@@ -19,17 +19,11 @@ image = (
     modal.Image.debian_slim()
     .pip_install("supabase", "requests", "google-generativeai", "playwright", "fastapi")
     .run_commands("playwright install chromium")
+    .add_local_dir(".", remote_path="/root/project", ignore=[".git", "node_modules", ".next", "__pycache__", ".ghl_browser_data", ".tmp", ".vscode", ".ghl_temp_profile_*"])
 )
 
 # Shared Secret Reference
 VAULT = modal.Secret.from_name("agency-vault")
-
-# Mount for the entire project
-PROJECT_MOUNT = modal.Mount.from_local_dir(
-    ".",
-    remote_path="/root/project",
-    condition=lambda p: not any(x in p for x in [".git", "node_modules", ".next", "__pycache__"])
-)
 
 def get_supabase() -> Client:
     url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
@@ -54,7 +48,7 @@ def brain_log(message: str):
     except Exception as e:
         print(f"Failed to log to DB: {str(e)}")
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 @modal.fastapi_endpoint(method="POST")
 async def ghl_webhook(payload: dict):
     """
@@ -105,7 +99,7 @@ async def ghl_webhook(payload: dict):
         brain_log(error_msg)
         return {"status": "error", "message": error_msg}
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 async def research_lead_logic(contact_id: str):
     """
     MISSION 2: PREDATOR LEAD ENRICHMENT
@@ -167,7 +161,7 @@ async def research_lead_logic(contact_id: str):
     
     return analysis
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 def social_posting_loop():
     """
     MISSION: CLOUD SOCIAL LOOP (3x Daily)
@@ -201,7 +195,7 @@ def social_posting_loop():
     except Exception as e:
         brain_log(f"Cloud Social Post Failed: {str(e)}")
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 async def spartan_responder(payload: dict):
     return await _spartan_responder_logic(payload)
 
@@ -335,7 +329,7 @@ def lead_research_loop():
         # Trigger actual logic
         research_lead_logic.remote(lead['ghl_contact_id'])
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 def outreach_scaling_loop():
     """
     MISSION: EMPIRE OUTREACH SCALING
@@ -372,7 +366,7 @@ def outreach_scaling_loop():
         except Exception as e:
             brain_log(f"Cloud Outreach Failed for {contact_id}: {str(e)}")
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 def system_guardian():
     """
     MISSION: SYSTEM INTEGRITY GUARDIAN
@@ -394,7 +388,7 @@ def system_guardian():
     except Exception as e:
         brain_log(f"[Guardian] Supabase Check FAILED: {str(e)}")
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 def database_sync_guardian():
     """
     MISSION: SYSTEM INTEGRITY GUARDIAN
@@ -403,7 +397,7 @@ def database_sync_guardian():
     # Health checks...
     return {"status": "healthy"}
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 async def hiring_spartan_system(payload: dict):
     return await _hiring_spartan_logic(payload)
 
@@ -563,7 +557,7 @@ def nurture_loop():
             supabase.table("contacts_master").update({"status": f"nurture_{target}"}).eq("ghl_contact_id", cid).execute()
             brain_log(f"[Cloud Nurture] {target} sent to {cid}")
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 def turbo_approve_all():
     """
     MISSION: TURBO APPROVE ALL STAGED REPLIES
@@ -597,7 +591,7 @@ def turbo_approve_all():
         except Exception as e:
             brain_log(f"❌ Error approving {cid}: {str(e)}")
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 def turbo_dispatch_all():
     """
     MISSION: TURBO DISPATCH ALL READY LEADS
@@ -634,7 +628,7 @@ def turbo_dispatch_all():
         except Exception as e:
             brain_log(f"❌ Error dispatching {cid}: {str(e)}")
 
-@app.function(image=image, secrets=[VAULT], mounts=[PROJECT_MOUNT])
+@app.function(image=image, secrets=[VAULT])
 def generate_master_dossier():
     """
     MISSION: MASTER DOSSIER GENERATION
