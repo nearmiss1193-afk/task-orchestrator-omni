@@ -1,0 +1,7 @@
+﻿Starting Loop Test for Contact: test_candidate_1766680016
+-> Sending simulated webhook to: https://nearmiss1193-afk--ghl-omni-automation-ghl-webhook.modal.run
+-> Webhook Response Status: 500
+-> Webhook Body: Internal Server Error
+-> Waiting 10 seconds for DB upsert...
+-> Verifying Supabase 'hiring_pipeline' table...
+FAILURE: Candidate NOT found in database.

@@ -1,0 +1,26 @@
+# Phase 10: Multi-Industry Blitz (Expansion)
+
+This mission expands the Vortex System to 5 new high-value SMB sectors in the Tampa Bay area.
+
+## Selected Industries
+1. **Solar** (Mission ID: `vortex_solar`)
+2. **Landscaping** (Mission ID: `vortex_land`)
+3. **Electricians** (Mission ID: `vortex_elec`)
+4. **Pest Control** (Mission ID: `vortex_pest`)
+5. **Moving Companies** (Mission ID: `vortex_move`)
+
+## Campaign Assets per Industry
+- **Meta Ad**: "Hyper-local problem/solution copy."
+- **Landing Page**: "Vortex-style booking funnel mockup."
+- **Outreach**: "Spartan email/SMS sequence."
+
+## Owner Visibility & Alerts
+- **CC Every Touch**: All emails/SMS to `owner@aiserviceco.com`.
+- **Immediate SMS Alerts**: Real-time notification to `+13529368152` for any reply.
+- **Dossier Dispatch**: New mission assets sent to owner before launch.
+
+## Implementation Steps
+- [ ] Generate 5-sector Ad Copy & Mockups.
+- [ ] Update `mission-multi-industry.py` for lead ingestion.
+- [ ] Trigger Predator Enrichment for 25 leads (5 per sector).
+- [ ] Launch outreach and mirror CCs to owner.

@@ -1,0 +1,26 @@
+# Turbo Mode & AI Stability Plan
+
+The goal is to enable "Auto-Accept" for commands to speed up execution and resolve the `429 Quota Exceeded` errors seen during the hiring loop test.
+
+## User Review Required
+
+> [!IMPORTANT]
+> To enable **Always Auto-Accept**, I will create a "Turbo Workflow" in `.agent/workflows/turbo.md`. Any mission I run through this workflow will automatically execute terminal commands without asking for your approval.
+
+## Proposed Changes
+
+### 1. Enable Turbo Mode (Auto-Accept)
+
+#### [NEW] [turbo.md](file:///C:/Users/nearm/.gemini/antigravity/scratch/task-orchestrator/.agent/workflows/turbo.md)
+Create a workflow with the `// turbo-all` annotation.
+
+### 2. Fix AI Quota / Model Errors
+
+#### [MODIFY] [deploy.py](file:///C:/Users/nearm/.gemini/antigravity/scratch/task-orchestrator/deploy.py)
+Switch to `gemini-1.5-flash-latest` or `gemini-2.0-flash-001` to avoid the "limit: 0" error encountered with `gemini-2.0-flash`.
+
+## Verification Plan
+
+### Automated Tests
+- Run `python scripts/test-hiring-loop.py` and verify it no longer returns a 500 or 429 error.
+- Verify that commands are auto-accepted when using the turbo workflow.
