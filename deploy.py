@@ -38,7 +38,8 @@ VAULT = modal.Secret.from_dict({
     "GEMINI_API_KEY": "AIzaSyB_WzpN1ASQssu_9ccfweWFPfoRknVUlHU",
     "SUPABASE_URL": "https://rzcpfwkygdvoshtwxncs.supabase.co",
     "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo",
-    "GHL_API_TOKEN": os.environ.get("GHL_API_TOKEN", "placeholder_if_missing") # Keep env fallback for GHL if not provided in chat
+    "GHL_API_TOKEN": os.environ.get("GHL_API_TOKEN", "placeholder_if_missing"), # Keep env fallback
+    "VAPI_PRIVATE_KEY": "c23c884d-0008-4b14-ad5d-530e98d0c9da"  # Voice Activation
 })
 
 def get_supabase():
@@ -413,9 +414,11 @@ def outreach_scaling_loop():
     Processes the 100-target batch through A/B testing via GHL API.
     """
     import requests
+    import time
     supabase = get_supabase()
     # Find leads tagged 'empire-scaling' that haven't been nurtured yet
-    leads = supabase.table("contacts_master").select("*").contains("tags", ["empire-scaling"]).eq("status", "research_done").limit(5).execute()
+    # FLOODGATE PROTOCOL: Increased to 50
+    leads = supabase.table("contacts_master").select("*").contains("tags", ["empire-scaling"]).eq("status", "research_done").limit(50).execute()
     
     ghl_token = os.environ.get("GHL_API_TOKEN") or os.environ.get("GHL_PRIVATE_KEY")
     ghl_headers = {'Authorization': f'Bearer {ghl_token}', 'Version': '2021-04-15', 'Content-Type': 'application/json'}
@@ -440,6 +443,7 @@ def outreach_scaling_loop():
             requests.post("https://services.leadconnectorhq.com/conversations/messages", json=email_payload, headers=ghl_headers)
             supabase.table("contacts_master").update({"status": "nurtured"}).eq("ghl_contact_id", contact_id).execute()
             brain_log(f"Cloud Outreach Sent to {contact_id} (Segment {segment})")
+            time.sleep(2) # Rate Limit Protection
         except Exception as e:
             brain_log(f"Cloud Outreach Failed for {contact_id}: {str(e)}")
 
@@ -782,6 +786,69 @@ def video_production_loop():
 
 
 
+
+@app.function(image=image, secrets=[VAULT]) # schedule=modal.Period(hours=4)
+def voice_concierge_loop():
+    """
+    MISSION: VOICE CONCIERGE (Start of Day)
+    Autonomously calls high-value leads to confirm interest.
+    """
+    brain_log("📞 Starting Cloud Voice Concierge (Vapi)...")
+    supabase = get_supabase()
+    
+    # Logic: Find leads nurtured > 3 days ago with high score
+    leads = supabase.table("contacts_master").select("*").eq("status", "nurtured").gt("lead_score", 90).limit(3).execute()
+    
+    if not leads.data:
+        brain_log("✅ No calls needed right now.")
+        return
+
+    # Inline VapiBridge (Sim Mode if key missing)
+    class VapiBridge:
+        def __init__(self, api_key=None):
+            self.api_key = api_key or os.environ.get("VAPI_PRIVATE_KEY")
+            self.base_url = "https://api.vapi.ai"
+        
+        def start_outbound_call(self, phone, context):
+            if not self.api_key:
+                return {"status": "simulated", "message": f"Did not call {phone}. Context: {context}"}
+            
+            # Real Call Logic
+            headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
+            payload = {
+                "phoneNumber": phone,
+                "assistantId": os.environ.get("VAPI_ASSISTANT_ID", "placeholder"),
+                "customer": {"number": phone},
+                "assistantOverrides": {"variableValues": {"context": context}}
+            }
+            try:
+                res = requests.post(f"{self.base_url}/call/phone", json=payload, headers=headers)
+                return res.json()
+            except Exception as e:
+                return {"status": "error", "message": str(e)}
+
+    # Execute
+    vapi_key = os.environ.get("VAPI_PRIVATE_KEY")
+    bridge = VapiBridge(vapi_key)
+    
+    for lead in leads.data:
+        cid = lead.get("ghl_contact_id")
+        phone = lead.get("phone", "+15550000000") # Fallback for safety
+        name = lead.get("full_name", "Founder")
+        
+        script = f"Hi {name}, I'm calling from AI Service Co. I noticed you opened our audit but haven't booked a time. Are you still looking to fix your missed calls?"
+        
+        res = bridge.start_outbound_call(phone, script)
+        
+        if res.get("status") == "simulated":
+             brain_log(f"📞 [SIMULATION] Calling {name}: {script}")
+        elif res.get("id"):
+             brain_log(f"📞 [LIVE] Call Initiated to {name}: {res.get('id')}")
+             supabase.table("contacts_master").update({"status": "called_voice"}).eq("ghl_contact_id", cid).execute()
+        else:
+             brain_log(f"❌ Call Failed to {name}: {res}")
+
+    brain_log("📞 Voice Concierge Batch Complete.")
 
 @app.function(image=image, secrets=[VAULT], timeout=600)
 @modal.asgi_app()
