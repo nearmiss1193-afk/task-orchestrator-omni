@@ -1,75 +1,49 @@
 
 import os
-from supabase import create_client
+import requests
+import json
 import time
 
-# Load Env
-try:
-    with open("modules/orchestrator/dashboard/.env.local", "r") as f:
-        for line in f:
-            if "=" in line and not line.startswith("#"):
-                key, val = line.strip().split("=", 1)
-                # Handle spaces or quotes if needed, simplified here
-                if key == "NEXT_PUBLIC_SUPABASE_URL": os.environ["SUPABASE_URL"] = val.strip().strip('"')
-                if key == "SUPABASE_SERVICE_ROLE_KEY": os.environ["SUPABASE_SERVICE_ROLE_KEY"] = val.strip().strip('"')
-except:
-    pass
+# Hardcoded Credentials
+URL = "https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/contacts_master"
+KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
 
 def seed():
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
-    if not url or not key:
-        print("CRITICAL: Missing credentials.")
-        return
-
-    supabase = create_client(url, key)
-    print("--- SEEDING TEST DATA ---")
-
-    # Insert Leads
+    print("--- SEEDING TEST DATA (DIRECT HTTP PROVEN) ---")
+    headers = {
+        "apikey": KEY,
+        "Authorization": f"Bearer {KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+    }
+    
+    # Minimal Data
     leads = [
-        {"name": "Alpha Corp", "company": "Alpha", "score": 85, "email": "ceo@alpha.com"},
-        {"name": "Beta Ltd", "company": "Beta", "score": 90, "email": "vp@beta.com"},
-        {"name": "Gamma Inc", "company": "Gamma", "score": 85, "email": "owner@gamma.com"},
-        {"name": "Delta LLC", "company": "Delta", "score": 95, "email": "admin@delta.com"},
-        {"name": "Omega Co", "company": "Omega", "score": 85, "email": "founder@omega.com"}
+        {"name": "Alpha Corp", "person": "Alice Alpha", "email": "ceo@alpha.com"},
+        {"name": "Beta Ltd", "person": "Bob Beta", "email": "vp@beta.com"},
+        {"name": "Gamma Inc", "person": "Gary Gamma", "email": "owner@gamma.com"},
+        {"name": "Delta LLC", "person": "Dana Delta", "email": "admin@delta.com"},
+        {"name": "Omega Co", "person": "Oscar Omega", "email": "founder@omega.com"}
     ]
     
-    # Try inserting into 'leads' first, then 'contacts_master'
-    target_table = "leads"
-    try:
-        # Check if table exists by selecting 1
-        supabase.table("leads").select("*").limit(1).execute()
-    except:
-        print("Table 'leads' not found. Using 'contacts_master'.")
-        target_table = "contacts_master"
-
-    print(f"Targeting Table: {target_table}")
-    
-    for lead in leads:
+    for i, lead in enumerate(leads):
         try:
-            # Adjust payload for contacts_master if needed
-            payload = lead
-            if target_table == "contacts_master":
-                payload = {
-                    "first_name": lead["name"].split()[0],
-                    "last_name": lead["name"].split()[-1] if " " in lead["name"] else "",
-                    "company_name": lead["company"],
-                    "email": lead["email"],
-                    # score might not exist in contacts_master schema, skipping
-                }
-            
-            res = supabase.table(target_table).insert(payload).execute()
-            print(f"Inserted: {lead['name']}")
-            
-            # Log action
-            log_payload = {
-                "message": f"SYSTEM: Ingested high-value lead {lead['name']} (Score: {lead['score']})",
-                "component": "LeadsEngine"
+            # EXACT Payload structure from test_raw_insert.py (Response 201)
+            payload = {
+                "ghl_contact_id": f"seed_verified_{int(time.time())}_{i}",
+                "full_name": lead["person"],
+                "email": lead["email"],
+                "status": "new"
             }
-            supabase.table("brain_logs").insert(log_payload).execute()
-
+            
+            resp = requests.post(URL, headers=headers, json=payload)
+            if resp.status_code in [200, 201]:
+                print(f"Inserted: {lead['person']}")
+            else:
+                print(f"Failed: {resp.status_code} - {resp.text}")
+                
         except Exception as e:
-            print(f"Failed to insert {lead['name']}: {e}")
+            print(f"Error: {e}")
 
 if __name__ == "__main__":
     seed()

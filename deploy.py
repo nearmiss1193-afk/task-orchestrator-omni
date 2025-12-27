@@ -9,8 +9,8 @@ import os
 import json
 import requests
 import datetime
-import google.generativeai as genai
-from supabase import create_client, Client
+# import google.generativeai as genai # Lazy Loaded
+# from supabase import create_client, Client # Lazy Loaded
 
 app = modal.App("ghl-omni-automation")
 
@@ -33,9 +33,16 @@ image = (
 )
 
 # Shared Secret Reference
-VAULT = modal.Secret.from_name("agency-vault")
+# VAULT = modal.Secret.from_name("agency-vault")
+VAULT = modal.Secret.from_dict({
+    "GEMINI_API_KEY": "AIzaSyB_WzpN1ASQssu_9ccfweWFPfoRknVUlHU",
+    "SUPABASE_URL": "https://rzcpfwkygdvoshtwxncs.supabase.co",
+    "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo",
+    "GHL_API_TOKEN": os.environ.get("GHL_API_TOKEN", "placeholder_if_missing") # Keep env fallback for GHL if not provided in chat
+})
 
-def get_supabase() -> Client:
+def get_supabase():
+    from supabase import create_client # Lazy Load
     url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
     key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
     if not url or not key:
@@ -43,6 +50,7 @@ def get_supabase() -> Client:
     return create_client(url, key)
 
 def get_gemini_model():
+    import google.generativeai as genai # Lazy Load
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     genai.configure(api_key=api_key)
     return genai.GenerativeModel('gemini-1.5-flash')
