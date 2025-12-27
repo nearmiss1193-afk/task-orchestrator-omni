@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { useChat } from 'ai/react';
 import { Send, Bot } from 'lucide-react';
-import { cn } from '@/lib/utils'; // Assuming cn utility is usually set up, but simpler to inline if needed.
+// import { cn } from '@/lib/utils'; // Unused
 
 export default function OracleChat() {
     const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -18,6 +18,7 @@ export default function OracleChat() {
                 <button
                     onClick={() => setIsOpen(true)}
                     className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition-all"
+                    aria-label="Open Oracle Chat"
                 >
                     <Bot size={24} />
                 </button>
@@ -52,8 +53,8 @@ export default function OracleChat() {
                             >
                                 <div
                                     className={`max-w-[85%] rounded-lg p-3 text-sm ${m.role === 'user'
-                                            ? 'bg-blue-600 text-white'
-                                            : 'bg-slate-800 text-slate-200 border border-slate-700'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-slate-800 text-slate-200 border border-slate-700'
                                         }`}
                                 >
                                     {m.content}
@@ -73,6 +74,7 @@ export default function OracleChat() {
                         <button
                             type="submit"
                             className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md"
+                            aria-label="Send Message"
                         >
                             <Send size={18} />
                         </button>

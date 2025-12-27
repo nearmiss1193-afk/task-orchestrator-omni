@@ -19,7 +19,17 @@ image = (
     modal.Image.debian_slim()
     .pip_install("supabase", "requests", "google-generativeai", "playwright", "fastapi")
     .run_commands("playwright install chromium")
-    .add_local_dir(".", remote_path="/root/project", ignore=[".git", "node_modules", ".next", "__pycache__", ".ghl_browser_data", ".tmp", ".vscode", ".ghl_temp_profile_*"])
+    .add_local_dir(".", remote_path="/root/project", ignore=[
+        ".git", 
+        "**/node_modules", 
+        "**/.next", 
+        "**/dist",
+        "__pycache__", 
+        ".ghl_browser_data", 
+        ".tmp", 
+        ".vscode", 
+        ".ghl_temp_profile_*"
+    ])
 )
 
 # Shared Secret Reference
@@ -762,5 +772,175 @@ def video_production_loop():
         else:
             brain_log(f"❌ Video Production Failed for {name}: {res.get('message')}")
 
+
+
+
+@app.function(image=image, secrets=[VAULT], timeout=600)
+@modal.asgi_app()
+def dashboard():
+    import traceback
+    try:
+        from fastapi import FastAPI, Request
+        from fastapi.responses import HTMLResponse
+        from fastapi.middleware.cors import CORSMiddleware
+        import json
+        import os
+        
+        web_app = FastAPI()
+
+        web_app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
+        # ... (Imports that might fail) ...
+        # Test imports early
+        import google.generativeai as genai
+        from supabase import create_client
+
+        # ... (HTML Content - identifying string to ensure replace works) ...
+        # [Truncated for brevity in this replace block, assumes surrounding code is similar]
+        
+        # RE-INLINING THE FULL CONTENT TO BE SAFE
+        HTML_CONTENT = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>EMPIRE COMMAND CENTER | CLOUD</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+            <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+            <script src="https://unpkg.com/lucide@latest"></script>
+            <style>
+                body { font-family: 'JetBrains Mono', monospace; background-color: #050505; color: #e0e0e0; }
+                .terminal-box { background: #0a0a0a; border: 1px solid #333; box-shadow: 0 0 20px rgba(0, 255, 65, 0.05); }
+            </style>
+        </head>
+        <body class="h-screen flex flex-col p-6 overflow-hidden">
+            <header class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold tracking-tighter text-white">EMPIRE <span class="text-[#00ff41]">COMMAND CENTER</span></h1>
+                    <p class="text-xs text-green-500 tracking-widest font-bold">SOVEREIGN STACK V2 // CLOUD ACTIVE</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-gray-500">SYSTEM TIME</p>
+                    <p class="text-xl font-bold" id="clock">00:00:00</p>
+                </div>
+            </header>
+            <div class="flex-1 flex justify-center items-center text-gray-500 font-mono">
+                 <div class="w-full h-full flex flex-col gap-4">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="terminal-box p-6"><h2 class="text-gray-400">LEADS</h2><p class="text-4xl text-white font-bold" id="stat-leads">...</p></div>
+                        <div class="terminal-box p-6"><h2 class="text-gray-400">PENDING</h2><p class="text-4xl text-yellow-500 font-bold" id="stat-pending">...</p></div>
+                        <div class="terminal-box p-6"><h2 class="text-gray-400">HEALTH</h2><p class="text-4xl text-green-500 font-bold">100%</p></div>
+                    </div>
+                    <div class="flex-1 grid grid-cols-2 gap-4 min-h-0">
+                         <div class="terminal-box p-4 overflow-auto" id="log-container">Loading Intelligence...</div>
+                         <div class="terminal-box p-4 flex flex-col">
+                             <div class="flex-1 overflow-auto bg-[#111] p-2 mb-2 rounded" id="chat-messages">
+                                <div class="p-2 text-gray-400">Oracle System Online.</div>
+                             </div>
+                             <form id="chat-form" class="flex gap-2">
+                                <input id="chat-input" class="flex-1 bg-black border border-gray-700 p-2 text-white" placeholder="Command...">
+                                <button type="submit" class="bg-indigo-600 px-4 text-white">SEND</button>
+                             </form>
+                         </div>
+                    </div>
+                 </div>
+            </div>
+            <script>
+                lucide.createIcons();
+                setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+                
+                async function fetchSystemData() {
+                    try {
+                        const stats = await (await fetch('/api/stats')).json();
+                        document.getElementById('stat-leads').innerText = stats.total_leads || 0;
+                        document.getElementById('stat-pending').innerText = stats.pending_approvals || 0;
+                        
+                        const logs = await (await fetch('/api/logs')).json();
+                        const c = document.getElementById('log-container');
+                        c.innerHTML = logs.map(l => `<div><span class="text-green-500">[${new Date(l.created_at).toLocaleTimeString()}]</span> ${l.message}</div>`).join('');
+                    } catch(e) { console.error(e); }
+                }
+                
+                document.getElementById('chat-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const inp = document.getElementById('chat-input');
+                    const msg = inp.value;
+                    inp.value = '';
+                    const box = document.getElementById('chat-messages');
+                    box.innerHTML += `<div class="p-2 text-right text-white">${msg}</div>`;
+                    try {
+                        const res = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg})});
+                        const data = await res.json();
+                        box.innerHTML += `<div class="p-2 text-left text-green-400">${data.reply}</div>`;
+                    } catch(e) { box.innerHTML += `<div class="p-2 text-left text-red-500">Error.</div>`; }
+                });
+                
+                fetchSystemData();
+                setInterval(fetchSystemData, 3000);
+            </script>
+        </body>
+        </html>
+        """
+
+        @web_app.get("/")
+        async def root():
+            return HTMLResponse(content=HTML_CONTENT)
+
+        @web_app.get("/api/stats")
+        async def stats():
+            try:
+                # Re-using the get_supabase from global scope since it is available
+                supabase = get_supabase() 
+                counts = supabase.table("contacts_master").select("*", count="exact").execute()
+                pending = supabase.table("staged_replies").select("*", count="exact").eq("status", "pending_approval").execute()
+                return {"total_leads": counts.count, "pending_approvals": pending.count}
+            except Exception as e:
+                return {"error": str(e)}
+
+        @web_app.get("/api/logs")
+        async def logs():
+            try:
+                supabase = get_supabase()
+                res = supabase.table("brain_logs").select("message, created_at").order("created_at", desc=True).limit(50).execute()
+                return res.data
+            except:
+                return []
+
+        @web_app.post("/api/chat")
+        async def chat(payload: dict):
+            try:
+                msg = payload.get("message")
+                supabase = get_supabase()
+                logs = supabase.table("brain_logs").select("message, created_at").order("created_at", desc=True).limit(10).execute().data
+                system_prompt = f"SYSTEM STATUS: {json.dumps(logs)} \nUSER: {msg}"
+                model = get_gemini_model()
+                res = model.generate_content(system_prompt)
+                return {"reply": res.text}
+            except Exception as e:
+                return {"reply": f"Error: {str(e)}"}
+
+        return web_app
+
+    except Exception as e:
+        # FALLBACK APP FOR DEBUGGING
+        from fastapi import FastAPI
+        from fastapi.responses import HTMLResponse
+        error_app = FastAPI()
+        err_msg = f"<h1>DEPLOYMENT CRASHED</h1><pre>{traceback.format_exc()}</pre>"
+        @error_app.get("/")
+        def crash_report():
+            return HTMLResponse(content=err_msg, status_code=500)
+        return error_app
+
+
+
 if __name__ == "__main__":
     app.run()
+
