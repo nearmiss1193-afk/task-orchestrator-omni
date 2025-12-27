@@ -17,30 +17,31 @@ def seed():
         "Prefer": "return=minimal"
     }
     
-    # Minimal Data
+    # CHAOS DATA (Resilience Test)
     leads = [
-        {"name": "Alpha Corp", "person": "Alice Alpha", "email": "ceo@alpha.com"},
-        {"name": "Beta Ltd", "person": "Bob Beta", "email": "vp@beta.com"},
-        {"name": "Gamma Inc", "person": "Gary Gamma", "email": "owner@gamma.com"},
-        {"name": "Delta LLC", "person": "Dana Delta", "email": "admin@delta.com"},
-        {"name": "Omega Co", "person": "Oscar Omega", "email": "founder@omega.com"}
+        {"name": "Chaos 1", "person": "No Email Guy", "email": ""}, # Missing Email
+        {"name": "Chaos 2", "person": "", "email": "ghost@beta.com"}, # Missing Name
+        {"name": "Chaos 3", "person": "D'Angelo O'Connor", "email": "complex@names.com"}, # Special Chars
+        {"name": "Chaos 4", "person": "Robert'); DROP TABLE students;--", "email": "sql@inject.com"}, # SQL Injection Attempt
+        {"name": "Chaos 5", "person": "Standard User", "email": "control@group.com"} # Control
     ]
     
     for i, lead in enumerate(leads):
         try:
-            # EXACT Payload structure from test_raw_insert.py (Response 201)
+            # Chaos Payload
             payload = {
-                "ghl_contact_id": f"seed_verified_{int(time.time())}_{i}",
-                "full_name": lead["person"],
-                "email": lead["email"],
-                "status": "new"
+                "ghl_contact_id": f"chaos_{int(time.time())}_{i}",
+                "full_name": lead["person"] or "Unknown", # Handle missing name logic
+                "email": lead["email"] or f"missing_{int(time.time())}@void.com", # Handle missing email
+                "status": "new",
+                "tags": ["chaos_test", "risk_high"]
             }
             
             resp = requests.post(URL, headers=headers, json=payload)
             if resp.status_code in [200, 201]:
-                print(f"Inserted: {lead['person']}")
+                print(f"✅ Ingested: {payload['full_name']}")
             else:
-                print(f"Failed: {resp.status_code} - {resp.text}")
+                print(f"⚠️ Rejected (Expected?): {resp.status_code} - {resp.text}")
                 
         except Exception as e:
             print(f"Error: {e}")
