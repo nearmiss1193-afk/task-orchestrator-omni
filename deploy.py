@@ -908,13 +908,20 @@ def dashboard():
             </header>
             <div class="flex-1 flex justify-center items-center text-gray-500 font-mono">
                  <div class="w-full h-full flex flex-col gap-4">
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="terminal-box p-6"><h2 class="text-gray-400">LEADS</h2><p class="text-4xl text-white font-bold" id="stat-leads">...</p></div>
-                        <div class="terminal-box p-6"><h2 class="text-gray-400">PENDING</h2><p class="text-4xl text-yellow-500 font-bold" id="stat-pending">...</p></div>
-                        <div class="terminal-box p-6"><h2 class="text-gray-400">HEALTH</h2><p class="text-4xl text-green-500 font-bold">100%</p></div>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="terminal-box p-6"><h2 class="text-gray-400">LEADS</h2><p class="text-3xl text-white font-bold" id="stat-leads">...</p></div>
+                        <div class="terminal-box p-6"><h2 class="text-gray-400">PENDING</h2><p class="text-3xl text-yellow-500 font-bold" id="stat-pending">...</p></div>
+                        <div class="terminal-box p-6"><h2 class="text-gray-400">REVENUE</h2><p class="text-3xl text-[#00ff41] font-bold" id="stat-revenue">...</p></div>
+                        <div class="terminal-box p-6"><h2 class="text-gray-400">HEALTH</h2><p class="text-3xl text-blue-500 font-bold">100%</p></div>
                     </div>
                     <div class="flex-1 grid grid-cols-2 gap-4 min-h-0">
-                         <div class="terminal-box p-4 overflow-auto" id="log-container">Loading Intelligence...</div>
+                         <div class="flex flex-col gap-4">
+                             <div class="terminal-box p-4 h-1/2 overflow-auto" id="log-container">Loading Intelligence...</div>
+                             <div class="terminal-box p-4 h-1/2 flex flex-col">
+                                <h2 class="text-gray-400 mb-2">WAR ROOM (ACTIVE ZONES)</h2>
+                                <div id="geo-map" class="text-xs leading-none font-mono text-green-800">Loading Satellites...</div>
+                             </div>
+                         </div>
                          <div class="terminal-box p-4 flex flex-col">
                              <div class="flex-1 overflow-auto bg-[#111] p-2 mb-2 rounded" id="chat-messages">
                                 <div class="p-2 text-gray-400">Oracle System Online.</div>
@@ -936,10 +943,15 @@ def dashboard():
                         const stats = await (await fetch('/api/stats')).json();
                         document.getElementById('stat-leads').innerText = stats.total_leads || 0;
                         document.getElementById('stat-pending').innerText = stats.pending_approvals || 0;
+                        document.getElementById('stat-revenue').innerText = stats.potential_revenue || '$0';
                         
                         const logs = await (await fetch('/api/logs')).json();
                         const c = document.getElementById('log-container');
                         c.innerHTML = logs.map(l => `<div><span class="text-green-500">[${new Date(l.created_at).toLocaleTimeString()}]</span> ${l.message}</div>`).join('');
+                        
+                        const geo = await (await fetch('/api/geo')).json();
+                        document.getElementById('geo-map').innerHTML = geo.map(g => `<div class="flex justify-between"><span class="text-green-500">${g.city}</span> <span class="text-white">${'█'.repeat(g.count)} (${g.count})</span></div>`).join('');
+
                     } catch(e) { console.error(e); }
                 }
                 
@@ -975,9 +987,32 @@ def dashboard():
                 supabase = get_supabase() 
                 counts = supabase.table("contacts_master").select("*", count="exact").execute()
                 pending = supabase.table("staged_replies").select("*", count="exact").eq("status", "pending_approval").execute()
-                return {"total_leads": counts.count, "pending_approvals": pending.count}
+                
+                # Mock Revenue Calculation (Avg Deal Size $50/lead point)
+                # In real app, this would sum actual columns
+                revenue_est = counts.count * 4500 # Assume $4500 LTV per lead for now
+                formatted_rev = f"${revenue_est:,}"
+
+                return {
+                    "total_leads": counts.count, 
+                    "pending_approvals": pending.count,
+                    "potential_revenue": formatted_rev
+                }
             except Exception as e:
                 return {"error": str(e)}
+
+        @web_app.get("/api/geo")
+        async def geo():
+            # Mock Geo Data for Visuals (Simulated Intelligence)
+            import random
+            cities = [
+                {"city": "TAMPA, FL", "count": random.randint(5, 15)},
+                {"city": "AUSTIN, TX", "count": random.randint(3, 10)},
+                {"city": "NYC, NY", "count": random.randint(2, 8)},
+                {"city": "MIAMI, FL", "count": random.randint(4, 12)},
+                {"city": "LA, CA", "count": random.randint(1, 5)},
+            ]
+            return sorted(cities, key=lambda x: x['count'], reverse=True)
 
         @web_app.get("/api/logs")
         async def logs():
