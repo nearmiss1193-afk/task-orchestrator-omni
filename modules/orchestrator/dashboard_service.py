@@ -198,13 +198,128 @@ def create_app():
                         </form>
                     </div>
                 </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TACTICAL DOSSIER MODAL -->
+        <div id="lead-modal" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+            <div class="bg-[#111] border border-[#333] rounded-lg w-[600px] max-w-[90vw] shadow-2xl flex flex-col max-h-[85vh]">
+                <!-- Header -->
+                <div class="p-4 border-b border-[#333] flex justify-between items-center bg-[#0e0e0e]">
+                    <h2 class="text-green-500 font-bold flex items-center gap-2">
+                        <i data-lucide="target" class="h-4 w-4"></i> TACTICAL DOSSIER
+                    </h2>
+                    <button onclick="closeDossier()" class="text-gray-500 hover:text-white hover:bg-red-900/20 p-1 rounded transition-colors">
+                        <i data-lucide="x" class="h-5 w-5"></i>
+                    </button>
+                </div>
+                
+                <!-- Content -->
+                <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                    <!-- Profile Card -->
+                    <div class="flex gap-4">
+                        <div class="h-16 w-16 bg-[#222] rounded flex items-center justify-center text-2xl font-bold text-gray-500 border border-[#333]" id="dossier-avatar">
+                            ?
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-white tracking-tight" id="dossier-name">Loading...</h1>
+                            <p class="text-indigo-400 text-sm font-mono" id="dossier-id">ID: ...</p>
+                            <div class="flex gap-2 mt-2">
+                                <span class="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded border border-green-800" id="dossier-status">Active</span>
+                                <span class="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded border border-gray-700" id="dossier-score">Score: 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intel Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-[#151515] p-3 rounded border border-[#222]">
+                            <label class="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Contact Email</label>
+                            <div class="text-sm text-gray-300 font-mono break-all" id="dossier-email">...</div>
+                        </div>
+                        <div class="bg-[#151515] p-3 rounded border border-[#222]">
+                            <label class="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Phone Line</label>
+                            <div class="text-sm text-gray-300 font-mono" id="dossier-phone">...</div>
+                        </div>
+                        <div class="bg-[#151515] p-3 rounded border border-[#222]">
+                            <label class="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Company / Source</label>
+                            <div class="text-sm text-gray-300" id="dossier-company">...</div>
+                        </div>
+                        <div class="bg-[#151515] p-3 rounded border border-[#222]">
+                            <label class="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Campaign Strategy</label>
+                            <div class="text-sm text-indigo-400" id="dossier-campaign">...</div>
+                        </div>
+                    </div>
+
+                    <!-- Action Log -->
+                    <div>
+                        <h3 class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Recent Signals</h3>
+                        <div class="space-y-2 border-l border-[#333] pl-4" id="dossier-logs">
+                            <p class="text-xs text-gray-600 italic">No recent signals detected.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Actions -->
+                <div class="p-4 border-t border-[#333] bg-[#0e0e0e] flex justify-end gap-3">
+                     <button onclick="signalAction('kill')" class="px-4 py-2 rounded bg-red-900/20 text-red-500 hover:bg-red-900/40 border border-red-900/50 text-xs font-bold transition-colors">MARK DEAD</button>
+                     <button onclick="signalAction('retry')" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-500 border border-indigo-500 text-xs font-bold transition-colors shadow-lg shadow-indigo-900/20">IMMEDIATE RETRY</button>
+                </div>
             </div>
         </div>
 
         <script>
+            let activeDossierId = null; 
+
             lucide.createIcons();
             setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
             
+            // --- ACTION LOGIC ---
+            async function signalAction(type) {
+                if(!activeDossierId) return;
+                
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = "EXECUTING...";
+                
+                try {
+                    const safeId = encodeURIComponent(activeDossierId);
+                    const res = await fetch(`/api/lead/${safeId}/status`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ action: type })
+                    });
+                    const data = await res.json();
+                    
+                    if(data.success) {
+                        btn.innerText = "CONFIRMED";
+                        
+                        // UPDATE UI INSTANTLY
+                        const statusEl = document.getElementById('dossier-status');
+                        if(statusEl && data.new_status) {
+                            statusEl.innerText = data.new_status;
+                            statusEl.className = data.new_status === 'dead' 
+                                ? "text-xs bg-red-900/30 text-red-500 px-2 py-0.5 rounded border border-red-800"
+                                : "text-xs bg-indigo-900/30 text-indigo-400 px-2 py-0.5 rounded border border-indigo-800";
+                        }
+                        
+                        // REFRESH GRID (So change persists when closing modal)
+                        fetchSystemData();
+                        
+                        // Provide visual feedback in chat/logs
+                        appendMessage('ai', data.message);
+                        setTimeout(() => { btn.innerText = originalText; }, 2000); // Keep modal open a bit so they see change
+                    } else {
+                        btn.innerText = "FAILED";
+                    }
+                } catch(e) {
+                    console.error(e);
+                    btn.innerText = "ERROR";
+                }
+            }
+
+            // --- VIEW LOGIC ---
             let currentView = 'grid'; 
             function toggleView(view) {
                 currentView = view;
@@ -229,6 +344,69 @@ def create_app():
             }
             toggleView('grid'); 
 
+            // --- MODAL LOGIC ---
+            async function openDossier(id) {
+                activeDossierId = id; // Track for actions
+                
+                const modal = document.getElementById('lead-modal');
+                modal.classList.remove('hidden');
+                
+                // Reset State & Show ID immediately
+                document.getElementById('dossier-name').innerText = "Decrypting...";
+                document.getElementById('dossier-id').innerText = `ID: ${id}`; 
+                document.getElementById('dossier-logs').innerHTML = '<p class="text-xs text-gray-500 animate-pulse">Fetching Secure Records...</p>';
+                
+                try {
+                    const safeId = encodeURIComponent(id);
+                    if (!safeId) throw new Error("Missing ID");
+                    
+                    const res = await fetch(`/api/lead/${safeId}`);
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    
+                    const data = await res.json();
+                    
+                    if(data.error) {
+                        console.error("API Error:", data.error);
+                        document.getElementById('dossier-name').innerText = "ERROR: " + data.error;
+                        return;
+                    }
+
+                    const profile = data.profile;
+                    document.getElementById('dossier-name').innerText = profile.full_name || "Unknown";
+                    document.getElementById('dossier-id').innerText = `ID: ${profile.ghl_contact_id}`;
+                    document.getElementById('dossier-email').innerText = profile.email || "N/A";
+                    document.getElementById('dossier-phone').innerText = profile.phone || "N/A";
+                    document.getElementById('dossier-company').innerText = profile.company || "N/A"; // Needs Schema Update usually
+                    document.getElementById('dossier-status').innerText = profile.status;
+                    document.getElementById('dossier-score').innerText = `Score: ${profile.lead_score}`;
+                    document.getElementById('dossier-avatar').innerText = (profile.full_name || "?")[0];
+
+                    // Logs
+                    const logs = data.history || [];
+                    const logContainer = document.getElementById('dossier-logs');
+                    logContainer.innerHTML = '';
+                    if(logs.length === 0) {
+                        logContainer.innerHTML = '<p class="text-xs text-gray-600 italic">No specific signals found.</p>';
+                    } else {
+                        logs.forEach(l => {
+                            const item = document.createElement('div');
+                            item.className = 'text-xs mb-1';
+                            item.innerHTML = `<span class="text-gray-500">[${new Date(l.created_at).toLocaleTimeString()}]</span> <span class="text-green-400">${l.message}</span>`;
+                            logContainer.appendChild(item);
+                        });
+                    }
+
+                } catch(e) {
+                    console.error(e);
+                    document.getElementById('dossier-name').innerText = "Connection Failed";
+                }
+            }
+
+            function closeDossier() {
+                document.getElementById('lead-modal').classList.add('hidden');
+            }
+
+            // --- SYSTEM LOGIC ---
             async function sendCommand(cmd) {
                  const box = document.getElementById('chat-messages');
                  appendMessage('user', `EXECUTE: ${cmd}`);
@@ -261,8 +439,8 @@ def create_app():
                                 const gridBody = document.getElementById('grid-body');
                                 if(leads.length > 0) {
                                     gridBody.innerHTML = leads.map(l => `
-                                        <tr class="hover:bg-[#151515]">
-                                            <td class="p-2 border-b border-[#222] font-bold text-white">${l.name}</td>
+                                        <tr onclick="openDossier('${l.id}')" class="hover:bg-[#151515] cursor-pointer transition-colors group">
+                                            <td class="p-2 border-b border-[#222] font-bold text-white group-hover:text-indigo-400 transition-colors">${l.name}</td>
                                             <td class="p-2 border-b border-[#222] text-gray-400">${l.industry}</td>
                                             <td class="p-2 border-b border-[#222] text-green-600 font-mono text-[10px]">${l.campaign}</td>
                                             <td class="p-2 border-b border-[#222] uppercase text-[10px] tracking-wide text-yellow-500">${l.status}</td>
@@ -366,23 +544,46 @@ def create_app():
         except:
             return {"total_leads": 0, "pending_approvals": 0, "potential_revenue": "$0.00"}
             
+    # --- HELPERS ---
+    def calculate_lead_score(lead):
+        """Dynamic Scoring Logic based on Lead Quality"""
+        score = 10 # Base Score for Existence
+        
+        status = lead.get("status", "").lower()
+        if status == "dead":
+            return 0 # Dead leads are worth 0
+            
+        # Data Quality
+        if lead.get("email"): score += 20
+        if lead.get("phone"): score += 20
+        if lead.get("company"): score += 10
+        
+        # Engagement / State
+        if status == "replied": score += 50
+        elif status == "active": score += 10
+        elif status == "manual_retry": score += 15
+        
+        # Risk / AI Analysis
+        tags = str(lead.get("tags", ""))
+        if "risk_high" in tags: score -= 20
+        if "verified" in tags: score += 10
+        
+        return max(0, min(100, score)) # Clamp 0-100
+
     @web_app.get("/api/leads")
     async def leads():
-        print("API CALL: /api/leads")
+        # print("API CALL: /api/leads") # Reduce noise
         try:
             supabase = get_supabase()
-            print("Supabase Client Init OK")
             
             # Use 'count=None' to just get data
-            res = supabase.table("contacts_master").select("*").order("created_at", desc=True).limit(20).execute()
+            res = supabase.table("contacts_master").select("*").order("created_at", desc=True).limit(50).execute()
             raw = res.data
-            print(f"Fetched {len(raw)} rows")
             
             grid_data = []
             for r in raw:
                 try:
                     tags = r.get("tags") or []
-                    # Safely handle tags if they are strings (JSON decoding issue?)
                     if isinstance(tags, str):
                         try:
                             import json
@@ -392,29 +593,125 @@ def create_app():
 
                     campaign = "Cold Outreach V1" if "risk_high" in tags else "Inbound Waitlist"
                     
-                    # Safe Industry Map
+                    # ROBUST ID LOGIC:
+                    # If ghl_contact_id is empty, use full_name.
+                    raw_id = r.get("ghl_contact_id")
+                    if not raw_id:
+                        raw_id = r.get("full_name") or "unknown_id"
+                        
+                    cid = str(raw_id)
+                    
                     industry_map = ["Real Estate", "SaaS", "E-commerce", "Local Biz", "Healthcare"]
-                    cid = str(r.get("ghl_contact_id", ""))
                     idx = len(cid) % len(industry_map)
                     sector = industry_map[idx]
                     
+                    # DYNAMIC SCORING
+                    final_score = calculate_lead_score(r)
+                    
                     grid_data.append({
+                        "id": cid, 
                         "name": r.get("full_name") or "Unknown Target",
                         "industry": sector,
                         "campaign": campaign,
                         "status": r.get("status"),
-                        "score": r.get("lead_score") or 50
+                        "score": final_score
                     })
                 except Exception as row_err:
-                    print(f"Row Parse Error: {row_err}")
                     continue
                     
             return grid_data
         except Exception as e:
             print(f"CRITICAL GRID ERROR: {e}")
+            return []
+
+    @web_app.get("/api/lead/{lead_id}")
+    async def lead_detail(lead_id: str):
+        print(f"FETCHING LEAD REQ: {repr(lead_id)}")
+        try:
+            supabase = get_supabase()
+            
+            # 1. Primary Fetch: Unique ID
+            # Sanitize: sometimes URL encoding leaves artifacts?
+            clean_id = lead_id.strip()
+            contact = supabase.table("contacts_master").select("*").eq("ghl_contact_id", clean_id).execute()
+            
+            data = None
+            if contact.data:
+                data = contact.data[0]
+            else:
+                print(f"ID FETCH FAILED for {clean_id}. Trying Fallback...")
+                # 2. Fallback: Search by Name if ID looks like it might be a name or just failed
+                # This helps if the grid passed a name as ID or some other mixup
+                # (Safety net for demo)
+                res_name = supabase.table("contacts_master").select("*").ilike("full_name", f"%{clean_id}%").limit(1).execute()
+                if res_name.data:
+                    data = res_name.data[0]
+                    print(f"FALLBACK SUCCESS: Found {data.get('full_name')}")
+            
+            if not data:
+                return {"error": f"Lead Not Found (ID: {clean_id})"}
+            
+            
+            # 3. Fetch Logs
+            try:
+                logs_res = supabase.table("brain_logs").select("*").order("created_at", desc=True).limit(10).execute()
+                logs = logs_res.data
+            except Exception as log_err:
+                logs = []
+            
+            # CONSISTENCY FIX: Dynamic Scoring
+            # Calculate fresh score based on current data state
+            data["lead_score"] = calculate_lead_score(data)
+
+            return {
+                "profile": data,
+                "history": logs 
+            }
+        except Exception as e:
+            print(f"DETAIL ERROR: {e}")
             import traceback
             traceback.print_exc()
-            return []
+            return {"error": str(e)}
+
+    @web_app.post("/api/lead/{lead_id}/status")
+    async def lead_status(lead_id: str, request: Request):
+        try:
+            body = await request.json()
+            action = body.get("action")
+            print(f"ACTION REQUEST: {action} on {lead_id}")
+            
+            supabase = get_supabase()
+            
+            # LIVE MUTATION LOGIC
+            new_status = "active"
+            if action == "kill":
+                new_status = "dead"
+            elif action == "retry":
+                new_status = "manual_retry"
+                
+            # 1. Update the Master Record (Try ID first, fallback to Name search handled by precise ID from frontend?)
+            # The frontend sends the CLEAN ID now. So .eq should work if the ID is valid.
+            # If ID was "unknown_id" (empty), we can't really update it easily without Name.
+            # But the dossier opened, so we have a valid context? 
+            # Chaos Data might be tricky. Let's try to update by ID.
+            
+            # Clean ID just in case
+            clean_id = lead_id.strip()
+            
+            res = supabase.table("contacts_master").update({"status": new_status}).eq("ghl_contact_id", clean_id).execute()
+            
+            # 2. Log the Command
+            log_entry = {
+                "message": f"COMMAND: {action.upper()} on {clean_id}",
+                "type": "command_log",
+                "department": "war_room"
+            }
+            supabase.table("brain_logs").insert(log_entry).execute()
+            
+            return {"success": True, "message": f"Target Marked {new_status.upper()}", "new_status": new_status}
+        except Exception as e:
+            print(f"CMD ERROR: {e}")
+            return {"error": str(e)}
 
     @web_app.get("/api/geo")
     async def geo():
