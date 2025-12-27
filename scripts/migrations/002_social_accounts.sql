@@ -1,4 +1,4 @@
--- CORTEX v2.0 Migration: Social Accounts
+-- CORTEX v2.0 Migration: Social Accounts (Fixed)
 CREATE TABLE IF NOT EXISTS public.social_accounts (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     platform TEXT NOT NULL,
