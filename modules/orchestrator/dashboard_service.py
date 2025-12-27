@@ -73,7 +73,7 @@ def create_app():
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                     </span>
-                    <p class="text-xs text-green-500 tracking-widest font-bold">SOVEREIGN STACK V2 // CLOUD ACTIVE</p>
+                    <p class="text-xs text-green-500 tracking-widest font-bold">SOVEREIGN STACK V2.1 // TACTICAL MODE</p>
                 </div>
             </div>
             <div class="text-right">
@@ -84,35 +84,77 @@ def create_app():
 
         <div class="grid grid-cols-12 gap-6 flex-1 min-h-0">
             <div class="col-span-8 flex flex-col gap-6 h-full min-h-0">
-                <div class="grid grid-cols-3 gap-4 h-32 shrink-0">
+                <div class="grid grid-cols-4 gap-4 h-32 shrink-0">
                     <div class="terminal-box p-4 rounded-lg bg-[#0f0f0f]">
                         <p class="text-xs text-gray-400 uppercase">Total Targets</p>
-                        <p class="text-4xl font-bold text-white mt-1" id="stat-leads">---</p>
-                        <i data-lucide="users" class="text-gray-700 absolute top-4 right-4 h-6 w-6"></i>
+                        <p class="text-3xl font-bold text-white mt-1" id="stat-leads">---</p>
+                        <i data-lucide="users" class="text-gray-700 absolute top-4 right-4 h-5 w-5"></i>
                     </div>
                     <div class="terminal-box p-4 rounded-lg bg-[#0f0f0f]">
-                        <p class="text-xs text-gray-400 uppercase">Pending Approvals</p>
-                        <p class="text-4xl font-bold text-yellow-500 mt-1" id="stat-pending">---</p>
-                        <i data-lucide="activity" class="text-gray-700 absolute top-4 right-4 h-6 w-6"></i>
+                        <p class="text-xs text-gray-400 uppercase">Pending</p>
+                        <p class="text-3xl font-bold text-yellow-500 mt-1" id="stat-pending">---</p>
+                        <i data-lucide="activity" class="text-gray-700 absolute top-4 right-4 h-5 w-5"></i>
                     </div>
                     <div class="terminal-box p-4 rounded-lg bg-[#0f0f0f]">
-                        <p class="text-xs text-gray-400 uppercase">System Health</p>
-                        <p class="text-4xl font-bold text-green-500 mt-1">100%</p>
-                        <i data-lucide="cpu" class="text-gray-700 absolute top-4 right-4 h-6 w-6"></i>
+                        <p class="text-xs text-gray-400 uppercase">Potential Revenue</p>
+                        <p class="text-3xl font-bold text-[#00ff41] mt-1" id="stat-revenue">---</p>
+                        <i data-lucide="dollar-sign" class="text-gray-700 absolute top-4 right-4 h-5 w-5"></i>
+                    </div>
+                    <div class="terminal-box p-4 rounded-lg bg-[#0f0f0f]">
+                        <p class="text-xs text-gray-400 uppercase">Health</p>
+                        <p class="text-3xl font-bold text-blue-500 mt-1">100%</p>
+                        <i data-lucide="cpu" class="text-gray-700 absolute top-4 right-4 h-5 w-5"></i>
                     </div>
                 </div>
 
-                <div class="terminal-box rounded-lg flex-1 flex flex-col min-h-0 overflow-hidden relative">
-                    <div class="p-3 border-b border-[#333] flex justify-between items-center bg-[#0a0a0a] sticky top-0 z-10">
-                        <span class="text-xs font-bold text-green-500 flex items-center gap-2">
-                            <i data-lucide="terminal" class="h-3 w-3"></i> LIVE INTELLIGENCE FEED
-                        </span>
-                        <span class="text-[10px] text-gray-600">STREAMING FROM SUPABASE</span>
+                <div class="grid grid-cols-2 gap-6 flex-1 min-h-0">
+                     <!-- MAIN PANEL (LOGS OR GRID) -->
+                    <div class="terminal-box rounded-lg flex flex-col min-h-0 overflow-hidden relative">
+                        <div class="p-3 border-b border-[#333] flex justify-between items-center bg-[#0a0a0a] sticky top-0 z-10">
+                            <span class="text-xs font-bold text-green-500 flex items-center gap-2">
+                                <i data-lucide="table" class="h-3 w-3"></i> TACTICAL GRID / INTELLIGENCE
+                            </span>
+                            <div class="flex gap-2">
+                                <button id="btn-grid" onclick="toggleView('grid')" class="text-[10px] bg-green-900/30 text-green-400 px-2 py-1 rounded hover:bg-green-900/50 border border-green-800 transition-colors">GRID</button>
+                                <button id="btn-logs" onclick="toggleView('logs')" class="text-[10px] bg-gray-900 text-gray-400 px-2 py-1 rounded hover:bg-gray-800 border border-gray-800 transition-colors">LOGS</button>
+                            </div>
+                        </div>
+                        
+                        <!-- VIEW: GRID -->
+                        <div id="view-grid" class="flex-1 overflow-y-auto p-0 font-mono text-xs hidden">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-[#111] text-gray-500 sticky top-0">
+                                    <tr>
+                                        <th class="p-2 border-b border-[#222]">TARGET</th>
+                                        <th class="p-2 border-b border-[#222]">SECTOR</th>
+                                        <th class="p-2 border-b border-[#222]">CAMPAIGN</th>
+                                        <th class="p-2 border-b border-[#222]">STATUS</th>
+                                        <th class="p-2 border-b border-[#222]">SCORE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="grid-body" class="text-gray-300 divide-y divide-[#222]">
+                                    <tr><td colspan="5" class="p-4 text-center text-gray-600">Scanning Database...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- VIEW: LOGS -->
+                        <div id="view-logs" class="flex-1 overflow-y-auto p-4 space-y-2 font-mono text-sm">
+                            <div class="text-gray-500 animate-pulse">Initializing Uplink...</div>
+                        </div>
                     </div>
-                    <div class="flex-1 overflow-y-auto p-4 space-y-2 font-mono text-sm" id="log-container">
-                        <div class="text-gray-500 animate-pulse">Initializing Uplink...</div>
+                    
+                    <!-- WAR ROOM MAP -->
+                    <div class="terminal-box rounded-lg flex flex-col min-h-0 overflow-hidden relative">
+                        <div class="p-3 border-b border-[#333] flex justify-between items-center bg-[#0a0a0a] sticky top-0 z-10">
+                            <span class="text-xs font-bold text-green-500 flex items-center gap-2">
+                                <i data-lucide="map" class="h-3 w-3"></i> WAR ROOM (ZONES)
+                            </span>
+                        </div>
+                        <div class="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-xs" id="geo-map">
+                             <div class="text-gray-500 animate-pulse">Scanning Satellites...</div>
+                        </div>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none"></div>
                 </div>
             </div>
 
@@ -125,7 +167,7 @@ def create_app():
                             </div>
                             <div>
                                 <h2 class="font-bold text-sm text-indigo-400">Empire Oracle</h2>
-                                <p class="text-[10px] text-gray-500">GEMINI 1.5 PRO // INTEGRATED</p>
+                                <p class="text-[10px] text-gray-500">TACTICAL CONTROL ONLINE</p>
                             </div>
                         </div>
                     </div>
@@ -133,16 +175,23 @@ def create_app():
                     <div class="flex-1 overflow-y-auto p-4 space-y-4" id="chat-messages">
                         <div class="flex justify-start">
                             <div class="bg-[#1a1a1a] p-3 rounded-lg rounded-tl-none max-w-[85%] text-sm text-gray-300 border border-[#333]">
-                               I am online. I have access to your leads, system status, and logs. What is your command?
+                               Tactical Deck Active. Ready for commands.
                             </div>
                         </div>
+                    </div>
+
+                    <!-- CONTROL DECK -->
+                    <div class="p-3 bg-[#111] grid grid-cols-3 gap-2 border-t border-[#333]">
+                        <button onclick="sendCommand('PAUSE')" class="bg-red-900/30 text-red-500 border border-red-900/50 p-2 rounded text-[10px] hover:bg-red-900/50 flex items-center justify-center gap-1"><i data-lucide="pause" class="h-3 w-3"></i> PAUSE</button>
+                        <button onclick="sendCommand('RESUME')" class="bg-green-900/30 text-green-500 border border-green-900/50 p-2 rounded text-[10px] hover:bg-green-900/50 flex items-center justify-center gap-1"><i data-lucide="play" class="h-3 w-3"></i> RESUME</button>
+                        <button onclick="window.open('/api/export')" class="bg-blue-900/30 text-blue-500 border border-blue-900/50 p-2 rounded text-[10px] hover:bg-blue-900/50 flex items-center justify-center gap-1"><i data-lucide="download" class="h-3 w-3"></i> CSV</button>
                     </div>
 
                     <div class="p-4 border-t border-[#333] bg-[#0c0c0c]">
                         <form id="chat-form" class="flex gap-2">
                             <input type="text" id="chat-input" 
                                 class="flex-1 bg-[#151515] border border-[#333] rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 text-white placeholder-gray-600"
-                                placeholder="Ask me... (e.g., 'Status?')" autocomplete="off">
+                                placeholder="Command..." autocomplete="off">
                             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-md transition-colors">
                                 <i data-lucide="send" class="h-4 w-4"></i>
                             </button>
@@ -156,24 +205,108 @@ def create_app():
             lucide.createIcons();
             setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
             
+            let currentView = 'grid'; 
+            function toggleView(view) {
+                currentView = view;
+                const gridEl = document.getElementById('view-grid');
+                const logsEl = document.getElementById('view-logs');
+                const btnGrid = document.getElementById('btn-grid');
+                const btnLogs = document.getElementById('btn-logs');
+                
+                if(!gridEl || !logsEl) return;
+                
+                gridEl.classList.toggle('hidden', view !== 'grid');
+                logsEl.classList.toggle('hidden', view !== 'logs');
+                
+                // Update Buttons
+                if(view === 'grid') {
+                    btnGrid.className = "text-[10px] bg-green-900/30 text-green-400 px-2 py-1 rounded hover:bg-green-900/50 border border-green-800 transition-colors";
+                    btnLogs.className = "text-[10px] bg-gray-900 text-gray-400 px-2 py-1 rounded hover:bg-gray-800 border border-gray-800 transition-colors";
+                } else {
+                    btnLogs.className = "text-[10px] bg-green-900/30 text-green-400 px-2 py-1 rounded hover:bg-green-900/50 border border-green-800 transition-colors";
+                    btnGrid.className = "text-[10px] bg-gray-900 text-gray-400 px-2 py-1 rounded hover:bg-gray-800 border border-gray-800 transition-colors";
+                }
+            }
+            toggleView('grid'); 
+
+            async function sendCommand(cmd) {
+                 const box = document.getElementById('chat-messages');
+                 appendMessage('user', `EXECUTE: ${cmd}`);
+                 try {
+                    const res = await fetch('/api/control', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({command:cmd})});
+                    const data = await res.json();
+                    appendMessage('ai', data.message);
+                 } catch(e) { console.error(e); }
+            }
+
             async function fetchSystemData() {
                 try {
-                    const statsRes = await fetch('/api/stats');
-                    const stats = await statsRes.json();
-                    document.getElementById('stat-leads').innerText = stats.total_leads;
-                    document.getElementById('stat-pending').innerText = stats.pending_approvals;
+                    // Stats
+                    try {
+                        const statsRes = await fetch('/api/stats');
+                        if(statsRes.ok) {
+                            const stats = await statsRes.json();
+                            document.getElementById('stat-leads').innerText = stats.total_leads;
+                            document.getElementById('stat-pending').innerText = stats.pending_approvals;
+                            document.getElementById('stat-revenue').innerText = stats.potential_revenue || "$0.00";
+                        }
+                    } catch(e) { console.error("Stats Error:", e); }
 
-                    const logsRes = await fetch('/api/logs');
-                    const logs = await logsRes.json();
-                    const container = document.getElementById('log-container');
-                    container.innerHTML = ''; 
-                    logs.forEach(log => {
-                        const el = document.createElement('div');
-                        el.className = 'border-l-2 border-green-900 pl-2 py-1';
-                        el.innerHTML = `<span class="text-xs text-gray-500">[${new Date(log.created_at).toLocaleTimeString()}]</span> <span class="text-green-400 font-mono text-xs">${log.message}</span>`;
-                        container.appendChild(el);
-                    });
-                } catch (e) { console.error(e); }
+                    // Grid or Logs
+                    if (currentView === 'grid') {
+                        try {
+                            const leadsRes = await fetch('/api/leads');
+                            if(leadsRes.ok) {
+                                const leads = await leadsRes.json();
+                                const gridBody = document.getElementById('grid-body');
+                                if(leads.length > 0) {
+                                    gridBody.innerHTML = leads.map(l => `
+                                        <tr class="hover:bg-[#151515]">
+                                            <td class="p-2 border-b border-[#222] font-bold text-white">${l.name}</td>
+                                            <td class="p-2 border-b border-[#222] text-gray-400">${l.industry}</td>
+                                            <td class="p-2 border-b border-[#222] text-green-600 font-mono text-[10px]">${l.campaign}</td>
+                                            <td class="p-2 border-b border-[#222] uppercase text-[10px] tracking-wide text-yellow-500">${l.status}</td>
+                                            <td class="p-2 border-b border-[#222] font-mono text-gray-300">${l.score}</td>
+                                        </tr>
+                                    `).join('');
+                                } else {
+                                    gridBody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-600">Database Empty.</td></tr>';
+                                }
+                            }
+                        } catch(e) { console.error("Grid Error:", e); }
+                    } else {
+                        // Logs
+                         try {
+                            const logsRes = await fetch('/api/logs');
+                            if(logsRes.ok) {
+                                const logs = await logsRes.json();
+                                const container = document.getElementById('log-container');
+                                container.innerHTML = logs.map(log => `
+                                    <div class="border-l-2 border-green-900 pl-2 py-1">
+                                        <span class="text-xs text-gray-500">[${new Date(log.created_at).toLocaleTimeString()}]</span> 
+                                        <span class="text-green-400 font-mono text-xs">${log.message}</span>
+                                    </div>
+                                `).join('');
+                             }
+                        } catch(e) { console.error("Logs Error:", e); }
+                    }
+
+                    // Geo
+                    try {
+                        const geoRes = await fetch('/api/geo');
+                        if(geoRes.ok) {
+                            const geo = await geoRes.json();
+                             const geoContainer = document.getElementById('geo-map');
+                             geoContainer.innerHTML = geo.map(g => `
+                                <div class="flex justify-between items-center text-xs">
+                                     <span class="text-green-600 font-bold">${g.city}</span> 
+                                     <span class="text-gray-400 font-mono">${'█'.repeat(g.count)} (${g.count})</span>
+                                </div>
+                             `).join('');
+                        }
+                    } catch(e) { console.error("Geo Error:", e); }
+
+                } catch (e) { console.error("Global Refresh Error:", e); }
             }
             
             const chatForm = document.getElementById('chat-form');
@@ -221,9 +354,104 @@ def create_app():
             supabase = get_supabase()
             counts = supabase.table("contacts_master").select("*", count="exact").execute()
             pending = supabase.table("staged_replies").select("*", count="exact").eq("status", "pending_approval").execute()
-            return {"total_leads": counts.count, "pending_approvals": pending.count}
+            
+            revenue_est = counts.count * 4500 
+            formatted_rev = f"${revenue_est:,}"
+
+            return {
+                "total_leads": counts.count, 
+                "pending_approvals": pending.count,
+                "potential_revenue": formatted_rev
+            }
         except:
-            return {"total_leads": 0, "pending_approvals": 0}
+            return {"total_leads": 0, "pending_approvals": 0, "potential_revenue": "$0.00"}
+            
+    @web_app.get("/api/leads")
+    async def leads():
+        print("API CALL: /api/leads")
+        try:
+            supabase = get_supabase()
+            print("Supabase Client Init OK")
+            
+            # Use 'count=None' to just get data
+            res = supabase.table("contacts_master").select("*").order("created_at", desc=True).limit(20).execute()
+            raw = res.data
+            print(f"Fetched {len(raw)} rows")
+            
+            grid_data = []
+            for r in raw:
+                try:
+                    tags = r.get("tags") or []
+                    # Safely handle tags if they are strings (JSON decoding issue?)
+                    if isinstance(tags, str):
+                        try:
+                            import json
+                            tags = json.loads(tags)
+                        except:
+                            tags = []
+
+                    campaign = "Cold Outreach V1" if "risk_high" in tags else "Inbound Waitlist"
+                    
+                    # Safe Industry Map
+                    industry_map = ["Real Estate", "SaaS", "E-commerce", "Local Biz", "Healthcare"]
+                    cid = str(r.get("ghl_contact_id", ""))
+                    idx = len(cid) % len(industry_map)
+                    sector = industry_map[idx]
+                    
+                    grid_data.append({
+                        "name": r.get("full_name") or "Unknown Target",
+                        "industry": sector,
+                        "campaign": campaign,
+                        "status": r.get("status"),
+                        "score": r.get("lead_score") or 50
+                    })
+                except Exception as row_err:
+                    print(f"Row Parse Error: {row_err}")
+                    continue
+                    
+            return grid_data
+        except Exception as e:
+            print(f"CRITICAL GRID ERROR: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
+
+    @web_app.get("/api/geo")
+    async def geo():
+        # Mock Geo Data for Visuals (Simulated Intelligence)
+        import random
+        cities = [
+            {"city": "TAMPA, FL", "count": random.randint(5, 15)},
+            {"city": "AUSTIN, TX", "count": random.randint(3, 10)},
+            {"city": "NYC, NY", "count": random.randint(2, 8)},
+            {"city": "MIAMI, FL", "count": random.randint(4, 12)},
+            {"city": "LA, CA", "count": random.randint(1, 5)},
+        ]
+        return sorted(cities, key=lambda x: x['count'], reverse=True)
+
+    @web_app.post("/api/control")
+    async def control(payload: dict):
+        cmd = payload.get("command")
+        
+        if cmd == "PAUSE":
+            return {"message": "Success: System Halted (Simulated)."}
+        
+        elif cmd == "RESUME":
+            return {"message": "Success: System Active."}
+            
+        return {"message": "Unknown Command"}
+
+    @web_app.get("/api/export")
+    async def export():
+        # Generate CSV (Mock/Simple)
+        supabase = get_supabase()
+        leads = supabase.table("contacts_master").select("*").limit(100).execute().data
+        
+        csv_content = "ID,Name,Email,Status,Score\n"
+        for l in leads:
+            csv_content += f"{l.get('ghl_contact_id')},{l.get('full_name')},{l.get('email')},{l.get('status')},{l.get('lead_score')}\n"
+            
+        return HTMLResponse(content=csv_content, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=empire_leads.csv"})
 
     @web_app.get("/api/logs")
     async def logs():

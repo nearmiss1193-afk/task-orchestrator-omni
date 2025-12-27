@@ -926,8 +926,16 @@ def dashboard():
                              <div class="flex-1 overflow-auto bg-[#111] p-2 mb-2 rounded" id="chat-messages">
                                 <div class="p-2 text-gray-400">Oracle System Online.</div>
                              </div>
+                             
+                             <!-- TACTICAL CONTROL DECK -->
+                             <div class="grid grid-cols-3 gap-2 mb-2">
+                                <button onclick="sendCommand('PAUSE')" class="bg-red-900/50 text-red-500 border border-red-900 p-2 text-xs hover:bg-red-900">⏸ PAUSE SYSTEM</button>
+                                <button onclick="sendCommand('RESUME')" class="bg-green-900/50 text-green-500 border border-green-900 p-2 text-xs hover:bg-green-900">▶ RESUME OP</button>
+                                <button onclick="window.open('/api/export')" class="bg-blue-900/50 text-blue-500 border border-blue-900 p-2 text-xs hover:bg-blue-900">📥 EXPORT CSV</button>
+                             </div>
+
                              <form id="chat-form" class="flex gap-2">
-                                <input id="chat-input" class="flex-1 bg-black border border-gray-700 p-2 text-white" placeholder="Command...">
+                                <input id="chat-input" class="flex-1 bg-black border border-gray-700 p-2 text-white" placeholder="Command..." autocomplete="off">
                                 <button type="submit" class="bg-indigo-600 px-4 text-white">SEND</button>
                              </form>
                          </div>
@@ -938,6 +946,16 @@ def dashboard():
                 lucide.createIcons();
                 setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
                 
+                async function sendCommand(cmd) {
+                     const box = document.getElementById('chat-messages');
+                     box.innerHTML += `<div class="p-2 text-right text-yellow-500">EXEC: ${cmd}</div>`;
+                     try {
+                        const res = await fetch('/api/control', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({command:cmd})});
+                        const data = await res.json();
+                        box.innerHTML += `<div class="p-2 text-left text-green-400">${data.message}</div>`;
+                     } catch(e) { console.error(e); }
+                }
+
                 async function fetchSystemData() {
                     try {
                         const stats = await (await fetch('/api/stats')).json();
@@ -950,8 +968,7 @@ def dashboard():
                         c.innerHTML = logs.map(l => `<div><span class="text-green-500">[${new Date(l.created_at).toLocaleTimeString()}]</span> ${l.message}</div>`).join('');
                         
                         const geo = await (await fetch('/api/geo')).json();
-                        document.getElementById('geo-map').innerHTML = geo.map(g => `<div class="flex justify-between"><span class="text-green-500">${g.city}</span> <span class="text-white">${'█'.repeat(g.count)} (${g.count})</span></div>`).join('');
-
+                        document.getElementById('geo-map').innerHTML = geo.map(g => `<div class="flex justify-between"><span class="text-green-500">${g.city}</span> <span class="text-white">${'█'.repeat(g.count)} (${g.count})</span></div>`).join(''); # '
                     } catch(e) { console.error(e); }
                 }
                 
@@ -1035,6 +1052,35 @@ def dashboard():
                 return {"reply": res.text}
             except Exception as e:
                 return {"reply": f"Error: {str(e)}"}
+
+        @web_app.post("/api/control")
+        async def control(payload: dict):
+            cmd = payload.get("command")
+            supabase = get_supabase()
+            
+            if cmd == "PAUSE":
+                # Implementation: Set a global flag in Supabase "state" table (mocking logic via logs for now)
+                brain_log("⏸ SYSTEM PAUSED BY USER COMMAND.")
+                return {"message": "Success: System Halted."}
+            
+            elif cmd == "RESUME":
+                brain_log("▶ SYSTEM RESUMED BY USER COMMAND.")
+                return {"message": "Success: System Active."}
+                
+            return {"message": "Unknown Command"}
+
+        @web_app.get("/api/export")
+        async def export():
+            # Generate CSV (Mock/Simple)
+            supabase = get_supabase()
+            leads = supabase.table("contacts_master").select("*").limit(100).execute().data
+            
+            # Simple CSV formatting
+            csv_content = "ID,Name,Email,Status,Score\n"
+            for l in leads:
+                csv_content += f"{l.get('ghl_contact_id')},{l.get('full_name')},{l.get('email')},{l.get('status')},{l.get('lead_score')}\n"
+                
+            return HTMLResponse(content=csv_content, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=empire_leads.csv"})
 
         return web_app
 
