@@ -5,6 +5,7 @@ import urllib.parse
 import ssl
 
 # --- DEPENDENCY SAFEGUARDS ---
+stripe_error = None
 try:
     import resend
     RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
@@ -18,7 +19,7 @@ try:
     stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 except ImportError as e:
     stripe = None
-    stripe_error = e
+    stripe_error = str(e)
 
 try:
     import pg8000.native
@@ -213,7 +214,7 @@ class handler(BaseHTTPRequestHandler):
             elif path == "/api/create-checkout-session":
                 # ... (Keep existing Stripe logic) ...
                 if not stripe:
-                    response_data = {"status": "error", "message": f"Stripe missing. Error: {str(stripe_error) if 'stripe_error' in globals() else 'Unknown'}"}
+                    response_data = {"status": "error", "message": f"Stripe import failed: {stripe_error if stripe_error else 'Unknown error'}"}
                 else:
                     plan = body.get('plan', 'starter').lower()
                     domain_url = os.environ.get("VERCEL_URL", "http://localhost:3000")
