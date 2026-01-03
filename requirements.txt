@@ -5,3 +5,4 @@ requests
 resend
 stripe
 pg8000
+sentry-sdk

@@ -20,7 +20,7 @@ try:
 
     params = {
         "from": "alert@aiserviceco.com",
-        "to": ["admin@aiserviceco.com"],
+        "to": ["admin@aiserviceco.com", "nearmiss1193@gmail.com"],
         "subject": "🦅 Empire System Status: SOVEREIGN [Online]",
         "html": """
         <h1>System Reporting Online</h1>

@@ -41,8 +41,25 @@ If the agent stops checking inventory or responding to requests:
 
     *This re-injects the Server URL and System Prompt (including the Security Protocol).*
 
-3. **Check API Keys**:
-    Ensure `.env` contains valid `VAPI_PRIVATE_KEY` and `GHL_API_TOKEN`.
+### C. Revenue System Restoration (Stripe/Vercel)
+
+If the checkout flow fails or 500 errors occur:
+
+1. **Check Vercel Deployment**:
+    - Go to **Vercel Dashboard** -> **Deployments**.
+    - If status is "Error", check logs for `ImportError` or `AuthenticationError`.
+2. **Verify Stripe Key**:
+    - Ensure `STRIPE_SECRET_KEY` in Vercel Settings starts with `sk_live_`.
+    - Use `python verify_key_local.py` (locally) to test if the key itself is valid.
+3. **Redeploy API**:
+
+    ```bash
+    cd c:\Users\nearm\.gemini\antigravity\scratch\empire-unified
+    vercel deploy --prod
+    ```
+
+4. **Health Check**:
+    - Visit `https://empire-sovereign-cloud.vercel.app/api/health` to confirm dependencies (Stripe, Resend, PG8000) are loaded.
 
 ## 2. Security Protocol (Office Manager)
 

@@ -1,5 +1,11 @@
 {
     "version": 2,
+    "builds": [
+        {
+            "src": "api/index.py",
+            "use": "@vercel/python"
+        }
+    ],
     "rewrites": [
         {
             "source": "/api/(.*)",
@@ -12,6 +18,12 @@
         {
             "source": "/(.*)",
             "destination": "/apps/portal/public/landing/$1"
+        }
+    ],
+    "crons": [
+        {
+            "path": "/api/health?ping_db=true",
+            "schedule": "0 12 * * *"
         }
     ]
 }
