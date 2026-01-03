@@ -17,6 +17,9 @@ git push origin main
 echo [4/4] Deploying to Cloud (Vercel)...
 call vercel deploy --prod
 
+echo [5/5] Notifying Stakeholders (Emailing Protocols)...
+python modules/comms/notify_save_status.py
+
 echo.
 echo ==========================================
 echo      ✅ PROTOCOL COMPLETE: SYSTEM SECURE
