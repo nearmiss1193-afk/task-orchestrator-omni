@@ -16,15 +16,21 @@ def verify():
         res = requests.post(BASE_URL, json=payload, timeout=10)
         print(f"Status Code: {res.status_code}")
         print(f"Response Body: {res.text}")
+        print()
         
         if res.status_code == 200:
             data = res.json()
+            print(f"Parsed JSON: {json.dumps(data, indent=2)}")
+            print()
+            
             if data.get("status") == "success" and "url" in data:
-                print("SUCCESS: Stripe Checkout Session Created.")
+                print("✅ SUCCESS: Stripe Checkout Session Created.")
                 print(f"Checkout URL: {data['url']}")
                 return True
             else:
-                print("FAILURE: API returned 200 but missing success/url.")
+                print("❌ FAILURE: API returned 200 but missing success/url.")
+                if "message" in data:
+                    print(f"Error Message: {data['message']}")
                 return False
         else:
             print(f"FAILURE: Unexpected status code {res.status_code}")
