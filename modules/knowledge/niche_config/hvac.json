@@ -1,0 +1,23 @@
+{
+    "vertical": "hvac",
+    "winning_offer": "Free 'AC Health Audit' + $50 On-Time Guarantee",
+    "pain_points": [
+        "Technicians showing up 4 hours late",
+        "Hidden 'Freon' charges",
+        "Ghosting after the quote"
+    ],
+    "compliance": [
+        "EPA Section 608 Certification required for refrigerant",
+        "Florida Building Code 2024 Energy Efficiency standards",
+        "SEER2 minimum requirements"
+    ],
+    "pricing": {
+        "service_call": 89,
+        "tune_up": 129,
+        "install_min": 5500
+    },
+    "objection_handlers": {
+        "price_shock": "We offer 0% financing for 18 months, which drops this to $75/mo.",
+        "need_spousals": "I can send the Video Quote to your partner right now."
+    }
+}
