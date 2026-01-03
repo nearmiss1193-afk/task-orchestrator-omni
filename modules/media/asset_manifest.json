@@ -54,6 +54,34 @@
         "tone": "Trust"
     },
     {
+        "id": "vid_restaurant_kitchen_001",
+        "type": "video",
+        "category": "wholesale_order",
+        "description": "Busy high-end restaurant kitchen with chefs plating food.",
+        "tags": [
+            "restaurant",
+            "kitchen",
+            "chef",
+            "food_service"
+        ],
+        "path": "assets/video/restaurant_kitchen_cinematic.mp4",
+        "tone": "Busy"
+    },
+    {
+        "id": "vid_dental_office_001",
+        "type": "video",
+        "category": "review_diverter",
+        "description": "Clean, modern dental office reception with smiling staff.",
+        "tags": [
+            "dental",
+            "medical",
+            "clean",
+            "office"
+        ],
+        "path": "assets/video/dental_office_cinematic.mp4",
+        "tone": "Clean"
+    },
+    {
         "id": "img_thermostat_shocker_001",
         "type": "image",
         "category": "pain_point",
