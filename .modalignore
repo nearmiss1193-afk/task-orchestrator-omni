@@ -1,0 +1,12 @@
+**/node_modules
+**/.git
+**/.next
+**/dist
+**/__pycache__
+**/*.log
+backups/
+**/*_b64.txt
+assets_data.py
+deploy_landing_v3.py
+deploy_landing_v5.py
+deploy_final_sso.py

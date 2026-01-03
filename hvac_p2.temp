@@ -1,0 +1,288 @@
+    <!-- VIDEO -->
+    <section class="video-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">See Your Advantage</div>
+                <h2 class="section-title">Watch How Winners Handle Calls</h2>
+                <p class="section-subtitle">See exactly how your AI answers calls, qualifies leads, and books jobs.</p>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/CeLRdL4WAJQ?rel=0&modestbranding=1" title="AI Service Co" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="problem-section">
+        <div class="container">
+            <div class="problem-grid">
+                <div class="problem-content">
+                    <div class="section-label">The Problem</div>
+                    <h2>This Is Why <span>They</span> Fail</h2>
+                    <p>80% of service businesses go under within 5 years because they can't keep up with calls.</p>
+                    <div class="problem-stats">
+                        <div class="problem-stat"><div class="problem-stat-number">62%</div><div class="problem-stat-label">Calls go unanswered</div></div>
+                        <div class="problem-stat"><div class="problem-stat-number">78%</div><div class="problem-stat-label">Callers won't leave vm</div></div>
+                        <div class="problem-stat"><div class="problem-stat-number">31%</div><div class="problem-stat-label">Calls after hours</div></div>
+                        <div class="problem-stat"><div class="problem-stat-number">47hr</div><div class="problem-stat-label">Avg response time</div></div>
+                    </div>
+                </div>
+                <div class="problem-cards">
+                    <div class="problem-card"><div class="problem-card-icon">📞</div><div><h4>They Miss Calls = You Get Jobs</h4><p>While they're on a job ignoring the phone, your AI answers in 2 seconds.</p></div></div>
+                    <div class="problem-card"><div class="problem-card-icon">💬</div><div><h4>They Ignore Texts = You Close Deals</h4><p>Your AI responds instantly to texts.</p></div></div>
+                    <div class="problem-card"><div class="problem-card-icon">⏰</div><div><h4>They Forget Follow-ups = You Stay Top of Mind</h4><p>Your AI follows up automatically within hours.</p></div></div>
+                    <div class="problem-card"><div class="problem-card-icon">💀</div><div><h4>They Abandon Customers = You Reactivate Revenue</h4><p>Your AI brings back dead leads.</p></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTION -->
+    <section class="solution-section" id="solutions">
+        <div class="container">
+            <div class="section-header"><div class="section-label">Your Unfair Advantage</div><h2 class="section-title">Your 24/7 AI Workforce</h2></div>
+            <div class="solution-grid">
+                <div class="solution-card"><div class="solution-icon">🛡️</div><h3>Inbound Closer</h3><p>AI answers calls, qualifies leads, books calendar.</p><span class="solution-status live">Live & Ready</span></div>
+                <div class="solution-card"><div class="solution-icon">🎯</div><h3>Outbound Hunter</h3><p>AI finds new customers and sends outreach.</p><span class="solution-status ready">Pro Plan</span></div>
+                <div class="solution-card"><div class="solution-icon">⚔️</div><h3>Database Reactivation</h3><p>AI revives dead leads.</p><span class="solution-status live">Growth Plan</span></div>
+                <div class="solution-card"><div class="solution-icon">📊</div><h3>Command Center</h3><p>Real-time dashboard.</p><span class="solution-status live">Pro Plan</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header"><div class="section-label">Pricing</div><h2 class="section-title">Pick Your Level of Domination</h2></div>
+            <div class="pricing-toggle">
+                <span class="active" id="monthlyLabel">Monthly</span>
+                <div class="toggle-switch" id="billingToggle" onclick="toggleBilling()"></div>
+                <span id="annualLabel">Annual</span>
+                <span class="save-badge">Save 20%</span>
+            </div>
+            <div class="pricing-grid">
+                <!-- LITE -->
+                <div class="pricing-card">
+                    <div class="pricing-header"><h3 class="pricing-name">Lite</h3><div class="pricing-price"><span class="pricing-currency">$</span><span class="pricing-amount" data-monthly="99" data-annual="79">99</span><span class="pricing-period">/mo</span></div></div>
+                    <div class="pricing-features"><ul><li>Missed call text-back (50/mo)</li><li>AI appointment setter (30 convos)</li><li>SMS unified inbox</li></ul></div>
+                    <button class="pricing-btn secondary" onclick="openFunnel()">Start Free Trial</button>
+                </div>
+                <!-- STARTER -->
+                <div class="pricing-card">
+                    <div class="pricing-header"><h3 class="pricing-name">Starter</h3><div class="pricing-price"><span class="pricing-currency">$</span><span class="pricing-amount" data-monthly="149" data-annual="119">149</span><span class="pricing-period">/mo</span></div></div>
+                    <div class="pricing-features"><ul><li>Missed call text-back (150/mo)</li><li>AI appointment setter (100 convos)</li><li>Full pipeline (3 stages)</li></ul></div>
+                    <button class="pricing-btn secondary" onclick="openFunnel()">Start Free Trial</button>
+                </div>
+                <!-- GROWTH -->
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-header"><h3 class="pricing-name">Growth</h3><div class="pricing-price"><span class="pricing-currency">$</span><span class="pricing-amount" data-monthly="297" data-annual="237">297</span><span class="pricing-period">/mo</span></div></div>
+                    <div class="pricing-features"><ul><li><strong>Unlimited</strong> missed call text-back</li><li>AI appointment setter (300 convos)</li><li><strong>Database reactivation</strong></li></ul></div>
+                    <button class="pricing-btn primary" onclick="openFunnel()">Start Free Trial</button>
+                </div>
+                <!-- PRO -->
+                <div class="pricing-card">
+                    <div class="pricing-header"><h3 class="pricing-name">Pro</h3><div class="pricing-price"><span class="pricing-currency">$</span><span class="pricing-amount" data-monthly="497" data-annual="397">497</span><span class="pricing-period">/mo</span></div></div>
+                    <div class="pricing-features"><ul><li><strong>Unlimited</strong> AI conversations</li><li><strong>Outbound campaigns</strong></li><li>Warlord analytics</li></ul></div>
+                    <button class="pricing-btn secondary" onclick="openFunnel()">Start Free Trial</button>
+                </div>
+                <!-- ENTERPRISE -->
+                <div class="pricing-card enterprise">
+                    <div class="pricing-header"><h3 class="pricing-name">Enterprise</h3><div class="pricing-price"><span class="pricing-amount" style="font-size: 32px;">Custom</span></div></div>
+                    <div class="pricing-features"><ul><li>Everything in Pro</li><li>Multi-location</li><li>White-label options</li></ul></div>
+                    <a href="tel:+18632132505" class="pricing-btn secondary">📞 Let's Talk</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS & TESTIMONIALS (Simplified for brevity as structure is same) -->
+    <section class="how-section" id="how-it-works">
+        <div class="container">
+            <div class="section-header"><div class="section-label">How It Works</div><h2 class="section-title">Dominating in 24 Hours</h2></div>
+            <div class="how-steps">
+                <div class="how-step"><div class="step-number">1</div><h3>Tell Us Your Game Plan</h3><p>Quick 5-minute form.</p></div>
+                <div class="how-step"><div class="step-number">2</div><h3>We Build Your AI Army</h3><p>Takes us ~4 hours.</p></div>
+                <div class="how-step"><div class="step-number">3</div><h3>Start Winning</h3><p>Forward calls and win.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header"><div class="section-label">Winners</div><h2 class="section-title">They Made the Switch.</h2></div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"AI paid for itself in 3 days."</p><div class="testimonial-author"><div class="testimonial-avatar">MT</div><div class="testimonial-info"><h4>Mike T.</h4><p>Thompson Plumbing</p></div></div></div>
+                <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"Customers have no idea it's not a real person."</p><div class="testimonial-author"><div class="testimonial-avatar">SR</div><div class="testimonial-info"><h4>Sarah R.</h4><p>Cool Breeze HVAC</p></div></div></div>
+                <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"No more missing calls while I'm on a roof."</p><div class="testimonial-author"><div class="testimonial-avatar">JW</div><div class="testimonial-info"><h4>James W.</h4><p>Wilson Roofing</p></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-header"><div class="section-label">Get Started</div><h2 class="section-title">Ready to Outwork Your Competition?</h2></div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Let's Build Your Advantage</h3>
+                    <div class="contact-methods">
+                        <div class="contact-method"><div class="contact-method-icon">📞</div><div><a href="tel:+18632132505">(863) 213-2505</a><span>Answered 24/7 by AI</span></div></div>
+                        <div class="contact-method"><div class="contact-method-icon">✉️</div><div><a href="mailto:owner@aiserviceco.com">owner@aiserviceco.com</a><span>Response within 24 hours</span></div></div>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <iframe src="https://links.aiserviceco.com/widget/form/7TTJ1CUAFjhON69ZsOZK" style="width:100%;height:100%;min-height:550px;border:none;" id="contact-form-embed_1" data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-form-id="7TTJ1CUAFjhON69ZsOZK"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand"><h3>⚡ AI Service <span>Co</span></h3></div>
+                <div class="footer-links"><h4>Product</h4><a href="#solutions">Solutions</a><a href="#pricing">Pricing</a></div>
+                <div class="footer-links"><h4>Contact</h4><a href="tel:+18632132505">(863) 213-2505</a><a href="mailto:owner@aiserviceco.com">owner@aiserviceco.com</a></div>
+            </div>
+            <div class="footer-bottom"><p>© 2025 AI Service Co.</p></div>
+        </div>
+    </footer>
+
+    <!-- FUNNEL -->
+    <div class="funnel-overlay" id="funnelOverlay">
+        <div class="funnel-container">
+            <button class="funnel-close" onclick="closeFunnel()">×</button>
+            <!-- Step 1 -->
+            <div class="funnel-step active" id="funnelStep1">
+                <h3>Where do you want to <span>beat your competition</span>?</h3>
+                <div class="funnel-options">
+                    <div class="funnel-option" onclick="goToStep(2, 'missed_calls')"><div class="funnel-option-icon">📞</div><div class="funnel-option-text"><h4>Capture every call</h4></div></div>
+                    <div class="funnel-option" onclick="goToStep(2, 'after_hours')"><div class="funnel-option-icon">🌙</div><div class="funnel-option-text"><h4>Win after-hours</h4></div></div>
+                </div>
+                <input type="text" class="funnel-other-input" id="otherPainInput" placeholder="Something else?" oninput="handleOtherInput(this)">
+                <button class="funnel-other-submit" id="otherPainSubmit" onclick="submitOtherPain()">Let's Talk About It →</button>
+            </div>
+            <!-- Step 2 -->
+            <div class="funnel-step" id="funnelStep2">
+                <h3>How big is <span>your operation</span>?</h3>
+                <div class="funnel-options">
+                    <div class="funnel-option" onclick="goToStep(3, 'solo')"><div class="funnel-option-icon">🔧</div><div class="funnel-option-text"><h4>Just me (solo)</h4></div></div>
+                    <div class="funnel-option" onclick="goToStep(3, 'small')"><div class="funnel-option-icon">🚐</div><div class="funnel-option-text"><h4>Small crew (2-5)</h4></div></div>
+                    <div class="funnel-option" onclick="goToStep(3, 'medium')"><div class="funnel-option-icon">🏢</div><div class="funnel-option-text"><h4>Growing shop (6-15)</h4></div></div>
+                </div>
+                <button class="funnel-back" onclick="goToStep(1)">← Back</button>
+            </div>
+            <!-- Step 3 -->
+            <div class="funnel-step" id="funnelStep3">
+                <h3>Busiest <span>Season</span>?</h3>
+                <div class="funnel-options">
+                    <div class="funnel-option" onclick="goToStep(4, 'winter')"><div class="funnel-option-icon">❄️</div><div class="funnel-option-text"><h4>Winter</h4></div></div>
+                    <div class="funnel-option" onclick="goToStep(4, 'summer')"><div class="funnel-option-icon">☀️</div><div class="funnel-option-text"><h4>Summer</h4></div></div>
+                </div>
+                <button class="funnel-back" onclick="goToStep(2)">← Back</button>
+            </div>
+             <!-- Step 4 -->
+            <div class="funnel-step" id="funnelStep4">
+                <h3>What's <span>next</span>?</h3>
+                <div class="funnel-options">
+                    <div class="funnel-option" onclick="showContactForm()"><div class="funnel-option-text"><h4>Start Free Trial</h4></div></div>
+                    <div class="funnel-option" onclick="showBookingOption()"><div class="funnel-option-text"><h4>Talk Strategy</h4></div></div>
+                </div>
+                <button class="funnel-back" onclick="goToStep(3)">← Back</button>
+            </div>
+            <!-- Booking -->
+            <div class="funnel-step" id="funnelStepBooking">
+                <h3>📞 Let's <span>Talk</span></h3>
+                <div class="funnel-contact-cards">
+                    <div class="funnel-contact-card"><h4>Call Us</h4><a href="tel:+18632132505">(863) 213-2505</a></div>
+                    <div class="funnel-contact-card"><h4>Chat</h4><a href="#" onclick="closeFunnel(); return false;">Open Chat Widget</a></div>
+                </div>
+            </div>
+            <!-- Contact Form Step (iframe) -->
+             <div class="funnel-step" id="funnelStepContact">
+                <h3>🚀 Let's Get <span>Started</span></h3>
+                <div class="funnel-form-container">
+                    <iframe src="https://links.aiserviceco.com/widget/form/7TTJ1CUAFjhON69ZsOZK" style="width:100%;height:500px;border:none;" id="inline-7TTJ1CUAFjhON69ZsOZK" data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-form-id="7TTJ1CUAFjhON69ZsOZK"></iframe>
+                </div>
+            </div>
+            <!-- Payment Form Step (iframe) -->
+             <div class="funnel-step" id="funnelStepPayment">
+                <h3>🏆 Let's <span>Dominate</span></h3>
+                <div class="funnel-form-container">
+                    <iframe src="https://links.aiserviceco.com/widget/form/qaJ7szEbp2TwJkAT6WxG" style="width:100%;height:600px;border:none;" id="inline-qaJ7szEbp2TwJkAT6WxG" data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-form-id="qaJ7szEbp2TwJkAT6WxG"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT WIDGET -->
+    <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="69507213261ca136120c2fe0"></script>
+    <script src="https://links.aiserviceco.com/js/form_embed.js"></script>
+
+    <!-- SCRIPTS -->
+    <script>
+        let funnelData = { problem:'', teamSize:'', season:'', action:'' };
+        function openFunnel() { document.getElementById('funnelOverlay').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeFunnel() { document.getElementById('funnelOverlay').classList.remove('active'); document.body.style.overflow = ''; setTimeout(() => { hideAllSteps(); document.getElementById('funnelStep1').classList.add('active'); }, 300); }
+        function hideAllSteps() { document.querySelectorAll('.funnel-step').forEach(step => step.classList.remove('active')); }
+        function goToStep(n, sel) {
+            if(n===2 && sel) funnelData.problem = sel;
+            if(n===3 && sel) funnelData.teamSize = sel;
+            if(n===4 && sel) funnelData.season = sel;
+            hideAllSteps(); document.getElementById('funnelStep'+n).classList.add('active');
+        }
+        function showContactForm() { funnelData.action='free_trial'; hideAllSteps(); document.getElementById('funnelStepContact').classList.add('active'); }
+        function showBookingOption() { funnelData.action='talk_first'; hideAllSteps(); document.getElementById('funnelStepBooking').classList.add('active'); }
+        function showPaymentForm() { funnelData.action='sign_up_now'; hideAllSteps(); document.getElementById('funnelStepPayment').classList.add('active'); }
+        function handleOtherInput(input) { document.getElementById('otherPainSubmit').classList.toggle('visible', input.value.trim().length > 0); }
+        function submitOtherPain() {
+            const val = document.getElementById('otherPainInput').value.trim();
+            if(val) { funnelData.customProblem = val; funnelData.problem = 'other'; closeFunnel(); setTimeout(() => alert('Thanks! Our team will reach out about: "'+val+'"'), 300); }
+        }
+        document.getElementById('funnelOverlay').addEventListener('click', function(e) { if(e.target === this) closeFunnel(); });
+        let isAnnual = false;
+        function toggleBilling() {
+            isAnnual = !isAnnual;
+            document.getElementById('billingToggle').classList.toggle('active', isAnnual);
+            document.getElementById('monthlyLabel').classList.toggle('active', !isAnnual);
+            document.getElementById('annualLabel').classList.toggle('active', isAnnual);
+            document.querySelectorAll('.pricing-amount').forEach(el => {
+                const m = el.dataset.monthly; const a = el.dataset.annual;
+                if(m && a) el.textContent = isAnnual ? a : m;
+            });
+        }
+    </script>
+
+    <!-- VAPI -->
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+    <script>
+        var vapiInstance = null;
+        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
+        const ASSISTANT_ID = "d19cae13-d11b-499b-a9e7-2e113efe1112"; 
+        (function () {
+            var script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            script.defer = true;
+            script.async = true;
+            script.onload = function () {
+                vapiInstance = window.vapiSDK.run({
+                    apiKey: VAPI_PUBLIC_KEY,
+                    assistant: ASSISTANT_ID,
+                    config: {
+                        position: "bottom-left", 
+                        offset: "40px",
+                        width: "50px",
+                        height: "50px",
+                        idle: { color: "rgb(239, 68, 68)", type: "pill", title: "Talk to AI", subtitle: "Instant Answers", icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg" },
+                        loading: { color: "rgb(93, 124, 202)", type: "pill", title: "Connecting...", subtitle: "Please wait", icon: "https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg" },
+                        active: { color: "rgb(255, 0, 0)", type: "pill", title: "Live Call", subtitle: "Listening...", icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg" }
+                    }
+                });
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "Veo Visionary",
+  "description": "Architect high-fidelity cinematic assets for global enterprise and creative strategy.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "placeholder": "Define the visual narrative of your next strategic milestone..."
+}

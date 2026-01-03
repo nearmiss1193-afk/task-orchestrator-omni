@@ -1,0 +1,85 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes pulse-indigo {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.animate-scanline {
+  animation: scanline 8s linear infinite;
+}
+
+.animate-pulse-indigo {
+  animation: pulse-indigo 3s ease-in-out infinite;
+}
+
+.cinema-letterbox {
+  background: linear-gradient(to bottom, black 0%, transparent 15%, transparent 85%, black 100%);
+}
+
+/* HIGH CONTRAST SCROLLBAR */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #000000;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #6366f1;
+  border: 2px solid #000000;
+  border-radius: 20px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #818cf8;
+}
+
+/* GLOBAL SCROLLBAR */
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #333333;
+  border: 3px solid #000000;
+  border-radius: 20px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+
+/* TEXT SELECTION */
+::selection {
+  background: #6366f1;
+  color: white;
+}
+
+.high-contrast-border {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.focus-ring {
+  @apply focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-black outline-none;
+}

@@ -1,0 +1,54 @@
+[
+    {
+        "type": "function",
+        "function": {
+            "name": "get_dashboard_stats",
+            "description": "Get real-time business statistics including active agents, revenue, system load, and network status.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "list_campaigns",
+            "description": "List all 10 active industry campaigns and their current status.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_recent_messages",
+            "description": "Read the most recent incoming messages or logs from the campaign simulation.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "execute_command",
+            "description": "Send a command to the Orchestrator (Antigravity) to perform an action.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "command": {
+                        "type": "string",
+                        "description": "The specific command to execute, e.g., 'Launch Email Campaign', 'Stop All Agents', 'Run Diagnosis'."
+                    }
+                },
+                "required": [
+                    "command"
+                ]
+            }
+        }
+    }
+]
