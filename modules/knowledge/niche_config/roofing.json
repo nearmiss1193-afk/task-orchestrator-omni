@@ -1,0 +1,23 @@
+{
+    "vertical": "roofing",
+    "pain_points": [
+        "Leaky roof causing water damage",
+        "Insurance claim denied or underpaid",
+        "Fear of upcoming hurricane season"
+    ],
+    "compliance": [
+        "Florida Building Code 2026: Requires secondary water barrier (SWR) for all re-roofs.",
+        "Miami-Dade High Velocity Hurricane Zone (HVHZ) standards apply.",
+        "130 MPH Wind Rating minimum for shingles."
+    ],
+    "winning_offer": "Free 'Hurricane Readiness' Roof Audit + Insurance Claim Assistance.",
+    "objections": {
+        "too_expensive": "We offer $0 down financing. A new roof also lowers your home insurance premium by up to 30%.",
+        "insurance_denied": "We have an in-house Public Adjuster who re-opens denied claims. 90% success rate."
+    },
+    "pricing": {
+        "shingle": "$450 per square",
+        "metal": "$950 per square",
+        "tile": "$1200 per square"
+    }
+}

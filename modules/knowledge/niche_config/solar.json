@@ -1,0 +1,22 @@
+{
+    "vertical": "solar",
+    "pain_points": [
+        "Skyrocketing TECO energy bills",
+        "Power outages during storms",
+        "Tax credit confusion"
+    ],
+    "compliance": [
+        "Federal Solar ITC (2026): 30% Tax Credit on panels and batteries.",
+        "Florida Net Metering (Tier 1): 1:1 credit for excess power sent to grid.",
+        "HOA Access Law: HOAs cannot legally ban solar panels in Florida."
+    ],
+    "winning_offer": "$0 Down 'Energy Independence' Plan. Swap your power bill for a lower solar payment.",
+    "objections": {
+        "moving_soon": "Solar increases home resale value by ~4.1% according to Zillow. The loan is transferable.",
+        "wait_for_tech": "Panel efficiency has plateaued. The 30% Tax Credit is the biggest variable, and it's active now."
+    },
+    "pricing": {
+        "per_watt": "$2.75 installed (Cash price)",
+        "battery": "$11,000 for Tesla Powerwall 3"
+    }
+}
