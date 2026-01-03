@@ -1,0 +1,69 @@
+[
+    {
+        "id": "vid_lakeland_truck_001",
+        "type": "video",
+        "category": "branding",
+        "description": "Empire HVAC Truck driving past Lake Morton with swans in background.",
+        "tags": [
+            "truck",
+            "local",
+            "scenic",
+            "lakeland"
+        ],
+        "path": "assets/video/truck_lake_morton.mp4",
+        "tone": "Peaceful"
+    },
+    {
+        "id": "vid_tech_attic_001",
+        "type": "video",
+        "category": "pain_point",
+        "description": "Technician wiping sweat in a hot attic, looking professional but urgent.",
+        "tags": [
+            "technician",
+            "attic",
+            "sweat",
+            "urgent"
+        ],
+        "path": "assets/video/tech_attic_sweat.mp4",
+        "tone": "Urgent"
+    },
+    {
+        "id": "img_happy_family_001",
+        "type": "image",
+        "category": "success",
+        "description": "Family sitting on couch enjoying cool air, thermostat showing 72 degrees.",
+        "tags": [
+            "family",
+            "comfort",
+            "indoor"
+        ],
+        "path": "assets/image/family_couch_cool.png",
+        "tone": "Happy"
+    },
+    {
+        "id": "vid_sun_n_fun_001",
+        "type": "video",
+        "category": "community",
+        "description": "Technician shaking hands with a pilot at Sun 'n Fun Fly-In.",
+        "tags": [
+            "community",
+            "event",
+            "trust"
+        ],
+        "path": "assets/video/sun_n_fun_handshake.mp4",
+        "tone": "Trust"
+    },
+    {
+        "id": "img_thermostat_shocker_001",
+        "type": "image",
+        "category": "pain_point",
+        "description": "Close up of thermostat reading 89 degrees inside.",
+        "tags": [
+            "thermostat",
+            "hot",
+            "emergency"
+        ],
+        "path": "assets/image/thermostat_89.png",
+        "tone": "Fear"
+    }
+]
