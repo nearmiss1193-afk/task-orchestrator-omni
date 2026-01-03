@@ -44,17 +44,16 @@ def main():
     
     <hr>
     <h2>1. Recovery Protocol</h2>
-    <pre style="background: #f4f4f4; padding: 10px; white-space: pre-wrap;">{recovery_doc[:2000]}...</pre>
-    <p><em>(Truncated for email. See full artifact for details.)</em></p>
+    <pre style="background: #f4f4f4; padding: 10px; white-space: pre-wrap;">{recovery_doc[:15000]}</pre>
 
     <hr>
     <h2>2. Capabilities Snapshot</h2>
-    <pre style="background: #f4f4f4; padding: 10px; white-space: pre-wrap;">{capabilities_doc[:2000]}...</pre>
+    <pre style="background: #f4f4f4; padding: 10px; white-space: pre-wrap;">{capabilities_doc[:15000]}</pre>
 
     <hr>
     <h2>3. Strategic Recommendations</h2>
     <p>Extracted from Expansion Strategy:</p>
-    <pre style="background: #f4f4f4; padding: 10px; white-space: pre-wrap;">{strategy_doc[:2000]}...</pre>
+    <pre style="background: #f4f4f4; padding: 10px; white-space: pre-wrap;">{strategy_doc[:15000]}</pre>
 
     <hr>
     <p><strong>Status:</strong> 🟢 LIVE & SECURE</p>
