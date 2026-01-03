@@ -9,6 +9,15 @@ stripe_error = None
 resend_error = None
 pg_error = None
 
+# --- SENTRY MONITORING ---
+try:
+    import sentry_sdk
+    dsn = os.environ.get("SENTRY_DSN")
+    if dsn:
+        sentry_sdk.init(dsn=dsn, traces_sample_rate=1.0)
+except: pass
+
+
 try:
     import resend
     RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
@@ -122,10 +131,31 @@ class handler(BaseHTTPRequestHandler):
                 
                 data = leads_data
 
+
+# ... (Existing imports) ...
+
             # --- ROUTE: HEALTH ---
             elif path == "/api/health":
+                # Heartbeat Logic (Keep DB Awake)
+                query_params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+                ping_db = 'ping_db' in query_params
+                
+                db_status = "skipped"
+                if ping_db:
+                    con = get_db_connection()
+                    if con:
+                        try:
+                            con.run("SELECT 1")
+                            con.close()
+                            db_status = "alive"
+                        except Exception as e:
+                            db_status = f"error: {e}"
+                    else:
+                        db_status = "connection_failed"
+
                 data = {
                     "status": "healthy",
+                    "heartbeat": db_status,
                     "dependencies": {
                         "stripe": {"loaded": stripe is not None, "error": stripe_error},
                         "resend": {"loaded": resend is not None, "error": resend_error},
@@ -186,6 +216,61 @@ class handler(BaseHTTPRequestHandler):
 
                 response_data = {"status": "ok"}
             
+            # --- ROUTE: STRIPE WEBHOOK ---
+            elif path == "/api/stripe-webhook":
+                sig_header = self.headers.get('Stripe-Signature')
+                webhook_secret = os.environ.get('STRIPE_WEBHOOK_SECRET')
+                
+                if not webhook_secret or not stripe:
+                    print("⚠️ Configuration Error: Missing Secret or Stripe Lib")
+                    # We return 200 to correct Stripe retries if config is broken, but verify sig if possible
+                    if not webhook_secret: raise Exception("Webhook Secret Missing")
+
+                try:
+                    event = stripe.Webhook.construct_event(
+                        post_data, sig_header, webhook_secret
+                    )
+                except Exception as e:
+                    print(f"⚠️ Webhook Error: {e}")
+                    raise e
+
+                # Handle the event
+                if event['type'] == 'checkout.session.completed':
+                    session = event['data']['object']
+                    customer_email = session.get('customer_details', {}).get('email')
+                    
+                    print(f"💰 Payment Received: {customer_email}")
+                    
+                    if resend and customer_email:
+                         try:
+                            # 1. Customer Welcome
+                            resend.Emails.send({
+                                "from": "alert@aiserviceco.com",
+                                "to": [customer_email],
+                                "subject": "Welcome to the Empire (Access Granted)",
+                                "html": """
+                                    <h1>Access Granted</h1>
+                                    <p>Your payment has been verified.</p>
+                                    <p><strong>Next Steps:</strong></p>
+                                    <ol>
+                                        <li>Login to your dashboard: <a href="https://empire-sovereign-cloud.vercel.app/dashboard.html">Click Here</a></li>
+                                        <li>Configure your profile.</li>
+                                    </ol>
+                                    <p>The Empire greets you.</p>
+                                """
+                            })
+                            # 2. Admin Alert
+                            resend.Emails.send({
+                                "from": "alert@aiserviceco.com",
+                                "to": ["nearmiss1193@gmail.com"],
+                                "subject": f"💰 New Sale: {customer_email}",
+                                "html": f"<p>New customer onboarding: {customer_email}</p>"
+                            })
+                         except Exception as e:
+                             print(f"Email Error: {e}")
+
+                response_data = {"status": "success"}
+
             # --- ROUTE: RESERVE ---
             elif path == "/api/reserve":
                 print(f"📝 Reservation: {body}")
@@ -212,7 +297,7 @@ class handler(BaseHTTPRequestHandler):
                     try:
                         resend.Emails.send({
                           "from": "alert@aiserviceco.com",
-                          "to": body.get('email'),
+                          "to": ["nearmiss1193@gmail.com"],
                           "subject": f"Reserved: {body.get('plan')}",
                           "html": "<p>Reservation Confirmed. Welcome to the Empire.</p>"
                         })
