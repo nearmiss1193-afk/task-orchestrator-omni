@@ -1,0 +1,7 @@
+{
+  "updated": "2025-12-30T13:13:52Z",
+  "rules": [
+    "optimize_images",
+    "relink_ctas"
+  ]
+}

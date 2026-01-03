@@ -1,0 +1,95 @@
+[2025-12-31T14:27:16.165372] ERR: 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/root/deploy.py", line 357, in ghl_webhook
+    return await _spartan_responder_logic(payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/deploy.py", line 727, in _spartan_responder_logic
+    summary_research = f"{raw_research.get('company_name', '')} | {raw_research.get('industry', '')}"
+                          ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+[2025-12-31T14:27:15.325508] Inbound Message detected for test_1767191225
+[2025-12-31T14:27:14.752035] Payload: {"type": "InboundMessage", "contact_id": "test_1767191225", "message": {"body": "how much for hvac leads?", "provider": "sms"}, "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767191225", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T14:27:14.152279] --- WEBHOOK START ---
+[2025-12-31T14:27:12.762505] Vortex Triggered for test_1767191225
+[2025-12-31T14:27:11.919107] Syncing Contact: test_1767191225
+[2025-12-31T14:27:11.328178] Payload: {"type": "ContactUpdate", "contact_id": "test_1767191225", "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767191225", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T14:27:10.684101] --- WEBHOOK START ---
+[2025-12-31T14:09:46.951372] ERR: 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/root/deploy.py", line 357, in ghl_webhook
+    return await _spartan_responder_logic(payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/deploy.py", line 727, in _spartan_responder_logic
+    summary_research = f"{raw_research.get('company_name', '')} | {raw_research.get('industry', '')}"
+                          ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+[2025-12-31T14:09:46.186847] Inbound Message detected for test_1767190171
+[2025-12-31T14:09:45.602241] Payload: {"type": "InboundMessage", "contact_id": "test_1767190171", "message": {"body": "how much for hvac leads?", "provider": "sms"}, "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767190171", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T14:09:44.985896] --- WEBHOOK START ---
+[2025-12-31T14:09:42.783089] Vortex Triggered for test_1767190171
+[2025-12-31T14:09:41.619327] Syncing Contact: test_1767190171
+[2025-12-31T14:09:41.010001] Payload: {"type": "ContactUpdate", "contact_id": "test_1767190171", "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767190171", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T14:09:40.383740] --- WEBHOOK START ---
+[2025-12-31T12:15:33.402317] ERR: 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/root/deploy.py", line 357, in ghl_webhook
+    return await _spartan_responder_logic(payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/deploy.py", line 727, in _spartan_responder_logic
+    summary_research = f"{raw_research.get('company_name', '')} | {raw_research.get('industry', '')}"
+                          ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+[2025-12-31T12:15:33.084400] Inbound Message detected for test_1767183323
+[2025-12-31T12:15:32.811641] Payload: {"type": "InboundMessage", "contact_id": "test_1767183323", "message": {"body": "how much for hvac leads?", "provider": "sms"}, "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767183323", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T12:15:32.658987] --- WEBHOOK START ---
+[2025-12-31T12:15:31.806300] Vortex Triggered for test_1767183323
+[2025-12-31T12:15:31.218162] Syncing Contact: test_1767183323
+[2025-12-31T12:15:30.921155] Payload: {"type": "ContactUpdate", "contact_id": "test_1767183323", "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767183323", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T12:15:30.500784] --- WEBHOOK START ---
+[2025-12-31T12:00:07.138441] [Governor] Cycle Complete. Governor Stable | Gain: 1.00 | Uptime: 99.0% (AI Analysis Failed: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.)
+[2025-12-31T12:00:05.566067] [Governor] Starting periodic oversight cycle...
+[2025-12-31T11:00:10.220997] Compression Complete: Error: {'message': "Could not find the table 'public.knowledge_snapshots' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+[2025-12-31T11:00:08.141602] 📜 Starting Daily Knowledge Compression (02:00 EST)...
+[2025-12-31T08:00:08.354598] [Governor] Cycle Complete. Governor Stable | Gain: 1.00 | Uptime: 99.0% (AI Analysis Failed: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.)
+[2025-12-31T08:00:06.565626] [Governor] Starting periodic oversight cycle...
+[2025-12-31T06:50:29.015705] Social Siege Error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-12-31T06:50:27.505791] ⚔️ Starting Social Siege Protocol...
+[2025-12-31T04:00:09.599514] [Governor] Cycle Complete. Governor Stable | Gain: 1.00 | Uptime: 99.0% (AI Analysis Failed: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.)
+[2025-12-31T04:00:06.746175] [Governor] Starting periodic oversight cycle...
+[2025-12-31T01:14:50.171284] ERR: 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/root/deploy.py", line 332, in ghl_webhook
+    return await _spartan_responder_logic(payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/deploy.py", line 702, in _spartan_responder_logic
+    summary_research = f"{raw_research.get('company_name', '')} | {raw_research.get('industry', '')}"
+                          ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+[2025-12-31T01:14:48.993275] Inbound Message detected for test_1767143680
+[2025-12-31T01:14:48.776222] Payload: {"type": "InboundMessage", "contact_id": "test_1767143680", "message": {"body": "how much for hvac leads?", "provider": "sms"}, "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767143680", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T01:14:48.549734] --- WEBHOOK START ---
+[2025-12-31T01:14:47.296324] Vortex Triggered for test_1767143680
+[2025-12-31T01:14:46.131159] Syncing Contact: test_1767143680
+[2025-12-31T01:14:45.529983] Payload: {"type": "ContactUpdate", "contact_id": "test_1767143680", "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767143680", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T01:14:44.926996] --- WEBHOOK START ---
+[2025-12-31T01:08:40.374337] ERR: 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+  File "/root/deploy.py", line 332, in ghl_webhook
+    return await _spartan_responder_logic(payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/deploy.py", line 702, in _spartan_responder_logic
+    summary_research = f"{raw_research.get('company_name', '')} | {raw_research.get('industry', '')}"
+                          ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+[2025-12-31T01:08:39.932384] Inbound Message detected for test_1767143313
+[2025-12-31T01:08:39.632169] Payload: {"type": "InboundMessage", "contact_id": "test_1767143313", "message": {"body": "how much for hvac leads?", "provider": "sms"}, "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767143313", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T01:08:39.221588] --- WEBHOOK START ---
+[2025-12-31T01:08:38.535797] Vortex Triggered for test_1767143313
+[2025-12-31T01:08:37.863937] Syncing Contact: test_1767143313
+[2025-12-31T01:08:37.486901] Payload: {"type": "ContactUpdate", "contact_id": "test_1767143313", "location_id": "TEST_LOC", "contact": {"ghl_contact_id": "test_1767143313", "full_name": "Test Lead Fixed", "email": "secret_shopper_fixed@aiserviceco.com", "status": "new", "tags": ["trigger-vortex", "secret-shopper", "hvac"]}}
+[2025-12-31T01:08:37.079936] --- WEBHOOK START ---

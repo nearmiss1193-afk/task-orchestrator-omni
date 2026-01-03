@@ -1,0 +1,25 @@
+{
+    "target_industry": "Service",
+    "target_location": "Global",
+    "depth": "deep_crawl",
+    "pages_to_scan": [
+        "/about",
+        "/team",
+        "/careers",
+        "/press",
+        "/blog",
+        "/contact"
+    ],
+    "extraction_schema": {
+        "founder_name": "string",
+        "key_decision_makers": "array",
+        "pain_points": "array",
+        "tech_stack": "array",
+        "recent_funding_round": "boolean",
+        "hiring_trends": "string"
+    },
+    "rate_limit": {
+        "requests_per_minute": 10,
+        "delay_between_requests": 2000
+    }
+}

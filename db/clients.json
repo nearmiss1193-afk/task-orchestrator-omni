@@ -1,0 +1,9 @@
+[
+    {
+        "name": "Validation Lead",
+        "phone": "555-0100",
+        "industry": "HVAC",
+        "status": "NEW",
+        "created_at": "2026-01-01T12:00:00.000Z"
+    }
+]

@@ -1,0 +1,466 @@
+[
+  {
+    "id": "387f1c0e-592e-4a23-a823-efe4ca755506",
+    "originalGoal": "Scan my GHL account for funnels and forms, generate a performance report, and email the results to admin@example.com",
+    "steps": [
+      {
+        "id": "step_1",
+        "connectorName": "GHL",
+        "action": "audit_account",
+        "params": {},
+        "status": "COMPLETED",
+        "attempts": 1,
+        "result": {
+          "success": true,
+          "action": "audit_account"
+        }
+      },
+      {
+        "id": "step_2",
+        "connectorName": "GHL",
+        "action": "create_funnel_page",
+        "params": {
+          "name": "AI Generated Funnel - 2025-12-24"
+        },
+        "status": "FAILED",
+        "attempts": 3,
+        "error": "No element found for selector: input[placeholder*='Name']"
+      },
+      {
+        "id": "step_3",
+        "connectorName": "Email",
+        "action": "send_email",
+        "params": {
+          "to": "admin@example.com",
+          "subject": "Funnel Created",
+          "body": "Your new funnel has been created successfully."
+        },
+        "status": "COMPLETED",
+        "attempts": 1,
+        "result": {
+          "messageId": "mock_1766609758619",
+          "status": "sent (mock)"
+        }
+      },
+      {
+        "id": "step_4",
+        "connectorName": "GHL",
+        "action": "send_email",
+        "params": {
+          "to": "test@example.com",
+          "subject": "Service Offer",
+          "body": "Hello from AI Agent..."
+        },
+        "status": "FAILED",
+        "attempts": 3,
+        "dependsOn": [],
+        "error": "Browser Interaction Failed: Could not search/find contact (Could not find Search Input bar after checking multiple selectors.)"
+      },
+      {
+        "id": "step_5",
+        "connectorName": "Report",
+        "action": "generate_report",
+        "params": {
+          "type": "performance"
+        },
+        "status": "PENDING",
+        "attempts": 0,
+        "dependsOn": [
+          "step_1",
+          "step_2",
+          "step_3",
+          "step_4"
+        ]
+      }
+    ],
+    "createdAt": "2025-12-24T20:55:58.050Z",
+    "status": "FAILED"
+  },
+  {
+    "id": "463aedbc-ebb6-493b-8425-ad0093503f18",
+    "originalGoal": "Scan my GHL account for funnels and forms, generate a performance report, and email the results to admin@example.com",
+    "steps": [
+      {
+        "id": "step_1",
+        "connectorName": "GHL",
+        "action": "audit_account",
+        "params": {},
+        "status": "COMPLETED",
+        "attempts": 1,
+        "result": {
+          "success": true,
+          "action": "audit_account"
+        }
+      },
+      {
+        "id": "step_2",
+        "connectorName": "GHL",
+        "action": "create_funnel_page",
+        "params": {
+          "name": "AI Generated Funnel - 2025-12-24"
+        },
+        "status": "FAILED",
+        "attempts": 3,
+        "error": "No element found for selector: input[placeholder*='Path']"
+      },
+      {
+        "id": "step_3",
+        "connectorName": "Email",
+        "action": "send_email",
+        "params": {
+          "to": "admin@example.com",
+          "subject": "Funnel Created",
+          "body": "Your new funnel has been created successfully."
+        },
+        "status": "COMPLETED",
+        "attempts": 1,
+        "result": {
+          "messageId": "mock_1766609871092",
+          "status": "sent (mock)"
+        }
+      },
+      {
+        "id": "step_4",
+        "connectorName": "GHL",
+        "action": "send_email",
+        "params": {
+          "to": "test@example.com",
+          "subject": "Service Offer",
+          "body": "Hello from AI Agent..."
+        },
+        "status": "COMPLETED",
+        "attempts": 3,
+        "dependsOn": [],
+        "result": {
+          "success": true,
+          "sentTo": [
+            "test@example.com"
+          ],
+          "note": "Real Browser Interaction: Searched for contact(s)."
+        }
+      },
+      {
+        "id": "step_5",
+        "connectorName": "Report",
+        "action": "generate_report",
+        "params": {
+          "type": "performance"
+        },
+        "status": "PENDING",
+        "attempts": 0,
+        "dependsOn": [
+          "step_1",
+          "step_2",
+          "step_3",
+          "step_4"
+        ]
+      }
+    ],
+    "createdAt": "2025-12-24T20:57:50.527Z",
+    "status": "FAILED"
+  },
+  {
+    "id": "real-life-mission-1766632807574",
+    "originalGoal": "Fix funnel logic and test real onboarding flow",
+    "createdAt": "2025-12-25T03:20:07.574Z",
+    "status": "RUNNING",
+    "steps": [
+      {
+        "id": "step_1",
+        "connectorName": "GHL_Browser",
+        "action": "create_funnel_page",
+        "params": {
+          "name": "Real-Life Onboarding Funnel 2025-12-25"
+        },
+        "status": "RUNNING",
+        "attempts": 0
+      },
+      {
+        "id": "step_2",
+        "connectorName": "GHL",
+        "action": "upsert_contact",
+        "params": {
+          "email": "nearmiss1193@gmail.com",
+          "firstName": "User",
+          "lastName": "Test",
+          "phone": "+15555555555"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1"
+        ],
+        "attempts": 0
+      },
+      {
+        "id": "step_3",
+        "connectorName": "GHL",
+        "action": "send_email",
+        "params": {
+          "to": "nearmiss1193@gmail.com",
+          "subject": "Welcome to your new Funnel",
+          "body": "Your funnel is ready at: {{step_1.result.funnelName}}. Go to onboarding now!"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1",
+          "step_2"
+        ],
+        "attempts": 0
+      }
+    ]
+  },
+  {
+    "id": "real-life-mission-1766633002521",
+    "originalGoal": "Fix funnel logic and test real onboarding flow",
+    "createdAt": "2025-12-25T03:23:22.521Z",
+    "status": "FAILED",
+    "steps": [
+      {
+        "id": "step_1",
+        "connectorName": "GHL_Browser",
+        "action": "create_funnel_page",
+        "params": {
+          "name": "Real-Life Onboarding Funnel 2025-12-25"
+        },
+        "status": "FAILED",
+        "attempts": 3,
+        "error": "No element found for selector: input[placeholder*='Name']"
+      },
+      {
+        "id": "step_2",
+        "connectorName": "GHL",
+        "action": "upsert_contact",
+        "params": {
+          "email": "nearmiss1193@gmail.com",
+          "firstName": "User",
+          "lastName": "Test",
+          "phone": "+15555555555"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1"
+        ],
+        "attempts": 0
+      },
+      {
+        "id": "step_3",
+        "connectorName": "GHL",
+        "action": "send_email",
+        "params": {
+          "to": "nearmiss1193@gmail.com",
+          "subject": "Welcome to your new Funnel",
+          "body": "Your funnel is ready at: {{step_1.result.funnelName}}. Go to onboarding now!"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1",
+          "step_2"
+        ],
+        "attempts": 0
+      }
+    ]
+  },
+  {
+    "id": "real-life-mission-1766633593351",
+    "originalGoal": "Fix funnel logic and test real onboarding flow",
+    "createdAt": "2025-12-25T03:33:13.351Z",
+    "status": "RUNNING",
+    "steps": [
+      {
+        "id": "step_1",
+        "connectorName": "GHL_Browser",
+        "action": "create_funnel_page",
+        "params": {
+          "name": "Real-Life Onboarding Funnel 2025-12-25"
+        },
+        "status": "RUNNING",
+        "attempts": 0
+      },
+      {
+        "id": "step_2",
+        "connectorName": "GHL",
+        "action": "upsert_contact",
+        "params": {
+          "email": "nearmiss1193@gmail.com",
+          "firstName": "User",
+          "lastName": "Test",
+          "phone": "+15555555555"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1"
+        ],
+        "attempts": 0
+      },
+      {
+        "id": "step_3",
+        "connectorName": "GHL",
+        "action": "send_email",
+        "params": {
+          "to": "nearmiss1193@gmail.com",
+          "subject": "Welcome to your new Funnel",
+          "body": "Your funnel is ready at: {{step_1.result.funnelName}}. Go to onboarding now!"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1",
+          "step_2"
+        ],
+        "attempts": 0
+      }
+    ]
+  },
+  {
+    "id": "real-life-mission-1766634438770",
+    "originalGoal": "Fix funnel logic and test real onboarding flow",
+    "createdAt": "2025-12-25T03:47:18.770Z",
+    "status": "FAILED",
+    "steps": [
+      {
+        "id": "step_1",
+        "connectorName": "GHL_Browser",
+        "action": "create_funnel_page",
+        "params": {
+          "name": "Real-Life Onboarding Funnel 2025-12-25"
+        },
+        "status": "FAILED",
+        "attempts": 3,
+        "error": "No element found for selector: input[placeholder*='Name']"
+      },
+      {
+        "id": "step_2",
+        "connectorName": "GHL",
+        "action": "upsert_contact",
+        "params": {
+          "email": "nearmiss1193@gmail.com",
+          "firstName": "User",
+          "lastName": "Test",
+          "phone": "+15555555555"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1"
+        ],
+        "attempts": 0
+      },
+      {
+        "id": "step_3",
+        "connectorName": "GHL",
+        "action": "send_email",
+        "params": {
+          "to": "nearmiss1193@gmail.com",
+          "subject": "Welcome to your new Funnel",
+          "body": "Your funnel is ready at: {{step_1.result.funnelName}}. Go to onboarding now!"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1",
+          "step_2"
+        ],
+        "attempts": 0
+      }
+    ]
+  },
+  {
+    "id": "real-life-mission-1766634580760",
+    "originalGoal": "Fix funnel logic and test real onboarding flow",
+    "createdAt": "2025-12-25T03:49:40.760Z",
+    "status": "FAILED",
+    "steps": [
+      {
+        "id": "step_1",
+        "connectorName": "GHL_Browser",
+        "action": "create_funnel_page",
+        "params": {
+          "name": "Real-Life Onboarding Funnel 2025-12-25"
+        },
+        "status": "FAILED",
+        "attempts": 3,
+        "error": "The browser is already running for C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\task-orchestrator\\.ghl_browser_data. Use a different `userDataDir` or stop the running browser first."
+      },
+      {
+        "id": "step_2",
+        "connectorName": "GHL",
+        "action": "upsert_contact",
+        "params": {
+          "email": "nearmiss1193@gmail.com",
+          "firstName": "User",
+          "lastName": "Test",
+          "phone": "+15555555555"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1"
+        ],
+        "attempts": 0
+      },
+      {
+        "id": "step_3",
+        "connectorName": "GHL",
+        "action": "send_email",
+        "params": {
+          "to": "nearmiss1193@gmail.com",
+          "subject": "Welcome to your new Funnel",
+          "body": "Your funnel is ready at: {{step_1.result.funnelName}}. Go to onboarding now!"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1",
+          "step_2"
+        ],
+        "attempts": 0
+      }
+    ]
+  },
+  {
+    "id": "real-life-mission-1766696806268",
+    "originalGoal": "Fix funnel logic and test real onboarding flow",
+    "createdAt": "2025-12-25T21:06:46.268Z",
+    "status": "FAILED",
+    "steps": [
+      {
+        "id": "step_1",
+        "connectorName": "GHL_Browser",
+        "action": "create_funnel_page",
+        "params": {
+          "name": "Real-Life Onboarding Funnel 2025-12-25"
+        },
+        "status": "FAILED",
+        "attempts": 3,
+        "error": "The browser is already running for C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\task-orchestrator\\.ghl_browser_data. Use a different `userDataDir` or stop the running browser first."
+      },
+      {
+        "id": "step_2",
+        "connectorName": "GHL",
+        "action": "upsert_contact",
+        "params": {
+          "email": "nearmiss1193@gmail.com",
+          "firstName": "User",
+          "lastName": "Test",
+          "phone": "+15555555555"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1"
+        ],
+        "attempts": 0
+      },
+      {
+        "id": "step_3",
+        "connectorName": "GHL",
+        "action": "send_email",
+        "params": {
+          "to": "nearmiss1193@gmail.com",
+          "subject": "Welcome to your new Funnel",
+          "body": "Your funnel is ready at: {{step_1.result.funnelName}}. Go to onboarding now!"
+        },
+        "status": "PENDING",
+        "dependsOn": [
+          "step_1",
+          "step_2"
+        ],
+        "attempts": 0
+      }
+    ]
+  }
+]

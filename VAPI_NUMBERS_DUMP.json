@@ -1,0 +1,11 @@
+[
+  {
+    "id": "6bb589da-04b4-4740-b20c-8afdd7a8339f",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "assistantId": "033ec1d3-e17d-4611-a497-b47cab1fdb4e",
+    "createdAt": "2026-01-01T20:32:00.462Z",
+    "updatedAt": "2026-01-01T20:32:51.783Z",
+    "provider": "vapi",
+    "status": "active"
+  }
+]

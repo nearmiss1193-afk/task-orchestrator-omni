@@ -1,0 +1,27 @@
+[
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6
+    }
+]

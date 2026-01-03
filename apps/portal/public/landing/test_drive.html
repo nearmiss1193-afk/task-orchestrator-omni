@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Test Drive - Empire HVAC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #09090b;
+            color: #f4f4f5;
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #22c55e;
+        }
+
+        .step {
+            background: #18181b;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #27272a;
+        }
+
+        .step h3 {
+            margin-top: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #22c55e;
+            color: #000;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        code {
+            background: #000;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #a1a1aa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 Empire System Test Drive</h1>
+        <p>Follow these steps to test the entire <b>Lead -> Sale -> Onboarding</b> flow.</p>
+
+        <div class="step">
+            <h3>Step 1: Capture (Lead Gen)</h3>
+            <p>Go to the Landing Page and fill out the "Get Started" form.</p>
+            <p><b>Expectation:</b> You should receive an SMS/Email acknowledgement immediately.</p>
+            <a href="hvac.html" class="btn" target="_blank">Open Landing Page</a>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: The Sale (Checkout)</h3>
+            <p>Navigate to the Checkout Page. This wraps the GHL Payment form.</p>
+            <p><b>Expectation:</b> Displays $99/$199/$297 pricing dynamically.</p>
+            <a href="checkout.html?plan=starter" class="btn" target="_blank">Open Checkout (Starter)</a>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Simulate Purchase (Don't Pay)</h3>
+            <p>To test the "Onboarding" (Phase 3) without charging your card, use the simulation Script.</p>
+            <p>Run this in your terminal:</p>
+            <code>python scripts/simulate_sale.py</code>
+            <p><b>Expectation:</b> Triggers the logic for "New Customer" without processing money.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: AI Call Test</h3>
+            <p>To specifically test "Rachel" calling a new lead:</p>
+            <code>python modules/communications/onboarding_trigger.py --phone YOUR_NUMBER</code>
+        </div>
+
+    </div>
+</body>
+
+</html>

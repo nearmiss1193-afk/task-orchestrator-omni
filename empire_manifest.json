@@ -1,0 +1,106 @@
+{
+    "system_name": "Empire Unified (Sovereign)",
+    "version": "v26.5",
+    "status": "OPERATIONAL",
+    "description": "Central Manifest of all Active Agents, Workflows, and Recovery Protocols.",
+    "agents": [
+        {
+            "id": "ghl_webhook",
+            "role": "Ingestion Gateway",
+            "type": "Trigger",
+            "input": "POST /ghl_webhook (ContactUpdate, InboundMessage)",
+            "output": "Supabase (contacts_master), Spartan Logic",
+            "priority": "CRITICAL",
+            "health_check": "Monitor Supabase 'brain_logs' for 'Webhook received'",
+            "recovery_protocol": "Automatic Retry via GHL Workflow (Trigger Vortex); If API 500, check Modal Logs."
+        },
+        {
+            "id": "research_lead_logic",
+            "role": "Intel Predator",
+            "type": "Enrichment",
+            "input": "Contact ID (Supabase)",
+            "output": "Supabase (contacts_master.raw_research)",
+            "priority": "HIGH",
+            "health_check": "Verify 'raw_research' column is not null for new leads",
+            "recovery_protocol": "Fallback to Google Search if Gemini fails. If no data found, mark 'research_failed' and proceed."
+        },
+        {
+            "id": "_spartan_responder_logic",
+            "role": "Hiring Spartan (Sales)",
+            "type": "Responder",
+            "input": "Inbound Message, Lead Context",
+            "output": "GHL Message (SMS/Email), Staged Reply DB",
+            "priority": "CRITICAL",
+            "health_check": "Message Latency < 5s",
+            "recovery_protocol": "Rule-Based Fallback: If Gemini is down, send 'standard_courtesy_reply' template."
+        },
+        {
+            "id": "social_posting_loop",
+            "role": "Social Siege",
+            "type": "Outreach",
+            "input": "Cron (Daily)",
+            "output": "GHL Social Planner (LinkedIn, FB, IG)",
+            "priority": "MEDIUM",
+            "health_check": "GHL Social Log",
+            "recovery_protocol": "Skip cycle if API Limit. Logs error to 'brain_logs'."
+        },
+        {
+            "id": "voice_courtesy_loop",
+            "role": "Voice Nexus",
+            "type": "Outreach",
+            "input": "Cron (Daily) -> 'nurture' leads",
+            "output": "Vapi.ai Call Trigger",
+            "priority": "HIGH",
+            "health_check": "Vapi Dashboard Call Logs",
+            "recovery_protocol": "If Vapi API 500, retry in 60m. Max 3 retries."
+        },
+        {
+            "id": "system_guardian",
+            "role": "The Governor",
+            "type": "Oversight",
+            "input": "Cron (Hourly)",
+            "output": "Self-Repair Actions, Admin Alert",
+            "priority": "CRITICAL",
+            "health_check": "Must run every 60m. Check 'brain_logs'.",
+            "recovery_protocol": "Cannot self-recover. Requires manual restart if Modal app crashes."
+        },
+        {
+            "id": "secret_shopper_loop",
+            "role": "Doppelganger (QA)",
+            "type": "Testing",
+            "input": "Cron (Hourly) or Manual Trigger",
+            "output": "Test Lead Injection, Success/Fail Log",
+            "priority": "LOW",
+            "health_check": "Verify 'secret-shopper' tag in GHL",
+            "recovery_protocol": "Log failure, do not block system. Alert Admin."
+        }
+    ],
+    "workflows": [
+        {
+            "id": "landing_page_funnel",
+            "role": "Lead Capture",
+            "endpoints": [
+                "/hvac_landing",
+                "/roofing_landing"
+            ],
+            "flow": "User Visit -> Form Submit -> GHL Webhook -> Ingestion Gateway",
+            "recovery": "If Modal UI down, use GHL Native Funnel (Backup URL)."
+        }
+    ],
+    "infrastructure": {
+        "database": {
+            "type": "Supabase",
+            "critical_tables": [
+                "contacts_master",
+                "brain_logs",
+                "staged_replies"
+            ],
+            "backup": "Daily pg_dump"
+        },
+        "host": {
+            "type": "Modal Cloud",
+            "region": "us-east",
+            "entrypoint": "deploy.py"
+        }
+    }
+}

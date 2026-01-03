@@ -1,0 +1,66 @@
+[
+  {
+    "App ID": "ap-ZJxSATfldm8POnPkwQZZ5e",
+    "Description": "ghl-omni-automation",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-24 17:19:00-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-oqbh3Kkw7A66FkHZXKfM05",
+    "Description": "ghl-omni-automation-dashboard-minimal",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-26 14:46:00-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-nNQyR5kh3vBqhzV7GBQNWd",
+    "Description": "ghl-omni-automation-dashboard-cloud",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-26 14:51:40-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-WFzj8pm0rybuo7KrWIr8vp",
+    "Description": "empire-dash",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-26 14:56:40-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-TeXy1X3XuVIeqMBPsytYth",
+    "Description": "min-dash",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-26 15:03:33-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-zajBMPco6qGb3clbF4MAHh",
+    "Description": "ghl-architect",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-28 14:56:42-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-u4BZFqIhLXRSf1tHmDQo9L",
+    "Description": "landing-page-host",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-28 20:59:58-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-NSLZ1WmiDHXfms2yicpNkA",
+    "Description": "landing-page-v2",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-28 21:09:06-05:00",
+    "Stopped at": null
+  }
+]

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Service Co | 80% of Businesses Fail. Yours Won't.</title>
+    <meta name="description" content="80% of service businesses fail from missed calls. Your AI answers 24/7. Setup in 24 hours.">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --black: #000000; --black-soft: #0a0a0a; --dark: #111111; --dark-card: #161616;
+            --gray-dark: #222222; --gray-mid: #333333; --gray: #666666; --gray-light: #999999;
+            --gray-lighter: #cccccc; --white: #ffffff; --off-white: #f5f5f5;
+            --red: #dc2626; --red-hover: #b91c1c; --red-light: #ef4444;
+            --red-glow: rgba(220, 38, 38, 0.3); --red-subtle: rgba(220, 38, 38, 0.1);
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: var(--white); background: var(--black); overflow-x: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        /* HEADER */
+        header { background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px); padding: 16px 0; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--gray-dark); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 800; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo-icon { width: 36px; height: 36px; background: var(--red); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .header-nav { display: flex; gap: 32px; align-items: center; }
+        .header-nav a { color: var(--gray-light); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s; }
+        .header-nav a:hover { color: var(--white); }
+        .header-cta-group { display: flex; gap: 12px; align-items: center; }
+        .header-phone { color: var(--white); text-decoration: none; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 6px; padding: 10px 16px; border: 1px solid var(--gray-dark); border-radius: 8px; transition: all 0.3s; }
+        .header-phone:hover { border-color: var(--red); color: var(--red); }
+        .header-cta { background: var(--red); color: var(--white); padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s; border: 2px solid var(--red); }
+        .header-cta:hover { background: var(--red-hover); transform: translateY(-1px); }
+        /* HERO */
+        .hero { min-height: 100vh; display: flex; align-items: center; padding: 140px 0 100px; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 30%, var(--red-subtle) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.02) 0%, transparent 50%); animation: heroGlow 15s ease-in-out infinite alternate; }
+        @keyframes heroGlow { 0% { transform: translate(0, 0); } 100% { transform: translate(-5%, -5%); } }
+        .hero-content { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--dark); border: 1px solid var(--gray-dark); color: var(--gray-light); padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+        .hero-badge-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; }
+        .hero h1 { font-size: 56px; font-weight: 900; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em; }
+        .hero h1 .highlight { color: var(--red); }
+        .hero-subtitle { font-size: 20px; color: var(--gray-light); margin-bottom: 16px; }
+        .hero-proof { font-size: 15px; color: var(--gray); margin-bottom: 32px; padding-left: 16px; border-left: 2px solid var(--red); }
+        .hero-cta-group { display: flex; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
+        .btn-primary { background: var(--red); color: var(--white); padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 700; transition: all 0.3s; border: 2px solid var(--red); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary:hover { background: var(--red-hover); transform: translateY(-2px); box-shadow: 0 10px 40px var(--red-glow); }
+        .btn-secondary { background: transparent; color: var(--white); padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600; border: 2px solid var(--gray-dark); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-secondary:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
+        .hero-trust { display: flex; gap: 24px; color: var(--gray-light); font-size: 14px; }
+        .trust-item { display: flex; gap: 8px; align-items: center; }
+        .hero-stats-card { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 16px; padding: 32px; position: relative; overflow: hidden; }
+        .hero-stats-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--red), transparent); }
+        .stat-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--gray-dark); }
+        .stat-value { font-size: 24px; font-weight: 800; color: var(--white); }
+        .stat-value.negative { color: var(--red); }
+        .stat-value.positive { color: #22c55e; }
+        /* GENERAL SECTIONS */
+        .video-section, .solution-section, .how-section, .contact-section { padding: 100px 0; background: var(--dark); }
+        .problem-section, .pricing-section, .testimonials-section, .final-cta { padding: 100px 0; background: var(--black); }
+        .section-header { text-align: center; margin-bottom: 48px; }
+        .section-label { display: inline-block; background: var(--red-subtle); color: var(--red); padding: 6px 14px; border-radius: 100px; font-size: 12px; fontWeight: 600; text-transform: uppercase; margin-bottom: 16px; }
+        .section-title { font-size: 40px; font-weight: 800; margin-bottom: 16px; }
+        .video-wrapper { max-width: 900px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid var(--gray-dark); background: var(--black); }
+        .video-wrapper iframe { width: 100%; aspect-ratio: 16/9; border: none; }
+        /* PROBLEM */
+        .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .problem-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .problem-stat { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 12px; padding: 24px; text-align: center; }
+        .problem-stat-number { font-size: 36px; font-weight: 900; color: var(--red); }
+        .problem-cards { display: flex; flex-direction: column; gap: 16px; }
+        .problem-card { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 12px; padding: 24px; display: flex; gap: 16px; transition: all 0.3s; }
+        .problem-card:hover { border-color: var(--red); transform: translateX(8px); }
+        .problem-card-icon { width: 48px; height: 48px; background: var(--red-subtle); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+        /* SOLUTION */
+        .solution-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+        .solution-card { background: var(--black); border: 1px solid var(--gray-dark); border-radius: 16px; padding: 32px 24px; text-align: center; position: relative; overflow: hidden; transition: all 0.3s; }
+        .solution-card:hover { border-color: var(--red); transform: translateY(-8px); }
+        .solution-icon { width: 64px; height: 64px; background: var(--red-subtle); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; }
+        .solution-status { display: inline-block; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; margin-top: 16px; text-transform: uppercase; }
+        .solution-status.live { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .solution-status.ready { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+        /* PRICING */
+        .pricing-toggle { display: flex; justify-content: center; gap: 16px; align-items: center; margin-bottom: 48px; }
+        .pricing-toggle span.active { color: var(--white); }
+        .toggle-switch { width: 56px; height: 28px; background: var(--gray-dark); border-radius: 100px; position: relative; cursor: pointer; transition: background 0.3s; }
+        .toggle-switch.active { background: var(--red); }
+        .toggle-switch.active::after { transform: translateX(28px); }
+        .toggle-switch::after { content: ''; width: 22px; height: 22px; background: var(--white); border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.3s; }
+        .save-badge { background: var(--red); color: var(--white); padding: 4px 10px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+        
+        .pricing-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; align-items: stretch; }
+        .pricing-card { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 16px; padding: 32px 24px; display: flex; flex-direction: column; position: relative; transition: all 0.3s; }
+        .pricing-card:hover { border-color: var(--gray-mid); transform: translateY(-4px); }
+        .pricing-card.featured { border-color: var(--red); background: linear-gradient(180deg, var(--red-subtle) 0%, var(--dark) 100%); }
+        .pricing-card.featured:hover { border-color: var(--red); }
+        .pricing-card.enterprise { background: linear-gradient(135deg, var(--dark) 0%, var(--gray-dark) 100%); }
+        .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--red); color: var(--white); padding: 6px 16px; border-radius: 100px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .pricing-header { text-align: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-dark); }
+        .pricing-amount { font-size: 48px; font-weight: 900; color: var(--white); line-height: 1; }
+        .pricing-features ul { list-style: none; }
+        .pricing-features li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; font-size: 13px; color: var(--gray-light); border-bottom: 1px solid var(--gray-dark); }
+        .pricing-features li svg { width: 16px; height: 16px; color: var(--red); }
+        .pricing-btn { width: 100%; padding: 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; text-align: center; text-decoration: none; display: block; }
+        .pricing-btn.primary { background: var(--red); color: var(--white); border: 2px solid var(--red); }
+        .pricing-btn.secondary { background: transparent; color: var(--white); border: 2px solid var(--gray-dark); }
+        .pricing-btn.secondary:hover { border-color: var(--white); }
+
+        /* HOW IT WORKS */
+        .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 48px; position: relative; }
+        .how-steps::before { content: ''; position: absolute; top: 48px; left: 15%; right: 15%; height: 2px; background: var(--gray-dark); }
+        .how-step { text-align: center; position: relative; }
+        .step-number { width: 96px; height: 96px; background: var(--black); border: 2px solid var(--gray-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; color: var(--red); margin: 0 auto 24px; position: relative; z-index: 1; }
+
+        /* TESTIMONIALS */
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+        .testimonial-card { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 16px; padding: 32px; transition: all 0.3s; }
+        .testimonial-stars { color: var(--red); font-size: 18px; margin-bottom: 16px; letter-spacing: 2px; }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-avatar { width: 48px; height: 48px; background: var(--red-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: var(--red); }
+
+        /* CONTACT */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: start; }
+        .contact-info { background: var(--red); border-radius: 16px; padding: 40px; color: var(--white); }
+        .contact-method-icon { width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .contact-form-wrapper { background: var(--black); border: 1px solid var(--gray-dark); border-radius: 16px; overflow: hidden; min-height: 500px; }
+        
+        /* FOOTER */
+        footer { background: var(--dark); padding: 60px 0 30px; border-top: 1px solid var(--gray-dark); }
+        .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+        .footer-links a { display: block; color: var(--gray-light); text-decoration: none; font-size: 14px; padding: 8px 0; }
+        .footer-bottom { padding-top: 24px; border-top: 1px solid var(--gray-dark); display: flex; justify-content: space-between; align-items: center; }
+
+        /* FUNNEL MODAL */
+        .funnel-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.95); z-index: 9999; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); }
+        .funnel-overlay.active { display: flex; }
+        .funnel-container { background: var(--dark); border: 1px solid var(--gray-dark); border-radius: 20px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
+        .funnel-close { position: absolute; top: 20px; right: 20px; background: var(--gray-dark); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; color: var(--gray-light); display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .funnel-close:hover { background: var(--red); color: var(--white); }
+        .funnel-step { display: none; padding: 48px 40px; }
+        .funnel-step.active { display: block; }
+        .funnel-progress { display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; }
+        .progress-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gray-dark); transition: all 0.3s; }
+        .progress-dot.active { background: var(--red); width: 32px; border-radius: 5px; }
+        .progress-dot.completed { background: var(--red); }
+        .funnel-option { display: flex; align-items: center; gap: 16px; padding: 18px 20px; border: 2px solid var(--gray-dark); border-radius: 12px; cursor: pointer; transition: all 0.3s; background: var(--black); margin-bottom: 12px; }
+        .funnel-option:hover { border-color: var(--red); background: var(--red-subtle); }
+        .funnel-option-icon { width: 48px; height: 48px; background: var(--gray-dark); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+        .funnel-option:hover .funnel-option-icon { background: var(--red); }
+        .funnel-other-input { width: 100%; padding: 16px 20px; border: 2px solid var(--gray-dark); border-radius: 12px; background: var(--black); color: var(--white); font-size: 15px; margin-top: 8px; }
+        .funnel-other-submit { margin-top: 12px; width: 100%; padding: 14px; background: var(--red); color: var(--white); border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; display: none; }
+        .funnel-other-submit.visible { display: block; }
+        .funnel-back { background: none; border: none; color: var(--gray); cursor: pointer; font-size: 14px; margin-top: 24px; display: flex; align-items: center; gap: 6px; margin: 24px auto 0; }
+        
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+            .pricing-card:nth-child(4), .pricing-card:nth-child(5) { grid-column: span 1; }
+        }
+        @media (max-width: 992px) {
+            .header-nav { display: none; }
+            .hero-content, .problem-grid, .contact-grid { grid-template-columns: 1fr; }
+            .solution-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .how-steps, .testimonials-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .header-cta-group { display: none; }
+            .solution-grid, .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo"><div class="logo-icon">⚡</div>AI Service <span>Co</span></a>
+                <nav class="header-nav">
+                    <a href="#solutions">Solutions</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+                <div class="header-cta-group">
+                    <a href="tel:+18632132505" class="header-phone">📞 (863) 213-2505</a>
+                    <a href="#" class="header-cta" onclick="openFunnel(); return false;">Start Free Trial</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge"><div class="hero-badge-dot"></div>AI-Powered • 24/7 Dominance • No Contracts</div>
+                    <h1>80% of Businesses Fail.<br><span class="highlight">Yours Won't.</span></h1>
+                    <p class="hero-subtitle">Not because you work harder — because your AI answers every call, replies to every text, and never forgets a customer.</p>
+                    <p class="hero-proof">While other contractors lose $45,000+ a year to missed calls and dead leads, you'll be booking jobs 24/7 on autopilot.</p>
+                    <div class="hero-cta-group">
+                        <button class="btn-primary" onclick="openFunnel()">Start Winning →</button>
+                        <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-stats-card">
+                        <div class="stats-card-title">Why Your Competitors Fail</div>
+                        <div class="stat-row"><span class="stat-label">Calls they miss weekly</span><span class="stat-value negative">8-12</span></div>
+                        <div class="stat-row"><span class="stat-label">Texts left unanswered</span><span class="stat-value negative">15-20</span></div>
+                        <div class="stat-row"><span class="stat-label">Customers they forget</span><span class="stat-value negative">73%</span></div>
+                        <div class="stat-row"><span class="stat-label">Revenue lost yearly</span><span class="stat-value negative">-$45,000+</span></div>
+                        <div class="stat-row"><span class="stat-label">Your advantage with AI</span><span class="stat-value positive">+$42,000</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
