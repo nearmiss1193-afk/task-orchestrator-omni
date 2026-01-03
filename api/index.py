@@ -6,26 +6,30 @@ import ssl
 
 # --- DEPENDENCY SAFEGUARDS ---
 stripe_error = None
+resend_error = None
+pg_error = None
+
 try:
     import resend
-    RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+    RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
     if RESEND_API_KEY:
         resend.api_key = RESEND_API_KEY
-except ImportError:
+except Exception as e:
     resend = None
+    resend_error = str(e)
 
 try:
     import stripe
-    stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
-except ImportError as e:
+    stripe.api_key = os.environ.get("STRIPE_SECRET_KEY", "").strip()
+except Exception as e:
     stripe = None
     stripe_error = str(e)
 
 try:
     import pg8000.native
-    # PG8000 is Pure Python - Safe for Vercel
-except ImportError:
+except Exception as e:
     pg8000 = None
+    pg_error = str(e)
 
 # --- DATABASE CONNECTION ---
 def get_db_connection():
@@ -117,6 +121,23 @@ class handler(BaseHTTPRequestHandler):
                     leads_data = [{"name": "Waiting for Data", "email": "system@ready.ai", "source": "SYSTEM_READY"}]
                 
                 data = leads_data
+
+            # --- ROUTE: HEALTH ---
+            elif path == "/api/health":
+                data = {
+                    "status": "healthy",
+                    "dependencies": {
+                        "stripe": {"loaded": stripe is not None, "error": stripe_error},
+                        "resend": {"loaded": resend is not None, "error": resend_error},
+                        "pg8000": {"loaded": pg8000 is not None, "error": pg_error}
+                    },
+                    "environment": {
+                        "STRIPE_KEY_PRESENT": os.environ.get("STRIPE_SECRET_KEY") is not None,
+                        "RESEND_KEY_PRESENT": os.environ.get("RESEND_API_KEY") is not None,
+                        "DB_URL_PRESENT": os.environ.get("DATABASE_URL") is not None,
+                        "VERCEL_URL": os.environ.get("VERCEL_URL")
+                    }
+                }
 
             else:
                 data = {"status": "Empire Sovereign Cloud Active 🟢"}
@@ -220,16 +241,22 @@ class handler(BaseHTTPRequestHandler):
                     domain_url = os.environ.get("VERCEL_URL", "http://localhost:3000")
                     if "http" not in domain_url: domain_url = f"https://{domain_url}"
                     amounts = { "starter": 9900, "lite": 19900, "growth": 29700, "enterprise": 49900 }
-                    session = stripe.checkout.Session.create(
-                        payment_method_types=['card'],
-                        line_items=[{'price_data': {'currency': 'usd', 'product_data': {'name': f'Empire HVAC: {plan.title()} Plan'}, 'unit_amount': amounts.get(plan, 9900), 'recurring': {'interval': 'month'}}, 'quantity': 1}],
-                        mode='subscription',
-                        customer_email=body.get('email'),
-                        success_url=f'{domain_url}/hvac.html?session_id={{CHECKOUT_SESSION_ID}}&payment=success',
-                        cancel_url=f'{domain_url}/checkout.html?payment=canceled',
-                        subscription_data={'trial_period_days': 7}
-                    )
-                    response_data = {"status": "success", "url": session.url}
+                    try:
+                        session = stripe.checkout.Session.create(
+                            payment_method_types=['card'],
+                            line_items=[{'price_data': {'currency': 'usd', 'product_data': {'name': f'Empire HVAC: {plan.title()} Plan'}, 'unit_amount': amounts.get(plan, 9900), 'recurring': {'interval': 'month'}}, 'quantity': 1}],
+                            mode='subscription',
+                            customer_email=body.get('email'),
+                            success_url=f'{domain_url}/hvac.html?session_id={{CHECKOUT_SESSION_ID}}&payment=success',
+                            cancel_url=f'{domain_url}/checkout.html?payment=canceled',
+                            subscription_data={'trial_period_days': 7}
+                        )
+                        response_data = {"status": "success", "url": session.url}
+                    except Exception as stripe_exec:
+                        import traceback
+                        full_err = traceback.format_exc()
+                        print(f"Stripe Session Error: {full_err}")
+                        response_data = {"status": "error", "message": f"Stripe failed: {str(stripe_exec)}", "traceback": full_err}
 
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
