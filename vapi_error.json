@@ -1,1 +1,1 @@
-{"message":["property tools should not exist","model.provider must be one of the following values: openai, azure-openai, together-ai, anyscale, openrouter, perplexity-ai, deepinfra, custom-llm, runpod, groq, vapi, anthropic, anthropic-bedrock, anthropic-vertex, google, xai, inflection-ai, cerebras, deep-seek, mistral"],"error":"Bad Request","statusCode":400}
+{"message":["model.property interruptionsEnabled should not exist"],"error":"Bad Request","statusCode":400}

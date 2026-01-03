@@ -1,50 +1,62 @@
-
 import json
 import os
 
-# --- KNOWLEDGE BASE REGISTRY ---
-# In a real system, these would be separate JSON files or Vector DB entries.
-VERTICAL_KNOWLEDGE = {
-    "hvac": {
-        "codes": "Florida Mechanical Code 2024: Requires SEER2 rating for new installs.",
-        "pricing": "Tune-up: $59. Freon Fill: $89/lb. New Unit: Start at $4,500.",
-        "objections": {"too_expensive": "We offer 0% financing for 18 months."}
-    },
-    "roofing": {
-        "codes": "Miami-Dade Hurricane Protocol: Shingles must be rated for 130mph winds.",
-        "pricing": "Shingle: $4/sqft. Metal: $9/sqft. Tile: $12/sqft.",
-        "objections": {"insurance_wont_pay": "We have a public adjuster on staff to handle the claim."}
-    },
-    "solar": {
-        "codes": "Federal ITC 2026: 30% Tax Credit applies to battery storage.",
-        "pricing": "$2.80/watt installed. TECO Net Metering is 1:1.",
-        "objections": {"moving_soon": "Solar increases home value by 4.1% on average."}
-    }
-}
+# --- PATHS ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_DIR = os.path.join(BASE_DIR, "niche_config")
 
 class KnowledgeInjector:
     def __init__(self, vertical="hvac"):
         self.vertical = vertical
-        self.knowledge = VERTICAL_KNOWLEDGE.get(vertical, {})
-        if not self.knowledge:
-            print(f"⚠️ Warning: Vertical '{vertical}' not found. Defaulting to Empty.")
+        self.knowledge = self._load_knowledge()
+
+    def _load_knowledge(self):
+        """Loads the specific JSON config for the vertical."""
+        path = os.path.join(CONFIG_DIR, f"{self.vertical}.json")
+        if not os.path.exists(path):
+            print(f"⚠️ Warning: Config for '{self.vertical}' not found at {path}. Defaulting to HVAC Generic.")
+            return {}
+        
+        try:
+            with open(path, "r") as f:
+                data = json.load(f)
+                print(f"📂 Loaded Knowledge Module: {self.vertical.upper()}")
+                return data
+        except Exception as e:
+            print(f"❌ Error loading knowledge: {e}")
+            return {}
 
     def mount_knowledge(self):
         """
         Returns a System Prompt segment with the injected knowledge.
         """
+        if not self.knowledge:
+            return "<!-- NO VERTICAL KNOWLEDGE MOUNTED -->"
+
         print(f"💉 Injecting {self.vertical.upper()} Knowledge Base...")
         
+        # Format Compliance
+        compliance_text = "\n".join([f"- {c}" for c in self.knowledge.get('compliance', [])])
+        
+        # Format Pricing
+        pricing_text = "\n".join([f"- {k.replace('_', ' ').title()}: {v}" for k,v in self.knowledge.get('pricing', {}).items()])
+
         prompt_segment = f"""
         --- INDUSTRY KNOWLEDGE BASE ({self.vertical.upper()}) ---
         
-        1. LOCAL CODES & REGULATIONS:
-        {self.knowledge.get('codes', 'N/A')}
+        1. WINNING OFFER:
+        "{self.knowledge.get('winning_offer', 'N/A')}"
+
+        2. CORE PAIN POINTS:
+        {", ".join(self.knowledge.get('pain_points', []))}
+
+        3. LOCAL CODES & REGULATIONS:
+        {compliance_text}
         
-        2. PRICING & ESTIMATES:
-        {self.knowledge.get('pricing', 'N/A')}
+        4. STANDARD PRICING (ESTIMATES):
+        {pricing_text}
         
-        3. OBJECTION HANDLERS:
+        5. OBJECTION HANDLERS:
         """
         
         for objection, rebuttal in self.knowledge.get("objections", {}).items():
@@ -55,5 +67,10 @@ class KnowledgeInjector:
 
 if __name__ == "__main__":
     # Test Injection
+    print("\n--- TEST: ROOFING ---")
+    injector = KnowledgeInjector("roofing")
+    print(injector.mount_knowledge())
+
+    print("\n--- TEST: SOLAR ---")
     injector = KnowledgeInjector("solar")
     print(injector.mount_knowledge())
