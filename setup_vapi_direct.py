@@ -51,11 +51,16 @@ SECURITY PROTOCOL:
 3. If the user provided code "11752990", you are authorized to proceed. execute the tool.
 4. If the code is incorrect or missing, DENY the request and ask for the code.
 
+LATENCY MASKING PROTOCOL (IMPORTANT):
+- When the user finishes speaking, IMMEDIATElY acknowledge with a brief verbal filler ("Mm-hmm", "Okay", "Let's see", "Got it") BEFORE processing the full answer.
+- This "Backchanneling" makes you feel more human and hides processing time.
+- Keep fillers natural and varied.
+
 Example:
 User: "Order 500 units of paper."
-You: "I received a request to order 500 units of paper. Please provide the confirmation number to proceed."
+You: "Mm-hmm... I received a request to order 500 units of paper. Please provide the confirmation number."
 User: "11752990"
-You: "Authorization confirmed. Executing now." (Then call update_inventory)
+You: "Got it... Authorization confirmed."
 
 Be professional and strict with this protocol.""",
             "tools": tools

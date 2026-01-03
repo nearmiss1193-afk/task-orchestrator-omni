@@ -199,20 +199,52 @@ class handler(BaseHTTPRequestHandler):
                 # 'Intel Predator' Logic: Log Interaction
                 if body.get('message', {}).get('type') == 'end-of-call-report':
                     con = get_db_connection()
+                    msg = body.get('message', {})
+                    summary = msg.get('summary', 'No summary')
+                    transcript = msg.get('transcript', 'No transcript')
+                    customer_phone = msg.get('customer', {}).get('number', 'Unknown')
+                    
+                    # 1. Log to DB
                     if con:
                         try:
-                            msg = body.get('message', {})
                             con.run(
                                 "INSERT INTO interactions (type, summary, transcript, lead_phone) VALUES (:t, :s, :tr, :p)",
                                 t='VAPI_CALL',
-                                s=msg.get('summary', 'No summary'),
-                                tr=msg.get('transcript', 'No transcript'),
-                                p=msg.get('customer', {}).get('number', 'Unknown')
+                                s=summary,
+                                tr=transcript,
+                                p=customer_phone
                             )
                             con.close()
                             print("✅ Call Logged to Neural Storage")
                         except Exception as e:
                             print(f"❌ Log Error: {e}")
+
+                    # 2. Lost Lead Recovery Loop (The "Rachel" Protocol)
+                    # Simple heuristic: If "appointment" or "booked" is NOT in summary, it's a lost lead.
+                    is_booked = "booked" in summary.lower() or "appointment" in summary.lower() or "scheduled" in summary.lower()
+                    
+                    if not is_booked and resend:
+                        print(f"⚠️ Lost Lead Detected: {customer_phone}. Triggering Recovery Protocol...")
+                        try:
+                            resend.Emails.send({
+                                "from": "alert@aiserviceco.com",
+                                "to": ["nearmiss1193@gmail.com"],
+                                "subject": f"🚨 LOST LEAD RECOVERY: {customer_phone}",
+                                "html": f"""
+                                    <h2>⚠️ Lead Did Not Book</h2>
+                                    <p><strong>Phone:</strong> {customer_phone}</p>
+                                    <p><strong>Summary:</strong> {summary}</p>
+                                    <hr>
+                                    <h3>🚀 ACTION REQUIRED: SMS RECOVERY</h3>
+                                    <p>Copy/Paste and send this SMS immediately:</p>
+                                    <blockquote style="background: #f9f9f9; padding: 15px; border-left: 5px solid #d9534f;">
+                                        "Hey, I'm Rachel from Lakeland Cooling. I noticed our call got cut off before we could lock in that $59 Tune-Up. Should I save that spot for you now?"
+                                    </blockquote>
+                                """
+                            })
+                            print("✅ Recovery Alert Sent.")
+                        except Exception as e:
+                            print(f"❌ Recovery Alert Failed: {e}")
 
                 response_data = {"status": "ok"}
             
