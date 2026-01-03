@@ -31,6 +31,7 @@ run_*.py
 !apps.json
 !package.json
 !sovereign_config.json
+!requirements.txt
 !api/index.py
 debug_*.py
 test_*.py
