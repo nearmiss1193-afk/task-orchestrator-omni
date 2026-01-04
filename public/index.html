@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Service Co | 80% of Businesses Fail. Yours Won't.</title>
+    <title>AI Service Co | The Operating System for Service Businesses</title>
     <meta name="description"
-        content="Stop missing calls. Start booking jobs 24/7 with the only AI receptionist built for contractors. Setup in 24 hours.">
+        content="The all-in-one AI workforce for contractors. Automated booking, dispatch, and customer service for HVAC, Plumbing, Roofing, and more.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,35 +18,39 @@
     <!-- Styles -->
     <style>
         :root {
-            /* Brand Colors: Tech Blue */
-            --primary: #2563eb;
-            /* Royal Blue */
-            --primary-hover: #1d4ed8;
-            --primary-glow: rgba(37, 99, 235, 0.5);
-            --primary-dim: rgba(37, 99, 235, 0.1);
+            /* Brand Colors: Sovereign Gold & Deep Slate */
+            --primary: #f59e0b;
+            /* Amber 500 */
+            --primary-hover: #d97706;
+            --primary-glow: rgba(245, 158, 11, 0.4);
+            --primary-dim: rgba(245, 158, 11, 0.1);
 
-            /* Slate Palette */
-            --bg-dark: #020617;
-            /* Slate 950 */
-            --bg-card: #0f172a;
+            --accent: #3b82f6;
+            /* Blue 500 */
+
+            /* Dark Palette */
+            --bg-dark: #0f172a;
             /* Slate 900 */
-            --bg-glass: rgba(15, 23, 42, 0.8);
+            --bg-card: #1e293b;
+            /* Slate 800 */
+            --bg-glass: rgba(30, 41, 59, 0.7);
 
             --text-main: #f8fafc;
             /* Slate 50 */
             --text-muted: #94a3b8;
             /* Slate 400 */
 
-            --border: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(37, 99, 235, 0.5);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(245, 158, 11, 0.5);
 
-            --gradient-hero: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.15), transparent 70%);
+            --gradient-hero: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15), transparent 70%);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -71,16 +75,6 @@
             transition: 0.3s;
         }
 
-        ul {
-            list-style: none;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
         /* HEADER */
         header {
             position: fixed;
@@ -88,11 +82,17 @@
             left: 0;
             width: 100%;
             z-index: 100;
-            background: rgba(2, 6, 23, 0.8);
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.9);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
             padding: 16px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
         .header-content {
@@ -103,10 +103,11 @@
 
         .logo {
             font-size: 20px;
-            font-weight: 700;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: -0.02em;
         }
 
         .logo span {
@@ -114,14 +115,15 @@
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--primary);
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #b45309);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            font-size: 18px;
         }
 
         .nav-links {
@@ -137,72 +139,35 @@
 
         .nav-links a:hover {
             color: white;
-        }
-
-        .header-cta {
-            background: var(--primary-dim);
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            border: 1px solid rgba(37, 99, 235, 0.2);
-        }
-
-        .header-cta:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         /* HERO */
         .hero {
-            padding: 180px 0 100px;
+            padding: 200px 0 100px;
             background: var(--gradient-hero);
             text-align: center;
-            position: relative;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 6px 16px;
-            border-radius: 100px;
-            font-size: 13px;
-            color: var(--primary);
-            margin-bottom: 32px;
-            font-weight: 500;
         }
 
         .hero h1 {
-            font-size: 64px;
+            font-size: 72px;
             line-height: 1.1;
             font-weight: 800;
             margin-bottom: 24px;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
         }
 
         .hero h1 span {
-            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero h1 .highlight {
-            background: linear-gradient(135deg, var(--primary) 0%, #60a5fa 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, #fcd34d 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 20px;
+            font-size: 22px;
             color: var(--text-muted);
-            max-width: 600px;
+            max-width: 660px;
             margin: 0 auto 40px;
         }
 
@@ -210,66 +175,41 @@
             display: flex;
             justify-content: center;
             gap: 16px;
+            margin-bottom: 80px;
         }
 
         .btn-primary {
             background: var(--primary);
-            color: white;
+            color: black;
             padding: 16px 32px;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 100px;
+            font-weight: 700;
             font-size: 16px;
-            box-shadow: 0 10px 30px -10px var(--primary-glow);
+            box-shadow: 0 0 20px -5px var(--primary-glow);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 20px 40px -10px var(--primary-glow);
+            box-shadow: 0 10px 40px -10px var(--primary-glow);
+            background: white;
         }
 
         .btn-secondary {
-            background: var(--bg-card);
+            background: transparent;
             border: 1px solid var(--border);
             color: white;
             padding: 16px 32px;
-            border-radius: 12px;
+            border-radius: 100px;
             font-weight: 600;
             font-size: 16px;
         }
 
         .btn-secondary:hover {
-            border-color: var(--text-muted);
+            border-color: white;
         }
 
-        /* VIDEO SECTION */
-        .video-section {
-            padding: 40px 0 100px;
-        }
-
-        .video-wrapper {
-            max-width: 1000px;
-            margin: 0 auto;
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            box-shadow: 0 0 100px -20px rgba(37, 99, 235, 0.15);
-            background: var(--bg-card);
-            aspect-ratio: 16/9;
-        }
-
-        .video-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .enterprise-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-        }
-
-        /* FEATURES / BENTO */
-        .features {
+        /* INDUSTRIES */
+        .industries {
             padding: 100px 0;
         }
 
@@ -281,219 +221,183 @@
         .section-header h2 {
             font-size: 40px;
             font-weight: 700;
-            margin-bottom: 16px;
         }
 
-        .section-header p {
-            color: var(--text-muted);
-            font-size: 18px;
-        }
-
-        .bento-grid {
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 24px;
         }
 
-        .bento-card {
+        .industry-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
+            border-radius: 20px;
             padding: 32px;
-            border-radius: 24px;
+            transition: 0.3s;
             position: relative;
             overflow: hidden;
+            group: card;
         }
 
-        .bento-card:hover {
-            border-color: var(--border-hover);
+        .industry-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -20px black;
         }
 
-        .bento-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--primary-dim);
-            color: var(--primary);
-            border-radius: 12px;
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .industry-card:hover .icon-box {
+            background: var(--primary);
+            color: black;
+            border-color: var(--primary);
+        }
+
+        .industry-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .industry-card p {
+            color: var(--text-muted);
+            font-size: 15px;
             margin-bottom: 24px;
         }
 
-        .bento-card h3 {
-            font-size: 20px;
+        .card-link {
+            color: var(--primary);
             font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .bento-card p {
-            color: var(--text-muted);
-            font-size: 15px;
-        }
-
-        /* PRICING */
-        .pricing-section {
-            padding: 100px 0;
-            background: linear-gradient(180deg, var(--bg-dark) 0%, #0f172a 100%);
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .pricing-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px 32px;
+            font-size: 14px;
             display: flex;
-            flex-direction: column;
-            position: relative;
+            align-items: center;
+            gap: 6px;
         }
 
-        .pricing-card.featured {
-            border-color: var(--primary);
-            box-shadow: 0 0 40px -10px var(--primary-dim);
-            transform: scale(1.05);
-            z-index: 2;
+        .card-link span {
+            transition: 0.3s;
         }
 
-        .pricing-card.featured::before {
-            content: 'Most Popular';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: white;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
+        .industry-card:hover .card-link span {
+            transform: translateX(4px);
         }
 
-        .pricing-header h3 {
+        /* FEATURES */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 100px;
+        }
+
+        .feature-img {
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 0 100px -30px rgba(59, 130, 246, 0.2);
+        }
+
+        .feature-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .feature-content h2 {
+            font-size: 36px;
+            margin-bottom: 24px;
+        }
+
+        .feature-content p {
+            color: var(--text-muted);
             font-size: 18px;
-            color: var(--text-muted);
-            font-weight: 500;
+            margin-bottom: 32px;
         }
 
-        .pricing-price {
-            font-size: 48px;
-            font-weight: 800;
-            color: white;
-            margin: 16px 0;
-        }
-
-        .pricing-price span {
-            font-size: 16px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .pricing-features {
-            margin: 32px 0;
-            flex-grow: 1;
-        }
-
-        .pricing-features li {
+        .feature-list li {
             display: flex;
             gap: 12px;
             margin-bottom: 16px;
-            color: var(--text-muted);
-            font-size: 14px;
+            align-items: center;
+            font-weight: 500;
         }
 
         .check {
             color: var(--primary);
-        }
-
-        .pricing-btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 600;
-            background: var(--primary-dim);
-            color: var(--primary);
-            border: 1px solid transparent;
-        }
-
-        .pricing-card.featured .pricing-btn {
-            background: var(--primary);
-            color: white;
-        }
-
-        .pricing-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .pricing-card.enterprise {
-            border: 1px solid var(--text-muted);
-            background: rgba(15, 23, 42, 0.6);
-        }
-
-        .pricing-price .original {
-            font-size: 18px;
-            text-decoration: line-through;
-            color: var(--text-muted);
-            font-weight: 400;
-            margin-right: 8px;
+            background: rgba(245, 158, 11, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
         }
 
         /* FOOTER */
         footer {
-            padding: 60px 0;
             border-top: 1px solid var(--border);
-            margin-top: 100px;
-            text-align: center;
+            padding: 80px 0;
+            margin-top: 120px;
+            background: #020617;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            margin-top: 16px;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
             color: var(--text-muted);
         }
 
-        @media (max-width: 900px) {
+        .footer-col ul li a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
             .hero h1 {
-                font-size: 42px;
+                font-size: 48px;
             }
 
-            .pricing-grid {
+            .features-grid {
                 grid-template-columns: 1fr;
             }
 
-            .bento-grid {
+            .footer-grid {
                 grid-template-columns: 1fr;
+                gap: 40px;
             }
-
-            .pricing-card.featured {
-                transform: none;
-            }
-
-            .header-content .nav-links {
-                display: none;
-            }
-        }
-
-        /* Glass Modal for Funnel (Placeholder) */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            -webkit-backdrop-filter: blur(5px);
-            backdrop-filter: blur(5px);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.active {
-            display: flex;
         }
     </style>
 </head>
@@ -503,186 +407,164 @@
     <header>
         <div class="container header-content">
             <a href="#" class="logo">
-                <div class="logo-icon">⚡</div>AI Service <span>Co</span>
+                <div class="logo-icon">⚡</div>AI Service <span>Co.</span>
             </a>
             <nav class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#demo">Demo</a>
-                <a href="#pricing">Pricing</a>
+                <a href="#industries">Solutions</a>
+                <a href="landing/dashboard.html">Platform</a>
+                <a href="#pricing">Enterprise</a>
             </nav>
-            <a href="#pricing" class="header-cta">Get Started</a>
+            <a href="landing/dashboard.html" class="btn-primary" style="padding: 10px 24px; font-size: 14px;">Login</a>
         </div>
     </header>
 
     <section class="hero">
         <div class="container">
-            <div class="hero-badge">✨ 24/7 AI Receptionist for HVAC & Plumbing</div>
-            <h1>Stop Missing Calls.<br><span class="highlight">Start Booking Jobs.</span></h1>
-            <p>Your new AI employee answers plays, books appointments, and reactivates dead leads 24/7. Setup takes 2
-                minutes.</p>
+            <h1>The Operating System for <br><span>Service Businesses</span></h1>
+            <p>Deploy a fully autonomous AI workforce. From instant dispatch to automated billing, we scale your
+                operations while you sleep.</p>
             <div class="hero-btns">
-                <a href="#pricing" class="btn-primary">Start Free Trial</a>
-                <a href="#demo" class="btn-secondary">Watch Demo</a>
-            </div>
-
-            <!-- Hero Video MOVED UP -->
-            <div class="video-wrapper hero-video-container">
-                <iframe src="https://www.youtube.com/embed/CeLRdL4WAJQ?rel=0&modestbranding=1"
-                    title="AI Service Co Demo"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
-                    allowfullscreen class="w-full h-full"></iframe>
+                <a href="#industries" class="btn-primary">Find Your Industry</a>
+                <a href="landing/dashboard.html" class="btn-secondary">View Live Demo</a>
             </div>
         </div>
     </section>
 
-
-
-    <section class="features" id="features">
+    <section class="industries" id="industries">
         <div class="container">
             <div class="section-header">
-                <h2>Why Winners Choose Us</h2>
-                <p>Features that convert missed calls into revenue.</p>
+                <h2>Tailored for Your Trade</h2>
+                <p>Specialized AI models trained on millions of real service calls.</p>
             </div>
-            <div class="bento-grid">
-                <!-- Card 1 -->
-                <div class="bento-card">
-                    <div class="bento-icon">📞</div>
-                    <h3>Instant Answering</h3>
-                    <p>Answers every call in < 2 seconds. Never send a customer to voicemail again.</p>
-                </div>
-                <!-- Card 2 -->
-                <div class="bento-card">
-                    <div class="bento-icon">♻️</div>
-                    <h3>Database Reactivation</h3>
-                    <p>We text your old leads to wake them up. Turn your "dead" list into instant revenue.</p>
-                </div>
-                <!-- Card 3 -->
-                <div class="bento-card">
-                    <div class="bento-icon">🎬</div>
-                    <h3>Veo Visionary App</h3>
-                    <p>Custom AI Video Reels & Advertising. We create, A/B test, and launch ads automatically.</p>
-                </div>
-                <!-- Card 4 -->
-                <div class="bento-card">
-                    <div class="bento-icon">📅</div>
-                    <h3>Auto-Booking</h3>
-                    <p>Qualifies leads and books directly into your calendar while you work.</p>
-                </div>
-                <!-- Card 5 -->
-                <div class="bento-card">
-                    <div class="bento-icon">📰</div>
-                    <h3>Newsletters & Nurture</h3>
-                    <p>Keep your audience engaged with AI-written newsletters and long-term follow-up.</p>
-                </div>
-                <!-- Card 6 -->
-                <div class="bento-card">
-                    <div class="bento-icon">💬</div>
-                    <h3>SMS Follow-up</h3>
-                    <p>Instantly texts missed calls and follows up with leads until they book.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="pricing-section" id="pricing">
-        <div class="container">
-            <div class="section-header">
-                <h2>Simple, Transparent Pricing</h2>
-                <p>No contracts. Cancel anytime. 7-Day Free Trial included.</p>
-            </div>
-            <div class="pricing-grid">
-                <!-- Starter -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3>Starter</h3>
-                    </div>
-                    <div class="pricing-price"><span class="original">$199</span>$99<span>/mo</span></div>
-                    <ul class="pricing-features">
-                        <li><span class="check">✓</span> <strong>24/7 Call Answering</strong><br><span
-                                class="text-xs text-muted">Never miss a revenue opportunity.</span></li>
-                        <li><span class="check">✓</span> <strong>Missed Call Text-Back</strong><br><span
-                                class="text-xs text-muted">Instant customer engagement.</span></li>
-                        <li><span class="check">✓</span> <strong>Instant Notifications</strong><br><span
-                                class="text-xs text-muted">Alerts via SMS & Email.</span></li>
-                        <li><span class="check">✓</span> Local Number Inclusion</li>
-                        <li><span class="check">✓</span> Basic Spam Filtering</li>
-                    </ul>
-                    <a href="checkout.html?plan=starter" class="pricing-btn">Start 7-Day Trial</a>
-                </div>
+            <div class="grid-container">
+                <!-- HVAC -->
+                <a href="landing/hvac.html" class="industry-card">
+                    <div class="icon-box">❄️</div>
+                    <h3>HVAC & Climate</h3>
+                    <p>Automated seasonality handling, emergency dispatch, and maintenance agreements.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
 
-                <!-- Lite (Pro) -->
-                <div class="pricing-card featured">
-                    <div class="pricing-header">
-                        <h3>Lite</h3>
-                    </div>
-                    <div class="pricing-price"><span class="original">$399</span>$199<span>/mo</span></div>
-                    <ul class="pricing-features">
-                        <li><span class="check">✓</span> <strong>Everything in Starter</strong></li>
-                        <li><span class="check">✓</span> <strong>Appointment Booking</strong><br><span
-                                class="text-xs text-muted">Syncs with your calendar.</span></li>
-                        <li><span class="check">✓</span> <strong>3 Custom AI Workflows</strong><br><span
-                                class="text-xs text-muted">Handle specific FAQs.</span></li>
-                        <li><span class="check">✓</span> Call Recording & Transcripts</li>
-                        <li><span class="check">✓</span> <strong>Sovereign CRM Integration</strong></li>
-                        <li><span class="check">✓</span> Priority Email Support</li>
-                    </ul>
-                    <a href="checkout.html?plan=lite" class="pricing-btn">Start 7-Day Trial</a>
-                </div>
+                <!-- Plumber -->
+                <a href="landing/plumber.html" class="industry-card">
+                    <div class="icon-box">💧</div>
+                    <h3>Plumbing & Piping</h3>
+                    <p>Leak detection intake, emergency prioritization, and water heater sales.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
 
-                <!-- Growth -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3>Growth</h3>
-                    </div>
-                    <div class="pricing-price"><span class="original">$597</span>$297<span>/mo</span></div>
-                    <ul class="pricing-features">
-                        <li><span class="check">✓</span> <strong>Everything in Lite</strong></li>
-                        <li><span class="check">✓</span> <strong>Database Reactivation</strong><br><span
-                                class="text-xs text-muted">Turn old leads into cash.</span></li>
-                        <li><span class="check">✓</span> <strong>Advanced Analytics</strong><br><span
-                                class="text-xs text-muted">Deep ROI tracking.</span></li>
-                        <li><span class="check">✓</span> Dedicated Account Manager</li>
-                        <li><span class="check">✓</span> Custom Voice Cloning</li>
-                    </ul>
-                    <a href="checkout.html?plan=growth" class="pricing-btn">Start 7-Day Trial</a>
-                </div>
+                <!-- Roofer -->
+                <a href="landing/roofer.html" class="industry-card">
+                    <div class="icon-box">🏠</div>
+                    <h3>Roofing & Storm</h3>
+                    <p>Hail storm reactivation, aerial measurement integration, and insurance claim handling.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
 
-                <!-- Enterprise -->
-                <div class="pricing-card enterprise">
-                    <div class="pricing-header">
-                        <h3>Enterprise</h3>
-                    </div>
-                    <div class="pricing-price">Custom<span>/mo</span></div>
-                    <ul class="pricing-features">
-                        <li><span class="check">✓</span> <strong>Volume Discounts</strong><br><span
-                                class="text-xs text-muted">For 10+ Locations.</span></li>
-                        <li><span class="check">✓</span> <strong>White Labeling</strong><br><span
-                                class="text-xs text-muted">Your Brand, Our Tech.</span></li>
-                        <li><span class="check">✓</span> <strong>API Access</strong><br><span
-                                class="text-xs text-muted">Full Developer Control.</span></li>
-                        <li><span class="check">✓</span> <strong>Custom Engineering</strong><br><span
-                                class="text-xs text-muted">Tailored AI Solutions.</span></li>
-                        <li><span class="check">✓</span> 24/7 Phone Support</li>
-                    </ul>
-                    <a href="mailto:sales@aiservice.co?subject=Enterprise%20Inquiry"
-                        class="pricing-btn enterprise-btn">Contact Sales</a>
-                </div>
+                <!-- Electrician -->
+                <a href="landing/electrician.html" class="industry-card">
+                    <div class="icon-box">⚡</div>
+                    <h3>Electrical</h3>
+                    <p>Panel upgrade campaigns, EV charger quoting, and emergency power dispatch.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Solar -->
+                <a href="landing/solar.html" class="industry-card">
+                    <div class="icon-box">☀️</div>
+                    <h3>Solar & Energy</h3>
+                    <p>Proposal generation, utility bill analysis, and tax credit qualification.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Landscaping -->
+                <a href="landing/landscaping.html" class="industry-card">
+                    <div class="icon-box">🌿</div>
+                    <h3>Landscaping</h3>
+                    <p>Seasonal recurring service booking, hardscape quoting, and route optimization.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Pest Control -->
+                <a href="landing/pest.html" class="industry-card">
+                    <div class="icon-box">🐜</div>
+                    <h3>Pest Control</h3>
+                    <p>Quarterly subscription renewals, infestation triage, and tech routing.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Restoration -->
+                <a href="landing/restoration.html" class="industry-card">
+                    <div class="icon-box">🌊</div>
+                    <h3>Damage Restoration</h3>
+                    <p>24/7 emergency response, insurance coordination, and mold remediation intake.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Auto Detail -->
+                <a href="landing/autodetail.html" class="industry-card">
+                    <div class="icon-box">🚗</div>
+                    <h3>Auto Detailing</h3>
+                    <p>Mobile unit scheduling, ceramic coating upsells, and fleet management.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Cleaning -->
+                <a href="landing/cleaning.html" class="industry-card">
+                    <div class="icon-box">✨</div>
+                    <h3>Cleaning Services</h3>
+                    <p>Deep clean booking, maid service recurring schedules, and Airbnb turnovers.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="container">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">⚡</div>AI Service <span>Co.</span>
+                </a>
+                <p>The first sovereign AI operating system tailored for the modern service economy.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">Intelligence</a></li>
+                    <li><a href="#">Dispatch</a></li>
+                    <li><a href="#">Payments</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container" style="text-align: center; margin-top: 60px; color: var(--border);">
             <p>© 2026 AI Service Co. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- VAPI -->
+    <!-- VAPI Integration -->
     <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
     <script>
         var vapiInstance = null;
         const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
-        const ASSISTANT_ID = "d19cae13-d11b-499b-a9e7-2e113efe1112";
+        const ASSISTANT_ID = "d19cae13-d11b-499b-a9e7-2e113efe1112"; // Using standard assistant for main hub
         (function () {
             var script = document.createElement('script');
             script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
@@ -693,11 +575,11 @@
                     apiKey: VAPI_PUBLIC_KEY,
                     assistant: ASSISTANT_ID,
                     config: {
-                        position: "bottom-left",
+                        position: "bottom-right",
                         offset: "40px",
                         width: "50px",
                         height: "50px",
-                        idle: { color: "#2563eb", type: "pill", title: "Talk to AI", subtitle: "Instant Answers", icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg" },
+                        idle: { color: "#f59e0b", type: "pill", title: "Talk to Sales", subtitle: "Ask anything", icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg" },
                         loading: { color: "#94a3b8", type: "pill", title: "Connecting...", subtitle: "Please wait", icon: "https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg" },
                         active: { color: "#ef4444", type: "pill", title: "Live Call", subtitle: "Listening...", icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg" }
                     }
