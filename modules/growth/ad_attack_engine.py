@@ -35,19 +35,19 @@ class AdAttackEngine:
         self.prompter = VideoPrompter()
         self.grievance_map = {
             "Tardiness": {
-                "hook": "Tired of waiting 4 hours for a '2-hour window'?",
-                "angle": "We pay YOU $50 if we're late.",
-                "visual_concept": "Close up of a frustrated homeowner looking at a watch, then a branded van arriving instantly"
+                "hook": "I saw your 1-star review about 'late techs'. Fix it today?",
+                "angle": "Our AI Dispatcher texts customers instantly when techs are late, saving the relationship.",
+                "visual_concept": "Split screen: Frazzled human dispatcher vs Calm AI Dashboard managing routes"
             },
             "Hidden Fees": {
-                "hook": "Did your 'Free Quote' turn into a $500 bill?",
-                "angle": "Flat Rate Pricing. Zero Surprises.",
-                "visual_concept": "Hand crushing a paper invoice with hidden fees, then showing a clean digital price tag"
+                "hook": "Are price complaints hurting your Google Rating?",
+                "angle": "Our 'Transparent Quote' bot sends approved PDF estimates before the truck rolls.",
+                "visual_concept": "Close up of a 5-Star Review that says 'Honest pricing!'"
             },
             "Ghosting": {
-                "hook": "Why do contractors stop answering the phone?",
-                "angle": "24/7 Live Americans. No Robots.",
-                "visual_concept": "Phone ringing endlessly in an empty office, cut to a smiling agent answering immediately"
+                "hook": "How many leads did you miss after 5pm yesterday?",
+                "angle": "Our AI Voice Agent answers 24/7. Never miss a $10k install again.",
+                "visual_concept": "Office lights turning off at 5pm, but the phone keeps ringing and AI answers it"
             }
         }
 
