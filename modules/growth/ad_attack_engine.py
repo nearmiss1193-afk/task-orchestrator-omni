@@ -1,13 +1,15 @@
 import os
 import random
 import sys
+import json
+from datetime import datetime
 
 # Allow import from sibling module
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from media.video_prompter import VideoPrompter
+from communication.sovereign_dispatch import dispatcher
 
 # --- SIMULATED SCRAPED DATA (PREDATOR 1-STAR FEED) ---
-# In production, this comes from an Apify Google Maps Scraper JSON output.
 COMPETITOR_REVIEWS = [
     {
         "competitor": "Iceberg HVAC Services",
@@ -20,18 +22,12 @@ COMPETITOR_REVIEWS = [
         "review": "Quoted me $4500 on the phone, but the final bill was $6200. Claimed 'copper prices went up'. Liars.",
         "stars": 1,
         "date": "2026-01-01"
-    },
-    {
-        "competitor": "Global HVAC",
-        "review": "My AC is still broken after 3 visits. They just keep refilling the freon and leaving.",
-        "stars": 1,
-        "date": "2025-12-29"
     }
 ]
 
 class AdAttackEngine:
     def __init__(self):
-        print("⚔️ Initializing Ad Attack Engine (Predator V34.1 - Sovereign Optimized)...")
+        print("⚔️ Initializing Ad Attack Engine (Predator V35.0 - Sovereign Edition)...")
         self.prompter = VideoPrompter()
         self.grievance_map = self._load_grievances()
 
@@ -44,16 +40,17 @@ class AdAttackEngine:
             print(f"⚠️ Failed to load Grievance DB: {e}. Using fallback.")
             return {}
 
-
     def scan_and_attack(self, competitor_name="Generic Inc"):
         print(f"   Searching 1-Star Reviews for: {competitor_name}...")
         
         # 0. Integrated Verification (The Shopper)
-        # Ensure our Landing Page is actually live before generating ads
         from qa.link_validator import validate_link
         target_url = "https://empire-sovereign-cloud.vercel.app"
+        
         if not validate_link(target_url):
             print("❌ ABORTING: Landing Page is DOWN. Cannot run ads.")
+            # Notify User via Sovereign Dispatch
+            dispatcher.send_email("nearmiss1193@gmail.com", "🚨 URGENT: Landing Page Down", "Ad Attack aborted because site is unreachable.")
             return []
 
         # Mocking the scrape results
@@ -77,33 +74,54 @@ class AdAttackEngine:
         return attack_ads
 
     def _safe_generate_prompt(self, concept):
-        # Resilience Logic: 3 Retries
         for attempt in range(3):
             try:
                 return self.prompter.generate_prompt(concept, vibe="cinematic_commercial")
             except Exception as e:
                 print(f"   ⚠️ Model Overload (Attempt {attempt+1}/3): {e}. Retrying...")
-                import time; time.sleep(2 * (attempt + 1)) # Backoff
-        
+                import time; time.sleep(2)
         return "Visual Prompt Unavailable (System Overload)"
 
-    def save_campaign_report(self, ads, filename="campaign_results_v1.md"):
+    def save_and_notify(self, ads):
+        """Saves report locally AND triggers Sovereign Dispatch notification."""
+        filename = "campaign_results_v1.md"
+        report_content = f"# ⚔️ AD ATTACK REPORT ({datetime.now().strftime('%Y-%m-%d')})\n\n"
+        
+        html_body = "<h2>⚔️ Ad Attack Campaign Generated</h2><ul>"
+        
         try:
+            # 1. Save Local Markdown
             with open(filename, "w", encoding="utf-8") as f:
-                f.write(f"# ⚔️ AD ATTACK CAMPAIGN REPORT\n")
-                f.write(f"**Date:** {os.environ.get('DATE', 'Today')}\n\n")
-                
+                f.write(report_content)
                 for i, ad in enumerate(ads):
-                    f.write(f"## Ad #{i+1} (Target: {ad['target_pain']})\n")
-                    f.write(f"**Headline:** {ad['headline']}\n")
-                    f.write(f"**Copy:** {ad['body']}\n")
-                    f.write(f"**🎥 Visual Prompt:** `{ad['video_prompt']}`\n")
-                    f.write(f"---\n")
+                    block = f"## Ad #{i+1}: {ad['target_pain']}\n**Hook:** {ad['headline']}\n**Visual:** `{ad['video_prompt']}`\n---\n"
+                    f.write(block)
+                    
+                    # Add to email HTML
+                    html_body += f"<li><strong>{ad['target_pain']}</strong>: {ad['headline']}</li>"
+            
             print(f"✅ Campaign Report saved to: {filename}")
+            
+            # 2. Sovereign Dispatch (Email + SMS)
+            html_body += f"</ul><p><strong>Full report saved to:</strong> {filename}</p>"
+            
+            print("   📨 Dispatching Alerts via Sovereign Network...")
+            dispatcher.send_email(
+                to_email="nearmiss1193@gmail.com", 
+                subject=f"⚔️ Campaign Ready: {len(ads)} Ads Generated", 
+                html_body=html_body
+            )
+            
+            dispatcher.send_sms(
+                to_phone="+13529368152",
+                body=f"⚔️ Ad Attack Complete. {len(ads)} ads generated for verification. Check inbox."
+            )
+            
         except Exception as e:
-            print(f"❌ Failed to save report: {e}")
+            print(f"❌ Failed to save/notify: {e}")
 
 if __name__ == "__main__":
     engine = AdAttackEngine()
     ads = engine.scan_and_attack("Lazy HVAC Boys LLC")
-    engine.save_campaign_report(ads)
+    if ads:
+        engine.save_and_notify(ads)
