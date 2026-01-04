@@ -11,6 +11,6 @@ cd c:\Users\nearm\.gemini\antigravity\scratch\empire-unified
 call vercel deploy --prod
 echo.
 echo ✅ DEPLOYMENT FINISHED.
-echo Now running verification...
-node verify_shopper.js
+echo Now running verification (The Shopper)...
+python modules/qa/link_validator.py
 pause

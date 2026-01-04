@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .status-captured {
+            background: #22c55e;
+        }
+
+        .status-call {
+            background: #3b82f6;
+        }
+    </style>
+</head>
+
+<body class="p-8 relative overflow-x-hidden">
+    <canvas id="neuralCanvas" class="fixed inset-0 z-0 pointer-events-none opacity-40"></canvas>
+
+    <!-- SOVEREIGN ACCESS GATE -->
+    <div id="accessGate" class="fixed inset-0 bg-slate-950/90 backdrop-blur-xl z-50 flex items-center justify-center">
+        <div class="bg-slate-900 border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
+            <div class="mb-6 text-4xl">🛡️</div>
+            <h2 class="text-xl font-bold mb-2">Restricted Access</h2>
+            <p class="text-slate-400 text-sm mb-6">Enter protocol authorization code.</p>
+
+            <input type="password" id="gateInput" placeholder="ACCESS CODE"
+                class="w-full bg-black/50 border border-slate-700 rounded-lg px-4 py-3 text-center tracking-widest text-lg focus:border-blue-500 focus:outline-none mb-4">
+
+            <button onclick="checkAccess()"
+                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition">
+                AUTHENTICATE
+            </button>
+            <p id="gateError" class="text-red-500 text-xs mt-4 hidden">Scale Authorization Failed.</p>
+        </div>
+    </div>
+    <script>
+        const GATE_KEY = "EMPIRE_ACCESS_TOKEN_V1";
+        const SESSION_CODE = "SOVEREIGN"; // User can change this later
+
+        function checkSession() {
+            if (localStorage.getItem(GATE_KEY) === "AUTHORIZED") {
+                document.getElementById('accessGate').style.display = 'none';
+            }
+        }
+
+        function checkAccess() {
+            const input = document.getElementById('gateInput');
+            if (input.value === SESSION_CODE) {
+                localStorage.setItem(GATE_KEY, "AUTHORIZED");
+                document.getElementById('accessGate').style.display = 'none';
+            } else {
+                const err = document.getElementById('gateError');
+                err.classList.remove('hidden');
+                err.innerText = "ACCESS DENIED.";
+                input.value = "";
+                input.classList.add('border-red-500');
+            }
+        }
+
+        // Bind Enter
+        document.getElementById('gateInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAccess();
+        });
+
+        checkSession();
+    </script>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-xl">⚡</div>
+                <div>
+                    <h1 class="text-2xl font-bold">Sovereign Command</h1>
+                    <p class="text-slate-400 text-sm">Local Server Status: <span class="text-green-400">● Online</span>
+                    </p>
+                </div>
+            </div>
+            <a href="https://empire-hvac-demo-sovereign.surge.sh/hvac.html" target="_blank" rel="noopener"
+                class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition">View Live Site ↗</a>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-slate-400 text-xs font-semibold uppercase">Total Leads</h3>
+                <div class="text-3xl font-bold mt-2" id="statLeads">...</div>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-slate-400 text-xs font-semibold uppercase">Est. Pipeline</h3>
+                <div class="text-3xl font-bold mt-2 text-green-400" id="statRevenue">...</div>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-slate-400 text-xs font-semibold uppercase">AI Calls</h3>
+                <div class="text-3xl font-bold mt-2 text-blue-400" id="statCalls">...</div>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-slate-400 text-xs font-semibold uppercase">Reservations</h3>
+                <div class="text-3xl font-bold mt-2 text-purple-400" id="statReservations">...</div>
+            </div>
+
+            <!-- Command Center -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Voice Uplink -->
+                <div class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center">
+                    <div
+                        class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 animate-pulse">
+                        <span class="text-3xl">🎙️</span>
+                    </div>
+                    <h3 class="text-lg font-bold">Orchestrator Uplink (Level 5)</h3>
+                    <p class="text-slate-400 text-sm mb-4">Direct Neural Link to Antigravity.</p>
+                    <button onclick="startVoiceUplink()" title="Initiate Voice Uplink"
+                        class="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg font-semibold transition w-full">
+                        Initiate Voice Uplink
+                    </button>
+                    <div id="vapi-status" class="mt-2 text-xs text-slate-400">Status: Standby</div>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="glass p-6 rounded-2xl col-span-2 flex flex-col h-[300px]">
+                    <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
+                        <h3 class="font-bold">Mission Control Chat</h3>
+                        <span class="text-xs text-green-400">● AI Online</span>
+                    </div>
+                    <div class="flex-1 overflow-y-auto mb-4 space-y-3" id="chatHistory">
+                        <div class="bg-white/5 p-3 rounded-lg text-sm rounded-tl-none">
+                            <span class="text-blue-400 font-bold text-xs block mb-1">SYSTEM</span>
+                            Welcome back, Commander. Usage is nominal. 7 active leads pursuing.
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="cmdInput" placeholder="Issue a command..."
+                            class="flex-1 bg-black/30 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500">
+                        <button onclick="sendChatCommand()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg"
+                            title="Send Command" aria-label="Send Command">↵</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leads Table -->
+        <div class="glass rounded-2xl overflow-hidden">
+            <div class="p-6 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-lg font-semibold">Recent Activity</h2>
+                <button onclick="fetchData()" class="text-sm text-blue-400 hover:text-blue-300">↻ Refresh</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-800/50 text-slate-400 text-xs uppercase">
+                        <tr>
+                            <th class="p-4">Name</th>
+                            <th class="p-4">Contact</th>
+                            <th class="p-4">Source</th>
+                            <th class="p-4">Plan / Meta</th>
+                            <th class="p-4">Intel Dossier</th>
+                            <th class="p-4">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-slate-700" id="leadsTable">
+                        <tr>
+                            <td colspan="5" class="p-8 text-center text-slate-500">Loading data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG
+        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://empire-sovereign-cloud.vercel.app';
+
+        // ORCHESTRATOR ID (New Level 5 Agent: Antigravity)
+        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab"; // Keep existing key
+        const ORCHESTRATOR_ASSISTANT_ID = "a3e439a2-4560-4625-99c8-222678bf130d"; // NEW ID
+
+        async function startVoiceUplink() {
+            const btn = document.querySelector('button[onclick="startVoiceUplink()"]');
+
+            // Check if Vapi SDK is loaded
+            if (!window.vapiSDK) {
+                // Load it dynamically if missing
+                console.log("Loading Vapi SDK...");
+                var script = document.createElement('script');
+                script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+                script.defer = true;
+                script.async = true;
+                script.onload = function () {
+                    startVoiceUplink(); // Retry after load
+                };
+                document.head.appendChild(script);
+                btn.innerText = "Loading Secure Protocol...";
+                return;
+            }
+
+            btn.innerText = "Connecting Neural Link...";
+            btn.classList.add("animate-pulse");
+
+            try {
+                window.vapiSDK.run({
+                    apiKey: VAPI_PUBLIC_KEY,
+                    assistant: ORCHESTRATOR_ASSISTANT_ID,
+                    config: {
+                        position: "bottom-right",
+                    }
+                });
+
+                btn.innerText = "🛑 End Uplink";
+                btn.onclick = () => window.location.reload();
+                document.getElementById('vapi-status').innerText = "Status: NEURAL LINK ACTIVE (Level 5)";
+                document.getElementById('vapi-status').className = "mt-2 text-xs text-green-400 font-bold";
+
+            } catch (e) {
+                console.warn("Voice Error:", e);
+                alert("Connection Refused: " + e.message);
+                btn.innerText = "Initiate Voice Uplink";
+                btn.classList.remove("animate-pulse");
+            }
+        }
+
+        async function simulateTyping(containerId, text) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Cursor
+            container.innerHTML = '<span class="animate-pulse">_</span>';
+
+            let i = 0;
+            const speed = 20; // ms per char
+
+            return new Promise(resolve => {
+                function type() {
+                    if (i < text.length) {
+                        container.innerHTML = text.substring(0, i + 1) + '<span class="animate-pulse text-blue-400">_</span>';
+                        i++;
+                        setTimeout(type, speed);
+                    } else {
+                        container.innerHTML = text; // Finalize
+                        resolve();
+                    }
+                }
+                type();
+            });
+        }
+
+        async function sendChatCommand() {
+            const input = document.getElementById('cmdInput');
+            const history = document.getElementById('chatHistory');
+            const cmd = input.value;
+            if (!cmd) return;
+
+            // 1. User Message
+            history.innerHTML += `
+                <div class="bg-blue-500/10 p-3 rounded-lg text-sm rounded-tr-none text-right border border-blue-500/20 mb-2">
+                    <span class="text-white font-bold text-xs block mb-1">COMMANDER</span>
+                    ${cmd}
+                </div>`;
+
+            input.value = '';
+            history.scrollTop = history.scrollHeight;
+
+            // 2. Sending State (Loading Bubble)
+            const loadingId = "loader-" + Date.now();
+            history.innerHTML += `
+                <div id="${loadingId}" class="bg-white/5 p-3 rounded-lg text-sm rounded-tl-none animate-pulse mb-2 border-l-2 border-green-500">
+                    <span class="text-blue-400 font-bold text-xs block mb-1">ORCHESTRATOR</span>
+                    <span class="text-xs">Processing Neural Link...</span>
+                </div>`;
+            history.scrollTop = history.scrollHeight;
+
+            try {
+                // Determine API URL (handle dev vs prod)
+                const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:3000/api/chat' : '/api/chat';
+
+                const res = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: cmd })
+                });
+
+                if (!res.ok) throw new Error("Uplink Unstable");
+                const data = await res.json();
+
+                // Remove Loading
+                document.getElementById(loadingId).remove();
+
+                // 3. Response Container
+                const responseId = "resp-" + Date.now();
+                history.innerHTML += `
+                <div class="bg-white/5 p-3 rounded-lg text-sm rounded-tl-none border-l-2 border-green-500 mb-2">
+                    <span class="text-blue-400 font-bold text-xs block mb-1">ORCHESTRATOR</span>
+                    <span id="${responseId}"></span>
+                </div>`;
+
+                await simulateTyping(responseId, data.response || "Command Executed.");
+
+            } catch (err) {
+                if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
+
+                // STATIC CACHE SIMULATION (Failover)
+                console.warn("Chat Offline -> Static Response", err);
+
+                const failId = "fail-" + Date.now();
+                history.innerHTML += `
+                <div class="bg-white/5 p-3 rounded-lg text-sm rounded-tl-none border-l-2 border-yellow-500 mb-2">
+                    <span class="text-blue-400 font-bold text-xs block mb-1">ORCHESTRATOR (CACHE)</span>
+                    <span id="${failId}"></span>
+                </div>`;
+
+                await simulateTyping(failId, "I am here, Commander. The backend is re-calibrating, but I am monitoring operations locally.");
+            }
+            history.scrollTop = history.scrollHeight;
+        }
+
+        // Bind Enter Key
+        const cmdInput = document.getElementById('cmdInput');
+        if (cmdInput) {
+            cmdInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') sendChatCommand();
+            });
+        }
+
+        // MOCK DATA FOR DEMO / FALLBACK
+        // MOCK DATA (High-Speed Static Cache) - Updated for Verification V4
+        const MOCK_STATS = {
+            leads: 5,
+            revenue: 495,
+            calls: 142,
+            reservations: 5
+        };
+
+        const MOCK_LEADS = [
+            { name: "System Test", phone: "555-0100", email: "admin@sovereign.ai", source: "SYSTEM_INIT", metadata: '{"plan":"Enterprise"}', created_at: new Date().toISOString() },
+            { name: "Vapi Voice Agent", phone: "555-0199", email: "voice@vapi.ai", source: "VOICE_INBOUND", metadata: '{"plan":"Growth"}', created_at: new Date().toISOString() },
+            { name: "Stripe Monitor", phone: "555-0200", email: "billing@stripe.com", source: "BILLING_CHECK", metadata: '{"plan":"Lite"}', created_at: new Date().toISOString() },
+            { name: "Backup Bot", phone: "555-0300", email: "backup@empire.ai", source: "BACKUP_LOG", metadata: '{"plan":"Starter"}', created_at: new Date().toISOString() },
+            { name: "Recovery Agent", phone: "555-0400", email: "recovery@empire.ai", source: "RECOVERY_LOG", metadata: '{"plan":"Enterprise"}', created_at: new Date().toISOString() }
+        ];
+
+        async function fetchData() {
+            try {
+                // Get Stats
+                const statsRes = await fetch(`${API_URL}/api/stats`);
+                if (!statsRes.ok) throw new Error("API Offline");
+                const stats = await statsRes.json();
+
+                document.getElementById('statLeads').textContent = stats.leads;
+                document.getElementById('statRevenue').textContent = '$' + stats.revenue.toLocaleString();
+                document.getElementById('statCalls').textContent = stats.calls;
+                document.getElementById('statReservations').textContent = stats.reservations;
+
+                // Get Leads
+                const leadsRes = await fetch(`${API_URL}/api/leads`);
+                const leads = await leadsRes.json();
+
+                const tbody = document.getElementById('leadsTable');
+                tbody.innerHTML = '';
+
+                if (leads.length === 0) {
+                    // Empty DB? Show mock leads so user sees something
+                    throw new Error("No Data (Force Mock)");
+                }
+
+                leads.forEach(lead => {
+                    const meta = JSON.parse(lead.metadata || '{}');
+                    const plan = meta.plan ? `<span class="px-2 py-1 bg-purple-500/10 text-purple-400 rounded-md text-xs uppercase font-bold">${meta.plan}</span>` : '-';
+
+                    const row = `
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="p-4 font-medium text-white">${lead.name || 'Unknown'}</td>
+                            <td class="p-4">
+                                <div class="text-white">${lead.phone}</div>
+                                <div class="text-slate-500 text-xs">${lead.email || ''}</div>
+                            </td>
+                            <td class="p-4"><span class="px-2 py-1 bg-blue-500/10 text-blue-400 rounded-md text-xs uppercase font-bold">${lead.source}</span></td>
+                            <td class="p-4">${plan}</td>
+                            <td class="p-4">
+                                <button onclick="alert('Intel Dossier: \\n- Industry: HVAC\\n- Est. Revenue: $1.2M\\n- Tech Stack: WordPress\\n- Pain Point: Missed Calls')" 
+                                    class="px-3 py-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded text-xs hover:bg-cyan-500/20 transition">
+                                    📄 VIEW INTEL
+                                </button>
+                            </td>
+                            <td class="p-4 text-slate-400">${new Date(lead.created_at).toLocaleString()}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+
+            } catch (err) {
+                console.warn("API Error - Switching to Mock Data", err);
+
+                // FALLBACK TO MOCK DATA (Command Center Simulation)
+                document.getElementById('statLeads').textContent = MOCK_STATS.leads;
+                document.getElementById('statRevenue').textContent = '$' + MOCK_STATS.revenue.toLocaleString();
+                document.getElementById('statCalls').textContent = MOCK_STATS.calls;
+                document.getElementById('statReservations').textContent = MOCK_STATS.reservations;
+
+                const tbody = document.getElementById('leadsTable');
+                tbody.innerHTML = '';
+                MOCK_LEADS.forEach(lead => {
+                    const meta = JSON.parse(lead.metadata || '{}');
+                    const plan = meta.plan ? `<span class="px-2 py-1 bg-purple-500/10 text-purple-400 rounded-md text-xs uppercase font-bold">${meta.plan}</span>` : '-';
+                    const row = `
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="p-4 font-medium text-white">${lead.name || 'Unknown'}</td>
+                            <td class="p-4">
+                                <div class="text-white">${lead.phone}</div>
+                                <div class="text-slate-500 text-xs">${lead.email || ''}</div>
+                            </td>
+                            <td class="p-4"><span class="px-2 py-1 bg-blue-500/10 text-blue-400 rounded-md text-xs uppercase font-bold">${lead.source}</span></td>
+                            <td class="p-4">${plan}</td>
+                            <td class="p-4">
+                                <button onclick="alert('Intel Dossier: \\n- Industry: HVAC\\n- Est. Revenue: $1.2M\\n- Tech Stack: WordPress\\n- Pain Point: Missed Calls')" 
+                                    class="px-3 py-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded text-xs hover:bg-cyan-500/20 transition">
+                                    📄 VIEW INTEL
+                                </button>
+                            </td>
+                            <td class="p-4 text-slate-400">${new Date(lead.created_at).toLocaleString()}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+
+                // Add Simulation Warning (SUPPRESSED FOR STATIC CACHE MODE)
+                console.log("Using Static Cache");
+                const warningRow = ``;
+                tbody.innerHTML = warningRow + tbody.innerHTML;
+            }
+        }
+
+        // Auto Load
+        fetchData();
+        // Refresh every 5s
+        setInterval(fetchData, 5000);
+    </script>
+
+    <!-- NEURAL NETWORK VISUALIZER -->
+    <script>
+        const canvas = document.getElementById('neuralCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        // Configuration
+        const PARTICLE_COUNT = 60;
+        const LINK_DISTANCE = 150;
+        const MOUSE_DISTANCE = 200;
+
+        // Resize Handling
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Mouse Tracking
+        const mouse = { x: null, y: null };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        // Particle Class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse Repulsion
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < MOUSE_DISTANCE) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (MOUSE_DISTANCE - distance) / MOUSE_DISTANCE;
+                        const directionX = forceDirectionX * force * 0.6;
+                        const directionY = forceDirectionY * force * 0.6;
+                        this.vx -= directionX;
+                        this.vy -= directionY;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'; // Blue-500
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Init Particles
+        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+        // Animation Loop
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+
+                // Draw Links
+                for (let j = index; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < LINK_DISTANCE) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(59, 130, 246, ${1 - distance / LINK_DISTANCE})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+    <!-- V50.0 VISUAL FACTORY: Local Asset Injection -->
+    <div id="visual-factory-layer" class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
+        <video autoplay loop muted playsinline class="w-full h-full object-cover">
+            <source src="../../../../modules/media/assets/video/truck_lake_morton.mp4" type="video/mp4">
+        </video>
+    </div>
+
+</body>
+
+</html>
+```

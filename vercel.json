@@ -2,6 +2,10 @@
     "version": 2,
     "builds": [
         {
+            "src": "public/**",
+            "use": "@vercel/static"
+        },
+        {
             "src": "api/index.py",
             "use": "@vercel/python"
         }
@@ -16,8 +20,12 @@
             "destination": "/api/index.py"
         },
         {
+            "source": "/",
+            "destination": "/public/index.html"
+        },
+        {
             "source": "/(.*)",
-            "destination": "/apps/portal/public/landing/$1"
+            "destination": "/public/$1"
         }
     ],
     "crons": [
