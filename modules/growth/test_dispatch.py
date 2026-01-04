@@ -81,6 +81,16 @@ def send_test_dispatch():
                 to="+13529368152"
             )
             print(f"   ✅ SMS SENT! SID: {message.sid}")
+            
+            # Poll for status update
+            import time
+            print("   ⏳ Polling delivery status for 10s...")
+            for i in range(5):
+                time.sleep(2)
+                updated_message = client.messages(message.sid).fetch()
+                print(f"      [{i*2}s] Status: {updated_message.status} | Error: {updated_message.error_code}")
+                if updated_message.status in ['delivered', 'undelivered', 'failed']:
+                    break
         except Exception as e:
             print(f"   ❌ SMS Failed: {e}")
     else:
