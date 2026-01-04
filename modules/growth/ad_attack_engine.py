@@ -31,28 +31,31 @@ COMPETITOR_REVIEWS = [
 
 class AdAttackEngine:
     def __init__(self):
-        print("⚔️ Initializing Ad Attack Engine (Predator V34.0)...")
+        print("⚔️ Initializing Ad Attack Engine (Predator V34.1 - Sovereign Optimized)...")
         self.prompter = VideoPrompter()
-        self.grievance_map = {
-            "Tardiness": {
-                "hook": "I saw your 1-star review about 'late techs'. Fix it today?",
-                "angle": "Our AI Dispatcher texts customers instantly when techs are late, saving the relationship.",
-                "visual_concept": "Split screen: Frazzled human dispatcher vs Calm AI Dashboard managing routes"
-            },
-            "Hidden Fees": {
-                "hook": "Are price complaints hurting your Google Rating?",
-                "angle": "Our 'Transparent Quote' bot sends approved PDF estimates before the truck rolls.",
-                "visual_concept": "Close up of a 5-Star Review that says 'Honest pricing!'"
-            },
-            "Ghosting": {
-                "hook": "How many leads did you miss after 5pm yesterday?",
-                "angle": "Our AI Voice Agent answers 24/7. Never miss a $10k install again.",
-                "visual_concept": "Office lights turning off at 5pm, but the phone keeps ringing and AI answers it"
-            }
-        }
+        self.grievance_map = self._load_grievances()
+
+    def _load_grievances(self):
+        try:
+            path = os.path.join(os.path.dirname(__file__), "..", "knowledge", "grievance_db.json")
+            with open(path, "r") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"⚠️ Failed to load Grievance DB: {e}. Using fallback.")
+            return {}
+
 
     def scan_and_attack(self, competitor_name="Generic Inc"):
         print(f"   Searching 1-Star Reviews for: {competitor_name}...")
+        
+        # 0. Integrated Verification (The Shopper)
+        # Ensure our Landing Page is actually live before generating ads
+        from qa.link_validator import validate_link
+        target_url = "https://empire-sovereign-cloud.vercel.app"
+        if not validate_link(target_url):
+            print("❌ ABORTING: Landing Page is DOWN. Cannot run ads.")
+            return []
+
         # Mocking the scrape results
         found_grievances = ["Tardiness", "Hidden Fees"]
         
@@ -60,30 +63,47 @@ class AdAttackEngine:
         for g in found_grievances:
             data = self.grievance_map.get(g)
             if data:
-                # Generate Cinematic Visual
-                video_prompt = self.prompter.generate_prompt(
-                    data['visual_concept'], 
-                    vibe="cinematic_commercial"
-                )
+                # Generate Cinematic Visual with SMART RETRY
+                video_prompt = self._safe_generate_prompt(data['visual_concept'])
                 
                 ad = {
                     "target_pain": g,
                     "headline": data['hook'],
-                    "body": data['angle'],
+                    "body": f"{data['angle']} [Link: {target_url}]",
                     "video_prompt": video_prompt
                 }
                 attack_ads.append(ad)
         
         return attack_ads
 
+    def _safe_generate_prompt(self, concept):
+        # Resilience Logic: 3 Retries
+        for attempt in range(3):
+            try:
+                return self.prompter.generate_prompt(concept, vibe="cinematic_commercial")
+            except Exception as e:
+                print(f"   ⚠️ Model Overload (Attempt {attempt+1}/3): {e}. Retrying...")
+                import time; time.sleep(2 * (attempt + 1)) # Backoff
+        
+        return "Visual Prompt Unavailable (System Overload)"
+
+    def save_campaign_report(self, ads, filename="campaign_results_v1.md"):
+        try:
+            with open(filename, "w", encoding="utf-8") as f:
+                f.write(f"# ⚔️ AD ATTACK CAMPAIGN REPORT\n")
+                f.write(f"**Date:** {os.environ.get('DATE', 'Today')}\n\n")
+                
+                for i, ad in enumerate(ads):
+                    f.write(f"## Ad #{i+1} (Target: {ad['target_pain']})\n")
+                    f.write(f"**Headline:** {ad['headline']}\n")
+                    f.write(f"**Copy:** {ad['body']}\n")
+                    f.write(f"**🎥 Visual Prompt:** `{ad['video_prompt']}`\n")
+                    f.write(f"---\n")
+            print(f"✅ Campaign Report saved to: {filename}")
+        except Exception as e:
+            print(f"❌ Failed to save report: {e}")
+
 if __name__ == "__main__":
     engine = AdAttackEngine()
     ads = engine.scan_and_attack("Lazy HVAC Boys LLC")
-    
-    print("\n--- ATTACK CAMPAIGN GENERATED ---\n")
-    for i, ad in enumerate(ads):
-        print(f"AD #{i+1} (Targeting: {ad['target_pain']})")
-        print(f"HEADLINE: {ad['headline']}")
-        print(f"COPY:     {ad['body']}")
-        print(f"🎥 SCENE:  {ad['video_prompt']}")
-        print("---------------------------------")
+    engine.save_campaign_report(ads)
