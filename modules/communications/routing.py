@@ -18,13 +18,7 @@ def route_communication(contact, message_type="EMAIL", content=None):
             
         print(f"⚠️ Primary Failed ({result.get('message')}). Switch to Backup.")
         
-    # 2. BACKUP: GoHighLevel Hook
-    # We trigger the GHL API as a fallback
-    ghl_token = os.environ.get("GHL_AGENCY_API_TOKEN")
-    if ghl_token:
-        print("🛡️ Engaging Backup Protocol (GHL)...")
-        # Logic to call GHL Conversation API would go here
-        # requests.post(...)
-        return {"status": "sent_backup", "provider": "GHL"}
-        
-    return {"status": "failed", "reason": "All Channels Down"}
+    
+    # 2. FAILURE: Log and Return
+    print("❌ Critical Failure: Sovereign Dispatch failed.")
+    return {"status": "failed", "provider": "Sovereign"}

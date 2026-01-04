@@ -60,6 +60,11 @@ def send_test_dispatch():
     twilio_token = os.environ.get("TWILIO_AUTH_TOKEN", "").strip()
     twilio_from = os.environ.get("TWILIO_FROM_NUMBER", "").strip()
     
+    if twilio_sid and not twilio_sid.startswith("AC"):
+        print(f"❌ CONFIG ERROR: TWILIO_ACCOUNT_SID must start with 'AC'. Found: '{twilio_sid[:2]}...'")
+        print("   -> Please get the 'Account SID' from the main Twilio Dashboard.")
+        return
+    
     if twilio_sid:
         print(f"      SID Loaded: {twilio_sid[:4]}...{twilio_sid[-4:]}")
     if twilio_token:
