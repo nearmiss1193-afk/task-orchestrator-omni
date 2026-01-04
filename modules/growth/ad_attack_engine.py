@@ -8,22 +8,7 @@ from datetime import datetime
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from media.video_prompter import VideoPrompter
 from communication.sovereign_dispatch import dispatcher
-
-# --- SIMULATED SCRAPED DATA (PREDATOR 1-STAR FEED) ---
-COMPETITOR_REVIEWS = [
-    {
-        "competitor": "Iceberg HVAC Services",
-        "review": "Technician showed up 2 hours late and smelled like smoke. Then charged me $90 just to say I needed a new unit.",
-        "stars": 1,
-        "date": "2026-01-02"
-    },
-    {
-        "competitor": "Egbert's Cooling",
-        "review": "Quoted me $4500 on the phone, but the final bill was $6200. Claimed 'copper prices went up'. Liars.",
-        "stars": 1,
-        "date": "2026-01-01"
-    }
-]
+from growth.scraper_sentiment import scrape_negative_reviews
 
 class AdAttackEngine:
     def __init__(self):
@@ -49,12 +34,24 @@ class AdAttackEngine:
         
         if not validate_link(target_url):
             print("❌ ABORTING: Landing Page is DOWN. Cannot run ads.")
-            # Notify User via Sovereign Dispatch
             dispatcher.send_email("nearmiss1193@gmail.com", "🚨 URGENT: Landing Page Down", "Ad Attack aborted because site is unreachable.")
             return []
 
-        # Mocking the scrape results
-        found_grievances = ["Tardiness", "Hidden Fees"]
+        # 1. Scrape Real (Simulated) Data
+        raw_reviews = scrape_negative_reviews()
+        
+        # 2. Analyze Sentiment & Map to Grievance
+        found_grievances = set()
+        for r in raw_reviews:
+            text = r['text'].lower()
+            if "late" in text or "wait" in text or "show" in text:
+                found_grievances.add("Tardiness")
+            elif "fee" in text or "bill" in text or "price" in text:
+                found_grievances.add("Hidden Fees")
+            elif "rude" in text or "attitude" in text:
+                found_grievances.add("Rude Staff")
+        
+        print(f"   🔍 Identified Pain Points: {list(found_grievances)}")
         
         attack_ads = []
         for g in found_grievances:
