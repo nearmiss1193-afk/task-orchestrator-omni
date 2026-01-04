@@ -1,23 +1,24 @@
 {
     "vertical": "hvac",
-    "winning_offer": "Free 'AC Health Audit' + $50 On-Time Guarantee",
+    "target_audience": "HVAC Business Owner / General Manager",
+    "winning_offer": "We Clone Your Best Dispatcher (AI Answers Funnel)",
     "pain_points": [
-        "Technicians showing up 4 hours late",
-        "Hidden 'Freon' charges",
-        "Ghosting after the quote"
+        "Losing 40% of leads to 'Missed Calls'",
+        "Angi/Thumbtack leads are low quality",
+        "Receptionists calling in sick",
+        "Technicians sitting idle due to dispatch lag"
     ],
     "compliance": [
-        "EPA Section 608 Certification required for refrigerant",
-        "Florida Building Code 2024 Energy Efficiency standards",
-        "SEER2 minimum requirements"
+        "TCPA Compliance for Automated SMS",
+        "A2P 10DLC Registration for Business Messaging"
     ],
     "pricing": {
-        "service_call": 89,
-        "tune_up": 129,
-        "install_min": 5500
+        "setup_fee": 2500,
+        "monthly_retainer": 997,
+        "performance_fee": "10% of closed jobs"
     },
     "objection_handlers": {
-        "price_shock": "We offer 0% financing for 18 months, which drops this to $75/mo.",
-        "need_spousals": "I can send the Video Quote to your partner right now."
+        "price_shock": "A single missed AC install costs you $6k. This system saves 10 of those a month.",
+        "robot_fear": "Our AI uses 'Ultra Low Latency' and pauses like a human. Listen to this demo."
     }
 }
