@@ -333,6 +333,24 @@
                         </div>
                     </div>
 
+                    <div class="form-group" style="margin-top: 20px; margin-bottom: 20px;">
+                        <label
+                            style="display: flex; align-items: start; gap: 10px; font-size: 13px; color: #64748b; cursor: pointer; line-height: 1.4;">
+                            <input type="checkbox" id="smsConsent" required
+                                style="width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0;">
+                            <span>
+                                I agree to the <a href="terms.html" target="_blank"
+                                    style="color: #2563eb; text-decoration: none;">Terms of Service</a>
+                                and <a href="privacy.html" target="_blank"
+                                    style="color: #2563eb; text-decoration: none;">Privacy Policy</a>.
+                                I provide express consent to receive marketing and account-related messages (SMS/Call)
+                                from Empire HVAC at the number provided. Msg frequency varies. Msg & data rates may
+                                apply.
+                                Reply STOP to cancel.
+                            </span>
+                        </label>
+                    </div>
+
                     <button type="submit" class="submit-btn" id="submitBtn">Start My 7-Day Free Trial →</button>
                     <div id="formStatus" class="form-status"></div>
 
@@ -432,10 +450,7 @@
                         }, 4000);
                     }
                 }
-            } else { // Removed else block as we handled error in catch
-                // no-op
-            }
-                } catch (err) {
+            } catch (err) {
                 console.error(err);
                 btn.innerHTML = 'Try Again';
                 btn.disabled = false;
