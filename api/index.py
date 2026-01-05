@@ -339,13 +339,21 @@ class handler(BaseHTTPRequestHandler):
 
             # --- ROUTE: CHAT ---
             elif path == "/api/chat":
-                # ... (Keep existing chat logic) ...
+                # Inject Command into Neural Stream (DB)
                 command = body.get('command', '').lower()
-                resp_text = "Command acknowledged."
-                if "status" in command:
-                     resp_text = "Systems Nominal. Database Connected. (Bare Metal)"
-                elif "deploy" in command:
-                     resp_text = "Deployment Active."
+                resp_text = "Command Queued."
+                
+                con = get_db_connection()
+                if con:
+                    try:
+                        con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=command)
+                        con.close()
+                        resp_text = "Command Sent to Core."
+                    except Exception as e:
+                        resp_text = f"Uplink Error: {str(e)}"
+                else:
+                    resp_text = "Cloud DB Offline."
+
                 response_data = {"status": "success", "response": resp_text}
 
             # --- ROUTE: CHECKOUT ---
