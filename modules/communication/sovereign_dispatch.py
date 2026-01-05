@@ -33,7 +33,11 @@ class SovereignDispatch:
         
         # GHL OVERRIDE
         if provider == "ghl":
-            return self.send_ghl_email(to_email, subject, html_body)
+            sent = self.send_ghl_email(to_email, subject, html_body)
+            if sent:
+                return True
+            print("[WARN] GHL Email Failed. Falling back to Resend...")
+            # Fall through to Resend logic below
 
         if not self.resend_key:
             print("❌ Email Blocked: No Key")

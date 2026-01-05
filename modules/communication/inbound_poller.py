@@ -1,175 +1,229 @@
 import time
-import os
-import sys
-import datetime
+import requests
 import json
-
-# Add root to pass
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from communication.sovereign_dispatch import dispatcher
-
+import os
 import google.generativeai as genai
-from dotenv import load_dotenv
+from datetime import datetime
 
-load_dotenv()
+# Import Dispatcher (Singleton)
+try:
+    from modules.communication.sovereign_dispatch import dispatcher
+except ImportError:
+    # Fallback for direct run
+    import sys
+    # .../modules/communication/inbound_poller.py -> .../modules/communication -> .../modules -> .../ (Root)
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    from modules.communication.sovereign_dispatch import dispatcher
 
-# Configure Gemini
-GENAI_KEY = os.getenv("GEMINI_API_KEY")
-if GENAI_KEY:
-    genai.configure(api_key=GENAI_KEY)
-    model = genai.GenerativeModel('gemini-2.0-flash-exp')
-else:
-    model = None
-    print("⚠️ GEMINI_API_KEY missing. AI features disabled.")
+# CONFIG
+GHL_API_TOKEN = os.environ.get("GHL_API_TOKEN")
+GHL_LOCATION_ID = os.environ.get("GHL_LOCATION_ID")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-class InboundPoller:
+genai.configure(api_key=GEMINI_API_KEY)
+
+class SovereignRouter:
+    def __init__(self):
+        self.processed_ids = self._load_processed()
+        self.kb_context = self._load_kb()
+        
     def _load_processed(self):
         try:
-            with open("processed_messages.json", "r") as f:
-                return set(json.load(f))
+            if os.path.exists("processed_messages.json"):
+                with open("processed_messages.json", "r") as f:
+                    return set(json.load(f))
         except:
-            return set()
+            pass
+        return set()
 
     def _save_processed(self):
-        with open("processed_messages.json", "w") as f:
-            json.dump(list(self.processed_ids), f)
-
-    def _load_knowledge(self):
-        """Loads the HVAC Knowledge Base from markdown."""
         try:
-            kb_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "knowledge", "hvac_kb.md")
-            with open(kb_path, "r", encoding="utf-8") as f:
-                return f.read()
-        except Exception as e:
-            print(f"⚠️ Failed to load Knowledge Base: {e}")
-            return "You are a helpful assistant for Empire HVAC."
+            with open("processed_messages.json", "w") as f:
+                json.dump(list(self.processed_ids), f)
+        except:
+            pass
 
-    def __init__(self):
-        self.last_check = datetime.datetime.now().isoformat()
-        self.processed_ids = self._load_processed()
-        self.knowledge_base = self._load_knowledge()
-        print("📡 Initializing Sovereign Inbound Poller (Spartan V3 - Context Aware)...")
-        print(f"   📘 Knowledge Base Loaded ({len(self.knowledge_base)} chars)")
-
-    def _generate_ai_response(self, context_history, contact_id):
-        """Generates a contextual response using Gemini."""
-        if not model:
-            return None # Return None to skip reply instead of generic fallback
+    def _load_kb(self):
+        """Loads B2B Sales and Senior Placement Knowledge Bases."""
+        kb_text = ""
+        try:
+            # Load B2B Sales (Default)
+            b2b_path = r"C:\Users\nearm\.gemini\antigravity\brain\1dc252aa-5552-4742-8763-0a1bcda94400\b2b_sales_kb.md"
+            if os.path.exists(b2b_path):
+                with open(b2b_path, "r") as f:
+                    kb_text += f"\n=== CORE MISSION: B2B SALES (SELLING AI TO BUSINESS OWNERS) ===\n{f.read()}\n"
             
-        system_prompt = f"""
-You are 'Spartan AI' (aka Cooling Cal), the intelligent Sales Assistant for Empire HVAC.
-Your goal is to book appointments and answer questions efficiently.
+            # Load Senior Placement (Secondary Niche)
+            senior_path = r"C:\Users\nearm\.gemini\antigravity\brain\1dc252aa-5552-4742-8763-0a1bcda94400\senior_placement_kb.md"
+            if os.path.exists(senior_path):
+                with open(senior_path, "r") as f:
+                    kb_text += f"\n=== SECONDARY NICHE: SENIOR PLACEMENT ===\n{f.read()}\n"
+                    
+            if not kb_text:
+                 return "We are Empire Unified. We help businesses automate growth with AI."
+            return kb_text
+        except:
+             return "We are Empire Unified. We help businesses automate growth with AI."
 
-### KNOWLEDGE BASE
-{self.knowledge_base}
-
-### CONVERSATION HISTORY
-{context_history}
-
-### INSTRUCTIONS
-1. Identifying the User: The user ID is {contact_id}.
-2. Context: Read the HISTORY above. Do NOT repeat yourself. If you already asked a question, wait for the answer or clarify.
-3. Selling: Promote "Late Tech" guarantee and "Instant Booking" ONLY if relevant.
-4. Constraint: Keep responses under 160 characters if possible.
-5. Conflict Check: If the history shows another bot (Dispatcher) sent "reply URGENT", ignore it and focus on the user's intent.
-
-YOUR REPLY:
-"""
+    def _classify_intent(self, message):
+        """
+        Uses LLM to classify intent: SALES, URGENT, SPAM, or UNKNOWN.
+        """
         try:
-            response = model.generate_content(system_prompt)
-            return response.text.strip()
+            model = genai.GenerativeModel('gemini-2.0-flash-exp')
+            prompt = f"""
+            Classify this inbound message from a customer.
+            Message: "{message}"
+            
+            Return ONE word:
+            - SALES (Asking about price, service, booking, availability)
+            - URGENT (Complaining, angry, water leak, emergency, "stop", "cancel")
+            - SPAM (Marketing, bot)
+            - OTHER (Greetings, confused)
+            """
+            res = model.generate_content(prompt)
+            return res.text.strip().upper()
+        except:
+            return "SALES" # Default safe
+
+    def _generate_spartan_response(self, history_text, incoming_msg):
+        """
+        Generates a context-aware sales response.
+        """
+        try:
+            model = genai.GenerativeModel('gemini-2.0-flash-exp')
+            
+            system_prompt = f"""
+            You are 'Sarah Leed', the Sales & Support Specialist for Empire Unified.
+            
+            Key Config:
+            - **DEFAULT ROLE:** B2B Growth Consultant. You are selling "AI Services" (Dispatchers, Lead Gen) TO Business Owners (HVAC, etc).
+            - **SECONDARY ROLE:** Senior Placement Advisor ("Sarah"). Only switch to this if they explicitly ask about "Senior Care services".
+            
+            KNOWLEDGE BASE:
+            {self.kb_context[:3000]}
+            
+            RULES:
+            1. Analyze the context. If they sound like a Business Owner ("How much is your software?", "Do you do leads?"), use B2B Knowledge.
+            2. If they sound like a *Customer* of an HVAC company ("How much is a tune up?"), CLARIFY: "Are you an HVAC owner looking for automation, or a homeowner?"
+            3. If they ask about "Senior Placement", switch to that niche.
+            4. Be concise (under 160 chars).
+            5. Goal: Book a DEMO.
+            
+            CONVERSATION HISTORY:
+            {history_text}
+            
+            NEW MESSAGE:
+            {incoming_msg}
+            
+            YOUR REPLY:
+            """
+            
+            res = model.generate_content(system_prompt)
+            return res.text.strip()
         except Exception as e:
-            print(f"   ❌ AI Generation Error: {e}")
+            print(f"[ERR] Gemini Gen Failed: {e}")
             return None
 
-    def check_messages(self):
-        """
-        Polls GHL 'conversations/search' to find unread messages.
-        """
-        print(f"   Scanning for new messages...")
+    def start_polling(self, interval=15):
+        print(f"📡 Sovereign Router ONLINE. Scanning every {interval}s...")
         
-        endpoint = "conversations/search"
-        payload = {
-            "locationId": dispatcher.ghl_location,
-            "sort": "desc",
-            "sortBy": "last_message_date",
-            "limit": 10
-        }
-        
-        res = dispatcher._ghl_request("GET", endpoint, params=payload)
-        
-        if not res or res.status_code != 200:
-            print("   ⚠️ Poll failed.")
-            return
-
-        data = res.json()
-        conversations = data.get('conversations', [])
-        
-        for conv in conversations:
-            contact_id = conv.get('contactId')
-            conversation_id = conv.get('id')
-            direction = conv.get('lastMessageDirection')
-            last_msg_date = conv.get('lastMessageDate') # Use as Unique ID proxy
-
-            # Unique ID for deduplication
-            unique_id = f"{contact_id}_{last_msg_date}"
-            
-            if direction == 'inbound' and unique_id not in self.processed_ids:
-                print(f"   📩 NEW INBOUND from {contact_id}")
-                
-                # --- SPARTAN V3 (CONTEXT AWARE) LOGIC ---
-                
-                # 1. Fetch History
-                history_data = dispatcher.get_conversation_messages(conversation_id)
-                
-                # Format History for LLM
-                history_text = ""
-                # Reverse to get chronological order (GHL returns newest first)
-                if history_data:
-                    for msg in reversed(history_data[:10]): # Last 10 messages
-                        role = "USER" if msg.get('direction') == "inbound" else "ASSISTANT"
-                        body = msg.get('body', '')
-                        history_text += f"{role}: {body}\n"
-                else:
-                    # Fallback if history fetch fails
-                    history_text = f"USER: {conv.get('lastMessageBody')}"
-
-                # 2. Check for Keywords (Quick Exit)
-                if "stop" in history_text.lower()[-50:]: 
-                     print(f"   🛑 UNSUBSCRIBE DETECTED: {contact_id}")
-                     self.processed_ids.add(unique_id)
-                     self._save_processed()
-                     continue
-
-                # 3. Generate Smart Reply
-                reply_body = self._generate_ai_response(history_text, contact_id)
-                
-                if reply_body:
-                    print(f"   🤖 SPARTAN (GEMINI) REPLYING: {reply_body}")
-                    success = dispatcher.send_sms(
-                        to_phone=conv.get('phone'), 
-                        body=reply_body, 
-                        provider="ghl"
-                    )
-                    
-                    if success:
-                         self.processed_ids.add(unique_id)
-                         self._save_processed()
-                else:
-                    print("   ⚠️ AI declined to reply (or error). Skipping.")
-                    self.processed_ids.add(unique_id)
-                    self._save_processed()
-                    
-    def run_loop(self):
         while True:
             try:
-                self.check_messages()
+                # 1. Search for conversations with unread messages
+                # GHL API doesn't have "unread" filter easily, so we sort by last_message_date
+                # For this PoC, we scan recent conversations.
+                
+                # Fetch recent conversations (last 10)
+                res = dispatcher._ghl_request("GET", "conversations/search?limit=10&sort=desc&sortBy=last_message_date")
+                
+                if res and res.status_code == 200:
+                    conversations = res.json().get('conversations', [])
+                    
+                    for conv in conversations:
+                        conv_id = conv['id']
+                        contact_name = conv.get('contactName', 'Unknown')
+                        
+                        # DEBUG: Always print keys for first few convs to find the right ID field
+                        print(f"   [DEBUG] Parsing Conv {conv_id} from {contact_name}")
+                        # print(f"   [DEBUG] Keys: {list(conv.keys())}") 
+
+                        # Try multiple keys for Contact ID
+                        contact_id = conv.get('contactId')
+                        if not contact_id and 'contact' in conv:
+                             contact_id = conv['contact'].get('id')
+                        
+                        if not contact_id:
+                             print(f"   [CRITICAL] Could not find ContactID in keys: {list(conv.keys())}")
+                             # Don't skip, but log it. We might fail to reply.
+                        
+                        msg_body = conv.get('lastMessageBody', '')
+                        direction = conv.get('lastMessageDirection', '')
+                        
+                        # Only process INBOUND messages we haven't seen
+                        msg_hash = f"{conv_id}-{msg_body[:10]}" 
+                        
+                        if direction == "inbound":
+                            if msg_hash not in self.processed_ids:
+                                print(f"📨 New Inbound from {contact_name}: {msg_body}")
+                                
+                                # 2. Classify Intent
+                                intent = self._classify_intent(msg_body)
+                                print(f"   🧠 Intent Verified: {intent}")
+                                
+                                reply = None
+                                
+                                if intent == "URGENT":
+                                    # Alert Human
+                                    dispatcher.send_sms("+13529368152", f"URGENT LEAD: {contact_name} says: {msg_body}")
+                                    reply = "I've alerted a senior manager. They will call you immediately."
+                                    
+                                elif intent == "SPAM":
+                                    print("   🗑️ Spam detected. Ignoring.")
+                                    self.processed_ids.add(msg_hash)
+                                    self._save_processed()
+                                    continue
+                                    
+                                else:
+                                    # SALES / OTHER -> Spartan AI
+                                    # Fetch full history for context
+                                    history = dispatcher.get_conversation_messages(conv_id)
+                                    # Format history reversed (oldest first)
+                                    history_text = "\n".join([f"{m.get('direction', 'unknown')}: {m.get('body', '')}" for m in reversed(history[:10])])
+                                    
+                                    reply = self._generate_spartan_response(history_text, msg_body)
+
+                                # 3. Send Reply
+                                if reply:
+                                    if not contact_id:
+                                        print("   ❌ Cannot reply: Contact ID missing.")
+                                        continue
+
+                                    print(f"   🤖 Sending Reply to {contact_id}: {reply}")
+                                    # Direct API call using ContactID (Bypasses phone lookup)
+                                    payload = {
+                                        "type": "SMS",
+                                        "contactId": contact_id,
+                                        "message": reply
+                                    }
+                                    res = dispatcher._ghl_request("POST", "conversations/messages", payload=payload)
+                                    
+                                    if res and res.status_code in [200, 201]:
+                                        print(f"   ✅ Reply Sent.")
+                                        self.processed_ids.add(msg_hash)
+                                        self._save_processed()
+                                    else:
+                                        print(f"   ❌ Reply Failed: {res.text if res else 'No Res'}")
+                            else:
+                                # Skipped (Already Processed)
+                                pass
+                        
+                time.sleep(interval)
+                
             except Exception as e:
-                print(f"   ❌ Poller Error: {e}")
-            
-            time.sleep(15) # Poll every 15s
+                print(f"⚠️ Router Loop Error: {e}")
+                time.sleep(interval)
 
 if __name__ == "__main__":
-    poller = InboundPoller()
-    poller.run_loop()
+    router = SovereignRouter()
+    router.start_polling()
