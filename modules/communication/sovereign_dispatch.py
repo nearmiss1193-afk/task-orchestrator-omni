@@ -14,6 +14,8 @@ class SovereignDispatch:
         self.twilio_sid = os.environ.get("TWILIO_ACCOUNT_SID", "").strip()
         self.twilio_token = os.environ.get("TWILIO_AUTH_TOKEN", "").strip()
         self.twilio_from = os.environ.get("TWILIO_FROM_NUMBER", "").strip()
+        self.vapi_key = os.environ.get("VAPI_PRIVATE_KEY", "").strip()
+        self.vapi_assistant_id = "800a37ee-f5de-4ecb-b8ea-e1bd26237c84"  # Sales Specialist from Vapi Dashboard
         
         # GHL Config
         self.ghl_token = os.environ.get("GHL_API_TOKEN", "").strip()
@@ -91,28 +93,40 @@ class SovereignDispatch:
             print(f"[ERR] SMS Failed: {e}")
             return False
 
-    def send_sms(self, to_phone, body, provider="twilio"):
-        """Sends SMS via Twilio or GHL."""
-        
-        # GHL OVERRIDE
-        if provider == "ghl":
-            return self.send_ghl_sms(to_phone, body)
-
-        if not (self.twilio_sid and self.twilio_token and self.twilio_from):
-            print("[SKIP] SMS Skipped (No Config)")
+    def make_call(self, to_phone, assistant_id=None):
+        """Initiates an outbound Vapi call."""
+        if not self.vapi_key:
+            print("❌ Call Blocked: No Vapi Key")
             return False
 
+        target_assistant = assistant_id or self.vapi_assistant_id
+        
+        headers = {
+            'Authorization': f'Bearer {self.vapi_key}',
+            'Content-Type': 'application/json'
+        }
+        
+        payload = {
+            "phoneNumberId": "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e",  # From Vapi Dashboard Screenshot
+            "customer": {
+                "number": to_phone,
+                "name": "Commander"
+            },
+            "assistantId": target_assistant
+        }
+
         try:
-            client = Client(self.twilio_sid, self.twilio_token)
-            msg = client.messages.create(
-                body=body,
-                from_=self.twilio_from,
-                to=to_phone
-            )
-            print(f"[OK] TWILIO SMS SENT to {to_phone}. SID: {msg.sid}")
-            return True
+            print(f"[INFO] Dialing {to_phone} via Vapi...")
+            res = requests.post("https://api.vapi.ai/call/phone", json=payload, headers=headers)
+            if res.status_code in [200, 201]:
+                call_id = res.json().get('id', 'Unknown')
+                print(f"[OK] CALL INITIATED. ID: {call_id}")
+                return True
+            else:
+                print(f"[ERR] Call API Error: {res.status_code} - {res.text}")
+                return False
         except Exception as e:
-            print(f"[ERR] SMS Failed: {e}")
+            print(f"[ERR] Call Exception: {e}")
             return False
 
     # --- GHL HELPER METHODS ---

@@ -22,6 +22,13 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 genai.configure(api_key=GEMINI_API_KEY)
 
+def safe_print(text):
+    """Safely prints to Windows console by stripping non-ascii chars."""
+    try:
+        print(text.encode('ascii', 'ignore').decode('ascii'))
+    except:
+        print("[Log Error]")
+
 class SovereignRouter:
     def __init__(self):
         self.processed_ids = self._load_processed()
@@ -127,7 +134,7 @@ class SovereignRouter:
             return None
 
     def start_polling(self, interval=15):
-        print(f"📡 Sovereign Router ONLINE. Scanning every {interval}s...")
+        safe_print(f"[INFO] Sovereign Router ONLINE. Scanning every {interval}s...")
         
         while True:
             try:
@@ -136,7 +143,9 @@ class SovereignRouter:
                 # For this PoC, we scan recent conversations.
                 
                 # Fetch recent conversations (last 10)
-                res = dispatcher._ghl_request("GET", "conversations/search?limit=10&sort=desc&sortBy=last_message_date")
+                # ERROR FIX: Must include locationId in query
+                endpoint = f"conversations/search?limit=10&sort=desc&sortBy=last_message_date&locationId={dispatcher.ghl_location}"
+                res = dispatcher._ghl_request("GET", endpoint)
                 
                 if res and res.status_code == 200:
                     conversations = res.json().get('conversations', [])
@@ -146,7 +155,7 @@ class SovereignRouter:
                         contact_name = conv.get('contactName', 'Unknown')
                         
                         # DEBUG: Always print keys for first few convs to find the right ID field
-                        print(f"   [DEBUG] Parsing Conv {conv_id} from {contact_name}")
+                        safe_print(f"   [DEBUG] Parsing Conv {conv_id} from {contact_name}")
                         # print(f"   [DEBUG] Keys: {list(conv.keys())}") 
 
                         # Try multiple keys for Contact ID
@@ -155,22 +164,23 @@ class SovereignRouter:
                              contact_id = conv['contact'].get('id')
                         
                         if not contact_id:
-                             print(f"   [CRITICAL] Could not find ContactID in keys: {list(conv.keys())}")
+                             safe_print(f"   [CRITICAL] Could not find ContactID in keys: {list(conv.keys())}")
                              # Don't skip, but log it. We might fail to reply.
                         
                         msg_body = conv.get('lastMessageBody', '')
                         direction = conv.get('lastMessageDirection', '')
+                        safe_print(f"   [DEBUG] ID: {conv_id} | Dir: {direction} | Body: {msg_body[:20]}...")
                         
                         # Only process INBOUND messages we haven't seen
                         msg_hash = f"{conv_id}-{msg_body[:10]}" 
                         
                         if direction == "inbound":
                             if msg_hash not in self.processed_ids:
-                                print(f"📨 New Inbound from {contact_name}: {msg_body}")
+                                safe_print(f"[NEW] Inbound from {contact_name}: {msg_body}")
                                 
                                 # 2. Classify Intent
                                 intent = self._classify_intent(msg_body)
-                                print(f"   🧠 Intent Verified: {intent}")
+                                safe_print(f"   [INTENT] Verified: {intent}")
                                 
                                 reply = None
                                 
@@ -180,7 +190,7 @@ class SovereignRouter:
                                     reply = "I've alerted a senior manager. They will call you immediately."
                                     
                                 elif intent == "SPAM":
-                                    print("   🗑️ Spam detected. Ignoring.")
+                                    safe_print("   [SPAM] Detected. Ignoring.")
                                     self.processed_ids.add(msg_hash)
                                     self._save_processed()
                                     continue
@@ -188,19 +198,29 @@ class SovereignRouter:
                                 else:
                                     # SALES / OTHER -> Spartan AI
                                     # Fetch full history for context
-                                    history = dispatcher.get_conversation_messages(conv_id)
-                                    # Format history reversed (oldest first)
-                                    history_text = "\n".join([f"{m.get('direction', 'unknown')}: {m.get('body', '')}" for m in reversed(history[:10])])
+                                    try:
+                                        history = dispatcher.get_conversation_messages(conv_id)
+                                        if not isinstance(history, list):
+                                            safe_print(f"   [WARN] History returned non-list: {type(history)}")
+                                            history = []
+                                        
+                                        # Format history reversed (oldest first)
+                                        # Safe slice
+                                        history_slice = history[:10] if history else []
+                                        history_text = "\n".join([f"{m.get('direction', 'unknown')}: {m.get('body', '')}" for m in reversed(history_slice)])
+                                    except Exception as e:
+                                        safe_print(f"   [WARN] History Context Error: {e}")
+                                        history_text = ""
                                     
                                     reply = self._generate_spartan_response(history_text, msg_body)
 
                                 # 3. Send Reply
                                 if reply:
                                     if not contact_id:
-                                        print("   ❌ Cannot reply: Contact ID missing.")
+                                        safe_print("   [ERR] Cannot reply: Contact ID missing.")
                                         continue
 
-                                    print(f"   🤖 Sending Reply to {contact_id}: {reply}")
+                                    safe_print(f"   [REPLY] Sending to {contact_id}: {reply}")
                                     # Direct API call using ContactID (Bypasses phone lookup)
                                     payload = {
                                         "type": "SMS",
@@ -210,11 +230,11 @@ class SovereignRouter:
                                     res = dispatcher._ghl_request("POST", "conversations/messages", payload=payload)
                                     
                                     if res and res.status_code in [200, 201]:
-                                        print(f"   ✅ Reply Sent.")
+                                        safe_print(f"   [SENT] Reply Sent.")
                                         self.processed_ids.add(msg_hash)
                                         self._save_processed()
                                     else:
-                                        print(f"   ❌ Reply Failed: {res.text if res else 'No Res'}")
+                                        safe_print(f"   [FAIL] Reply Failed: {res.text if res else 'No Res'}")
                             else:
                                 # Skipped (Already Processed)
                                 pass
@@ -222,7 +242,7 @@ class SovereignRouter:
                 time.sleep(interval)
                 
             except Exception as e:
-                print(f"⚠️ Router Loop Error: {e}")
+                safe_print(f"⚠️ Router Loop Error: {e}")
                 time.sleep(interval)
 
 if __name__ == "__main__":
