@@ -75,7 +75,7 @@ def complete_command(cmd_id, result):
         except: pass
 
 def main():
-    print("📡 Sovereign Uplink Bridge V2.0 (DB Enabled)...")
+    print("[INFO] Sovereign Uplink Bridge V2.0 (DB Enabled)...")
     print("   Connecting [Supabase] -> [Local Cortex]")
     
     while True:
@@ -83,15 +83,15 @@ def main():
         
         if cmd_obj:
             command = cmd_obj['command']
-            print(f"⚡ INCOMING COMMAND: {command}")
+            print(f"[CMD] INCOMING COMMAND: {command}")
             try:
                 # Execute via Cortex
                 res = requests.post(CORTEX_URL, json={"command": command})
-                print(f"   ✅ Execution Status: {res.status_code}")
+                print(f"   [OK] Execution Status: {res.status_code}")
                 # Mark Complete
                 complete_command(cmd_obj['id'], "success")
             except Exception as e:
-                print(f"   ❌ Execution Failed: {e}")
+                print(f"   [ERR] Execution Failed: {e}")
         
         time.sleep(2)
 
