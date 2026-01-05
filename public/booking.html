@@ -123,41 +123,32 @@
         <h1>Book a Demo Session</h1>
         <p>See how our AI can double your leads. Enter your details below to schedule a time.</p>
 
-        <!-- Sovereign Compliant Form -->
-        <form action="#" method="POST" style="text-align: left;">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required placeholder="John Doe">
-            </div>
+        <!-- GHL Booking Widget (Restored for Data Intake) -->
+        <iframe src="https://api.leadconnectorhq.com/widget/form/qaJ7szEbp2TwJkAT6WxG" class="ghl-form-iframe"
+            id="inline-qaJ7szEbp2TwJkAT6WxG" data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow"
+            data-trigger-value="" data-activation-type="alwaysActivated" data-activation-value=""
+            data-deactivation-type="neverDeactivate" data-deactivation-value="" data-form-name="Empire Demo Request"
+            data-height="532" data-layout-iframe-id="inline-qaJ7szEbp2TwJkAT6WxG" data-form-id="qaJ7szEbp2TwJkAT6WxG"
+            title="Book Demo">
+        </iframe>
+        <script src="https://link.msgsndr.com/js/form_embed.js"></script>
 
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required placeholder="john@company.com">
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
-            </div>
-
-            <!-- COMPLIANCE CHECKBOX -->
-            <div class="form-group" style="display: flex; gap: 10px; align-items: start;">
-                <input type="checkbox" id="compliance" name="compliance" required
-                    style="width: 20px; height: 20px; margin-top: 2px;">
-                <label for="compliance" style="font-size: 12px; font-weight: 400; line-height: 1.4; color: #a1a1aa;">
-                    I agree to receive SMS text messages from AI Service Co at the number provided.
-                    I understand that standard message rates may apply and I can reply STOP to unsubscribe at any time.
-                    See our <a href="privacy.html" target="_blank" style="color: var(--primary);">Privacy Policy</a> and
-                    <a href="terms.html" target="_blank" style="color: var(--primary);">Terms</a>.
-                </label>
-            </div>
-
-            <button type="submit" class="btn">Confirm Booking</button>
-        </form>
-
-        <p style="font-size: 11px; color: #52525b; margin-top: 20px;">
-            *We do not share your mobile information with third parties for marketing purposes.
-        </p>
+        <!-- Compliance & Legal -->
+        <div
+            style="margin-top: 20px; text-align: left; font-size: 11px; color: #71717a; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+            <p style="margin-bottom: 8px;">
+                <strong>Consent to Communications:</strong> By submitting this form, you agree to receive SMS text
+                messages from AI Service Co
+                at the phone number provided. Message frequency varies. Standard message and data rates may apply.
+                Reply STOP to unsubscribe at any time.
+            </p>
+            <p>
+                See our <a href="privacy.html" target="_blank" style="color: var(--primary);">Privacy Policy</a> and
+                <a href="terms.html" target="_blank" style="color: var(--primary);">Terms of Service</a>.
+            </p>
+            <p style="margin-top: 8px; color: #52525b;">* We do not share your mobile information with third parties for
+                marketing purposes.</p>
+        </div>
 
         <div class="note">
             Your booking request will warn our team immediately.<br>
