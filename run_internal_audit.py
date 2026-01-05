@@ -11,23 +11,39 @@ load_dotenv()
 GHL_TOKEN = os.environ.get("GHL_API_TOKEN")
 GHL_LOC = os.environ.get("GHL_LOCATION_ID")
 
+
+REQUIRED_SERVICES = [
+    "inbound_poller.py",
+    "intake_server.py",
+    "uplink_bridge.py"
+]
+
 def check_process_integrity():
-    print("   [SCAN] Checking for duplicate processes...")
-    # Use tasklist as a robust, dependency-free check on Windows
+    print("   [SCAN] Checking Process Integrity (The Trinity)...")
+    
+    # Get all python processes once
+    python_procs = {} # name -> count
+    
     try:
         output = subprocess.check_output('tasklist /FI "IMAGENAME eq python.exe" /FO CSV /V', shell=True).decode()
-        # Count instances of inbound_poller.py
-        count = output.lower().count("inbound_poller.py")
         
-        if count > 1:
-            print(f"   [FAIL] Process Conflict: {count} 'inbound_poller.py' instances found. Only 1 allowed.")
-            return False
-        
-        print(f"   [OK] Process Integrity: {count} instance(s) found (Clean).")
+        for p_name in REQUIRED_SERVICES:
+            count = output.lower().count(p_name.lower())
+            python_procs[p_name] = count
+            
+            if count == 0:
+                print(f"      [WARN] Service DOWN: {p_name} (Sentinel should fix this)")
+            elif count > 1:
+                print(f"      [FAIL] Conflict: {count} instances of {p_name}")
+                return False
+            else:
+                print(f"      [OK] {p_name}: Running (Clean).")
+                
         return True
     except Exception as e:
         print(f"   [WARN] Could not verify processes: {e}")
-        return True # Fail open if we can't check, but verify logic
+        return True # Fail open to allow sentinel to run
+
 
 def run_tests():
     print("   [TEST] Running Logic Test Suite...")
