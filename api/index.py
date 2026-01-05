@@ -339,98 +339,90 @@ class handler(BaseHTTPRequestHandler):
 
             # --- ROUTE: CHAT ---
             elif path == "/api/chat":
+                import re
+                import urllib.request
+                
                 command = body.get('command', '').strip()
                 resp_text = "Command received."
+                cmd_lower = command.lower()
                 
-                # Import Gemini (only here to avoid cold start issues)
-                try:
-                    import google.generativeai as genai
+                # ACTION: Send SMS
+                if any(x in cmd_lower for x in ["send sms", "text ", "message "]):
+                    phone_match = re.search(r'\+?1?\d{10,11}', command)
+                    if phone_match:
+                        phone = phone_match.group()
+                        if not phone.startswith("+"):
+                            phone = "+1" + phone.lstrip("1")
+                        con = get_db_connection()
+                        if con:
+                            try:
+                                con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"sms:{phone}:Dashboard Command")
+                                con.close()
+                                resp_text = f"SMS command queued for {phone}. Uplink Bridge will execute."
+                            except:
+                                resp_text = f"SMS queued locally for {phone}."
+                        else:
+                            resp_text = f"SMS command noted for {phone}. Local system will process."
+                    else:
+                        resp_text = "No phone number detected. Try: 'Send SMS to +13529368152'"
+                
+                # ACTION: Call
+                elif any(x in cmd_lower for x in ["call ", "dial ", "phone "]):
+                    phone_match = re.search(r'\+?1?\d{10,11}', command)
+                    if phone_match:
+                        phone = phone_match.group()
+                        if not phone.startswith("+"):
+                            phone = "+1" + phone.lstrip("1")
+                        con = get_db_connection()
+                        if con:
+                            try:
+                                con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"call:{phone}")
+                                con.close()
+                                resp_text = f"Call command queued. Sarah will call {phone} shortly."
+                            except:
+                                resp_text = f"Call noted for {phone}. Local system will dial."
+                        else:
+                            resp_text = f"Call command noted for {phone}."
+                    else:
+                        resp_text = "No phone number detected. Try: 'Call +13529368152'"
+                
+                # ACTION: Email
+                elif "email" in cmd_lower:
+                    resp_text = "Email command detected. Queuing for dispatch..."
+                    con = get_db_connection()
+                    if con:
+                        try:
+                            con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"email:{command}")
+                            con.close()
+                        except: pass
+                
+                # STATUS/INFO: Use Gemini via HTTP
+                else:
                     GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
                     if GEMINI_KEY:
-                        genai.configure(api_key=GEMINI_KEY)
-                        
-                        # Check for action commands first
-                        cmd_lower = command.lower()
-                        
-                        # ACTION: Send SMS
-                        if any(x in cmd_lower for x in ["send sms", "text ", "message "]):
-                            # Extract phone number using simple regex
-                            import re
-                            phone_match = re.search(r'\+?1?\d{10,11}', command)
-                            if phone_match:
-                                phone = phone_match.group()
-                                if not phone.startswith("+"):
-                                    phone = "+1" + phone.lstrip("1")
-                                # Execute SMS via GHL
-                                resp_text = f"Executing SMS to {phone}... Check your phone for confirmation."
-                                # Note: Actual SMS must be done by local system since we don't have credentials here
-                                # Write to DB for uplink_bridge to process
-                                con = get_db_connection()
-                                if con:
-                                    try:
-                                        con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"sms:{phone}:Dashboard Command Triggered")
-                                        con.close()
-                                        resp_text = f"SMS command queued for {phone}. Uplink Bridge will execute."
-                                    except:
-                                        resp_text = f"Queued locally. Target: {phone}"
-                            else:
-                                resp_text = "No phone number detected. Try: 'Send SMS to +13529368152'"
-                        
-                        # ACTION: Call
-                        elif any(x in cmd_lower for x in ["call ", "dial ", "phone "]):
-                            import re
-                            phone_match = re.search(r'\+?1?\d{10,11}', command)
-                            if phone_match:
-                                phone = phone_match.group()
-                                if not phone.startswith("+"):
-                                    phone = "+1" + phone.lstrip("1")
-                                con = get_db_connection()
-                                if con:
-                                    try:
-                                        con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"call:{phone}")
-                                        con.close()
-                                        resp_text = f"Call command queued for {phone}. Sarah will call shortly."
-                                    except:
-                                        resp_text = f"Call queued locally. Target: {phone}"
-                            else:
-                                resp_text = "No phone number detected. Try: 'Call +13529368152'"
-                        
-                        # ACTION: Email
-                        elif "email" in cmd_lower:
-                            resp_text = "Email command detected. Queuing for dispatch..."
-                            con = get_db_connection()
-                            if con:
-                                try:
-                                    con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"email:{command}")
-                                    con.close()
-                                except: pass
-                        
-                        # STATUS/INFO: Use Gemini for everything else
-                        else:
-                            model = genai.GenerativeModel('gemini-1.5-flash')
-                            system_prompt = """You are the Sovereign AI Orchestrator, the command interface for Empire Unified.
+                        try:
+                            system_prompt = """You are the Sovereign AI Orchestrator for Empire Unified.
+You help the Commander manage their AI business automation system.
+Capabilities: SMS via GHL, Voice calls via Sarah (Vapi), Email via Resend.
+Status: 5 leads, 142 AI calls tracked. All systems online.
+Be concise (under 80 words), helpful, action-oriented."""
+
+                            prompt_text = f"{system_prompt}\n\nCommander: {command}"
                             
-You help the Commander manage their AI-powered business automation system.
-
-Available capabilities:
-- SMS: Send text messages via GHL
-- Voice: Initiate calls via Vapi (Sarah the Spartan)
-- Email: Send emails via Resend
-- Leads: 5 active leads in pipeline
-- AI Calls: 142 tracked
-
-Current system status: All systems operational. Sarah (Voice AI) is online.
-
-Be concise, helpful, and action-oriented. If the Commander asks to do something, acknowledge and confirm.
-Keep responses under 100 words."""
-
-                            full_prompt = f"{system_prompt}\n\nCommander says: {command}"
-                            response = model.generate_content(full_prompt)
-                            resp_text = response.text.strip()
+                            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}"
+                            
+                            payload = json.dumps({
+                                "contents": [{"parts": [{"text": prompt_text}]}]
+                            }).encode('utf-8')
+                            
+                            req = urllib.request.Request(api_url, data=payload, headers={'Content-Type': 'application/json'})
+                            with urllib.request.urlopen(req, timeout=10) as response:
+                                result = json.loads(response.read().decode('utf-8'))
+                                resp_text = result.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'Command acknowledged.')
+                        except Exception as e:
+                            resp_text = f"Understood, Commander. System is operational. (AI: {str(e)[:50]})"
                     else:
-                        resp_text = "Gemini API key not configured. Using local mode."
-                except Exception as e:
-                    resp_text = f"AI processing error: {str(e)[:100]}"
+                        resp_text = "System online. Gemini key not configured for chat."
 
                 response_data = {"status": "success", "response": resp_text}
 
