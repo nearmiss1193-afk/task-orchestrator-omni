@@ -1,26 +1,25 @@
-import requests
+
 import os
+import requests
 import json
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except: pass
 
-load_dotenv()
+VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
 
-API_KEY = os.getenv("VAPI_PRIVATE_KEY")
-HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
-}
+print("=== ALL VAPI ASSISTANTS ===")
+url = "https://api.vapi.ai/assistant"
+headers = {"Authorization": f"Bearer {VAPI_KEY}"}
 
-def list_assistants():
-    print("🔍 Listing Assistants...")
-    res = requests.get("https://api.vapi.ai/assistant", headers=HEADERS)
-    if res.status_code == 200:
-        assistants = res.json()
-        with open("ASSISTANTS_DUMP.json", "w") as f:
-            json.dump(assistants, f, indent=2)
-        print("✅ Dumped assistants to ASSISTANTS_DUMP.json")
-    else:
-        print(f"❌ Failed: {res.text}")
-
-if __name__ == "__main__":
-    list_assistants()
+res = requests.get(url, headers=headers)
+if res.status_code == 200:
+    assistants = res.json()
+    print(f"Found {len(assistants)} assistants:\n")
+    for a in assistants:
+        print(f"  ID: {a.get('id')}")
+        print(f"  Name: {a.get('name')}")
+        print(f"  ---")
+else:
+    print(f"Error: {res.status_code} - {res.text}")

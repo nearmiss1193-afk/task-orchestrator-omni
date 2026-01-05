@@ -15,7 +15,7 @@ class SovereignDispatch:
         self.twilio_token = os.environ.get("TWILIO_AUTH_TOKEN", "").strip()
         self.twilio_from = os.environ.get("TWILIO_FROM_NUMBER", "").strip()
         self.vapi_key = os.environ.get("VAPI_PRIVATE_KEY", "").strip()
-        self.vapi_assistant_id = "800a37ee-f5de-4ecb-b8ea-e1bd26237c84"  # Sales Specialist from Vapi Dashboard
+        self.vapi_assistant_id = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"  # Sarah the Spartan
         
         # GHL Config
         self.ghl_token = os.environ.get("GHL_API_TOKEN", "").strip()
