@@ -540,47 +540,86 @@
             input.value = command;
             await sendChatCommand();
         }
+
+        // Vapi instance holder
+        let vapiInstance = null;
+
         async function startVoiceUplink() {
             const btn = document.querySelector('button[onclick="startVoiceUplink()"]');
+            const statusEl = document.getElementById('vapi-status');
 
-            // Check if Vapi SDK is loaded
-            if (!window.vapiSDK) {
-                // Load it dynamically if missing
-                console.log("Loading Vapi SDK...");
-                var script = document.createElement('script');
-                script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-                script.defer = true;
-                script.async = true;
-                script.onload = function () {
-                    startVoiceUplink(); // Retry after load
-                };
-                document.head.appendChild(script);
-                btn.innerText = "Loading Secure Protocol...";
+            // If already connected, stop
+            if (vapiInstance) {
+                vapiInstance.stop();
+                vapiInstance = null;
+                btn.innerText = "Initiate Voice Uplink";
+                btn.classList.remove("animate-pulse");
+                statusEl.innerText = "Status: Standby";
+                statusEl.className = "mt-2 text-xs text-slate-400";
                 return;
             }
 
-            btn.innerText = "Connecting Neural Link...";
+            btn.innerText = "Connecting...";
             btn.classList.add("animate-pulse");
+            statusEl.innerText = "Status: Initializing voice link...";
 
             try {
-                window.vapiSDK.run({
-                    apiKey: VAPI_PUBLIC_KEY,
-                    assistant: ORCHESTRATOR_ASSISTANT_ID,
-                    config: {
-                        position: "bottom-right",
-                    }
+                // Check if Vapi SDK is loaded
+                if (typeof Vapi === 'undefined') {
+                    // Load the SDK
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = "https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.min.js";
+                        script.onload = resolve;
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                }
+
+                // Create Vapi instance
+                vapiInstance = new Vapi(VAPI_PUBLIC_KEY);
+
+                // Event listeners
+                vapiInstance.on('call-start', () => {
+                    console.log('Call started');
+                    btn.innerText = "🛑 End Uplink";
+                    statusEl.innerText = "Status: NEURAL LINK ACTIVE ✅";
+                    statusEl.className = "mt-2 text-xs text-green-400 font-bold";
                 });
 
-                btn.innerText = "🛑 End Uplink";
-                btn.onclick = () => window.location.reload();
-                document.getElementById('vapi-status').innerText = "Status: NEURAL LINK ACTIVE (Level 5)";
-                document.getElementById('vapi-status').className = "mt-2 text-xs text-green-400 font-bold";
+                vapiInstance.on('call-end', () => {
+                    console.log('Call ended');
+                    vapiInstance = null;
+                    btn.innerText = "Initiate Voice Uplink";
+                    btn.classList.remove("animate-pulse");
+                    statusEl.innerText = "Status: Session ended";
+                    statusEl.className = "mt-2 text-xs text-slate-400";
+                });
+
+                vapiInstance.on('speech-start', () => {
+                    statusEl.innerText = "Status: AI Speaking...";
+                });
+
+                vapiInstance.on('speech-end', () => {
+                    statusEl.innerText = "Status: Listening...";
+                });
+
+                vapiInstance.on('error', (error) => {
+                    console.error('Vapi error:', error);
+                    statusEl.innerText = "Status: Error - " + (error.message || 'Unknown');
+                    statusEl.className = "mt-2 text-xs text-red-400";
+                });
+
+                // Start the call with the orchestrator assistant
+                await vapiInstance.start(ORCHESTRATOR_ASSISTANT_ID);
 
             } catch (e) {
-                console.warn("Voice Error:", e);
-                alert("Connection Refused: " + e.message);
-                btn.innerText = "Initiate Voice Uplink";
+                console.error("Voice Error:", e);
+                statusEl.innerText = "Status: Connection failed - " + e.message;
+                statusEl.className = "mt-2 text-xs text-red-400";
+                btn.innerText = "Retry Voice Uplink";
                 btn.classList.remove("animate-pulse");
+                vapiInstance = null;
             }
         }
 
