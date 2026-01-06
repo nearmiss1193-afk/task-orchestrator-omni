@@ -1085,6 +1085,22 @@ def integrity_cron():
     supabase = get_supabase()
     ov.ping_integrity_service(supabase)
 
+@app.function(schedule=modal.Cron("0 */6 * * *"), image=image, secrets=[VAULT])
+def pdr_agent_cron():
+    """
+    MISSION: PERSONAL DEVELOPMENT RESEARCH (PDRAgent)
+    Runs every 6h to identify system gaps and research improvements.
+    """
+    brain_log("[PDRAgent] Starting quality research cycle...")
+    try:
+        from modules.governor.pdr_agent import PDRAgent
+        agent = PDRAgent()
+        # In Modal, we might need to pass the supabase client or specific context
+        agent.execute_loop()
+        brain_log("[PDRAgent] Research cycle complete. Verifiable updates dispatched.", level="SUCCESS")
+    except Exception as e:
+        brain_log(f"[PDRAgent] Research Failed: {e}", level="ERR")
+
 @app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 11 * * *")) # 11:00 UTC = 06:00 EST
 def knowledge_archivist():
     """
