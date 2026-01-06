@@ -383,6 +383,8 @@ class handler(BaseHTTPRequestHandler):
                             # Try to trigger real Vapi outbound call
                             VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY", "")
                             SARAH_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"  # Sarah assistant ID
+                            # Phone ID is REQUIRED for outbound calls - use env var or hardcoded fallback
+                            VAPI_PHONE_ID = os.environ.get("VAPI_PHONE_ID", "") or "8a7f18bf-8c1b-4aa661-8d5f-d622a12cb4f8"
                             
                             if VAPI_KEY:
                                 try:
@@ -391,7 +393,7 @@ class handler(BaseHTTPRequestHandler):
                                         "customer": {
                                             "number": phone
                                         },
-                                        "phoneNumberId": os.environ.get("VAPI_PHONE_ID", "")
+                                        "phoneNumberId": VAPI_PHONE_ID
                                     }).encode('utf-8')
                                     
                                     vapi_req = urllib.request.Request(
