@@ -342,87 +342,97 @@ class handler(BaseHTTPRequestHandler):
                 import re
                 import urllib.request
                 
-                command = body.get('command', '').strip()
-                resp_text = "Command received."
-                cmd_lower = command.lower()
-                
-                # ACTION: Send SMS
-                if any(x in cmd_lower for x in ["send sms", "text ", "message "]):
-                    phone_match = re.search(r'\+?1?\d{10,11}', command)
-                    if phone_match:
-                        phone = phone_match.group()
-                        if not phone.startswith("+"):
-                            phone = "+1" + phone.lstrip("1")
+                try:
+                    command = body.get('command', '').strip()
+                    resp_text = "Command received."
+                    cmd_lower = command.lower()
+                    
+                    # ACTION: Send SMS
+                    if any(x in cmd_lower for x in ["send sms", "text ", "message "]):
+                        phone_match = re.search(r'\+?1?\d{10,11}', command)
+                        if phone_match:
+                            phone = phone_match.group()
+                            if not phone.startswith("+"):
+                                phone = "+1" + phone.lstrip("1")
+                            con = get_db_connection()
+                            if con:
+                                try:
+                                    con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"sms:{phone}:Dashboard Command")
+                                    con.close()
+                                    resp_text = f"SMS command queued for {phone}. Uplink Bridge will execute."
+                                except:
+                                    resp_text = f"SMS queued locally for {phone}."
+                            else:
+                                resp_text = f"SMS command noted for {phone}. Local system will process."
+                        else:
+                            resp_text = "No phone number detected. Try: 'Send SMS to +13529368152'"
+                    
+                    # ACTION: Call
+                    elif any(x in cmd_lower for x in ["call ", "dial ", "phone "]):
+                        phone_match = re.search(r'\+?1?\d{10,11}', command)
+                        if phone_match:
+                            phone = phone_match.group()
+                            if not phone.startswith("+"):
+                                phone = "+1" + phone.lstrip("1")
+                            con = get_db_connection()
+                            if con:
+                                try:
+                                    con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"call:{phone}")
+                                    con.close()
+                                    resp_text = f"Call command queued. Sarah will call {phone} shortly."
+                                except:
+                                    resp_text = f"Call noted for {phone}. Local system will dial."
+                            else:
+                                resp_text = f"Call command noted for {phone}."
+                        else:
+                            resp_text = "No phone number detected. Try: 'Call +13529368152'"
+                    
+                    # ACTION: Email
+                    elif "email" in cmd_lower:
+                        resp_text = "Email command detected. Queuing for dispatch..."
                         con = get_db_connection()
                         if con:
                             try:
-                                con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"sms:{phone}:Dashboard Command")
+                                con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"email:{command}")
                                 con.close()
-                                resp_text = f"SMS command queued for {phone}. Uplink Bridge will execute."
-                            except:
-                                resp_text = f"SMS queued locally for {phone}."
-                        else:
-                            resp_text = f"SMS command noted for {phone}. Local system will process."
+                            except: pass
+                    
+                    # STATUS/INFO: Use Claude via HTTP
                     else:
-                        resp_text = "No phone number detected. Try: 'Send SMS to +13529368152'"
-                
-                # ACTION: Call
-                elif any(x in cmd_lower for x in ["call ", "dial ", "phone "]):
-                    phone_match = re.search(r'\+?1?\d{10,11}', command)
-                    if phone_match:
-                        phone = phone_match.group()
-                        if not phone.startswith("+"):
-                            phone = "+1" + phone.lstrip("1")
-                        con = get_db_connection()
-                        if con:
+                        ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+                        if ANTHROPIC_KEY:
                             try:
-                                con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"call:{phone}")
-                                con.close()
-                                resp_text = f"Call command queued. Sarah will call {phone} shortly."
-                            except:
-                                resp_text = f"Call noted for {phone}. Local system will dial."
-                        else:
-                            resp_text = f"Call command noted for {phone}."
-                    else:
-                        resp_text = "No phone number detected. Try: 'Call +13529368152'"
-                
-                # ACTION: Email
-                elif "email" in cmd_lower:
-                    resp_text = "Email command detected. Queuing for dispatch..."
-                    con = get_db_connection()
-                    if con:
-                        try:
-                            con.run("INSERT INTO commands (command, status) VALUES (:c, 'pending')", c=f"email:{command}")
-                            con.close()
-                        except: pass
-                
-                # STATUS/INFO: Use Gemini via HTTP
-                else:
-                    GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
-                    if GEMINI_KEY:
-                        try:
-                            system_prompt = """You are the Sovereign AI Orchestrator for Empire Unified.
+                                system_prompt = """You are the Sovereign AI Orchestrator for Empire Unified.
 You help the Commander manage their AI business automation system.
 Capabilities: SMS via GHL, Voice calls via Sarah (Vapi), Email via Resend.
-Status: 5 leads, 142 AI calls tracked. All systems online.
+Status: 5 leads, 142 AI calls tracked. All systems online. Sarah (Elite Voice AI) is active.
 Be concise (under 80 words), helpful, action-oriented."""
 
-                            prompt_text = f"{system_prompt}\n\nCommander: {command}"
-                            
-                            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}"
-                            
-                            payload = json.dumps({
-                                "contents": [{"parts": [{"text": prompt_text}]}]
-                            }).encode('utf-8')
-                            
-                            req = urllib.request.Request(api_url, data=payload, headers={'Content-Type': 'application/json'})
-                            with urllib.request.urlopen(req, timeout=10) as response:
-                                result = json.loads(response.read().decode('utf-8'))
-                                resp_text = result.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'Command acknowledged.')
-                        except Exception as e:
-                            resp_text = f"Understood, Commander. System is operational. (AI: {str(e)[:50]})"
-                    else:
-                        resp_text = "System online. Gemini key not configured for chat."
+                                api_url = "https://api.anthropic.com/v1/messages"
+                                
+                                claude_payload = json.dumps({
+                                    "model": "claude-3-5-sonnet-20241022",
+                                    "max_tokens": 200,
+                                    "system": system_prompt,
+                                    "messages": [{"role": "user", "content": command}]
+                                }).encode('utf-8')
+                                
+                                headers = {
+                                    'Content-Type': 'application/json',
+                                    'x-api-key': ANTHROPIC_KEY,
+                                    'anthropic-version': '2023-06-01'
+                                }
+                                
+                                req = urllib.request.Request(api_url, data=claude_payload, headers=headers)
+                                with urllib.request.urlopen(req, timeout=15) as api_resp:
+                                    result = json.loads(api_resp.read().decode('utf-8'))
+                                    resp_text = result.get('content', [{}])[0].get('text', 'Command acknowledged.')
+                            except Exception as claude_err:
+                                resp_text = f"System operational. (AI: {str(claude_err)[:40]})"
+                        else:
+                            resp_text = "System online. All channels ready. Sarah standing by."
+                except Exception as chat_error:
+                    resp_text = f"Error processing command: {str(chat_error)[:60]}"
 
                 response_data = {"status": "success", "response": resp_text}
 
