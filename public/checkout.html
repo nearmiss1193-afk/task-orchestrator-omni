@@ -6,241 +6,241 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Checkout - Empire HVAC</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2563eb;
-            /* Tech Blue */
-            --black: #0f172a;
-            /* Slate 900 */
-            --dark: #1e293b;
-            /* Slate 800 */
-            --light: #f8fafc;
-            /* Slate 50 */
-            --gray: #94a3b8;
-            /* Slate 400 */
-            --border: rgba(255, 255, 255, 0.1);
-        }
+    <link rel="stylesheet" href="/styles.css">
 
-        body {
-            background-color: var(--black);
-            color: var(--light);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+    --primary: #2563eb;
+    /* Tech Blue */
+    --black: #0f172a;
+    /* Slate 900 */
+    --dark: #1e293b;
+    /* Slate 800 */
+    --light: #f8fafc;
+    /* Slate 50 */
+    --gray: #94a3b8;
+    /* Slate 400 */
+    --border: rgba(255, 255, 255, 0.1);
+    }
 
-        .checkout-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            width: 100%;
-            max-width: 1100px;
-            margin-top: 40px;
-        }
+    body {
+    background-color: var(--black);
+    color: var(--light);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    }
 
-        /* Order Summary */
-        .order-summary {
-            background: var(--dark);
-            padding: 40px;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            height: fit-content;
-        }
+    .checkout-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 40px;
+    }
 
-        .summary-header {
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
+    /* Order Summary */
+    .order-summary {
+    background: var(--dark);
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    height: fit-content;
+    }
 
-        .summary-header h2 {
-            margin: 0;
-            font-size: 24px;
-        }
+    .summary-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    }
 
-        .summary-header p {
-            color: var(--gray);
-            margin: 5px 0 0 0;
-            font-size: 14px;
-        }
+    .summary-header h2 {
+    margin: 0;
+    font-size: 24px;
+    }
 
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+    .summary-header p {
+    color: var(--gray);
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    }
 
-        .item-name {
-            font-weight: 600;
-            font-size: 18px;
-        }
+    .order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    }
 
-        .item-price {
-            font-weight: 700;
-            font-size: 18px;
-        }
+    .item-name {
+    font-weight: 600;
+    font-size: 18px;
+    }
 
-        .discount-badge {
-            background: rgba(37, 99, 235, 0.2);
-            color: #60a5fa;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-            margin-left: 10px;
-        }
+    .item-price {
+    font-weight: 700;
+    font-size: 18px;
+    }
 
-        .total-row {
-            border-top: 1px solid var(--border);
-            padding-top: 20px;
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 24px;
-            font-weight: 700;
-        }
+    .discount-badge {
+    background: rgba(37, 99, 235, 0.2);
+    color: #60a5fa;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 10px;
+    }
 
-        .waived-setup {
-            color: #60a5fa;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+    .total-row {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: 700;
+    }
 
-        .guarantee {
-            margin-top: 30px;
-            display: flex;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 12px;
-        }
+    .waived-setup {
+    color: #60a5fa;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    }
 
-        /* Sovereign Form */
-        .payment-form-container {
-            background: #fff;
-            padding: 40px;
-            border-radius: 24px;
-            color: #333;
-        }
+    .guarantee {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    /* Sovereign Form */
+    .payment-form-container {
+    background: #fff;
+    padding: 40px;
+    border-radius: 24px;
+    color: #333;
+    }
 
-        .form-label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
+    .form-group {
+    margin-bottom: 20px;
+    }
 
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
+    .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+    }
 
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+    .form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    }
 
-        .submit-btn:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
-        }
+    .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    }
 
-        @media (max-width: 768px) {
-            .checkout-container {
-                grid-template-columns: 1fr;
-            }
-        }
+    .submit-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    }
 
-        .strikethrough {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
+    @media (max-width: 768px) {
+    .checkout-container {
+    grid-template-columns: 1fr;
+    }
+    }
 
-        .free-text {
-            color: var(--primary);
-        }
+    .strikethrough {
+    text-decoration: line-through;
+    opacity: 0.6;
+    }
 
-        /* Refactored Styles */
-        .reservation-note {
-            margin-top: 20px;
-            font-size: 13px;
-            color: var(--gray);
-        }
+    .free-text {
+    color: var(--primary);
+    }
 
-        .form-title {
-            margin-top: 0;
-            margin-bottom: 24px;
-        }
+    /* Refactored Styles */
+    .reservation-note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--gray);
+    }
 
-        .payment-details-group {
-            margin-top: 24px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
+    .form-title {
+    margin-top: 0;
+    margin-bottom: 24px;
+    }
 
-        .card-input-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
+    .payment-details-group {
+    margin-top: 24px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    }
 
-        .card-num {
-            flex: 2;
-        }
+    .card-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    }
 
-        .card-date {
-            flex: 1;
-        }
+    .card-num {
+    flex: 2;
+    }
 
-        .card-cvc {
-            flex: 1;
-        }
+    .card-date {
+    flex: 1;
+    }
 
-        .security-badge {
-            font-size: 11px;
-            color: #888;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+    .card-cvc {
+    flex: 1;
+    }
 
-        .form-status {
-            margin-top: 16px;
-            text-align: center;
-            display: none;
-        }
+    .security-badge {
+    font-size: 11px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    }
 
-        .legal-text {
-            font-size: 11px;
-            color: #666;
-            margin-top: 20px;
-            line-height: 1.5;
-        }
+    .form-status {
+    margin-top: 16px;
+    text-align: center;
+    display: none;
+    }
+
+    .legal-text {
+    font-size: 11px;
+    color: #666;
+    margin-top: 20px;
+    line-height: 1.5;
+    }
     </style>
 </head>
 
@@ -273,7 +273,7 @@
             </div>
 
             <div class="waived-setup">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="progress-23"
                     stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
@@ -333,16 +333,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-top: 20px; margin-bottom: 20px;">
-                        <label
-                            style="display: flex; align-items: start; gap: 10px; font-size: 13px; color: #64748b; cursor: pointer; line-height: 1.4;">
-                            <input type="checkbox" id="smsConsent" required
-                                style="width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0;">
+                    <div class="consent-container">
+                        <label class="consent-label">
+                            <input type="checkbox" id="smsConsent" required class="consent-checkbox">
                             <span>
-                                I agree to the <a href="terms.html" target="_blank"
-                                    style="color: #2563eb; text-decoration: none;">Terms of Service</a>
-                                and <a href="privacy.html" target="_blank"
-                                    style="color: #2563eb; text-decoration: none;">Privacy Policy</a>.
+                                I agree to the <a href="terms.html" target="_blank" class="link-style">Terms of
+                                    Service</a>
+                                and <a href="privacy.html" target="_blank" class="link-style">Privacy Policy</a>.
                                 I provide express consent to receive marketing and account-related messages (SMS/Call)
                                 from Empire HVAC at the number provided. Msg frequency varies. Msg & data rates may
                                 apply.
