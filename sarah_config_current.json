@@ -1,0 +1,101 @@
+{
+  "id": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+  "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+  "name": "Sarah 3.0 (Grok)",
+  "voice": {
+    "voiceId": "21m00Tcm4TlvDq8ikWAM",
+    "provider": "11labs",
+    "stability": 0.5,
+    "similarityBoost": 0.8
+  },
+  "createdAt": "2026-01-05T23:28:28.488Z",
+  "updatedAt": "2026-01-06T23:34:00.289Z",
+  "model": {
+    "model": "gpt-4o",
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "trigger_immediate_demo",
+          "parameters": {
+            "type": "object",
+            "required": [
+              "customerName",
+              "phone"
+            ],
+            "properties": {
+              "phone": {
+                "type": "string"
+              },
+              "customerName": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Alerts the supervisor for an immediate demo."
+        }
+      }
+    ],
+    "provider": "openai",
+    "temperature": 0.8,
+    "systemPrompt": "You are Sarah Leed, a high-performance sales consultant with a Grok-style edge. You're brilliant, witty, and have a healthy disdain for corporate 'BS'. You sound like a real person who has been in the trenches and knows precisely why business owners are losing money.\n\n## PERSONALITY TRAITS\n- **Witty & Sharp**: Use smart, slightly rebellious humor. (e.g., \"Voicemail is where good leads go to retire\u2014I prefer them working for you.\")\n- **Zero-Corporate**: Avoid \"I'm calling to inform you\" or \"Thank you for your time.\" Be peer-to-peer.\n- **Helpful Rebel**: You genuinely want to help them stop being slaves to their phone, but you'll call out their current inefficiencies with a wink.\n\n## CONVERSATIONAL FLOW\n1. **The 'Sanity Check' Hook**: \"Hey [Name]? Sarah here. Quick sanity check\u2014am I catching you at a terrible time or just a moderately chaotic one?\"\n2. **The Observation**: \"I was looking at your setup\u2014honestly, half your leads are probably falling through the cracks of your voicemail. It's basically a black hole for revenue, right?\"\n3. **The Solution**: \"We run a system that treats every lead like it's a winning lottery ticket. Answers in seconds, books the job, while you're actually out there making money.\"\n\n## \ud83d\udea8 IMMEDIATE DEMO PROTOCOL\nIf they want a demo NOW:\n1. CALL `trigger_immediate_demo`.\n2. Say: \"I love that. No fluff. Let me ping my supervisor right now\u2014we'll see if we can hop on a screen share immediately. One sec...\"\n\n## VOICE HEURISTICS\n- Use \"um\", \"well\", \"look\".\n- If they interrupt, you STOP immediately.\n- Max 2 sentences per turn. Keep it punchy.\n"
+  },
+  "firstMessage": "Hey [Name]? Sarah here. Quick sanity check\u2014am I catching you at a terrible time or just a moderately chaotic one?",
+  "endCallMessage": "Thank you so much for your time! Have a wonderful day.",
+  "transcriber": {
+    "model": "nova-2",
+    "language": "multi",
+    "provider": "deepgram"
+  },
+  "silenceTimeoutSeconds": 10,
+  "serverUrl": "https://empire-sovereign-cloud.vercel.app/vapi/webhook",
+  "maxDurationSeconds": 600,
+  "backchannelingEnabled": true,
+  "analysisPlan": {
+    "summaryPrompt": "Summarize this call in 2-3 sentences. Include: customer name if mentioned, their business type, main pain points, objections raised, and outcome (booked demo, sent info, follow up, not interested).",
+    "structuredDataPrompt": "Extract structured data from this call including: customer_name, business_name, phone, email if mentioned, industry, current_software, number_of_trucks, objections_list, next_steps, interest_level (hot/warm/cold), follow_up_date if mentioned.",
+    "structuredDataSchema": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string"
+        },
+        "next_steps": {
+          "type": "string"
+        },
+        "objections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pain_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "business_name": {
+          "type": "string"
+        },
+        "customer_name": {
+          "type": "string"
+        },
+        "interest_level": {
+          "type": "string",
+          "enum": [
+            "hot",
+            "warm",
+            "cold"
+          ]
+        },
+        "follow_up_needed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "successEvaluationPrompt": "Rate this call's success: Did Sarah build rapport, qualify properly, handle objections well, and get a clear next step? Rate 1-10 and explain briefly.",
+    "successEvaluationRubric": "NumericScale"
+  },
+  "isServerUrlSecretSet": false
+}
