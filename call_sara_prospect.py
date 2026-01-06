@@ -1,4 +1,7 @@
 import os, requests, json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Load environment variables
 VAPI_API_KEY = os.getenv('VAPI_API_KEY')
@@ -26,7 +29,7 @@ payload = {
     }
 }
 headers = {
-    "Authorization": f"Bearer {VAPI_API_KEY}",
+    "Authorization": f"Bearer {VAPI_PRIVATE_KEY}",
     "Content-Type": "application/json"
 }
 try:

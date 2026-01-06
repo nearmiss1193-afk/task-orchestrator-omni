@@ -1,4 +1,7 @@
 import os, requests, json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_ghl_contacts():
     token = os.getenv('GHL_AGENCY_API_TOKEN')

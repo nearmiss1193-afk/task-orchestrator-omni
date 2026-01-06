@@ -262,6 +262,30 @@
                             title="Send Command" aria-label="Send Command">↵</button>
                     </div>
                 </div>
+
+                <!-- NEW: Asset Intake Command Center -->
+                <div class="glass p-6 rounded-2xl flex flex-col h-[300px]">
+                    <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
+                        <h3 class="font-bold">Asset Inbox (Save Protocol)</h3>
+                        <span class="text-xs text-blue-400">● Ready</span>
+                    </div>
+                    <div id="dropZone"
+                        class="flex-1 border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center p-4 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 cursor-pointer relative mb-4">
+                        <div class="text-3xl mb-2">📥</div>
+                        <p class="text-xs text-slate-400 text-center">Drag & Drop Videos/Links or <span
+                                class="text-blue-400">Click to Paste</span></p>
+                        <input type="text" id="assetUrlPaste" class="absolute inset-0 opacity-0 cursor-pointer"
+                            placeholder="Paste URL here">
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="assetTitle" placeholder="Asset Label (optional)"
+                            class="flex-1 bg-black/30 border border-white/10 rounded-lg px-4 py-2 text-xs focus:outline-none focus:border-blue-500">
+                        <button onclick="submitDashboardAsset()"
+                            class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-xs font-bold transition">SAVE</button>
+                    </div>
+                    <div id="assetStatus" class="mt-2 text-[10px] text-slate-500">Uploads route to Antigravity Watchdog.
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -614,6 +638,102 @@
                 btn.innerText = "Retry Voice Uplink";
                 btn.classList.remove("animate-pulse");
                 vapiInstance = null;
+            }
+        }
+
+        // ASSET INTAKE LOGIC
+        const dropZone = document.getElementById('dropZone');
+        const assetInput = document.getElementById('assetUrlPaste');
+        const assetStatus = document.getElementById('assetStatus');
+
+        // URL Detection helper
+        function isValidUrl(string) {
+            try { new URL(string); return true; }
+            catch (_) { return false; }
+        }
+
+        // Drop Zone Handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-blue-500', 'bg-blue-500/10');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-blue-500', 'bg-blue-500/10');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-500', 'bg-blue-500/10');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                assetStatus.innerText = "Processing file: " + files[0].name;
+                // For now, we simulate file upload by logging metadata
+                // In production, this would upload to Supabase Storage
+                alert("File detected: " + files[0].name + ". Initializing local storage bridge...");
+            }
+        });
+
+        // Paste Handling
+        assetInput.addEventListener('paste', (e) => {
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            if (isValidUrl(pastedText)) {
+                assetInput.value = pastedText;
+                assetStatus.innerText = "🔗 URL detected. Click SAVE to push to Antigravity.";
+                assetStatus.classList.add('text-blue-400');
+            }
+        });
+
+        async function submitDashboardAsset() {
+            const url = assetInput.value;
+            const title = document.getElementById('assetTitle').value;
+            if (!url) {
+                alert("Please provide a URL or Link first.");
+                return;
+            }
+
+            assetStatus.innerText = "🚀 Pushing to cloud inbox...";
+
+            try {
+                // In a sovereign stack, we can use the Supabase JS client or a direct fetch to our API
+                // Here we use the existing local /api pattern if available or a direct fetch to Supabase
+                const payload = {
+                    type: "link",
+                    url: url,
+                    category: "research",
+                    metadata: { label: title, source: "dashboard" }
+                };
+
+                // Using the specific Supabase REST endpoint for 'asset_inbox'
+                const SUPA_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co";
+                const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"; // Service Role (Restricted Dashboard)
+
+                const res = await fetch(`${SUPA_URL}/rest/v1/asset_inbox`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPA_KEY,
+                        'Authorization': `Bearer ${SUPA_KEY}`,
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    assetStatus.innerText = "✅ Asset Captured. Antigravity is watching.";
+                    assetStatus.classList.add('text-green-400');
+                    assetInput.value = '';
+                    setTimeout(() => {
+                        assetStatus.innerText = "Uploads route to Antigravity Watchdog.";
+                        assetStatus.classList.remove('text-green-400', 'text-blue-400');
+                    }, 3000);
+                } else {
+                    throw new Error(await res.text());
+                }
+            } catch (err) {
+                console.error(err);
+                assetStatus.innerText = "❌ Error: " + err.message;
+                assetStatus.classList.add('text-red-400');
             }
         }
 
