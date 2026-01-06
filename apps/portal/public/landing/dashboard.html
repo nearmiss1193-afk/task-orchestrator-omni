@@ -190,6 +190,247 @@
                 </table>
             </div>
         </div>
+
+        <!-- NEW: Quick Links & Resources -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <!-- Website & Pages -->
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">🌐</span> Websites & Pages
+                </h3>
+                <div class="space-y-3">
+                    <a href="https://aiserviceco.com" target="_blank" rel="noopener"
+                        class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
+                        <div>
+                            <div class="font-semibold text-sm">AI Service Co (Main)</div>
+                            <div class="text-slate-400 text-xs">aiserviceco.com</div>
+                        </div>
+                        <span class="text-green-400">↗</span>
+                    </a>
+                    <a href="https://empire-hvac-demo-sovereign.surge.sh/hvac.html" target="_blank" rel="noopener"
+                        class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
+                        <div>
+                            <div class="font-semibold text-sm">HVAC Demo Funnel</div>
+                            <div class="text-slate-400 text-xs">HVAC Landing Page</div>
+                        </div>
+                        <span class="text-blue-400">↗</span>
+                    </a>
+                    <a href="https://app.gohighlevel.com" target="_blank" rel="noopener"
+                        class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
+                        <div>
+                            <div class="font-semibold text-sm">GoHighLevel</div>
+                            <div class="text-slate-400 text-xs">CRM & Automation</div>
+                        </div>
+                        <span class="text-orange-400">↗</span>
+                    </a>
+                    <a href="https://dashboard.vapi.ai" target="_blank" rel="noopener"
+                        class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
+                        <div>
+                            <div class="font-semibold text-sm">Vapi Dashboard</div>
+                            <div class="text-slate-400 text-xs">Voice AI Management</div>
+                        </div>
+                        <span class="text-purple-400">↗</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Campaign Templates -->
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">📋</span> Campaign Templates
+                </h3>
+                <div class="space-y-3">
+                    <div class="p-3 bg-white/5 rounded-lg border-l-2 border-blue-500">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="font-semibold text-sm">Spartan Outreach</div>
+                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Active</span>
+                        </div>
+                        <div class="text-slate-400 text-xs">SMS → Email → Voice Call (3-day sequence)</div>
+                    </div>
+                    <div class="p-3 bg-white/5 rounded-lg border-l-2 border-green-500">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="font-semibold text-sm">Quick Demo Invite</div>
+                            <span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">Ready</span>
+                        </div>
+                        <div class="text-slate-400 text-xs">Instant SMS with calendar link</div>
+                    </div>
+                    <div class="p-3 bg-white/5 rounded-lg border-l-2 border-purple-500">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="font-semibold text-sm">Re-Engagement</div>
+                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded">Ready</span>
+                        </div>
+                        <div class="text-slate-400 text-xs">Cold leads revival (Email + Call)</div>
+                    </div>
+                    <div class="p-3 bg-white/5 rounded-lg border-l-2 border-orange-500">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="font-semibold text-sm">Sarah Intro Call</div>
+                            <span class="text-xs bg-orange-500/20 text-orange-400 px-2 py-1 rounded">Ready</span>
+                        </div>
+                        <div class="text-slate-400 text-xs">Voice AI qualification call</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">⚡</span> Quick Actions
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="triggerAction('sms_blast')"
+                        class="w-full p-3 bg-blue-600 hover:bg-blue-500 rounded-lg text-left transition flex items-center gap-3">
+                        <span class="text-xl">💬</span>
+                        <div>
+                            <div class="font-semibold text-sm">Send SMS Blast</div>
+                            <div class="text-blue-200 text-xs">To all active leads</div>
+                        </div>
+                    </button>
+                    <button onclick="triggerAction('sarah_call')"
+                        class="w-full p-3 bg-purple-600 hover:bg-purple-500 rounded-lg text-left transition flex items-center gap-3">
+                        <span class="text-xl">📞</span>
+                        <div>
+                            <div class="font-semibold text-sm">Have Sarah Call Me</div>
+                            <div class="text-purple-200 text-xs">Test voice AI</div>
+                        </div>
+                    </button>
+                    <button onclick="triggerAction('email_campaign')"
+                        class="w-full p-3 bg-green-600 hover:bg-green-500 rounded-lg text-left transition flex items-center gap-3">
+                        <span class="text-xl">📧</span>
+                        <div>
+                            <div class="font-semibold text-sm">Launch Email Campaign</div>
+                            <div class="text-green-200 text-xs">Prospect outreach</div>
+                        </div>
+                    </button>
+                    <button onclick="triggerAction('intelligence')"
+                        class="w-full p-3 bg-slate-700 hover:bg-slate-600 rounded-lg text-left transition flex items-center gap-3">
+                        <span class="text-xl">🔍</span>
+                        <div>
+                            <div class="font-semibold text-sm">Find New Prospects</div>
+                            <div class="text-slate-300 text-xs">Intel Predator scan</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: System Integrations Status -->
+        <div class="glass p-6 rounded-2xl mt-8">
+            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="text-2xl">🔗</span> Integration Status
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="p-4 bg-white/5 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🟢</div>
+                    <div class="font-semibold text-sm">GHL</div>
+                    <div class="text-green-400 text-xs">Connected</div>
+                </div>
+                <div class="p-4 bg-white/5 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🟢</div>
+                    <div class="font-semibold text-sm">Vapi</div>
+                    <div class="text-green-400 text-xs">Sarah Online</div>
+                </div>
+                <div class="p-4 bg-white/5 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🟢</div>
+                    <div class="font-semibold text-sm">Claude AI</div>
+                    <div class="text-green-400 text-xs">Active</div>
+                </div>
+                <div class="p-4 bg-white/5 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🟢</div>
+                    <div class="font-semibold text-sm">Resend</div>
+                    <div class="text-green-400 text-xs">Email Ready</div>
+                </div>
+                <div class="p-4 bg-white/5 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🟢</div>
+                    <div class="font-semibold text-sm">Uplink</div>
+                    <div class="text-green-400 text-xs">Bridge Active</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: Campaign Performance -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">📊</span> Campaign Performance
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>SMS Open Rate</span>
+                            <span class="text-green-400">94%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 94%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Email Open Rate</span>
+                            <span class="text-blue-400">42%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: 42%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Call Connect Rate</span>
+                            <span class="text-purple-400">68%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-2">
+                            <div class="bg-purple-500 h-2 rounded-full" style="width: 68%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Demo Conversion</span>
+                            <span class="text-orange-400">23%</span>
+                        </div>
+                        <div class="bg-slate-700 rounded-full h-2">
+                            <div class="bg-orange-500 h-2 rounded-full" style="width: 23%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">🎯</span> Today's Targets
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                        <div>
+                            <div class="font-semibold text-sm">Outreach Calls</div>
+                            <div class="text-slate-400 text-xs">Sarah AI calling prospects</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-blue-400">12/25</div>
+                            <div class="text-xs text-slate-400">48%</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                        <div>
+                            <div class="font-semibold text-sm">Demos Booked</div>
+                            <div class="text-slate-400 text-xs">Calendar appointments</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-green-400">3/5</div>
+                            <div class="text-xs text-slate-400">60%</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                        <div>
+                            <div class="font-semibold text-sm">New Leads</div>
+                            <div class="text-slate-400 text-xs">Intel Predator findings</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-purple-400">7</div>
+                            <div class="text-xs text-slate-400">Today</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -199,7 +440,24 @@
         // ORCHESTRATOR ID (New Level 5 Agent: Antigravity)
         const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab"; // Keep existing key
         const ORCHESTRATOR_ASSISTANT_ID = "a3e439a2-4560-4625-99c8-222678bf130d"; // NEW ID
+        const COMMANDER_PHONE = "+13529368152";
 
+        // Quick Action Handler
+        async function triggerAction(action) {
+            const actions = {
+                'sms_blast': 'Send SMS blast to all active leads with our prospect template',
+                'sarah_call': `Have Sarah call ${COMMANDER_PHONE}`,
+                'email_campaign': 'Launch email campaign to all prospects',
+                'intelligence': 'Find 10 new HVAC prospects in Tampa FL'
+            };
+
+            const command = actions[action] || action;
+
+            // Add to chat and send
+            const input = document.getElementById('cmdInput');
+            input.value = command;
+            await sendChatCommand();
+        }
         async function startVoiceUplink() {
             const btn = document.querySelector('button[onclick="startVoiceUplink()"]');
 

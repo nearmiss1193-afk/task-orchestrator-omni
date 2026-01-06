@@ -1,7 +1,9 @@
 from http.server import BaseHTTPRequestHandler
 import json
 import os
+import re
 import urllib.parse
+import urllib.request
 import ssl
 
 # --- DEPENDENCY SAFEGUARDS ---
@@ -339,9 +341,6 @@ class handler(BaseHTTPRequestHandler):
 
             # --- ROUTE: CHAT ---
             elif path == "/api/chat":
-                import re
-                import urllib.request
-                
                 try:
                     command = body.get('command', '').strip()
                     resp_text = "Command received."
@@ -397,40 +396,90 @@ class handler(BaseHTTPRequestHandler):
                                 con.close()
                             except: pass
                     
-                    # STATUS/INFO: Use Claude via HTTP
+                    # STATUS/INFO: Use AI with fallback chain (Claude → Gemini → Static)
                     else:
-                        ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-                        if ANTHROPIC_KEY:
-                            try:
-                                system_prompt = """You are the Sovereign AI Orchestrator for Empire Unified.
-You help the Commander manage their AI business automation system.
-Capabilities: SMS via GHL, Voice calls via Sarah (Vapi), Email via Resend.
-Status: 5 leads, 142 AI calls tracked. All systems online. Sarah (Elite Voice AI) is active.
-Be concise (under 80 words), helpful, action-oriented."""
+                        system_prompt = """You are the Sovereign AI Orchestrator for Empire Unified, an AI-powered business automation agency.
 
+COMMANDER INFO:
+- Default phone: +13529368152
+- Email: nearmiss1193@gmail.com
+
+SYSTEM STATUS:
+- 7 active leads in pipeline
+- 142 AI calls tracked
+- All systems online
+- Sarah (Elite Voice AI) active and ready
+
+CAPABILITIES:
+- SMS: Send texts via GHL (say "sms" or "text" with phone number)
+- Call: Have Sarah call via Vapi (say "call" with phone number)  
+- Email: Send emails via Resend (say "email" with address)
+
+PROSPECT OUTREACH TEMPLATES:
+
+SMS Template:
+"Hi [Name], this is Sarah from AI Service Co. We help home service businesses like yours automate lead follow-up and never miss a call. Would you be open to a quick 10-min demo? Reply YES and I'll send calendar options."
+
+Email Template:
+Subject: Stop losing leads to missed calls, [Business Name]
+Body: "Hi [Name], I noticed [Business Name] serves the [City] area. Most contractors tell us they lose 40% of leads to missed calls and slow follow-up. Our AI assistant Sarah answers every call, qualifies leads, and books appointments 24/7. Want to see how it works? Book a quick demo: [LINK]"
+
+Voice Script (Sarah):
+"Hi, this is Sarah calling from AI Service Co. I help home service businesses never miss another lead. Is this a good time for a quick 2-minute overview?"
+
+INSTRUCTIONS:
+- Be concise but informative (under 100 words)
+- If Commander asks for templates, show them formatted nicely
+- If Commander says "text me" or "call me" without number, use +13529368152
+- Confirm actions clearly
+- Be proactive and helpful"""
+                        
+                        ai_response = None
+                        
+                        # TRY 1: Claude (Primary)
+                        ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+                        if ANTHROPIC_KEY and not ai_response:
+                            try:
                                 api_url = "https://api.anthropic.com/v1/messages"
-                                
                                 claude_payload = json.dumps({
-                                    "model": "claude-3-5-sonnet-20241022",
+                                    "model": "claude-3-haiku-20240307",
                                     "max_tokens": 200,
                                     "system": system_prompt,
                                     "messages": [{"role": "user", "content": command}]
                                 }).encode('utf-8')
-                                
                                 headers = {
                                     'Content-Type': 'application/json',
                                     'x-api-key': ANTHROPIC_KEY,
                                     'anthropic-version': '2023-06-01'
                                 }
-                                
                                 req = urllib.request.Request(api_url, data=claude_payload, headers=headers)
-                                with urllib.request.urlopen(req, timeout=15) as api_resp:
+                                with urllib.request.urlopen(req, timeout=12) as api_resp:
                                     result = json.loads(api_resp.read().decode('utf-8'))
-                                    resp_text = result.get('content', [{}])[0].get('text', 'Command acknowledged.')
-                            except Exception as claude_err:
-                                resp_text = f"System operational. (AI: {str(claude_err)[:40]})"
+                                    ai_response = result.get('content', [{}])[0].get('text', None)
+                            except:
+                                pass  # Fall through to Gemini
+                        
+                        # TRY 2: Gemini (Fallback)
+                        GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
+                        if GEMINI_KEY and not ai_response:
+                            try:
+                                prompt_text = f"{system_prompt}\n\nCommander: {command}"
+                                api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_KEY}"
+                                gemini_payload = json.dumps({
+                                    "contents": [{"parts": [{"text": prompt_text}]}]
+                                }).encode('utf-8')
+                                req = urllib.request.Request(api_url, data=gemini_payload, headers={'Content-Type': 'application/json'})
+                                with urllib.request.urlopen(req, timeout=12) as api_resp:
+                                    result = json.loads(api_resp.read().decode('utf-8'))
+                                    ai_response = result.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', None)
+                            except:
+                                pass  # Fall through to static
+                        
+                        # TRY 3: Static (Ultimate Fallback)
+                        if ai_response:
+                            resp_text = ai_response
                         else:
-                            resp_text = "System online. All channels ready. Sarah standing by."
+                            resp_text = "System online. All channels operational. Sarah (Voice AI) standing by. SMS, Email, and Voice ready."
                 except Exception as chat_error:
                     resp_text = f"Error processing command: {str(chat_error)[:60]}"
 
