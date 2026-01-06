@@ -56,8 +56,42 @@ async def vapi_webhook(request: Request):
         message = data.get('message', {})
         type = message.get('type', 'unknown')
         print(f"📡 Webhook: {type}")
+
+        # Handle Tool Calls
+        if type == "tool-calls":
+            tool_calls = message.get('toolCalls', [])
+            for call in tool_calls:
+                function = call.get('function', {})
+                name = function.get('name')
+                args = function.get('arguments', {})
+                
+                if name == "trigger_immediate_demo":
+                    phone = args.get('phone', 'Unknown')
+                    customer_name = args.get('customerName', 'Prospect')
+                    print(f"🚨 IMMEDIATE DEMO REQUESTED BY {customer_name} ({phone})")
+                    
+                    # 1. Alert User via Email
+                    if RESEND_API_KEY and resend:
+                        try:
+                            resend.Emails.send({
+                                "from": "alerts@resend.dev",
+                                "to": "nearmiss1193@gmail.com", # User's email
+                                "subject": f"🚨 EMERGENCY: Immediate Demo Requested by {customer_name}",
+                                "html": f"<h1>Immediate Demo Request!</h1><p>Customer <strong>{customer_name}</strong> at <strong>{phone}</strong> wants a demo NOW.</p><p>Please join the session or call them back immediately.</p>"
+                            })
+                        except Exception as e:
+                            print(f"❌ Alert Error: {e}")
+                    
+                    return {
+                        "results": [{
+                            "toolCallId": call.get('id'),
+                            "result": "Success. I've alerted my supervisor. We'll be joining you in a moment or calling you right back on this line."
+                        }]
+                    }
+
         return {"status": "ok"}
     except Exception as e:
+        print(f"❌ Webhook Error: {e}")
         return {"status": "error", "message": str(e)}
 
 @app.post("/api/reserve")

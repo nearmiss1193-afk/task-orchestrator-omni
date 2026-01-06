@@ -18,14 +18,14 @@ if not VAPI_KEY:
 headers = {"Authorization": f"Bearer {VAPI_KEY}"}
 
 # Get recent calls
-print("📞 Fetching recent Vapi calls...")
-res = requests.get("https://api.vapi.ai/call", headers=headers, timeout=15)
+print("[VAPI] Fetching recent calls...")
+res = requests.get("https://api.vapi.ai/call?limit=20", headers=headers, timeout=15)
 
 if res.status_code == 200:
     calls = res.json()
     print(f"\n=== {len(calls)} Recent Calls ===\n")
     
-    for call in calls[:10]:
+    for call in calls:
         customer = call.get("customer", {})
         phone = customer.get("number", "Unknown")
         name = customer.get("name", "")
@@ -34,11 +34,13 @@ if res.status_code == 200:
         created = call.get("createdAt", "")[:19] if call.get("createdAt") else "N/A"
         transcript = call.get("transcript", "")
         
-        print(f"📱 To: {phone} ({name})")
-        print(f"   Status: {status} | Duration: {duration}s | Created: {created}")
-        
-        if transcript:
-            print(f"   Transcript: {transcript[:150]}...")
-        print()
+        # Only show relevant calls (to user or recent)
+        if phone == "+13529368152" or phone == "Unknown":
+            print(f"CALL To: {phone} ({name})")
+            print(f"   Status: {status} | Duration: {duration}s | Created: {created}")
+            
+            if transcript:
+                print(f"   Transcript: {transcript}")
+            print("-" * 20)
 else:
-    print(f"❌ API Error: {res.status_code}")
+    print(f"API Error: {res.status_code}")
