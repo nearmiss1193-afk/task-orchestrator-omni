@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Vapi HTML Script Tag SDK for Voice Uplink -->
-    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js" defer async></script>
     <style>
         body {
             background-color: #020617;
@@ -521,9 +520,12 @@
         // CONFIG
         const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://empire-sovereign-cloud.vercel.app';
 
-        // VAPI CONFIG - Using Sarah for voice (known working)
+        // VAPI CONFIG - Orchestrator for Commander, Sarah for Customers
         const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
-        const ORCHESTRATOR_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"; // Sarah the Spartan (verified working)
+        // Empire Office Manager: For YOU (the commander) on dashboard
+        const ORCHESTRATOR_ASSISTANT_ID = "033ec1d3-e17d-4611-a497-b47cab1fdb4e";
+        // Sarah the Spartan: For customer-facing calls/campaigns (NOT used on dashboard)
+        const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
         const COMMANDER_PHONE = "+13529368152";
 
         // Quick Action Handler
@@ -921,6 +923,57 @@
             <source src="../../../../modules/media/assets/video/truck_lake_morton.mp4" type="video/mp4">
         </video>
     </div>
+
+    <!-- VAPI AUTO-INIT CALL WIDGET (Working Pattern from hvac.html) -->
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+    <script>
+        (function () {
+            var script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            script.defer = true;
+            script.async = true;
+            script.onload = function () {
+                if (window.vapiSDK && !window.vapiWidgetInitialized) {
+                    window.vapiWidgetInitialized = true;
+                    vapiInstance = window.vapiSDK.run({
+                        apiKey: VAPI_PUBLIC_KEY,
+                        assistant: ORCHESTRATOR_ASSISTANT_ID,
+                        config: {
+                            position: "bottom-right",
+                            offset: "40px",
+                            width: "50px",
+                            height: "50px",
+                            idle: {
+                                color: "#2563eb",
+                                type: "pill",
+                                title: "Voice Uplink",
+                                subtitle: "Speak to Orchestrator",
+                                icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg"
+                            },
+                            loading: {
+                                color: "#94a3b8",
+                                type: "pill",
+                                title: "Connecting...",
+                                subtitle: "Please wait",
+                                icon: "https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg"
+                            },
+                            active: {
+                                color: "#22c55e",
+                                type: "pill",
+                                title: "Neural Link Active",
+                                subtitle: "Listening...",
+                                icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg"
+                            }
+                        }
+                    });
+                    console.log("[SOVEREIGN] Vapi Voice Uplink Widget Initialized");
+                    document.getElementById('vapi-status').innerText = "Status: Widget Active ✅";
+                    document.getElementById('vapi-status').className = "mt-2 text-xs text-green-400 font-bold";
+                }
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
 
 </body>
 
