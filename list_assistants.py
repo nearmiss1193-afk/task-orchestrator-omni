@@ -1,25 +1,19 @@
-
-import os
+#!/usr/bin/env python3
+"""Get all Vapi assistants"""
 import requests
-import json
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except: pass
 
-VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
+key = None
+with open('.env', 'r', encoding='utf-8', errors='ignore') as f:
+    for line in f:
+        if 'VAPI_PRIVATE_KEY' in line and '=' in line:
+            key = line.split('=', 1)[1].strip().strip('"').strip("'")
+            break
 
-print("=== ALL VAPI ASSISTANTS ===")
-url = "https://api.vapi.ai/assistant"
-headers = {"Authorization": f"Bearer {VAPI_KEY}"}
-
-res = requests.get(url, headers=headers)
-if res.status_code == 200:
-    assistants = res.json()
-    print(f"Found {len(assistants)} assistants:\n")
-    for a in assistants:
-        print(f"  ID: {a.get('id')}")
-        print(f"  Name: {a.get('name')}")
-        print(f"  ---")
-else:
-    print(f"Error: {res.status_code} - {res.text}")
+r = requests.get('https://api.vapi.ai/assistant', headers={'Authorization': f'Bearer {key}'})
+assts = r.json()
+print('VAPI ASSISTANTS:')
+print('='*50)
+for a in assts:
+    print(f"Name: {a.get('name')}")
+    print(f"  ID: {a.get('id')}")
+    print()

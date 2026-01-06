@@ -7,6 +7,8 @@
     <title>Sovereign Command Center</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vapi HTML Script Tag SDK for Voice Uplink -->
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js" defer async></script>
     <style>
         body {
             background-color: #020617;
@@ -519,9 +521,9 @@
         // CONFIG
         const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://empire-sovereign-cloud.vercel.app';
 
-        // ORCHESTRATOR ID (New Level 5 Agent: Antigravity)
-        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab"; // Keep existing key
-        const ORCHESTRATOR_ASSISTANT_ID = "a3e439a2-4560-4625-99c8-222678bf130d"; // NEW ID
+        // VAPI CONFIG - Using Sarah for voice (known working)
+        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
+        const ORCHESTRATOR_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"; // Sarah the Spartan (verified working)
         const COMMANDER_PHONE = "+13529368152";
 
         // Quick Action Handler
@@ -548,14 +550,9 @@
             const btn = document.querySelector('button[onclick="startVoiceUplink()"]');
             const statusEl = document.getElementById('vapi-status');
 
-            // If already connected, stop
+            // If already connected, stop by reloading
             if (vapiInstance) {
-                vapiInstance.stop();
-                vapiInstance = null;
-                btn.innerText = "Initiate Voice Uplink";
-                btn.classList.remove("animate-pulse");
-                statusEl.innerText = "Status: Standby";
-                statusEl.className = "mt-2 text-xs text-slate-400";
+                window.location.reload();
                 return;
             }
 
@@ -564,58 +561,35 @@
             statusEl.innerText = "Status: Initializing voice link...";
 
             try {
-                // Check if Vapi SDK is loaded
-                if (typeof Vapi === 'undefined') {
-                    // Load the SDK
-                    await new Promise((resolve, reject) => {
-                        const script = document.createElement('script');
-                        script.src = "https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.min.js";
-                        script.onload = resolve;
-                        script.onerror = reject;
-                        document.head.appendChild(script);
-                    });
+                // Check if vapiSDK is loaded (from the HTML script tag SDK)
+                if (!window.vapiSDK) {
+                    throw new Error("Vapi SDK loading... Please wait and try again.");
                 }
 
-                // Create Vapi instance
-                vapiInstance = new Vapi(VAPI_PUBLIC_KEY);
-
-                // Event listeners
-                vapiInstance.on('call-start', () => {
-                    console.log('Call started');
-                    btn.innerText = "🛑 End Uplink";
-                    statusEl.innerText = "Status: NEURAL LINK ACTIVE ✅";
-                    statusEl.className = "mt-2 text-xs text-green-400 font-bold";
+                // Use the official vapiSDK.run() method
+                vapiInstance = window.vapiSDK.run({
+                    apiKey: VAPI_PUBLIC_KEY,
+                    assistant: ORCHESTRATOR_ASSISTANT_ID,
+                    config: {
+                        position: "bottom-right",
+                        idle: {
+                            color: "#007bff",
+                            type: "orb"
+                        },
+                        active: {
+                            color: "#00ff00",
+                            type: "orb"
+                        }
+                    }
                 });
 
-                vapiInstance.on('call-end', () => {
-                    console.log('Call ended');
-                    vapiInstance = null;
-                    btn.innerText = "Initiate Voice Uplink";
-                    btn.classList.remove("animate-pulse");
-                    statusEl.innerText = "Status: Session ended";
-                    statusEl.className = "mt-2 text-xs text-slate-400";
-                });
-
-                vapiInstance.on('speech-start', () => {
-                    statusEl.innerText = "Status: AI Speaking...";
-                });
-
-                vapiInstance.on('speech-end', () => {
-                    statusEl.innerText = "Status: Listening...";
-                });
-
-                vapiInstance.on('error', (error) => {
-                    console.error('Vapi error:', error);
-                    statusEl.innerText = "Status: Error - " + (error.message || 'Unknown');
-                    statusEl.className = "mt-2 text-xs text-red-400";
-                });
-
-                // Start the call with the orchestrator assistant
-                await vapiInstance.start(ORCHESTRATOR_ASSISTANT_ID);
+                btn.innerText = "🛑 End Uplink";
+                statusEl.innerText = "Status: NEURAL LINK ACTIVE ✅";
+                statusEl.className = "mt-2 text-xs text-green-400 font-bold";
 
             } catch (e) {
                 console.error("Voice Error:", e);
-                statusEl.innerText = "Status: Connection failed - " + e.message;
+                statusEl.innerText = "Status: " + e.message;
                 statusEl.className = "mt-2 text-xs text-red-400";
                 btn.innerText = "Retry Voice Uplink";
                 btn.classList.remove("animate-pulse");
