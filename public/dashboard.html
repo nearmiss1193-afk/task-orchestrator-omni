@@ -37,6 +37,24 @@
         .status-call {
             background: #3b82f6;
         }
+
+        /* FIX: Ensure dropdowns and chat always on top */
+        .dropdown-menu,
+        [class*="dropdown"],
+        select {
+            z-index: 9999 !important;
+            position: relative;
+        }
+
+        .chat-widget,
+        #chatHistory {
+            z-index: 9998 !important;
+        }
+
+        nav select,
+        nav .relative {
+            z-index: 9997 !important;
+        }
     </style>
 </head>
 
