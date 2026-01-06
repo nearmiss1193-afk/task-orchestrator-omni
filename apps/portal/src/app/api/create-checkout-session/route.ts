@@ -34,7 +34,7 @@ export async function POST(req: Request) {
             }, { status: 500, headers: corsHeaders });
         }
 
-        const stripe = new Stripe(stripeKey, { apiVersion: '2024-06-20' });
+        const stripe = new Stripe(stripeKey, { apiVersion: '2025-12-15.clover' });
         const selectedPlan = PLANS[plan] || PLANS.starter;
 
         console.log('[STRIPE] Creating checkout session for:', { name, email, plan: selectedPlan.name });

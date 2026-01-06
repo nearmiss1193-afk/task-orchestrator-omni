@@ -1,12 +1,31 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+function getSupabase(): SupabaseClient | null {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!url || !key) return null;
+    return createClient(url, key);
+}
 
 export async function GET() {
+    const supabase = getSupabase();
+
+    // Return mock data if Supabase not configured
+    if (!supabase) {
+        return NextResponse.json({
+            success: true,
+            data: {
+                leads: 127,
+                pipeline: 48500,
+                calls: 23,
+                reservations: 8,
+                lastUpdated: new Date().toISOString(),
+                isMock: true
+            }
+        });
+    }
+
     try {
         // Get total leads count
         const { count: leadsCount } = await supabase
@@ -44,7 +63,7 @@ export async function GET() {
             }
         });
     } catch (error) {
-        // Fallback with mock data if Supabase not available
+        // Fallback with mock data if error
         return NextResponse.json({
             success: true,
             data: {
