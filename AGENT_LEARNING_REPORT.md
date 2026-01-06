@@ -114,13 +114,13 @@ The Empire Unified syclass="consent-label"via Supabase (`/api/memory`)
 
 ### High Priority  
 
-3. **Push 45 Commits** - Run `git push origin main`
+1. **Push 45 Commits** - Run `git push origin main`
 2. **Fix Vercel Build** - Run `npm install @supabase/supabase-js`
 3. **Create Spartan Workflow** - Build GHL workflow triggered by `trigger-vortex` tag
 
 ### Optimization
 
-6. **Deploy Memory API** - Enable Linda's cross-call memory
+1. **Deploy Memory API** - Enable Linda's cross-call memory
 2. **Route Vapi→GHL** - Free call recording for training data
 3. **Close HomeHeart HVAC** - 5-star prospect in Lakeland, FL
 
@@ -148,5 +148,4 @@ The Empire Unified syclass="consent-label"via Supabase (`/api/memory`)
 
 **CAPABILITIES CONFIRMED:**
 > **Continuous Learning & Evolution** - All agents have memory persistence infrastructure via Supabase. They remember past conversations, learn from outcomes, and evolve responses based on performance metrics.
-
 > **Autonomous Growth System** - Agents are configured with planned knowledge discovery goals, enabling systematic improvement without manual intervention.

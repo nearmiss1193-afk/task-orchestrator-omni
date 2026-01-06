@@ -20,3 +20,13 @@ assets/
 output/
 supervisor_logs/
 sovereign_digests/
+
+# Prevent credential exposure
+test_claude*.py
+test_*_api*.py
+*_key*.txt
+*credentials*.json
+*secret*.txt
+.env.*
+*.pem
+*.key

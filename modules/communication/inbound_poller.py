@@ -137,6 +137,13 @@ class SovereignRouter:
         safe_print(f"[INFO] Sovereign Router ONLINE. Scanning every {interval}s...")
         
         while True:
+            if os.path.exists("STOP_POLLER"):
+                safe_print("[INFO] Stop signal received (STOP_POLLER file found). Exiting sovereign loop.")
+                try:
+                    os.remove("STOP_POLLER")
+                except:
+                    pass
+                break
             try:
                 # 1. Search for conversations with unread messages
                 # GHL API doesn't have "unread" filter easily, so we sort by last_message_date

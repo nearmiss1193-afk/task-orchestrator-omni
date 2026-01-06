@@ -2,9 +2,12 @@
 import os
 import json
 import urllib.request
+from dotenv import load_dotenv
 
-# CORRECTED key (capital O not zero)
-ANTHROPIC_KEY = "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"
+load_dotenv()
+
+# Read from environment - NEVER hardcode API keys
+ANTHROPIC_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 
 # Try claude-3-sonnet-20240229 instead (more stable model name)
 def test_claude(command, model_name):

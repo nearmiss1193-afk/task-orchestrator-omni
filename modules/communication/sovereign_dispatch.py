@@ -58,7 +58,7 @@ class SovereignDispatch:
         }
         
         try:
-            res = requests.post("https://api.resend.com/emails", json=payload, headers=headers)
+            res = requests.post("https://api.resend.com/emails", json=payload, headers=headers, timeout=30)
             if res.status_code in [200, 201]:
                 print(f"[OK] EMAIL SENT to {to_email}. ID: {res.json().get('id')}")
                 return True
@@ -117,7 +117,7 @@ class SovereignDispatch:
 
         try:
             print(f"[INFO] Dialing {to_phone} via Vapi...")
-            res = requests.post("https://api.vapi.ai/call/phone", json=payload, headers=headers)
+            res = requests.post("https://api.vapi.ai/call/phone", json=payload, headers=headers, timeout=30)
             if res.status_code in [200, 201]:
                 call_id = res.json().get('id', 'Unknown')
                 print(f"[OK] CALL INITIATED. ID: {call_id}")
@@ -142,9 +142,9 @@ class SovereignDispatch:
         try:
             print(f"[DEBUG] GHL {method} -> {url}")
             if method == "GET":
-                res = requests.get(url, headers=headers, params=params)
+                res = requests.get(url, headers=headers, params=params, timeout=30)
             else:
-                res = requests.post(url, json=payload, headers=headers)
+                res = requests.post(url, json=payload, headers=headers, timeout=30)
             
             print(f"      Code: {res.status_code}")
             if res.status_code not in [200, 201]:
@@ -269,7 +269,7 @@ class SovereignDispatch:
             "Accept": "application/json"
         }
         try:
-            res = requests.get(url, headers=headers)
+            res = requests.get(url, headers=headers, timeout=30)
             if res.status_code == 200:
                 return res.json().get('messages', [])
             else:
