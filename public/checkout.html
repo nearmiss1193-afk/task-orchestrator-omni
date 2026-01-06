@@ -264,7 +264,7 @@
             </div>
 
             <div class="order-item setup-fee-row">
-                <span>7-Day Free Trial</span>
+                <span>Setup Fee</span>
                 <span><span class="strikethrough">$2,500</span> <span class="free-text">$0</span></span>
             </div>
             <div class="order-item">
@@ -287,8 +287,8 @@
 
             <div class="guarantee">
                 <div class="guarantee-text">
-                    <h4>7-Day Free Trial</h4>
-                    <p>Full access. Cancel anytime before day 7.</p>
+                    <h4>14-Day Money-Back Guarantee</h4>
+                    <p>Try it risk-free. Pay only after results.</p>
                 </div>
             </div>
 
@@ -351,7 +351,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="submit-btn" id="submitBtn">Start My 7-Day Free Trial →</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">Generate My Account →</button>
                     <div id="formStatus" class="form-status"></div>
 
                     <p class="legal-text">
@@ -410,8 +410,11 @@
                 };
 
                 try {
+                    // API Base - use Vercel production endpoint
+                    const API_BASE = 'https://empire-sovereign-cloud.vercel.app';
+
                     // 1. Reserve in DB (Lead Capture)
-                    const reserveRes = await fetch('/api/reserve', {
+                    const reserveRes = await fetch(`${API_BASE}/api/reserve`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(formData)
@@ -420,7 +423,7 @@
                     // 2. Redirect to Stripe
                     btn.innerHTML = 'Securing Session...';
 
-                    const stripeRes = await fetch('/api/create-checkout-session', {
+                    const stripeRes = await fetch(`${API_BASE}/api/create-checkout-session`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(formData)
