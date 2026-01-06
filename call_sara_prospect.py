@@ -15,19 +15,24 @@ Introduce yourself, ask about the prospect's HVAC needs, and schedule a call.
 Keep it friendly and concise.
 """
 
-# Create the call via Vapi API (simplified example)
-url = 'https://api.vapi.ai/v1/calls'
+# Create the call via Vapi API
+url = 'https://api.vapi.ai/call/phone' # Correct outbound endpoint
 payload = {
-    "to": USER_PHONE,
-    "from": os.getenv('VAPI_PHONE_NUMBER_ID'),
-    "script": prospecting_script,
-    "agent": "sara",
-    "metadata": {"purpose": "prospecting_demo"}
+    "assistantId": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a", # Sarah the Spartan
+    "phoneNumberId": os.getenv('VAPI_PHONE_NUMBER_ID'),
+    "customer": {
+        "number": USER_PHONE,
+        "name": "Homeheart Hvac"
+    }
 }
 headers = {
     "Authorization": f"Bearer {VAPI_API_KEY}",
     "Content-Type": "application/json"
 }
-response = requests.post(url, headers=headers, json=payload)
-print('Vapi call response status:', response.status_code)
-print('Response body:', response.text)
+try:
+    print(f"Triggering call to {USER_PHONE}...")
+    response = requests.post(url, headers=headers, json=payload, timeout=30)
+    print('Vapi call response status:', response.status_code)
+    print('Response body:', response.text)
+except Exception as e:
+    print(f"Error triggering call: {e}")
