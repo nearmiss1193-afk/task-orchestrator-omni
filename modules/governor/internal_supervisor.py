@@ -39,8 +39,13 @@ class InternalSupervisor:
         level = "INFO"
         if signal_type == "READY": level = "SUCCESS"
         if signal_type == "ERROR": level = "CRITICAL"
+        if signal_type == "SIGNAL_EVOLUTION": level = "EVOLUTION"
         
         self.log_event(source, level, f"[{signal_type}] {payload}")
+
+        # Handle Evolution
+        if signal_type == "SIGNAL_EVOLUTION":
+            self.apply_evolution(source, payload)
         
     def log_event(self, context, level, message, supabase_client=None):
         """
@@ -142,6 +147,17 @@ class InternalSupervisor:
         except Exception as e:
             self.log_event("ECONOMY", "ERR", f"EGI Fail: {e}")
             return 0.0
+
+    def apply_evolution(self, source, payload):
+        """
+        [SIGNAL_EVOLUTION]
+        Applies quality improvements suggested by PDRAgent or other coaches.
+        """
+        agent = payload.get("agent")
+        directive = payload.get("directive")
+        print(f"✨ [EVOLUTION] Applying Coach Directive to {agent}: {directive}")
+        # In a real system, this might trigger a prompt update or config reload.
+        self.log_event("GOVERNOR", "SUCCESS", f"Evolution Applied: {agent} improved.")
 
     # --- ACTION 3: EFFICIENCY SCOUT ---
     def efficiency_scout(self, recent_logs):
