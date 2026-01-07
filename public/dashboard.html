@@ -38,22 +38,46 @@
             background: #3b82f6;
         }
 
-        /* FIX: Ensure dropdowns and chat always on top */
-        .dropdown-menu,
-        [class*="dropdown"],
-        select {
-            z-index: 9999 !important;
-            position: relative;
+        /* PORTAL DROPDOWN - Fixed position, escapes all stacking contexts */
+        .dropdown-portal {
+            position: fixed !important;
+            z-index: 2147483647 !important;
+            /* Max 32-bit signed int */
+            background: #0f172a !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 0.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+            min-width: 200px;
+            display: none;
+        }
+
+        .dropdown-portal.active {
+            display: block !important;
+        }
+
+        .dropdown-portal a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #f8fafc;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-portal a:hover {
+            background: #1e40af;
+        }
+
+        .dropdown-portal a:first-child {
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+
+        .dropdown-portal a:last-child {
+            border-radius: 0 0 0.5rem 0.5rem;
         }
 
         .chat-widget,
         #chatHistory {
             z-index: 9998 !important;
-        }
-
-        nav select,
-        nav .relative {
-            z-index: 9997 !important;
         }
     </style>
 </head>
@@ -110,7 +134,7 @@
         checkSession();
     </script>
 
-    <div class="max-w-7xl mx-auto relative z-10">
+    <div class="max-w-7xl mx-auto relative">
         <!-- Top Navigation Bar -->
         <nav class="glass rounded-2xl p-3 mb-6 flex items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-3">
@@ -122,90 +146,96 @@
                 </div>
             </div>
 
-            <!-- Navigation Tabs -->
+            <!-- Navigation Tabs (Click-to-Toggle) -->
             <div class="flex items-center gap-2 flex-wrap">
-                <!-- Landing Pages Dropdown -->
-                <div class="relative group">
-                    <button
-                        class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
-                        🏠 Landing Pages <span class="text-xs">▼</span>
-                    </button>
-                    <div
-                        class="absolute top-full left-0 mt-1 bg-slate-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[200px]">
-                        <a href="/hvac.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 rounded-t-lg text-sm">🔧 HVAC</a>
-                        <a href="/plumber.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">🔧 Plumber</a>
-                        <a href="/electrician.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">⚡ Electrician</a>
-                        <a href="/roofer.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">🏠 Roofer</a>
-                        <a href="/solar.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">☀️ Solar</a>
-                        <a href="/landscaping.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">🌿 Landscaping</a>
-                        <a href="/cleaning.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">🧹 Cleaning</a>
-                        <a href="/pest.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">🐜 Pest Control</a>
-                        <a href="/restoration.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">🔨 Restoration</a>
-                        <a href="/autodetail.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 rounded-b-lg text-sm">🚗 Auto Detail</a>
-                    </div>
-                </div>
-
-                <!-- System Pages Dropdown -->
-                <div class="relative group">
-                    <button
-                        class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
-                        ⚙️ System <span class="text-xs">▼</span>
-                    </button>
-                    <div
-                        class="absolute top-full left-0 mt-1 bg-slate-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[180px]">
-                        <a href="/booking.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 rounded-t-lg text-sm">📅 Booking</a>
-                        <a href="/checkout.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">💳 Checkout</a>
-                        <a href="/payment.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">💰 Payment</a>
-                        <a href="/intake.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">📋 Intake Form</a>
-                        <a href="/test_drive.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">🚀 Test Drive</a>
-                        <a href="/audit.html" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 rounded-b-lg text-sm">📊 Audit</a>
-                    </div>
-                </div>
-
-                <!-- External Tools Dropdown -->
-                <div class="relative group">
-                    <button
-                        class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
-                        🔗 Tools <span class="text-xs">▼</span>
-                    </button>
-                    <div
-                        class="absolute top-full right-0 mt-1 bg-slate-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-[180px]">
-                        <a href="https://app.gohighlevel.com" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 rounded-t-lg text-sm">🟠 GoHighLevel</a>
-                        <a href="https://dashboard.vapi.ai" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">🎙️ Vapi Dashboard</a>
-                        <a href="https://resend.com/emails" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">📧 Resend</a>
-                        <a href="https://vercel.com/dashboard" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 text-sm">▲ Vercel</a>
-                        <a href="https://platform.claude.com" target="_blank" rel="noopener"
-                            class="block px-4 py-2 hover:bg-slate-700 rounded-b-lg text-sm">🤖 Claude API</a>
-                    </div>
-                </div>
-
-                <!-- Home Link -->
+                <button onclick="togglePortal('portalLanding', this)"
+                    class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
+                    🏠 Landing Pages <span class="text-xs">▼</span>
+                </button>
+                <button onclick="togglePortal('portalSystem', this)"
+                    class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
+                    ⚙️ System <span class="text-xs">▼</span>
+                </button>
+                <button onclick="togglePortal('portalTools', this)"
+                    class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition flex items-center gap-2">
+                    🔗 Tools <span class="text-xs">▼</span>
+                </button>
                 <a href="/" target="_blank" rel="noopener"
                     class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg transition">
                     🌐 Main Site
                 </a>
             </div>
         </nav>
+    </div>
+
+    <!-- PORTAL DROPDOWNS (Rendered outside all containers) -->
+    <div id="portalLanding" class="dropdown-portal">
+        <a href="/hvac.html" target="_blank">🔧 HVAC</a>
+        <a href="/plumber.html" target="_blank">🔧 Plumber</a>
+        <a href="/electrician.html" target="_blank">⚡ Electrician</a>
+        <a href="/roofer.html" target="_blank">🏠 Roofer</a>
+        <a href="/solar.html" target="_blank">☀️ Solar</a>
+        <a href="/landscaping.html" target="_blank">🌿 Landscaping</a>
+        <a href="/cleaning.html" target="_blank">🧹 Cleaning</a>
+        <a href="/pest.html" target="_blank">🐜 Pest Control</a>
+        <a href="/restoration.html" target="_blank">🔨 Restoration</a>
+        <a href="/autodetail.html" target="_blank">🚗 Auto Detail</a>
+    </div>
+
+    <div id="portalSystem" class="dropdown-portal">
+        <a href="/booking.html" target="_blank">📅 Booking</a>
+        <a href="/checkout.html" target="_blank">💳 Checkout</a>
+        <a href="/payment.html" target="_blank">💰 Payment</a>
+        <a href="/intake.html" target="_blank">📋 Intake Form</a>
+        <a href="/test_drive.html" target="_blank">🚀 Test Drive</a>
+        <a href="/audit.html" target="_blank">📊 Audit</a>
+    </div>
+
+    <div id="portalTools" class="dropdown-portal">
+        <a href="https://app.gohighlevel.com" target="_blank" rel="noopener">🟠 GoHighLevel</a>
+        <a href="https://dashboard.vapi.ai" target="_blank" rel="noopener">🎙️ Vapi Dashboard</a>
+        <a href="https://resend.com/emails" target="_blank" rel="noopener">📧 Resend</a>
+        <a href="https://vercel.com/dashboard" target="_blank" rel="noopener">▲ Vercel</a>
+        <a href="https://platform.claude.com" target="_blank" rel="noopener">🤖 Claude API</a>
+    </div>
+
+    <script>
+        let activePortal = null;
+        let activeButton = null;
+
+        function togglePortal(portalId, btn) {
+            const portal = document.getElementById(portalId);
+
+            // Close any open portal first
+            if (activePortal && activePortal !== portal) {
+                activePortal.classList.remove('active');
+            }
+
+            // Toggle current portal
+            if (portal.classList.contains('active')) {
+                portal.classList.remove('active');
+                activePortal = null;
+            } else {
+                // Position portal below button
+                const rect = btn.getBoundingClientRect();
+                portal.style.top = (rect.bottom + 8) + 'px';
+                portal.style.left = rect.left + 'px';
+                portal.classList.add('active');
+                activePortal = portal;
+                activeButton = btn;
+            }
+        }
+
+        // Close portal when clicking outside
+        document.addEventListener('click', (e) => {
+            if (activePortal && !activePortal.contains(e.target) && !e.target.closest('button[onclick*=\"togglePortal\"]')) {
+                activePortal.classList.remove('active');
+                activePortal = null;
+            }
+        });
+    </script>
+
+    <div class="max-w-7xl mx-auto relative">
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
