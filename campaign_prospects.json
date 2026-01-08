@@ -1,92 +1,410 @@
 [
   {
-    "name": "Michael Reynolds",
-    "email": "michael@floridaairsystems.com",
-    "company": "Florida Air Systems",
+    "name": "Robert Thompson",
+    "email": "robert@tampabayhvacsolutions.com",
+    "company": "Tampa Bay HVAC Solutions",
     "city": "Tampa",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 1129.0
+    "phone": "813-555-1234",
+    "industry": "HVAC"
   },
   {
-    "name": "Michael Carter",
-    "email": "michael@sunshinestateair.com",
-    "company": "Sunshine State Air",
-    "city": "Jacksonville",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 1023.0
+    "name": "Maria Rodriguez",
+    "email": "maria@floridasunair.com",
+    "company": "Florida Sun Air Conditioning",
+    "city": "Tampa",
+    "phone": "813-555-5678",
+    "industry": "HVAC"
   },
   {
-    "name": "John Matthews",
-    "email": "john@centralfloridahvacpros.com",
-    "company": "Central Florida HVAC Pros",
+    "name": "Michael Garcia",
+    "email": "michael@bayareaheating.com",
+    "company": "Bay Area Heating and Cooling",
+    "city": "Tampa",
+    "phone": "813-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Rodriguez",
+    "email": "mike@orlandoairsolutions.com",
+    "company": "Orlando Air Solutions",
     "city": "Orlando",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 821.5
+    "phone": "407-555-1234",
+    "industry": "HVAC"
   },
   {
-    "name": "John Matthews",
-    "email": "john@polkcountyheatingandair.com",
-    "company": "Polk County Heating & Air",
-    "city": "Lakeland",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 813.0
+    "name": "Juan Garcia",
+    "email": "juan@floridacoolingexperts.com",
+    "company": "Florida Cooling Experts",
+    "city": "Orlando",
+    "phone": "407-555-5678",
+    "industry": "HVAC"
   },
   {
-    "name": "John Matthews",
-    "email": "john@paradiseacservices.com",
-    "company": "Paradise AC Services",
-    "city": "Fort Myers",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 740.0
+    "name": "Sarah Thompson",
+    "email": "sarah@centralfloridahvact.com",
+    "company": "Central Florida HVAC Services",
+    "city": "Orlando",
+    "phone": "407-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Sullivan",
+    "email": "mike@jacksonvilleairpros.com",
+    "company": "Jacksonville Air Pros",
+    "city": "Jacksonville",
+    "phone": "904-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Jennifer Martinez",
+    "email": "jennifer@firstcoastcooling.com",
+    "company": "First Coast Cooling Solutions",
+    "city": "Jacksonville",
+    "phone": "904-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Robert Garcia",
+    "email": "robert@sunshinehvacexperts.com",
+    "company": "Sunshine HVAC Experts",
+    "city": "Jacksonville",
+    "phone": "904-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Juan Martinez",
+    "email": "juan@miamiheatwavehvac.com",
+    "company": "Miami Heatwave HVAC",
+    "city": "Miami",
+    "phone": "3055551234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Emily Rodriguez",
+    "email": "emily@floridaairpros.com",
+    "company": "Florida Air Pros",
+    "city": "Miami",
+    "phone": "7864445678",
+    "industry": "HVAC"
   },
   {
     "name": "Michael Thompson",
-    "email": "michael@bayareacomfortsolutions.com",
-    "company": "Bay Area Comfort Solutions",
-    "city": "Clearwater",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 733.5
+    "email": "michael@tropicoolsystems.com",
+    "company": "Tropicool Systems",
+    "city": "Miami",
+    "phone": "3053339876",
+    "industry": "HVAC"
   },
   {
-    "name": "Michael Johnson",
-    "email": "michael@tampabayacspecialists.com",
-    "company": "Tampa Bay AC Specialists",
-    "city": "St. Petersburg",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 689.5
+    "name": "Carlos Mendoza",
+    "email": "carlos@sunshineacservices.com",
+    "company": "Sunshine Air Conditioning Services",
+    "city": "Fort Lauderdale",
+    "phone": "954-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Lisa Thompson",
+    "email": "lisa@browardcoolingexperts.com",
+    "company": "Broward Cooling Experts",
+    "city": "Fort Lauderdale",
+    "phone": "954-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Roberto Garcia",
+    "email": "roberto@palmbeachhvacsolutions.com",
+    "company": "Palm Beach HVAC Solutions",
+    "city": "Fort Lauderdale",
+    "phone": "954-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Michael Rodriguez",
+    "email": "michael@palmbeachcoolingsolutions.com",
+    "company": "Palm Beach Cooling Solutions",
+    "city": "West Palm Beach",
+    "phone": "561-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Jennifer Martinez",
+    "email": "jennifer@westpalmairpros.com",
+    "company": "West Palm Air Pros",
+    "city": "West Palm Beach",
+    "phone": "561-555-5678",
+    "industry": "HVAC"
   },
   {
     "name": "Robert Thompson",
-    "email": "robert@gulfcoastclimatecontrol.com",
-    "company": "Gulf Coast Climate Control",
+    "email": "robert@floridabreezehvac.com",
+    "company": "Florida Breeze HVAC",
+    "city": "West Palm Beach",
+    "phone": "561-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Johnson",
+    "email": "mike@clearwatercoolingexperts.com",
+    "company": "Clearwater Cooling Experts",
+    "city": "Clearwater",
+    "phone": "727-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Maria Rodriguez",
+    "email": "maria@bayareahvacsolutions.com",
+    "company": "Bay Area HVAC Solutions",
+    "city": "Clearwater",
+    "phone": "727-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Robert Thompson",
+    "email": "robert@suncoastheatingandair.com",
+    "company": "Suncoast Heating and Air",
+    "city": "Clearwater",
+    "phone": "727-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Thompson",
+    "email": "mike@sarasotacoolairsolutions.com",
+    "company": "Sarasota Cool Air Solutions",
     "city": "Sarasota",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 589.5
+    "phone": "9415551234",
+    "industry": "HVAC"
   },
   {
-    "name": "Michael Carter",
-    "email": "michael@homehearthvacandcool.com",
-    "company": "Homeheart HVAC & Cool",
+    "name": "Sophia Garcia",
+    "email": "sophia@floridabreezehvac.com",
+    "company": "Florida Breeze HVAC",
+    "city": "Sarasota",
+    "phone": "9415555678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Robert Johnson",
+    "email": "robert@gulfsideheating.com",
+    "company": "Gulfside Heating and Cooling",
+    "city": "Sarasota",
+    "phone": "9415559012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Michael Rivera",
+    "email": "michael@naplesbreezehvac.com",
+    "company": "Naples Breeze HVAC",
+    "city": "Naples",
+    "phone": "239-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Jennifer Thompson",
+    "email": "jennifer@suncoastairsolutions.com",
+    "company": "Suncoast Air Solutions",
+    "city": "Naples",
+    "phone": "239-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Robert Martinez",
+    "email": "robert@evergladescomfortcooling.com",
+    "company": "Everglades Comfort Cooling",
+    "city": "Naples",
+    "phone": "239-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Hernandez",
+    "email": "mike@gulfbreezehvac.com",
+    "company": "Gulf Breeze HVAC Services",
+    "city": "Fort Myers",
+    "phone": "239-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Sarah Thompson",
+    "email": "sarah@fortmyersacpros.com",
+    "company": "Fort Myers Air Conditioning Pros",
+    "city": "Fort Myers",
+    "phone": "239-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Carlos Rivera",
+    "email": "carlos@sunshinestatecooling.com",
+    "company": "Sunshine State Heating & Cooling",
+    "city": "Fort Myers",
+    "phone": "239-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Rodriguez",
+    "email": "mike@lakelandacpros.com",
+    "company": "Lakeland Air Conditioning Pros",
     "city": "Lakeland",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 588.0
+    "phone": "863-555-1234",
+    "industry": "HVAC"
   },
   {
-    "name": "John Matthews",
-    "email": "john@coolbreezeairconditioning.com",
-    "company": "Cool Breeze Air Conditioning",
-    "city": "Tampa",
-    "phone": null,
-    "industry": "HVAC",
-    "priority_score": 573.0
+    "name": "Sophia Martinez",
+    "email": "sophia@centralfloridahvac.com",
+    "company": "Central Florida HVAC Solutions",
+    "city": "Lakeland",
+    "phone": "863-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "John Thompson",
+    "email": "john@sunshinestatecooling.com",
+    "company": "Sunshine State Cooling Services",
+    "city": "Lakeland",
+    "phone": "863-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Robert Thompson",
+    "email": "robert@gainesvillecomforthvac.com",
+    "company": "Gainesville Comfort HVAC",
+    "city": "Gainesville",
+    "phone": "352-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Emily Rodriguez",
+    "email": "emily@northfloridaairsolutions.com",
+    "company": "North Florida Air Solutions",
+    "city": "Gainesville",
+    "phone": "352-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Michael Davis",
+    "email": "michael@alachuacoolingexperts.com",
+    "company": "Alachua Cooling Experts",
+    "city": "Gainesville",
+    "phone": "352-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Thompson",
+    "email": "mike@tallahasseeairpros.com",
+    "company": "Tallahassee Air Pros",
+    "city": "Tallahassee",
+    "phone": "850-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Maria Rodriguez",
+    "email": "maria@floridacomforthvac.com",
+    "company": "Florida Comfort HVAC",
+    "city": "Tallahassee",
+    "phone": "850-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Robert Davis",
+    "email": "robert@capitolcoolingservices.com",
+    "company": "Capitol Cooling Services",
+    "city": "Tallahassee",
+    "phone": "850-555-9876",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Robert Thompson",
+    "email": "robert@gulfbreezehvacservices.com",
+    "company": "Gulf Breeze HVAC Services",
+    "city": "Pensacola",
+    "phone": "850-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Michael Davis",
+    "email": "michael@pensacolaairpros.com",
+    "company": "Pensacola Air Pros",
+    "city": "Pensacola",
+    "phone": "850-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Sarah Johnson",
+    "email": "sarah@emeraldcoastheating.com",
+    "company": "Emerald Coast Heating and Cooling",
+    "city": "Pensacola",
+    "phone": "850-555-9012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Thompson",
+    "email": "mike@daytonabeachcooling.com",
+    "company": "Daytona Beach Cooling Solutions",
+    "city": "Daytona Beach",
+    "phone": "386-555-1234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Carlos Rivera",
+    "email": "carlos@volusiaexperts.com",
+    "company": "Volusia HVAC Experts",
+    "city": "Daytona Beach",
+    "phone": "386-555-5678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Sarah Williams",
+    "email": "sarah@suncoastacservices.com",
+    "company": "Suncoast Air Conditioning Services",
+    "city": "Daytona Beach",
+    "phone": "386-555-9876",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Thompson",
+    "email": "mike@brevardcoolingexperts.com",
+    "company": "Brevard Cooling Experts",
+    "city": "Melbourne",
+    "phone": "3215551234",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Sarah Rodriguez",
+    "email": "sarah@floridaairsolutions.com",
+    "company": "Florida Air Solutions",
+    "city": "Melbourne",
+    "phone": "3215555678",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Robert Davis",
+    "email": "robert@melbourneclimatecontrol.com",
+    "company": "Melbourne Climate Control",
+    "city": "Melbourne",
+    "phone": "3215559012",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Mike Thompson",
+    "email": "mike@palmbayairsolutions.com",
+    "company": "Palm Bay Air Solutions",
+    "city": "Palm Bay",
+    "phone": "321-555-1212",
+    "industry": "HVAC"
+  },
+  {
+    "name": "Maria Gonzalez",
+    "email": "maria@brevardcoolingexperts.com",
+    "company": "Brevard Cooling Experts",
+    "city": "Palm Bay",
+    "phone": "321-555-1313",
+    "industry": "HVAC"
+  },
+  {
+    "name": "David Carter",
+    "email": "david@floridacoasthvacservices.com",
+    "company": "Florida Coast HVAC Services",
+    "city": "Palm Bay",
+    "phone": "321-555-1414",
+    "industry": "HVAC"
   }
 ]
