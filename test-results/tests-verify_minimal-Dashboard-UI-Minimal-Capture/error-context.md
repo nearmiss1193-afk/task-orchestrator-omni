@@ -1,0 +1,291 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: 🛡️
+    - heading "Restricted Access" [level=2] [ref=e5]
+    - paragraph [ref=e6]: Enter protocol authorization code.
+    - textbox "ACCESS CODE" [ref=e7]
+    - button "AUTHENTICATE" [ref=e8] [cursor=pointer]
+  - navigation [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]: ⚡
+      - generic [ref=e13]:
+        - heading "Sovereign Command" [level=1] [ref=e14]
+        - paragraph [ref=e15]: "Status: ● All Systems Online"
+    - generic [ref=e16]:
+      - button "🏠 Landing Pages ▼" [ref=e17] [cursor=pointer]:
+        - text: 🏠 Landing Pages
+        - generic [ref=e18]: ▼
+      - button "⚙️ System ▼" [ref=e19] [cursor=pointer]:
+        - text: ⚙️ System
+        - generic [ref=e20]: ▼
+      - button "🔗 Tools ▼" [ref=e21] [cursor=pointer]:
+        - text: 🔗 Tools
+        - generic [ref=e22]: ▼
+      - link "🌐 Main Site" [ref=e23] [cursor=pointer]:
+        - /url: /
+  - generic [ref=e24]:
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - heading "Total Leads" [level=3] [ref=e27]
+        - generic [ref=e28]: "5"
+      - generic [ref=e29]:
+        - heading "Est. Pipeline" [level=3] [ref=e30]
+        - generic [ref=e31]: $495
+      - generic [ref=e32]:
+        - heading "AI Calls" [level=3] [ref=e33]
+        - generic [ref=e34]: "142"
+      - generic [ref=e35]:
+        - heading "Reservations" [level=3] [ref=e36]
+        - generic [ref=e37]: "5"
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e41]: 🎙️
+          - heading "Orchestrator Uplink (Level 5)" [level=3] [ref=e42]
+          - paragraph [ref=e43]: Direct Neural Link to Antigravity.
+          - button "Initiate Voice Uplink" [ref=e44] [cursor=pointer]
+          - generic [ref=e45]: "Status: Widget Active ✅"
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - heading "Mission Control Chat" [level=3] [ref=e48]
+            - generic [ref=e49]: ● AI Online
+          - generic [ref=e51]:
+            - generic [ref=e52]: SYSTEM
+            - text: Welcome back, Commander. Usage is nominal. 7 active leads pursuing.
+          - generic [ref=e53]:
+            - textbox "Issue a command..." [ref=e54]
+            - button "Send Command" [ref=e55] [cursor=pointer]: ↵
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - heading "Asset Inbox (Save Protocol)" [level=3] [ref=e58]
+            - generic [ref=e59]: ● Ready
+          - generic [ref=e60] [cursor=pointer]:
+            - generic [ref=e61]: 📥
+            - paragraph [ref=e62]: Drag & Drop Videos/Links or Click to Paste
+            - textbox "Paste URL here" [ref=e63]
+          - generic [ref=e64]:
+            - textbox "Asset Label (optional)" [ref=e65]
+            - button "SAVE" [ref=e66] [cursor=pointer]
+          - generic [ref=e67]: Uploads route to Antigravity Watchdog.
+    - generic [ref=e68]:
+      - generic [ref=e69]:
+        - heading "Recent Activity" [level=2] [ref=e70]
+        - button "↻ Refresh" [ref=e71] [cursor=pointer]
+      - table [ref=e73]:
+        - rowgroup [ref=e74]:
+          - row "Name Contact Source Plan / Meta Intel Dossier Date" [ref=e75]:
+            - columnheader "Name" [ref=e76]
+            - columnheader "Contact" [ref=e77]
+            - columnheader "Source" [ref=e78]
+            - columnheader "Plan / Meta" [ref=e79]
+            - columnheader "Intel Dossier" [ref=e80]
+            - columnheader "Date" [ref=e81]
+        - rowgroup [ref=e82]:
+          - row "System Test 555-0100 admin@sovereign.ai SYSTEM_INIT Enterprise 📄 VIEW INTEL 1/6/2026, 8:21:43 PM" [ref=e83]:
+            - cell "System Test" [ref=e84]
+            - cell "555-0100 admin@sovereign.ai" [ref=e85]:
+              - generic [ref=e86]: 555-0100
+              - generic [ref=e87]: admin@sovereign.ai
+            - cell "SYSTEM_INIT" [ref=e88]
+            - cell "Enterprise" [ref=e89]
+            - cell "📄 VIEW INTEL" [ref=e90]:
+              - button "📄 VIEW INTEL" [ref=e91] [cursor=pointer]
+            - cell "1/6/2026, 8:21:43 PM" [ref=e92]
+          - row "Vapi Voice Agent 555-0199 voice@vapi.ai VOICE_INBOUND Growth 📄 VIEW INTEL 1/6/2026, 8:21:43 PM" [ref=e93]:
+            - cell "Vapi Voice Agent" [ref=e94]
+            - cell "555-0199 voice@vapi.ai" [ref=e95]:
+              - generic [ref=e96]: 555-0199
+              - generic [ref=e97]: voice@vapi.ai
+            - cell "VOICE_INBOUND" [ref=e98]
+            - cell "Growth" [ref=e99]
+            - cell "📄 VIEW INTEL" [ref=e100]:
+              - button "📄 VIEW INTEL" [ref=e101] [cursor=pointer]
+            - cell "1/6/2026, 8:21:43 PM" [ref=e102]
+          - row "Stripe Monitor 555-0200 billing@stripe.com BILLING_CHECK Lite 📄 VIEW INTEL 1/6/2026, 8:21:43 PM" [ref=e103]:
+            - cell "Stripe Monitor" [ref=e104]
+            - cell "555-0200 billing@stripe.com" [ref=e105]:
+              - generic [ref=e106]: 555-0200
+              - generic [ref=e107]: billing@stripe.com
+            - cell "BILLING_CHECK" [ref=e108]
+            - cell "Lite" [ref=e109]
+            - cell "📄 VIEW INTEL" [ref=e110]:
+              - button "📄 VIEW INTEL" [ref=e111] [cursor=pointer]
+            - cell "1/6/2026, 8:21:43 PM" [ref=e112]
+          - row "Backup Bot 555-0300 backup@empire.ai BACKUP_LOG Starter 📄 VIEW INTEL 1/6/2026, 8:21:43 PM" [ref=e113]:
+            - cell "Backup Bot" [ref=e114]
+            - cell "555-0300 backup@empire.ai" [ref=e115]:
+              - generic [ref=e116]: 555-0300
+              - generic [ref=e117]: backup@empire.ai
+            - cell "BACKUP_LOG" [ref=e118]
+            - cell "Starter" [ref=e119]
+            - cell "📄 VIEW INTEL" [ref=e120]:
+              - button "📄 VIEW INTEL" [ref=e121] [cursor=pointer]
+            - cell "1/6/2026, 8:21:43 PM" [ref=e122]
+          - row "Recovery Agent 555-0400 recovery@empire.ai RECOVERY_LOG Enterprise 📄 VIEW INTEL 1/6/2026, 8:21:43 PM" [ref=e123]:
+            - cell "Recovery Agent" [ref=e124]
+            - cell "555-0400 recovery@empire.ai" [ref=e125]:
+              - generic [ref=e126]: 555-0400
+              - generic [ref=e127]: recovery@empire.ai
+            - cell "RECOVERY_LOG" [ref=e128]
+            - cell "Enterprise" [ref=e129]
+            - cell "📄 VIEW INTEL" [ref=e130]:
+              - button "📄 VIEW INTEL" [ref=e131] [cursor=pointer]
+            - cell "1/6/2026, 8:21:43 PM" [ref=e132]
+    - generic [ref=e133]:
+      - generic [ref=e134]:
+        - heading "🌐 Websites & Pages" [level=3] [ref=e135]:
+          - generic [ref=e136]: 🌐
+          - text: Websites & Pages
+        - generic [ref=e137]:
+          - link "AI Service Co (Main) aiserviceco.com ↗" [ref=e138] [cursor=pointer]:
+            - /url: https://aiserviceco.com
+            - generic [ref=e139]:
+              - generic [ref=e140]: AI Service Co (Main)
+              - generic [ref=e141]: aiserviceco.com
+            - generic [ref=e142]: ↗
+          - link "HVAC Demo Funnel HVAC Landing Page ↗" [ref=e143] [cursor=pointer]:
+            - /url: https://empire-hvac-demo-sovereign.surge.sh/hvac.html
+            - generic [ref=e144]:
+              - generic [ref=e145]: HVAC Demo Funnel
+              - generic [ref=e146]: HVAC Landing Page
+            - generic [ref=e147]: ↗
+          - link "GoHighLevel CRM & Automation ↗" [ref=e148] [cursor=pointer]:
+            - /url: https://app.gohighlevel.com
+            - generic [ref=e149]:
+              - generic [ref=e150]: GoHighLevel
+              - generic [ref=e151]: CRM & Automation
+            - generic [ref=e152]: ↗
+          - link "Vapi Dashboard Voice AI Management ↗" [ref=e153] [cursor=pointer]:
+            - /url: https://dashboard.vapi.ai
+            - generic [ref=e154]:
+              - generic [ref=e155]: Vapi Dashboard
+              - generic [ref=e156]: Voice AI Management
+            - generic [ref=e157]: ↗
+      - generic [ref=e158]:
+        - heading "📋 Campaign Templates" [level=3] [ref=e159]:
+          - generic [ref=e160]: 📋
+          - text: Campaign Templates
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - generic [ref=e163]:
+              - generic [ref=e164]: Spartan Outreach
+              - generic [ref=e165]: Active
+            - generic [ref=e166]: SMS → Email → Voice Call (3-day sequence)
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - generic [ref=e169]: Quick Demo Invite
+              - generic [ref=e170]: Ready
+            - generic [ref=e171]: Instant SMS with calendar link
+          - generic [ref=e172]:
+            - generic [ref=e173]:
+              - generic [ref=e174]: Re-Engagement
+              - generic [ref=e175]: Ready
+            - generic [ref=e176]: Cold leads revival (Email + Call)
+          - generic [ref=e177]:
+            - generic [ref=e178]:
+              - generic [ref=e179]: Sarah Intro Call
+              - generic [ref=e180]: Ready
+            - generic [ref=e181]: Voice AI qualification call
+      - generic [ref=e182]:
+        - heading "⚡ Quick Actions" [level=3] [ref=e183]:
+          - generic [ref=e184]: ⚡
+          - text: Quick Actions
+        - generic [ref=e185]:
+          - button "💬 Send SMS Blast To all active leads" [ref=e186] [cursor=pointer]:
+            - generic [ref=e187]: 💬
+            - generic [ref=e188]:
+              - generic [ref=e189]: Send SMS Blast
+              - generic [ref=e190]: To all active leads
+          - button "📞 Have Sarah Call Me Test voice AI" [ref=e191] [cursor=pointer]:
+            - generic [ref=e192]: 📞
+            - generic [ref=e193]:
+              - generic [ref=e194]: Have Sarah Call Me
+              - generic [ref=e195]: Test voice AI
+          - button "📧 Launch Email Campaign Prospect outreach" [ref=e196] [cursor=pointer]:
+            - generic [ref=e197]: 📧
+            - generic [ref=e198]:
+              - generic [ref=e199]: Launch Email Campaign
+              - generic [ref=e200]: Prospect outreach
+          - button "🔍 Find New Prospects Intel Predator scan" [ref=e201] [cursor=pointer]:
+            - generic [ref=e202]: 🔍
+            - generic [ref=e203]:
+              - generic [ref=e204]: Find New Prospects
+              - generic [ref=e205]: Intel Predator scan
+    - generic [ref=e206]:
+      - heading "🔗 Integration Status" [level=3] [ref=e207]:
+        - generic [ref=e208]: 🔗
+        - text: Integration Status
+      - generic [ref=e209]:
+        - generic [ref=e210]:
+          - generic [ref=e211]: 🟢
+          - generic [ref=e212]: GHL
+          - generic [ref=e213]: Connected
+        - generic [ref=e214]:
+          - generic [ref=e215]: 🟢
+          - generic [ref=e216]: Vapi
+          - generic [ref=e217]: Sarah Online
+        - generic [ref=e218]:
+          - generic [ref=e219]: 🟢
+          - generic [ref=e220]: Claude AI
+          - generic [ref=e221]: Active
+        - generic [ref=e222]:
+          - generic [ref=e223]: 🟢
+          - generic [ref=e224]: Resend
+          - generic [ref=e225]: Email Ready
+        - generic [ref=e226]:
+          - generic [ref=e227]: 🟢
+          - generic [ref=e228]: Uplink
+          - generic [ref=e229]: Bridge Active
+    - generic [ref=e230]:
+      - generic [ref=e231]:
+        - heading "📊 Campaign Performance" [level=3] [ref=e232]:
+          - generic [ref=e233]: 📊
+          - text: Campaign Performance
+        - generic [ref=e234]:
+          - generic [ref=e236]:
+            - generic [ref=e237]: SMS Open Rate
+            - generic [ref=e238]: 94%
+          - generic [ref=e242]:
+            - generic [ref=e243]: Email Open Rate
+            - generic [ref=e244]: 42%
+          - generic [ref=e248]:
+            - generic [ref=e249]: Call Connect Rate
+            - generic [ref=e250]: 68%
+          - generic [ref=e254]:
+            - generic [ref=e255]: Demo Conversion
+            - generic [ref=e256]: 23%
+      - generic [ref=e259]:
+        - heading "🎯 Today's Targets" [level=3] [ref=e260]:
+          - generic [ref=e261]: 🎯
+          - text: Today's Targets
+        - generic [ref=e262]:
+          - generic [ref=e263]:
+            - generic [ref=e264]:
+              - generic [ref=e265]: Outreach Calls
+              - generic [ref=e266]: Sarah AI calling prospects
+            - generic [ref=e267]:
+              - generic [ref=e268]: 12/25
+              - generic [ref=e269]: 48%
+          - generic [ref=e270]:
+            - generic [ref=e271]:
+              - generic [ref=e272]: Demos Booked
+              - generic [ref=e273]: Calendar appointments
+            - generic [ref=e274]:
+              - generic [ref=e275]: 3/5
+              - generic [ref=e276]: 60%
+          - generic [ref=e277]:
+            - generic [ref=e278]:
+              - generic [ref=e279]: New Leads
+              - generic [ref=e280]: Intel Predator findings
+            - generic [ref=e281]:
+              - generic [ref=e282]: "7"
+              - generic [ref=e283]: Today
+  - text: "```"
+  - button "Icon Voice Uplink Speak to Orchestrator" [ref=e284] [cursor=pointer]:
+    - img "Icon" [ref=e286]
+    - generic [ref=e287]:
+      - generic [ref=e288]: Voice Uplink
+      - generic [ref=e289]: Speak to Orchestrator
+```

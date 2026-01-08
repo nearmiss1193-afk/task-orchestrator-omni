@@ -27,7 +27,7 @@ def check_ghl():
     try:
         # Check location health
         url = f"https://services.leadconnectorhq.com/locations/{location_id}"
-        headers = {"Authorization": f"Bearer {token}", "Version": "2021-07-02"}
+        headers = {"Authorization": f"Bearer {token}", "Version": "2021-07-28"}
         res = requests.get(url, headers=headers)
         if res.status_code == 200:
             print(f"✅ GHL API: Connected. Location: {res.json().get('location', {}).get('name')}")

@@ -427,6 +427,11 @@
                 <a href="#industries" class="btn-primary">Find Your Industry</a>
                 <a href="dashboard.html" class="btn-secondary">View Live Demo</a>
             </div>
+            <div style="margin-top: 20px; font-size: 14px; color: var(--text-muted);">
+                <span style="color: var(--primary); font-weight: 600;">Call Sarah:</span> +1 (863) 213-2505
+                <span style="margin: 0 15px; opacity: 0.3;">|</span>
+                <span style="color: var(--primary); font-weight: 600;">Text Only:</span> (863) 260-5336
+            </div>
         </div>
     </section>
 
@@ -542,7 +547,8 @@
                 <ul>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Careers</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="tel:+18632132505" style="color: var(--primary);">Call: +1 (863) 213-2505</a></li>
+                    <li><span style="color: var(--text-muted); font-size: 12px;">Text: (863) 260-5336</span></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -564,7 +570,7 @@
     <script>
         var vapiInstance = null;
         const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
-        const ASSISTANT_ID = "d19cae13-d11b-499b-a9e7-2e113efe1112"; // Using standard assistant for main hub
+        const ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"; // Updated to Sarah 3.0 (Grok)
         (function () {
             var script = document.createElement('script');
             script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";

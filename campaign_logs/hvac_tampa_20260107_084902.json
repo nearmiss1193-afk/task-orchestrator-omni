@@ -1,0 +1,25 @@
+{
+  "campaign": "HVAC Florida",
+  "city": "Tampa",
+  "started": "2026-01-07T08:48:42.586253",
+  "prospects": [
+    {
+      "company": "Cool Breeze HVAC",
+      "email_subject": "Missed After-Hours Calls Inquiry",
+      "sent": true
+    },
+    {
+      "company": "Florida Air Systems",
+      "email_subject": "Error: {code:Some resource has been exhausted,error:Too many tokens consumed for API key xai-...NIVt (ID 45b41812-6a2c-40aa-ad44-6a9ee436d282). Your API key's token limit is \u2014 Tokens per Minute (actual/limit): 264/10. You can update the rate limits at https://console.x.ai.}",
+      "sent": true
+    },
+    {
+      "company": "Bay Area Comfort",
+      "email_subject": "Missed After-Hours Calls Inquiry",
+      "sent": true
+    }
+  ],
+  "emails_sent": 3,
+  "emails_failed": 0,
+  "completed": "2026-01-07T08:49:02.757708"
+}

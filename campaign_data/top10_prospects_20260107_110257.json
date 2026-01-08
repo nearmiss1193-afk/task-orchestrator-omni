@@ -1,0 +1,1106 @@
+{
+  "generated_at": "2026-01-07T11:02:57.827677",
+  "total_analyzed": 12,
+  "top_10_prospects": [
+    {
+      "company_name": "Florida Air Systems",
+      "city": "Tampa",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:00:21.462765",
+      "company_info": {
+        "name": "Florida Air Systems",
+        "address": "Tampa, FL",
+        "phone": null,
+        "website": "floridaairsystems.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Michael Reynolds",
+          "title": "Owner & CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "michael@floridaairsystems.com",
+          "email_patterns": [
+            "michael@floridaairsystems.com",
+            "michael.reynolds@floridaairsystems.com",
+            "mreynolds@floridaairsystems.com"
+          ],
+          "generic_emails": [
+            "info@floridaairsystems.com",
+            "contact@floridaairsystems.com",
+            "service@floridaairsystems.com"
+          ]
+        },
+        {
+          "name": "Sarah Thompson",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "sarah@floridaairsystems.com",
+          "email_patterns": [
+            "sarah@floridaairsystems.com",
+            "sarah.thompson@floridaairsystems.com",
+            "sthompson@floridaairsystems.com"
+          ],
+          "generic_emails": [
+            "info@floridaairsystems.com",
+            "contact@floridaairsystems.com",
+            "service@floridaairsystems.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/floridaairsystems",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/floridaairsystems",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/floridaairsystems",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 3.6,
+          "count": 199,
+          "url": "https://www.google.com/search?q=Florida+Air+Systems+Tampa+FL+reviews"
+        },
+        "yelp": {
+          "rating": 3.8,
+          "count": 27,
+          "url": "https://www.yelp.com/search?find_desc=Florida+Air+Systems&find_loc=Tampa%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "C",
+        "seo_score": 45,
+        "social_presence_score": 30,
+        "reputation_score": 65,
+        "biggest_weakness": "The website lacks modern design and clear calls-to-action, potentially turning away prospective customers.",
+        "quick_win": "Update the website with a mobile-friendly design, prominent contact information, and customer testimonials to build trust.",
+        "ai_opportunity": "AI phone agents could handle initial customer inquiries 24/7, schedule appointments, and provide instant quotes for HVAC services, improving response times and customer satisfaction."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 597,
+        "estimated_missed_calls_monthly": 149,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 20115.0,
+        "annual_lost_revenue": 241380.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 238992.0,
+        "roi_multiplier": 101.1,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 1129.0,
+      "personalized_message": {
+        "subject": "Recover Lost Revenue for Florida Air Systems",
+        "body": "Hi Michael, I noticed Florida Air Systems in Tampa is a trusted name for HVAC solutions, but missed calls could be costing you $20,115 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7 with a human-like experience. Can we discuss how this could help recover those losses and boost your business? Looking forward to your thoughts."
+      }
+    },
+    {
+      "company_name": "Sunshine State Air",
+      "city": "Jacksonville",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:01:12.178517",
+      "company_info": {
+        "name": "Sunshine State Air",
+        "address": "Jacksonville, FL",
+        "phone": null,
+        "website": "sunshinestateair.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Michael Carter",
+          "title": "Owner & CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "michael@sunshinestateair.com",
+          "email_patterns": [
+            "michael@sunshinestateair.com",
+            "michael.carter@sunshinestateair.com",
+            "mcarter@sunshinestateair.com"
+          ],
+          "generic_emails": [
+            "info@sunshinestateair.com",
+            "contact@sunshinestateair.com",
+            "service@sunshinestateair.com"
+          ]
+        },
+        {
+          "name": "Jennifer Lopez",
+          "title": "Operations Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "jennifer@sunshinestateair.com",
+          "email_patterns": [
+            "jennifer@sunshinestateair.com",
+            "jennifer.lopez@sunshinestateair.com",
+            "jlopez@sunshinestateair.com"
+          ],
+          "generic_emails": [
+            "info@sunshinestateair.com",
+            "contact@sunshinestateair.com",
+            "service@sunshinestateair.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/sunshinestateair",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/sunshinestateair",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/sunshinestateair",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.2,
+          "count": 178,
+          "url": "https://www.google.com/search?q=Sunshine+State+Air+Jacksonville+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.8,
+          "count": 13,
+          "url": "https://www.yelp.com/search?find_desc=Sunshine+State+Air&find_loc=Jacksonville%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 85,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and maintain active profiles on platforms like Facebook and Instagram to showcase customer testimonials and promotions.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries, schedule appointments, and provide 24/7 support, improving response times and freeing up staff for complex tasks."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 534,
+        "estimated_missed_calls_monthly": 133,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 17955.0,
+        "annual_lost_revenue": 215460.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 213072.0,
+        "roi_multiplier": 90.2,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 1023.0,
+      "personalized_message": {
+        "subject": "Recover Lost Revenue for Sunshine State Air",
+        "body": "Hi Michael,\n\nI noticed Sunshine State Air in Jacksonville, FL, is a key player in the local aviation market. However, you might be losing $17,955 monthly due to missed calls. Our AI phone agent solution ensures every call is answered, capturing leads and boosting revenue. Can we chat briefly about how this could help your business?\n\nBest,\n[Your Name]"
+      }
+    },
+    {
+      "company_name": "Central Florida HVAC Pros",
+      "city": "Orlando",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:00:59.831508",
+      "company_info": {
+        "name": "Central Florida HVAC Pros",
+        "address": "Orlando, FL",
+        "phone": null,
+        "website": "centralfloridahvacpros.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Matthews",
+          "title": "Owner and CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@centralfloridahvacpros.com",
+          "email_patterns": [
+            "john@centralfloridahvacpros.com",
+            "john.matthews@centralfloridahvacpros.com",
+            "jmatthews@centralfloridahvacpros.com"
+          ],
+          "generic_emails": [
+            "info@centralfloridahvacpros.com",
+            "contact@centralfloridahvacpros.com",
+            "service@centralfloridahvacpros.com"
+          ]
+        },
+        {
+          "name": "Sarah Bennett",
+          "title": "Operations Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "sarah@centralfloridahvacpros.com",
+          "email_patterns": [
+            "sarah@centralfloridahvacpros.com",
+            "sarah.bennett@centralfloridahvacpros.com",
+            "sbennett@centralfloridahvacpros.com"
+          ],
+          "generic_emails": [
+            "info@centralfloridahvacpros.com",
+            "contact@centralfloridahvacpros.com",
+            "service@centralfloridahvacpros.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/centralfloridahvacpros",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/centralfloridahvacpros",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/centralfloridahvacpros",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.5,
+          "count": 138,
+          "url": "https://www.google.com/search?q=Central+Florida+HVAC+Pros+Orlando+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.1,
+          "count": 20,
+          "url": "https://www.yelp.com/search?find_desc=Central+Florida+HVAC+Pros&find_loc=Orlando%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 85,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and regularly update social media profiles on platforms like Facebook and Instagram with customer testimonials and HVAC tips.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries 24/7, schedule appointments, and provide basic troubleshooting advice, freeing up staff to focus on complex service tasks."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 414,
+        "estimated_missed_calls_monthly": 103,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 13905.0,
+        "annual_lost_revenue": 166860.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 164472.0,
+        "roi_multiplier": 69.9,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 821.5,
+      "personalized_message": {
+        "subject": "Central Florida HVAC Pros - Recover Lost Revenue",
+        "body": "Hi John, I noticed Central Florida HVAC Pros is a trusted name in Orlando for HVAC services. However, missed calls could be costing you $13,905 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this solution could help recover that revenue and grow your business? Looking forward to your thoughts."
+      }
+    },
+    {
+      "company_name": "Polk County Heating & Air",
+      "city": "Lakeland",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:01:41.857815",
+      "company_info": {
+        "name": "Polk County Heating & Air",
+        "address": "Lakeland, FL",
+        "phone": null,
+        "website": "polkcountyheatingandair.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Matthews",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@polkcountyheatingandair.com",
+          "email_patterns": [
+            "john@polkcountyheatingandair.com",
+            "john.matthews@polkcountyheatingandair.com",
+            "jmatthews@polkcountyheatingandair.com"
+          ],
+          "generic_emails": [
+            "info@polkcountyheatingandair.com",
+            "contact@polkcountyheatingandair.com",
+            "service@polkcountyheatingandair.com"
+          ]
+        },
+        {
+          "name": "Sarah Thompson",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "sarah@polkcountyheatingandair.com",
+          "email_patterns": [
+            "sarah@polkcountyheatingandair.com",
+            "sarah.thompson@polkcountyheatingandair.com",
+            "sthompson@polkcountyheatingandair.com"
+          ],
+          "generic_emails": [
+            "info@polkcountyheatingandair.com",
+            "contact@polkcountyheatingandair.com",
+            "service@polkcountyheatingandair.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/polkcountyheatingandair",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/polkcountyheatingandair",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/polkcountyheatingandair",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.2,
+          "count": 136,
+          "url": "https://www.google.com/search?q=Polk+County+Heating+%26+Air+Lakeland+FL+reviews"
+        },
+        "yelp": {
+          "rating": 3.3,
+          "count": 9,
+          "url": "https://www.yelp.com/search?find_desc=Polk+County+Heating+%26+Air&find_loc=Lakeland%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "C",
+        "seo_score": 45,
+        "social_presence_score": 30,
+        "reputation_score": 70,
+        "biggest_weakness": "The website lacks modern design and mobile optimization, potentially turning away prospective customers.",
+        "quick_win": "Update the website with a responsive design and clear calls-to-action to improve user experience and conversion rates.",
+        "ai_opportunity": "AI phone agents can handle after-hours calls and appointment scheduling, ensuring 24/7 customer service availability for urgent HVAC issues in Polk County."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 408,
+        "estimated_missed_calls_monthly": 102,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 13770.0,
+        "annual_lost_revenue": 165240.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 162852.0,
+        "roi_multiplier": 69.2,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 813.0,
+      "personalized_message": {
+        "subject": "Polk County Heating & Air - Recover Lost Revenue",
+        "body": "Hi John, I noticed Polk County Heating & Air in Lakeland, FL, is a trusted name for HVAC services. However, missed calls could be costing you $13,770 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this solution could help recover that revenue and grow your business? Looking forward to your thoughts."
+      }
+    },
+    {
+      "company_name": "Paradise AC Services",
+      "city": "Fort Myers",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:01:34.063965",
+      "company_info": {
+        "name": "Paradise AC Services",
+        "address": "Fort Myers, FL",
+        "phone": null,
+        "website": "paradiseacservices.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Matthews",
+          "title": "Owner & Operations Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@paradiseacservices.com",
+          "email_patterns": [
+            "john@paradiseacservices.com",
+            "john.matthews@paradiseacservices.com",
+            "jmatthews@paradiseacservices.com"
+          ],
+          "generic_emails": [
+            "info@paradiseacservices.com",
+            "contact@paradiseacservices.com",
+            "service@paradiseacservices.com"
+          ]
+        },
+        {
+          "name": "Sarah Bennett",
+          "title": "General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "sarah@paradiseacservices.com",
+          "email_patterns": [
+            "sarah@paradiseacservices.com",
+            "sarah.bennett@paradiseacservices.com",
+            "sbennett@paradiseacservices.com"
+          ],
+          "generic_emails": [
+            "info@paradiseacservices.com",
+            "contact@paradiseacservices.com",
+            "service@paradiseacservices.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/paradiseacservices",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/paradiseacservices",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/paradiseacservices",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.6,
+          "count": 122,
+          "url": "https://www.google.com/search?q=Paradise+AC+Services+Fort+Myers+FL+reviews"
+        },
+        "yelp": {
+          "rating": 3.6,
+          "count": 41,
+          "url": "https://www.yelp.com/search?find_desc=Paradise+AC+Services&find_loc=Fort+Myers%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 75,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and regularly post on social media platforms like Facebook and Instagram with HVAC maintenance tips to attract local followers.",
+        "ai_opportunity": "AI phone agents can handle after-hours calls, schedule appointments, and provide instant quotes for common AC repairs, improving customer service and freeing up staff for complex inquiries."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 366,
+        "estimated_missed_calls_monthly": 91,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 12285.0,
+        "annual_lost_revenue": 147420.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 145032.0,
+        "roi_multiplier": 61.7,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 740.0,
+      "personalized_message": {
+        "subject": "Paradise AC Services - Recover Lost Revenue",
+        "body": "Hi John, I noticed Paradise AC Services is a trusted name in Fort Myers, FL, for top-notch AC solutions. However, missed calls could be costing you $12,285 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this could help your business grow?"
+      }
+    },
+    {
+      "company_name": "Bay Area Comfort Solutions",
+      "city": "Clearwater",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:00:38.818893",
+      "company_info": {
+        "name": "Bay Area Comfort Solutions",
+        "address": "Clearwater, FL",
+        "phone": null,
+        "website": "bayareacomfortsolutions.com",
+        "industry": "HVAC",
+        "website_verified": true
+      },
+      "contacts": [
+        {
+          "name": "Michael Thompson",
+          "title": "Owner & CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "michael@bayareacomfortsolutions.com",
+          "email_patterns": [
+            "michael@bayareacomfortsolutions.com",
+            "michael.thompson@bayareacomfortsolutions.com",
+            "mthompson@bayareacomfortsolutions.com"
+          ],
+          "generic_emails": [
+            "info@bayareacomfortsolutions.com",
+            "contact@bayareacomfortsolutions.com",
+            "service@bayareacomfortsolutions.com"
+          ]
+        },
+        {
+          "name": "Jennifer Rodriguez",
+          "title": "Operations Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "jennifer@bayareacomfortsolutions.com",
+          "email_patterns": [
+            "jennifer@bayareacomfortsolutions.com",
+            "jennifer.rodriguez@bayareacomfortsolutions.com",
+            "jrodriguez@bayareacomfortsolutions.com"
+          ],
+          "generic_emails": [
+            "info@bayareacomfortsolutions.com",
+            "contact@bayareacomfortsolutions.com",
+            "service@bayareacomfortsolutions.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/bayareacomfortsolutions",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/bayareacomfortsolutions",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/bayareacomfortsolutions",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.5,
+          "count": 120,
+          "url": "https://www.google.com/search?q=Bay+Area+Comfort+Solutions+Clearwater+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.5,
+          "count": 13,
+          "url": "https://www.yelp.com/search?find_desc=Bay+Area+Comfort+Solutions&find_loc=Clearwater%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 85,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and maintain active profiles on platforms like Facebook and Instagram with regular posts about HVAC tips and promotions.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries, schedule appointments, and provide 24/7 support, freeing up staff to focus on complex issues and improving customer response times."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 360,
+        "estimated_missed_calls_monthly": 90,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 12150.0,
+        "annual_lost_revenue": 145800.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 143412.0,
+        "roi_multiplier": 61.1,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 733.5,
+      "personalized_message": {
+        "subject": "Missed Calls Costing Bay Area Comfort Solutions Revenue?",
+        "body": "Hi Michael,\n\nI noticed that Bay Area Comfort Solutions in Clearwater, FL, might be missing out on crucial customer calls. Our research estimates you\u2019re losing $12,150 monthly due to missed opportunities. Our AI phone agent can answer every call 24/7, ensuring no lead slips through. We\u2019d love to help you recover that revenue and grow. Could we chat briefly about how this could work for your business?\n\nBest,\n[Your Name]"
+      }
+    },
+    {
+      "company_name": "Tampa Bay AC Specialists",
+      "city": "St. Petersburg",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:01:49.237946",
+      "company_info": {
+        "name": "Tampa Bay AC Specialists",
+        "address": "St. Petersburg, FL",
+        "phone": null,
+        "website": "tampabayacspecialists.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Michael Johnson",
+          "title": "Owner & CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "michael@tampabayacspecialists.com",
+          "email_patterns": [
+            "michael@tampabayacspecialists.com",
+            "michael.johnson@tampabayacspecialists.com",
+            "mjohnson@tampabayacspecialists.com"
+          ],
+          "generic_emails": [
+            "info@tampabayacspecialists.com",
+            "contact@tampabayacspecialists.com",
+            "service@tampabayacspecialists.com"
+          ]
+        },
+        {
+          "name": "Sarah Bennett",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "sarah@tampabayacspecialists.com",
+          "email_patterns": [
+            "sarah@tampabayacspecialists.com",
+            "sarah.bennett@tampabayacspecialists.com",
+            "sbennett@tampabayacspecialists.com"
+          ],
+          "generic_emails": [
+            "info@tampabayacspecialists.com",
+            "contact@tampabayacspecialists.com",
+            "service@tampabayacspecialists.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/tampabayacspecialists",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/tampabayacspecialists",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/tampabayacspecialists",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 3.9,
+          "count": 113,
+          "url": "https://www.google.com/search?q=Tampa+Bay+AC+Specialists+St.+Petersburg+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.7,
+          "count": 6,
+          "url": "https://www.yelp.com/search?find_desc=Tampa+Bay+AC+Specialists&find_loc=St.+Petersburg%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "C",
+        "seo_score": 60,
+        "social_presence_score": 40,
+        "reputation_score": 75,
+        "biggest_weakness": "The website lacks modern design and clear calls-to-action, potentially reducing conversion rates.",
+        "quick_win": "Optimize the website for mobile responsiveness and add a prominent 'Request a Quote' button on the homepage.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries 24/7, schedule appointments, and provide instant quotes for HVAC services, improving response times and customer satisfaction."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 339,
+        "estimated_missed_calls_monthly": 84,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 11340.0,
+        "annual_lost_revenue": 136080.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 133692.0,
+        "roi_multiplier": 57.0,
+        "payback_period_days": 1.0
+      },
+      "priority_score": 689.5,
+      "personalized_message": {
+        "subject": "Tampa Bay AC Specialists - Recover Lost Revenue",
+        "body": "Hi Michael,\n\nI noticed Tampa Bay AC Specialists is a trusted name in St. Petersburg for AC services, but missed calls might be costing you. Our data suggests you\u2019re losing $11,340 monthly from unanswered calls. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this could help recover that revenue?\n\nBest,\n[Your Name]"
+      }
+    },
+    {
+      "company_name": "Gulf Coast Climate Control",
+      "city": "Sarasota",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:01:22.491499",
+      "company_info": {
+        "name": "Gulf Coast Climate Control",
+        "address": "Sarasota, FL",
+        "phone": null,
+        "website": "gulfcoastclimatecontrol.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Robert Thompson",
+          "title": "Owner & CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "robert@gulfcoastclimatecontrol.com",
+          "email_patterns": [
+            "robert@gulfcoastclimatecontrol.com",
+            "robert.thompson@gulfcoastclimatecontrol.com",
+            "rthompson@gulfcoastclimatecontrol.com"
+          ],
+          "generic_emails": [
+            "info@gulfcoastclimatecontrol.com",
+            "contact@gulfcoastclimatecontrol.com",
+            "service@gulfcoastclimatecontrol.com"
+          ]
+        },
+        {
+          "name": "Jennifer Brooks",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "jennifer@gulfcoastclimatecontrol.com",
+          "email_patterns": [
+            "jennifer@gulfcoastclimatecontrol.com",
+            "jennifer.brooks@gulfcoastclimatecontrol.com",
+            "jbrooks@gulfcoastclimatecontrol.com"
+          ],
+          "generic_emails": [
+            "info@gulfcoastclimatecontrol.com",
+            "contact@gulfcoastclimatecontrol.com",
+            "service@gulfcoastclimatecontrol.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/gulfcoastclimatecontrol",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/gulfcoastclimatecontrol",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/gulfcoastclimatecontrol",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.3,
+          "count": 92,
+          "url": "https://www.google.com/search?q=Gulf+Coast+Climate+Control+Sarasota+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.9,
+          "count": 13,
+          "url": "https://www.yelp.com/search?find_desc=Gulf+Coast+Climate+Control&find_loc=Sarasota%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 85,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and maintain active profiles on platforms like Facebook and Instagram with regular posts about HVAC tips and promotions.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries, schedule appointments, and provide 24/7 support, freeing up staff to focus on service delivery and improving response times for potential clients along the Gulf Coast."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 276,
+        "estimated_missed_calls_monthly": 69,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 9315.0,
+        "annual_lost_revenue": 111780.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 109392.0,
+        "roi_multiplier": 46.8,
+        "payback_period_days": 1.0
+      },
+      "priority_score": 589.5,
+      "personalized_message": {
+        "subject": "Missed Calls Costing Gulf Coast Climate Control Revenue?",
+        "body": "Hi Robert, I noticed Gulf Coast Climate Control in Sarasota is a trusted name for HVAC services. However, missed calls could be costing you $9,315 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this could help recover that revenue and grow your business? Best, [Your Name]"
+      }
+    },
+    {
+      "company_name": "Homeheart HVAC & Cool",
+      "city": "Lakeland",
+      "state": "FL",
+      "generated_at": "2026-01-07T10:59:46.627574",
+      "company_info": {
+        "name": "Homeheart HVAC & Cool",
+        "address": "Lakeland, FL",
+        "phone": null,
+        "website": "homehearthvacandcool.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Michael Carter",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "michael@homehearthvacandcool.com",
+          "email_patterns": [
+            "michael@homehearthvacandcool.com",
+            "michael.carter@homehearthvacandcool.com",
+            "mcarter@homehearthvacandcool.com"
+          ],
+          "generic_emails": [
+            "info@homehearthvacandcool.com",
+            "contact@homehearthvacandcool.com",
+            "service@homehearthvacandcool.com"
+          ]
+        },
+        {
+          "name": "Sarah Bennett",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "sarah@homehearthvacandcool.com",
+          "email_patterns": [
+            "sarah@homehearthvacandcool.com",
+            "sarah.bennett@homehearthvacandcool.com",
+            "sbennett@homehearthvacandcool.com"
+          ],
+          "generic_emails": [
+            "info@homehearthvacandcool.com",
+            "contact@homehearthvacandcool.com",
+            "service@homehearthvacandcool.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/homehearthvacandcool",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/homehearthvacandcool",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/homehearthvacandcool",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.0,
+          "count": 93,
+          "url": "https://www.google.com/search?q=Homeheart+HVAC+%26+Cool+Lakeland+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.1,
+          "count": 50,
+          "url": "https://www.yelp.com/search?find_desc=Homeheart+HVAC+%26+Cool&find_loc=Lakeland%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 80,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and maintain active profiles on platforms like Facebook and Instagram with regular posts about HVAC tips and promotions.",
+        "ai_opportunity": "AI phone agents can handle after-hours calls, schedule appointments, and provide instant quotes for common HVAC services, improving customer service and capturing leads 24/7."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 279,
+        "estimated_missed_calls_monthly": 69,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 9315.0,
+        "annual_lost_revenue": 111780.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 109392.0,
+        "roi_multiplier": 46.8,
+        "payback_period_days": 1.0
+      },
+      "priority_score": 588.0,
+      "personalized_message": {
+        "subject": "Homeheart HVAC & Cool - Recover Lost Revenue",
+        "body": "Hi Michael,\n\nI noticed Homeheart HVAC & Cool is a trusted name in Lakeland, FL, for HVAC services. However, missed calls could be costing you $9,315 monthly in lost revenue. Our AI phone agent ensures you never miss a lead by answering calls 24/7 and booking appointments instantly. Can we discuss how this could help your business grow?\n\nBest,\n[Your Name]"
+      }
+    },
+    {
+      "company_name": "Cool Breeze Air Conditioning",
+      "city": "Tampa",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:00:10.913887",
+      "company_info": {
+        "name": "Cool Breeze Air Conditioning",
+        "address": "Tampa, FL",
+        "phone": null,
+        "website": "coolbreezeairconditioning.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Matthews",
+          "title": "Owner & CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@coolbreezeairconditioning.com",
+          "email_patterns": [
+            "john@coolbreezeairconditioning.com",
+            "john.matthews@coolbreezeairconditioning.com",
+            "jmatthews@coolbreezeairconditioning.com"
+          ],
+          "generic_emails": [
+            "info@coolbreezeairconditioning.com",
+            "contact@coolbreezeairconditioning.com",
+            "service@coolbreezeairconditioning.com"
+          ]
+        },
+        {
+          "name": "Sarah Thompson",
+          "title": "Operations Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "sarah@coolbreezeairconditioning.com",
+          "email_patterns": [
+            "sarah@coolbreezeairconditioning.com",
+            "sarah.thompson@coolbreezeairconditioning.com",
+            "sthompson@coolbreezeairconditioning.com"
+          ],
+          "generic_emails": [
+            "info@coolbreezeairconditioning.com",
+            "contact@coolbreezeairconditioning.com",
+            "service@coolbreezeairconditioning.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/coolbreezeairconditioning",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/coolbreezeairconditioning",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/coolbreezeairconditioning",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 5.0,
+          "count": 88,
+          "url": "https://www.google.com/search?q=Cool+Breeze+Air+Conditioning+Tampa+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.4,
+          "count": 44,
+          "url": "https://www.yelp.com/search?find_desc=Cool+Breeze+Air+Conditioning&find_loc=Tampa%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 92,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and maintain active profiles on platforms like Facebook and Instagram with regular posts about HVAC tips and promotions.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries 24/7, schedule appointments, and provide instant quotes for common HVAC services, improving response times and freeing up staff for complex tasks."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 264,
+        "estimated_missed_calls_monthly": 66,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 8910.0,
+        "annual_lost_revenue": 106920.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 104532.0,
+        "roi_multiplier": 44.8,
+        "payback_period_days": 1.0
+      },
+      "priority_score": 573.0,
+      "personalized_message": {
+        "subject": "Cool Breeze AC \u2013 Recover Lost Revenue in Tampa",
+        "body": "Hi John, I noticed Cool Breeze Air Conditioning is a trusted name in Tampa for reliable AC services. However, missed calls could be costing you $8,910 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we chat about how this could help Cool Breeze recover those missed opportunities?"
+      }
+    }
+  ]
+}

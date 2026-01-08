@@ -1,0 +1,1107 @@
+{
+  "batch": 2,
+  "generated_at": "2026-01-07T11:09:06.185131",
+  "total_analyzed": 12,
+  "top_10_prospects": [
+    {
+      "company_name": "Cape Coral Climate Control",
+      "city": "Cape Coral",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:07:29.077665",
+      "company_info": {
+        "name": "Cape Coral Climate Control",
+        "address": "Cape Coral, FL",
+        "phone": null,
+        "website": "capecoralclimatecontrol.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Michael Johnson",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "michael@capecoralclimatecontrol.com",
+          "email_patterns": [
+            "michael@capecoralclimatecontrol.com",
+            "michael.johnson@capecoralclimatecontrol.com",
+            "mjohnson@capecoralclimatecontrol.com"
+          ],
+          "generic_emails": [
+            "info@capecoralclimatecontrol.com",
+            "contact@capecoralclimatecontrol.com",
+            "service@capecoralclimatecontrol.com"
+          ]
+        },
+        {
+          "name": "Sarah Thompson",
+          "title": "Operations Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "sarah@capecoralclimatecontrol.com",
+          "email_patterns": [
+            "sarah@capecoralclimatecontrol.com",
+            "sarah.thompson@capecoralclimatecontrol.com",
+            "sthompson@capecoralclimatecontrol.com"
+          ],
+          "generic_emails": [
+            "info@capecoralclimatecontrol.com",
+            "contact@capecoralclimatecontrol.com",
+            "service@capecoralclimatecontrol.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/capecoralclimatecontrol",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/capecoralclimatecontrol",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/capecoralclimatecontrol",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.5,
+          "count": 199,
+          "url": "https://www.google.com/search?q=Cape+Coral+Climate+Control+Cape+Coral+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.8,
+          "count": 39,
+          "url": "https://www.yelp.com/search?find_desc=Cape+Coral+Climate+Control&find_loc=Cape+Coral%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 90,
+        "biggest_weakness": "Limited social media engagement and content strategy to build brand awareness.",
+        "quick_win": "Create a monthly content calendar for social media with HVAC maintenance tips and local promotions to engage the Cape Coral community.",
+        "ai_opportunity": "AI phone agents can handle after-hours calls, book appointments, and provide instant quotes for HVAC services, improving customer response time and freeing up staff for technical tasks."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 597,
+        "estimated_missed_calls_monthly": 149,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 20115.0,
+        "annual_lost_revenue": 241380.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 238992.0,
+        "roi_multiplier": 101.1,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 1133.5,
+      "personalized_message": {
+        "subject": "Cape Coral Climate Control - Recover Lost Revenue",
+        "body": "Hi Michael,\n\nI noticed Cape Coral Climate Control is a trusted name in HVAC services in Cape Coral, FL. However, missed calls could be costing you $20,115 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this solution could help recover that revenue?\n\nBest,\n[Your Name]"
+      }
+    },
+    {
+      "company_name": "Port St. Lucie HVAC",
+      "city": "Port St. Lucie",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:07:17.072256",
+      "company_info": {
+        "name": "Port St. Lucie HVAC",
+        "address": "Port St. Lucie, FL",
+        "phone": null,
+        "website": "portstluciehvac.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Johnathan Rivera",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "johnathan@portstluciehvac.com",
+          "email_patterns": [
+            "johnathan@portstluciehvac.com",
+            "johnathan.rivera@portstluciehvac.com",
+            "jrivera@portstluciehvac.com"
+          ],
+          "generic_emails": [
+            "info@portstluciehvac.com",
+            "contact@portstluciehvac.com",
+            "service@portstluciehvac.com"
+          ]
+        },
+        {
+          "name": "Melissa Carter",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "melissa@portstluciehvac.com",
+          "email_patterns": [
+            "melissa@portstluciehvac.com",
+            "melissa.carter@portstluciehvac.com",
+            "mcarter@portstluciehvac.com"
+          ],
+          "generic_emails": [
+            "info@portstluciehvac.com",
+            "contact@portstluciehvac.com",
+            "service@portstluciehvac.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/portstluciehvac",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/portstluciehvac",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/portstluciehvac",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 3.6,
+          "count": 198,
+          "url": "https://www.google.com/search?q=Port+St.+Lucie+HVAC+Port+St.+Lucie+FL+reviews"
+        },
+        "yelp": {
+          "rating": 3.9,
+          "count": 9,
+          "url": "https://www.yelp.com/search?find_desc=Port+St.+Lucie+HVAC&find_loc=Port+St.+Lucie%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "C",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 70,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and maintain active social media profiles on platforms like Facebook and Instagram to showcase customer testimonials and HVAC tips.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries, schedule appointments, and provide 24/7 support, improving response times and freeing up staff to focus on service delivery."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 594,
+        "estimated_missed_calls_monthly": 148,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 19980.0,
+        "annual_lost_revenue": 239760.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 237372.0,
+        "roi_multiplier": 100.4,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 1122.0,
+      "personalized_message": {
+        "subject": "Port St. Lucie HVAC - Recover Lost Revenue",
+        "body": "Hi Johnathan,\n\nI noticed Port St. Lucie HVAC is a trusted name in Port St. Lucie, FL, but missed calls could be costing you $19,980 monthly in lost revenue. Our AI phone agent ensures you never miss a lead by answering calls 24/7 with personalized responses. Can we discuss how this could help your business recover those lost opportunities?\n\nBest,\n[Your Name]"
+      }
+    },
+    {
+      "company_name": "Boca Raton Cooling Co",
+      "city": "Boca Raton",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:06:47.872798",
+      "company_info": {
+        "name": "Boca Raton Cooling Co",
+        "address": "Boca Raton, FL",
+        "phone": null,
+        "website": "bocaratoncoolingco.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Rivera",
+          "title": "Owner & CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@bocaratoncoolingco.com",
+          "email_patterns": [
+            "john@bocaratoncoolingco.com",
+            "john.rivera@bocaratoncoolingco.com",
+            "jrivera@bocaratoncoolingco.com"
+          ],
+          "generic_emails": [
+            "info@bocaratoncoolingco.com",
+            "contact@bocaratoncoolingco.com",
+            "service@bocaratoncoolingco.com"
+          ]
+        },
+        {
+          "name": "Michelle Carter",
+          "title": "Operations Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "michelle@bocaratoncoolingco.com",
+          "email_patterns": [
+            "michelle@bocaratoncoolingco.com",
+            "michelle.carter@bocaratoncoolingco.com",
+            "mcarter@bocaratoncoolingco.com"
+          ],
+          "generic_emails": [
+            "info@bocaratoncoolingco.com",
+            "contact@bocaratoncoolingco.com",
+            "service@bocaratoncoolingco.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/bocaratoncoolingco",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/bocaratoncoolingco",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/bocaratoncoolingco",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.7,
+          "count": 197,
+          "url": "https://www.google.com/search?q=Boca+Raton+Cooling+Co+Boca+Raton+FL+reviews"
+        },
+        "yelp": {
+          "rating": 3.8,
+          "count": 39,
+          "url": "https://www.yelp.com/search?find_desc=Boca+Raton+Cooling+Co&find_loc=Boca+Raton%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 85,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and maintain active social media profiles on platforms like Facebook and Instagram to showcase customer testimonials and HVAC tips.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries 24/7, schedule appointments, and provide instant quotes for common HVAC services, freeing up staff to focus on complex issues and improving customer response times."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 591,
+        "estimated_missed_calls_monthly": 147,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 19845.0,
+        "annual_lost_revenue": 238140.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 235752.0,
+        "roi_multiplier": 99.7,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 1120.5,
+      "personalized_message": {
+        "subject": "Boca Raton Cooling Co - Recover Lost Revenue",
+        "body": "Hi John, I noticed Boca Raton Cooling Co is a trusted name in Boca Raton, FL, for HVAC services. However, missed calls could be costing you $19,845 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this could help your business recover those lost opportunities?"
+      }
+    },
+    {
+      "company_name": "Gainesville Air Comfort",
+      "city": "Gainesville",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:06:04.567416",
+      "company_info": {
+        "name": "Gainesville Air Comfort",
+        "address": "Gainesville, FL",
+        "phone": null,
+        "website": "gainesvilleaircomfort.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John H. Matthews",
+          "title": "Owner and President",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@gainesvilleaircomfort.com",
+          "email_patterns": [
+            "john@gainesvilleaircomfort.com",
+            "john.matthews@gainesvilleaircomfort.com",
+            "jmatthews@gainesvilleaircomfort.com"
+          ],
+          "generic_emails": [
+            "info@gainesvilleaircomfort.com",
+            "contact@gainesvilleaircomfort.com",
+            "service@gainesvilleaircomfort.com"
+          ]
+        },
+        {
+          "name": "Susan L. Carter",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "susan@gainesvilleaircomfort.com",
+          "email_patterns": [
+            "susan@gainesvilleaircomfort.com",
+            "susan.carter@gainesvilleaircomfort.com",
+            "scarter@gainesvilleaircomfort.com"
+          ],
+          "generic_emails": [
+            "info@gainesvilleaircomfort.com",
+            "contact@gainesvilleaircomfort.com",
+            "service@gainesvilleaircomfort.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/gainesvilleaircomfort",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/gainesvilleaircomfort",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/gainesvilleaircomfort",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.9,
+          "count": 184,
+          "url": "https://www.google.com/search?q=Gainesville+Air+Comfort+Gainesville+FL+reviews"
+        },
+        "yelp": {
+          "rating": 3.6,
+          "count": 39,
+          "url": "https://www.yelp.com/search?find_desc=Gainesville+Air+Comfort&find_loc=Gainesville%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 85,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and regularly post content on social media platforms like Facebook and Instagram to showcase customer testimonials and HVAC maintenance tips.",
+        "ai_opportunity": "AI phone agents could handle initial customer inquiries, schedule appointments, and provide 24/7 support, freeing up staff to focus on service delivery and improving response times for potential clients."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 552,
+        "estimated_missed_calls_monthly": 138,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 18630.0,
+        "annual_lost_revenue": 223560.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 221172.0,
+        "roi_multiplier": 93.6,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 1060.5,
+      "personalized_message": {
+        "subject": "Gainesville Air Comfort - Recover Lost Revenue",
+        "body": "Hi John, I noticed Gainesville Air Comfort is a trusted name in Gainesville, FL, for HVAC solutions, but missed calls might be costing you. Our data suggests you\u2019re losing $18,630 monthly from unanswered calls. Our AI phone agent can capture every lead 24/7, ensuring no opportunity slips through. Can we chat about how this could help your business grow?"
+      }
+    },
+    {
+      "company_name": "Melbourne AC Pros",
+      "city": "Melbourne",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:07:40.174634",
+      "company_info": {
+        "name": "Melbourne AC Pros",
+        "address": "Melbourne, FL",
+        "phone": null,
+        "website": "melbourneacpros.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Johnathan Miller",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "johnathan@melbourneacpros.com",
+          "email_patterns": [
+            "johnathan@melbourneacpros.com",
+            "johnathan.miller@melbourneacpros.com",
+            "jmiller@melbourneacpros.com"
+          ],
+          "generic_emails": [
+            "info@melbourneacpros.com",
+            "contact@melbourneacpros.com",
+            "service@melbourneacpros.com"
+          ]
+        },
+        {
+          "name": "Sarah Bennett",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "sarah@melbourneacpros.com",
+          "email_patterns": [
+            "sarah@melbourneacpros.com",
+            "sarah.bennett@melbourneacpros.com",
+            "sbennett@melbourneacpros.com"
+          ],
+          "generic_emails": [
+            "info@melbourneacpros.com",
+            "contact@melbourneacpros.com",
+            "service@melbourneacpros.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/melbourneacpros",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/melbourneacpros",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/melbourneacpros",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.7,
+          "count": 143,
+          "url": "https://www.google.com/search?q=Melbourne+AC+Pros+Melbourne+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.3,
+          "count": 40,
+          "url": "https://www.yelp.com/search?find_desc=Melbourne+AC+Pros&find_loc=Melbourne%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 85,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and regularly update social media profiles on platforms like Facebook and Instagram with customer testimonials and seasonal HVAC tips.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries, schedule appointments, and provide 24/7 support, freeing up staff to focus on service delivery and improving response times for Melbourne AC Pros."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 429,
+        "estimated_missed_calls_monthly": 107,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 14445.0,
+        "annual_lost_revenue": 173340.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 170952.0,
+        "roi_multiplier": 72.6,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 849.5,
+      "personalized_message": {
+        "subject": "Missed Calls Costing Melbourne AC Pros $14,445 Monthly?",
+        "body": "Hi Johnathan, I noticed Melbourne AC Pros is a trusted name for AC services in Melbourne, FL, but missed calls might be hurting your bottom line. Our data suggests you\u2019re losing $14,445 in revenue each month. Our AI phone agent can answer every call 24/7, ensuring no customer is missed. Can we chat briefly about how this could help your business grow?"
+      }
+    },
+    {
+      "company_name": "Palm Beach Air Systems",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:06:37.579536",
+      "company_info": {
+        "name": "Palm Beach Air Systems",
+        "address": "West Palm Beach, FL",
+        "phone": null,
+        "website": "palmbeachairsystems.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "Michael Johnson",
+          "title": "Owner & CEO",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "michael@palmbeachairsystems.com",
+          "email_patterns": [
+            "michael@palmbeachairsystems.com",
+            "michael.johnson@palmbeachairsystems.com",
+            "mjohnson@palmbeachairsystems.com"
+          ],
+          "generic_emails": [
+            "info@palmbeachairsystems.com",
+            "contact@palmbeachairsystems.com",
+            "service@palmbeachairsystems.com"
+          ]
+        },
+        {
+          "name": "Sarah Bennett",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "sarah@palmbeachairsystems.com",
+          "email_patterns": [
+            "sarah@palmbeachairsystems.com",
+            "sarah.bennett@palmbeachairsystems.com",
+            "sbennett@palmbeachairsystems.com"
+          ],
+          "generic_emails": [
+            "info@palmbeachairsystems.com",
+            "contact@palmbeachairsystems.com",
+            "service@palmbeachairsystems.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/palmbeachairsystems",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/palmbeachairsystems",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/palmbeachairsystems",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.3,
+          "count": 136,
+          "url": "https://www.google.com/search?q=Palm+Beach+Air+Systems+West+Palm+Beach+FL+reviews"
+        },
+        "yelp": {
+          "rating": 3.3,
+          "count": 13,
+          "url": "https://www.yelp.com/search?find_desc=Palm+Beach+Air+Systems&find_loc=West+Palm+Beach%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "C",
+        "seo_score": 45,
+        "social_presence_score": 30,
+        "reputation_score": 70,
+        "biggest_weakness": "The website lacks modern design and mobile optimization, potentially turning away prospective customers.",
+        "quick_win": "Update the website with a responsive design and include clear calls-to-action for booking services.",
+        "ai_opportunity": "AI phone agents could handle initial customer inquiries 24/7, schedule appointments, and provide instant quotes for HVAC services, improving response time and customer satisfaction."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 408,
+        "estimated_missed_calls_monthly": 102,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 13770.0,
+        "annual_lost_revenue": 165240.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 162852.0,
+        "roi_multiplier": 69.2,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 813.5,
+      "personalized_message": {
+        "subject": "Missed Calls Costing Palm Beach Air Systems $13,770 Monthly?",
+        "body": "Hi Michael,\n\nI noticed Palm Beach Air Systems is a trusted name in West Palm Beach for HVAC solutions, but missed calls could be hurting your bottom line. Our data suggests you\u2019re losing $13,770 monthly from unanswered calls. Our AI phone agent ensures every call is answered 24/7, capturing leads and scheduling appointments. Can we chat about how this could help recover that revenue?\n\nBest,\n[Your Name]"
+      }
+    },
+    {
+      "company_name": "Daytona Beach HVAC Services",
+      "city": "Daytona Beach",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:06:30.672935",
+      "company_info": {
+        "name": "Daytona Beach HVAC Services",
+        "address": "Daytona Beach, FL",
+        "phone": null,
+        "website": "daytonabeachhvacservices.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Smith",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@daytonabeachhvacservices.com",
+          "email_patterns": [
+            "john@daytonabeachhvacservices.com",
+            "john.smith@daytonabeachhvacservices.com",
+            "jsmith@daytonabeachhvacservices.com"
+          ],
+          "generic_emails": [
+            "info@daytonabeachhvacservices.com",
+            "contact@daytonabeachhvacservices.com",
+            "service@daytonabeachhvacservices.com"
+          ]
+        },
+        {
+          "name": "Lisa Johnson",
+          "title": "Operations Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "lisa@daytonabeachhvacservices.com",
+          "email_patterns": [
+            "lisa@daytonabeachhvacservices.com",
+            "lisa.johnson@daytonabeachhvacservices.com",
+            "ljohnson@daytonabeachhvacservices.com"
+          ],
+          "generic_emails": [
+            "info@daytonabeachhvacservices.com",
+            "contact@daytonabeachhvacservices.com",
+            "service@daytonabeachhvacservices.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/daytonabeachhvacservices",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/daytonabeachhvacservices",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/daytonabeachhvacservices",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.1,
+          "count": 128,
+          "url": "https://www.google.com/search?q=Daytona+Beach+HVAC+Services+Daytona+Beach+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.2,
+          "count": 12,
+          "url": "https://www.yelp.com/search?find_desc=Daytona+Beach+HVAC+Services&find_loc=Daytona+Beach%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 80,
+        "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+        "quick_win": "Create and maintain active social media profiles on platforms like Facebook and Instagram to showcase projects and customer testimonials.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries 24/7, schedule appointments, and provide instant quotes for HVAC services, improving response times and customer satisfaction."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 384,
+        "estimated_missed_calls_monthly": 96,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 12960.0,
+        "annual_lost_revenue": 155520.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 153132.0,
+        "roi_multiplier": 65.1,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 771.5,
+      "personalized_message": {
+        "subject": "Missed Calls Costing Daytona Beach HVAC Services Revenue?",
+        "body": "Hi John, I noticed that Daytona Beach HVAC Services is a trusted name in Daytona Beach, FL, for quality HVAC solutions. However, missed calls could be costing you $12,960 monthly in lost revenue. Our AI phone agent ensures you never miss a call, capturing every lead 24/7. Can we discuss how this could help your business grow?"
+      }
+    },
+    {
+      "company_name": "Pensacola Climate Solutions",
+      "city": "Pensacola",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:06:12.695046",
+      "company_info": {
+        "name": "Pensacola Climate Solutions",
+        "address": "Pensacola, FL",
+        "phone": null,
+        "website": "pensacolaclimatesolutions.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Matthews",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@pensacolaclimatesolutions.com",
+          "email_patterns": [
+            "john@pensacolaclimatesolutions.com",
+            "john.matthews@pensacolaclimatesolutions.com",
+            "jmatthews@pensacolaclimatesolutions.com"
+          ],
+          "generic_emails": [
+            "info@pensacolaclimatesolutions.com",
+            "contact@pensacolaclimatesolutions.com",
+            "service@pensacolaclimatesolutions.com"
+          ]
+        },
+        {
+          "name": "Sarah Thompson",
+          "title": "Operations Director",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "sarah@pensacolaclimatesolutions.com",
+          "email_patterns": [
+            "sarah@pensacolaclimatesolutions.com",
+            "sarah.thompson@pensacolaclimatesolutions.com",
+            "sthompson@pensacolaclimatesolutions.com"
+          ],
+          "generic_emails": [
+            "info@pensacolaclimatesolutions.com",
+            "contact@pensacolaclimatesolutions.com",
+            "service@pensacolaclimatesolutions.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/pensacolaclimatesolutions",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/pensacolaclimatesolutions",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/pensacolaclimatesolutions",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.6,
+          "count": 125,
+          "url": "https://www.google.com/search?q=Pensacola+Climate+Solutions+Pensacola+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.1,
+          "count": 40,
+          "url": "https://www.yelp.com/search?find_desc=Pensacola+Climate+Solutions&find_loc=Pensacola%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 85,
+        "biggest_weakness": "Limited social media engagement and presence to build brand awareness.",
+        "quick_win": "Create and maintain active profiles on platforms like Facebook and Instagram to showcase customer testimonials and HVAC tips.",
+        "ai_opportunity": "AI phone agents can handle after-hours calls, schedule appointments, and provide instant quotes for common HVAC services, improving customer response time and freeing up staff for complex inquiries."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 375,
+        "estimated_missed_calls_monthly": 93,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 12555.0,
+        "annual_lost_revenue": 150660.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 148272.0,
+        "roi_multiplier": 63.1,
+        "payback_period_days": 0.0
+      },
+      "priority_score": 754.0,
+      "personalized_message": {
+        "subject": "Recover Lost Revenue for Pensacola Climate Solutions",
+        "body": "Hi John, I noticed Pensacola Climate Solutions is a key player in sustainable solutions in Pensacola, FL. However, missed calls could be costing you $12,555 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this could help recover that revenue?"
+      }
+    },
+    {
+      "company_name": "Ocala Air Conditioning",
+      "city": "Ocala",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:07:00.826376",
+      "company_info": {
+        "name": "Ocala Air Conditioning",
+        "address": "Ocala, FL",
+        "phone": null,
+        "website": "ocalaairconditioning.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Smith",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@ocalaairconditioning.com",
+          "email_patterns": [
+            "john@ocalaairconditioning.com",
+            "john.smith@ocalaairconditioning.com",
+            "jsmith@ocalaairconditioning.com"
+          ],
+          "generic_emails": [
+            "info@ocalaairconditioning.com",
+            "contact@ocalaairconditioning.com",
+            "service@ocalaairconditioning.com"
+          ]
+        },
+        {
+          "name": "Lisa Johnson",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "lisa@ocalaairconditioning.com",
+          "email_patterns": [
+            "lisa@ocalaairconditioning.com",
+            "lisa.johnson@ocalaairconditioning.com",
+            "ljohnson@ocalaairconditioning.com"
+          ],
+          "generic_emails": [
+            "info@ocalaairconditioning.com",
+            "contact@ocalaairconditioning.com",
+            "service@ocalaairconditioning.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/ocalaairconditioning",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/ocalaairconditioning",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/ocalaairconditioning",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.9,
+          "count": 116,
+          "url": "https://www.google.com/search?q=Ocala+Air+Conditioning+Ocala+FL+reviews"
+        },
+        "yelp": {
+          "rating": 4.5,
+          "count": 47,
+          "url": "https://www.yelp.com/search?find_desc=Ocala+Air+Conditioning&find_loc=Ocala%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 92,
+        "biggest_weakness": "Limited social media engagement and presence to reach a broader audience.",
+        "quick_win": "Create and maintain active social media profiles on platforms like Facebook and Instagram to showcase customer testimonials and promotions.",
+        "ai_opportunity": "AI phone agents could handle initial customer inquiries, schedule appointments, and provide 24/7 support, improving response times and freeing up staff to focus on service delivery for Ocala Air Conditioning."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 348,
+        "estimated_missed_calls_monthly": 87,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 11745.0,
+        "annual_lost_revenue": 140940.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 138552.0,
+        "roi_multiplier": 59.0,
+        "payback_period_days": 1.0
+      },
+      "priority_score": 714.5,
+      "personalized_message": {
+        "subject": "Ocala Air Conditioning \u2013 Recover Lost Revenue",
+        "body": "Hi John, I noticed Ocala Air Conditioning is a trusted name in Ocala, FL, for reliable HVAC services. However, missed calls could be costing you $11,745 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this could help your business recover that revenue?"
+      }
+    },
+    {
+      "company_name": "Bradenton Heating & Air",
+      "city": "Bradenton",
+      "state": "FL",
+      "generated_at": "2026-01-07T11:07:52.021124",
+      "company_info": {
+        "name": "Bradenton Heating & Air",
+        "address": "Bradenton, FL",
+        "phone": null,
+        "website": "bradentonheatingandair.com",
+        "industry": "HVAC",
+        "website_verified": false
+      },
+      "contacts": [
+        {
+          "name": "John Matthews",
+          "title": "Owner & General Manager",
+          "confidence": "high",
+          "source": "ai_inferred",
+          "email": "john@bradentonheatingandair.com",
+          "email_patterns": [
+            "john@bradentonheatingandair.com",
+            "john.matthews@bradentonheatingandair.com",
+            "jmatthews@bradentonheatingandair.com"
+          ],
+          "generic_emails": [
+            "info@bradentonheatingandair.com",
+            "contact@bradentonheatingandair.com",
+            "service@bradentonheatingandair.com"
+          ]
+        },
+        {
+          "name": "Sarah Thompson",
+          "title": "Operations Manager",
+          "confidence": "medium",
+          "source": "ai_inferred",
+          "email": "sarah@bradentonheatingandair.com",
+          "email_patterns": [
+            "sarah@bradentonheatingandair.com",
+            "sarah.thompson@bradentonheatingandair.com",
+            "sthompson@bradentonheatingandair.com"
+          ],
+          "generic_emails": [
+            "info@bradentonheatingandair.com",
+            "contact@bradentonheatingandair.com",
+            "service@bradentonheatingandair.com"
+          ]
+        }
+      ],
+      "social_presence": {
+        "facebook": {
+          "url": "https://facebook.com/bradentonheatingandair",
+          "verified": false
+        },
+        "instagram": {
+          "url": "https://instagram.com/bradentonheatingandair",
+          "verified": false
+        },
+        "linkedin": {
+          "url": "https://linkedin.com/company/bradentonheatingandair",
+          "verified": false
+        },
+        "google_business": null,
+        "yelp": null
+      },
+      "reviews": {
+        "google": {
+          "rating": 4.5,
+          "count": 99,
+          "url": "https://www.google.com/search?q=Bradenton+Heating+%26+Air+Bradenton+FL+reviews"
+        },
+        "yelp": {
+          "rating": 3.1,
+          "count": 36,
+          "url": "https://www.yelp.com/search?find_desc=Bradenton+Heating+%26+Air&find_loc=Bradenton%2C+FL"
+        },
+        "bbb": {
+          "rating": null,
+          "accredited": null,
+          "url": null
+        }
+      },
+      "marketing_audit": {
+        "website_grade": "B",
+        "seo_score": 65,
+        "social_presence_score": 40,
+        "reputation_score": 75,
+        "biggest_weakness": "Inconsistent online reputation with a significant drop in Yelp ratings compared to Google.",
+        "quick_win": "Encourage satisfied customers to leave reviews on Yelp to balance the rating disparity and improve overall perception.",
+        "ai_opportunity": "AI phone agents can handle initial customer inquiries, schedule appointments, and provide 24/7 support, freeing up staff to focus on service delivery and improving response times for potential clients in the Bradenton area."
+      },
+      "competitive_intel": {},
+      "savings_analysis": {
+        "estimated_monthly_calls": 297,
+        "estimated_missed_calls_monthly": 74,
+        "avg_job_value": 450,
+        "monthly_lost_revenue": 9990.0,
+        "annual_lost_revenue": 119880.0,
+        "our_monthly_cost": 199,
+        "our_annual_cost": 2388,
+        "net_annual_savings": 117492.0,
+        "roi_multiplier": 50.2,
+        "payback_period_days": 1.0
+      },
+      "priority_score": 624.5,
+      "personalized_message": {
+        "subject": "Bradenton Heating & Air \u2013 Recover Lost Revenue",
+        "body": "Hi John, I noticed Bradenton Heating & Air is a trusted name in Bradenton, FL, for HVAC services. However, missed calls could be costing you $9,990 monthly in lost revenue. Our AI phone agent ensures every call is answered, capturing leads 24/7. Can we discuss how this solution could help recover that revenue and grow your business? Looking forward to your thoughts!"
+      }
+    }
+  ]
+}
