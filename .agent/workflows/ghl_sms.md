@@ -6,7 +6,7 @@ description: How to send SMS via GHL webhook workflow
 
 ## Webhook URL
 
-```
+```text
 https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd
 ```
 
@@ -33,11 +33,11 @@ requests.post(
 
 ## Common Issues
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| SMS skipped | Contact not created first | Reorder workflow |
-| 401 Unauthorized | API token expired | Use webhooks instead |
-| No message sent | Wrong webhook URL | Verify workflow is published |
+| Issue             | Cause                  | Fix                        |
+| ----------------- | ---------------------- | -------------------------- |
+| SMS skipped       | Contact not created    | Reorder workflow           |
+| 401 Unauthorized  | API token expired      | Use webhooks instead       |
+| No message sent   | Wrong webhook URL      | Verify workflow published  |
 
 ## Lesson Learned (Jan 7, 2026)
 
