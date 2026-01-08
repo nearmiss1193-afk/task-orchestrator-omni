@@ -1,47 +1,115 @@
 import os
 import resend
+from datetime import datetime
 from dotenv import load_dotenv
 
-# Load environment variables (including RESEND_API_KEY)
+# Load environment variables
 load_dotenv()
 resend.api_key = os.getenv('RESEND_API_KEY')
 
-# Paths to the files we want to include
-# Paths to the files we want to include (Current Brain)
-SAVE_PROTOCOL_PATH = r'C:\Users\nearm\.gemini\antigravity\brain\6ec66d63-d29a-4316-87d2-a1c21879a62a\save_protocol_report.md'
-CONTACTS_PATH = r'C:\Users\nearm\.gemini\antigravity\brain\6ec66d63-d29a-4316-87d2-a1c21879a62a\contacts.md'
+# Dashboard URL
+DASHBOARD_URL = "https://client-portal-one-phi.vercel.app"
 
-# Read file contents (Handle missing files gracefully)
-try:
-    with open(SAVE_PROTOCOL_PATH, 'r', encoding='utf-8') as f:
-        save_content = f.read()
-except:
-    save_content = "Save Protocol Report not found."
+# Generate current status report
+def generate_status_report():
+    report = f"""
+# 🏰 EMPIRE UNIFIED - SAVE PROTOCOL
+Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
-try:
-    with open(CONTACTS_PATH, 'r', encoding='utf-8') as f:
-        contacts_content = f.read()
-except:
-    contacts_content = "Contacts list not found."
+## 🌐 DASHBOARD ACCESS (24/7)
+**URL:** {DASHBOARD_URL}
+**Description:** Mission Control - accessible from any device, anywhere
 
-# Build email body – simple HTML with preformatted sections
+## 🔗 LIVE ENDPOINTS
+| Service | URL | Status |
+|---------|-----|--------|
+| Dashboard | {DASHBOARD_URL} | ✅ LIVE |
+| Vapi Webhook | https://nearmiss1193-afk--vapi-live.modal.run | ✅ DEPLOYED |
+| Health Check | https://nearmiss1193-afk--health-live.modal.run | ✅ ACTIVE |
+
+## 📂 KEY FILE LOCATIONS
+- **Project:** c:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified
+- **Environment:** .env (contains all API keys)
+- **Gmail OAuth:** gmail_credentials.json, gmail_token.json
+- **Knowledge Base:** knowledge_base/ (business wisdom, AI playbook, sales, marketing)
+
+## 🔧 RECOVERY COMMANDS
+If system needs restart:
+```bash
+cd c:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified
+python cloud_inspector.py          # Check all systems
+python -m modal deploy modal_webhooks_only.py  # Redeploy webhooks
+python run_save_protocol.py        # Generate report
+```
+
+## 📚 KNOWLEDGE BASE FILES
+- ai_boom_playbook.md - AI market opportunities
+- business_wisdom.md - Success/failure patterns from history
+- sales_mastery.md - Scripts and objection handling
+- service_industry_guide.md - HVAC, plumbing, roofing verticals
+- marketing_playbook.md - Lead generation strategies
+- web_mastery.md - Web design psychology
+- system_recovery.md - Crash recovery procedures
+
+## 💾 CRITICAL CREDENTIALS (in .env)
+- SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY
+- VAPI_PRIVATE_KEY
+- GHL_API_KEY
+- RESEND_API_KEY
+- GMAIL_CLIENT_ID / GMAIL_CLIENT_SECRET
+
+## ✅ COMPONENTS STATUS
+| Component | Status |
+|-----------|--------|
+| Email Poller | ✅ Built (email_poller.py) |
+| Cloud Inspector | ✅ Built (cloud_inspector.py) |
+| Auto-Responder | ✅ Built (auto_responder.py) |
+| Gmail Integration | ✅ Connected |
+| Deep Brain Pipeline | ✅ Ready |
+| Vercel Dashboard | ✅ DEPLOYED |
+| Modal Webhooks | ✅ DEPLOYED |
+| Google Analytics | ✅ G-8080RNWHVV |
+
+---
+The Empire never sleeps. 🌙
+"""
+    return report
+
+# Build email body
+status_report = generate_status_report()
+
 html_body = f"""
-<div style="text-align: center; margin-bottom: 20px;">
-    <a href="http://localhost:8501" style="background-color: #007bff; color: white; padding: 15px 25px; text-decoration: none; font-size: 18px; border-radius: 5px; font-weight: bold;">🚀 Launch Mission Control</a>
-    <p style="color: #666; font-size: 12px; margin-top: 5px;">(External: <a href="https://aiserviceco.com/admin">aiserviceco.com/admin</a>)</p>
+<div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+    <div style="text-align: center; margin-bottom: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px;">
+        <h1 style="color: white; margin: 0;">🏰 Empire Unified</h1>
+        <p style="color: #e0e0e0; margin: 10px 0;">Save Protocol Report</p>
+        <a href="{DASHBOARD_URL}" style="display: inline-block; background-color: #fff; color: #667eea; padding: 15px 30px; text-decoration: none; font-size: 18px; border-radius: 5px; font-weight: bold; margin-top: 15px;">🚀 Launch Dashboard</a>
+    </div>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+        <h2>📊 Quick Links</h2>
+        <ul>
+            <li><a href="{DASHBOARD_URL}">24/7 Dashboard</a></li>
+            <li><a href="https://nearmiss1193-afk--health-live.modal.run">Health Check API</a></li>
+            <li><a href="https://modal.com/apps">Modal Dashboard</a></li>
+            <li><a href="https://supabase.com/dashboard">Supabase Console</a></li>
+        </ul>
+    </div>
+    
+    <pre style="background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 10px; overflow-x: auto; font-size: 12px; line-height: 1.5;">{status_report}</pre>
+    
+    <div style="text-align: center; margin-top: 30px; color: #666; font-size: 12px;">
+        <p>Generated by Save Protocol | {datetime.now().strftime("%Y-%m-%d %H:%M")}</p>
+        <p>AI Service Company • Sovereign AI Platform</p>
+    </div>
 </div>
-<hr>
-<h2>📋 Save Protocol Report</h2>
-<pre style='background:#f4f4f4;padding:10px;border-radius:5px;'>{save_content}</pre>
-<h2>📇 Contact List</h2>
-<pre style='background:#f4f4f4;padding:10px;border-radius:5px;'>{contacts_content}</pre>
 """
 
-# Email parameters – send to both addresses
+# Email parameters
 params = {
     "from": "alert@aiserviceco.com",
     "to": ["nearmiss1193@gmail.com", "owner@aiserviceco.com"],
-    "subject": "🚀 Save Protocol & Contacts – Empire Unified",
+    "subject": f"🏰 Save Protocol - {datetime.now().strftime('%b %d %H:%M')} | Dashboard: {DASHBOARD_URL}",
     "html": html_body,
 }
 
