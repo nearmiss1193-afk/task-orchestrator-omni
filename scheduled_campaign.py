@@ -71,6 +71,7 @@ def send_campaign_email(prospect: dict) -> bool:
             json={
                 "from": "Sarah <sarah@aiserviceco.com>",
                 "to": [prospect.get('email')],
+                "cc": ["owner@aiserviceco.com"],  # Send copy to owner
                 "subject": f"Quick question about {prospect.get('company', 'your business')}'s missed calls",
                 "html": email_html
             }
