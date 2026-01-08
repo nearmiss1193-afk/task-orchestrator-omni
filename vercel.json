@@ -2,36 +2,17 @@
     "version": 2,
     "builds": [
         {
-            "src": "public/**",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "api/index.py",
+            "src": "api/*.py",
             "use": "@vercel/python"
         }
     ],
-    "rewrites": [
+    "routes": [
         {
-            "source": "/api/(.*)",
-            "destination": "/api/index.py"
-        },
-        {
-            "source": "/vapi/webhook",
-            "destination": "/api/index.py"
-        },
-        {
-            "source": "/",
-            "destination": "/public/index.html"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/public/$1"
+            "src": "/api/(.*)",
+            "dest": "/api/$1"
         }
     ],
-    "crons": [
-        {
-            "path": "/api/health?ping_db=true",
-            "schedule": "0 12 * * *"
-        }
-    ]
+    "env": {
+        "PYTHONUNBUFFERED": "1"
+    }
 }
