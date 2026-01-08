@@ -117,6 +117,8 @@ from datetime import datetime
 
 # ... imports ...
 
+from modules.email_command import EmailCommander
+
 def get_lead_timezone(state):
     """Return timezone string for a given state."""
     mapping = {
@@ -136,11 +138,58 @@ def is_within_window(tz_name):
     except:
         return True # Default open if unknown
 
+from modules.ai_reply import generate_sarah_reply
+
+def check_inbox_sentinel():
+    """Checks inbox for new leads and alerts."""
+    try:
+        # print("📧 Sentinel: Checking Inbox...") # Reduce noise
+        commander = EmailCommander()
+        if not commander.service:
+            print("  ⚠️ Sentinel Offline (Auth Failed)")
+            return
+
+        emails = commander.get_unread_emails(5)
+        if not emails:
+            print("  ✅ Inbox Clean")
+            return
+
+        print(f"  📨 Found {len(emails)} unread.")
+        for email in emails:
+            subject = email.get('subject', '').lower()
+            sender = email.get('from', '')
+            
+            print(f"    - Processing: {subject} from {sender}")
+            
+            # AI Reply Logic
+            try:
+                reply_body = generate_sarah_reply(email['subject'], email['body'], sender)
+                if "Error" in reply_body:
+                    print(f"      ⚠️ AI Gen Failed: {reply_body}")
+                    continue
+                
+                print(f"      🤖 Generated Reply: {reply_body[:50]}...")
+                
+                if commander.reply_to_email(email, reply_body):
+                    commander.mark_as_read(email['id'])
+                    print("      ✅ Replied & Archived")
+                else:
+                    print("      ❌ Failed to send reply")
+                    
+            except Exception as e:
+                print(f"      ❌ Sentinel Process Error: {e}")
+                
+    except Exception as e:
+        print(f"  ⚠️ Sentinel Error: {e}")
+
 def run_drip():
     print("💧 Starting Follow-the-Sun Drip Campaign")
-    print("   (1 Call / 10 Mins | 8AM-7PM Local Constraint)")
+    print("   (1 Call / 10 Mins | 8AM-7PM Local Constraint | 📧 Auto-Reply ACTIVE)")
     
     while True: # Continuous loop
+        
+        # 0. Run Sentinel Check
+        check_inbox_sentinel()
         # 1. Fetch Candidates (exclude 'contacted' or 'bad_data')
         try:
             res = supabase.table('leads').select('*').eq('status', 'new').limit(100).execute()

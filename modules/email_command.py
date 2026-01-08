@@ -87,6 +87,7 @@ class EmailCommander:
                 subject = next((h['value'] for h in headers if h['name'] == 'Subject'), 'No Subject')
                 sender = next((h['value'] for h in headers if h['name'] == 'From'), 'Unknown')
                 date = next((h['value'] for h in headers if h['name'] == 'Date'), '')
+                msg_id = next((h['value'] for h in headers if h['name'] == 'Message-ID'), '')
                 
                 # Get body
                 body = ""
@@ -99,12 +100,13 @@ class EmailCommander:
                     body = base64.urlsafe_b64decode(email_data['payload']['body']['data']).decode('utf-8')
                 
                 emails.append({
-                    'id': msg['id'],
+                    'id': msg['id'], # Gmail API ID
+                    'message_id': msg_id, # RFC 822 Message-ID
                     'subject': subject,
                     'from': sender,
                     'date': date,
                     'snippet': email_data.get('snippet', ''),
-                    'body': body[:500]  # Truncate for safety
+                    'body': body[:2000] # Increased limit for AI context
                 })
             
             return emails
@@ -135,6 +137,34 @@ class EmailCommander:
             
         except Exception as e:
             print(f"❌ Failed to send: {e}")
+            return False
+
+    def reply_to_email(self, original_email_data, reply_body):
+        """Reply to an email maintaining the thread."""
+        if not self.service:
+            return False
+        
+        try:
+            message = MIMEText(reply_body)
+            message['to'] = original_email_data['from']
+            message['subject'] = original_email_data['subject'] if original_email_data['subject'].lower().startswith('re:') else f"Re: {original_email_data['subject']}"
+            message['In-Reply-To'] = original_email_data['message_id']
+            message['References'] = original_email_data['message_id']
+            
+            raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+            
+            self.service.users().messages().send(
+                userId='me',
+                body={
+                    'raw': raw,
+                    'threadId': original_email_data.get('threadId') # Optional but good practice
+                }
+            ).execute()
+            
+            print(f"✅ Replied to {original_email_data['from']}")
+            return True
+        except Exception as e:
+            print(f"❌ Failed to reply: {e}")
             return False
     
     def mark_as_read(self, message_id):
