@@ -1,12 +1,17 @@
 # EMPIRE CAPABILITIES & GAPS ANALYSIS
 
-## Last Updated: 2026-01-07
+## Last Updated: 2026-01-08
 
 ---
 
 ## ✅ CURRENT CAPABILITIES (LIVE & WORKING)
 
-### 🎙️ Voice AI (Sarah 3.1)
+### 🚀 Sovereign Architecture (v2)
+
+- [x] **Supabase Brain:** Centralized task queue, agent presence, and campaign data.
+- [x] **Python Worker:** Autonomous "Body" listening for Vapi/Grok/Twilio tasks.
+- [x] **Billing Engine:** Stripe Connect (Express) + Subscription Schedules (Setup Fee logic).
+- [x] **Command Dashboard:** Streamlit UI for monitoring agents and financials.
 
 - [x] Outbound sales calls via Vapi
 - [x] Grok-powered persona (witty, zero-corporate)
@@ -80,8 +85,8 @@
 - [x] Vapi (voice agents)
 - [x] Resend (email)
 - [x] GHL SMS (via webhook - FIXED)
+- [x] Stripe webhook (payment provisioning - v2)
 - [ ] **GAP:** Calendly API (automated booking)
-- [ ] **GAP:** Stripe webhook (payment notifications)
 
 ---
 
@@ -90,7 +95,7 @@
 | Gap | Impact | Recommended Fix |
 | :--- | :--- | :--- |
 | ~~SMS Sending Blocked~~ | ✅ FIXED | GHL webhook workflow |
-| **No email tracking** | Can't measure campaign success | Add Resend webhooks or use Mailgun |
+| ~~No email tracking~~ | Partial (Resend API) | Need Webhooks for Open/Click analytics |
 | **Inbound call routing** | Missing leads when they call us | Set up Vapi inbound + forwarding |
 | **No automated sequences** | Manual follow-up required | Build scheduler + cron jobs |
 

@@ -4,5 +4,11 @@
     "sent": 9,
     "total_prospects": 10,
     "timestamp": "2026-01-08T08:04:24.164531"
+  },
+  {
+    "type": "sms",
+    "sent": 0,
+    "total_prospects": 10,
+    "timestamp": "2026-01-08T10:00:24.337175"
   }
 ]
