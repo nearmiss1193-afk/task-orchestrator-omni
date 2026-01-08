@@ -103,7 +103,7 @@ python send_save_protocol.py
 ## 📂 KEY FILE LOCATIONS
 
 | File | Purpose |
-|------|---------|
+| :--- | :--- |
 | `.env` | All API keys and secrets |
 | `modal_webhooks_only.py` | Persistent webhook deployment |
 | `cloud_inspector.py` | Health check all systems |
@@ -128,7 +128,7 @@ python send_save_protocol.py
 ## 📞 EMERGENCY CONTACTS
 
 | Service | URL |
-|---------|-----|
+| :--- | :--- |
 | Modal Status | <https://status.modal.com> |
 | Supabase Status | <https://status.supabase.com> |
 | Vercel Status | <https://www.vercel-status.com> |

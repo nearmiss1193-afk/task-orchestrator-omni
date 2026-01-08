@@ -1899,8 +1899,8 @@
             </div>
 
             <div class="video-wrapper">
-                <div class="video-placeholder"
-                <div class="video-placeholder" onclick="alert('Full system demo video coming soon!')">
+                <div class="video-placeholder" <div class="video-placeholder"
+                    onclick="alert('Full system demo video coming soon!')">
                     <div class="video-play-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M8 5v14l11-7z" />
@@ -2233,7 +2233,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <h3><span style="font-size: 24px;">⚡</span> AI Service<span>Co</span></h3>
+                    <h3><span class="brand-icon">⚡</span> AI Service<span>Co</span></h3>
                     <p>The #1 AI automation platform for service businesses. Stop chasing leads. Start closing jobs.</p>
                 </div>
 
@@ -2257,7 +2257,7 @@
                     <h4>Contact</h4>
                     <a href="mailto:sarah@empireunified.com">sarah@empireunified.com</a>
                     <a href="tel:+13527585336">(352) 758-5336</a>
-                    <p style="margin-top: 10px; color: var(--gray);">Florida, USA</p>
+                    <p class="footer-location">Florida, USA</p>
                 </div>
             </div>
 
@@ -2312,15 +2312,15 @@
                         </div>
                     </div>
 
-                    <div style="margin-top: 10px;">
+                    <div class="funnel-input-group">
                         <div class="funnel-option" onclick="toggleOtherInput(this)">
                             <div class="funnel-option-icon">✨</div>
                             <div class="funnel-option-text">
                                 <h4>Something else...</h4>
                             </div>
                         </div>
-                        <input type="text" class="funnel-other-input" id="otherPainInput"
-                            placeholder="Type your biggest challenge..." style="display: none;">
+                        <input type="text" class="funnel-other-input hidden-input" id="otherPainInput"
+                            placeholder="Type your biggest challenge...">
                         <button class="funnel-other-submit" id="otherPainSubmit"
                             onclick="submitOtherPain()">Continue</button>
                     </div>
@@ -2400,16 +2400,15 @@
 
             <!-- Step 4: Offer Selection -->
             <div class="funnel-step" id="funnelStep4">
-                <div class="funnel-progress" style="opacity: 0;">
+                <div class="funnel-progress hidden">
                 </div>
                 <h3>Perfect. <span class="highlight">Here's the plan.</span></h3>
-                <p style="margin-bottom: 20px;">Based on your answers, we recommend starting with the <strong>Growth
+                <p class="mb-20">Based on your answers, we recommend starting with the <strong>Growth
                         Partner</strong> setup.</p>
 
                 <div class="funnel-options">
-                    <div class="funnel-option" onclick="showContactForm()"
-                        style="border-color: var(--red); background: var(--red-subtle);">
-                        <div class="funnel-option-icon" style="background: var(--red);">”¥</div>
+                    <div class="funnel-option special-offer" onclick="showContactForm()">
+                        <div class="funnel-option-icon special-icon">”¥</div>
                         <div class="funnel-option-text">
                             <h4>Start My Free Trial</h4>
                             <p>14 Days Free. Cancel Anytime.</p>
@@ -2443,8 +2442,7 @@
 
                 <div class="funnel-form-container">
                     <!-- GHL PAYMENT FORM EMBED -->
-                    <iframe src="https://api.leadconnectorhq.com/widget/form/qaJ7szEbp2TwJkAT6WxG"
-                        style="width:100%;height:100%;border:none;border-radius:4px;min-height:500px;"
+                    <iframe src="https://api.leadconnectorhq.com/widget/form/qaJ7szEbp2TwJkAT6WxG" class="ghl-embed"
                         id="inline-qaJ7szEbp2TwJkAT6WxG" data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow"
                         data-trigger-value="" data-activation-type="alwaysActivated" data-activation-value=""
                         data-deactivation-type="neverDeactivate" data-deactivation-value=""
@@ -2465,8 +2463,7 @@
 
                 <div class="funnel-form-container">
                     <!-- GHL FORM EMBED -->
-                    <iframe src="https://api.leadconnectorhq.com/widget/form/7TTJ1CUAFjhON69ZsOZK"
-                        style="width:100%;height:100%;border:none;border-radius:4px;min-height:500px;"
+                    <iframe src="https://api.leadconnectorhq.com/widget/form/7TTJ1CUAFjhON69ZsOZK" class="ghl-embed"
                         id="inline-7TTJ1CUAFjhON69ZsOZK" data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow"
                         data-trigger-value="" data-activation-type="alwaysActivated" data-activation-value=""
                         data-deactivation-type="neverDeactivate" data-deactivation-value=""
@@ -2494,12 +2491,12 @@
 
                     <div class="funnel-contact-card">
                         <h4>Email Us</h4>
-                        <a href="mailto:support@aiserviceco.com" style="font-size: 18px;">support@aiserviceco.com</a>
+                        <a href="mailto:support@aiserviceco.com" class="contact-email">support@aiserviceco.com</a>
                         <p>Response within 2 hours.</p>
                     </div>
 
                     <!-- Chat trigger via LeadConnector -->
-                    <div class="funnel-contact-card" onclick="openChatWidget()" style="cursor: pointer;">
+                    <div class="funnel-contact-card pointer" onclick="openChatWidget()">
                         <h4>Live Chat</h4>
                         <a href="#">Start Chat</a>
                         <p>Instant answers.</p>
