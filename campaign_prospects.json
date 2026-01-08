@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Michael Reynolds",
+    "email": "michael@floridaairsystems.com",
+    "company": "Florida Air Systems",
+    "city": "Tampa",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 1129.0
+  },
+  {
+    "name": "Michael Carter",
+    "email": "michael@sunshinestateair.com",
+    "company": "Sunshine State Air",
+    "city": "Jacksonville",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 1023.0
+  },
+  {
+    "name": "John Matthews",
+    "email": "john@centralfloridahvacpros.com",
+    "company": "Central Florida HVAC Pros",
+    "city": "Orlando",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 821.5
+  },
+  {
+    "name": "John Matthews",
+    "email": "john@polkcountyheatingandair.com",
+    "company": "Polk County Heating & Air",
+    "city": "Lakeland",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 813.0
+  },
+  {
+    "name": "John Matthews",
+    "email": "john@paradiseacservices.com",
+    "company": "Paradise AC Services",
+    "city": "Fort Myers",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 740.0
+  },
+  {
+    "name": "Michael Thompson",
+    "email": "michael@bayareacomfortsolutions.com",
+    "company": "Bay Area Comfort Solutions",
+    "city": "Clearwater",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 733.5
+  },
+  {
+    "name": "Michael Johnson",
+    "email": "michael@tampabayacspecialists.com",
+    "company": "Tampa Bay AC Specialists",
+    "city": "St. Petersburg",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 689.5
+  },
+  {
+    "name": "Robert Thompson",
+    "email": "robert@gulfcoastclimatecontrol.com",
+    "company": "Gulf Coast Climate Control",
+    "city": "Sarasota",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 589.5
+  },
+  {
+    "name": "Michael Carter",
+    "email": "michael@homehearthvacandcool.com",
+    "company": "Homeheart HVAC & Cool",
+    "city": "Lakeland",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 588.0
+  },
+  {
+    "name": "John Matthews",
+    "email": "john@coolbreezeairconditioning.com",
+    "company": "Cool Breeze Air Conditioning",
+    "city": "Tampa",
+    "phone": null,
+    "industry": "HVAC",
+    "priority_score": 573.0
+  }
+]
