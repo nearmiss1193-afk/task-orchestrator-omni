@@ -44,6 +44,7 @@ def send_campaign_email(prospect: dict) -> bool:
     email_html = f"""
     <html>
     <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <p style='background-color: #f3f4f6; padding: 10px; text-align: center; border-radius: 5px; margin-bottom: 20px;'><a href='http://localhost:8501' style='text-decoration: none; color: #3b82f6; font-weight: bold;'>⚡ View Agent Dashboard</a></p>
     <h2>Hey {prospect.get('name', 'there').split()[0]},</h2>
     
     <p>I noticed {prospect.get('company', 'your business')} might be missing calls after hours. Quick question:</p>

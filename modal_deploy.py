@@ -7,7 +7,7 @@ import modal
 import os
 
 # Create Modal app
-app = modal.App("empire-services")
+app = modal.App("empire-sovereign-v2")
 
 # Image with dependencies
 image = modal.Image.debian_slim().pip_install(
@@ -16,8 +16,32 @@ image = modal.Image.debian_slim().pip_install(
     "python-dotenv",
     "schedule",
     "fastapi",
-    "uvicorn"
+    "uvicorn",
+    "supabase"
+)\
+.add_local_file("worker.py", remote_path="/root/worker.py")\
+.add_local_dir("modules", remote_path="/root/modules", ignore=["ghl-mcp", "descript-mcp", "node_modules", "__pycache__", "**/*.pyc", ".git", "**/*.zip", "**/*.db", "**/*.csv"])
+
+# ============ SOVEREIGN WORKER (THE BODY) ============
+@app.function(
+    image=image,
+    secrets=[modal.Secret.from_dotenv(path=os.path.join(os.getcwd(), ".env"))],
+    timeout=86400, # 24 hours (Long running)
+    keep_warm=1
 )
+def sovereign_worker():
+    """
+    The main autonomous agent loop.
+    Runs continuously in the cloud to process Supabase tasks.
+    """
+    import worker
+    
+    print("🚀 Sovereign Worker Starting in Cloud...")
+    try:
+        worker.main_loop() 
+    except Exception as e:
+        print(f"CRITICAL WORKER FAILURE: {e}")
+        raise e
 
 
 # ============ EMAIL TRACKING SERVICE ============
@@ -26,7 +50,7 @@ image = modal.Image.debian_slim().pip_install(
     secrets=[modal.Secret.from_dotenv()],
     keep_warm=1
 )
-@modal.web_endpoint(method="POST", label="email-webhook")
+@modal.web_endpoint(method="POST", label="email-callback")
 def email_webhook(data: dict):
     """Handle Resend email webhooks"""
     from datetime import datetime
@@ -52,7 +76,7 @@ def email_webhook(data: dict):
     secrets=[modal.Secret.from_dotenv()],
     keep_warm=1
 )
-@modal.web_endpoint(method="GET", label="email-health")
+@modal.web_endpoint(method="GET", label="email-status")
 def email_health():
     return {"status": "ok", "service": "email_tracking"}
 
@@ -63,7 +87,7 @@ def email_health():
     secrets=[modal.Secret.from_dotenv()],
     keep_warm=1
 )
-@modal.web_endpoint(method="POST", label="vapi-webhook")
+@modal.web_endpoint(method="POST", label="vapi-callback")
 def vapi_webhook(data: dict):
     """Handle Vapi call status webhooks"""
     import requests
@@ -74,22 +98,45 @@ def vapi_webhook(data: dict):
     
     print(f"[VAPI] {call_status} - Call: {call_id}")
     
-    # Forward missed calls
-    if call_status in ['end-of-call-report', 'hang']:
-        ended_reason = data.get('message', {}).get('endedReason', '')
-        if ended_reason in ['no-answer', 'busy', 'failed']:
-            # Notify backup
-            ghl_webhook = os.environ.get('GHL_SMS_WEBHOOK', '')
-            backup_phone = os.environ.get('TEST_PHONE', '')
+    # Deep Brain Harvest (Phase 8)
+    if call_status == 'end-of-call-report':
+        try:
+            from supabase import create_client
+            import os
             
-            if ghl_webhook and backup_phone:
-                try:
-                    requests.post(ghl_webhook, json={
-                        "phone": backup_phone,
-                        "message": f"📞 Missed call! Reason: {ended_reason}. Call back ASAP."
-                    })
-                except:
-                    pass
+            supa_url = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+            supa_key = os.getenv("SUPABASE_SERVICE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+            
+            if supa_url and supa_key:
+                client = create_client(supa_url, supa_key)
+                
+                msg = data.get('message', {})
+                logger_data = {
+                    'call_id': msg.get('call', {}).get('id'),
+                    'phone_number': msg.get('customer', {}).get('number'),
+                    'assistant_id': msg.get('assistantId'),
+                    'transcript': msg.get('transcript'),
+                    'summary': msg.get('summary'),
+                    'sentiment': msg.get('analysis', {}).get('sentiment'),
+                    'metadata': msg
+                }
+                
+                client.table('call_transcripts').upsert(logger_data).execute()
+                print(f"[DEEP BRAIN] Harvested call {call_id}")
+        except Exception as e:
+            print(f"[DEEP BRAIN] Harvest Failed: {e}")
+
+    # Forward missed calls / Rescue Bridge
+    if call_status in ['end-of-call-report', 'hang']:
+        try:
+            from modules import rescue_bridge
+            result = rescue_bridge.handle_failed_call(data)
+            print(f"[VAPI] Rescue result: {result}")
+        except ImportError:
+            # Fallback if module not found (shouldn't happen with add_local_dir)
+            pass
+        except Exception as e:
+             print(f"[VAPI] Rescue bridge error: {e}")
     
     return {"status": "received", "call_status": call_status}
 
@@ -205,4 +252,7 @@ def main():
     print("  - /vapi-webhook (POST)")
     print("  - /analytics (GET)")
     print("  - /health (GET)")
-    print("  - Sequence scheduler runs every 15 minutes")
+    print("Services:")
+    print("  - Sequence scheduler (every 15 min)")
+    print("  - Sovereign Worker (Continuous)")
+    print("\nTo launch worker explicitly: modal run modal_deploy.py::sovereign_worker")
