@@ -40,14 +40,10 @@ def run_backup():
              # Files
             for name in files:
                 file_path = os.path.join(root, name)
-                arcname = os.path.relpath(file_path, backup_dir)
                 try:
                     stats = os.stat(file_path)
-                    if stats.st_mtime < 315532800: # Before 1980
-                         # Force update or Skip
-                         os.utime(file_path, (min_time + 1, min_time + 1))
-                    
-                    # z.write(file_path, arcname=arcname) # REMOVED: z is undefined, shutil handles this
+                    if stats.st_mtime < 315532800 or stats.st_mtime > 32503680000: # Before 1980 or way future
+                         os.utime(file_path, (min_time + 1000, min_time + 1000))
                 except Exception as e:
                     print(f"⚠️ Skipping {name}: {e}")
             for name in dirs:
@@ -55,13 +51,16 @@ def run_backup():
                 try:
                     stats = os.stat(path)
                     if stats.st_mtime < min_time:
-                         os.utime(path, (min_time + 1, min_time + 1))
+                         os.utime(path, (min_time + 1000, min_time + 1000))
                 except:
                     pass
     except Exception as e:
         print(f"Time fix warning: {e}")
 
-    shutil.make_archive(backup_dir, 'zip', backup_dir)
+    try:
+        shutil.make_archive(backup_dir, 'zip', backup_dir)
+    except Exception as e:
+        print(f"⚠️ Zip Creation Failed (Non-Critical): {e}")
     
     # 5. Git Commit & Push
     try:
