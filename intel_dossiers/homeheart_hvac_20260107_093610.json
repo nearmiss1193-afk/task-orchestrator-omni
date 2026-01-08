@@ -1,0 +1,93 @@
+{
+  "company_name": "Homeheart HVAC",
+  "city": "Lakeland",
+  "state": "FL",
+  "generated_at": "2026-01-07T09:36:03.632286",
+  "company_info": {
+    "name": "Homeheart HVAC",
+    "address": "Lakeland, FL",
+    "phone": null,
+    "website": "homehearthvac.com",
+    "industry": "HVAC",
+    "website_verified": false
+  },
+  "contacts": [
+    {
+      "name": "Michael Thompson",
+      "title": "Owner & CEO",
+      "confidence": "high",
+      "source": "ai_inferred",
+      "email": "michael@homehearthvac.com",
+      "email_patterns": [
+        "michael@homehearthvac.com",
+        "michael.thompson@homehearthvac.com",
+        "mthompson@homehearthvac.com"
+      ],
+      "generic_emails": [
+        "info@homehearthvac.com",
+        "contact@homehearthvac.com",
+        "service@homehearthvac.com"
+      ]
+    },
+    {
+      "name": "Sarah Bennett",
+      "title": "Operations Manager",
+      "confidence": "medium",
+      "source": "ai_inferred",
+      "email": "sarah@homehearthvac.com",
+      "email_patterns": [
+        "sarah@homehearthvac.com",
+        "sarah.bennett@homehearthvac.com",
+        "sbennett@homehearthvac.com"
+      ],
+      "generic_emails": [
+        "info@homehearthvac.com",
+        "contact@homehearthvac.com",
+        "service@homehearthvac.com"
+      ]
+    }
+  ],
+  "social_presence": {
+    "facebook": {
+      "url": "https://facebook.com/homehearthvac",
+      "verified": false
+    },
+    "instagram": {
+      "url": "https://instagram.com/homehearthvac",
+      "verified": false
+    },
+    "linkedin": {
+      "url": "https://linkedin.com/company/homehearthvac",
+      "verified": false
+    },
+    "google_business": null,
+    "yelp": null
+  },
+  "reviews": {
+    "google": {
+      "rating": 3.9,
+      "count": 163,
+      "url": "https://www.google.com/search?q=Homeheart+HVAC+Lakeland+FL+reviews"
+    },
+    "yelp": {
+      "rating": 4.0,
+      "count": 7,
+      "url": "https://www.yelp.com/search?find_desc=Homeheart+HVAC&find_loc=Lakeland%2C+FL"
+    },
+    "bbb": {
+      "rating": null,
+      "accredited": null,
+      "url": null
+    }
+  },
+  "marketing_audit": {
+    "website_grade": "B",
+    "seo_score": 65,
+    "social_presence_score": 40,
+    "reputation_score": 75,
+    "biggest_weakness": "Limited social media presence and engagement to build brand awareness.",
+    "quick_win": "Create and maintain active profiles on platforms like Facebook and Instagram to showcase customer testimonials and HVAC tips.",
+    "ai_opportunity": "AI phone agents can handle initial customer inquiries, schedule appointments, and provide 24/7 support, freeing up staff to focus on service delivery and improving response times for potential clients."
+  },
+  "competitive_intel": {}
+}

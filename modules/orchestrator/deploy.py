@@ -615,7 +615,7 @@ Start: {analysis.get('timeline')}
             "emailSubject": "summary from our call - Nick",
             "html": f"<pre>{proposal}</pre>" # Simple rendering
         },
-        headers={'Authorization': f'Bearer {ghl_token}', 'Version': '2021-04-15', 'Content-Type': 'application/json'}
+        headers={'Authorization': f'Bearer {ghl_token}', 'Version': '2021-07-28', 'Content-Type': 'application/json'}
     )
     brain_log(f"✅ Proposal Sent to {contact_id}")
 

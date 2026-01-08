@@ -1,0 +1,30 @@
+{
+  "campaign": "HVAC Florida",
+  "city": "Tampa",
+  "started": "2026-01-07T15:20:27.588160",
+  "prospects": [
+    {
+      "company": "Cool Breeze HVAC",
+      "email_subject": "Missed After-Hours Calls Concern?",
+      "sent": true
+    },
+    {
+      "company": "Florida Air Systems",
+      "email_subject": "Missed After-Hours Calls Concern?",
+      "sent": true
+    },
+    {
+      "company": "Bay Area Comfort",
+      "email_subject": "Missed After-Hours Calls Inquiry",
+      "sent": true
+    },
+    {
+      "company": "Tampa Bay AC Pros",
+      "email_subject": "Missed After-Hours Calls Concern?",
+      "sent": true
+    }
+  ],
+  "emails_sent": 4,
+  "emails_failed": 0,
+  "completed": "2026-01-07T15:20:54.573700"
+}

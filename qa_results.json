@@ -1,0 +1,126 @@
+{
+  "timestamp": "2026-01-07T19:05:49.283402",
+  "base_url": "https://aiserviceco.com",
+  "tests": [
+    {
+      "name": "Page loads: https://aiserviceco.com/",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Page loads: https://aiserviceco.com/dashboard.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Page loads: https://aiserviceco.com/checkout.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Page loads: https://aiserviceco.com/checkout.html?plan=lite",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Page loads: https://aiserviceco.com/checkout.html?plan=growth",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Page loads: https://aiserviceco.com/hvac.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Page loads: https://aiserviceco.com/terms.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Page loads: https://aiserviceco.com/privacy.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "No raw CSS visible: https://aiserviceco.com/",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "No raw CSS visible: https://aiserviceco.com/dashboard.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "No raw CSS visible: https://aiserviceco.com/checkout.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "No raw CSS visible: https://aiserviceco.com/checkout.html?plan=lite",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "No raw CSS visible: https://aiserviceco.com/checkout.html?plan=growth",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "No raw CSS visible: https://aiserviceco.com/hvac.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "No raw CSS visible: https://aiserviceco.com/terms.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "No raw CSS visible: https://aiserviceco.com/privacy.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Form structure: https://aiserviceco.com/checkout.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Form structure: https://aiserviceco.com/checkout.html?plan=lite",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Form structure: https://aiserviceco.com/checkout.html?plan=growth",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Links work: https://aiserviceco.com/",
+      "passed": false,
+      "details": "Broken: ['https://fonts.googleapis.com (404)', 'https://fonts.gstatic.com (404)']"
+    },
+    {
+      "name": "Links work: https://aiserviceco.com/checkout.html",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "API endpoint: /api/stats",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "API endpoint: /api/leads",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "summary": {
+    "passed": 22,
+    "failed": 1,
+    "warnings": 0
+  }
+}
