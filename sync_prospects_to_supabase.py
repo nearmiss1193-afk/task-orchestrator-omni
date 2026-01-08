@@ -15,33 +15,39 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def sync_prospects():
-    json_path = "campaign_prospects.json"
-    
-    if not os.path.exists(json_path):
-        print(f"❌ File not found: {json_path}")
+import sys
+
+def sync_prospects(filename="campaign_prospects.json"):
+    if not os.path.exists(filename):
+        print(f"❌ File not found: {filename}")
         return
 
-    with open(json_path, 'r') as f:
+    with open(filename, 'r') as f:
         prospects = json.load(f)
 
-    print(f"📦 Found {len(prospects)} prospects to sync...")
+    print(f"📦 Found {len(prospects)} prospects in {filename}...")
     
     count = 0
     for p in prospects:
         # Map JSON fields to DB columns
-        data = {
+        # Schema adaptation: Phone, City, Industry go into 'agent_research' JSONB
+        state = p.get('state', 'FL')
+        prospect_data = {
             "first_name": p.get('name', '').split(' ')[0],
             "last_name": ' '.join(p.get('name', '').split(' ')[1:]) if ' ' in p.get('name', '') else '',
-            "company_name": p.get('company'),
-            "email": p.get('email'),
             "phone": p.get('phone'),
             "city": p.get('city'),
-            "state": "FL",
+            "state": state,
             "industry": p.get('industry', 'HVAC'),
-            "source": "grok_hunter_v1",
+            "source": f"grok_hunter_{filename}"
+        }
+
+        data = {
+            "company_name": p.get('company') or p.get('company_name'),
+            "email": p.get('email'),
             "status": "new",
-            "created_at": time.strftime('%Y-%m-%d %H:%M:%S%z')
+            "created_at": time.strftime('%Y-%m-%d %H:%M:%S%z'),
+            "agent_research": prospect_data # Store everything here
         }
         
         # Check if exists (dedupe by email or company)
@@ -65,7 +71,11 @@ def sync_prospects():
         except Exception as e:
             print(f"  ❌ Error syncing {data['company_name']}: {e}")
 
-    print(f"Synced {count} new leads.")
+    print(f"Synced {count} new leads from {filename}.")
 
 if __name__ == "__main__":
-    sync_prospects()
+    import sys
+    if len(sys.argv) > 1:
+        sync_prospects(sys.argv[1])
+    else:
+        sync_prospects()
