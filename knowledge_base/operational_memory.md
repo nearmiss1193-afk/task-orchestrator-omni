@@ -76,6 +76,27 @@
 - Backup via `python backup_protocol_v2.py`
 - System health: `python cloud_inspector.py`
 
+### Morning SOP (Daily Check)
+
+1. **Check Campaign Status:**
+
+   ```bash
+   python get_transcripts.py  # View overnight call results
+   ```
+
+2. **Check Lead Pipeline:**
+
+   ```bash
+   python get_campaign_status.py  # Lead counts by status
+   ```
+
+3. **Review Terminal for Errors:**
+   - Check `launch_drip_campaign.py` terminal for issues
+   - Look for API errors, rate limits, or failed calls
+4. **Verify Sarah is Active:**
+   - Confirm drip campaign is running (7 AM window now open)
+   - FL leads callable after 7 AM EST
+
 ---
 
 ## 🧠 Learnings Log
@@ -125,3 +146,27 @@
 - Automated prompt refinement based on outcomes
 
 **Full research:** `knowledge_base/ai_research_2025.md`
+
+---
+
+## 🛠️ Engineering Standards (SOP)
+
+### Crash Resilience & Auto-Recovery Protocol
+
+**Mandatory for all automation scripts (Orchestrators/Managers).**
+
+1. **Subprocess Isolation:**
+    - Do NOT run critical worker logic in the main thread.
+    - Use `subprocess.run(capture_output=True)` to isolate individual tasks.
+
+2. **Crash Detection:**
+    - Check `res.returncode != 0`.
+    - Capture `res.stderr` (last 200 chars) for immediate context.
+
+3. **Auto-Quarantine (No Stalls):**
+    - If a worker crashes, **IMMEDIATELY** update the lead's status to `system_crash`.
+    - Log the error in the `leads` table `notes` column.
+    - *Result:* The pipeline must continue processing the next lead immediately. The campaign must never stall due to a single bad record or bug.
+
+4. **Self-Correction (Future):**
+    - Scripts should attempt one retry or flag for "Medic Agent" intervention.

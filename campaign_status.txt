@@ -1,92 +1,189 @@
-=== LEADS (86) ===
-  - ? | ? | Status: ready_to_send
+=== LEADS (139) ===
+  - ? | ? | Status: processing_email
   - ? | ? | Status: contacted
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
   - ? | ? | Status: contacted
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
-  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
+  - ? | ? | Status: processing_email
 
-=== CALL TRANSCRIPTS (6) ===
+=== CALL TRANSCRIPTS (10) ===
+  - 2026-01-09T15:22:59
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: This is Rachel at AI Service Company. I'm looking at your file. Are we focusing on fixing your missed calls or launching the new VO ads today? User: I'm actually looking at the, uh, trial. Is it a 7 day or a 14 day trial? AI: That's a great question. Let's map that out in a demo. Would tomorrow ...
+
+  - 2026-01-09T15:13:08
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: specialist. How can I help you automate your business today? User: Yeah. I was hoping to speak to, uh, orchestrator. AI: I can definitely help get you in touch with the orchestrator line if you need technical details. But first, can I ask what specific HVAC or plumbing automation needs you're lo...
+
+  - 2026-01-09T14:42:08
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: Hey. This is John from Empire AI. I'm actually an AI agent calling to check your availability. You got a second? User: Yeah. Sure. AI: I'm actually an artificial intelligence calling to see if you can handle more estimates. You guys busy right now? User: Uh, no. Not too much. AI: Hey. This is Jo...
+
+  - 2026-01-09T14:04:14
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: This is John with Empire Roofing. Who am I speaking with? User: Daniel. AI: Hey, Daniel. This is John with Empire. How's the roof looking? You thinking of getting it replaced? Can you tell me a bit about it? ...
+
+  - 2026-01-09T13:48:36
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+
+  - 2026-01-09T13:43:54
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+
+  - 2026-01-09T13:33:54
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+
+  - 2026-01-09T13:30:14
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+
   - 2026-01-08T22:51:15
     Phone: ?
     Duration: ?s
@@ -98,30 +195,6 @@
     Duration: ?s
     Outcome: ?
     Snippet: AI: Hey, Emily. It's Sarah. AI: calls. You got 30 seconds for a weird question? ...
-
-  - 2026-01-08T22:03:17
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: It's Sarah. I was looking at none online and had a theory about how you guys are handling your dispatched calls. You got 30 seconds for a weird question? User: Sure. AI: Awesome. So my guess is that you might be losing potential calls or jobs when your lines are tied up or it's after hours. We t...
-
-  - 2026-01-08T22:00:35
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: Hey. Thanks for calling AI service Company. This is Sarah. Who do I have the pleasure of speaking ...
-
-  - 2026-01-08T21:57:28
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: Hey. Thanks for calling AI Service Company. This is Sarah. Who do I have the pleasure of speaking with today? User: Um, you called me. AI: Oh, my bad. Is this person's name? User: Yes. AI: Hey, person's name. This is Sarah from AI service company. I'll be quick. Noticed your business and thought...
-
-  - 2026-01-08T21:50:57
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: Hey. Thanks for calling AI service company. This is Sarah. Who do I have the pleasure of speaking with today? User: My name is Dan. AI: Nice to meet you, Dan. What can I help you with? User: Uh, I was just uh, looking at the email that you guys sent me. It sent me to your site, but I wasn't sure...
 
 
 === SYSTEM LOGS (2) ===

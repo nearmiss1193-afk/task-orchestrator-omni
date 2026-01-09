@@ -1,54 +1,57 @@
-
 import os
 from supabase import create_client
-import json
 
-# HARDCODED SECRETS (From deploy.py)
-URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
-KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
+# Hardcoded from .env for immediate debug reliability
+SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
 
-def get_supabase():
-    return create_client(URL, KEY)
-
-def test_leads():
-    print("--- TESTING LEADS ENDPOINT ---")
+def check_status():
+    print("Connecting to Supabase...")
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+    
+    # 1. Total Counts by Status
+    print("\n--- Lead Status Counts ---")
     try:
-        supabase = get_supabase()
-        # Exact logic from dashboard_service.py
-        raw = supabase.table("contacts_master").select("*").order("created_at", desc=True).limit(20).execute().data
+        # Fetch all status fields
+        res = supabase.table('leads').select('status').execute()
+        counts = {}
+        for row in res.data:
+            s = row.get('status', 'UNION')
+            counts[s] = counts.get(s, 0) + 1
         
-        print(f"Fetched {len(raw)} rows.")
-        if len(raw) > 0:
-            print(f"Sample Row: {raw[0]}")
-            
-        grid_data = []
-        for r in raw:
-            tags = r.get("tags") or []
-            campaign = "Cold Outreach V1" if "risk_high" in tags else "Inbound Waitlist"
-            
-            industry_map = ["Real Estate", "SaaS", "E-commerce", "Local Biz", "Healthcare"]
-            # Check for possible TypeError in hash logic
-            cid = r.get("ghl_contact_id", "")
-            if not isinstance(cid, str):
-                cid = str(cid)
-                
-            pseudo_random_index = len(cid) % len(industry_map)
-            sector = industry_map[pseudo_random_index]
-            
-            grid_data.append({
-                "name": r.get("full_name") or "Unknown Target",
-                "industry": sector,
-                "campaign": campaign,
-                "status": r.get("status"),
-                "score": r.get("lead_score") or 50
-            })
-        print(f"Refined Data: {json.dumps(grid_data[:2])}")
-        print("✅ SUCCESS")
-        
+        for status, count in counts.items():
+            print(f"{status}: {count}")
     except Exception as e:
-        print(f"❌ FAIL: {e}")
-        import traceback
-        traceback.print_exc()
+        print(f"Error fetching counts: {e}")
+
+    # 2. Check "Reservations" (converted / appointment_set)
+    print("\n--- 'Reservations' Details ---")
+    try:
+        res = supabase.table('leads').select('*').in_('status', ['converted', 'appointment_set']).execute()
+        if not res.data:
+            print("No leads found with status 'converted' or 'appointment_set'.")
+            # Fallback: Maybe logic uses 'qualified'?
+            res = supabase.table('leads').select('*').eq('status', 'qualified').execute()
+            if res.data:
+                print(f"Found {len(res.data)} 'qualified' leads (maybe these are them?):")
+        
+        for lead in res.data:
+            print(f"- {lead.get('company_name')} ({lead.get('status')}): {lead.get('notes')}")
+            
+    except Exception as e:
+        print(f"Error fetching reservations: {e}")
+
+    # 3. Check Transcripts
+    print("\n--- Call Transcripts ---")
+    try:
+        res = supabase.table('call_transcripts').select('*', count='exact').execute()
+        print(f"Total Call Transcripts: {len(res.data)}")
+        if res.data:
+            print("Last 3 transcripts:")
+            for t in res.data[:3]:
+                 print(f"- {t.get('created_at')} | {t.get('summary')[:50]}...")
+    except Exception as e:
+        print(f"Error fetching transcripts: {e}")
 
 if __name__ == "__main__":
-    test_leads()
+    check_status()
