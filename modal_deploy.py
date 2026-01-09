@@ -72,14 +72,7 @@ def email_webhook(data: dict):
     return {"status": "received", "event": event_type}
 
 
-@app.function(
-    image=image,
-    secrets=[modal.Secret.from_dotenv()],
-    keep_warm=1
-)
-@modal.web_endpoint(method="GET", label="email-status")
-def email_health():
-    return {"status": "ok", "service": "email_tracking"}
+# email_health removed to reduce endpoint count (consolidated into main health)
 
 
 # ============ VAPI CALL STATUS SERVICE ============
@@ -237,13 +230,8 @@ def vapi_webhook(data: dict):
     return {"status": "received", "call_status": call_status}
 
 
-@app.function(
-    image=image,
-    secrets=[modal.Secret.from_dotenv()],
-    keep_warm=1
-)
-@modal.web_endpoint(method="GET", label="vapi-health")
-def vapi_health():
+# vapi_health removed to reduce endpoint count (consolidated into main health)
+def _vapi_health_internal():
     return {"status": "ok", "service": "inbound_forwarder"}
 
 
@@ -285,14 +273,9 @@ def run_sequences():
     return {"executed": executed}
 
 
-# ============ CALL ANALYTICS ============
-@app.function(
-    image=image,
-    secrets=[modal.Secret.from_dotenv()],
-    keep_warm=1
-)
-@modal.web_endpoint(method="GET", label="analytics")
-def call_analytics():
+# ============ CALL ANALYTICS (internal - moved from web endpoint to reduce count) ============
+# call_analytics endpoint removed to fit within Modal free tier limit
+def _call_analytics_internal():
     """Get call analytics"""
     import requests
     from collections import defaultdict
