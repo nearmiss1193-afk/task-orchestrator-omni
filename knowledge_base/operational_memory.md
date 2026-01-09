@@ -170,3 +170,17 @@
 
 4. **Self-Correction (Future):**
     - Scripts should attempt one retry or flag for "Medic Agent" intervention.
+
+
+## 1.4 Pricing Architecture (Golden Standard)
+- **Unified Pricing Model**: $297/mo (Starter/Growth)
+- **Authority**: This document is the SINGLE SOURCE OF TRUTH for pricing.
+- **Validation**: All HTML pages must match this price.
+- **Tiers**:
+  - Starter: $297/mo
+  - Growth: $497/mo (Only if explicitly upsold, default is $297)
+  - Scale: $997/mo
+
+### 1.5 Protocol: Deployment & Verification
+- **Pre-Deployment**: Run verify_site_integrity.py.
+- **Git State**: Always git status before git commit.

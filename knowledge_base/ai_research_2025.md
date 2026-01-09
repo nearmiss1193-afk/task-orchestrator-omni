@@ -97,7 +97,7 @@
 - **Predictive lead scoring** - Focus on high-conversion prospects
 - **Real-time call coaching** - Tone, pacing, language analysis
 
-### Best Practices
+### Best Practices (Sales)
 
 - Clear goals for AI agents
 - Continuous monitoring (response time, conversion rates)
@@ -146,7 +146,7 @@
 3. **Output Format** - Structure expectations
 4. **Context/Guardrails** - Boundaries and data
 
-### Best Practices
+### Best Practices (Prompts)
 
 - **Clarity and specificity** - Avoid ambiguity
 - **Provide context** - Background, audience, goal
