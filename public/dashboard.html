@@ -8,8 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Vapi SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.min.js"></script>
+    <!-- Vapi SDK (Browser UMD Build) -->
+    <script src="https://unpkg.com/@vapi-ai/web/dist/vapi.umd.js"></script>
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -162,6 +162,20 @@
             </div>
         </div>
 
+        <!-- CALL TRANSCRIPTS (Brain Training Data) -->
+        <div class="glass p-6 rounded-2xl mb-6">
+            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
+                <h3 class="font-bold flex items-center gap-2">
+                    <span>📞</span> Call Transcripts & AI Learnings
+                </h3>
+                <button onclick="fetchTranscripts()" class="text-xs text-blue-400 hover:text-blue-300">↻
+                    Refresh</button>
+            </div>
+            <div id="transcriptsContainer" class="space-y-3 max-h-[400px] overflow-y-auto">
+                <div class="text-center text-slate-500 py-6">Loading transcripts...</div>
+            </div>
+        </div>
+
         <!-- ASSET INBOX (Feed the Brain) -->
         <div class="glass p-6 rounded-2xl">
             <div class="flex justify-between items-center mb-4">
@@ -252,6 +266,62 @@
             alert("Open Dossier ID: " + id + "\\n(Feature coming in Sprint 2)");
         }
 
+        // --- TRANSCRIPTS FETCHING ---
+        async function fetchTranscripts() {
+            const container = document.getElementById('transcriptsContainer');
+            container.innerHTML = '<div class="text-center text-slate-500 py-4">Loading...</div>';
+
+            try {
+                const { data, error } = await sbClient
+                    .from('call_transcripts')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(20);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="text-center text-slate-500 py-6">No call transcripts yet. Make some calls!</div>';
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                data.forEach((t, i) => {
+                    const date = new Date(t.created_at).toLocaleDateString() + ' ' + new Date(t.created_at).toLocaleTimeString();
+                    const phone = t.phone_number || 'Unknown';
+                    const sentiment = t.sentiment || 'N/A';
+                    const summary = t.summary || 'No summary';
+                    const transcript = t.transcript || 'No transcript available';
+
+                    // Sentiment color
+                    let sentimentClass = 'text-slate-400';
+                    if (sentiment && sentiment.toLowerCase().includes('positive')) sentimentClass = 'text-green-400';
+                    if (sentiment && sentiment.toLowerCase().includes('negative')) sentimentClass = 'text-red-400';
+
+                    const div = document.createElement('div');
+                    div.className = 'bg-slate-800/50 rounded-lg p-4 border border-white/5';
+                    div.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <span class="font-bold text-white">📞 ${phone}</span>
+                                <span class="text-xs text-slate-500 ml-2">${date}</span>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded ${sentimentClass} bg-white/5">${sentiment}</span>
+                        </div>
+                        <p class="text-sm text-slate-300 mb-2">${summary.substring(0, 200)}${summary.length > 200 ? '...' : ''}</p>
+                        <details class="mt-2">
+                            <summary class="text-xs text-blue-400 cursor-pointer hover:text-blue-300">📜 View Full Transcript</summary>
+                            <pre class="mt-2 p-3 bg-slate-900 rounded text-xs text-slate-400 whitespace-pre-wrap max-h-48 overflow-y-auto">${transcript}</pre>
+                        </details>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (err) {
+                container.innerHTML = '<div class="text-center text-red-400 py-4">Error loading transcripts: ' + err.message + '</div>';
+            }
+        }
+
         // --- 2. VAPI UPLINK (with null safety) ---
         let isConnected = false;
 
@@ -327,6 +397,7 @@
         window.addEventListener('load', () => {
             fetchStats();
             fetchLeads();
+            fetchTranscripts();
             setInterval(fetchStats, 10000); // 10s refresh
             setInterval(fetchLeads, 10000);
         });
