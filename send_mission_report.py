@@ -13,7 +13,7 @@ if not RESEND_API_KEY:
 resend.api_key = RESEND_API_KEY
 
 def send_report():
-    print("📧 Sending Mission Report...")
+    print("Sending Mission Report...")
     
     html_content = """
     <h1>🛡️ Protocol Omega: Save Complete</h1>
@@ -37,12 +37,12 @@ def send_report():
         r = resend.Emails.send({
             "from": "Empire Unified <onboarding@resend.dev>",
             "to": "nearmiss1193@gmail.com",
-            "subject": "🛡️ Protocol Omega: Mission Report & Backup Status",
+            "subject": "Protocol Omega: Mission Report & Backup Status",
             "html": html_content
         })
-        print(f"✅ Email Sent (ID: {r['id']})")
+        print(f"Email Sent (ID: {r['id']})")
     except Exception as e:
-        print(f"❌ Email Failed: {e}")
+        print(f"Email Failed: {e}")
 
 if __name__ == "__main__":
     send_report()
