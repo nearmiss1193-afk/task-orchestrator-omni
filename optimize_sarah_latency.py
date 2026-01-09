@@ -19,9 +19,9 @@ headers = {
 # Optimized configuration for <500ms latency
 # Research source: Vapi latency docs, AssemblyAI recommendations
 optimizations = {
-    # Switch to Groq LLM (Llama) - much faster than GPT-4
+    # Switch to Groq LLM - much faster than GPT-4
     "model": {
-        "model": "llama-3.1-70b-versatile",  # Groq's fast model
+        "model": "llama-3.3-70b-versatile",  # Production-ready Groq Llama
         "provider": "groq",
         "messages": [
             {

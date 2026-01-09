@@ -1,0 +1,83 @@
+{
+  "id": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+  "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+  "name": "Sarah 3.1",
+  "voice": {
+    "model": "eleven_flash_v2_5",
+    "voiceId": "21m00Tcm4TlvDq8ikWAM",
+    "provider": "11labs"
+  },
+  "createdAt": "2026-01-05T23:28:28.488Z",
+  "updatedAt": "2026-01-09T02:07:11.697Z",
+  "model": {
+    "model": "llama-3.3-70b-versatile",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are Sarah, AI phone assistant for AI Service Company. Be warm, genuine, casual.\n\nINBOUND: \"Hey, thanks for calling! This is Sarah. Who am I speaking with?\"\n- Get their name, then: \"Nice to meet you, [name]! How can I help?\"\n- For demos: \"Awesome! What's your best email for a calendar invite?\"\n\nOUTBOUND: \"Hey, is this [name]?\" \n- If yes: \"Hey [name], Sarah from AI Service Company. Quick question - do you miss revenue from after-hours calls? Got 30 seconds?\"\n\nOBJECTIONS:\n- \"Have a receptionist\": \"We handle overflow and 2 AM calls - your team stays focused.\"\n- \"Cost?\": \"Less than one missed job per month. Want me to run numbers?\"\n- \"Not interested\": \"All good! I'll check back when you're ready.\"\n\nSTYLE: Casual, concise, human. Use \"totally\", \"honestly\". No essays."
+      }
+    ],
+    "provider": "groq",
+    "maxTokens": 150,
+    "temperature": 0.7
+  },
+  "recordingEnabled": true,
+  "firstMessage": "Hey, thanks for calling AI Service Company! This is Sarah. Who do I have the pleasure of speaking with today?",
+  "endCallMessage": "Thank you so much for your time! Have a wonderful day.",
+  "transcriber": {
+    "model": "nova-2",
+    "language": "en",
+    "provider": "deepgram"
+  },
+  "silenceTimeoutSeconds": 10,
+  "serverUrl": "https://nearmiss1193-afk--vapi-live.modal.run",
+  "maxDurationSeconds": 600,
+  "backchannelingEnabled": true,
+  "analysisPlan": {
+    "summaryPrompt": "Summarize this call in 2-3 sentences. Include: customer name if mentioned, their business type, main pain points, objections raised, and outcome (booked demo, sent info, follow up, not interested).",
+    "structuredDataPrompt": "Extract structured data from this call including: customer_name, business_name, phone, email if mentioned, industry, current_software, number_of_trucks, objections_list, next_steps, interest_level (hot/warm/cold), follow_up_date if mentioned.",
+    "structuredDataSchema": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string"
+        },
+        "next_steps": {
+          "type": "string"
+        },
+        "objections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pain_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "business_name": {
+          "type": "string"
+        },
+        "customer_name": {
+          "type": "string"
+        },
+        "interest_level": {
+          "type": "string",
+          "enum": [
+            "hot",
+            "warm",
+            "cold"
+          ]
+        },
+        "follow_up_needed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "successEvaluationPrompt": "Rate this call's success: Did Sarah build rapport, qualify properly, handle objections well, and get a clear next step? Rate 1-10 and explain briefly.",
+    "successEvaluationRubric": "NumericScale"
+  },
+  "isServerUrlSecretSet": false
+}
