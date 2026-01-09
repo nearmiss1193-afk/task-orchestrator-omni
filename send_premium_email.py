@@ -51,7 +51,7 @@ I put together a quick 60-second video showing how one HVAC company turned misse
 
 <table cellpadding="0" cellspacing="0" style="margin:30px 0;">
 <tr><td style="background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%); border-radius:10px; padding:16px 28px;">
-<a href="https://calendly.com/aiserviceco/demo" style="color:#fff; text-decoration:none; font-weight:600; font-size:15px;">
+<a href="https://www.aiserviceco.com/features.html" style="color:#fff; text-decoration:none; font-weight:600; font-size:15px;">
 📞 Book a Quick Chat
 </a>
 </td></tr>

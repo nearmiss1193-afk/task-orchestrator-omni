@@ -18,7 +18,7 @@ I noticed your missed call automation could be improved. I'm building a custom R
 
 <a href="https://aiserviceco.com/audit/cooling21">Link to Custom Audit</a>
 
-Book a Call: <a href="https://calendly.com/aiserviceco/demo">https://calendly.com/aiserviceco/demo</a>
+Book a Call: <a href="https://www.aiserviceco.com/features.html">https://www.aiserviceco.com/features.html</a>
 
 If you want to fix this bottleneck, let's chat.
 

@@ -96,7 +96,7 @@ async def run_spear():
         TASK: Generate Campaign Assets & Strategy.
         1. EMAIL 1 (Pattern Interrupt):
            - Rule 1: MUST start body with "Learn, Evolve, and Grow Always".
-           - Rule 2: MUST include "Book a Call: https://calendly.com/aiserviceco/demo".
+           - Rule 2: MUST include "Book a Call: https://www.aiserviceco.com/features.html".
            - Tone: Helpful, Peer-to-Peer.
         2. SMS 1 (Nudge):
            - Rule: MUST end with "Learn, Evolve, and Grow Always".

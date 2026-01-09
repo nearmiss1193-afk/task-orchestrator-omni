@@ -61,7 +61,7 @@ EMAIL_HTML = f"""
 
         <p>If you want a system that treats every lead like a winning lottery ticket—while you're out making money—let's chat.</p>
 
-        <a href="https://calendly.com/aiserviceco/demo" class="cta" style="background: #22c55e;">📅 Book a Quick Demo Call</a>
+        <a href="https://www.aiserviceco.com/features.html" class="cta" style="background: #22c55e;">📅 Book a Quick Demo Call</a>
 
         <p>Talk soon,<br>
         <strong>Daniel @ AI Service Co</strong></p>

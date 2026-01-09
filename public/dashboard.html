@@ -53,7 +53,18 @@
         const ORCHESTRATOR_ID = "78b4c14a-4db3-4416-9289-d1bfd2409606";
 
         const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        const vapi = new window.vapi(VAPI_PUBLIC_KEY);
+
+        // Vapi initialization with error handling (SDK may not load correctly)
+        let vapi = null;
+        try {
+            if (window.Vapi) {
+                vapi = new window.Vapi(VAPI_PUBLIC_KEY);
+            } else if (window.vapi) {
+                vapi = new window.vapi(VAPI_PUBLIC_KEY);
+            }
+        } catch (e) {
+            console.warn('[Dashboard] Vapi SDK failed to initialize:', e.message);
+        }
     </script>
 
     <div class="max-w-7xl mx-auto">
@@ -241,21 +252,24 @@
             alert("Open Dossier ID: " + id + "\\n(Feature coming in Sprint 2)");
         }
 
-        // --- 2. VAPI UPLINK ---
+        // --- 2. VAPI UPLINK (with null safety) ---
         let isConnected = false;
 
-        vapi.on('call-start', () => {
-            console.log('Call started');
-            document.getElementById('statusUplink').innerText = "Status: 🟢 ONLINE (Secure Channel)";
-            document.getElementById('statusUplink').className = "mt-3 text-xs text-green-400 font-bold font-mono animate-pulse";
-            document.getElementById('btnUplink').innerText = "DISCONNECT";
-            document.getElementById('btnUplink').className = "px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-lg font-bold w-full transition shadow-lg shadow-red-500/20";
-        });
+        // Only attach listeners if vapi initialized successfully
+        if (vapi) {
+            vapi.on('call-start', () => {
+                console.log('Call started');
+                document.getElementById('statusUplink').innerText = "Status: 🟢 ONLINE (Secure Channel)";
+                document.getElementById('statusUplink').className = "mt-3 text-xs text-green-400 font-bold font-mono animate-pulse";
+                document.getElementById('btnUplink').innerText = "DISCONNECT";
+                document.getElementById('btnUplink').className = "px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-lg font-bold w-full transition shadow-lg shadow-red-500/20";
+            });
 
-        vapi.on('call-end', () => {
-            console.log('Call ended');
-            resetUplinkUI();
-        });
+            vapi.on('call-end', () => {
+                console.log('Call ended');
+                resetUplinkUI();
+            });
+        }
 
         function resetUplinkUI() {
             isConnected = false;
@@ -266,6 +280,10 @@
         }
 
         function toggleUplink() {
+            if (!vapi) {
+                document.getElementById('statusUplink').innerText = "Status: Voice SDK unavailable";
+                return;
+            }
             if (isConnected) {
                 vapi.stop();
                 isConnected = false;

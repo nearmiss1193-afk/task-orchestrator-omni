@@ -35,7 +35,7 @@ resend.api_key = os.getenv('RESEND_API_KEY')
 
 # Configuration
 VIDEO_URL = "https://youtube.com/shorts/C4GRQ8xaFn0"
-CALENDLY_LINK = "https://calendly.com/aiserviceco/demo"
+CALENDLY_LINK = "https://www.aiserviceco.com/features.html"
 RATE_LIMIT = 20  # emails per batch
 RATE_WINDOW = 600  # 10 minutes in seconds
 

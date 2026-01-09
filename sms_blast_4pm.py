@@ -27,7 +27,7 @@ except ImportError:
 
 # Configuration
 VIDEO_URL = "https://youtube.com/shorts/C4GRQ8xaFn0"
-CALENDLY_LINK = "https://calendly.com/aiserviceco/demo"
+CALENDLY_LINK = "https://www.aiserviceco.com/features.html"
 CAMPAIGN_DATA_DIR = "campaign_data"
 
 # Twilio credentials (set these in .env)
