@@ -243,6 +243,16 @@
             line-height: 1.5;
         }
     </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8080RNWHVV">
+    </script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-8080RNWHVV');
+    </script>
 </head>
 
 <body>
@@ -376,19 +386,19 @@
 
             planInput.value = plan;
 
-            if (plan === 'lite') {
-                planNameEl.textContent = 'HVAC Lite';
-                planPriceEl.textContent = '$199/mo';
-                totalPriceEl.textContent = '$199';
+            if (plan === 'scale') {
+                planNameEl.textContent = 'AI Scale';
+                planPriceEl.textContent = '$997/mo';
+                totalPriceEl.textContent = '$997';
             } else if (plan === 'growth') {
-                planNameEl.textContent = 'HVAC Growth';
+                planNameEl.textContent = 'AI Growth';
+                planPriceEl.textContent = '$497/mo';
+                totalPriceEl.textContent = '$497';
+            } else {
+                // Default to Starter ($297) - Golden Standard
+                planNameEl.textContent = 'AI Starter';
                 planPriceEl.textContent = '$297/mo';
                 totalPriceEl.textContent = '$297';
-            } else {
-                // Default to Starter ($99)
-                planNameEl.textContent = 'HVAC Starter';
-                planPriceEl.textContent = '$99/mo';
-                totalPriceEl.textContent = '$99';
             }
 
             async function handleSubmit(e) {

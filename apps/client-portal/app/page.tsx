@@ -84,6 +84,7 @@ export default function MissionControl() {
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [leads, setLeads] = useState<Lead[]>([]);
     const [trainingData, setTrainingData] = useState<TrainingData[]>([]);
+    const [memory, setMemory] = useState<string>('');
 
     const [chatMessages, setChatMessages] = useState<{ role: string; content: string }[]>([]);
     const [chatInput, setChatInput] = useState('');
@@ -192,6 +193,14 @@ export default function MissionControl() {
                     .limit(50);
                 if (trainData) setTrainingData(trainData);
 
+                // 6. Fetch Operational Memory (Real Brain)
+                const { data: memData } = await supabase
+                    .from('system_memory')
+                    .select('value')
+                    .eq('key', 'operational_buffer')
+                    .single();
+                if (memData) setMemory(memData.value);
+
             } catch (e) {
                 console.warn('Real data fetch incomplete (tables might be missing).', e);
             }
@@ -286,8 +295,8 @@ export default function MissionControl() {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`px-5 py-3 text-sm font-medium transition-all flex items-center gap-2 border-b-2 whitespace-nowrap rounded-t-lg hover:bg-white/5 ${activeTab === tab.id
-                                        ? 'border-blue-500 text-blue-400 bg-blue-500/5'
-                                        : 'border-transparent text-slate-400'
+                                    ? 'border-blue-500 text-blue-400 bg-blue-500/5'
+                                    : 'border-transparent text-slate-400'
                                     }`}
                             >
                                 <span className="text-lg">{tab.icon}</span>
@@ -411,8 +420,8 @@ export default function MissionControl() {
                                                 </td>
                                                 <td className="p-3">
                                                     <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded ${lead.status === 'new' ? 'bg-blue-500/10 text-blue-400' :
-                                                            lead.status === 'contacted' ? 'bg-yellow-500/10 text-yellow-400' :
-                                                                'bg-green-500/10 text-green-400'
+                                                        lead.status === 'contacted' ? 'bg-yellow-500/10 text-yellow-400' :
+                                                            'bg-green-500/10 text-green-400'
                                                         }`}>
                                                         {lead.status}
                                                     </span>
@@ -428,33 +437,39 @@ export default function MissionControl() {
                 )}
 
                 {/* Brain (Training) Tab */}
+                {/* Brain (Training) Tab */}
                 {activeTab === 'brain' && (
                     <div className="bg-white/5 border border-white/10 rounded-xl p-6">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-semibold">🧠 Training Data (Brain)</h2>
-                            <div className="text-xs font-mono text-slate-400">{trainingData.length} Concepts</div>
+                            <h2 className="text-xl font-semibold">🧠 Operational Memory (Active Directives)</h2>
+                            <div className="text-xs font-mono text-green-400 animate-pulse">LIVE SYNC</div>
                         </div>
 
-                        <div className="grid gap-4">
-                            {trainingData.length === 0 ? (
-                                <div className="text-center py-12 bg-black/20 rounded-xl">
-                                    <div className="text-4xl mb-4">🧠</div>
-                                    <h3 className="text-lg font-medium text-slate-300">Brain is Empty</h3>
-                                    <p className="text-slate-500">No training data harvested yet.</p>
+                        <div className="grid gap-6">
+                            {/* Operational Memory Block */}
+                            <div className="bg-black/40 border border-green-500/20 rounded-xl p-6 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                                <h3 className="text-sm font-bold text-green-400 mb-4 uppercase tracking-wider flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    Current Protocols
+                                </h3>
+                                <div className="prose prose-invert prose-sm max-w-none">
+                                    <pre className="whitespace-pre-wrap bg-transparent p-0 text-slate-300 font-mono text-xs leading-relaxed">
+                                        {memory || 'Initializing neural handshake...'}
+                                    </pre>
                                 </div>
-                            ) : (
-                                trainingData.map(data => (
-                                    <div key={data.id} className="bg-black/20 border border-white/5 rounded-lg p-4">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <span className="text-xs font-mono uppercase text-blue-400 bg-blue-500/10 px-2 py-1 rounded">
-                                                {data.source}
-                                            </span>
-                                            <span className="text-xs text-slate-500">{new Date(data.created_at).toLocaleDateString()}</span>
+                            </div>
+
+                            {/* Legacy Training Data */}
+                            <div className="opacity-60">
+                                <h3 className="text-xs font-bold text-slate-500 mb-2 uppercase">Archived Concepts ({trainingData.length})</h3>
+                                <div className="grid gap-2">
+                                    {trainingData.slice(0, 3).map(data => (
+                                        <div key={data.id} className="bg-black/20 border border-white/5 rounded p-3 text-xs text-slate-400 truncate">
+                                            {data.content}
                                         </div>
-                                        <p className="text-slate-300 text-sm leading-relaxed">{data.content}</p>
-                                    </div>
-                                ))
-                            )}
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -586,8 +601,8 @@ export default function MissionControl() {
                             {chatMessages.map((msg, i) => (
                                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[80%] rounded-2xl px-5 py-3 text-sm leading-relaxed shadow-lg ${msg.role === 'user'
-                                            ? 'bg-blue-600 text-white rounded-br-none'
-                                            : 'bg-white/10 text-slate-200 border border-white/5 rounded-bl-none'
+                                        ? 'bg-blue-600 text-white rounded-br-none'
+                                        : 'bg-white/10 text-slate-200 border border-white/5 rounded-bl-none'
                                         }`}>
                                         {msg.content}
                                     </div>

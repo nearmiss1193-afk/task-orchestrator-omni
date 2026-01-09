@@ -4,6 +4,7 @@ import json
 import os
 import google.generativeai as genai
 from datetime import datetime
+import psycopg2
 
 # Import Dispatcher (Singleton)
 try:
@@ -33,6 +34,23 @@ class SovereignRouter:
     def __init__(self):
         self.processed_ids = self._load_processed()
         self.kb_context = self._load_kb()
+        self.db_url = os.environ.get("DATABASE_URL")
+
+    def _fetch_memory(self):
+        """Fetches the latest Operational Buffer from System Memory."""
+        if not self.db_url:
+            return ""
+        try:
+            conn = psycopg2.connect(self.db_url)
+            cur = conn.cursor()
+            cur.execute("SELECT value FROM system_memory WHERE key = 'operational_buffer';")
+            row = cur.fetchone()
+            conn.close()
+            if row:
+                return f"\n=== 🧠 ACTIVE DIRECTIVES (LIVE SYSTEM MEMORY) ===\n{row[0]}\n"
+        except Exception as e:
+            safe_print(f"[WARN] Memory Fetch Failed: {e}")
+        return ""
         
     def _load_processed(self):
         try:
@@ -100,6 +118,9 @@ class SovereignRouter:
         try:
             model = genai.GenerativeModel('gemini-2.0-flash-exp')
             
+            # Fetch Active Brain Memory
+            brain_memory = self._fetch_memory()
+
             system_prompt = f"""
             You are 'Sarah the Spartan', the Lead Sales Consultant for Empire HVAC (and Empire Unified).
             
@@ -108,6 +129,8 @@ class SovereignRouter:
             - **NAME:** Sarah the Spartan.
             - **STYLE:** Professional, concise, high-agency.
             
+            {brain_memory}
+
             KNOWLEDGE BASE:
             {self.kb_context[:3000]}
             
