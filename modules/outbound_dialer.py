@@ -27,7 +27,7 @@ VAPI_PHONE_NUMBER_ID = os.getenv("VAPI_PHONE_NUMBER_ID")
 SARAH_ASSISTANT_ID = "1a797f12-e516-4fe8-a3a6-72f0cbf4a48d"  # Sarah Sales Agent
 JOHN_ASSISTANT_ID = "ce4d14a2-2c7e-4eb5-b2d8-ca84ad5e2c3b"   # John Office Manager
 
-VAPI_API_URL = "https://api.vapi.ai/call/phone"
+VAPI_API_URL = "https://api.vapi.ai/call"
 
 
 def dial_prospect(phone_number: str, company_name: str = "", city: str = "", 
@@ -55,16 +55,14 @@ def dial_prospect(phone_number: str, company_name: str = "", city: str = "",
     if not phone_number.startswith("+"):
         phone_number = "+1" + phone_number.replace("-", "").replace(" ", "")
     
-    # Build payload
+    # Build payload - MUST include type for outbound calls
     payload = {
+        "type": "outboundPhoneCall",
         "phoneNumberId": VAPI_PHONE_NUMBER_ID,
         "assistantId": assistant_id or SARAH_ASSISTANT_ID,
         "customer": {
             "number": phone_number,
             "name": company_name or "Prospect",
-        },
-        "assistantOverrides": {
-            "firstMessage": first_message or f"Hi! This is Sarah from AI Service Co. I'm reaching out because I noticed {company_name or 'your company'} might benefit from our AI phone system. Do you have a quick minute?"
         }
     }
     

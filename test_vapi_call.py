@@ -1,63 +1,65 @@
-#!/usr/bin/env python3
-"""Get Vapi phone ID and make test call"""
+"""
+Test Vapi Outbound Call - Debug Version
+"""
+import os
 import requests
+import json
+from dotenv import load_dotenv
+load_dotenv()
 
-# Read key
-key = None
-with open('.env', 'r', encoding='utf-8', errors='ignore') as f:
-    for line in f:
-        if 'VAPI_PRIVATE_KEY' in line and '=' in line:
-            key = line.split('=', 1)[1].strip().strip('"').strip("'")
-            break
-
-if not key:
-    print("No VAPI key found")
-    exit(1)
+key = os.getenv("VAPI_PRIVATE_KEY")
+phone_number_id = os.getenv("VAPI_PHONE_NUMBER_ID")
 
 print(f"Key: {key[:15]}...")
+print(f"Phone Number ID: {phone_number_id}")
+
+# First, let's get the CORRECT assistant ID from the account
+print("\n=== Getting Correct IDs ===")
+r = requests.get("https://api.vapi.ai/assistant", headers={"Authorization": f"Bearer {key}"})
+if r.status_code == 200:
+    assistants = r.json()
+    print(f"Found {len(assistants)} assistants:")
+    for a in assistants:
+        print(f"  {a.get('id')[:20]}... - {a.get('name')}")
+    
+    # Use first assistant
+    if assistants:
+        assistant_id = assistants[0]["id"]
+        print(f"\nUsing assistant: {assistant_id}")
 
 # Get phone numbers
-r = requests.get('https://api.vapi.ai/phone-number', headers={'Authorization': f'Bearer {key}'})
-print(f"\nPhone numbers response: {r.status_code}")
-
-if r.status_code == 200:
-    phones = r.json()
+r2 = requests.get("https://api.vapi.ai/phone-number", headers={"Authorization": f"Bearer {key}"})
+if r2.status_code == 200:
+    phones = r2.json()
+    print(f"\nFound {len(phones)} phone numbers:")
+    for p in phones:
+        print(f"  {p.get('id')} - {p.get('number')}")
+    
     if phones:
-        phone = phones[0]
-        print(f"\nPhone Number: {phone.get('number')}")
-        print(f"Phone ID: {phone.get('id')}")
-        print(f"Provider: {phone.get('provider')}")
-        
-        # Now make the test call
-        print("\n" + "="*40)
-        print("MAKING TEST CALL TO COMMANDER")
-        print("="*40)
-        
-        call_response = requests.post(
-            'https://api.vapi.ai/call/phone',
-            headers={
-                'Authorization': f'Bearer {key}',
-                'Content-Type': 'application/json'
-            },
-            json={
-                'assistantId': '1a797f12-e2dd-4f7f-b2c5-08c38c74859a',  # Sarah
-                'phoneNumberId': phone.get('id'),  # THIS IS REQUIRED!
-                'customer': {
-                    'number': '+13529368152'
-                }
-            }
-        )
-        
-        print(f"\nCall Status: {call_response.status_code}")
-        print(f"Response: {call_response.text}")
-        
-        if call_response.status_code in [200, 201]:
-            data = call_response.json()
-            print(f"\n✅ SUCCESS! Call initiated!")
-            print(f"Call ID: {data.get('id')}")
-        else:
-            print(f"\n❌ Call failed")
-    else:
-        print("No phone numbers configured!")
-else:
-    print(f"Error: {r.text}")
+        phone_number_id = phones[0]["id"]
+        print(f"\nUsing phone: {phone_number_id}")
+
+# Now make the call with correct IDs
+print("\n=== Attempting Outbound Call ===")
+payload = {
+    "type": "outboundPhoneCall",
+    "phoneNumberId": phone_number_id,
+    "assistantId": assistant_id,
+    "customer": {
+        "number": "+13529368152"
+    }
+}
+
+print(f"Payload: {json.dumps(payload, indent=2)}")
+
+r3 = requests.post(
+    "https://api.vapi.ai/call",
+    headers={
+        "Authorization": f"Bearer {key}",
+        "Content-Type": "application/json"
+    },
+    json=payload
+)
+
+print(f"\nStatus: {r3.status_code}")
+print(f"Response: {r3.text}")
