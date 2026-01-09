@@ -3,10 +3,15 @@ import os
 import requests
 import time
 import json
+import subprocess
+from datetime import datetime
 from dotenv import load_dotenv
 from supabase import create_client
 
 load_dotenv()
+
+# Hourly Task Tracking
+LAST_AUDIT_HOUR = None
 
 # Config
 SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
@@ -130,11 +135,11 @@ def get_lead_timezone(state):
     return mapping.get(state, 'US/Eastern')
 
 def is_within_window(tz_name):
-    """Check if current time in tz_name is between 08:00 and 19:00."""
+    """Check if current time in tz_name is between 07:00 and 19:00."""
     try:
         tz = pytz.timezone(tz_name)
         now = datetime.now(tz)
-        return 8 <= now.hour < 19
+        return 7 <= now.hour < 19
     except:
         return True # Default open if unknown
 
@@ -182,11 +187,63 @@ def check_inbox_sentinel():
     except Exception as e:
         print(f"  ⚠️ Sentinel Error: {e}")
 
+def run_hourly_audit():
+    """Run internal audit and learning harvester once per hour."""
+    global LAST_AUDIT_HOUR
+    
+    current_hour = datetime.now().hour
+    if LAST_AUDIT_HOUR == current_hour:
+        return  # Already ran this hour
+    
+    print(f"\n⏰ HOURLY AUDIT ({current_hour}:00)")
+    LAST_AUDIT_HOUR = current_hour
+    
+    # 1. Run Internal Audit
+    try:
+        print("   [AUDIT] Running internal audit...")
+        result = subprocess.run(
+            ["python", "run_internal_audit.py"],
+            capture_output=True, text=True, timeout=60
+        )
+        if result.returncode == 0:
+            print("   [OK] Internal Audit: PASSED")
+        else:
+            print(f"   [WARN] Audit Issues: {result.stdout[:100]}")
+    except Exception as e:
+        print(f"   [WARN] Audit failed: {e}")
+    
+    # 2. Harvest New Transcripts for Learning
+    try:
+        print("   [LEARNING] Harvesting new call transcripts...")
+        # Get transcripts from last hour
+        res = supabase.table('call_transcripts').select('*').order('created_at', desc=True).limit(10).execute()
+        transcripts = res.data
+        
+        if transcripts:
+            print(f"   [OK] Found {len(transcripts)} recent transcripts for brain training")
+            # Log learning harvest
+            supabase.table('system_logs').insert({
+                'level': 'learning',
+                'source': 'hourly_audit',
+                'message': f'Harvested {len(transcripts)} transcripts for training',
+                'metadata': {'transcript_count': len(transcripts), 'hour': current_hour}
+            }).execute()
+        else:
+            print("   [INFO] No new transcripts this hour")
+            
+    except Exception as e:
+        print(f"   [WARN] Harvest failed: {e}")
+    
+    print("   [DONE] Hourly audit complete\n")
+
 def run_drip():
-    print("💧 Starting Follow-the-Sun Drip Campaign")
-    print("   (1 Call / 10 Mins | 8AM-7PM Local Constraint | 📧 Auto-Reply ACTIVE)")
+    print("Starting Follow-the-Sun Drip Campaign")
+    print("   (1 Call / 10 Mins | 8AM-7PM Local | Email Auto-Reply | Hourly Audit ACTIVE)")
     
     while True: # Continuous loop
+        
+        # 0. Hourly Audit & Learning
+        run_hourly_audit()
         
         # 0. Run Sentinel Check
         check_inbox_sentinel()

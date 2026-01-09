@@ -1,0 +1,131 @@
+=== LEADS (86) ===
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: contacted
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: contacted
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+  - ? | ? | Status: ready_to_send
+
+=== CALL TRANSCRIPTS (6) ===
+  - 2026-01-08T22:51:15
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: Hey, Michael. It's Sarah. AI: calls. You got 30 seconds for a weird question? User: Okay. Move ...
+
+  - 2026-01-08T22:11:18
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: Hey, Emily. It's Sarah. AI: calls. You got 30 seconds for a weird question? ...
+
+  - 2026-01-08T22:03:17
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: It's Sarah. I was looking at none online and had a theory about how you guys are handling your dispatched calls. You got 30 seconds for a weird question? User: Sure. AI: Awesome. So my guess is that you might be losing potential calls or jobs when your lines are tied up or it's after hours. We t...
+
+  - 2026-01-08T22:00:35
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: Hey. Thanks for calling AI service Company. This is Sarah. Who do I have the pleasure of speaking ...
+
+  - 2026-01-08T21:57:28
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: Hey. Thanks for calling AI Service Company. This is Sarah. Who do I have the pleasure of speaking with today? User: Um, you called me. AI: Oh, my bad. Is this person's name? User: Yes. AI: Hey, person's name. This is Sarah from AI service company. I'll be quick. Noticed your business and thought...
+
+  - 2026-01-08T21:50:57
+    Phone: ?
+    Duration: ?s
+    Outcome: ?
+    Snippet: AI: Hey. Thanks for calling AI service company. This is Sarah. Who do I have the pleasure of speaking with today? User: My name is Dan. AI: Nice to meet you, Dan. What can I help you with? User: Uh, I was just uh, looking at the email that you guys sent me. It sent me to your site, but I wasn't sure...
+
+
+=== SYSTEM LOGS (2) ===
+  - 2026-01-08T17:31:22 | ? | Failed task: provision_account
+  - 2026-01-08T17:31:21 | ? | Started task: provision_account
+
+=== CAMPAIGN STATUS: COMPLETE ===

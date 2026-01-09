@@ -1,0 +1,6 @@
+GHL Token Scope Test Results
+========================================
+Location Info: OK
+Contacts List: FAIL (401)
+Conversations: FAIL (404)
+Users: FAIL (401)
