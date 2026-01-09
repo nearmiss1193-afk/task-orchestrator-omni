@@ -52,7 +52,7 @@
         // "John" as the Orchestrator
         const ORCHESTRATOR_ID = "78b4c14a-4db3-4416-9289-d1bfd2409606";
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const vapi = new window.vapi(VAPI_PUBLIC_KEY);
     </script>
 
@@ -177,11 +177,11 @@
         // --- 1. DATA FETCHING ---
         async function fetchStats() {
             // Simple counts
-            const { count: total } = await supabase.from('leads').select('*', { count: 'exact', head: true });
-            const { count: contacted } = await supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'contacted');
-            const { count: calls } = await supabase.from('call_transcripts').select('*', { count: 'exact', head: true });
+            const { count: total } = await sbClient.from('leads').select('*', { count: 'exact', head: true });
+            const { count: contacted } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'contacted');
+            const { count: calls } = await sbClient.from('call_transcripts').select('*', { count: 'exact', head: true });
             // "Appointments" approximated
-            const { count: appts } = await supabase.from('leads').select('*', { count: 'exact', head: true }).in('status', ['converted', 'appointment_set']);
+            const { count: appts } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).in('status', ['converted', 'appointment_set']);
 
             document.getElementById('statLeads').innerText = total || 0;
             // Dummy logic: $1000 per contacted lead for pipeline
@@ -192,7 +192,7 @@
 
         async function fetchLeads() {
             const filter = document.getElementById('campaignFilter').value;
-            let query = supabase.from('leads').select('*').order('created_at', { ascending: false }).limit(50);
+            let query = sbClient.from('leads').select('*').order('created_at', { ascending: false }).limit(50);
 
             // Note: 'industry' is inside 'agent_research' JSONB usually, so perfect filtering might require raw SQL or standardized columns.
             // For now, we fetch recent 50 and filter client side if needed, or rely on implicit order.
@@ -287,7 +287,7 @@
 
             // Push to Supabase 'asset_inbox' or just 'system_logs' for now if table missing
             // We'll trust 'leads' table for loose storage if needed, but better to log it.
-            const { error } = await supabase.from('system_logs').insert({
+            const { error } = await sbClient.from('system_logs').insert({
                 level: 'INFO',
                 event_type: 'ASSET_UPLOAD',
                 message: 'Asset Uploaded from Dashboard: ' + url,
