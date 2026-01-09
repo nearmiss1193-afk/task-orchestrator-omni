@@ -95,3 +95,33 @@
 - [ ] Google Ads verification (Customer ID: 810-390-2080)
 - [ ] Google Business Profile verification
 - [ ] Consider Hunter.io/Apollo.io for lead enrichment tomorrow
+
+---
+
+## 📚 Research Learnings (2026-01-08)
+
+### Voice AI (Vapi) Optimization
+
+- Target latency: <500ms end-to-end
+- Use Groq LLM + ElevenLabs Flash v2.5 for speed
+- Shorten system prompts, use streaming
+
+### Lead Enrichment
+
+- Hunter.io: Combined API (email + company) - 100+ data points
+- Apollo.io: 275M contacts, real-time enrichment
+- Clay: Waterfall enrichment across 150+ providers
+
+### Multi-Agent Frameworks
+
+- LangGraph: Best for complex stateful workflows
+- CrewAI: Best for role-based agent teams (production-ready)
+- AutoGen: Best for conversational prototyping
+
+### Self-Improving Systems
+
+- Feedback loops are critical for continuous refinement
+- Human-in-the-loop prevents model collapse
+- Automated prompt refinement based on outcomes
+
+**Full research:** `knowledge_base/ai_research_2025.md`
