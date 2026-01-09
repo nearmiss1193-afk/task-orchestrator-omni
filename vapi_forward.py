@@ -1,6 +1,7 @@
+import os
 import requests
 
-VAPI_API_KEY = 'c23c884d-0008-4b14-ad5d-530e98d0c9da'
+VAPI_API_KEY = os.getenv('VAPI_PRIVATE_KEY')
 SARAH_ID = '1a797f12-e2dd-4f7f-b2c5-08c38c74859a'
 FALLBACK_PHONE = '+13529368152'
 

@@ -17,7 +17,8 @@ image = modal.Image.debian_slim().pip_install(
     "schedule",
     "fastapi",
     "uvicorn",
-    "supabase"
+    "supabase",
+    "google-generativeai"
 )\
 .add_local_file("worker.py", remote_path="/root/worker.py")\
 .add_local_dir("modules", remote_path="/root/modules", ignore=["ghl-mcp", "descript-mcp", "node_modules", "__pycache__", "**/*.pyc", ".git", "**/*.zip", "**/*.db", "**/*.csv"])
@@ -89,16 +90,17 @@ def email_health():
 )
 @modal.web_endpoint(method="POST", label="vapi-callback")
 def vapi_webhook(data: dict):
-    """Handle Vapi call status webhooks"""
+    """Handle Vapi call status webhooks - WITH AI LEARNING"""
     import requests
     from datetime import datetime
+    import json
     
     call_status = data.get('message', {}).get('type', 'unknown')
     call_id = data.get('message', {}).get('call', {}).get('id', 'unknown')
     
     print(f"[VAPI] {call_status} - Call: {call_id}")
     
-    # Deep Brain Harvest (Phase 8)
+    # Deep Brain Harvest + AI Learning (Phase 8+)
     if call_status == 'end-of-call-report':
         try:
             from supabase import create_client
@@ -111,18 +113,113 @@ def vapi_webhook(data: dict):
                 client = create_client(supa_url, supa_key)
                 
                 msg = data.get('message', {})
+                transcript = msg.get('transcript', '')
+                summary = msg.get('summary', '')
+                phone = msg.get('customer', {}).get('number', 'Unknown')
+                assistant_id = msg.get('assistantId', '')
+                
+                # Determine agent name
+                agent_name = 'Sarah' if 'sarah' in assistant_id.lower() or '1a797f12' in assistant_id else 'AI Agent'
+                
+                # 1. Save transcript to database
                 logger_data = {
                     'call_id': msg.get('call', {}).get('id'),
-                    'phone_number': msg.get('customer', {}).get('number'),
-                    'assistant_id': msg.get('assistantId'),
-                    'transcript': msg.get('transcript'),
-                    'summary': msg.get('summary'),
+                    'phone_number': phone,
+                    'assistant_id': assistant_id,
+                    'transcript': transcript,
+                    'summary': summary,
                     'sentiment': msg.get('analysis', {}).get('sentiment'),
                     'metadata': msg
                 }
                 
                 client.table('call_transcripts').upsert(logger_data).execute()
                 print(f"[DEEP BRAIN] Harvested call {call_id}")
+                
+                # 2. AI Learning Extraction (use Gemini to extract insights)
+                try:
+                    import google.generativeai as genai
+                    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+                    if api_key and transcript:
+                        genai.configure(api_key=api_key)
+                        model = genai.GenerativeModel("gemini-1.5-flash")
+                        
+                        learning_prompt = f'''
+                        Analyze this call transcript and extract learnings for the AI agent.
+                        
+                        TRANSCRIPT:
+                        {transcript[:3000]}
+                        
+                        SUMMARY:
+                        {summary}
+                        
+                        Extract:
+                        1. What objections did the customer raise?
+                        2. What worked well in the conversation?
+                        3. What could be improved?
+                        4. Key insight for future calls?
+                        
+                        Format as JSON: {{"objections": [], "successes": [], "improvements": [], "insight": ""}}
+                        '''
+                        
+                        response = model.generate_content(learning_prompt)
+                        raw = response.text.replace('```json', '').replace('```', '').strip()
+                        
+                        try:
+                            learnings = json.loads(raw)
+                            
+                            # Store learnings
+                            client.table('agent_learnings').insert({
+                                'agent_name': agent_name,
+                                'topic': 'call_analysis',
+                                'insight': json.dumps(learnings),
+                                'confidence': 0.85
+                            }).execute()
+                            
+                            print(f"[AI LEARNING] {agent_name} learned from call {call_id}")
+                        except:
+                            # Store raw insight if JSON parse fails
+                            client.table('agent_learnings').insert({
+                                'agent_name': agent_name,
+                                'topic': 'call_insight',
+                                'insight': raw[:500],
+                                'confidence': 0.7
+                            }).execute()
+                except Exception as learn_err:
+                    print(f"[AI LEARNING] Extraction failed: {learn_err}")
+                
+                # 3. Send notification with transcript
+                try:
+                    resend_key = os.getenv("RESEND_API_KEY")
+                    owner_email = os.getenv("GHL_EMAIL") or "nearmiss1193@gmail.com"
+                    
+                    if resend_key:
+                        notification = {
+                            "from": "Empire AI <notifications@aiserviceco.com>",
+                            "to": [owner_email],
+                            "subject": f"📞 Call Complete: {phone}",
+                            "html": f'''
+                            <h2>Call Transcript - {agent_name}</h2>
+                            <p><strong>Phone:</strong> {phone}</p>
+                            <p><strong>Time:</strong> {datetime.now().strftime("%Y-%m-%d %H:%M")}</p>
+                            <p><strong>Sentiment:</strong> {msg.get('analysis', {}).get('sentiment', 'N/A')}</p>
+                            <hr>
+                            <h3>Summary</h3>
+                            <p>{summary or 'No summary available'}</p>
+                            <hr>
+                            <h3>Full Transcript</h3>
+                            <pre style="background:#f5f5f5;padding:10px;white-space:pre-wrap;">{transcript or 'No transcript'}</pre>
+                            '''
+                        }
+                        
+                        requests.post(
+                            "https://api.resend.com/emails",
+                            headers={"Authorization": f"Bearer {resend_key}"},
+                            json=notification
+                        )
+                        print(f"[NOTIFY] Transcript sent to {owner_email}")
+                except Exception as notify_err:
+                    print(f"[NOTIFY] Failed: {notify_err}")
+                    
         except Exception as e:
             print(f"[DEEP BRAIN] Harvest Failed: {e}")
 
@@ -133,7 +230,6 @@ def vapi_webhook(data: dict):
             result = rescue_bridge.handle_failed_call(data)
             print(f"[VAPI] Rescue result: {result}")
         except ImportError:
-            # Fallback if module not found (shouldn't happen with add_local_dir)
             pass
         except Exception as e:
              print(f"[VAPI] Rescue bridge error: {e}")

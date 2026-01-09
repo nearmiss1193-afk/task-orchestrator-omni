@@ -1,9 +1,10 @@
 """
 verify_agents.py - Check all AI agents are configured for 24/7
 """
+import os
 import requests
 
-VAPI_API_KEY = 'c23c884d-0008-4b14-ad5d-530e98d0c9da'
+VAPI_API_KEY = os.getenv('VAPI_PRIVATE_KEY')
 headers = {'Authorization': f'Bearer {VAPI_API_KEY}'}
 
 print('=' * 50)

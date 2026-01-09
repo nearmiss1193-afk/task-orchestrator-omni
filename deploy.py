@@ -23,7 +23,7 @@ image = (
     .pip_install("playwright==1.40.0", "modal-client", "python-dotenv", "requests", "supabase", "fastapi", "stripe", "google-generativeai>=0.5.0", "dnspython")
     .run_commands(
         "apt-get update",
-        "apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libxkbcommon0 libgtk-3-0 libdrm2 libgbm1 libasound2 git",
+        "apt-get install -y libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libxkbcommon0 libgtk-3-0 libdrm2 libgbm1 libasound2 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libcups2 libpango-1.0-0 libcairo2 git",
         "playwright install chromium"
     )
     .add_local_dir(".", remote_path="/root", ignore=[
