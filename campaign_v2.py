@@ -38,7 +38,7 @@ VAPI_PRIVATE_KEY = os.getenv('VAPI_PRIVATE_KEY')
 VAPI_TWILIO_PHONE_ID = 'ee668638-38f0-4984-81ae-e2fd5d83084b'
 # Use Twilio number for unlimited calls, fall back to Vapi number if needed
 VAPI_PHONE_ID = VAPI_TWILIO_PHONE_ID or os.getenv('VAPI_PHONE_NUMBER_ID')
-ASSISTANT_ID = "a3e439a2-4560-4625-99c8-222678bf130d"  # Antigravity/Sarah
+ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"  # Sarah (Sales AI)
 GHL_WEBHOOK_URL = os.getenv('GHL_SMS_WEBHOOK_URL')
 TEST_PHONE = os.getenv('TEST_PHONE')
 
