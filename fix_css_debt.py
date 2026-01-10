@@ -25,12 +25,16 @@ def extract_styles():
                 with open(path, "r", encoding="utf-8") as f:
                     content = f.read()
                 
-                # Regex for style="..."
-                # Note: minimal handling for escaped quotes
+                # Regex for style="..." OR style='...'
                 def replace_style(match):
                     nonlocal class_counter, css_content, modified
-                    style_body = match.group(1).strip()
-                    if not style_body: return match.group(0)
+                    
+                    # Group 2 is double quoted content, Group 3 is single quoted
+                    style_body = match.group(2) or match.group(3)
+                    if not style_body: 
+                         return match.group(0)
+                    
+                    style_body = style_body.strip()
                     
                     if style_body not in style_map:
                         cls_name = f"style-fix-{class_counter}"
@@ -41,41 +45,10 @@ def extract_styles():
                     cls_name = style_map[style_body]
                     modified = True
                     
-                    # If class attribute exists, append. Else create.
-                    # This regex replace is tricky contextually.
-                    # Simplified: We just return the class attribute part? No, we replace the WHOLE style="" attribute.
-                    # But we need to put it into 'class'.
-                    # We can't easily merge with existing class locally in this regex.
-                    # Strategy: Return a marker, then post-process?
-                    # Better: Just replace style="..." with class="... existing?" 
-                    # Too complex for regex single pass if class exists.
-                    
                     return f'class="{cls_name}" data-style-migrated="true"'
 
-                # This strict replacement assumes 1) no existing class, or 2) validation later.
-                # Use a smarter regex that finds the whole tag? Too slow.
-                # Warning: This replaces style="" with class="...". If tag has class="", we have two class attributes. Browser handles first? 
-                # or invalid.
-                
-                # Let's simple-replace style="..." with class="style-fix-N". 
-                # If there is already a class attribute, we should merge.
-                # This is hard with regex. 
-                
-                # SAFE APPROACH: Only replace lines where we are confident.
-                # Actually, the user wants it FIXED. 
-                # I will construct a replacement that looks for class="..." nearby? No.
-                
-                # Plan B: Just generate the CSS file for reference and log the lines to change manually? No, 80 lines.
-                # Plan C: Use BeautifulSoup? Not installed?
-                # I'll use simple string replace for `style="...` but I'll check if `class=` is in the tag.
-                # If I replace `style="..."` with `class="fix-1"`, and `class="foo"` exists -> `<div class="foo" class="fix-1">`.
-                # Invalid HTML, but browsers might merge or ignore one.
-                # Let's try to be cleaner: `class="fix-1 foo"`?
-                
-                # For now, I will just do the extraction and replacement. 
-                # Most of these 'inline style' errors are likely on elements without classes (generated code).
-                
-                new_content = re.sub(r'style="([^"]+)"', replace_style, content)
+                # Regex updated to handle both " and '
+                new_content = re.sub(r'(style=(["\'])(.*?)\2)', replace_style, content)
                 
                 # Inject CSS link if modified
                 if modified:

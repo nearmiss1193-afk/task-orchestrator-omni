@@ -1,7 +1,13 @@
 import time
 import subprocess
 import sys
+import os
 from datetime import datetime
+
+# Force UTF-8 for Windows console output to support emojis
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
 
 # CONFIG
 LOOP_INTERVAL = 60  # Run every 60 seconds (Turbo Mode)
