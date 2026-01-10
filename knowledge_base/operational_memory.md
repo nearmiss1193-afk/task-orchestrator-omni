@@ -1,7 +1,36 @@
 # Empire Operational Memory
 
 > **Purpose:** Persistent memory file for cross-session knowledge retention.
-> **Last Updated:** 2026-01-08T20:41 EST
+> **Last Updated:** 2026-01-10T10:18 EST
+
+---
+
+## 🚨 CRITICAL: Phone Number Architecture (2026-01-10)
+
+### Current Phone Numbers in Vapi
+
+| Number | Type | Status | Notes |
+|--------|------|--------|-------|
+| +1 (863) 213 2505 | Vapi-purchased | ⚠️ Error | "AI Service Co" - showing TypeError |
+| +1 (863) 692 8548 | Vapi-purchased | ✅ Active | "John Roofing Line" |
+| +1 (904) 512 9565 | Vapi-purchased | ✅ Active | "Riley (ALF Specialist)" |
+| +1 (863) 337 3705 | Vapi-purchased | ✅ Active | Untitled |
+| +1 (863) 337 3601 | Vapi-purchased | ✅ Active | Untitled |
+| +1 (863) 692 8474 | Vapi-purchased | ✅ Active | "Sarah (Temporarily John)" |
+| +1 (863) 260 8351 | **Twilio-imported** | ✅ UNLIMITED | "Empire Invoice (Twilio)" |
+
+### Vapi Daily Limits
+
+- **Vapi-purchased numbers have DAILY OUTBOUND CALL LIMITS**
+- **Twilio-imported numbers have NO LIMITS**
+- Use `VAPI_TWILIO_PHONE_ID` for high-volume campaigns
+
+### GHL Outbound Calling (Alternative to Vapi)
+
+- GHL can make outbound calls via Workflows
+- Trigger: Inbound Webhook or "Contact Tag Added"
+- Action: "Call Contact" (connects agent) or "Voicemail Drop"
+- **Does NOT require Vapi** - uses GHL's own infrastructure
 
 ---
 
@@ -100,6 +129,16 @@
 ---
 
 ## 🧠 Learnings Log
+
+### 2026-01-10
+
+- **Vapi Hit Daily Limit:** Vapi-purchased numbers have daily outbound call caps
+- **Solution:** Import Twilio number OR use GHL workflows for outbound
+- **GHL Integration Working:** webhook successfully accepting leads (HTTP 200)
+- **Supabase Schema Mismatch:** Live table uses `company_name`, NOT `first_name`/`last_name`
+- **Fix:** Use minimal insert with `status` + `last_called` columns (HTTP 201)
+- **campaign_v2.py Created:** Clean production script with correct API formats
+- **Git Saved:** Commit `d025228` - all changes preserved
 
 ### 2026-01-08
 
