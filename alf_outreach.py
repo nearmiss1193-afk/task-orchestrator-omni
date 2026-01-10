@@ -25,7 +25,7 @@ SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
 VAPI_PRIVATE_KEY = os.getenv('VAPI_PRIVATE_KEY')
 VAPI_PHONE_ID = os.getenv('VAPI_PHONE_NUMBER_ID')
-ASSISTANT_ID = "800a37ee-f5de-4ecb-b8ea-e1bd26237c84" # Riley (Senior Placement)
+ASSISTANT_ID = "93f64b69-314c-4040-b8d2-1c9f9a71dfc8" # Riley (ALF Specialist) - Auto-Created
 
 if not all([GROK_API_KEY, SUPABASE_URL, SUPABASE_KEY, VAPI_PRIVATE_KEY, VAPI_PHONE_ID]):
     print("❌ Missing credentials")
