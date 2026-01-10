@@ -279,7 +279,8 @@
                         <span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${badgeClass}">${lead.status}</span>
                     </div>
                     <div class="col-span-3 text-[10px] font-mono text-slate-500">
-                        ${phone}<br>${new Date(lead.created_at).toLocaleDateString()}
+                        ${phone}<br>
+                        <span title="Created At">${new Date(lead.created_at).toLocaleString()}</span>
                     </div>
                     <div class="col-span-2 text-right">
                          <button onclick="viewDossier('${lead.id}')" class="text-blue-400 hover:text-white text-xs underline">VIEW</button>

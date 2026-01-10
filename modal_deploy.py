@@ -5,6 +5,10 @@ Deploy all Empire services to Modal for 24/7 uptime.
 """
 import modal
 import os
+import requests
+import json
+from datetime import datetime
+from fastapi import Request
 
 # Create Modal app
 app = modal.App("empire-sovereign-v2")
@@ -316,7 +320,8 @@ campaign_image = modal.Image.debian_slim().pip_install(
     "requests",
     "python-dotenv",
     "supabase",
-    "google-generativeai"
+    "google-generativeai",
+    "fastapi"
 )
 
 
@@ -384,6 +389,76 @@ def cloud_drip_campaign():
     print(f"[CLOUD DRIP] Complete: {sent} sent")
     return {"sent": sent}
 
+
+@app.function(
+    image=campaign_image,
+    secrets=[modal.Secret.from_dotenv()],
+)
+@modal.web_endpoint(method="POST")
+async def vapi_status(request: Request):
+    """
+    Endpoint for Vapi Voice Agent to get system status.
+    """
+    import os
+    from supabase import create_client
+    # Request is already imported
+
+    try:
+        supa_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+        supa_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+        
+        if not all([supa_url, supa_key]):
+            return {"results": [{"toolCallId": "unknown", "result": "Error: Missing credentials."}]}
+
+        supabase = create_client(supa_url, supa_key)
+
+        # 1. Get Stats
+        leads_res = supabase.table("leads").select("*", count="exact", head=True).execute()
+        calls_res = supabase.table("call_transcripts").select("*", count="exact", head=True).execute()
+        
+        speech = (
+            f"Command, system is online. "
+            f"You have {leads_res.count} leads and {calls_res.count} calls logged. "
+            f"Cloud Autonomous Systems are active. "
+            f"West Coast Blitz is enforcing H-V-A-C protocols."
+        )
+        
+        return {
+            "results": [
+                {
+                    "toolCallId": "unknown", 
+                    "result": speech
+                }
+            ]
+        }
+    except Exception as e:
+        print(f"[VAPI STATUS] Error: {e}")
+        return {"results": [{"toolCallId": "unknown", "result": f"System Error: {str(e)}"}]}
+
+@app.function(
+    image=campaign_image,
+    secrets=[modal.Secret.from_dotenv()],
+)
+@modal.web_endpoint(method="POST")
+async def vapi_trigger_hunt(request: Request):
+    """
+    Voice Command: 'Find more leads'
+    """
+    try:
+        # Trigger the cloud prospector immediately (spawn)
+        # Note: In Modal we call .spawn() on the function handle
+        cloud_prospector.spawn()
+        
+        return {
+            "results": [
+                {
+                    "toolCallId": "unknown", 
+                    "result": "Affirmative. I have deployed the Cloud Prospector to hunt for new H-V-A-C targets immediately."
+                }
+            ]
+        }
+    except Exception as e:
+        return {"results": [{"toolCallId": "unknown", "result": f"Failed to execute: {str(e)}"}]}
 
 @app.function(
     image=campaign_image,
@@ -560,7 +635,9 @@ def cloud_multi_touch():
     import requests
     import json
     import re
+    import modal
     from datetime import datetime
+    from fastapi import Request
     from supabase import create_client
     
     print(f"[CLOUD OUTREACH] Starting at {datetime.now().isoformat()}")
