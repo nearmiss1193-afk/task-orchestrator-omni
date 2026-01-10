@@ -289,8 +289,54 @@
             });
         }
 
-        function viewDossier(id) {
-            alert("Open Dossier ID: " + id + "\\n(Feature coming in Sprint 2)");
+        async function viewDossier(id) {
+            // Fetch lead details
+            const { data, error } = await sbClient.from('leads').select('*').eq('id', id).single();
+
+            if (error || !data) {
+                alert('Could not load lead details');
+                return;
+            }
+
+            // Parse research data
+            let research = data.agent_research || {};
+            if (typeof research === 'string') {
+                try { research = JSON.parse(research); } catch (e) { research = {}; }
+            }
+
+            // Build dossier content
+            const phone = research.phone || data.phone || 'N/A';
+            const email = research.email || data.email || 'N/A';
+            const website = research.website || 'N/A';
+            const owner = research.owner_name || research.owner || 'Unknown';
+            const city = data.city || research.city || 'N/A';
+            const industry = data.industry || 'N/A';
+
+            const content = `
+<div style="background:#1a1a2e;color:#fff;padding:20px;border-radius:12px;max-width:500px;font-family:system-ui;">
+    <h2 style="margin:0 0 15px 0;color:#60a5fa;">📋 ${data.company_name || 'Prospect'}</h2>
+    <div style="display:grid;gap:10px;">
+        <div><strong style="color:#94a3b8;">Status:</strong> ${data.status}</div>
+        <div><strong style="color:#94a3b8;">Industry:</strong> ${industry}</div>
+        <div><strong style="color:#94a3b8;">City:</strong> ${city}</div>
+        <hr style="border:1px solid #334155;">
+        <div><strong style="color:#94a3b8;">📞 Phone:</strong> ${phone}</div>
+        <div><strong style="color:#94a3b8;">📧 Email:</strong> ${email}</div>
+        <div><strong style="color:#94a3b8;">🌐 Website:</strong> ${website}</div>
+        <div><strong style="color:#94a3b8;">👤 Owner:</strong> ${owner}</div>
+        <hr style="border:1px solid #334155;">
+        <div><strong style="color:#94a3b8;">Created:</strong> ${new Date(data.created_at).toLocaleString()}</div>
+        <div><strong style="color:#94a3b8;">Last Called:</strong> ${data.last_called ? new Date(data.last_called).toLocaleString() : 'Never'}</div>
+    </div>
+    <button onclick="this.parentElement.parentElement.remove()" style="margin-top:15px;background:#3b82f6;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">Close</button>
+</div>`;
+
+            // Show modal
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;';
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+            modal.innerHTML = content;
+            document.body.appendChild(modal);
         }
 
         // --- ACTIVITY FETCHING ---
