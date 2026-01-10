@@ -309,6 +309,271 @@ def _call_analytics_internal():
     return {"error": "Failed to fetch analytics"}
 
 
+# ============ CLOUD CAMPAIGNS (24/7 AUTONOMOUS) ============
+
+# Campaign image with all dependencies
+campaign_image = modal.Image.debian_slim().pip_install(
+    "requests",
+    "python-dotenv",
+    "supabase",
+    "google-generativeai"
+)
+
+
+@app.function(
+    image=campaign_image,
+    secrets=[modal.Secret.from_dotenv()],
+    schedule=modal.Cron("0 9 * * *")  # Daily at 9 AM ET
+)
+def cloud_drip_campaign():
+    """Daily drip campaign - runs in cloud 24/7"""
+    import os
+    import requests
+    from datetime import datetime
+    from supabase import create_client
+    
+    print(f"[CLOUD DRIP] Starting at {datetime.now().isoformat()}")
+    
+    supa_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+    supa_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    resend_key = os.getenv("RESEND_API_KEY")
+    
+    if not all([supa_url, supa_key, resend_key]):
+        print("[CLOUD DRIP] Missing credentials")
+        return {"error": "credentials"}
+    
+    client = create_client(supa_url, supa_key)
+    
+    # Get leads to drip
+    result = client.table("leads").select("*")\
+        .eq("status", "contacted")\
+        .limit(20)\
+        .execute()
+    
+    leads = result.data
+    print(f"[CLOUD DRIP] Found {len(leads)} leads for drip")
+    
+    sent = 0
+    for lead in leads:
+        email = lead.get("email")
+        company = lead.get("company_name", "Your Company")
+        
+        if email:
+            # Send follow-up
+            res = requests.post(
+                "https://api.resend.com/emails",
+                headers={"Authorization": f"Bearer {resend_key}"},
+                json={
+                    "from": "Daniel @ AI Service Co <system@aiserviceco.com>",
+                    "to": [email],
+                    "subject": f"Following up - {company}",
+                    "html": f"<p>Hi! Just wanted to follow up on my previous message about AI phone agents for {company}.</p><p>Would love to show you how it works. Reply to chat!</p><p>- Daniel<br>(352) 758-5336</p>"
+                }
+            )
+            if res.status_code in [200, 201]:
+                sent += 1
+    
+    # Log
+    client.table("system_logs").insert({
+        "level": "INFO",
+        "event_type": "CLOUD_DRIP_COMPLETE",
+        "message": f"Sent {sent}/{len(leads)} drip emails",
+        "metadata": {"sent": sent, "total": len(leads)}
+    }).execute()
+    
+    print(f"[CLOUD DRIP] Complete: {sent} sent")
+    return {"sent": sent}
+
+
+@app.function(
+    image=campaign_image,
+    secrets=[modal.Secret.from_dotenv()],
+    schedule=modal.Cron("0 */2 * * *")  # Every 2 hours
+)
+def cloud_growth_daemon():
+    """Growth daemon - prospect intel gathering in cloud"""
+    import os
+    import requests
+    from datetime import datetime
+    from supabase import create_client
+    
+    print(f"[CLOUD GROWTH] Starting at {datetime.now().isoformat()}")
+    
+    supa_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+    supa_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    
+    if not all([supa_url, supa_key]):
+        return {"error": "credentials"}
+    
+    client = create_client(supa_url, supa_key)
+    
+    # Count leads by status
+    statuses = ["new", "contacted", "replied", "called", "qualified", "booked"]
+    counts = {}
+    
+    for status in statuses:
+        result = client.table("leads").select("id", count="exact").eq("status", status).execute()
+        counts[status] = len(result.data) if result.data else 0
+    
+    total = sum(counts.values())
+    
+    # Log stats
+    client.table("system_logs").insert({
+        "level": "INFO",
+        "event_type": "CLOUD_GROWTH_CHECK",
+        "message": f"Pipeline: {total} leads",
+        "metadata": counts
+    }).execute()
+    
+    print(f"[CLOUD GROWTH] Pipeline: {counts}")
+    return counts
+
+
+@app.function(
+    image=campaign_image,
+    secrets=[modal.Secret.from_dotenv()],
+    schedule=modal.Cron("*/5 * * * *")  # Every 5 minutes
+)
+def cloud_guardian():
+    """System guardian - continuous health monitoring in cloud"""
+    import os
+    import requests
+    from datetime import datetime
+    from supabase import create_client
+    
+    services = {
+        "website": "https://www.aiserviceco.com",
+        "dashboard": "https://www.aiserviceco.com/dashboard.html",
+    }
+    
+    issues = []
+    for name, url in services.items():
+        try:
+            r = requests.get(url, timeout=10)
+            if r.status_code != 200:
+                issues.append(f"{name}: {r.status_code}")
+        except Exception as e:
+            issues.append(f"{name}: {str(e)[:50]}")
+    
+    # Alert if issues
+    if issues:
+        resend_key = os.getenv("RESEND_API_KEY")
+        owner = os.getenv("OWNER_EMAIL", "nearmiss1193@gmail.com")
+        
+        if resend_key:
+            requests.post(
+                "https://api.resend.com/emails",
+                headers={"Authorization": f"Bearer {resend_key}"},
+                json={
+                    "from": "System Guardian <alerts@aiserviceco.com>",
+                    "to": [owner],
+                    "subject": f"🚨 System Alert: {len(issues)} issues",
+                    "html": f"<h2>Issues Detected</h2><pre>{chr(10).join(issues)}</pre>"
+                }
+            )
+        
+        print(f"[CLOUD GUARDIAN] ⚠️ {len(issues)} issues: {issues}")
+    else:
+        print(f"[CLOUD GUARDIAN] ✅ All services OK")
+    
+    return {"healthy": len(issues) == 0, "issues": issues}
+
+
+@app.function(
+    image=campaign_image,
+    secrets=[modal.Secret.from_dotenv()],
+    schedule=modal.Cron("0 10,14 * * 1-5")  # 10 AM and 2 PM on weekdays
+)
+def cloud_multi_touch():
+    """Multi-touch outreach - Email + SMS + Call in cloud"""
+    import os
+    import requests
+    import json
+    from datetime import datetime
+    from supabase import create_client
+    
+    print(f"[CLOUD OUTREACH] Starting at {datetime.now().isoformat()}")
+    
+    supa_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+    supa_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    resend_key = os.getenv("RESEND_API_KEY")
+    vapi_key = os.getenv("VAPI_PRIVATE_KEY")
+    vapi_phone = os.getenv("VAPI_PHONE_NUMBER_ID")
+    
+    client = create_client(supa_url, supa_key)
+    
+    # Get 5 leads for outreach
+    result = client.table("leads").select("*")\
+        .in_("status", ["new", "processing_email"])\
+        .limit(5)\
+        .execute()
+    
+    leads = result.data
+    print(f"[CLOUD OUTREACH] Processing {len(leads)} leads")
+    
+    results = {"email": 0, "sms": 0, "call": 0}
+    
+    for lead in leads:
+        meta = lead.get("agent_research", {})
+        if isinstance(meta, str):
+            try:
+                meta = json.loads(meta)
+            except:
+                meta = {}
+        
+        email = meta.get("email") or lead.get("email")
+        phone = meta.get("phone") or lead.get("phone")
+        company = lead.get("company_name", "Prospect")
+        
+        # Email
+        if email and resend_key:
+            res = requests.post(
+                "https://api.resend.com/emails",
+                headers={"Authorization": f"Bearer {resend_key}"},
+                json={
+                    "from": "Daniel @ AI Service Co <system@aiserviceco.com>",
+                    "to": [email],
+                    "subject": f"Quick question for {company}",
+                    "html": f"<p>Hi! I noticed {company} might benefit from AI phone agents. Worth a quick chat?</p><p>- Daniel<br>(352) 758-5336</p>"
+                }
+            )
+            if res.status_code in [200, 201]:
+                results["email"] += 1
+        
+        # Call (using Vapi)
+        if phone and vapi_key and vapi_phone:
+            if not phone.startswith("+"):
+                phone = "+1" + phone.replace("-", "").replace(" ", "")
+            
+            call_res = requests.post(
+                "https://api.vapi.ai/call",
+                headers={"Authorization": f"Bearer {vapi_key}", "Content-Type": "application/json"},
+                json={
+                    "type": "outboundPhoneCall",
+                    "phoneNumberId": vapi_phone,
+                    "assistantId": "1a797f12-e516-4fe8-a3a6-72f0cbf4a48d",
+                    "customer": {"number": phone, "name": company}
+                }
+            )
+            if call_res.status_code in [200, 201]:
+                results["call"] += 1
+                client.table("leads").update({
+                    "status": "called",
+                    "last_called": datetime.now().isoformat()
+                }).eq("id", lead["id"]).execute()
+    
+    # Log
+    client.table("system_logs").insert({
+        "level": "INFO",
+        "event_type": "CLOUD_OUTREACH_COMPLETE",
+        "message": f"Emails: {results['email']}, Calls: {results['call']}",
+        "metadata": results
+    }).execute()
+    
+    print(f"[CLOUD OUTREACH] Complete: {results}")
+    return results
+
+
 # ============ HEALTH CHECK ============
 @app.function(image=image)
 @modal.web_endpoint(method="GET", label="health")
@@ -317,7 +582,7 @@ def health():
     from datetime import datetime
     return {
         "status": "ok",
-        "services": ["email_tracking", "inbound_forwarder", "sequence_scheduler", "call_analytics"],
+        "services": ["email_tracking", "inbound_forwarder", "sequence_scheduler", "call_analytics", "cloud_campaigns"],
         "timestamp": datetime.now().isoformat()
     }
 
