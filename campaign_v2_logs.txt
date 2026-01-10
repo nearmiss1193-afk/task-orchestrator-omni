@@ -156,3 +156,27 @@
 2026-01-10 10:46:21,771 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
 2026-01-10 10:46:22,361 - INFO - Call initiated: Test Protocol Alpha - 019ba896-5061-7228-8b9a-dd4ed8d90dc2
 2026-01-10 10:46:27,362 - INFO - Campaign complete - 5/5 successful
+2026-01-10 10:57:56,036 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 10:57:56,037 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:58:54,019 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:58:54,638 - INFO - GHL accepted: All American Air & Electric
+2026-01-10 10:58:55,270 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:58:55,427 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:58:56,178 - INFO - Call initiated: All American Air & Electric - 019ba8a1-d0ca-7eeb-9d4f-ddad86710634
+2026-01-10 10:59:11,689 - INFO - GHL accepted: B & B Air Conditioning Inc.
+2026-01-10 10:59:11,938 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:59:12,099 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:59:12,890 - INFO - Call initiated: B & B Air Conditioning Inc. - 019ba8a2-120d-7aa3-ac10-28dade0ecbc7
+2026-01-10 10:59:28,416 - INFO - GHL accepted: Coast to Coast Heating & Air
+2026-01-10 10:59:28,727 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:59:28,877 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:59:29,679 - INFO - Call initiated: Coast to Coast Heating & Air - 019ba8a2-53ae-7bbc-a599-07b34b540521
+2026-01-10 10:59:45,247 - INFO - GHL accepted: Dial Duron Service Co.
+2026-01-10 10:59:45,490 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:59:45,648 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:59:46,309 - INFO - Call initiated: Dial Duron Service Co. - 019ba8a2-94e1-7772-aa5b-cbeeebf4c898
+2026-01-10 11:00:03,070 - INFO - GHL accepted: Desouzza's Heating & Air
+2026-01-10 11:00:03,361 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 11:00:03,509 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:00:04,669 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8a2-dc00-7aa7-8741-de2f312f8d2a
+2026-01-10 11:00:09,671 - INFO - Campaign complete - 5/5 successful
