@@ -37,6 +37,7 @@
 
         gtag('config', 'G-8080RNWHVV');
     </script>
+    <link rel="stylesheet" href="css/autofix.css">
 </head>
 
 <body class="p-8 overflow-x-hidden">
@@ -314,22 +315,22 @@
             const industry = data.industry || 'N/A';
 
             const content = `
-<div style="background:#1a1a2e;color:#fff;padding:20px;border-radius:12px;max-width:500px;font-family:system-ui;">
-    <h2 style="margin:0 0 15px 0;color:#60a5fa;">📋 ${data.company_name || 'Prospect'}</h2>
-    <div style="display:grid;gap:10px;">
-        <div><strong style="color:#94a3b8;">Status:</strong> ${data.status}</div>
-        <div><strong style="color:#94a3b8;">Industry:</strong> ${industry}</div>
-        <div><strong style="color:#94a3b8;">City:</strong> ${city}</div>
-        <hr style="border:1px solid #334155;">
-        <div><strong style="color:#94a3b8;">📞 Phone:</strong> ${phone}</div>
-        <div><strong style="color:#94a3b8;">📧 Email:</strong> ${email}</div>
-        <div><strong style="color:#94a3b8;">🌐 Website:</strong> ${website}</div>
-        <div><strong style="color:#94a3b8;">👤 Owner:</strong> ${owner}</div>
-        <hr style="border:1px solid #334155;">
-        <div><strong style="color:#94a3b8;">Created:</strong> ${new Date(data.created_at).toLocaleString()}</div>
-        <div><strong style="color:#94a3b8;">Last Called:</strong> ${data.last_called ? new Date(data.last_called).toLocaleString() : 'Never'}</div>
+<div class="style-fix-8" data-style-migrated="true">
+    <h2 class="style-fix-9" data-style-migrated="true">📋 ${data.company_name || 'Prospect'}</h2>
+    <div class="style-fix-10" data-style-migrated="true">
+        <div><strong class="style-fix-11" data-style-migrated="true">Status:</strong> ${data.status}</div>
+        <div><strong class="style-fix-11" data-style-migrated="true">Industry:</strong> ${industry}</div>
+        <div><strong class="style-fix-11" data-style-migrated="true">City:</strong> ${city}</div>
+        <hr class="style-fix-12" data-style-migrated="true">
+        <div><strong class="style-fix-11" data-style-migrated="true">📞 Phone:</strong> ${phone}</div>
+        <div><strong class="style-fix-11" data-style-migrated="true">📧 Email:</strong> ${email}</div>
+        <div><strong class="style-fix-11" data-style-migrated="true">🌐 Website:</strong> ${website}</div>
+        <div><strong class="style-fix-11" data-style-migrated="true">👤 Owner:</strong> ${owner}</div>
+        <hr class="style-fix-12" data-style-migrated="true">
+        <div><strong class="style-fix-11" data-style-migrated="true">Created:</strong> ${new Date(data.created_at).toLocaleString()}</div>
+        <div><strong class="style-fix-11" data-style-migrated="true">Last Called:</strong> ${data.last_called ? new Date(data.last_called).toLocaleString() : 'Never'}</div>
     </div>
-    <button onclick="this.parentElement.parentElement.remove()" style="margin-top:15px;background:#3b82f6;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">Close</button>
+    <button onclick="this.parentElement.parentElement.remove()" class="style-fix-13" data-style-migrated="true">Close</button>
 </div>`;
 
             // Show modal

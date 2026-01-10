@@ -16,69 +16,22 @@ def create_reporter():
     # Note: Vapi expects 'server' at the tool level, and strict 'function' schema.
     
     agent_payload = {
-        "name": "System Reporter",
+        "name": "System Reporter Minimal",
         "model": {
             "provider": "openai",
             "model": "gpt-4",
-            "systemMessage": """
-                    SECURITY PROTOCOL: RED.
-                    1. On call start, say "Sovereign System. State your authorization code."
-                    2. You MUST verify the code is "one one two nine seven five two nine nine zero" (1129752990).
-                    3. If code is WRONG: Say "Access Denied" and hang up.
-                    4. If code is CORRECT: Say "Access Granted. Command?" and enable tools (Status, Trigger Hunt).
-                    5. Keep responses brief and military-style.
-                    """,
-            "tools": [
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "get_status",
-                        "description": "Get system counting stats and health.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "check": {
-                                    "type": "string",
-                                    "description": "Confirmation",
-                                    "enum": ["status"]
-                                }
-                            },
-                            "required": ["check"]
-                        }
-                    },
-                    "server": {
-                        "url": "https://nearmiss1193-afk--empire-sovereign-v2-vapi-status.modal.run"
-                    }
-                },
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "trigger_hunt",
-                        "description": "Trigger the cloud prospector to find new leads immediately.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "confirm": {
-                                    "type": "string",
-                                    "description": "Confirmation to start",
-                                    "enum": ["start"]
-                                }
-                            },
-                            "required": ["confirm"]
-                        }
-                    },
-                    "server": {
-                        "url": "https://nearmiss1193-afk--empire-sovereign-v2-vapi-trigger-hunt.modal.run"
-                    }
-                }
+            "messages": [
+                 {
+                    "role": "system",
+                    "content": "You are a helpful assistant." 
+                 }
             ]
         },
         "voice": {
-            "provider": "11labs", 
-            "voiceId": "flq6f7yk4Ece79KdVNzY" 
+             "provider": "11labs",
+             "voiceId": "flq6f7yk4Ece79KdVNzY"
         }
     }
-
     res = requests.post(
         "https://api.vapi.ai/assistant",
         headers={"Authorization": f"Bearer {KEY}", "Content-Type": "application/json"},
