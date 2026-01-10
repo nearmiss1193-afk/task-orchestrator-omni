@@ -166,39 +166,31 @@ def push_to_ghl(lead: dict, phone: str) -> bool:
 
 # ============ SUPABASE INTEGRATION ============
 def save_to_database(lead: dict, phone: str, status: str = 'new') -> bool:
-    """Save lead to Supabase - uses ACTUAL live schema columns."""
+    """Save lead to Supabase using email-based schema."""
     company = lead.get('company_name', 'Unknown Lead')
+    email = f"info@{company.replace(' ', '').replace('&', '').lower()}.com"
     
-    # ACTUAL SCHEMA: id, created_at, status, last_called, ghl_contact_id, company_name, phone, city, agent_research
+    # Schema uses email as identifier, store company in agent_research JSON
     db_record = {
-        'company_name': company,
-        'phone': phone,
-        'city': TARGET_CITY,
+        'email': email,
         'status': status,
-        'last_called': datetime.now().isoformat(),
         'agent_research': json.dumps({
+            'company_name': company,
+            'phone': phone,
+            'city': TARGET_CITY,
             'source': 'Empire_Blitz_AI',
-            'raw_lead': lead,
             'processed_at': datetime.now().isoformat()
         })
     }
     
     try:
-        result = supabase.table("leads").insert(db_record).execute()
+        supabase.table("leads").insert(db_record).execute()
         print(f"💾 DB: {company}")
         logger.info(f"Database saved: {company}")
         return True
     except Exception as e:
-        # If schema still wrong, try minimal insert
-        try:
-            minimal = {'status': status, 'last_called': datetime.now().isoformat()}
-            supabase.table("leads").insert(minimal).execute()
-            print(f"💾 DB (minimal): {company}")
-            return True
-        except:
-            print(f"⚠️ DB Skip: {str(e)[:50]}")
-            logger.error(f"Database error: {e}")
-            return False
+        logger.warning(f"DB insert: {str(e)[:50]}")
+        return False
 
 # ============ VAPI INTEGRATION ============
 def call_lead(lead: dict, phone: str) -> bool:
