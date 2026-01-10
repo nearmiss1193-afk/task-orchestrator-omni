@@ -162,6 +162,33 @@
             </div>
         </div>
 
+        <!-- OUTREACH ACTIVITY (Emails, SMS, Calls) -->
+        <div class="glass p-6 rounded-2xl mb-6">
+            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
+                <h3 class="font-bold flex items-center gap-2">
+                    <span>📊</span> Outreach Activity Feed
+                </h3>
+                <button onclick="fetchActivity()" class="text-xs text-blue-400 hover:text-blue-300">↻ Refresh</button>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="bg-blue-500/10 p-3 rounded-lg text-center">
+                    <div id="emailCount" class="text-2xl font-bold text-blue-400">-</div>
+                    <div class="text-xs text-slate-400">Emails Sent</div>
+                </div>
+                <div class="bg-green-500/10 p-3 rounded-lg text-center">
+                    <div id="smsCount" class="text-2xl font-bold text-green-400">-</div>
+                    <div class="text-xs text-slate-400">SMS Sent</div>
+                </div>
+                <div class="bg-purple-500/10 p-3 rounded-lg text-center">
+                    <div id="callCount" class="text-2xl font-bold text-purple-400">-</div>
+                    <div class="text-xs text-slate-400">Calls Made</div>
+                </div>
+            </div>
+            <div id="activityContainer" class="space-y-2 max-h-[300px] overflow-y-auto">
+                <div class="text-center text-slate-500 py-4">Loading activity...</div>
+            </div>
+        </div>
+
         <!-- CALL TRANSCRIPTS (Brain Training Data) -->
         <div class="glass p-6 rounded-2xl mb-6">
             <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
@@ -264,6 +291,72 @@
 
         function viewDossier(id) {
             alert("Open Dossier ID: " + id + "\\n(Feature coming in Sprint 2)");
+        }
+
+        // --- ACTIVITY FETCHING ---
+        async function fetchActivity() {
+            const container = document.getElementById('activityContainer');
+            container.innerHTML = '<div class="text-center text-slate-500 py-4">Loading...</div>';
+
+            try {
+                // Get recent system logs for activity
+                const { data, error } = await sbClient
+                    .from('system_logs')
+                    .select('*')
+                    .in('event_type', ['CLOUD_OUTREACH_COMPLETE', 'CLOUD_DRIP_COMPLETE', 'MULTI_TOUCH_SEQUENCE', 'EMAIL_SENT', 'SMS_SENT', 'CALL_MADE'])
+                    .order('created_at', { ascending: false })
+                    .limit(50);
+
+                if (error) throw error;
+
+                // Count totals
+                let emails = 0, sms = 0, calls = 0;
+                if (data) {
+                    data.forEach(log => {
+                        const meta = log.metadata || {};
+                        if (meta.email) emails += meta.email;
+                        if (meta.sent) emails += meta.sent;
+                        if (meta.sms) sms += meta.sms;
+                        if (meta.call) calls += meta.call;
+                        if (log.event_type === 'EMAIL_SENT') emails++;
+                        if (log.event_type === 'SMS_SENT') sms++;
+                        if (log.event_type === 'CALL_MADE') calls++;
+                    });
+                }
+
+                document.getElementById('emailCount').textContent = emails;
+                document.getElementById('smsCount').textContent = sms;
+                document.getElementById('callCount').textContent = calls;
+
+                // Display activity feed
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="text-center text-slate-500 py-4">No recent activity</div>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                data.slice(0, 15).forEach(log => {
+                    const time = new Date(log.created_at).toLocaleTimeString();
+                    const date = new Date(log.created_at).toLocaleDateString();
+                    let icon = '📧';
+                    if (log.event_type.includes('SMS')) icon = '📱';
+                    if (log.event_type.includes('CALL')) icon = '📞';
+                    if (log.event_type.includes('DRIP')) icon = '💧';
+                    if (log.event_type.includes('OUTREACH')) icon = '🚀';
+
+                    const div = document.createElement('div');
+                    div.className = 'bg-slate-800/30 rounded p-2 text-xs flex items-center gap-2';
+                    div.innerHTML = `
+                        <span>${icon}</span>
+                        <span class="flex-1 text-slate-300">${log.message || log.event_type}</span>
+                        <span class="text-slate-500">${date} ${time}</span>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (err) {
+                console.error('Activity fetch error:', err);
+                container.innerHTML = '<div class="text-center text-red-400 py-4">Error loading activity</div>';
+            }
         }
 
         // --- TRANSCRIPTS FETCHING ---

@@ -482,7 +482,7 @@ def cloud_guardian():
 @app.function(
     image=campaign_image,
     secrets=[modal.Secret.from_dotenv()],
-    schedule=modal.Cron("0 10,14 * * 1-5")  # 10 AM and 2 PM on weekdays
+    schedule=modal.Cron("0 10,14 * * *")  # 10 AM and 2 PM DAILY (including weekends)
 )
 def cloud_multi_touch():
     """Multi-touch outreach - Email + SMS + Call in cloud"""
