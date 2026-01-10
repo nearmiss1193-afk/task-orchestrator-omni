@@ -388,45 +388,115 @@ def cloud_drip_campaign():
 @app.function(
     image=campaign_image,
     secrets=[modal.Secret.from_dotenv()],
-    schedule=modal.Cron("0 */2 * * *")  # Every 2 hours
+    schedule=modal.Cron("0 */4 * * *")  # Every 4 hours
 )
-def cloud_growth_daemon():
-    """Growth daemon - prospect intel gathering in cloud"""
+def cloud_prospector():
+    """Cloud Prospector - 24/7 Lead Hunting"""
     import os
+    import json
     import requests
+    import re
+    import google.generativeai as genai
     from datetime import datetime
     from supabase import create_client
     
-    print(f"[CLOUD GROWTH] Starting at {datetime.now().isoformat()}")
+    print(f"[CLOUD PROSPECTOR] Starting at {datetime.now().isoformat()}")
     
     supa_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
     supa_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    gemini_key = os.getenv("GEMINI_API_KEY")
     
-    if not all([supa_url, supa_key]):
+    if not all([supa_url, supa_key, gemini_key]):
+        print("Missing credentials")
         return {"error": "credentials"}
     
     client = create_client(supa_url, supa_key)
     
-    # Count leads by status
-    statuses = ["new", "contacted", "replied", "called", "qualified", "booked"]
-    counts = {}
+    # 1. Check Pipeline Depth
+    result = client.table("leads").select("id", count="exact").in_("status", ["new", "processing_email"]).execute()
+    count = result.count if result.count is not None else len(result.data)
     
-    for status in statuses:
-        result = client.table("leads").select("id", count="exact").eq("status", status).execute()
-        counts[status] = len(result.data) if result.data else 0
+    print(f"[CLOUD PROSPECTOR] Current fresh leads: {count}")
     
-    total = sum(counts.values())
+    if count >= 30:
+        print("Pipeline healthy. Resting.")
+        return {"status": "healthy", "count": count}
     
-    # Log stats
-    client.table("system_logs").insert({
-        "level": "INFO",
-        "event_type": "CLOUD_GROWTH_CHECK",
-        "message": f"Pipeline: {total} leads",
-        "metadata": counts
-    }).execute()
+    # 2. Hunt Mode
+    print("Pipeline low. Initiating hunt...")
+    genai.configure(api_key=gemini_key)
+    model = genai.GenerativeModel('gemini-2.0-flash-exp')
     
-    print(f"[CLOUD GROWTH] Pipeline: {counts}")
-    return counts
+    # Targeting
+    cities = ["Tampa", "Orlando", "Miami", "Jacksonville", "Sarasota"]
+    target_city = cities[datetime.now().hour % len(cities)]
+    
+    prompt = f"""
+    Act as a lead generation expert. Find 5 REAL HVAC, Plumbing, or Roofing companies in {target_city}, FL.
+    
+    CRITICAL RULES:
+    1. DO NOT use fictional numbers (555-xxxx).
+    2. Provide REAL public phone numbers and emails if available.
+    3. If a field is unknown, use "N/A".
+    4. Verify the area code matches {target_city} (e.g. 813, 407, 305, 904).
+    
+    Return a JSON array with these fields:
+    - company_name
+    - owner_name (or "Manager")
+    - email (guess format firstname@domain.com if 80% sure, else N/A)
+    - phone (10 digit, no dashes)
+    - city
+    - industry
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        text = response.text
+        # Extract JSON
+        json_match = re.search(r'\[.*\]', text, re.DOTALL)
+        if not json_match:
+            print("No JSON found in response")
+            return {"error": "no_json"}
+            
+        leads = json.loads(json_match.group())
+        valid_leads = []
+        
+        for lead in leads:
+            phone = lead.get('phone', '').replace('-', '').replace(' ', '')
+            
+            # STRICT VALIDATION
+            if '555' in phone:  # Reject 555
+                continue
+            if len(phone) < 10:
+                continue
+            
+            # Check duplicates
+            dup = client.table("leads").select("id").eq("company_name", lead['company_name']).execute()
+            if dup.data:
+                continue
+                
+            lead['status'] = 'new'
+            lead['created_at'] = datetime.now().isoformat()
+            lead['agent_research'] = json.dumps(lead) # Store raw data
+            valid_leads.append(lead)
+            
+        if valid_leads:
+            client.table("leads").insert(valid_leads).execute()
+            print(f"[CLOUD PROSPECTOR] Added {len(valid_leads)} new leads")
+            
+            # Log
+            client.table("system_logs").insert({
+                "level": "INFO",
+                "event_type": "PROSPECTOR_HUNT",
+                "message": f"Added {len(valid_leads)} leads from {target_city}",
+                "metadata": {"city": target_city, "count": len(valid_leads)}
+            }).execute()
+            
+        return {"added": len(valid_leads)}
+
+    except Exception as e:
+        print(f"Prospector error: {e}")
+        return {"error": str(e)}
 
 
 @app.function(
@@ -489,6 +559,7 @@ def cloud_multi_touch():
     import os
     import requests
     import json
+    import re
     from datetime import datetime
     from supabase import create_client
     
@@ -511,7 +582,7 @@ def cloud_multi_touch():
     leads = result.data
     print(f"[CLOUD OUTREACH] Processing {len(leads)} leads")
     
-    results = {"email": 0, "sms": 0, "call": 0}
+    results = {"email": 0, "sms": 0, "call": 0, "skipped": 0}
     
     for lead in leads:
         meta = lead.get("agent_research", {})
@@ -525,48 +596,67 @@ def cloud_multi_touch():
         phone = meta.get("phone") or lead.get("phone")
         company = lead.get("company_name", "Prospect")
         
+        # VALIDATION
+        valid_phone = False
+        if phone:
+            clean_phone = re.sub(r'\D', '', str(phone))
+            # Reject 555 in middle (NXX-555-XXXX)
+            if '555' in clean_phone[3:6]: 
+                print(f"Skipping 555 number: {phone}")
+                results['skipped'] += 1
+            elif len(clean_phone) >= 10:
+                valid_phone = True
+                phone = f"+1{clean_phone[-10:]}" # Standardize
+        
         # Email
-        if email and resend_key:
-            res = requests.post(
-                "https://api.resend.com/emails",
-                headers={"Authorization": f"Bearer {resend_key}"},
-                json={
-                    "from": "Daniel @ AI Service Co <system@aiserviceco.com>",
-                    "to": [email],
-                    "subject": f"Quick question for {company}",
-                    "html": f"<p>Hi! I noticed {company} might benefit from AI phone agents. Worth a quick chat?</p><p>- Daniel<br>(352) 758-5336</p>"
-                }
-            )
-            if res.status_code in [200, 201]:
-                results["email"] += 1
+        if email and resend_key and "N/A" not in email:
+            try:
+                res = requests.post(
+                    "https://api.resend.com/emails",
+                    headers={"Authorization": f"Bearer {resend_key}"},
+                    json={
+                        "from": "Daniel @ AI Service Co <system@aiserviceco.com>",
+                        "to": [email],
+                        "subject": f"Quick question for {company}",
+                        "html": f"<p>Hi! I noticed {company} might benefit from AI phone agents. Worth a quick chat?</p><p>- Daniel<br>(352) 758-5336</p>"
+                    }
+                )
+                if res.status_code in [200, 201]:
+                    results["email"] += 1
+            except Exception as e:
+                print(f"Email error: {e}")
         
         # Call (using Vapi)
-        if phone and vapi_key and vapi_phone:
-            if not phone.startswith("+"):
-                phone = "+1" + phone.replace("-", "").replace(" ", "")
-            
-            call_res = requests.post(
-                "https://api.vapi.ai/call",
-                headers={"Authorization": f"Bearer {vapi_key}", "Content-Type": "application/json"},
-                json={
-                    "type": "outboundPhoneCall",
-                    "phoneNumberId": vapi_phone,
-                    "assistantId": "1a797f12-e516-4fe8-a3a6-72f0cbf4a48d",
-                    "customer": {"number": phone, "name": company}
-                }
-            )
-            if call_res.status_code in [200, 201]:
-                results["call"] += 1
-                client.table("leads").update({
-                    "status": "called",
-                    "last_called": datetime.now().isoformat()
-                }).eq("id", lead["id"]).execute()
+        if valid_phone and vapi_key and vapi_phone:
+            try:
+                call_res = requests.post(
+                    "https://api.vapi.ai/call",
+                    headers={"Authorization": f"Bearer {vapi_key}", "Content-Type": "application/json"},
+                    json={
+                        "type": "outboundPhoneCall",
+                        "phoneNumberId": vapi_phone,
+                        "assistantId": "1a797f12-e516-4fe8-a3a6-72f0cbf4a48d",
+                        "customer": {"number": phone, "name": company}
+                    }
+                )
+                if call_res.status_code in [200, 201]:
+                    results["call"] += 1
+                    client.table("leads").update({
+                        "status": "called",
+                        "last_called": datetime.now().isoformat()
+                    }).eq("id", lead["id"]).execute()
+                else:
+                    print(f"Vapi error: {call_res.text}")
+            except Exception as e:
+                print(f"Call error: {e}")
+        else:
+             print(f"Skipping invalid/missing phone for {company}")
     
     # Log
     client.table("system_logs").insert({
         "level": "INFO",
         "event_type": "CLOUD_OUTREACH_COMPLETE",
-        "message": f"Emails: {results['email']}, Calls: {results['call']}",
+        "message": f"Emails: {results['email']}, Calls: {results['call']}, Skipped: {results['skipped']}",
         "metadata": results
     }).execute()
     
