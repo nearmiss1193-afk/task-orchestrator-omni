@@ -1,32 +1,30 @@
-# list_vapi_phones.py - List available Vapi phone numbers
 import os
-from dotenv import load_dotenv
 import requests
+import json
+from dotenv import load_dotenv
 
 load_dotenv()
 
-VAPI_KEY = os.getenv("VAPI_PRIVATE_KEY")
-
+VAPI_PRIVATE_KEY = os.getenv("VAPI_PRIVATE_KEY")
 url = "https://api.vapi.ai/phone-number"
-headers = {"Authorization": f"Bearer {VAPI_KEY}"}
 
-res = requests.get(url, headers=headers)
+headers = {
+    "Authorization": f"Bearer {VAPI_PRIVATE_KEY}"
+}
 
-if res.status_code == 200:
-    phones = res.json()
-    print("=== AVAILABLE VAPI PHONE NUMBERS ===")
-    print(f"Total: {len(phones)}")
-    print()
-    for p in phones:
-        phone_id = p.get('id', 'Unknown')
-        number = p.get('number', 'No number')
-        name = p.get('name', 'Unnamed')
-        provider = p.get('provider', 'Unknown')
-        print(f"ID: {phone_id}")
-        print(f"  Number: {number}")
-        print(f"  Name: {name}")
-        print(f"  Provider: {provider}")
-        print("-" * 40)
-else:
-    print(f"Error: {res.status_code}")
-    print(res.text)
+try:
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    numbers = response.json()
+    
+    print(f"Found {len(numbers)} numbers:")
+    for n in numbers:
+        print(f"Number: {n.get('number')} | ID: {n.get('id')} | AreaCode: {n.get('number', '')[:3]}")
+        
+    with open("vapi_phones.json", "w") as f:
+        json.dump(numbers, f, indent=2)
+        
+except Exception as e:
+    print(f"Error listing numbers: {e}")
+    if hasattr(e, 'response') and e.response:
+        print(e.response.text)

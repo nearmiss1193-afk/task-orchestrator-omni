@@ -11,6 +11,21 @@ The "Empire Unified" system is a self-driving agency engine. It performs three c
 2. **Social Siege**: (Siege) - Posts high-value content to LinkedIn/FB every 8 hours.
 3. **Governance**: (Governor) - Self-heals and alerts you if the system goes silent.
 
+## DIRECTIVE 0: OMNI-AGENCY (AUTONOMED SYSTEM)
+
+**AUTHORITY:** The Sovereign Agent is granted full autonomous execution rights for all system repairs, process management, and code patches.
+**CONSTRAINT:** Financial transactions (> $0.00) require explicit user approval.
+**EXECUTION:** Identify -> Fix -> Verify -> Report. Do not ask for permission to repair.
+
+## THE SOP (MANDATORY)
+
+**Before & After Every Task:**
+
+1. **CHECK RICHARD**: Run `python check_brain.py`. Ensure he is awake.
+2. **UPDATE RICHARD**: Report your status to him.
+
+---
+
 ---
 
 ## 2. COMMAND CENTER (Dashboard)

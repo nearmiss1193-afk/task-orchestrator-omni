@@ -89,7 +89,7 @@ def run_save():
         caps_gaps = f.read()
 
     # Full Email Body (HTML)
-    html_body = f\"\"\"
+    html_body = f"""
     <div style='font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #f8fafc; background-color: #0f172a; padding: 40px; border-radius: 20px;'>
         <h1 style='color: #3b82f6; text-align: center; border-bottom: 2px solid #1e293b; padding-bottom: 10px;'>EMPIRE UNIFIED: STATE BACKUP</h1>
         <p style='text-align: center; color: #94a3b8;'>Timestamp: {timestamp}</p>
@@ -115,7 +115,7 @@ def run_save():
             <p style='color: #64748b; font-size: 12px;'>Sovereign Agent Status: ACTIVE | Stability: HIGH</p>
         </div>
     </div>
-    \"\"\"
+    """
 
     # Send Email
     params = {

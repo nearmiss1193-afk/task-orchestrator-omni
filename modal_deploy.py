@@ -733,8 +733,7 @@ def cloud_multi_touch():
     # Log
     client.table("system_logs").insert({
         "level": "INFO",
-        "event_type": "CLOUD_OUTREACH_COMPLETE",
-        "message": f"Emails: {results['email']}, Calls: {results['call']}, Skipped: {results['skipped']}",
+        "message": f"[CLOUD_OUTREACH] Emails: {results['email']}, Calls: {results['call']}, Skipped: {results['skipped']}",
         "metadata": results
     }).execute()
     

@@ -24,11 +24,16 @@ GROK_API_KEY = os.getenv('GROK_API_KEY')
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
 VAPI_PRIVATE_KEY = os.getenv('VAPI_PRIVATE_KEY')
-VAPI_PHONE_ID = os.getenv('VAPI_PHONE_NUMBER_ID')
+VAPI_PHONE_ID = "4e38087a-0937-4997-bc1c-4ddf77c5cf70" # Riley's Designated Line
 ASSISTANT_ID = "93f64b69-314c-4040-b8d2-1c9f9a71dfc8" # Riley (ALF Specialist) - Auto-Created
 
 if not all([GROK_API_KEY, SUPABASE_URL, SUPABASE_KEY, VAPI_PRIVATE_KEY, VAPI_PHONE_ID]):
     print("❌ Missing credentials")
+    print(f"GROK: {bool(GROK_API_KEY)}")
+    print(f"SUPA_URL: {bool(SUPABASE_URL)}")
+    print(f"SUPA_KEY: {bool(SUPABASE_KEY)}")
+    print(f"VAPI_KEY: {bool(VAPI_PRIVATE_KEY)}")
+    print(f"PHONE_ID: {bool(VAPI_PHONE_ID)}")
     exit(1)
 
 # Initialize Clients

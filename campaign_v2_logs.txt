@@ -1,0 +1,23 @@
+2026-01-10 10:05:00,791 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 10:05:00,836 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:05:02,042 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:05:03,261 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:05:04,224 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:05:04,229 - ERROR - Database error: {'message': "Could not find the 'first_name' column of 'leads' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+2026-01-10 10:05:19,941 - INFO - GHL accepted: Test Protocol Beta
+2026-01-10 10:05:20,192 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:05:20,193 - ERROR - Database error: {'message': "Could not find the 'first_name' column of 'leads' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+2026-01-10 10:05:40,195 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:05:41,254 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:05:42,252 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:05:42,522 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:05:42,523 - ERROR - Database error: {'message': "Could not find the 'first_name' column of 'leads' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+2026-01-10 10:05:58,585 - INFO - GHL accepted: Test Protocol Beta
+2026-01-10 10:05:58,832 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:05:58,834 - ERROR - Database error: {'message': "Could not find the 'first_name' column of 'leads' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+2026-01-10 10:06:18,835 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:06:19,893 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:06:20,871 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:06:21,132 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:06:21,132 - ERROR - Database error: {'message': "Could not find the 'first_name' column of 'leads' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+2026-01-10 10:06:26,134 - INFO - Campaign complete - 5/5 successful

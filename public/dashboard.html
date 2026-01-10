@@ -8,8 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Vapi SDK (Browser UMD Build) -->
-    <script src="https://unpkg.com/@vapi-ai/web/dist/vapi.umd.js"></script>
+    <!-- Vapi SDK (Browser UMD Build) - Switched to jsDelivr for reliability -->
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/vapi.umd.js"></script>
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -55,17 +55,35 @@
 
         const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Vapi initialization with error handling (SDK may not load correctly)
+        // Vapi initialization with Retry Logic
         let vapi = null;
-        try {
-            if (window.Vapi) {
-                vapi = new window.Vapi(VAPI_PUBLIC_KEY);
-            } else if (window.vapi) {
-                vapi = new window.vapi(VAPI_PUBLIC_KEY);
+
+        function initVapi() {
+            try {
+                if (window.Vapi) {
+                    vapi = new window.Vapi(VAPI_PUBLIC_KEY);
+                    console.log("✅ Vapi SDK Initialized");
+                    document.getElementById('statusUplink').innerText = "Status: Ready";
+                    return true;
+                } else {
+                    console.log("⏳ Waiting for Vapi SDK...");
+                    return false;
+                }
+            } catch (e) {
+                console.warn('[Dashboard] Vapi init error:', e.message);
+                return false;
             }
-        } catch (e) {
-            console.warn('[Dashboard] Vapi SDK failed to initialize:', e.message);
         }
+
+        // Try initializing every 500ms for 5 seconds
+        let attempts = 0;
+        const vapiInterval = setInterval(() => {
+            if (initVapi() || attempts > 10) {
+                clearInterval(vapiInterval);
+                if (!vapi) document.getElementById('statusUplink').innerText = "Status: Voice SDK Error";
+            }
+            attempts++;
+        }, 500);
     </script>
 
     <div class="max-w-7xl mx-auto">
