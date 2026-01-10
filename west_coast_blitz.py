@@ -23,7 +23,7 @@ SUPABASE_URL = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
 VAPI_PRIVATE_KEY = os.getenv('VAPI_PRIVATE_KEY')
 VAPI_PHONE_ID = os.getenv('VAPI_PHONE_NUMBER_ID')
-ASSISTANT_ID = "1a797f12-e516-4fe8-a3a6-72f0cbf4a48d"
+ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a" # Verified ID for 'Sarah (Temporarily John)'
 
 if not all([GROK_API_KEY, SUPABASE_URL, SUPABASE_KEY, VAPI_PRIVATE_KEY, VAPI_PHONE_ID]):
     print("❌ Missing credentials")
@@ -40,12 +40,12 @@ if not GEMINI_API_KEY:
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-def generate_leads():
-    print(f"\n[BLITZ] Hunting in {TARGET_CITY} (Gemini)...")
+def generate_leads(city, state):
+    print(f"\n[BLITZ] Hunting in {city}, {state} (Gemini)...")
     model = genai.GenerativeModel('gemini-2.0-flash-exp')
     
     prompt = f"""
-    Act as a lead generation expert. Find 5 REAL **HVAC** companies in {TARGET_CITY}, {TARGET_STATE}.
+    Act as a lead generation expert. Find 5 REAL **HVAC** companies in {city}, {state}.
     
     CRITICAL RULES:
     1. DO NOT use fictional numbers (555-xxxx).
@@ -118,30 +118,51 @@ def call_lead(lead):
             return True
         else:
             print(f"❌ Call Failed: {res.text}")
+            # Log error to file for debugging
+            with open("blitz_error.log", "a", encoding="utf-8") as f:
+                f.write(f"[{datetime.now()}] Error calling {lead['company_name']} ({phone}): {res.text}\n")
             
     except Exception as e:
         print(f"❌ Error: {e}")
     return False
 
 def main():
-    print("⚡ WEST COAST BLITZ STARTED ⚡")
-    print(f"Target: {TARGET_CITY} (PT Timezone)")
-    
+    print("⚡ MULTI-ZONE BLITZ STARTED ⚡")
+    print("Strategy: CA until 10PM ET (7PM PT) -> Then HI/AK")
+
     total_calls = 0
-    
+
     while True:
-        # Stop at 8:55 PM ET (5:55 PM PT)
-        if datetime.now().hour >= 21: # 9 PM ET
-             print("🛑 Cutoff reached (9 PM ET). Stopping.")
-             break
-             
-        leads = generate_leads()
+        current_hour = datetime.now().hour
+        
+        # TIMEZONE LOGIC (ET Based)
+        # CA: Stop at 22:00 ET (7 PM PT)
+        # HI: Stop at 01:00 ET (7 PM HST) - ample buffer
+        
+        target_city = "Honolulu"
+        target_state = "HI"
+        
+        if current_hour < 22: # Before 10 PM ET
+            target_city = "Los Angeles"
+            target_state = "CA"
+            cutoff_hour = 22
+        elif current_hour < 24: # Before Midnight ET
+            target_city = "Honolulu"
+            target_state = "HI" 
+            cutoff_hour = 1 # 1 AM next day
+        else: # Late night fallback
+            print("🛑 Global Safety Cutoff. Stopping.")
+            break
+            
+        print(f"\n[BLITZ] Clock: {datetime.now().strftime('%H:%M')} ET | Target: {target_city}, {target_state}")
+        
+        leads = generate_leads(target_city, target_state) # Updated signature
         if not leads:
             print("No leads found. Retrying...")
             time.sleep(5)
             continue
             
-        print(f"Found {len(leads)} candidates.")
+        print(f"Found {len(leads)} candidates in {target_state}.")
         
         for lead in leads:
             if call_lead(lead):
