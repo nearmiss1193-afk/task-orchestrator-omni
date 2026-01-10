@@ -432,7 +432,7 @@ def cloud_prospector():
     target_city = cities[datetime.now().hour % len(cities)]
     
     prompt = f"""
-    Act as a lead generation expert. Find 5 REAL HVAC, Plumbing, or Roofing companies in {target_city}, FL.
+    Act as a lead generation expert. Find 5 REAL **HVAC** companies in {target_city}, FL.
     
     CRITICAL RULES:
     1. DO NOT use fictional numbers (555-xxxx).
