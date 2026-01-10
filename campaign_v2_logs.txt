@@ -204,3 +204,198 @@
 2026-01-10 11:06:50,518 - INFO - Database saved: Desouzza's Heating & Air
 2026-01-10 11:06:51,275 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8a9-10a7-7dd4-b808-8676c05cfd66
 2026-01-10 11:06:56,277 - INFO - Campaign complete - 5/5 successful
+2026-01-10 11:46:56,744 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 11:46:56,745 - INFO - Generating leads for Tampa, FL
+2026-01-10 11:46:57,436 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 11:46:57,987 - INFO - GHL accepted: All American Air & Electric
+2026-01-10 11:46:58,787 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:46:58,801 - INFO - Database saved: All American Air & Electric
+2026-01-10 11:46:59,498 - INFO - Call initiated: All American Air & Electric - 019ba8cd-d006-7666-aa49-66c94a61e481
+2026-01-10 11:47:15,025 - INFO - GHL accepted: B & B Air Conditioning Inc.
+2026-01-10 11:47:15,265 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:47:15,266 - INFO - Database saved: B & B Air Conditioning Inc.
+2026-01-10 11:47:15,835 - INFO - Call initiated: B & B Air Conditioning Inc. - 019ba8ce-0ffe-7666-aa49-a4ad26c5773d
+2026-01-10 11:47:31,388 - INFO - GHL accepted: Coast to Coast Heating & Air
+2026-01-10 11:47:31,665 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:47:31,665 - INFO - Database saved: Coast to Coast Heating & Air
+2026-01-10 11:47:32,235 - INFO - Call initiated: Coast to Coast Heating & Air - 019ba8ce-5001-7cc4-aac5-3855a80557b8
+2026-01-10 11:47:47,895 - INFO - GHL accepted: Dial Duron Service Co.
+2026-01-10 11:47:48,155 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:47:48,156 - INFO - Database saved: Dial Duron Service Co.
+2026-01-10 11:47:48,706 - INFO - Call initiated: Dial Duron Service Co. - 019ba8ce-905b-7ff5-9903-74a9d05dc545
+2026-01-10 11:48:04,235 - INFO - GHL accepted: Desouzza's Heating & Air
+2026-01-10 11:48:04,495 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:48:04,496 - INFO - Database saved: Desouzza's Heating & Air
+2026-01-10 11:48:05,066 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8ce-d048-7772-aa7b-992156c3b767
+2026-01-10 11:48:10,067 - INFO - Campaign complete - 5/5 successful
+2026-01-10 11:50:12,745 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 11:50:12,747 - INFO - Generating leads for Tampa, FL
+2026-01-10 11:50:13,428 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 11:50:13,916 - INFO - GHL accepted: All American Air & Electric
+2026-01-10 11:50:14,546 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:50:14,557 - INFO - Database saved: All American Air & Electric
+2026-01-10 11:50:15,156 - INFO - Call initiated: All American Air & Electric - 019ba8d0-cc75-7772-aa7d-28ca77ca81ec
+2026-01-10 11:50:30,645 - INFO - GHL accepted: B & B Air Conditioning Inc.
+2026-01-10 11:50:30,995 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:50:30,995 - INFO - Database saved: B & B Air Conditioning Inc.
+2026-01-10 11:50:32,065 - INFO - Call initiated: B & B Air Conditioning Inc. - 019ba8d1-0d06-7449-881d-0a6d3e1f6f9d
+2026-01-10 11:50:48,335 - INFO - GHL accepted: Coast to Coast Heating & Air
+2026-01-10 11:50:48,605 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:50:48,606 - INFO - Database saved: Coast to Coast Heating & Air
+2026-01-10 11:50:49,254 - INFO - Call initiated: Coast to Coast Heating & Air - 019ba8d1-5190-7446-9b91-381323df4938
+2026-01-10 11:51:04,774 - INFO - GHL accepted: Dial Duron Service Co.
+2026-01-10 11:51:05,037 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:51:05,038 - INFO - Database saved: Dial Duron Service Co.
+2026-01-10 11:51:05,655 - INFO - Call initiated: Dial Duron Service Co. - 019ba8d1-9196-755b-a307-478e7edc3cf9
+2026-01-10 11:51:21,184 - INFO - GHL accepted: Desouzza's Heating & Air
+2026-01-10 11:51:21,476 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:51:21,479 - INFO - Database saved: Desouzza's Heating & Air
+2026-01-10 11:51:22,116 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8d1-d1d8-7772-aa7d-dbf8084b3810
+2026-01-10 11:51:27,119 - INFO - Campaign complete - 5/5 successful
+2026-01-10 11:53:29,147 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 11:53:29,147 - INFO - Generating leads for Tampa, FL
+2026-01-10 11:53:29,724 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 11:53:30,285 - INFO - GHL accepted: All American Air & Electric
+2026-01-10 11:53:30,874 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:53:30,875 - INFO - Database saved: All American Air & Electric
+2026-01-10 11:53:31,888 - INFO - Call initiated: All American Air & Electric - 019ba8d3-cc60-7ff5-9908-c8394c5a9514
+2026-01-10 11:53:47,444 - INFO - GHL accepted: B & B Air Conditioning Inc.
+2026-01-10 11:53:47,674 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:53:47,676 - INFO - Database saved: B & B Air Conditioning Inc.
+2026-01-10 11:53:48,293 - INFO - Call initiated: B & B Air Conditioning Inc. - 019ba8d4-0cfe-7ffc-ad16-a9515b9a0dba
+2026-01-10 11:54:03,824 - INFO - GHL accepted: Coast to Coast Heating & Air
+2026-01-10 11:54:04,183 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:54:04,184 - INFO - Database saved: Coast to Coast Heating & Air
+2026-01-10 11:54:04,895 - INFO - Call initiated: Coast to Coast Heating & Air - 019ba8d4-4d90-7dd7-a772-5e7d201ce6ca
+2026-01-10 11:54:20,403 - INFO - GHL accepted: Dial Duron Service Co.
+2026-01-10 11:54:20,644 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:54:20,645 - INFO - Database saved: Dial Duron Service Co.
+2026-01-10 11:54:21,504 - INFO - Call initiated: Dial Duron Service Co. - 019ba8d4-8e24-7770-b0e1-d59fd1f8f574
+2026-01-10 11:54:37,064 - INFO - GHL accepted: Desouzza's Heating & Air
+2026-01-10 11:54:37,374 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:54:37,375 - INFO - Database saved: Desouzza's Heating & Air
+2026-01-10 11:54:37,984 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8d4-cf12-766d-ae42-5d14ddfd4b1a
+2026-01-10 11:54:42,986 - INFO - Campaign complete - 5/5 successful
+2026-01-10 11:56:45,638 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 11:56:45,640 - INFO - Generating leads for Tampa, FL
+2026-01-10 11:56:46,399 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 11:56:46,934 - INFO - GHL accepted: All American Air & Electric
+2026-01-10 11:56:47,513 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:56:47,527 - INFO - Database saved: All American Air & Electric
+2026-01-10 11:56:48,193 - INFO - Call initiated: All American Air & Electric - 019ba8d6-cbaa-733d-82b9-c0ea9790d1b9
+2026-01-10 11:57:03,732 - INFO - GHL accepted: B & B Air Conditioning Inc.
+2026-01-10 11:57:04,003 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:57:04,004 - INFO - Database saved: B & B Air Conditioning Inc.
+2026-01-10 11:57:04,643 - INFO - Call initiated: B & B Air Conditioning Inc. - 019ba8d7-0bd2-766d-ae44-5d2b7bc2724d
+2026-01-10 11:57:20,197 - INFO - GHL accepted: Coast to Coast Heating & Air
+2026-01-10 11:57:20,493 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:57:20,493 - INFO - Database saved: Coast to Coast Heating & Air
+2026-01-10 11:57:21,105 - INFO - Call initiated: Coast to Coast Heating & Air - 019ba8d7-4c4b-7449-8822-72317171d603
+2026-01-10 11:57:36,633 - INFO - GHL accepted: Dial Duron Service Co.
+2026-01-10 11:57:37,014 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:57:37,015 - INFO - Database saved: Dial Duron Service Co.
+2026-01-10 11:57:37,714 - INFO - Call initiated: Dial Duron Service Co. - 019ba8d7-8d1c-7dd4-b829-f2a4bcd19639
+2026-01-10 11:57:53,262 - INFO - GHL accepted: Desouzza's Heating & Air
+2026-01-10 11:57:53,583 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 11:57:53,583 - INFO - Database saved: Desouzza's Heating & Air
+2026-01-10 11:57:54,373 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8d7-cdcc-7dd4-b82a-32b1f23723af
+2026-01-10 11:57:59,376 - INFO - Campaign complete - 5/5 successful
+2026-01-10 12:00:01,005 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 12:00:01,005 - INFO - Generating leads for Tampa, FL
+2026-01-10 12:00:03,442 - INFO - Generated 5 leads from Gemini
+2026-01-10 12:00:03,972 - INFO - GHL accepted: Integrity Home Solutions
+2026-01-10 12:00:04,625 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:00:04,626 - INFO - Database saved: Integrity Home Solutions
+2026-01-10 12:00:05,432 - INFO - Call initiated: Integrity Home Solutions - 019ba8d9-ce07-7aa3-ac3c-c754b6872fad
+2026-01-10 12:00:20,982 - INFO - GHL accepted: Arctica Cooling
+2026-01-10 12:00:21,242 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:00:21,243 - INFO - Database saved: Arctica Cooling
+2026-01-10 12:00:21,845 - INFO - Call initiated: Arctica Cooling - 019ba8da-0e39-7ddb-88ac-45eaef77c646
+2026-01-10 12:00:37,364 - INFO - GHL accepted: Hoffman Electrical & A/C
+2026-01-10 12:00:37,612 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:00:37,612 - INFO - Database saved: Hoffman Electrical & A/C
+2026-01-10 12:00:38,232 - INFO - Call initiated: Hoffman Electrical & A/C - 019ba8da-4e27-733d-82bd-969e0a65eef8
+2026-01-10 12:00:53,742 - INFO - GHL accepted: Cool Today
+2026-01-10 12:00:53,981 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:00:53,982 - INFO - Database saved: Cool Today
+2026-01-10 12:00:54,803 - INFO - Call initiated: Cool Today - 019ba8da-8e92-799a-ae70-4cdf7fa5f4e0
+2026-01-10 12:01:10,332 - INFO - GHL accepted: Air Conditioning Innovations, Inc.
+2026-01-10 12:01:10,684 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:01:10,685 - INFO - Database saved: Air Conditioning Innovations, Inc.
+2026-01-10 12:01:11,244 - INFO - Call initiated: Air Conditioning Innovations, Inc. - 019ba8da-cf41-7eeb-9d7f-6ef041d6359e
+2026-01-10 12:01:16,246 - INFO - Campaign complete - 5/5 successful
+2026-01-10 12:03:17,576 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 12:03:17,576 - INFO - Generating leads for Tampa, FL
+2026-01-10 12:03:28,650 - ERROR - Lead generation error: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Max retries exceeded with url: /v1beta/models/gemini-2.0-flash-exp:generateContent?key=AIzaSyAkch32yvh3tKb0NZlDPUTCdyiHfsTOrko (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000014992839BE0>: Failed to resolve 'generativelanguage.googleapis.com' ([Errno 11001] getaddrinfo failed)"))
+2026-01-10 12:03:46,075 - ERROR - GHL error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2026-01-10 12:03:46,602 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:03:46,603 - INFO - Database saved: All American Air & Electric
+2026-01-10 12:03:47,131 - INFO - GHL accepted: B & B Air Conditioning Inc.
+2026-01-10 12:03:47,281 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:03:47,281 - INFO - Database saved: B & B Air Conditioning Inc.
+2026-01-10 12:03:48,781 - INFO - Call initiated: B & B Air Conditioning Inc. - 019ba8dd-35ff-7ff5-990f-d36353ef6f04
+2026-01-10 12:04:04,262 - INFO - GHL accepted: Coast to Coast Heating & Air
+2026-01-10 12:04:04,543 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:04:04,544 - INFO - Database saved: Coast to Coast Heating & Air
+2026-01-10 12:04:05,352 - INFO - Call initiated: Coast to Coast Heating & Air - 019ba8dd-76c7-7446-9b9a-948eca61762d
+2026-01-10 12:04:20,941 - INFO - GHL accepted: Dial Duron Service Co.
+2026-01-10 12:04:21,223 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:04:21,223 - INFO - Database saved: Dial Duron Service Co.
+2026-01-10 12:04:21,772 - INFO - Call initiated: Dial Duron Service Co. - 019ba8dd-b789-7bbe-ad4c-0bed1ceb202d
+2026-01-10 12:04:37,291 - INFO - GHL accepted: Desouzza's Heating & Air
+2026-01-10 12:04:37,551 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:04:37,552 - INFO - Database saved: Desouzza's Heating & Air
+2026-01-10 12:04:38,701 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8dd-f7f1-7ddb-88af-76ed0d1f1b4f
+2026-01-10 12:04:54,235 - INFO - GHL accepted: Mike Scott Plumbing
+2026-01-10 12:04:54,511 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:04:54,512 - INFO - Database saved: Mike Scott Plumbing
+2026-01-10 12:04:55,091 - INFO - Call initiated: Mike Scott Plumbing - 019ba8de-39a0-7aaa-a4f3-8d0851074a18
+2026-01-10 12:05:00,092 - INFO - Campaign complete - 5/5 successful
+2026-01-10 12:07:02,205 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 12:07:02,210 - INFO - Generating leads for Tampa, FL
+2026-01-10 12:07:02,834 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 12:07:03,472 - INFO - GHL accepted: All American Air & Electric
+2026-01-10 12:07:04,043 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:07:04,053 - INFO - Database saved: All American Air & Electric
+2026-01-10 12:07:04,992 - INFO - Call initiated: All American Air & Electric - 019ba8e0-349d-7aa3-ac42-1f2b5f6678dd
+2026-01-10 12:07:20,580 - INFO - GHL accepted: B & B Air Conditioning Inc.
+2026-01-10 12:07:20,820 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:07:20,821 - INFO - Database saved: B & B Air Conditioning Inc.
+2026-01-10 12:07:21,701 - INFO - Call initiated: B & B Air Conditioning Inc. - 019ba8e0-75e7-7bbe-ad4e-17fdaac220e5
+2026-01-10 12:07:37,320 - INFO - GHL accepted: Coast to Coast Heating & Air
+2026-01-10 12:07:37,612 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:07:37,612 - INFO - Database saved: Coast to Coast Heating & Air
+2026-01-10 12:07:38,555 - INFO - Call initiated: Coast to Coast Heating & Air - 019ba8e0-b7a0-7aa3-ac42-4b7f40ceb245
+2026-01-10 12:07:54,060 - INFO - GHL accepted: Dial Duron Service Co.
+2026-01-10 12:07:54,320 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:07:54,321 - INFO - Database saved: Dial Duron Service Co.
+2026-01-10 12:07:54,933 - INFO - Call initiated: Dial Duron Service Co. - 019ba8e0-f803-7dd7-a77c-b0e5c9db4079
+2026-01-10 12:08:10,492 - INFO - GHL accepted: Desouzza's Heating & Air
+2026-01-10 12:08:10,821 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:08:10,822 - INFO - Database saved: Desouzza's Heating & Air
+2026-01-10 12:08:11,702 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8e1-3934-7772-aa88-921090a170c6
+2026-01-10 12:08:16,705 - INFO - Campaign complete - 5/5 successful
+2026-01-10 12:10:19,173 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 12:10:19,173 - INFO - Generating leads for Tampa, FL
+2026-01-10 12:10:19,761 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 12:10:20,311 - INFO - GHL accepted: All American Air & Electric
+2026-01-10 12:10:20,831 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:10:20,833 - INFO - Database saved: All American Air & Electric
+2026-01-10 12:10:21,465 - INFO - Call initiated: All American Air & Electric - 019ba8e3-346b-799a-ae79-72a977454d32
+2026-01-10 12:10:36,959 - INFO - GHL accepted: B & B Air Conditioning Inc.
+2026-01-10 12:10:37,220 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:10:37,221 - INFO - Database saved: B & B Air Conditioning Inc.
+2026-01-10 12:10:38,071 - INFO - Call initiated: B & B Air Conditioning Inc. - 019ba8e3-74d9-7666-8917-abee11104c75
+2026-01-10 12:10:53,611 - INFO - GHL accepted: Coast to Coast Heating & Air
+2026-01-10 12:10:53,910 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:10:53,910 - INFO - Database saved: Coast to Coast Heating & Air
+2026-01-10 12:10:54,512 - INFO - Call initiated: Coast to Coast Heating & Air - 019ba8e3-b594-7cc2-941d-e67a00480203
+2026-01-10 12:11:09,989 - INFO - GHL accepted: Dial Duron Service Co.
+2026-01-10 12:11:10,249 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:11:10,249 - INFO - Database saved: Dial Duron Service Co.
+2026-01-10 12:11:10,979 - INFO - Call initiated: Dial Duron Service Co. - 019ba8e3-f5b8-7772-aa8e-509dc0ee9732
+2026-01-10 12:11:26,550 - INFO - GHL accepted: Desouzza's Heating & Air
+2026-01-10 12:11:26,820 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 12:11:26,820 - INFO - Database saved: Desouzza's Heating & Air
+2026-01-10 12:11:27,629 - INFO - Call initiated: Desouzza's Heating & Air - 019ba8e4-369b-7ee4-9144-6d4ef708be3e
+2026-01-10 12:11:32,631 - INFO - Campaign complete - 5/5 successful
