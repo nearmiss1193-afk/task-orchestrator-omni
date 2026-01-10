@@ -100,3 +100,59 @@
 2026-01-10 10:25:46,077 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
 2026-01-10 10:25:46,997 - INFO - Call initiated: Test Protocol Alpha - 019ba883-7676-766d-adff-f41383fd29f2
 2026-01-10 10:25:52,000 - INFO - Campaign complete - 5/5 successful
+2026-01-10 10:37:12,458 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 10:37:12,459 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:37:13,329 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:37:14,008 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:37:14,717 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:37:14,875 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:37:15,772 - INFO - Call initiated: Test Protocol Alpha - 019ba88d-f97a-7ccd-9d39-0188acc3cbcd
+2026-01-10 10:37:31,505 - INFO - GHL accepted: Test Protocol Beta
+2026-01-10 10:37:31,785 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:37:31,945 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:37:32,724 - INFO - Call initiated: Test Protocol Beta - 019ba88e-3bad-7bbc-90cf-68065d55fffc
+2026-01-10 10:37:52,726 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:37:53,366 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:37:53,843 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:37:54,203 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:37:54,345 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:37:54,958 - INFO - Call initiated: Test Protocol Alpha - 019ba88e-9293-7bbc-90cf-91353e2bf159
+2026-01-10 10:38:10,813 - INFO - GHL accepted: Test Protocol Beta
+2026-01-10 10:38:11,045 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:38:11,203 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:38:16,713 - INFO - Call initiated: Test Protocol Beta - 019ba88e-e756-700e-b626-8a39417fda9f
+2026-01-10 10:38:36,715 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:38:37,342 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:38:37,877 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:38:38,162 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:38:38,324 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:38:38,904 - INFO - Call initiated: Test Protocol Alpha - 019ba88f-3e3b-7cc5-82a8-c4567a821c38
+2026-01-10 10:38:43,906 - INFO - Campaign complete - 5/5 successful
+2026-01-10 10:45:00,937 - INFO - Campaign started - Target: Tampa, FL
+2026-01-10 10:45:00,982 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:45:01,727 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:45:02,296 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:45:02,925 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:45:03,061 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:45:04,481 - INFO - Call initiated: Test Protocol Alpha - 019ba895-1dc5-7eeb-9d45-2e65362ad3b2
+2026-01-10 10:45:19,962 - INFO - GHL accepted: Test Protocol Beta
+2026-01-10 10:45:20,211 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:45:20,384 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:45:20,961 - INFO - Call initiated: Test Protocol Beta - 019ba895-60b0-7bbe-ad14-98129cbf62df
+2026-01-10 10:45:40,963 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:45:41,631 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:45:42,121 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:45:42,417 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:45:42,572 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:45:43,353 - INFO - Call initiated: Test Protocol Alpha - 019ba895-b7d8-7bbe-ad15-006ee6ec0d05
+2026-01-10 10:45:58,901 - INFO - GHL accepted: Test Protocol Beta
+2026-01-10 10:45:59,141 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:45:59,291 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:46:00,121 - INFO - Call initiated: Test Protocol Beta - 019ba895-f94d-7cc5-82ae-f0cb83117697
+2026-01-10 10:46:20,123 - INFO - Generating leads for Tampa, FL
+2026-01-10 10:46:20,751 - WARNING - Gemini 429 - Using backup cache
+2026-01-10 10:46:21,302 - INFO - GHL accepted: Test Protocol Alpha
+2026-01-10 10:46:21,602 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 400 Bad Request"
+2026-01-10 10:46:21,771 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 10:46:22,361 - INFO - Call initiated: Test Protocol Alpha - 019ba896-5061-7228-8b9a-dd4ed8d90dc2
+2026-01-10 10:46:27,362 - INFO - Campaign complete - 5/5 successful

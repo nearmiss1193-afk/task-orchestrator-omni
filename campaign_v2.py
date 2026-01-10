@@ -75,10 +75,18 @@ def generate_leads(city: str, state: str) -> list:
     print(f"\n🔍 Hunting in {city}, {state}...")
     logger.info(f"Generating leads for {city}, {state}")
     
-    # Backup leads using TEST_PHONE for validation
+    # REAL FLORIDA HVAC BACKUP LEADS (from knowledge_base/hvac_prospect_list.md)
     backup_leads = [
-        {"company_name": "Test Protocol Alpha", "phone": TEST_PHONE or "813-555-0101"},
-        {"company_name": "Test Protocol Beta", "phone": TEST_PHONE or "813-555-0102"}
+        {"company_name": "All American Air & Electric", "phone": "352-629-1211"},
+        {"company_name": "B & B Air Conditioning Inc.", "phone": "352-229-8667"},
+        {"company_name": "Coast to Coast Heating & Air", "phone": "352-229-8622"},
+        {"company_name": "Dial Duron Service Co.", "phone": "352-732-8030"},
+        {"company_name": "Desouzza's Heating & Air", "phone": "352-237-7724"},
+        {"company_name": "Mike Scott Plumbing", "phone": "352-500-2444"},
+        {"company_name": "Ace Air Conditioning", "phone": "352-290-3944"},
+        {"company_name": "Patrick's Heating & Air", "phone": "352-236-0400"},
+        {"company_name": "Gator Air and Energy", "phone": "352-275-4827"},
+        {"company_name": "Bertie Heating & Air", "phone": "352-331-2005"},
     ]
     
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={GEMINI_API_KEY}"
