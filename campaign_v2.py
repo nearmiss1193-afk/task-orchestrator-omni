@@ -27,15 +27,17 @@ load_dotenv()
 # ============ CONFIGURATION ============
 TARGET_CITY = "Tampa"
 TARGET_STATE = "FL"
-ENABLE_VAPI_CALLS = False  # Twilio import failed - GHL only mode for now
+ENABLE_VAPI_CALLS = True  # Using Twilio-imported number (UNLIMITED CALLS)
 
 # API Keys
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 SUPABASE_URL = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
 VAPI_PRIVATE_KEY = os.getenv('VAPI_PRIVATE_KEY')
-# Use Twilio-imported number if available, otherwise fall back to Vapi number
-VAPI_PHONE_ID = os.getenv('VAPI_TWILIO_PHONE_ID') or os.getenv('VAPI_PHONE_NUMBER_ID')
+# Twilio-imported number ID (UNLIMITED - no daily limits)
+VAPI_TWILIO_PHONE_ID = 'ee668638-38f0-4984-81ae-e2fd5d83084b'
+# Use Twilio number for unlimited calls, fall back to Vapi number if needed
+VAPI_PHONE_ID = VAPI_TWILIO_PHONE_ID or os.getenv('VAPI_PHONE_NUMBER_ID')
 ASSISTANT_ID = "a3e439a2-4560-4625-99c8-222678bf130d"  # Antigravity/Sarah
 GHL_WEBHOOK_URL = os.getenv('GHL_SMS_WEBHOOK_URL')
 TEST_PHONE = os.getenv('TEST_PHONE')
