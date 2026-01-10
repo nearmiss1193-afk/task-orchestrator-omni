@@ -136,51 +136,52 @@ def vapi_webhook(data: dict):
                 try:
                     import google.generativeai as genai
                     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+                    
                     if api_key and transcript:
                         genai.configure(api_key=api_key)
-                        model = genai.GenerativeModel("gemini-1.5-flash")
+                        # Use JSON mode for reliability
+                        model = genai.GenerativeModel(
+                            "gemini-1.5-flash",
+                            generation_config={"response_mime_type": "application/json"}
+                        )
                         
                         learning_prompt = f'''
                         Analyze this call transcript and extract learnings for the AI agent.
+                        TRANSCRIPT: {transcript[:4000]}
+                        SUMMARY: {summary}
                         
-                        TRANSCRIPT:
-                        {transcript[:3000]}
-                        
-                        SUMMARY:
-                        {summary}
-                        
-                        Extract:
-                        1. What objections did the customer raise?
-                        2. What worked well in the conversation?
-                        3. What could be improved?
-                        4. Key insight for future calls?
-                        
-                        Format as JSON: {{"objections": [], "successes": [], "improvements": [], "insight": ""}}
+                        Output a JSON object with these keys:
+                        - objections (list of strings)
+                        - successes (list of strings)
+                        - improvements (list of strings)
+                        - insight (string, key takeaway)
                         '''
                         
                         response = model.generate_content(learning_prompt)
-                        raw = response.text.replace('```json', '').replace('```', '').strip()
+                        # In JSON mode, text is guaranteed valid JSON
+                        learnings = json.loads(response.text)
+                            
+                        # Store learnings
+                        client.table('agent_learnings').insert({
+                            'agent_name': agent_name,
+                            'topic': 'call_analysis',
+                            'insight': json.dumps(learnings),
+                            'confidence': 0.95
+                        }).execute()
                         
-                        try:
-                            learnings = json.loads(raw)
-                            
-                            # Store learnings
-                            client.table('agent_learnings').insert({
-                                'agent_name': agent_name,
-                                'topic': 'call_analysis',
-                                'insight': json.dumps(learnings),
-                                'confidence': 0.85
-                            }).execute()
-                            
-                            print(f"[AI LEARNING] {agent_name} learned from call {call_id}")
-                        except:
-                            # Store raw insight if JSON parse fails
-                            client.table('agent_learnings').insert({
-                                'agent_name': agent_name,
-                                'topic': 'call_insight',
-                                'insight': raw[:500],
-                                'confidence': 0.7
-                            }).execute()
+                        print(f"[AI LEARNING] {agent_name} learned from call {call_id} (Version 2.0)")
+                        
+                except Exception as learn_err:
+                    print(f"[AI LEARNING] Extraction failed: {learn_err}")
+                    # Fallback to saving raw failure for debugging
+                    try:
+                        client.table('agent_learnings').insert({
+                            'agent_name': agent_name,
+                            'topic': 'learning_error',
+                            'insight': str(learn_err),
+                            'confidence': 0.0
+                        }).execute()
+                    except: pass
                 except Exception as learn_err:
                     print(f"[AI LEARNING] Extraction failed: {learn_err}")
                 
