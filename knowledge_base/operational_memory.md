@@ -1,7 +1,19 @@
 # Empire Operational Memory
 
 > **Purpose:** Persistent memory file for cross-session knowledge retention.
-> **Last Updated:** 2026-01-10T10:18 EST
+> **Last Updated:** 2026-01-10T11:15 EST
+
+---
+
+## 👑 OWNER INFORMATION
+
+| Field | Value |
+|-------|-------|
+| **Primary Email** | <owner@aiserviceco.com> |
+| **Secondary Email** | <nearmiss1193@gmail.com> |
+| **Dashboard** | <https://www.aiserviceco.com/dashboard.html> |
+| **GHL Portal** | <https://app.gohighlevel.com> |
+| **Vapi Dashboard** | <https://dashboard.vapi.ai> |
 
 ---
 
