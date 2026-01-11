@@ -1,4 +1,4 @@
-# Empire Operational Memory
+make sure it doesnt break snything, do deepthink type resea# Empire Operational Memory
 
 > **Purpose:** Persistent memory file for cross-session knowledge retention.
 > **Last Updated:** 2026-01-11T14:00 EST
