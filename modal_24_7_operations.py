@@ -185,6 +185,92 @@ def health_monitor():
     print("Health Monitor complete!")
 
 # ============================================================================
+# SOCIAL MEDIA AUTOMATION - Runs 4 times daily
+# ============================================================================
+
+@app.function(
+    image=image,
+    secrets=secrets,
+    schedule=modal.Cron("0 8,13,15,19 * * *"),  # 8 AM, 1 PM, 3 PM, 7 PM EST
+    timeout=300
+)
+def social_media_poster():
+    """
+    Generates and posts AI-created content to social media
+    - 8 AM: LinkedIn (HVAC tip)
+    - 1 PM: Facebook (Business insight)
+    - 3 PM: Twitter (Quick tip)
+    - 7 PM: Instagram (Success story)
+    """
+    import sys
+    import os
+    from datetime import datetime
+    
+    sys.path.insert(0, os.path.dirname(__file__))
+    
+    from social_content_generator import generate_content
+    from social_media_manager import post_to_social
+    
+    hour = datetime.now().hour
+    
+    # Determine platform and theme based on time
+    if hour == 8:
+        platform, theme = "linkedin", "hvac_tips"
+    elif hour == 13:
+        platform, theme = "facebook", "business_insights"
+    elif hour == 15:
+        platform, theme = "twitter", "hvac_tips"
+    elif hour == 19:
+        platform, theme = "instagram", "success_stories"
+    else:
+        platform, theme = "linkedin", "hvac_tips"
+    
+    print(f"Generating {platform} post ({theme})...")
+    content = generate_content(theme, platform)
+    
+    print(f"Posting to {platform}...")
+    result = post_to_social(content, platforms=[platform])
+    
+    if result['success']:
+        print(f"✓ Posted to {platform}!")
+    else:
+        print(f"✗ Failed to post: {result.get('error')}")
+
+# ============================================================================
+# SOCIAL MEDIA ANALYTICS - Runs daily at 10 PM EST
+# ============================================================================
+
+@app.function(
+    image=image,
+    secrets=secrets,
+    schedule=modal.Cron("0 22 * * *"),  # 10 PM EST
+    timeout=300
+)
+def social_media_analytics():
+    """
+    Collects social media analytics and feeds to brain
+    - Engagement metrics
+    - Top performing posts
+    - Audience insights
+    """
+    import sys
+    import os
+    
+    sys.path.insert(0, os.path.dirname(__file__))
+    
+    from social_media_manager import monitor_engagement
+    
+    print("Collecting social media analytics...")
+    analytics = monitor_engagement()
+    
+    if analytics:
+        print(f"Total posts: {analytics.get('total_posts', 0)}")
+        print(f"Total engagement: {analytics.get('total_likes', 0)} likes")
+        # Save to brain for analysis
+    
+    print("Social media analytics complete!")
+
+# ============================================================================
 # DEPLOYMENT INFO
 # ============================================================================
 
@@ -201,6 +287,8 @@ def main():
     print("  4. Daily System Analysis  - Daily at 8 PM EST")
     print("  5. Weekly Learning Agent  - Sunday at 8 PM EST")
     print("  6. Health Monitor         - Every 3 hours")
+    print("  7. Social Media Poster    - 4x daily (8 AM, 1 PM, 3 PM, 7 PM)")
+    print("  8. Social Media Analytics - Daily at 10 PM EST")
     print("\nDeployment:")
     print("  modal deploy modal_24_7_operations.py")
     print("="*70)
