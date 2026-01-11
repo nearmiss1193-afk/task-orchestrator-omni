@@ -29,3 +29,21 @@
 2026-01-10 21:13:51,133 - INFO - Dossier: HVAC Repair Community
 2026-01-10 21:13:51,770 - INFO - CALL: HVAC Repair Community - 019baad4
 2026-01-10 21:13:52,283 - INFO - SMS: HVAC Repair Community
+2026-01-10 21:15:52,957 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:15:54,038 - INFO - GHL: West LA Air Conditioning
+2026-01-10 21:15:54,221 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:15:54,228 - INFO - Dossier: West LA Air Conditioning
+2026-01-10 21:15:55,148 - INFO - CALL: West LA Air Conditioning - 019baad6
+2026-01-10 21:15:55,951 - INFO - SMS: West LA Air Conditioning
+2026-01-10 21:17:56,622 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:17:57,464 - INFO - GHL: Hollywood HVAC Pro
+2026-01-10 21:17:57,612 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:17:57,616 - INFO - Dossier: Hollywood HVAC Pro
+2026-01-10 21:17:58,383 - INFO - CALL: Hollywood HVAC Pro - 019baad8
+2026-01-10 21:17:58,991 - INFO - SMS: Hollywood HVAC Pro
+2026-01-10 21:20:00,750 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:20:01,484 - INFO - GHL: Beverly Hills Cooling
+2026-01-10 21:20:01,661 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:20:01,666 - INFO - Dossier: Beverly Hills Cooling
+2026-01-10 21:20:06,005 - INFO - CALL: Beverly Hills Cooling - 019baada
+2026-01-10 21:20:06,530 - INFO - SMS: Beverly Hills Cooling
