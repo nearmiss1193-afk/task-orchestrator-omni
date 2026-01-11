@@ -148,3 +148,160 @@
 2026-01-10 21:55:03,277 - INFO - Dossier: Shekhter Sam HVAC
 2026-01-10 21:55:06,366 - INFO - CALL: Shekhter Sam HVAC - 019baafa
 2026-01-10 21:55:06,895 - INFO - SMS: Shekhter Sam HVAC
+2026-01-10 21:57:07,561 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:57:08,573 - INFO - GHL: Same Day Heating SD
+2026-01-10 21:57:08,736 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:57:08,739 - INFO - Dossier: Same Day Heating SD
+2026-01-10 21:57:09,418 - INFO - CALL: Same Day Heating SD - 019baafc
+2026-01-10 21:57:10,006 - INFO - SMS: Same Day Heating SD
+2026-01-10 21:59:10,759 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:59:11,436 - INFO - GHL: La Jolla AC Services
+2026-01-10 21:59:11,593 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:59:11,606 - INFO - Dossier: La Jolla AC Services
+2026-01-10 21:59:12,221 - INFO - CALL: La Jolla AC Services - 019baafe
+2026-01-10 21:59:12,797 - INFO - SMS: La Jolla AC Services
+2026-01-10 22:01:13,433 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:01:14,555 - INFO - GHL: Chula Vista Cooling
+2026-01-10 22:01:14,833 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:01:14,835 - INFO - Dossier: Chula Vista Cooling
+2026-01-10 22:01:15,998 - INFO - CALL: Chula Vista Cooling - 019bab00
+2026-01-10 22:01:16,684 - INFO - SMS: Chula Vista Cooling
+2026-01-10 22:03:17,255 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:03:17,992 - INFO - GHL: Carlsbad HVAC Pro
+2026-01-10 22:03:18,154 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:03:18,161 - INFO - Dossier: Carlsbad HVAC Pro
+2026-01-10 22:03:19,204 - INFO - CALL: Carlsbad HVAC Pro - 019bab02
+2026-01-10 22:03:19,713 - INFO - SMS: Carlsbad HVAC Pro
+2026-01-10 22:05:20,054 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:05:20,622 - INFO - GHL: Escondido Air
+2026-01-10 22:05:20,792 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:05:20,793 - INFO - Dossier: Escondido Air
+2026-01-10 22:05:21,653 - INFO - CALL: Escondido Air - 019bab03
+2026-01-10 22:05:22,126 - INFO - SMS: Escondido Air
+2026-01-10 22:07:22,422 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:07:23,006 - INFO - GHL: Oceanside Cooling
+2026-01-10 22:07:23,162 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:07:23,163 - INFO - Dossier: Oceanside Cooling
+2026-01-10 22:07:23,894 - INFO - CALL: Oceanside Cooling - 019bab05
+2026-01-10 22:07:24,418 - INFO - SMS: Oceanside Cooling
+2026-01-10 22:09:24,713 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:09:25,311 - INFO - GHL: El Cajon AC
+2026-01-10 22:09:25,471 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:09:25,471 - INFO - Dossier: El Cajon AC
+2026-01-10 22:09:26,133 - INFO - CALL: El Cajon AC - 019bab07
+2026-01-10 22:09:26,701 - INFO - SMS: El Cajon AC
+2026-01-10 22:11:28,116 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:11:28,612 - INFO - GHL: National City HVAC
+2026-01-10 22:11:28,791 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:11:28,795 - INFO - Dossier: National City HVAC
+2026-01-10 22:11:29,373 - INFO - CALL: National City HVAC - 019bab09
+2026-01-10 22:11:29,930 - INFO - SMS: National City HVAC
+2026-01-10 22:13:30,180 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:13:30,690 - INFO - GHL: San Marcos Air
+2026-01-10 22:13:30,880 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:13:30,881 - INFO - Dossier: San Marcos Air
+2026-01-10 22:13:31,840 - INFO - CALL: San Marcos Air - 019bab0b
+2026-01-10 22:13:32,371 - INFO - SMS: San Marcos Air
+2026-01-10 22:15:32,619 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:15:33,161 - INFO - GHL: Vista Cooling Pro
+2026-01-10 22:15:33,311 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:15:33,311 - INFO - Dossier: Vista Cooling Pro
+2026-01-10 22:15:33,920 - INFO - CALL: Vista Cooling Pro - 019bab0d
+2026-01-10 22:15:34,404 - INFO - SMS: Vista Cooling Pro
+2026-01-10 22:17:34,659 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:17:35,218 - INFO - GHL: Encinitas AC
+2026-01-10 22:17:35,389 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:17:35,390 - INFO - Dossier: Encinitas AC
+2026-01-10 22:17:36,168 - INFO - CALL: Encinitas AC - 019bab0f
+2026-01-10 22:17:36,667 - INFO - SMS: Encinitas AC
+2026-01-10 22:19:36,951 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:19:37,509 - INFO - GHL: Poway HVAC Services
+2026-01-10 22:19:37,672 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:19:37,674 - INFO - Dossier: Poway HVAC Services
+2026-01-10 22:19:38,379 - INFO - CALL: Poway HVAC Services - 019bab11
+2026-01-10 22:19:38,871 - INFO - SMS: Poway HVAC Services
+2026-01-10 22:21:39,118 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:21:39,690 - INFO - GHL: Santee Air Pro
+2026-01-10 22:21:39,843 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:21:39,846 - INFO - Dossier: Santee Air Pro
+2026-01-10 22:21:40,739 - INFO - CALL: Santee Air Pro - 019bab12
+2026-01-10 22:21:41,353 - INFO - SMS: Santee Air Pro
+2026-01-10 22:23:41,609 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:23:42,222 - INFO - GHL: Coronado Cooling
+2026-01-10 22:23:42,379 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:23:42,380 - INFO - Dossier: Coronado Cooling
+2026-01-10 22:23:43,241 - INFO - CALL: Coronado Cooling - 019bab14
+2026-01-10 22:23:43,753 - INFO - SMS: Coronado Cooling
+2026-01-10 22:25:44,027 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:25:44,556 - INFO - GHL: Rancho Bernardo AC
+2026-01-10 22:25:44,716 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:25:44,717 - INFO - Dossier: Rancho Bernardo AC
+2026-01-10 22:25:45,652 - INFO - CALL: Rancho Bernardo AC - 019bab16
+2026-01-10 22:25:46,148 - INFO - SMS: Rancho Bernardo AC
+2026-01-10 22:27:46,426 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:27:46,966 - INFO - GHL: Cabrillo Plumbing AC
+2026-01-10 22:27:47,126 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:27:47,126 - INFO - Dossier: Cabrillo Plumbing AC
+2026-01-10 22:27:47,976 - INFO - CALL: Cabrillo Plumbing AC - 019bab18
+2026-01-10 22:27:48,507 - INFO - SMS: Cabrillo Plumbing AC
+2026-01-10 22:29:48,786 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:29:49,326 - INFO - GHL: Same Day AC SF
+2026-01-10 22:29:49,478 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:29:49,478 - INFO - Dossier: Same Day AC SF
+2026-01-10 22:29:50,293 - INFO - CALL: Same Day AC SF - 019bab1a
+2026-01-10 22:29:50,786 - INFO - SMS: Same Day AC SF
+2026-01-10 22:31:51,139 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:31:51,745 - INFO - GHL: ABCO Mechanical
+2026-01-10 22:31:51,911 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:31:51,912 - INFO - Dossier: ABCO Mechanical
+2026-01-10 22:31:52,636 - INFO - CALL: ABCO Mechanical - 019bab1c
+2026-01-10 22:31:53,157 - INFO - SMS: ABCO Mechanical
+2026-01-10 22:33:53,420 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:33:54,015 - INFO - GHL: A-1 Heating Cooling
+2026-01-10 22:33:54,164 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:33:54,165 - INFO - Dossier: A-1 Heating Cooling
+2026-01-10 22:33:54,766 - INFO - CALL: A-1 Heating Cooling - 019bab1e
+2026-01-10 22:33:55,256 - INFO - SMS: A-1 Heating Cooling
+2026-01-10 22:35:55,514 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:35:56,001 - INFO - GHL: San Jose Heating Cool
+2026-01-10 22:35:56,156 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:35:56,156 - INFO - Dossier: San Jose Heating Cool
+2026-01-10 22:35:56,777 - INFO - CALL: San Jose Heating Cool - 019bab1f
+2026-01-10 22:35:57,258 - INFO - SMS: San Jose Heating Cool
+2026-01-10 22:37:57,625 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:37:58,167 - INFO - GHL: AAA Furnace AC
+2026-01-10 22:37:58,324 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:37:58,324 - INFO - Dossier: AAA Furnace AC
+2026-01-10 22:37:59,607 - INFO - CALL: AAA Furnace AC - 019bab21
+2026-01-10 22:38:00,145 - INFO - SMS: AAA Furnace AC
+2026-01-10 22:40:00,430 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:40:01,042 - INFO - GHL: Air Quality HVAC
+2026-01-10 22:40:01,204 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:40:01,205 - INFO - Dossier: Air Quality HVAC
+2026-01-10 22:40:03,134 - INFO - CALL: Air Quality HVAC - 019bab23
+2026-01-10 22:40:03,748 - INFO - SMS: Air Quality HVAC
+2026-01-10 22:42:04,050 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:42:04,620 - INFO - GHL: Oakland Air Pro
+2026-01-10 22:42:04,769 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:42:04,770 - INFO - Dossier: Oakland Air Pro
+2026-01-10 22:42:05,451 - INFO - CALL: Oakland Air Pro - 019bab25
+2026-01-10 22:42:05,902 - INFO - SMS: Oakland Air Pro
+2026-01-10 22:44:06,147 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:44:06,815 - INFO - GHL: Berkeley HVAC
+2026-01-10 22:44:06,962 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:44:06,963 - INFO - Dossier: Berkeley HVAC
+2026-01-10 22:44:07,777 - INFO - CALL: Berkeley HVAC - 019bab27
+2026-01-10 22:44:08,284 - INFO - SMS: Berkeley HVAC
+2026-01-10 22:46:08,915 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:46:09,719 - INFO - GHL: Fremont Cooling
+2026-01-10 22:46:09,912 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:46:09,914 - INFO - Dossier: Fremont Cooling
+2026-01-10 22:46:10,806 - INFO - CALL: Fremont Cooling - 019bab29
+2026-01-10 22:46:11,343 - INFO - SMS: Fremont Cooling
+2026-01-10 22:48:12,080 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 22:48:13,229 - INFO - GHL: Sunnyvale AC
+2026-01-10 22:48:13,413 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 22:48:13,418 - INFO - Dossier: Sunnyvale AC
+2026-01-10 22:48:14,108 - INFO - CALL: Sunnyvale AC - 019bab2b
+2026-01-10 22:48:14,734 - INFO - SMS: Sunnyvale AC
+2026-01-10 22:50:15,431 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"

@@ -253,7 +253,16 @@
             // Simple counts
             const { count: total } = await sbClient.from('leads').select('*', { count: 'exact', head: true });
             const { count: contacted } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'contacted');
-            const { count: calls } = await sbClient.from('call_transcripts').select('*', { count: 'exact', head: true });
+
+            // Count calls from leads that have been called (have last_called set)
+            const { count: callsFromLeads } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).not('last_called', 'is', null);
+
+            // Also try system_logs for CALL entries
+            const { count: callsFromLogs } = await sbClient.from('system_logs').select('*', { count: 'exact', head: true }).ilike('message', '%CALL%');
+
+            // Use whichever is higher
+            const calls = Math.max(callsFromLeads || 0, callsFromLogs || 0, contacted || 0);
+
             // "Appointments" approximated
             const { count: appts } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).in('status', ['converted', 'appointment_set']);
 
