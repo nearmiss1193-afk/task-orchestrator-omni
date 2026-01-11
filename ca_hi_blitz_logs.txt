@@ -1286,3 +1286,18 @@
 2026-01-11 14:09:30,834 - INFO - CALL: Hilo Cooling Pro - 019bae76
 2026-01-11 14:09:31,040 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40hilocoolingpro.com "HTTP/2 200 OK"
 2026-01-11 14:09:31,937 - INFO - SMS: Hilo Cooling Pro
+2026-01-11 14:11:32,604 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 14:11:33,797 - INFO - GHL: Lahaina HVAC
+2026-01-11 14:11:33,994 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:11:34,001 - INFO - Dossier: Lahaina HVAC
+2026-01-11 14:11:35,255 - INFO - CALL: Lahaina HVAC - 019bae78
+2026-01-11 14:11:35,427 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40lahainahvac.com "HTTP/2 200 OK"
+2026-01-11 14:11:36,355 - INFO - SMS: Lahaina HVAC
+2026-01-11 14:13:36,720 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 14:13:37,721 - INFO - GHL: Kihei AC Expert
+2026-01-11 14:13:38,027 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:13:38,027 - INFO - Dossier: Kihei AC Expert
+2026-01-11 14:13:39,000 - INFO - CALL: Kihei AC Expert - 019bae7a
+2026-01-11 14:13:39,231 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40kiheiacexpert.com "HTTP/2 200 OK"
+2026-01-11 14:13:40,242 - INFO - SMS: Kihei AC Expert
+2026-01-11 14:13:40,245 - INFO - Blitz complete - Processed: 100, Skipped: 0
