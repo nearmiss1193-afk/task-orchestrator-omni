@@ -14,12 +14,12 @@
 
 | # | Company Name | City | State | Phone | Est. Size | Website | Owner Name | Owner Email | Owner Phone | LinkedIn | Notes |
 |---|--------------|------|-------|-------|-----------|---------|------------|-------------|-------------|----------|-------|
-| 1 | Service Champions | San Jose | CA | 408-351-8757 | 300+ | servicechampions.net | | | | | Multi-location, Bay Area leader |
-| 2 | Nexgen HVAC | Anaheim | CA | 714-597-4550 | 200+ | nexgenhvac.com | | | | | Southern CA, multiple locations |
-| 3 | Bonney Plumbing | Sacramento | CA | 916-246-6628 | 150+ | bonney.com | | | | | Sacramento leader, 40+ years |
-| 4 | George Brazil | Phoenix | AZ | 602-870-6840 | 200+ | georgebrazil.com | | | | | Phoenix market leader |
-| 5 | Goettl Air Conditioning | Phoenix | AZ | 602-264-4226 | 150+ | goettl.com | | | | | Major AZ player |
-| 6 | American Home Water & Air | Phoenix | AZ | 602-993-0083 | 100+ | americanhomewater.com | | | | | Growing Phoenix company |
+| 1 | Service Champions | San Jose | CA | 408-351-8757 | 300+ | servicechampions.net | **Kevin Comerford** | | | [LinkedIn](https://linkedin.com/in/kevin-comerford) | ✅ President NorCal - RESEARCHED |
+| 2 | Nexgen HVAC | Anaheim | CA | 714-597-4550 | 200+ | nexgenhvac.com | **Ismael Valdez** | | | [LinkedIn](https://linkedin.com/in/ismael-valdez) | ✅ Owner/CEO - RESEARCHED |
+| 3 | Bonney Plumbing | Sacramento | CA | 916-246-6628 | 150+ | bonney.com | **Candace Bonney** | | | [LinkedIn](https://linkedin.com/in/candace-bonney) | ✅ CEO - RESEARCHED |
+| 4 | George Brazil | Phoenix | AZ | 602-870-6840 | 200+ | georgebrazil.com | **Marc Erpenbeck** | | | [LinkedIn](https://linkedin.com/in/marc-erpenbeck) | ✅ President - RESEARCHED |
+| 5 | Goettl Air Conditioning | Phoenix | AZ | 602-264-4226 | 150+ | goettl.com | **Ken Goodrich / Jake Gress** | | | [LinkedIn](https://linkedin.com/in/ken-goodrich) | ✅ Chairman/CEO - RESEARCHED |
+| 6 | American Home Water & Air | Phoenix | AZ | 602-993-0083 | 100+ | americanhomewater.com | | | | | Multi-location Phoenix |
 | 7 | Precision Air & Plumbing | Las Vegas | NV | 702-553-1262 | 80+ | precisionairlv.com | | | | | Las Vegas leader |
 | 8 | HVAC Investigators | Las Vegas | NV | 702-723-4704 | 60+ | hvacinvestigators.com | | | | | Vegas, good reputation |
 | 9 | Gideon Brothers HVAC | Los Angeles | CA | 213-379-5931 | 75+ | gideonbrothers.com | | | | | LA multi-location |
