@@ -48,23 +48,36 @@
 
 ## 🕐 Business Rules
 
+### ⏰ TIMEZONE ENFORCEMENT (MANDATORY)
+
+**NO calls or SMS before 8 AM or after 7 PM in the lead's local timezone unless specifically requested by the lead.**
+
+| State | Timezone | UTC Offset | Example: 8 PM ET |
+|-------|----------|------------|------------------|
+| FL, GA, NY | Eastern (ET) | UTC-5 | 8 PM |
+| TX, IL, LA | Central (CT) | UTC-6 | 7 PM |
+| AZ, CO, NM | Mountain (MT) | UTC-7 | 6 PM |
+| CA, NV, WA | Pacific (PT) | UTC-8 | 5 PM |
+| HI | Hawaii (HT) | UTC-10 | 3 PM |
+
 ### Calling Rules
 
-- **7 AM Start:** NO outbound calls before 7 AM local time
-- **7 PM Cutoff:** Stop calling after 7 PM local time for each timezone
-- **Follow-the-Sun Pattern:** When EST hits 7 PM, shift to Central → Mountain → Pacific
-- **Window:** 7 AM - 7 PM local time for all outbound calls
-- **Call Pacing:** 1 call every 10 minutes between leads
+- **8 AM Start:** NO outbound calls before 8 AM local time
+- **7 PM Cutoff:** Stop calling after 7 PM local time
+- **Window:** 8 AM - 7 PM local time for all outbound calls
+- **One Touch Per Day:** No multiple calls in one day unless lead asks
+- **Follow-the-Sun:** When EST hits 7 PM, shift to Central → Mountain → Pacific → Hawaii
+
+### SMS Rules
+
+- **Same 8 AM - 7 PM window as calls**
+- **One SMS per day max** unless lead requests more
+- **Always check timezone before sending**
 
 ### Email Best Practices
 
 - **Optimal Send Times:** 9-11 AM, 1-3 PM local time
 - **Avoid:** Before 8 AM, after 6 PM, weekends for business emails
-
-### SMS Rules
-
-- **Same 8 AM - 7 PM window as calls**
-- **Follow timezone rules before sending**
 
 ---
 
