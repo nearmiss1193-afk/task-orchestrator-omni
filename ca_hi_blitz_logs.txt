@@ -47,3 +47,63 @@
 2026-01-10 21:20:01,666 - INFO - Dossier: Beverly Hills Cooling
 2026-01-10 21:20:06,005 - INFO - CALL: Beverly Hills Cooling - 019baada
 2026-01-10 21:20:06,530 - INFO - SMS: Beverly Hills Cooling
+2026-01-10 21:22:07,200 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:22:07,958 - INFO - GHL: Santa Monica AC
+2026-01-10 21:22:08,120 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:22:08,124 - INFO - Dossier: Santa Monica AC
+2026-01-10 21:22:09,182 - INFO - CALL: Santa Monica AC - 019baadc
+2026-01-10 21:22:09,782 - INFO - SMS: Santa Monica AC
+2026-01-10 21:24:10,905 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:24:12,749 - INFO - GHL: Pasadena Air Services
+2026-01-10 21:24:12,921 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:24:12,930 - INFO - Dossier: Pasadena Air Services
+2026-01-10 21:24:14,263 - INFO - CALL: Pasadena Air Services - 019baade
+2026-01-10 21:24:15,700 - INFO - SMS: Pasadena Air Services
+2026-01-10 21:26:16,297 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:26:17,186 - INFO - GHL: Burbank HVAC
+2026-01-10 21:26:17,399 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:26:17,404 - INFO - Dossier: Burbank HVAC
+2026-01-10 21:26:18,841 - INFO - CALL: Burbank HVAC - 019baae0
+2026-01-10 21:26:19,389 - INFO - SMS: Burbank HVAC
+2026-01-10 21:28:20,017 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:28:21,034 - INFO - GHL: Glendale Cooling
+2026-01-10 21:28:21,207 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:28:21,210 - INFO - Dossier: Glendale Cooling
+2026-01-10 21:28:22,103 - INFO - CALL: Glendale Cooling - 019baae2
+2026-01-10 21:28:22,869 - INFO - SMS: Glendale Cooling
+2026-01-10 21:30:23,160 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:30:23,834 - INFO - GHL: Long Beach AC Pro
+2026-01-10 21:30:23,998 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:30:24,000 - INFO - Dossier: Long Beach AC Pro
+2026-01-10 21:30:24,721 - INFO - CALL: Long Beach AC Pro - 019baae3
+2026-01-10 21:30:25,238 - INFO - SMS: Long Beach AC Pro
+2026-01-10 21:32:25,810 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:32:26,597 - INFO - GHL: Torrance Air Systems
+2026-01-10 21:32:26,797 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:32:26,805 - INFO - Dossier: Torrance Air Systems
+2026-01-10 21:32:27,630 - INFO - CALL: Torrance Air Systems - 019baae5
+2026-01-10 21:32:28,164 - INFO - SMS: Torrance Air Systems
+2026-01-10 21:34:28,785 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:34:29,999 - INFO - GHL: Inglewood HVAC
+2026-01-10 21:34:30,168 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:34:30,179 - INFO - Dossier: Inglewood HVAC
+2026-01-10 21:34:31,306 - INFO - CALL: Inglewood HVAC - 019baae7
+2026-01-10 21:34:31,846 - INFO - SMS: Inglewood HVAC
+2026-01-10 21:36:32,446 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:36:33,923 - INFO - GHL: Downey AC Services
+2026-01-10 21:36:34,086 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:36:34,090 - INFO - Dossier: Downey AC Services
+2026-01-10 21:36:34,750 - INFO - CALL: Downey AC Services - 019baae9
+2026-01-10 21:36:35,267 - INFO - SMS: Downey AC Services
+2026-01-10 21:38:35,818 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:38:36,794 - INFO - GHL: Norwalk Cooling
+2026-01-10 21:38:36,975 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:38:36,978 - INFO - Dossier: Norwalk Cooling
+2026-01-10 21:38:37,747 - INFO - CALL: Norwalk Cooling - 019baaeb
+2026-01-10 21:38:38,325 - INFO - SMS: Norwalk Cooling
+2026-01-10 21:40:38,850 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:40:39,704 - INFO - GHL: Compton Air Pro
+2026-01-10 21:40:39,855 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:40:39,858 - INFO - Dossier: Compton Air Pro
+2026-01-10 21:40:40,808 - INFO - CALL: Compton Air Pro - 019baaed
+2026-01-10 21:40:41,318 - INFO - SMS: Compton Air Pro
