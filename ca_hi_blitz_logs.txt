@@ -1,1 +1,31 @@
 2026-01-10 21:05:39,349 - INFO - CA+HI BLITZ STARTED - 100 leads - 2026-01-10 21:05:39.349554
+2026-01-10 21:05:39,946 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:05:40,505 - INFO - GHL: JW Plumbing Heating Air
+2026-01-10 21:05:40,655 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:05:40,656 - INFO - Dossier: JW Plumbing Heating Air
+2026-01-10 21:05:41,353 - INFO - CALL: JW Plumbing Heating Air - 019baacd
+2026-01-10 21:05:41,885 - INFO - SMS: JW Plumbing Heating Air
+2026-01-10 21:07:42,444 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:07:43,080 - INFO - GHL: Brody Pennell Heating AC
+2026-01-10 21:07:43,242 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:07:43,244 - INFO - Dossier: Brody Pennell Heating AC
+2026-01-10 21:07:43,906 - INFO - CALL: Brody Pennell Heating AC - 019baacf
+2026-01-10 21:07:44,413 - INFO - SMS: Brody Pennell Heating AC
+2026-01-10 21:09:44,882 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:09:45,558 - INFO - GHL: Home Upgrade Specialist
+2026-01-10 21:09:45,732 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:09:45,735 - INFO - Dossier: Home Upgrade Specialist
+2026-01-10 21:09:46,385 - INFO - CALL: Home Upgrade Specialist - 019baad1
+2026-01-10 21:09:46,952 - INFO - SMS: Home Upgrade Specialist
+2026-01-10 21:11:47,438 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:11:48,120 - INFO - GHL: LA Heating Contractor
+2026-01-10 21:11:48,294 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:11:48,296 - INFO - Dossier: LA Heating Contractor
+2026-01-10 21:11:49,086 - INFO - CALL: LA Heating Contractor - 019baad2
+2026-01-10 21:11:49,655 - INFO - SMS: LA Heating Contractor
+2026-01-10 21:13:50,229 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:13:50,951 - INFO - GHL: HVAC Repair Community
+2026-01-10 21:13:51,131 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:13:51,133 - INFO - Dossier: HVAC Repair Community
+2026-01-10 21:13:51,770 - INFO - CALL: HVAC Repair Community - 019baad4
+2026-01-10 21:13:52,283 - INFO - SMS: HVAC Repair Community
