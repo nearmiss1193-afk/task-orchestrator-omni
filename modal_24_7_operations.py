@@ -24,7 +24,8 @@ secrets = [
     modal.Secret.from_name("resend-api-key"),
     modal.Secret.from_name("supabase-credentials"),
     modal.Secret.from_name("vapi-credentials"),
-    modal.Secret.from_name("ghl-credentials")
+    modal.Secret.from_name("ghl-credentials"),
+    modal.Secret.from_name("ayrshare-api-key")  # CRITICAL for social media
 ]
 
 # ============================================================================
