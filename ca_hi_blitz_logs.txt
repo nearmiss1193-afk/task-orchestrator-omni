@@ -985,3 +985,276 @@
 2026-01-11 12:40:40,519 - INFO - CALL: Redwood City AC - 019bae25
 2026-01-11 12:40:40,690 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40redwoodcityac.com "HTTP/2 200 OK"
 2026-01-11 12:40:41,677 - INFO - SMS: Redwood City AC
+2026-01-11 12:42:42,195 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:42:42,888 - INFO - GHL: Hayward HVAC Pro
+2026-01-11 12:42:43,060 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:42:43,061 - INFO - Dossier: Hayward HVAC Pro
+2026-01-11 12:42:43,642 - INFO - CALL: Hayward HVAC Pro - 019bae27
+2026-01-11 12:42:43,848 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40haywardhvacpro.com "HTTP/2 200 OK"
+2026-01-11 12:42:44,515 - INFO - SMS: Hayward HVAC Pro
+2026-01-11 12:44:45,341 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:44:46,578 - INFO - GHL: Concord Air Services
+2026-01-11 12:44:46,787 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:44:46,791 - INFO - Dossier: Concord Air Services
+2026-01-11 12:44:48,066 - INFO - CALL: Concord Air Services - 019bae29
+2026-01-11 12:44:48,254 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40concordairservices.com "HTTP/2 200 OK"
+2026-01-11 12:44:49,159 - INFO - SMS: Concord Air Services
+2026-01-11 12:46:49,616 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:46:50,584 - INFO - GHL: Walnut Creek Cooling
+2026-01-11 12:46:50,747 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:46:50,792 - INFO - Dossier: Walnut Creek Cooling
+2026-01-11 12:46:52,006 - INFO - CALL: Walnut Creek Cooling - 019bae2a
+2026-01-11 12:46:52,175 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40walnutcreekcooling.com "HTTP/2 200 OK"
+2026-01-11 12:46:52,962 - INFO - SMS: Walnut Creek Cooling
+2026-01-11 12:48:53,367 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:48:54,299 - INFO - GHL: Pleasanton AC
+2026-01-11 12:48:54,510 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:48:54,511 - INFO - Dossier: Pleasanton AC
+2026-01-11 12:48:55,718 - INFO - CALL: Pleasanton AC - 019bae2c
+2026-01-11 12:48:55,881 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40pleasantonac.com "HTTP/2 200 OK"
+2026-01-11 12:48:56,758 - INFO - SMS: Pleasanton AC
+2026-01-11 12:50:57,143 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:50:58,060 - INFO - GHL: Livermore HVAC
+2026-01-11 12:50:58,229 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:50:58,231 - INFO - Dossier: Livermore HVAC
+2026-01-11 12:50:59,496 - INFO - CALL: Livermore HVAC - 019bae2e
+2026-01-11 12:50:59,656 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40livermorehvac.com "HTTP/2 200 OK"
+2026-01-11 12:51:00,556 - INFO - SMS: Livermore HVAC
+2026-01-11 12:53:01,074 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:53:02,023 - INFO - GHL: Garick Air Conditioning
+2026-01-11 12:53:02,194 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:53:02,195 - INFO - Dossier: Garick Air Conditioning
+2026-01-11 12:53:03,147 - INFO - CALL: Garick Air Conditioning - 019bae30
+2026-01-11 12:53:03,307 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40garickairconditioning.com "HTTP/2 200 OK"
+2026-01-11 12:53:04,206 - INFO - SMS: Garick Air Conditioning
+2026-01-11 12:55:04,637 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:55:05,657 - INFO - GHL: Roach Heating AC
+2026-01-11 12:55:05,860 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:55:05,861 - INFO - Dossier: Roach Heating AC
+2026-01-11 12:55:11,289 - INFO - CALL: Roach Heating AC - 019bae32
+2026-01-11 12:55:11,574 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40roachheatingac.com "HTTP/2 200 OK"
+2026-01-11 12:55:12,427 - INFO - SMS: Roach Heating AC
+2026-01-11 12:57:12,915 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:57:13,530 - INFO - GHL: Harris Air Mechanical
+2026-01-11 12:57:13,693 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:57:13,694 - INFO - Dossier: Harris Air Mechanical
+2026-01-11 12:57:15,119 - INFO - CALL: Harris Air Mechanical - 019bae34
+2026-01-11 12:57:15,298 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40harrisairmechanical.com "HTTP/2 200 OK"
+2026-01-11 12:57:16,220 - INFO - SMS: Harris Air Mechanical
+2026-01-11 12:59:16,641 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 12:59:17,664 - INFO - GHL: Steve Patrick AC
+2026-01-11 12:59:17,833 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 12:59:17,837 - INFO - Dossier: Steve Patrick AC
+2026-01-11 12:59:19,658 - INFO - CALL: Steve Patrick AC - 019bae36
+2026-01-11 12:59:19,828 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40stevepatrickac.com "HTTP/2 200 OK"
+2026-01-11 12:59:20,743 - INFO - SMS: Steve Patrick AC
+2026-01-11 13:01:21,159 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:01:22,081 - INFO - GHL: HAC Heating AC
+2026-01-11 13:01:22,252 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:01:22,254 - INFO - Dossier: HAC Heating AC
+2026-01-11 13:01:23,451 - INFO - CALL: HAC Heating AC - 019bae38
+2026-01-11 13:01:23,626 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40hacheatingac.com "HTTP/2 200 OK"
+2026-01-11 13:01:24,483 - INFO - SMS: HAC Heating AC
+2026-01-11 13:03:24,876 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:03:25,824 - INFO - GHL: JUST AIR Heating
+2026-01-11 13:03:26,090 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:03:26,091 - INFO - Dossier: JUST AIR Heating
+2026-01-11 13:03:27,317 - INFO - CALL: JUST AIR Heating - 019bae3a
+2026-01-11 13:03:27,526 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40justairheating.com "HTTP/2 200 OK"
+2026-01-11 13:03:28,425 - INFO - SMS: JUST AIR Heating
+2026-01-11 13:05:28,867 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:05:29,844 - INFO - GHL: Mitchell Aire Fresno
+2026-01-11 13:05:30,004 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:05:30,005 - INFO - Dossier: Mitchell Aire Fresno
+2026-01-11 13:05:30,917 - INFO - CALL: Mitchell Aire Fresno - 019bae3c
+2026-01-11 13:05:31,119 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40mitchellairefresno.com "HTTP/2 200 OK"
+2026-01-11 13:05:31,993 - INFO - SMS: Mitchell Aire Fresno
+2026-01-11 13:07:32,362 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:07:32,975 - INFO - GHL: Elk Grove HVAC
+2026-01-11 13:07:33,142 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:07:33,143 - INFO - Dossier: Elk Grove HVAC
+2026-01-11 13:07:33,795 - INFO - CALL: Elk Grove HVAC - 019bae3d
+2026-01-11 13:07:33,966 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40elkgrovehvac.com "HTTP/2 200 OK"
+2026-01-11 13:07:34,770 - INFO - SMS: Elk Grove HVAC
+2026-01-11 13:09:35,243 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:09:36,149 - INFO - GHL: Roseville Cooling
+2026-01-11 13:09:36,368 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:09:36,369 - INFO - Dossier: Roseville Cooling
+2026-01-11 13:09:37,392 - INFO - CALL: Roseville Cooling - 019bae3f
+2026-01-11 13:09:37,592 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40rosevillecooling.com "HTTP/2 200 OK"
+2026-01-11 13:09:38,519 - INFO - SMS: Roseville Cooling
+2026-01-11 13:11:39,046 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:11:40,036 - INFO - GHL: Folsom AC Pro
+2026-01-11 13:11:40,221 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:11:40,223 - INFO - Dossier: Folsom AC Pro
+2026-01-11 13:11:41,451 - INFO - CALL: Folsom AC Pro - 019bae41
+2026-01-11 13:11:41,710 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40folsomacpro.com "HTTP/2 200 OK"
+2026-01-11 13:11:42,575 - INFO - SMS: Folsom AC Pro
+2026-01-11 13:13:42,935 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:13:43,804 - INFO - GHL: Stockton HVAC
+2026-01-11 13:13:43,970 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:13:43,971 - INFO - Dossier: Stockton HVAC
+2026-01-11 13:13:45,205 - INFO - CALL: Stockton HVAC - 019bae43
+2026-01-11 13:13:45,401 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40stocktonhvac.com "HTTP/2 200 OK"
+2026-01-11 13:13:46,329 - INFO - SMS: Stockton HVAC
+2026-01-11 13:15:46,855 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:15:47,777 - INFO - GHL: Modesto Air
+2026-01-11 13:15:47,981 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:15:47,982 - INFO - Dossier: Modesto Air
+2026-01-11 13:15:49,210 - INFO - CALL: Modesto Air - 019bae45
+2026-01-11 13:15:49,376 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40modestoair.com "HTTP/2 200 OK"
+2026-01-11 13:15:50,239 - INFO - SMS: Modesto Air
+2026-01-11 13:17:50,663 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:17:51,578 - INFO - GHL: Bakersfield Cooling
+2026-01-11 13:17:51,751 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:17:51,752 - INFO - Dossier: Bakersfield Cooling
+2026-01-11 13:17:52,853 - INFO - CALL: Bakersfield Cooling - 019bae47
+2026-01-11 13:17:53,114 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40bakersfieldcooling.com "HTTP/2 200 OK"
+2026-01-11 13:17:54,025 - INFO - SMS: Bakersfield Cooling
+2026-01-11 13:19:54,463 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:19:55,317 - INFO - GHL: Visalia AC Services
+2026-01-11 13:19:55,484 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:19:55,484 - INFO - Dossier: Visalia AC Services
+2026-01-11 13:19:56,711 - INFO - CALL: Visalia AC Services - 019bae49
+2026-01-11 13:19:56,883 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40visaliaacservices.com "HTTP/2 200 OK"
+2026-01-11 13:19:57,736 - INFO - SMS: Visalia AC Services
+2026-01-11 13:21:58,263 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:21:59,284 - INFO - GHL: Clovis HVAC Pro
+2026-01-11 13:21:59,489 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:21:59,490 - INFO - Dossier: Clovis HVAC Pro
+2026-01-11 13:22:00,655 - INFO - CALL: Clovis HVAC Pro - 019bae4b
+2026-01-11 13:22:01,024 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40clovishvacpro.com "HTTP/2 200 OK"
+2026-01-11 13:22:01,778 - INFO - SMS: Clovis HVAC Pro
+2026-01-11 13:24:02,269 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:24:03,192 - INFO - GHL: Merced Air
+2026-01-11 13:24:03,395 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:24:03,396 - INFO - Dossier: Merced Air
+2026-01-11 13:24:04,509 - INFO - CALL: Merced Air - 019bae4d
+2026-01-11 13:24:04,682 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40mercedair.com "HTTP/2 200 OK"
+2026-01-11 13:24:05,642 - INFO - SMS: Merced Air
+2026-01-11 13:26:06,071 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:26:06,993 - INFO - GHL: Turlock Cooling
+2026-01-11 13:26:07,301 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:26:07,303 - INFO - Dossier: Turlock Cooling
+2026-01-11 13:26:08,323 - INFO - CALL: Turlock Cooling - 019bae4e
+2026-01-11 13:26:08,528 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40turlockcooling.com "HTTP/2 200 OK"
+2026-01-11 13:26:09,390 - INFO - SMS: Turlock Cooling
+2026-01-11 13:28:09,824 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:28:10,701 - INFO - GHL: Tracy AC Expert
+2026-01-11 13:28:10,871 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:28:10,872 - INFO - Dossier: Tracy AC Expert
+2026-01-11 13:28:12,152 - INFO - CALL: Tracy AC Expert - 019bae50
+2026-01-11 13:28:12,331 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40tracyacexpert.com "HTTP/2 200 OK"
+2026-01-11 13:28:13,254 - INFO - SMS: Tracy AC Expert
+2026-01-11 13:30:13,747 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:30:14,784 - INFO - GHL: Manteca HVAC
+2026-01-11 13:30:14,948 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:30:14,949 - INFO - Dossier: Manteca HVAC
+2026-01-11 13:30:16,031 - INFO - CALL: Manteca HVAC - 019bae52
+2026-01-11 13:30:16,199 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40mantecahvac.com "HTTP/2 200 OK"
+2026-01-11 13:30:17,066 - INFO - SMS: Manteca HVAC
+2026-01-11 13:32:17,534 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:32:18,522 - INFO - GHL: Lodi Air Pro
+2026-01-11 13:32:18,707 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:32:18,708 - INFO - Dossier: Lodi Air Pro
+2026-01-11 13:32:20,039 - INFO - CALL: Lodi Air Pro - 019bae54
+2026-01-11 13:32:20,334 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40lodiairpro.com "HTTP/2 200 OK"
+2026-01-11 13:32:21,190 - INFO - SMS: Lodi Air Pro
+2026-01-11 13:34:21,795 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:34:22,816 - INFO - GHL: Standard Air Hawaii
+2026-01-11 13:34:23,021 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:34:23,035 - INFO - Dossier: Standard Air Hawaii
+2026-01-11 13:34:24,046 - INFO - CALL: Standard Air Hawaii - 019bae56
+2026-01-11 13:34:24,250 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40standardairhawaii.com "HTTP/2 200 OK"
+2026-01-11 13:34:25,150 - INFO - SMS: Standard Air Hawaii
+2026-01-11 13:36:25,596 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:36:26,505 - INFO - GHL: Advanced AC Hawaii
+2026-01-11 13:36:26,704 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:36:26,705 - INFO - Dossier: Advanced AC Hawaii
+2026-01-11 13:36:28,052 - INFO - CALL: Advanced AC Hawaii - 019bae58
+2026-01-11 13:36:28,259 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40advancedachawaii.com "HTTP/2 200 OK"
+2026-01-11 13:36:29,180 - INFO - SMS: Advanced AC Hawaii
+2026-01-11 13:38:29,602 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:38:30,625 - INFO - GHL: AC Essential Services
+2026-01-11 13:38:30,830 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:38:30,832 - INFO - Dossier: AC Essential Services
+2026-01-11 13:38:31,795 - INFO - CALL: AC Essential Services - 019bae5a
+2026-01-11 13:38:32,058 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40acessentialservices.com "HTTP/2 200 OK"
+2026-01-11 13:38:32,912 - INFO - SMS: AC Essential Services
+2026-01-11 13:40:33,404 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:40:34,325 - INFO - GHL: Alakai Mechanical
+2026-01-11 13:40:34,530 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:40:34,531 - INFO - Dossier: Alakai Mechanical
+2026-01-11 13:40:35,759 - INFO - CALL: Alakai Mechanical - 019bae5c
+2026-01-11 13:40:35,963 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40alakaimechanical.com "HTTP/2 200 OK"
+2026-01-11 13:40:36,820 - INFO - SMS: Alakai Mechanical
+2026-01-11 13:42:37,308 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:42:38,188 - INFO - GHL: Maui AC Service
+2026-01-11 13:42:38,435 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:42:38,436 - INFO - Dossier: Maui AC Service
+2026-01-11 13:42:39,746 - INFO - CALL: Maui AC Service - 019bae5e
+2026-01-11 13:42:39,950 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40mauiacservice.com "HTTP/2 200 OK"
+2026-01-11 13:42:40,805 - INFO - SMS: Maui AC Service
+2026-01-11 13:44:41,214 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:44:42,144 - INFO - GHL: Alltemp Maui
+2026-01-11 13:44:42,339 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:44:42,341 - INFO - Dossier: Alltemp Maui
+2026-01-11 13:44:43,365 - INFO - CALL: Alltemp Maui - 019bae5f
+2026-01-11 13:44:43,525 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40alltempmaui.com "HTTP/2 200 OK"
+2026-01-11 13:44:44,547 - INFO - SMS: Alltemp Maui
+2026-01-11 13:46:45,016 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:46:46,041 - INFO - GHL: Cooling Hawaii
+2026-01-11 13:46:46,245 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:46:46,247 - INFO - Dossier: Cooling Hawaii
+2026-01-11 13:46:47,269 - INFO - CALL: Cooling Hawaii - 019bae61
+2026-01-11 13:46:47,475 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40coolinghawaii.com "HTTP/2 200 OK"
+2026-01-11 13:46:48,318 - INFO - SMS: Cooling Hawaii
+2026-01-11 13:48:48,834 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:48:49,843 - INFO - GHL: Windward AC
+2026-01-11 13:48:50,047 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:48:50,048 - INFO - Dossier: Windward AC
+2026-01-11 13:48:51,071 - INFO - CALL: Windward AC - 019bae63
+2026-01-11 13:48:51,276 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40windwardac.com "HTTP/2 200 OK"
+2026-01-11 13:48:52,302 - INFO - SMS: Windward AC
+2026-01-11 13:50:52,673 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:50:53,526 - INFO - GHL: Waikiki HVAC Pro
+2026-01-11 13:50:53,696 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:50:53,698 - INFO - Dossier: Waikiki HVAC Pro
+2026-01-11 13:50:54,773 - INFO - CALL: Waikiki HVAC Pro - 019bae65
+2026-01-11 13:50:54,981 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40waikikihvacpro.com "HTTP/2 200 OK"
+2026-01-11 13:50:55,863 - INFO - SMS: Waikiki HVAC Pro
+2026-01-11 13:52:56,221 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:52:57,041 - INFO - GHL: Pearl City Cooling
+2026-01-11 13:52:57,204 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:52:57,205 - INFO - Dossier: Pearl City Cooling
+2026-01-11 13:52:58,160 - INFO - CALL: Pearl City Cooling - 019bae67
+2026-01-11 13:52:58,339 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40pearlcitycooling.com "HTTP/2 200 OK"
+2026-01-11 13:52:59,101 - INFO - SMS: Pearl City Cooling
+2026-01-11 13:54:59,536 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:55:00,448 - INFO - GHL: Aiea AC Services
+2026-01-11 13:55:00,635 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:55:00,636 - INFO - Dossier: Aiea AC Services
+2026-01-11 13:55:04,834 - INFO - CALL: Aiea AC Services - 019bae69
+2026-01-11 13:55:04,999 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40aieaacservices.com "HTTP/2 200 OK"
+2026-01-11 13:55:05,860 - INFO - SMS: Aiea AC Services
+2026-01-11 13:57:06,301 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:57:07,202 - INFO - GHL: Kailua HVAC
+2026-01-11 13:57:07,510 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:57:07,511 - INFO - Dossier: Kailua HVAC
+2026-01-11 13:57:08,772 - INFO - CALL: Kailua HVAC - 019bae6b
+2026-01-11 13:57:09,045 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40kailuahvac.com "HTTP/2 200 OK"
+2026-01-11 13:57:09,976 - INFO - SMS: Kailua HVAC
+2026-01-11 13:59:10,365 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 13:59:11,003 - INFO - GHL: Kaneohe Air Pro
+2026-01-11 13:59:11,160 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 13:59:11,161 - INFO - Dossier: Kaneohe Air Pro
+2026-01-11 13:59:12,032 - INFO - CALL: Kaneohe Air Pro - 019bae6d
+2026-01-11 13:59:12,235 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40kaneoheairpro.com "HTTP/2 200 OK"
+2026-01-11 13:59:12,977 - INFO - SMS: Kaneohe Air Pro
+2026-01-11 14:01:13,508 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 14:01:14,422 - INFO - GHL: Kapolei Cooling
+2026-01-11 14:01:14,601 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:01:14,602 - INFO - Dossier: Kapolei Cooling
+2026-01-11 14:01:15,366 - INFO - CALL: Kapolei Cooling - 019bae6f
+2026-01-11 14:01:15,625 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40kapoleicooling.com "HTTP/2 200 OK"
+2026-01-11 14:01:16,515 - INFO - SMS: Kapolei Cooling

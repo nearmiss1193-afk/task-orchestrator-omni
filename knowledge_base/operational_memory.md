@@ -1,7 +1,39 @@
 # Empire Operational Memory
 
 > **Purpose:** Persistent memory file for cross-session knowledge retention.
-> **Last Updated:** 2026-01-10T11:15 EST
+> **Last Updated:** 2026-01-11T14:00 EST
+
+---
+
+## 🔑 API KEYS & INTEGRATIONS (VERIFIED 2026-01-11)
+
+| Service | Status | Purpose | Key Location |
+|---------|--------|---------|--------------|
+| **Hunter.io** | ✅ ACTIVE | Find decision maker emails | `.env` line 100 |
+| **Apollo.io** | ✅ ACTIVE | Direct dial phones + emails | `.env` line 102 |
+| **Vapi AI** | ✅ ACTIVE | AI phone calls | `.env` line 50 |
+| **Resend** | ✅ ACTIVE | Email sending | `.env` line 62 |
+| **GHL** | ✅ ACTIVE | CRM + SMS | `.env` line 6 |
+| **Supabase** | ✅ ACTIVE | Database | `.env` line 13 |
+| **Anthropic Claude** | ✅ ACTIVE | AI assistant | `.env` line 70 |
+| **Grok AI** | ✅ ACTIVE | xAI research | `.env` line 76 |
+
+### Decision Maker Enrichment
+
+**Script:** `enrich_decision_makers.py`  
+**Capabilities:**
+
+- Hunter.io: Find owner/CEO emails from company domain
+- Apollo.io: Get direct dial phone numbers + LinkedIn profiles
+- Returns: Name, email, phone, title for decision makers
+
+**Usage:**
+
+```python
+from enrich_decision_makers import enrich_lead
+contact = enrich_lead("Company Name", domain="company.com")
+# Returns: {name, email, phone, title, source}
+```
 
 ---
 
