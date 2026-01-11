@@ -1258,3 +1258,31 @@
 2026-01-11 14:01:15,366 - INFO - CALL: Kapolei Cooling - 019bae6f
 2026-01-11 14:01:15,625 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40kapoleicooling.com "HTTP/2 200 OK"
 2026-01-11 14:01:16,515 - INFO - SMS: Kapolei Cooling
+2026-01-11 14:03:17,062 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 14:03:17,866 - INFO - GHL: Ewa Beach AC
+2026-01-11 14:03:18,042 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:03:18,043 - INFO - Dossier: Ewa Beach AC
+2026-01-11 14:03:18,729 - INFO - CALL: Ewa Beach AC - 019bae70
+2026-01-11 14:03:18,915 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40ewabeachac.com "HTTP/2 200 OK"
+2026-01-11 14:03:19,826 - INFO - SMS: Ewa Beach AC
+2026-01-11 14:05:20,260 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 14:05:21,188 - INFO - GHL: Mililani HVAC
+2026-01-11 14:05:21,386 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:05:21,432 - INFO - Dossier: Mililani HVAC
+2026-01-11 14:05:22,900 - INFO - CALL: Mililani HVAC - 019bae72
+2026-01-11 14:05:23,088 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40mililanihvac.com "HTTP/2 200 OK"
+2026-01-11 14:05:23,923 - INFO - SMS: Mililani HVAC
+2026-01-11 14:07:24,370 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 14:07:25,334 - INFO - GHL: Kona Air Services
+2026-01-11 14:07:25,518 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:07:25,519 - INFO - Dossier: Kona Air Services
+2026-01-11 14:07:26,828 - INFO - CALL: Kona Air Services - 019bae74
+2026-01-11 14:07:27,031 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40konaairservices.com "HTTP/2 200 OK"
+2026-01-11 14:07:28,160 - INFO - SMS: Kona Air Services
+2026-01-11 14:09:28,592 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-11 14:09:29,607 - INFO - GHL: Hilo Cooling Pro
+2026-01-11 14:09:29,808 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:09:29,809 - INFO - Dossier: Hilo Cooling Pro
+2026-01-11 14:09:30,834 - INFO - CALL: Hilo Cooling Pro - 019bae76
+2026-01-11 14:09:31,040 - INFO - HTTP Request: PATCH https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?email=eq.info%40hilocoolingpro.com "HTTP/2 200 OK"
+2026-01-11 14:09:31,937 - INFO - SMS: Hilo Cooling Pro

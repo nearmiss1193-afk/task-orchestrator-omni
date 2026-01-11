@@ -1,0 +1,11 @@
+2026-01-11 14:09:44,421 - INFO - ENRICHED CAMPAIGN STARTED - 5 leads
+2026-01-11 14:09:44,422 - INFO - ENRICH START: JW Plumbing Heating Air
+2026-01-11 14:09:46,198 - INFO - ENRICH FAILED: JW Plumbing Heating Air - using main line
+2026-01-11 14:09:46,774 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:09:46,778 - INFO - SAVED: JW Plumbing Heating Air
+2026-01-11 14:09:47,834 - INFO - CALL: JW Plumbing Heating Air - 019bae76
+2026-01-11 14:10:17,839 - INFO - ENRICH START: Brody Pennell Heating AC
+2026-01-11 14:10:19,989 - INFO - ENRICH FAILED: Brody Pennell Heating AC - using main line
+2026-01-11 14:10:20,397 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:10:20,397 - INFO - SAVED: Brody Pennell Heating AC
+2026-01-11 14:10:21,444 - INFO - CALL: Brody Pennell Heating AC - 019bae77
