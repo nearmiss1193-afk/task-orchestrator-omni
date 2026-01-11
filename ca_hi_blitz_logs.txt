@@ -107,3 +107,44 @@
 2026-01-10 21:40:39,858 - INFO - Dossier: Compton Air Pro
 2026-01-10 21:40:40,808 - INFO - CALL: Compton Air Pro - 019baaed
 2026-01-10 21:40:41,318 - INFO - SMS: Compton Air Pro
+2026-01-10 21:42:42,173 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:42:43,345 - INFO - GHL: El Monte HVAC
+2026-01-10 21:42:43,514 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:42:43,528 - INFO - Dossier: El Monte HVAC
+2026-01-10 21:42:44,699 - INFO - CALL: El Monte HVAC - 019baaef
+2026-01-10 21:42:45,485 - INFO - SMS: El Monte HVAC
+2026-01-10 21:44:46,038 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:44:46,679 - INFO - GHL: Pomona AC Expert
+2026-01-10 21:44:46,874 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:44:46,876 - INFO - Dossier: Pomona AC Expert
+2026-01-10 21:44:48,187 - INFO - CALL: Pomona AC Expert - 019baaf1
+2026-01-10 21:44:48,706 - INFO - SMS: Pomona AC Expert
+2026-01-10 21:46:49,481 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:46:50,309 - INFO - GHL: Gorgis AC Heating
+2026-01-10 21:46:50,512 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:46:50,516 - INFO - Dossier: Gorgis AC Heating
+2026-01-10 21:46:51,274 - INFO - CALL: Gorgis AC Heating - 019baaf3
+2026-01-10 21:46:51,864 - INFO - SMS: Gorgis AC Heating
+2026-01-10 21:48:52,456 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:48:53,184 - INFO - GHL: San Diego Air Conditioning
+2026-01-10 21:48:53,346 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:48:53,350 - INFO - Dossier: San Diego Air Conditioning
+2026-01-10 21:48:54,599 - INFO - SMS: San Diego Air Conditioning
+2026-01-10 21:50:55,246 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:50:56,191 - INFO - GHL: Ambient Heating AC
+2026-01-10 21:50:56,397 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:50:56,401 - INFO - Dossier: Ambient Heating AC
+2026-01-10 21:50:57,087 - INFO - CALL: Ambient Heating AC - 019baaf6
+2026-01-10 21:50:57,706 - INFO - SMS: Ambient Heating AC
+2026-01-10 21:52:58,447 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:52:59,761 - INFO - GHL: Aeris Mechanical
+2026-01-10 21:52:59,965 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:52:59,971 - INFO - Dossier: Aeris Mechanical
+2026-01-10 21:53:01,087 - INFO - CALL: Aeris Mechanical - 019baaf8
+2026-01-10 21:53:01,857 - INFO - SMS: Aeris Mechanical
+2026-01-10 21:55:02,482 - INFO - HTTP Request: GET https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads?select=email%2Cagent_research "HTTP/2 200 OK"
+2026-01-10 21:55:03,108 - INFO - GHL: Shekhter Sam HVAC
+2026-01-10 21:55:03,275 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-10 21:55:03,277 - INFO - Dossier: Shekhter Sam HVAC
+2026-01-10 21:55:06,366 - INFO - CALL: Shekhter Sam HVAC - 019baafa
+2026-01-10 21:55:06,895 - INFO - SMS: Shekhter Sam HVAC

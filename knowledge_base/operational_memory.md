@@ -81,6 +81,58 @@
 
 ---
 
+## 🔍 INSPECTOR / AUDITOR / SECRET SHOPPER (MANDATORY SOP)
+
+### Automated System Checks - Every 3 Hours
+
+**Purpose:** Ensure ALL system pages and services are running smoothly with no errors.
+
+#### Pages to Audit
+
+| Page | URL | What to Check |
+|------|-----|---------------|
+| **Dashboard** | <https://www.aiserviceco.com/dashboard.html> | Leads loading, stats updating, no JS errors |
+| **HVAC Landing** | <https://www.aiserviceco.com/hvac.html> | Form working, phone clickable, page loads |
+| **Plumber Landing** | <https://www.aiserviceco.com/plumber.html> | Form working, phone clickable, page loads |
+| **Roofing Landing** | <https://www.aiserviceco.com/roofing.html> | Form working, phone clickable, page loads |
+| **Main Site** | <https://www.aiserviceco.com> | All links working, no 404s |
+| **Vapi Calls** | <https://dashboard.vapi.ai/calls> | Calls appearing, transcripts generating |
+| **GHL Contacts** | <https://app.gohighlevel.com> | Leads imported, workflows running |
+| **Supabase** | <https://supabase.com/dashboard> | Tables accessible, no errors |
+
+#### Audit Checklist
+
+1. ✅ All pages load without errors (HTTP 200)
+2. ✅ No console JavaScript errors
+3. ✅ Forms submit successfully
+4. ✅ Phone numbers are clickable
+5. ✅ Data is fresh (not stale/old dates)
+6. ✅ Vapi transcripts appearing for today's calls
+7. ✅ Dashboard stats are updating
+8. ✅ Campaign scripts still running
+
+#### Audit Schedule
+
+| Time (EST) | Action |
+|------------|--------|
+| 8:00 AM | Morning Audit - Start of day check |
+| 11:00 AM | Mid-Morning Audit |
+| 2:00 PM | Afternoon Audit |
+| 5:00 PM | Evening Audit |
+| 8:00 PM | Night Audit - After business hours |
+
+#### After Every Deployment
+
+**MANDATORY:** Run full audit within 5 minutes of any code deployment to verify no regressions.
+
+#### Secret Shopper Test (Weekly)
+
+- Call own business number to test AI response
+- Submit form on landing page as prospect
+- Verify entire lead flow works end-to-end
+
+---
+
 ## 🎯 Campaign State
 
 ### Active Leads by Timezone (as of 2026-01-08)
