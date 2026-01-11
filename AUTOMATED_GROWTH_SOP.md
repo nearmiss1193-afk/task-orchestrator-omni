@@ -281,6 +281,19 @@ python weekly_learning_agent.py
 # - Updates SOPs if needed
 ```
 
+### 8:00 PM - Daily System Analysis (NEW)
+
+```bash
+# Auto-runs via Modal schedule (DAILY)
+python daily_system_analysis.py
+# - Analyzes entire system (campaigns, agents, SOPs)
+# - Performs deep AI analysis
+# - Identifies improvements and gaps
+# - Feeds results to brain (artifacts directory)
+# - Generates daily report
+# - Updates CAPABILITIES_GAPS.md
+```
+
 ---
 
 ## 🎯 SUCCESS METRICS
