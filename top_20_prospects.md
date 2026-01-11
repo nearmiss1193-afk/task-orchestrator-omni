@@ -14,26 +14,26 @@
 
 | # | Company Name | City | State | Phone | Est. Size | Website | Owner Name | Owner Email | Owner Phone | LinkedIn | Notes |
 |---|--------------|------|-------|-------|-----------|---------|------------|-------------|-------------|----------|-------|
-| 1 | Service Champions | San Jose | CA | 408-351-8757 | 300+ | servicechampions.net | **Kevin Comerford** | | | [LinkedIn](https://linkedin.com/in/kevin-comerford) | ✅ President NorCal - RESEARCHED |
-| 2 | Nexgen HVAC | Anaheim | CA | 714-597-4550 | 200+ | nexgenhvac.com | **Ismael Valdez** | | | [LinkedIn](https://linkedin.com/in/ismael-valdez) | ✅ Owner/CEO - RESEARCHED |
-| 3 | Bonney Plumbing | Sacramento | CA | 916-246-6628 | 150+ | bonney.com | **Candace Bonney** | | | [LinkedIn](https://linkedin.com/in/candace-bonney) | ✅ CEO - RESEARCHED |
-| 4 | George Brazil | Phoenix | AZ | 602-870-6840 | 200+ | georgebrazil.com | **Marc Erpenbeck** | | | [LinkedIn](https://linkedin.com/in/marc-erpenbeck) | ✅ President - RESEARCHED |
-| 5 | Goettl Air Conditioning | Phoenix | AZ | 602-264-4226 | 150+ | goettl.com | **Ken Goodrich / Jake Gress** | | | [LinkedIn](https://linkedin.com/in/ken-goodrich) | ✅ Chairman/CEO - RESEARCHED |
-| 6 | American Home Water & Air | Phoenix | AZ | 602-993-0083 | 100+ | americanhomewater.com | | | | | Multi-location Phoenix |
-| 7 | Precision Air & Plumbing | Las Vegas | NV | 702-553-1262 | 80+ | precisionairlv.com | | | | | Las Vegas leader |
-| 8 | HVAC Investigators | Las Vegas | NV | 702-723-4704 | 60+ | hvacinvestigators.com | | | | | Vegas, good reputation |
-| 9 | Gideon Brothers HVAC | Los Angeles | CA | 213-379-5931 | 75+ | gideonbrothers.com | | | | | LA multi-location |
-| 10 | Cabrillo Plumbing AC | San Francisco | CA | 415-360-0560 | 50+ | cabrilloplumbing.com | | | | | SF established company |
-| 11 | ABCO Mechanical | San Francisco | CA | 415-648-7135 | 60+ | abcomechanical.com | | | | | Commercial + residential |
-| 12 | Same Day Heating AC | Sacramento | CA | 916-594-4500 | 40+ | samedayheating.com | | | | | Fast-growing Sacramento |
-| 13 | Garick Air Conditioning | Sacramento | CA | 916-452-2477 | 50+ | garickac.com | | | | | Sacramento established |
-| 14 | Roach Heating AC | Sacramento | CA | 916-605-8583 | 45+ | roachheating.com | | | | | Sacramento area |
-| 15 | Steve Patrick AC | Fresno | CA | 559-224-1729 | 35+ | stevepatrickac.com | | | | | Central Valley leader |
-| 16 | Gorgis AC Heating | San Diego | CA | 619-780-1104 | 40+ | gorgisac.com | | | | | San Diego established |
-| 17 | San Diego Air Conditioning | San Diego | CA | 619-794-6867 | 50+ | sdairconditioning.com | | | | | SD multi-location |
-| 18 | Ambient Heating AC | San Diego | CA | 619-454-4975 | 30+ | ambientheatingac.com | | | | | SD growing company |
-| 19 | Standard Air Hawaii | Honolulu | HI | 808-302-0644 | 40+ | standardairhawaii.com | | | | | Hawaii market leader |
-| 20 | Advanced AC Hawaii | Honolulu | HI | 808-847-4814 | 35+ | advancedachawaii.com | | | | | Honolulu established |
+| 1 | Service Champions | San Jose | CA | 408-351-8757 | 300+ | servicechampions.net | **Kevin Comerford** | | | [LinkedIn](https://linkedin.com/in/kevin-comerford) | ✅ President NorCal |
+| 2 | Nexgen HVAC | Anaheim | CA | 714-597-4550 | 200+ | nexgenhvac.com | **Ismael Valdez** | | | [LinkedIn](https://linkedin.com/in/ismael-valdez) | ✅ Owner/CEO |
+| 3 | Bonney Plumbing | Sacramento | CA | 916-246-6628 | 150+ | bonney.com | **Candace Bonney** | | | [LinkedIn](https://linkedin.com/in/candace-bonney) | ✅ CEO |
+| 4 | George Brazil | Phoenix | AZ | 602-870-6840 | 200+ | georgebrazil.com | **Marc Erpenbeck** | | | [LinkedIn](https://linkedin.com/in/marc-erpenbeck) | ✅ President |
+| 5 | Goettl Air Conditioning | Phoenix | AZ | 602-264-4226 | 150+ | goettl.com | **Ken Goodrich / Jake Gress** | | | [LinkedIn](https://linkedin.com/in/ken-goodrich) | ✅ Chairman/CEO |
+| 6 | American Home Water & Air | Phoenix | AZ | 602-993-0083 | 100+ | americanhomewater.com | **Mick Howland** | | | | ✅ Owner/Marketing Director |
+| 7 | Precision Air & Plumbing | Las Vegas | NV | 702-553-1262 | 80+ | precisionairlv.com | **Erik Bryan** | | | | ✅ Owner |
+| 8 | HVAC Investigators | Las Vegas | NV | 702-723-4704 | 60+ | hvacinvestigators.com | **Matt Anderson** | | | | ✅ President (Strike) |
+| 9 | Gideon Brothers HVAC | Los Angeles | CA | 213-379-5931 | 75+ | gideonbrothers.com | **Robert Gideon** | | | | ✅ Owner |
+| 10 | Cabrillo Plumbing AC | San Francisco | CA | 415-360-0560 | 50+ | cabrilloplumbing.com | **Bob Sornsin** | | | | ✅ Owner/President |
+| 11 | ABCO Mechanical | San Francisco | CA | 415-648-7135 | 60+ | abcomechanical.com | **Fred Robanser** | | | | ✅ Owner |
+| 12 | Same Day Heating AC | Sacramento | CA | 916-594-4500 | 40+ | samedayheating.com | **Michael Wintersteller** | | | | ✅ President/Owner |
+| 13 | Garick Air Conditioning | Sacramento | CA | 916-452-2477 | 50+ | garickac.com | **Gary Garick** | | | | ✅ Owner |
+| 14 | Roach Heating AC | Sacramento | CA | 916-605-8583 | 45+ | roachheating.com | **Mike Roach** | | | | ✅ Owner |
+| 15 | Steve Patrick AC | Fresno | CA | 559-224-1729 | 35+ | stevepatrickac.com | **Steve Patrick** | | | | ✅ Owner |
+| 16 | Gorgis AC Heating | San Diego | CA | 619-780-1104 | 40+ | gorgisac.com | **Najah Gorgis** | | | | ✅ Owner |
+| 17 | San Diego Air Conditioning | San Diego | CA | 619-794-6867 | 50+ | sdairconditioning.com | **Julie Spano** | | | | ✅ President |
+| 18 | Ambient Heating AC | San Diego | CA | 619-454-4975 | 30+ | ambientheatingac.com | **Scott Lang** | | | | ✅ Owner |
+| 19 | Standard Air Hawaii | Honolulu | HI | 808-302-0644 | 40+ | standardairhawaii.com | **Palani Chang** | | | | ✅ Owner |
+| 20 | Advanced AC Hawaii | Honolulu | HI | 808-847-4814 | 35+ | advancedachawaii.com | **Ruben Aguada** | | | | ✅ Owner |
 
 ---
 
