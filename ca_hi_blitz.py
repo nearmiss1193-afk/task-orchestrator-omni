@@ -221,6 +221,7 @@ def save_dossier(lead):
         supabase.table("leads").insert({
             'email': email,
             'status': 'contacted',
+            'last_called': datetime.now().isoformat(),  # FIXED: Track when called
             'agent_research': json.dumps({
                 'company_name': company,
                 'phone': f"+1{normalize_phone(lead['phone'])}",
@@ -235,6 +236,17 @@ def save_dossier(lead):
             })
         }).execute()
         logger.info(f"Dossier: {company}")
+        return True
+    except:
+        return False
+
+def update_last_called(lead):
+    """Update last_called timestamp for existing leads"""
+    email = f"info@{re.sub(r'[^a-z0-9]', '', lead['company_name'].lower())}.com"
+    try:
+        supabase.table("leads").update({
+            'last_called': datetime.now().isoformat()
+        }).eq('email', email).execute()
         return True
     except:
         return False
@@ -313,13 +325,17 @@ def main():
         # 1. Push to GHL
         ghl_ok = push_to_ghl(lead)
         
-        # 2. Save dossier
+        # 2. Save dossier (includes last_called)
         save_dossier(lead)
         
         # 3. Make AI call
         call_ok = make_call(lead)
         
-        # 4. Send SMS
+        # 4. Update last_called timestamp after successful call
+        if call_ok:
+            update_last_called(lead)
+        
+        # 5. Send SMS
         sms_ok = send_sms(lead)
         
         if ghl_ok or call_ok or sms_ok:
