@@ -1,55 +1,34 @@
-"""
-quick_status.py - Fast campaign status check
-"""
+"""Quick pipeline check"""
+from supabase import create_client
 import os
-import psycopg2
+from datetime import datetime
 from dotenv import load_dotenv
-
 load_dotenv()
 
-conn = psycopg2.connect(os.getenv("DATABASE_URL"))
-cur = conn.cursor()
+url = os.getenv('NEXT_PUBLIC_SUPABASE_URL') or os.getenv('SUPABASE_URL')
+key = os.getenv('SUPABASE_SERVICE_ROLE_KEY') or os.getenv('SUPABASE_SERVICE_KEY')
+client = create_client(url, key)
 
-print("=" * 60)
-print("CAMPAIGN STATUS REPORT")
-print("=" * 60)
+today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
-# Lead counts by status
-cur.execute("""
-    SELECT status, COUNT(*) 
-    FROM leads 
-    GROUP BY status 
-    ORDER BY COUNT(*) DESC
-""")
-print("\n📊 LEADS BY STATUS:")
-for row in cur.fetchall():
-    print(f"   {row[0]}: {row[1]}")
+# Get today's contacted
+contacted = client.table('leads').select('id, company_name').eq('status', 'contacted').gte('updated_at', today.isoformat()).limit(20).execute()
 
-# Emails sent
-cur.execute("SELECT COUNT(*) FROM outbound_events WHERE event_type='email'")
-emails = cur.fetchone()[0]
-print(f"\n📧 EMAILS SENT: {emails}")
+# Get total counts
+total = len(client.table('leads').select('id').execute().data)
+enriched = len(client.table('leads').select('id').eq('status', 'enriched').execute().data)
+needs = len(client.table('leads').select('id').eq('status', 'needs_enrichment').execute().data)
+contacted_count = len(contacted.data)
 
-# SMS sent  
-cur.execute("SELECT COUNT(*) FROM outbound_events WHERE event_type='sms'")
-sms = cur.fetchone()[0] if cur.rowcount else 0
-print(f"💬 SMS SENT: {sms}")
-
-# Calls made
-cur.execute("SELECT COUNT(*) FROM outbound_events WHERE event_type='call'")
-calls = cur.fetchone()[0] if cur.rowcount else 0
-print(f"📞 CALLS MADE: {calls}")
-
-# Recent transcripts
-cur.execute("""
-    SELECT contact_name, summary, created_at 
-    FROM transcripts 
-    ORDER BY created_at DESC 
-    LIMIT 5
-""")
-print("\n🎙️ RECENT TRANSCRIPTS:")
-for row in cur.fetchall():
-    print(f"   - {row[0]}: {row[1][:60]}... ({row[2]})")
-
-conn.close()
-print("\n" + "=" * 60)
+print('='*50)
+print('TODAY STATS')
+print('='*50)
+print(f'Total Leads in Pipeline: {total}')
+print(f'Enriched (ready to contact): {enriched}')
+print(f'Needs Enrichment: {needs}')
+print(f'Contacted TODAY: {contacted_count}')
+print()
+print('Companies contacted today:')
+for lead in contacted.data[:15]:
+    company = lead.get("company_name", "Unknown")
+    print(f'  - {company}')
