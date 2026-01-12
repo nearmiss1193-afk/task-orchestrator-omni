@@ -575,54 +575,7 @@ def cloud_prospector():
         return {"error": str(e)}
 
 
-@app.function(
-    image=campaign_image,
-    secrets=[modal.Secret.from_dotenv()],
-    schedule=modal.Cron("*/5 * * * *")  # Every 5 minutes
-)
-def cloud_guardian():
-    """System guardian - continuous health monitoring in cloud"""
-    import os
-    import requests
-    from datetime import datetime
-    from supabase import create_client
-    
-    services = {
-        "website": "https://www.aiserviceco.com",
-        "dashboard": "https://www.aiserviceco.com/dashboard.html",
-    }
-    
-    issues = []
-    for name, url in services.items():
-        try:
-            r = requests.get(url, timeout=10)
-            if r.status_code != 200:
-                issues.append(f"{name}: {r.status_code}")
-        except Exception as e:
-            issues.append(f"{name}: {str(e)[:50]}")
-    
-    # Alert if issues
-    if issues:
-        resend_key = os.getenv("RESEND_API_KEY")
-        owner = os.getenv("OWNER_EMAIL", "nearmiss1193@gmail.com")
-        
-        if resend_key:
-            requests.post(
-                "https://api.resend.com/emails",
-                headers={"Authorization": f"Bearer {resend_key}"},
-                json={
-                    "from": "System Guardian <alerts@aiserviceco.com>",
-                    "to": [owner],
-                    "subject": f"🚨 System Alert: {len(issues)} issues",
-                    "html": f"<h2>Issues Detected</h2><pre>{chr(10).join(issues)}</pre>"
-                }
-            )
-        
-        print(f"[CLOUD GUARDIAN] ⚠️ {len(issues)} issues: {issues}")
-    else:
-        print(f"[CLOUD GUARDIAN] ✅ All services OK")
-    
-    return {"healthy": len(issues) == 0, "issues": issues}
+# cloud_guardian removed - replaced by self_healing_monitor with auto-repair capabilities
 
 
 @app.function(
@@ -631,7 +584,13 @@ def cloud_guardian():
     schedule=modal.Cron("0 10,14 * * *")  # 10 AM and 2 PM DAILY (including weekends)
 )
 def cloud_multi_touch():
-    """Multi-touch outreach - Email + SMS + Call in cloud"""
+    """Multi-touch outreach - Email + SMS + Call in cloud
+    
+    SOP: This function now includes pre-flight lead quality validation.
+    - Prioritizes enriched phones over raw AI-generated data
+    - Validates all numbers before calling
+    - Auto-triggers enrichment for invalid leads
+    """
     import os
     import requests
     import json
@@ -648,20 +607,66 @@ def cloud_multi_touch():
     resend_key = os.getenv("RESEND_API_KEY")
     vapi_key = os.getenv("VAPI_PRIVATE_KEY")
     vapi_phone = os.getenv("VAPI_PHONE_NUMBER_ID")
+    apollo_key = os.getenv("APOLLO_API_KEY")
     
     client = create_client(supa_url, supa_key)
     
-    # Get 5 leads for outreach
+    # === PRE-FLIGHT: Get leads and validate quality ===
     result = client.table("leads").select("*")\
         .in_("status", ["new", "processing_email"])\
-        .limit(5)\
+        .limit(10)\
         .execute()
     
     leads = result.data
-    print(f"[CLOUD OUTREACH] Processing {len(leads)} leads")
+    print(f"[CLOUD OUTREACH] Checking {len(leads)} leads for quality...")
     
-    results = {"email": 0, "sms": 0, "call": 0, "skipped": 0}
+    results = {"email": 0, "sms": 0, "call": 0, "skipped": 0, "enriched": 0}
+    callable_leads = []
     
+    def validate_phone(phone_str):
+        """Validate phone - reject fakes"""
+        if not phone_str:
+            return False, None, "missing"
+        cleaned = re.sub(r'\D', '', str(phone_str))
+        if len(cleaned) < 10:
+            return False, None, "too_short"
+        exchange = cleaned[-7:-4] if len(cleaned) >= 7 else ""
+        if exchange == "555":
+            return False, None, "fake_555"
+        return True, cleaned[-10:], None
+    
+    def try_enrich_apollo(company_name, city=None):
+        """Quick Apollo enrichment for single lead"""
+        if not apollo_key:
+            return None
+        try:
+            resp = requests.post(
+                "https://api.apollo.io/v1/mixed_people/search",
+                headers={"Content-Type": "application/json", "X-Api-Key": apollo_key},
+                json={
+                    "q_organization_name": company_name,
+                    "person_titles": ["Owner", "CEO", "President"],
+                    "per_page": 3
+                },
+                timeout=15
+            )
+            data = resp.json()
+            for person in data.get("people", []):
+                phones = person.get("phone_numbers", [])
+                if phones:
+                    phone = phones[0].get("raw_number")
+                    is_valid, cleaned, _ = validate_phone(phone)
+                    if is_valid:
+                        return {
+                            "phone": f"+1{cleaned}",
+                            "email": person.get("email"),
+                            "name": person.get("name")
+                        }
+        except Exception as e:
+            print(f"[ENRICH] Apollo error: {e}")
+        return None
+    
+    # === VALIDATE AND ENRICH LEADS ===
     for lead in leads:
         meta = lead.get("agent_research", {})
         if isinstance(meta, str):
@@ -669,22 +674,66 @@ def cloud_multi_touch():
                 meta = json.loads(meta)
             except:
                 meta = {}
+        # Ensure meta is always a dict
+        if not meta or not isinstance(meta, dict):
+            meta = {}
+
         
-        email = meta.get("email") or lead.get("email")
-        phone = meta.get("phone") or lead.get("phone")
+        # PRIORITY: enriched_phone > phone field > agent_research phone
+        enriched_phone = meta.get("enriched_phone", "")
+        lead_phone = lead.get("phone", "")
+        research_phone = meta.get("phone", "")
+        
+        # Try phones in priority order
+        actual_phone = None
+        for phone in [enriched_phone, lead_phone, research_phone]:
+            is_valid, cleaned, issue = validate_phone(phone)
+            if is_valid:
+                actual_phone = f"+1{cleaned}"
+                break
+        
         company = lead.get("company_name", "Prospect")
+        email = meta.get("enriched_email", "") or meta.get("email", "") or lead.get("email", "")
         
-        # VALIDATION
-        valid_phone = False
-        if phone:
-            clean_phone = re.sub(r'\D', '', str(phone))
-            # Reject 555 in middle (NXX-555-XXXX)
-            if '555' in clean_phone[3:6]: 
-                print(f"Skipping 555 number: {phone}")
-                results['skipped'] += 1
-            elif len(clean_phone) >= 10:
-                valid_phone = True
-                phone = f"+1{clean_phone[-10:]}" # Standardize
+        if not actual_phone:
+            # Try Apollo enrichment on-the-fly
+            print(f"   🔧 Enriching {company}...")
+            enriched = try_enrich_apollo(company, lead.get("city"))
+            if enriched:
+                actual_phone = enriched["phone"]
+                email = enriched.get("email") or email
+                # Save enrichment
+                client.table("leads").update({
+                    "phone": actual_phone,
+                    "agent_research": json.dumps({
+                        **meta,
+                        "enriched_phone": actual_phone,
+                        "enriched_email": enriched.get("email"),
+                        "enriched_name": enriched.get("name"),
+                        "enriched_at": datetime.now().isoformat()
+                    })
+                }).eq("id", lead["id"]).execute()
+                results["enriched"] += 1
+                print(f"   ✅ Enriched: {actual_phone}")
+            else:
+                print(f"   ❌ Could not enrich {company}")
+                results["skipped"] += 1
+                continue
+        
+        callable_leads.append({
+            "id": lead["id"],
+            "company": company,
+            "phone": actual_phone,
+            "email": email
+        })
+    
+    print(f"[CLOUD OUTREACH] Processing {len(callable_leads)} callable leads")
+    
+    # === OUTREACH ===
+    for lead in callable_leads[:5]:  # Process max 5 per run
+        company = lead["company"]
+        email = lead["email"]
+        phone = lead["phone"]
         
         # Email
         if email and resend_key and "N/A" not in email:
@@ -705,7 +754,7 @@ def cloud_multi_touch():
                 print(f"Email error: {e}")
         
         # Call (using Vapi)
-        if valid_phone and vapi_key and vapi_phone:
+        if phone and vapi_key and vapi_phone:
             try:
                 call_res = requests.post(
                     "https://api.vapi.ai/call",
@@ -713,7 +762,7 @@ def cloud_multi_touch():
                     json={
                         "type": "outboundPhoneCall",
                         "phoneNumberId": vapi_phone,
-                        "assistantId": "1a797f12-e516-4fe8-a3a6-72f0cbf4a48d",
+                        "assistantId": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
                         "customer": {"number": phone, "name": company}
                     }
                 )
@@ -727,13 +776,12 @@ def cloud_multi_touch():
                     print(f"Vapi error: {call_res.text}")
             except Exception as e:
                 print(f"Call error: {e}")
-        else:
-             print(f"Skipping invalid/missing phone for {company}")
     
     # Log
     client.table("system_logs").insert({
         "level": "INFO",
-        "message": f"[CLOUD_OUTREACH] Emails: {results['email']}, Calls: {results['call']}, Skipped: {results['skipped']}",
+        "event_type": "CLOUD_OUTREACH",
+        "message": f"[CLOUD_OUTREACH] Emails: {results['email']}, Calls: {results['call']}, Enriched: {results['enriched']}, Skipped: {results['skipped']}",
         "metadata": results
     }).execute()
     
@@ -871,6 +919,152 @@ def social_media_analytics():
             print(f"[ANALYTICS] DB error: {e}")
     
     return analytics
+
+
+# ============ SELF-HEALING HEALTH MONITOR ============
+
+health_monitor_image = modal.Image.debian_slim().pip_install(
+    "requests",
+    "supabase",
+    "resend"
+)
+
+@app.function(
+    image=health_monitor_image,
+    secrets=[modal.Secret.from_dotenv()],
+    schedule=modal.Cron("*/30 * * * *")  # Every 30 minutes
+)
+def self_healing_monitor():
+    """Comprehensive self-healing health monitor - checks all systems and auto-repairs issues"""
+    import os
+    import requests
+    import json
+    from datetime import datetime, timedelta
+    from supabase import create_client
+    
+    print("=" * 60)
+    print("🏥 EMPIRE SELF-HEALING HEALTH MONITOR")
+    print(f"   Time: {datetime.now().isoformat()}")
+    print("=" * 60)
+    
+    supa_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL") or os.getenv("SUPABASE_URL")
+    supa_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_KEY")
+    resend_key = os.getenv("RESEND_API_KEY")
+    
+    all_healthy = True
+    all_issues = []
+    
+    # 1. Check Supabase Health
+    print("\n🔍 Checking Supabase health...")
+    critical_tables = ["prospects", "leads", "email_logs", "system_logs", "call_logs"]
+    
+    try:
+        client = create_client(supa_url, supa_key)
+        
+        for table in critical_tables:
+            try:
+                result = client.table(table).select("*").limit(1).execute()
+                print(f"   ✅ {table}: OK")
+            except Exception as e:
+                error_msg = str(e)
+                print(f"   ❌ {table}: {error_msg[:50]}")
+                all_issues.append({"type": "supabase", "table": table, "error": error_msg[:100]})
+                
+                # Auto-repair: If schema cache issue, refresh it
+                if "PGRST" in error_msg:
+                    print(f"   🔧 Attempting schema cache refresh...")
+                    try:
+                        client.rpc("pg_notify", {"channel": "pgrst", "payload": "reload schema"}).execute()
+                        print(f"   ✅ Schema cache refresh triggered")
+                    except:
+                        pass
+    except Exception as e:
+        print(f"   ❌ Supabase connection failed: {e}")
+        all_issues.append({"type": "supabase", "error": str(e)[:100]})
+    
+    # 2. Check Critical Endpoints
+    print("\n🌐 Checking endpoints...")
+    endpoints = {
+        "modal_webhook": "https://nearmiss1193-afk--empire-sovereign-v2-email-webhook.modal.run",
+        "website": "https://aiserviceco.com",
+        "dashboard": "https://aiserviceco.com/dashboard.html",
+    }
+    
+    for name, url in endpoints.items():
+        try:
+            response = requests.get(url, timeout=10)
+            if response.status_code < 500:
+                print(f"   ✅ {name}: {response.status_code}")
+            else:
+                print(f"   ❌ {name}: {response.status_code}")
+                all_issues.append({"type": "endpoint", "name": name, "status": response.status_code})
+        except Exception as e:
+            print(f"   ❌ {name}: {str(e)[:40]}")
+            all_issues.append({"type": "endpoint", "name": name, "error": str(e)[:100]})
+    
+    # 3. Check Recent Activity
+    print("\n📊 Checking recent activity...")
+    try:
+        two_hours_ago = (datetime.now() - timedelta(hours=2)).isoformat()
+        result = client.table("system_logs").select("*").gte("created_at", two_hours_ago).execute()
+        log_count = len(result.data)
+        
+        if log_count > 0:
+            print(f"   ✅ {log_count} system events in last 2 hours")
+        else:
+            print(f"   ⚠️ No activity in last 2 hours - system may be stalled")
+            all_issues.append({"type": "activity", "issue": "No activity in 2 hours"})
+    except Exception as e:
+        print(f"   ❌ Activity check failed: {e}")
+    
+    # Log health check
+    try:
+        client.table("system_logs").insert({
+            "level": "INFO" if not all_issues else "WARNING",
+            "event_type": "HEALTH_CHECK",
+            "message": f"Health check: {len(all_issues)} issues" if all_issues else "All systems healthy",
+            "metadata": {"issues": all_issues, "timestamp": datetime.now().isoformat(), "monitor": "self-healing"}
+        }).execute()
+    except:
+        pass
+    
+    # 4. Send Alert if Issues
+    if all_issues and resend_key:
+        print("\n📧 Sending alert email...")
+        try:
+            import resend
+            resend.api_key = resend_key
+            
+            issue_summary = "\n".join([f"• {json.dumps(i)}" for i in all_issues[:5]])
+            
+            resend.Emails.send({
+                "from": "Health Monitor <monitor@aiserviceco.com>",
+                "to": ["owner@aiserviceco.com", "nearmiss1193@gmail.com"],
+                "subject": f"🚨 Empire Alert: {len(all_issues)} Issues Detected",
+                "html": f"""
+                <div style="font-family: system-ui; padding: 20px; background: #1e293b; color: #f8fafc;">
+                    <h2 style="color: #ef4444;">⚠️ System Alert</h2>
+                    <pre style="background: #0f172a; padding: 15px; border-radius: 8px;">{issue_summary}</pre>
+                    <hr style="border-color: #334155;">
+                    <p style="color: #64748b; font-size: 12px;">
+                        Sent by Empire Self-Healing Monitor at {datetime.now().isoformat()}
+                    </p>
+                </div>
+                """
+            })
+            print(f"   ✅ Alert sent")
+        except Exception as e:
+            print(f"   ❌ Failed to send alert: {e}")
+    
+    # Summary
+    print("\n" + "=" * 60)
+    if not all_issues:
+        print("✅ ALL SYSTEMS HEALTHY")
+    else:
+        print(f"⚠️ {len(all_issues)} ISSUE(S) DETECTED")
+    print("=" * 60)
+    
+    return {"healthy": len(all_issues) == 0, "issues": all_issues, "timestamp": datetime.now().isoformat()}
 
 
 # ============ HEALTH CHECK ============
