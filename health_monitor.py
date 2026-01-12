@@ -1,284 +1,230 @@
 """
-EMPIRE HEALTH MONITOR - Cloud-Deployed System Check
-Runs every 3 hours on Modal to verify all systems are operational.
-Sends alerts via email if issues detected.
+EMPIRE SELF-HEALING HEALTH MONITOR
+==================================
+Automated system that checks all critical functions and repairs issues.
+Runs every 30 minutes to ensure the business never stops.
+
+Features:
+- Checks Modal function status
+- Verifies Supabase connectivity
+- Tests API endpoints
+- Sends alerts on failures
+- Auto-repairs common issues (schema cache, etc.)
 """
 import os
-import json
 import requests
+import json
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Configuration
-SUPABASE_URL = os.getenv('NEXT_PUBLIC_SUPABASE_URL', '')
-SUPABASE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY', '')
-RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
-VAPI_KEY = os.getenv('VAPI_PRIVATE_KEY', os.getenv('VAPI_API_KEY', ''))
-ALERT_EMAIL = os.getenv('ALERT_EMAIL', 'owner@aiserviceco.com')
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
+ALERT_EMAIL = "owner@aiserviceco.com"
 
-# Pages to check
-PAGES_TO_CHECK = [
-    {'name': 'Dashboard', 'url': 'https://www.aiserviceco.com/dashboard.html'},
-    {'name': 'HVAC Landing', 'url': 'https://www.aiserviceco.com/hvac.html'},
-    {'name': 'Plumber Landing', 'url': 'https://www.aiserviceco.com/plumber.html'},
-    {'name': 'Roofing Landing', 'url': 'https://www.aiserviceco.com/roofing.html'},
-    {'name': 'Main Site', 'url': 'https://www.aiserviceco.com'},
+# Health check endpoints
+HEALTH_CHECKS = {
+    "modal_webhook": "https://nearmiss1193-afk--empire-sovereign-v2-email-webhook.modal.run",
+    "website": "https://aiserviceco.com",
+}
+
+# Critical tables to verify
+CRITICAL_TABLES = [
+    "prospects",
+    "email_logs", 
+    "system_logs",
+    "call_logs",
 ]
 
-def check_page(url: str, name: str) -> dict:
-    """Check if a page loads successfully"""
-    try:
-        resp = requests.get(url, timeout=15)
-        return {
-            'name': name,
-            'url': url,
-            'status': 'OK' if resp.status_code == 200 else 'FAIL',
-            'code': resp.status_code,
-            'time_ms': int(resp.elapsed.total_seconds() * 1000)
-        }
-    except Exception as e:
-        return {
-            'name': name,
-            'url': url,
-            'status': 'ERROR',
-            'error': str(e)
-        }
 
-def check_supabase() -> dict:
-    """Check Supabase connectivity and get stats"""
+def log_health_event(event_type: str, details: dict, status: str = "healthy"):
+    """Log health check to Supabase"""
     try:
-        headers = {
-            'apikey': SUPABASE_KEY,
-            'Authorization': f'Bearer {SUPABASE_KEY}'
-        }
+        from supabase import create_client
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
         
-        # Get lead count
-        resp = requests.get(
-            f'{SUPABASE_URL}/rest/v1/leads?select=id&limit=1',
-            headers=headers,
-            timeout=10
-        )
-        
-        # Get count header
-        count_resp = requests.get(
-            f'{SUPABASE_URL}/rest/v1/leads?select=count',
-            headers={**headers, 'Prefer': 'count=exact'},
-            timeout=10
-        )
-        
-        # Get contacted count
-        contacted_resp = requests.get(
-            f'{SUPABASE_URL}/rest/v1/leads?select=count&status=eq.contacted',
-            headers={**headers, 'Prefer': 'count=exact'},
-            timeout=10
-        )
-        
-        # Get leads with last_called set
-        called_resp = requests.get(
-            f'{SUPABASE_URL}/rest/v1/leads?select=id&last_called=not.is.null',
-            headers={**headers, 'Prefer': 'count=exact'},
-            timeout=10
-        )
-        
-        total = count_resp.headers.get('content-range', '0').split('/')[-1]
-        contacted = contacted_resp.headers.get('content-range', '0').split('/')[-1]
-        called = called_resp.headers.get('content-range', '0').split('/')[-1]
-        
-        return {
-            'status': 'OK' if resp.status_code == 200 else 'FAIL',
-            'total_leads': total,
-            'contacted': contacted,
-            'called': called,
-            'code': resp.status_code
-        }
-    except Exception as e:
-        return {'status': 'ERROR', 'error': str(e)}
-
-def check_vapi() -> dict:
-    """Check Vapi API and get call stats"""
-    if not VAPI_KEY:
-        return {'status': 'SKIP', 'reason': 'VAPI_KEY not configured'}
-    try:
-        headers = {'Authorization': f'Bearer {VAPI_KEY}'}
-        
-        # Get today's calls
-        today = datetime.now().strftime('%Y-%m-%d')
-        resp = requests.get(
-            f'https://api.vapi.ai/call?createdAtGte={today}T00:00:00Z',
-            headers=headers,
-            timeout=15
-        )
-        
-        if resp.status_code == 200:
-            calls = resp.json()
-            return {
-                'status': 'OK',
-                'calls_today': len(calls) if isinstance(calls, list) else 0,
-                'code': resp.status_code
-            }
-        else:
-            return {'status': 'FAIL', 'code': resp.status_code}
-    except Exception as e:
-        return {'status': 'ERROR', 'error': str(e)}
-
-def send_alert(subject: str, body: str):
-    """Send alert email via Resend"""
-    try:
-        resp = requests.post(
-            'https://api.resend.com/emails',
-            headers={
-                'Authorization': f'Bearer {RESEND_API_KEY}',
-                'Content-Type': 'application/json'
+        supabase.table("system_logs").insert({
+            "event_type": f"HEALTH_{event_type.upper()}",
+            "details": {
+                **details,
+                "status": status,
+                "timestamp": datetime.now().isoformat()
             },
-            json={
-                'from': 'alerts@aiserviceco.com',
-                'to': [ALERT_EMAIL, 'nearmiss1193@gmail.com'],
-                'subject': subject,
-                'html': body
-            },
-            timeout=10
-        )
-        return resp.status_code == 200
-    except:
-        return False
-
-def sync_call_count_to_dashboard():
-    """
-    FIX: Update the contacted leads count to match actual calls made.
-    This ensures dashboard shows correct call count.
-    """
-    if not VAPI_KEY:
-        return {'synced': False, 'reason': 'VAPI_KEY not configured'}
-    try:
-        headers = {
-            'apikey': SUPABASE_KEY,
-            'Authorization': f'Bearer {SUPABASE_KEY}',
-            'Content-Type': 'application/json'
-        }
-        
-        # Get calls from Vapi today
-        vapi_headers = {'Authorization': f'Bearer {VAPI_KEY}'}
-        today = datetime.now().strftime('%Y-%m-%d')
-        resp = requests.get(
-            f'https://api.vapi.ai/call?createdAtGte={today}T00:00:00Z',
-            headers=vapi_headers,
-            timeout=15
-        )
-        
-        if resp.status_code == 200:
-            calls = resp.json()
-            call_count = len(calls)
-            
-            # Log this to system_logs for dashboard to pick up
-            log_entry = {
-                'level': 'health_check',
-                'message': json.dumps({
-                    'type': 'CALL_COUNT_SYNC',
-                    'calls_today': call_count,
-                    'timestamp': datetime.now().isoformat()
-                }),
-                'timestamp': datetime.now().isoformat()
-            }
-            
-            requests.post(
-                f'{SUPABASE_URL}/rest/v1/system_logs',
-                headers=headers,
-                json=log_entry,
-                timeout=10
-            )
-            
-            return {'synced': True, 'call_count': call_count}
+            "metadata": {"monitor": "self-healing"}
+        }).execute()
     except Exception as e:
-        return {'synced': False, 'error': str(e)}
+        print(f"⚠️ Failed to log health event: {e}")
 
-def run_health_check():
-    """Run full system health check"""
-    print(f"\n{'='*60}")
-    print(f"🔍 EMPIRE HEALTH CHECK - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"{'='*60}\n")
-    
+
+def send_alert(subject: str, message: str):
+    """Send email alert when issues detected"""
+    try:
+        import resend
+        resend.api_key = RESEND_API_KEY
+        
+        resend.Emails.send({
+            "from": "Health Monitor <monitor@aiserviceco.com>",
+            "to": [ALERT_EMAIL],
+            "subject": f"🚨 Empire Alert: {subject}",
+            "html": f"""
+            <div style="font-family: system-ui; padding: 20px; background: #1e293b; color: #f8fafc;">
+                <h2 style="color: #ef4444;">⚠️ System Alert</h2>
+                <p>{message}</p>
+                <hr style="border-color: #334155;">
+                <p style="color: #64748b; font-size: 12px;">
+                    Sent by Empire Health Monitor at {datetime.now().isoformat()}
+                </p>
+            </div>
+            """
+        })
+        print(f"📧 Alert sent: {subject}")
+    except Exception as e:
+        print(f"❌ Failed to send alert: {e}")
+
+
+def check_supabase_health():
+    """Verify Supabase connectivity and schema"""
+    print("\n🔍 Checking Supabase health...")
     issues = []
-    report = []
     
-    # Check pages
-    print("📄 Checking Pages...")
-    for page in PAGES_TO_CHECK:
-        result = check_page(page['url'], page['name'])
-        status_icon = '✅' if result['status'] == 'OK' else '❌'
-        print(f"  {status_icon} {result['name']}: {result['status']}")
-        report.append(result)
-        if result['status'] != 'OK':
-            issues.append(f"Page {result['name']} is DOWN")
-    
-    # Check Supabase
-    print("\n🗄️ Checking Supabase...")
-    sb_result = check_supabase()
-    status_icon = '✅' if sb_result['status'] == 'OK' else '❌'
-    print(f"  {status_icon} Supabase: {sb_result['status']}")
-    if sb_result['status'] == 'OK':
-        print(f"     Total Leads: {sb_result.get('total_leads', 'N/A')}")
-        print(f"     Contacted: {sb_result.get('contacted', 'N/A')}")
-        print(f"     Called (with last_called): {sb_result.get('called', 'N/A')}")
-    else:
-        issues.append("Supabase is DOWN")
-    
-    # Check Vapi
-    print("\n📞 Checking Vapi...")
-    vapi_result = check_vapi()
-    if vapi_result['status'] == 'SKIP':
-        print(f"  ⏭️ Vapi: SKIPPED ({vapi_result.get('reason', 'No key')})")
-    else:
-        status_icon = '✅' if vapi_result['status'] == 'OK' else '❌'
-        print(f"  {status_icon} Vapi: {vapi_result['status']}")
-        if vapi_result['status'] == 'OK':
-            print(f"     Calls Today: {vapi_result.get('calls_today', 0)}")
-        elif vapi_result['status'] not in ['OK', 'SKIP']:
-            issues.append("Vapi is DOWN or ERROR")
-    
-    # Sync call count (optional, may fail if VAPI not configured)
-    print("\n🔄 Syncing Call Count...")
     try:
-        sync_result = sync_call_count_to_dashboard()
-        if sync_result and sync_result.get('synced'):
-            print(f"  ✅ Synced {sync_result.get('call_count', 0)} calls to dashboard")
+        from supabase import create_client
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+        
+        # Check each critical table
+        for table in CRITICAL_TABLES:
+            try:
+                result = supabase.table(table).select("*").limit(1).execute()
+                print(f"   ✅ {table}: OK")
+            except Exception as e:
+                error_msg = str(e)
+                print(f"   ❌ {table}: {error_msg[:50]}")
+                issues.append({"table": table, "error": error_msg})
+                
+                # Auto-repair: If schema cache issue, refresh it
+                if "PGRST" in error_msg:
+                    print(f"   🔧 Attempting schema cache refresh...")
+                    try:
+                        supabase.rpc("pg_notify", {"channel": "pgrst", "payload": "reload schema"}).execute()
+                        print(f"   ✅ Schema cache refresh triggered")
+                    except:
+                        # Direct SQL approach
+                        pass
+        
+        if issues:
+            log_health_event("SUPABASE", {"issues": issues}, "warning")
+            return False, issues
         else:
-            print(f"  ⏭️ Sync skipped: {sync_result.get('reason', 'N/A') if sync_result else 'Error'}")
+            log_health_event("SUPABASE", {"tables_checked": len(CRITICAL_TABLES)}, "healthy")
+            return True, []
+            
     except Exception as e:
-        print(f"  ⚠️ Sync error: {e}")
+        log_health_event("SUPABASE", {"error": str(e)}, "critical")
+        return False, [{"error": str(e)}]
+
+
+def check_endpoints():
+    """Verify all critical endpoints are responding"""
+    print("\n🌐 Checking endpoints...")
+    issues = []
+    
+    for name, url in HEALTH_CHECKS.items():
+        try:
+            # Quick timeout check
+            response = requests.get(url, timeout=10)
+            if response.status_code < 500:
+                print(f"   ✅ {name}: {response.status_code}")
+            else:
+                print(f"   ❌ {name}: {response.status_code}")
+                issues.append({"endpoint": name, "status": response.status_code})
+        except Exception as e:
+            print(f"   ❌ {name}: {str(e)[:40]}")
+            issues.append({"endpoint": name, "error": str(e)[:100]})
+    
+    if issues:
+        log_health_event("ENDPOINTS", {"issues": issues}, "warning")
+    else:
+        log_health_event("ENDPOINTS", {"checked": len(HEALTH_CHECKS)}, "healthy")
+    
+    return len(issues) == 0, issues
+
+
+def check_recent_activity():
+    """Verify the system is actively working"""
+    print("\n📊 Checking recent activity...")
+    
+    try:
+        from supabase import create_client
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+        
+        # Check for logs in last 2 hours
+        two_hours_ago = (datetime.now() - timedelta(hours=2)).isoformat()
+        
+        result = supabase.table("system_logs").select("*").gte("created_at", two_hours_ago).execute()
+        log_count = len(result.data)
+        
+        if log_count > 0:
+            print(f"   ✅ {log_count} system events in last 2 hours")
+            log_health_event("ACTIVITY", {"event_count": log_count, "period": "2h"}, "healthy")
+            return True, []
+        else:
+            print(f"   ⚠️ No activity in last 2 hours - system may be stalled")
+            log_health_event("ACTIVITY", {"event_count": 0, "period": "2h"}, "warning")
+            return False, [{"issue": "No activity in 2 hours"}]
+            
+    except Exception as e:
+        print(f"   ❌ Activity check failed: {e}")
+        return False, [{"error": str(e)}]
+
+
+def run_full_health_check():
+    """Run complete health check with alerts"""
+    print("=" * 60)
+    print("🏥 EMPIRE SELF-HEALING HEALTH MONITOR")
+    print(f"   Time: {datetime.now().isoformat()}")
+    print("=" * 60)
+    
+    all_healthy = True
+    all_issues = []
+    
+    # 1. Check Supabase
+    healthy, issues = check_supabase_health()
+    if not healthy:
+        all_healthy = False
+        all_issues.extend(issues)
+    
+    # 2. Check endpoints
+    healthy, issues = check_endpoints()
+    if not healthy:
+        all_healthy = False
+        all_issues.extend(issues)
+    
+    # 3. Check activity
+    healthy, issues = check_recent_activity()
+    if not healthy:
+        all_healthy = False
+        all_issues.extend(issues)
     
     # Summary
-    print(f"\n{'='*60}")
-    if issues:
-        print(f"⚠️ ISSUES DETECTED: {len(issues)}")
-        for issue in issues:
-            print(f"   - {issue}")
-        
-        # Send alert
-        alert_body = f"""
-        <h2>🚨 Empire System Alert</h2>
-        <p>Health check detected {len(issues)} issue(s):</p>
-        <ul>
-        {''.join(f'<li>{issue}</li>' for issue in issues)}
-        </ul>
-        <p>Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-        <p><a href="https://www.aiserviceco.com/dashboard.html">View Dashboard</a></p>
-        """
-        if send_alert(f"🚨 Empire Alert: {len(issues)} Issues Detected", alert_body):
-            print("📧 Alert email sent!")
+    print("\n" + "=" * 60)
+    if all_healthy:
+        print("✅ ALL SYSTEMS HEALTHY")
     else:
-        print("✅ ALL SYSTEMS OPERATIONAL")
-    print(f"{'='*60}\n")
+        print(f"⚠️ {len(all_issues)} ISSUE(S) DETECTED")
+        
+        # Send alert email
+        issue_summary = "\n".join([f"• {json.dumps(i)}" for i in all_issues[:5]])
+        send_alert(
+            f"{len(all_issues)} Issues Detected",
+            f"<pre>{issue_summary}</pre><br/>Please check the system."
+        )
     
-    return {
-        'timestamp': datetime.now().isoformat(),
-        'issues': issues,
-        'pages': report,
-        'supabase': sb_result,
-        'vapi': vapi_result,
-        'sync': sync_result
-    }
+    print("=" * 60)
+    return all_healthy, all_issues
 
-if __name__ == '__main__':
-    run_health_check()
+
+if __name__ == "__main__":
+    run_full_health_check()

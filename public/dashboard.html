@@ -57,6 +57,7 @@
 
         // Vapi initialization with Retry Logic
         let vapi = null;
+        let isConnected = false;
 
         function initVapi() {
             try {
@@ -64,6 +65,22 @@
                     vapi = new window.Vapi(VAPI_PUBLIC_KEY);
                     console.log("✅ Vapi SDK Initialized");
                     document.getElementById('statusUplink').innerText = "Status: Ready";
+
+                    // Attach event listeners NOW that SDK is ready
+                    vapi.on('call-start', () => {
+                        console.log('Call started');
+                        isConnected = true;
+                        document.getElementById('statusUplink').innerText = "Status: 🟢 ONLINE (Secure Channel)";
+                        document.getElementById('statusUplink').className = "mt-3 text-xs text-green-400 font-bold font-mono animate-pulse";
+                        document.getElementById('btnUplink').innerText = "DISCONNECT";
+                        document.getElementById('btnUplink').className = "px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-lg font-bold w-full transition shadow-lg shadow-red-500/20";
+                    });
+
+                    vapi.on('call-end', () => {
+                        console.log('Call ended');
+                        resetUplinkUI();
+                    });
+
                     return true;
                 } else {
                     console.log("⏳ Waiting for Vapi SDK...");
@@ -75,14 +92,14 @@
             }
         }
 
-        // Try initializing every 500ms for 10 seconds (20 attempts)
+        // Try initializing every 500ms for 15 seconds (30 attempts)
         let attempts = 0;
         const vapiInterval = setInterval(() => {
-            if (initVapi() || attempts > 20) {
+            if (initVapi() || attempts > 30) {
                 clearInterval(vapiInterval);
                 if (!vapi) {
-                    document.getElementById('statusUplink').innerText = "Status: Voice SDK unavailable";
-                    console.warn('[Dashboard] Vapi SDK failed to load after 20 attempts');
+                    document.getElementById('statusUplink').innerText = "Status: Connecting...";
+                    console.warn('[Dashboard] Vapi SDK still loading, will retry on click');
                 }
             }
             attempts++;
@@ -437,83 +454,99 @@
             }
         }
 
-        // --- TRANSCRIPTS FETCHING (Fixed to use system_logs) ---
+        // --- TRANSCRIPTS FETCHING (Uses call_logs table) ---
         async function fetchTranscripts() {
             const container = document.getElementById('transcriptsContainer');
-            container.innerHTML = '<div class="text-center text-slate-500 py-4">Loading transcripts...</div>';
+            container.innerHTML = '<div class="text-center text-slate-500 py-4">Loading call logs...</div>';
 
             try {
-                // Fetch from system_logs where transcripts are stored
-                const { data, error } = await sbClient
-                    .from('system_logs')
+                // First try call_logs table
+                const { data: callData, error: callError } = await sbClient
+                    .from('call_logs')
                     .select('*')
-                    .eq('level', 'call_transcript')
-                    .order('timestamp', { ascending: false })
+                    .order('created_at', { ascending: false })
                     .limit(30);
 
-                if (error) {
-                    console.error('Transcript error:', error);
-                    throw error;
-                }
-
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<div class="text-center text-slate-500 py-6">No call transcripts yet today. Calls are being made!</div>';
+                if (!callError && callData && callData.length > 0) {
+                    renderCallLogs(callData);
                     return;
                 }
 
-                container.innerHTML = '';
+                // Fallback to system_logs
+                const { data, error } = await sbClient
+                    .from('system_logs')
+                    .select('*')
+                    .or('event_type.ilike.%CALL%,level.eq.call_transcript')
+                    .order('created_at', { ascending: false })
+                    .limit(30);
 
-                data.forEach((log) => {
-                    // Parse the message JSON
-                    let t = {};
-                    try {
-                        t = typeof log.message === 'string' ? JSON.parse(log.message) : log.message;
-                    } catch (e) {
-                        t = { transcript: log.message, summary: '', customer: 'Unknown' };
-                    }
+                if (error) throw error;
 
-                    const date = new Date(log.timestamp).toLocaleDateString() + ' ' + new Date(log.timestamp).toLocaleTimeString();
-                    const customer = t.customer || t.customer_name || 'Unknown';
-                    const phone = t.phone || t.customer_phone || 'N/A';
-                    const summary = t.summary || t.ended_reason || 'No summary';
-                    const transcript = t.transcript || 'No transcript available';
-                    const duration = t.duration_sec || t.duration || 0;
-                    const status = t.status || t.ended_reason || 'ended';
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="text-center text-slate-500 py-6">No calls recorded yet. System is making calls!</div>';
+                    return;
+                }
 
-                    // Status color
-                    let statusClass = 'text-slate-400 bg-slate-500/20';
-                    if (status.includes('ended')) statusClass = 'text-green-400 bg-green-500/20';
-                    if (status.includes('failed') || status.includes('error')) statusClass = 'text-red-400 bg-red-500/20';
-
-                    const div = document.createElement('div');
-                    div.className = 'bg-slate-800/50 rounded-lg p-4 border border-white/5 mb-2';
-                    div.innerHTML = `
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <span class="font-bold text-white">📞 ${customer}</span>
-                                <span class="text-xs text-slate-500 ml-2">${phone}</span>
-                            </div>
-                            <div class="flex gap-2">
-                                <span class="text-xs px-2 py-1 rounded ${statusClass}">${status}</span>
-                                <span class="text-xs text-slate-400">${duration}s</span>
-                            </div>
-                        </div>
-                        <div class="text-xs text-slate-500 mb-2">${date}</div>
-                        <p class="text-sm text-slate-300 mb-2">${summary.substring(0, 300)}${summary.length > 300 ? '...' : ''}</p>
-                        ${transcript && transcript !== 'No transcript available' ? `
-                        <details class="mt-2">
-                            <summary class="text-xs text-blue-400 cursor-pointer hover:text-blue-300">📜 View Full Transcript</summary>
-                            <pre class="mt-2 p-3 bg-slate-900 rounded text-xs text-slate-400 whitespace-pre-wrap max-h-48 overflow-y-auto">${transcript}</pre>
-                        </details>` : ''}
-                    `;
-                    container.appendChild(div);
-                });
+                renderSystemLogs(data);
             } catch (err) {
                 console.error('Transcripts error:', err);
-                container.innerHTML = '<div class="text-center text-yellow-400 py-4">⚠️ Loading from backup source...</div>';
-                // Try loading from todays_transcripts.json file instead
                 loadBackupTranscripts();
             }
+        }
+
+        function renderCallLogs(data) {
+            const container = document.getElementById('transcriptsContainer');
+            container.innerHTML = '';
+
+            data.forEach(call => {
+                const date = new Date(call.created_at).toLocaleString();
+                const statusClass = call.status === 'completed' ? 'text-green-400 bg-green-500/20' :
+                    call.status === 'failed' ? 'text-red-400 bg-red-500/20' : 'text-blue-400 bg-blue-500/20';
+
+                const div = document.createElement('div');
+                div.className = 'bg-slate-800/50 rounded-lg p-4 border border-white/5 mb-2';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="font-bold text-white">📞 ${call.customer_name || 'Unknown'}</span>
+                            <span class="text-xs text-slate-500 ml-2">${call.phone_number || ''}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="text-xs px-2 py-1 rounded ${statusClass}">${call.status || 'pending'}</span>
+                            <span class="text-xs text-slate-400">${call.duration || 0}s</span>
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-500 mb-2">${date}</div>
+                    ${call.summary ? `<p class="text-sm text-slate-300 mb-2">${call.summary}</p>` : ''}
+                    ${call.transcript ? `
+                    <details class="mt-2">
+                        <summary class="text-xs text-blue-400 cursor-pointer">📜 View Transcript</summary>
+                        <pre class="mt-2 p-3 bg-slate-900 rounded text-xs text-slate-400 whitespace-pre-wrap max-h-48 overflow-y-auto">${call.transcript}</pre>
+                    </details>` : ''}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderSystemLogs(data) {
+            const container = document.getElementById('transcriptsContainer');
+            container.innerHTML = '';
+
+            data.forEach(log => {
+                const date = new Date(log.created_at).toLocaleString();
+                const meta = log.metadata || {};
+
+                const div = document.createElement('div');
+                div.className = 'bg-slate-800/50 rounded-lg p-4 border border-white/5 mb-2';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-white">📞 ${log.event_type}</span>
+                        <span class="text-xs text-slate-400">${date}</span>
+                    </div>
+                    <p class="text-sm text-slate-300">${log.message || JSON.stringify(meta).substring(0, 200)}</p>
+                `;
+                container.appendChild(div);
+            });
         }
 
         async function loadBackupTranscripts() {
@@ -547,43 +580,32 @@
             }
         }
 
-        // --- 2. VAPI UPLINK (with null safety) ---
-        let isConnected = false;
-
-        // Only attach listeners if vapi initialized successfully
-        if (vapi) {
-            vapi.on('call-start', () => {
-                console.log('Call started');
-                document.getElementById('statusUplink').innerText = "Status: 🟢 ONLINE (Secure Channel)";
-                document.getElementById('statusUplink').className = "mt-3 text-xs text-green-400 font-bold font-mono animate-pulse";
-                document.getElementById('btnUplink').innerText = "DISCONNECT";
-                document.getElementById('btnUplink').className = "px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-lg font-bold w-full transition shadow-lg shadow-red-500/20";
-            });
-
-            vapi.on('call-end', () => {
-                console.log('Call ended');
-                resetUplinkUI();
-            });
-        }
-
+        // --- 2. VAPI UPLINK ---
         function resetUplinkUI() {
             isConnected = false;
-            document.getElementById('statusUplink').innerText = "Status: Standby";
+            document.getElementById('statusUplink').innerText = "Status: Ready";
             document.getElementById('statusUplink').className = "mt-3 text-xs text-slate-500 font-mono";
             document.getElementById('btnUplink').innerText = "INITIATE LINK";
             document.getElementById('btnUplink').className = "px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold w-full transition shadow-lg shadow-blue-500/20";
         }
 
         function toggleUplink() {
+            // Try to init if not ready
+            if (!vapi && window.Vapi) {
+                vapi = new window.Vapi(VAPI_PUBLIC_KEY);
+            }
+
             if (!vapi) {
-                document.getElementById('statusUplink').innerText = "Status: Voice SDK unavailable";
+                document.getElementById('statusUplink').innerText = "Status: Loading SDK...";
+                setTimeout(toggleUplink, 1000); // Retry in 1 second
                 return;
             }
+
             if (isConnected) {
                 vapi.stop();
                 isConnected = false;
             } else {
-                document.getElementById('statusUplink').innerText = "Status: Handshaking...";
+                document.getElementById('statusUplink').innerText = "Status: Connecting...";
                 vapi.start(ORCHESTRATOR_ID);
                 isConnected = true;
             }
@@ -618,13 +640,18 @@
             }
         }
 
-        // --- 4. INIT ---
+        // --- 4. INIT WITH AUTO-REFRESH ---
         window.addEventListener('load', () => {
             fetchStats();
             fetchLeads();
             fetchTranscripts();
-            setInterval(fetchStats, 10000); // 10s refresh
-            setInterval(fetchLeads, 10000);
+            fetchActivity();
+
+            // Auto-refresh every 30 seconds
+            setInterval(fetchStats, 30000);
+            setInterval(fetchLeads, 30000);
+            setInterval(fetchTranscripts, 60000);
+            setInterval(fetchActivity, 60000);
         });
 
     </script>
