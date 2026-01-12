@@ -729,31 +729,62 @@ def cloud_multi_touch():
     
     print(f"[CLOUD OUTREACH] Processing {len(callable_leads)} callable leads")
     
-    # === OUTREACH ===
+    # === GHL WEBHOOKS FOR CUSTOMER OUTREACH ===
+    GHL_SMS_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+    GHL_EMAIL_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+    
     for lead in callable_leads[:5]:  # Process max 5 per run
         company = lead["company"]
         email = lead["email"]
         phone = lead["phone"]
         
-        # Email
-        if email and resend_key and "N/A" not in email:
+        # === EMAIL via GHL Webhook (Primary) ===
+        if email and "N/A" not in email:
             try:
+                email_payload = {
+                    "email": email,
+                    "phone": phone,
+                    "company": company,
+                    "action": "send_email",
+                    "subject": f"Quick question for {company}",
+                    "message": f"Hi! I noticed {company} might benefit from AI phone agents that can answer calls 24/7, book appointments, and qualify leads. Worth a quick 5-minute chat?\n\n- Daniel\n(352) 758-5336"
+                }
                 res = requests.post(
-                    "https://api.resend.com/emails",
-                    headers={"Authorization": f"Bearer {resend_key}"},
-                    json={
-                        "from": "Daniel @ AI Service Co <system@aiserviceco.com>",
-                        "to": [email],
-                        "subject": f"Quick question for {company}",
-                        "html": f"<p>Hi! I noticed {company} might benefit from AI phone agents. Worth a quick chat?</p><p>- Daniel<br>(352) 758-5336</p>"
-                    }
+                    GHL_EMAIL_WEBHOOK,
+                    headers={"Content-Type": "application/json"},
+                    json=email_payload,
+                    timeout=15
                 )
                 if res.status_code in [200, 201]:
                     results["email"] += 1
+                    print(f"   📧 GHL Email sent to {email}")
+                else:
+                    print(f"   ⚠️ GHL Email webhook returned: {res.status_code}")
             except Exception as e:
-                print(f"Email error: {e}")
+                print(f"   ❌ GHL Email error: {e}")
         
-        # Call (using Vapi)
+        # === SMS via GHL Webhook ===
+        if phone:
+            try:
+                sms_payload = {
+                    "phone": phone,
+                    "message": f"Hi! This is Daniel from AI Service Co. I help businesses like {company} automate phone calls with AI. Would you be open to a quick chat? Call/text: 352-758-5336"
+                }
+                sms_res = requests.post(
+                    GHL_SMS_WEBHOOK,
+                    headers={"Content-Type": "application/json"},
+                    json=sms_payload,
+                    timeout=15
+                )
+                if sms_res.status_code in [200, 201]:
+                    results["sms"] += 1
+                    print(f"   💬 GHL SMS sent to {phone}")
+                else:
+                    print(f"   ⚠️ GHL SMS webhook returned: {sms_res.status_code}")
+            except Exception as e:
+                print(f"   ❌ GHL SMS error: {e}")
+        
+        # === CALL via Vapi ===
         if phone and vapi_key and vapi_phone:
             try:
                 call_res = requests.post(
@@ -772,20 +803,21 @@ def cloud_multi_touch():
                         "status": "called",
                         "last_called": datetime.now().isoformat()
                     }).eq("id", lead["id"]).execute()
+                    print(f"   📞 Vapi call initiated to {phone}")
                 else:
-                    print(f"Vapi error: {call_res.text}")
+                    print(f"   ⚠️ Vapi error: {call_res.text[:100]}")
             except Exception as e:
-                print(f"Call error: {e}")
+                print(f"   ❌ Call error: {e}")
     
-    # Log
+    # Log to Supabase
     client.table("system_logs").insert({
         "level": "INFO",
         "event_type": "CLOUD_OUTREACH",
-        "message": f"[CLOUD_OUTREACH] Emails: {results['email']}, Calls: {results['call']}, Enriched: {results['enriched']}, Skipped: {results['skipped']}",
+        "message": f"[GHL_OUTREACH] Email: {results['email']}, SMS: {results['sms']}, Call: {results['call']}, Enriched: {results['enriched']}, Skipped: {results['skipped']}",
         "metadata": results
     }).execute()
     
-    print(f"[CLOUD OUTREACH] Complete: {results}")
+    print(f"[CLOUD OUTREACH] Complete via GHL: {results}")
     return results
 
 
@@ -800,7 +832,7 @@ social_image = modal.Image.debian_slim().pip_install(
 @app.function(
     image=social_image,
     secrets=[modal.Secret.from_dotenv()],
-    schedule=modal.Cron("0 8 * * *")  # 8 AM daily
+    # schedule=modal.Cron("0 8 * * *")  # DISABLED - Modal 5-cron limit
 )
 def social_media_poster():
     """AI-powered social media posting to 9 platforms via Ayrshare"""
@@ -875,7 +907,7 @@ def social_media_poster():
 @app.function(
     image=social_image,
     secrets=[modal.Secret.from_dotenv()],
-    schedule=modal.Cron("0 22 * * *")  # 10 PM daily
+    # schedule=modal.Cron("0 22 * * *")  # DISABLED - Modal 5-cron limit
 )
 def social_media_analytics():
     """Collect social media analytics daily"""
