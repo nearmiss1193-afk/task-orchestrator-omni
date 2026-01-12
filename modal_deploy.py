@@ -55,7 +55,7 @@ def sovereign_worker():
     secrets=[modal.Secret.from_dotenv()],
     keep_warm=1
 )
-@modal.web_endpoint(method="POST", label="email-callback")
+@modal.fastapi_endpoint(method="POST", label="email-callback")
 def email_webhook(data: dict):
     """Handle Resend email webhooks"""
     from datetime import datetime
@@ -85,7 +85,7 @@ def email_webhook(data: dict):
     secrets=[modal.Secret.from_dotenv()],
     keep_warm=1
 )
-@modal.web_endpoint(method="POST", label="vapi-callback")
+@modal.fastapi_endpoint(method="POST", label="vapi-callback")
 def vapi_webhook(data: dict):
     """Handle Vapi call status webhooks - WITH AI LEARNING"""
     import requests
@@ -395,7 +395,7 @@ def cloud_drip_campaign():
     image=campaign_image,
     secrets=[modal.Secret.from_dotenv()],
 )
-@modal.web_endpoint(method="POST")
+@modal.fastapi_endpoint(method="POST")
 async def vapi_status(request: Request):
     """
     Endpoint for Vapi Voice Agent to get system status.
@@ -440,7 +440,7 @@ async def vapi_status(request: Request):
     image=campaign_image,
     secrets=[modal.Secret.from_dotenv()],
 )
-@modal.web_endpoint(method="POST")
+@modal.fastapi_endpoint(method="POST")
 async def vapi_trigger_hunt(request: Request):
     """
     Voice Command: 'Find more leads'
@@ -741,9 +741,141 @@ def cloud_multi_touch():
     return results
 
 
+# ============ SOCIAL MEDIA AUTOMATION (24/7) ============
+
+social_image = modal.Image.debian_slim().pip_install(
+    "requests",
+    "anthropic",
+    "supabase"
+)
+
+@app.function(
+    image=social_image,
+    secrets=[modal.Secret.from_dotenv()],
+    schedule=modal.Cron("0 8 * * *")  # 8 AM daily
+)
+def social_media_poster():
+    """AI-powered social media posting to 9 platforms via Ayrshare"""
+    import os
+    import requests
+    from datetime import datetime
+    import anthropic
+    
+    hour = datetime.now().hour
+    
+    # Platform schedule
+    if hour == 8:
+        platforms = ["linkedin"]
+        theme = "hvac_tips"
+    elif hour == 13:
+        platforms = ["facebook", "instagram"]
+        theme = "business_insights"
+    elif hour == 15:
+        platforms = ["twitter", "threads"]
+        theme = "quick_tips"
+    else:
+        platforms = ["linkedin", "facebook"]
+        theme = "success_stories"
+    
+    print(f"[SOCIAL] Posting to {platforms} with theme: {theme}")
+    
+    # Generate content with Claude
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        print("[SOCIAL] No Anthropic key - using default content")
+        content = "AI-powered phone agents are revolutionizing HVAC customer service. Ask us how! #HVAC #AI #CustomerService"
+    else:
+        try:
+            client = anthropic.Anthropic(api_key=api_key)
+            message = client.messages.create(
+                model="claude-3-5-sonnet-20241022",
+                max_tokens=300,
+                messages=[{
+                    "role": "user",
+                    "content": f"Create a short, engaging social media post for an HVAC business about {theme}. Be professional but conversational. Include 2-3 relevant hashtags. Keep it under 250 characters for Twitter/Threads compatibility."
+                }]
+            )
+            content = message.content[0].text
+        except Exception as e:
+            print(f"[SOCIAL] Claude error: {e}")
+            content = "Your HVAC business deserves 24/7 coverage. Our AI phone agents never miss a call! #HVAC #AI #CustomerService"
+    
+    print(f"[SOCIAL] Content: {content[:100]}...")
+    
+    # Post via Ayrshare
+    ayrshare_key = os.environ.get("AYRSHARE_API_KEY")
+    if ayrshare_key:
+        try:
+            resp = requests.post(
+                "https://app.ayrshare.com/api/post",
+                headers={
+                    "Authorization": f"Bearer {ayrshare_key}",
+                    "Content-Type": "application/json"
+                },
+                json={"post": content, "platforms": platforms}
+            )
+            print(f"[SOCIAL] Ayrshare response: {resp.status_code} - {resp.text[:200]}")
+            return {"status": "posted", "platforms": platforms, "response": resp.status_code}
+        except Exception as e:
+            print(f"[SOCIAL] Ayrshare error: {e}")
+            return {"status": "error", "error": str(e)}
+    else:
+        print("[SOCIAL] No Ayrshare key - skipping post")
+        return {"status": "skipped", "reason": "no_api_key"}
+
+
+@app.function(
+    image=social_image,
+    secrets=[modal.Secret.from_dotenv()],
+    schedule=modal.Cron("0 22 * * *")  # 10 PM daily
+)
+def social_media_analytics():
+    """Collect social media analytics daily"""
+    import os
+    import requests
+    from datetime import datetime
+    from supabase import create_client
+    
+    print(f"[ANALYTICS] Collecting at {datetime.now().isoformat()}")
+    
+    ayrshare_key = os.environ.get("AYRSHARE_API_KEY")
+    supa_url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
+    supa_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    
+    analytics = {"collected": False}
+    
+    if ayrshare_key:
+        try:
+            resp = requests.get(
+                "https://app.ayrshare.com/api/analytics/social",
+                headers={"Authorization": f"Bearer {ayrshare_key}"}
+            )
+            if resp.status_code == 200:
+                analytics = resp.json()
+                analytics["collected"] = True
+                print(f"[ANALYTICS] Collected: {analytics}")
+        except Exception as e:
+            print(f"[ANALYTICS] Error: {e}")
+    
+    # Log to Supabase
+    if supa_url and supa_key:
+        try:
+            client = create_client(supa_url, supa_key)
+            client.table("system_logs").insert({
+                "level": "INFO",
+                "event_type": "SOCIAL_ANALYTICS",
+                "message": f"Daily social analytics collected",
+                "metadata": analytics
+            }).execute()
+        except Exception as e:
+            print(f"[ANALYTICS] DB error: {e}")
+    
+    return analytics
+
+
 # ============ HEALTH CHECK ============
 @app.function(image=image)
-@modal.web_endpoint(method="GET", label="health")
+@modal.fastapi_endpoint(method="GET", label="health")
 def health():
     """Master health check"""
     from datetime import datetime
