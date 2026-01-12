@@ -20,7 +20,7 @@ from modules.grok_client import GrokClient
 resend.api_key = os.getenv('RESEND_API_KEY')
 VIDEO_URL = "https://youtube.com/shorts/C4GRQ8xaFn0"
 VIDEO_THUMBNAIL = "https://i.ytimg.com/vi/C4GRQ8xaFn0/maxresdefault.jpg"
-CALENDLY_LINK = "https://calendly.com/aiserviceco/demo"
+CALENDLY_LINK = "https://aiserviceco.com"  # Landing page with video demo - Calendly was 404
 
 # Load both batches of prospects
 CAMPAIGN_DATA_DIR = "campaign_data"
