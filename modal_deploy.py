@@ -464,10 +464,10 @@ async def vapi_trigger_hunt(request: Request):
 @app.function(
     image=campaign_image,
     secrets=[modal.Secret.from_dotenv()],
-    schedule=modal.Cron("0 */4 * * *")  # Every 4 hours
+    schedule=modal.Cron("0 */2 * * *")  # Every 2 hours - ALWAYS PROSPECTING
 )
 def cloud_prospector():
-    """Cloud Prospector - 24/7 Lead Hunting"""
+    """Cloud Prospector - 24/7 Lead Hunting with Apollo Enrichment"""
     import os
     import json
     import requests
@@ -481,6 +481,7 @@ def cloud_prospector():
     supa_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
     supa_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     gemini_key = os.getenv("GEMINI_API_KEY")
+    apollo_key = os.getenv("APOLLO_API_KEY")
     
     if not all([supa_url, supa_key, gemini_key]):
         print("Missing credentials")
@@ -488,15 +489,14 @@ def cloud_prospector():
     
     client = create_client(supa_url, supa_key)
     
-    # 1. Check Pipeline Depth
+    # 1. Check Pipeline Depth (but ALWAYS hunt now)
     result = client.table("leads").select("id", count="exact").in_("status", ["new", "processing_email"]).execute()
     count = result.count if result.count is not None else len(result.data)
     
-    print(f"[CLOUD PROSPECTOR] Current fresh leads: {count}")
+    print(f"[CLOUD PROSPECTOR] Current fresh leads: {count} - HUNTING ALWAYS!")
     
-    if count >= 30:
-        print("Pipeline healthy. Resting.")
-        return {"status": "healthy", "count": count}
+    # REMOVED: Pipeline check - we always prospect now
+
     
     # 2. Hunt Mode
     print("Pipeline low. Initiating hunt...")
@@ -581,7 +581,7 @@ def cloud_prospector():
 @app.function(
     image=campaign_image,
     secrets=[modal.Secret.from_dotenv()],
-    schedule=modal.Cron("0 10,14 * * *")  # 10 AM and 2 PM DAILY (including weekends)
+    schedule=modal.Cron("0 8-18 * * 1-6")  # Hourly 8 AM - 6 PM, Mon-Sat
 )
 def cloud_multi_touch():
     """Multi-touch outreach - Email + SMS + Call in cloud

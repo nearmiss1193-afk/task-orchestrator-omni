@@ -1,204 +1,22 @@
-=== LEADS (139) ===
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: contacted
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: contacted
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
-  - ? | ? | Status: processing_email
+﻿=== LEAD PIPELINE STATUS ===
+  new                 : 0
+  processing_email    : 112
+  called              : 4
+  contacted           : 310
+  needs_enrichment    : 17
+  qualified           : 0
+  TOTAL               : 444
 
-=== CALL TRANSCRIPTS (10) ===
-  - 2026-01-09T15:22:59
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: This is Rachel at AI Service Company. I'm looking at your file. Are we focusing on fixing your missed calls or launching the new VO ads today? User: I'm actually looking at the, uh, trial. Is it a 7 day or a 14 day trial? AI: That's a great question. Let's map that out in a demo. Would tomorrow ...
+=== CAMPAIGN SCHEDULE (Modal Cloud - 24/7) ===
+  cloud_multi_touch:   10 AM & 2 PM daily (5-10 leads per run)
+  cloud_drip_campaign: 9 AM daily
+  cloud_prospector:    Every 4 hours (hunts new leads)
+  self_healing_monitor: Every 30 min
 
-  - 2026-01-09T15:13:08
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: specialist. How can I help you automate your business today? User: Yeah. I was hoping to speak to, uh, orchestrator. AI: I can definitely help get you in touch with the orchestrator line if you need technical details. But first, can I ask what specific HVAC or plumbing automation needs you're lo...
+=== RECENT OUTREACH LOGS ===
+  2026-01-12T18:39: [CLOUD_OUTREACH] Emails: 5, Calls: 4, Enriched: 0, Skipped: 
+  2026-01-12T18:32: [CLOUD_OUTREACH] Emails: 4, Calls: 0, Enriched: 0, Skipped: 
+  2026-01-12T15:37: Emails: 3, Calls: 0, Skipped: 5
 
-  - 2026-01-09T14:42:08
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: Hey. This is John from Empire AI. I'm actually an AI agent calling to check your availability. You got a second? User: Yeah. Sure. AI: I'm actually an artificial intelligence calling to see if you can handle more estimates. You guys busy right now? User: Uh, no. Not too much. AI: Hey. This is Jo...
-
-  - 2026-01-09T14:04:14
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: This is John with Empire Roofing. Who am I speaking with? User: Daniel. AI: Hey, Daniel. This is John with Empire. How's the roof looking? You thinking of getting it replaced? Can you tell me a bit about it? ...
-
-  - 2026-01-09T13:48:36
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-
-  - 2026-01-09T13:43:54
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-
-  - 2026-01-09T13:33:54
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-
-  - 2026-01-09T13:30:14
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-
-  - 2026-01-08T22:51:15
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: Hey, Michael. It's Sarah. AI: calls. You got 30 seconds for a weird question? User: Okay. Move ...
-
-  - 2026-01-08T22:11:18
-    Phone: ?
-    Duration: ?s
-    Outcome: ?
-    Snippet: AI: Hey, Emily. It's Sarah. AI: calls. You got 30 seconds for a weird question? ...
-
-
-=== SYSTEM LOGS (2) ===
-  - 2026-01-08T17:31:22 | ? | Failed task: provision_account
-  - 2026-01-08T17:31:21 | ? | Started task: provision_account
-
-=== CAMPAIGN STATUS: COMPLETE ===
+YES - Campaign IS running on schedule!
+Manual trigger: python -m modal run modal_deploy.py::cloud_multi_touch
