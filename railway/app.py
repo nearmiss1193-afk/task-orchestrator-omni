@@ -39,7 +39,13 @@ NICHES = [
     {"keywords": "Electrical contractor", "location": "Arizona"},
 ]
 
-stats = {"prospects": 0, "emails": 0, "sms": 0, "calls": 0}
+stats = {
+    "prospects": 0, 
+    "emails": 0, 
+    "sms": 0, 
+    "calls": 0, 
+    "last_heartbeat": time.time()
+}
 
 # ==== SUPABASE ====
 def supabase_request(method, table, data=None, params=None):
@@ -228,6 +234,7 @@ def run_scheduler():
     
     while True:
         schedule.run_pending()
+        stats["last_heartbeat"] = time.time()
         time.sleep(60)
 
 def send_status_report():
@@ -263,6 +270,9 @@ def home():
 
 @app.route("/health")
 def health():
+    # Deep Health Check: Ensure worker thread is alive (heartbeat within 5 mins)
+    if time.time() - stats.get("last_heartbeat", 0) > 300:
+        return jsonify({"status": "unhealthy", "reason": "thread_dead"}), 500
     return jsonify({"status": "healthy"})
 
 @app.route("/trigger/prospect", methods=["POST"])
