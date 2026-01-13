@@ -90,5 +90,5 @@ def test_auth():
 
 if __name__ == "__main__":
     test_auth()
-    # test_outreach_check()
-    test_prospect()
+    test_outreach_check()
+    # test_prospect()
