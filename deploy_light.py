@@ -7,7 +7,7 @@ import os
 
 # Lightweight image
 image = modal.Image.debian_slim(python_version="3.11").pip_install(
-    "requests", "supabase", "python-dotenv"
+    "requests", "supabase", "python-dotenv", "fastapi", "pytz"
 )
 
 app = modal.App("empire-core")
