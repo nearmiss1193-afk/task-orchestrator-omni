@@ -239,15 +239,94 @@ def run_outreach():
     
     print(f"[OUTREACH] Processed {len(leads)} leads")
 
+# ==== TIMEZONE-AWARE CALLER ====
+TIMEZONE_STATES = {
+    "Eastern": ["Florida", "Georgia", "New York", "Pennsylvania", "Ohio", "Virginia", "North Carolina"],
+    "Central": ["Texas", "Illinois", "Tennessee", "Alabama", "Louisiana", "Oklahoma"],
+    "Mountain": ["Colorado", "Arizona", "Utah", "Nevada"],
+    "Pacific": ["California", "Oregon", "Washington"],
+    "Hawaii": ["Hawaii"]
+}
+
+def get_active_timezone():
+    """Get which timezone is currently in 8AM-6PM call window"""
+    from datetime import timezone as tz
+    utc_hour = datetime.now(tz.utc).hour
+    
+    # Map UTC hours to active timezones (8 AM - 6 PM local)
+    # Eastern: UTC 13-23 (8 AM - 6 PM EST)
+    if 13 <= utc_hour < 23:
+        return "Eastern"
+    # Central: UTC 14-00
+    if 14 <= utc_hour or utc_hour < 1:
+        return "Central"
+    # Mountain: UTC 15-01
+    if 15 <= utc_hour or utc_hour < 2:
+        return "Mountain"
+    # Pacific: UTC 16-02
+    if 16 <= utc_hour or utc_hour < 3:
+        return "Pacific"
+    # Hawaii: UTC 18-04
+    if 18 <= utc_hour or utc_hour < 5:
+        return "Hawaii"
+    return None
+
+last_call_time = 0
+
+def run_caller():
+    """Make calls - every 5 minutes, timezone-aware"""
+    global last_call_time
+    
+    # Enforce 5 min pacing
+    if time.time() - last_call_time < 300:
+        return
+    
+    active_tz = get_active_timezone()
+    if not active_tz:
+        print(f"[CALLER] No timezone in call window")
+        return
+    
+    # Get states for this timezone
+    target_states = TIMEZONE_STATES.get(active_tz, [])
+    print(f"\n[{datetime.now().strftime('%H:%M')}] CALLER: Targeting {active_tz} ({target_states[:2]}...)")
+    
+    # Get leads with phone in these states
+    for state in target_states:
+        leads = supabase_request("GET", "leads", params={
+            "status": "eq.contacted",
+            "state": f"eq.{state}",
+            "phone": "neq.null",
+            "limit": "1"
+        })
+        
+        if leads and len(leads) > 0:
+            lead = leads[0]
+            phone = lead.get("phone")
+            company = lead.get("company_name", "Business")
+            
+            print(f"[CALL] Calling {company} in {state}")
+            make_call(phone, company, lead.get("decision_maker"))
+            
+            # Update status
+            supabase_request("PATCH", f"leads?id=eq.{lead['id']}", {"status": "called"})
+            last_call_time = time.time()
+            return
+    
+    print(f"[CALLER] No leads found in {active_tz}")
+
 # ==== SCHEDULER ====
 def run_scheduler():
-    """Background scheduler thread"""
-    schedule.every(2).hours.do(run_prospector)
-    schedule.every(1).hours.do(run_outreach)
+    """Background scheduler thread - AGGRESSIVE 24/7"""
+    # Aggressive schedule per /outreach_sop
+    schedule.every(15).minutes.do(run_prospector)  # Was 2 hours
+    schedule.every(10).minutes.do(run_outreach)    # Was 1 hour  
+    schedule.every(5).minutes.do(run_caller)       # NEW: Calls
     schedule.every(6).hours.do(send_status_report)
     
     # Run immediately on start
+    print("[STARTUP] Running initial prospector...")
     run_prospector()
+    print("[STARTUP] Running initial outreach...")
     run_outreach()
     
     while True:
