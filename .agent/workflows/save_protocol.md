@@ -4,6 +4,20 @@ description: Standard operating procedure for session end - ALWAYS run this
 
 # Save Protocol SOP
 
+## ⚠️ MANDATORY: Deep Research Before New Technology
+
+**BEFORE using ANY new platform, API, or tool:**
+
+1. **Search web** for official documentation
+2. **Read requirements** (auth, env vars, config files)
+3. **Understand the full workflow** before first command
+4. **Verify prerequisites** are met (accounts, tokens, etc.)
+5. **PLAN first, then execute**
+
+This applies to: Railway, Modal, Vercel, new APIs, new libraries, etc.
+
+---
+
 ## Required Actions at Session End
 
 ### 1. Git Commit & Push
