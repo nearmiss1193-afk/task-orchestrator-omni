@@ -23,6 +23,8 @@ SARAH_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
 RESEND_KEY = os.getenv("RESEND_API_KEY")
 APOLLO_KEY = os.getenv("APOLLO_API_KEY")
 GHL_SMS = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+GHL_EMAIL = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/5148d523-9899-446a-9410-144465ab96d8"
+
 
 SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL") or os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_KEY")
@@ -44,12 +46,24 @@ def get_active_regions():
         return ["California", "Hawaii", "Florida", "Texas"]
 
 # === AGENT 1: PROSPECTOR ===
-def prospect_agent():
+def prospect_agent(niche_strategy=None):
     """Finds new leads from Apollo"""
     print(f"\n🔍 [PROSPECTOR] Starting search...")
     
     regions = get_active_regions()
     niches = ["HVAC contractors", "Roofing companies", "Plumbing services"]
+    
+    # Brain Strategy Injection
+    if niche_strategy:
+        print(f"   🧠 Focusing on STRATEGIC NICHE: {niche_strategy}")
+        # Map common names to Apollo keywords if needed
+        strategies = {
+            "plumber": "Plumbing services",
+            "hvac": "HVAC contractors",
+            "roofer": "Roofing companies"
+        }
+        keyword = strategies.get(niche_strategy, niche_strategy)
+        niches = [keyword] # Override or prepend? Let's OVERRIDE to focus fire.
     
     new_leads = 0
     for region in regions[:2]:  # Process 2 regions per cycle
@@ -389,6 +403,26 @@ def contact_agent():
 
                 name = decision_maker.split()[0] if decision_maker else "there"
                 
+                # Dynamic Asset Routing
+                from modules.learning.brain import EmpireBrain
+                brain = EmpireBrain()
+                
+                # Guess niche from industry or company name
+                niche = lead.get("industry", "").lower()
+                if not niche:
+                     if "roof" in company.lower(): niche = "roofer"
+                     elif "pump" in company.lower() or "plumb" in company.lower(): niche = "plumber"
+                     elif "air" in company.lower() or "cool" in company.lower(): niche = "hvac"
+                     else: niche = "plumber" # Default
+                
+                assets = brain.get_asset_map(niche)
+                video_link = assets.get("video_link", "https://top-local-plumber.vercel.app/#video")
+                branding = assets.get("branding", {
+                    "sender": "Daniel from AI Service Co",
+                    "company": "AI Service Co",
+                    "headline": "Stop losing revenue to voicemail and admin work."
+                })
+
                 html_body = f"""
                 <p>Hi {name},</p>
                 
@@ -406,34 +440,51 @@ def contact_agent():
                 </ul>
                 
                 <p><strong>Use Case for {company}:</strong></p>
-                <p>Stop losing revenue to voicemail and admin work. Sarah costs less than a single day's pay on our $99/mo plan.</p>
+                <p>{branding['headline']} Sarah costs less than a single day's pay on our $99/mo plan.</p>
                 
                 <p><strong>Bonus:</strong> We're giving a <strong style="color: #047857;">Free SMS Text Number</strong> to our first 25 partners this week.</p>
                 
-                <p>See it in action: <a href="https://top-local-plumber.vercel.app/#video">Watch 30s Demo</a></p>
+                <p>See it in action: <a href="{video_link}">Watch 30s Demo</a></p>
                 
                 <p>Are you the right person to speak with about this?</p>
                 
                 <p>Best,<br>
-                Daniel<br>
-                AI Service Co<br>
+                {branding['sender']}<br>
+                {branding['company']}<br>
                 (352) 758-5336</p>
                 """
                 
+                
                 resp = requests.post(
-                    "https://api.resend.com/emails",
-                    headers={"Authorization": f"Bearer {RESEND_KEY}"},
+                    GHL_EMAIL,
                     json={
-                        "from": "Daniel <daniel@aiserviceco.com>",
-                        "to": [email],
+                        "email": email,
+                        "from_name": branding['sender'],
+                        "from_email": "daniel@aiserviceco.com",
                         "subject": f"Missed calls at {company}?",
-                        "html": html_body
+                        "html_body": html_body,
+                        "company": company,
+                        "audit_link": audit_link
                     },
                     timeout=15
                 )
                 if resp.status_code in [200, 201]:
                     stats["emails"] += 1
-                    print(f"      ✅ EMAIL sent")
+                    print(f"      ✅ EMAIL sent via GHL")
+                    
+                    # Brain Learning Log
+                    try:
+                        log_entry = {
+                            "timestamp": datetime.now().isoformat(),
+                            "type": "outreach_success",
+                            "company": company,
+                            "audit_link": audit_link,
+                            "email": email
+                        }
+                        with open("brain_log.json", "a") as f:
+                            f.write(json.dumps(log_entry) + "\n")
+                    except:
+                        pass
             except:
                 print("      ❌ Email failed")
                 pass
@@ -451,10 +502,21 @@ def contact_agent():
 def run_production_loop(stop_event):
     """Loop for Finding, Enriching, and Auditing Leads (The Factory)"""
     print("🏭 [PRODUCTION] Thread started...")
+    
+    # Initialize The Brain
+    from modules.learning.brain import EmpireBrain
+    brain = EmpireBrain()
+    
     while not stop_event.is_set():
         try:
+            # 0. Learn & Optimize
+            strategy = brain.reflect_and_optimize()
+            target_niche = strategy.get("focus_niche", "plumber")
+            print(f"   🧠 Strategy Update: Targeting '{target_niche}'")
+
             # 1. Prospect
-            prospect_agent()
+            # Pass the optimized niche to the prospector
+            prospect_agent(niche=target_niche) 
             time.sleep(2)
             
             # 2. Enrich

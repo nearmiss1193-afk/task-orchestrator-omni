@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import fetch from 'node-fetch';
-import Resend from 'resend';
+import { Resend } from 'resend';
 
 // CORS headers
 const corsHeaders = {

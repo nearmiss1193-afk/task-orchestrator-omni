@@ -1843,7 +1843,7 @@
     </section>
     
     <!-- ========== VIDEO SECTION ========== -->
-    <section class="video-section">
+    <section class="video-section" id="video">
         <div class="container">
             <div class="section-header">
                 <span class="section-label">Demo</span>

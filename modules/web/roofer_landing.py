@@ -604,6 +604,25 @@ def get_roofer_landing_html(calendly_url="#", stripe_url="#"):
                 </div>
             </div>
         </div>
+    <!-- DEMO SECTION -->
+    <section id="demo" class="video-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">See It In Action</span>
+                <h2 class="section-title">Listen To Eric Book An Inspection</h2>
+                <p class="section-subtitle">Real call recording. 45 seconds. Zero human intervention.</p>
+            </div>
+            
+            <div class="video-wrapper" id="video">
+                <!-- Placeholder for Demo Video -->
+                <div class="video-placeholder" onclick="this.innerHTML='<iframe width=\'100%\' height=\'500\' src=\'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1\' title=\'YouTube video player\' frameborder=\'0\' allow=\'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\' allowfullscreen></iframe>'">
+                    <div class="video-play-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <p style="font-weight: 600; font-size: 18px; color: white;">Watch Live Demo</p>
+                </div>
+            </div>
+        </div>
     </section>
 
 </body>
