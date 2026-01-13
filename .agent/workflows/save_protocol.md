@@ -4,15 +4,36 @@ description: Standard operating procedure for session end - ALWAYS run this
 
 # Save Protocol SOP
 
-## ⚠️ MANDATORY: Deep Research Before New Technology
+> [!CAUTION]
+> **THIS IS MANDATORY.** Before EVERY `notify_user` call that updates the user on completed work, you MUST include ALL items from the checklist below. NO EXCEPTIONS.
 
-**BEFORE using ANY new platform, API, or tool:**
+## ⛔ HARD RULE: Minimum notify_user Content
 
-1. **Search web** for official documentation
-2. **Read requirements** (auth, env vars, config files)
-3. **Understand the full workflow** before first command
-4. **Verify prerequisites** are met (accounts, tokens, etc.)
-5. **PLAN first, then execute**
+Every status update to the user MUST contain:
+
+- [ ] **Dashboard Link**: <https://www.aiserviceco.com/dashboard.html>
+- [ ] **What Was Done**: Bullet list of completed actions
+- [ ] **System States**: Campaign/Sarah/Cloud status
+- [ ] **Recovery Command**: Exact `python ...` command to restart
+- [ ] **Next Priority**: 1-2 recommendations
+
+If any of these are missing, THE PROTOCOL IS VIOLATED.
+
+---
+
+## ⚠️ MANDATORY: Research Protocol
+
+**BEFORE using ANY new platform, API, or tool, RUN `/research_protocol`**
+
+See: `.agent/workflows/research_protocol.md` for full process.
+
+Quick checklist:
+
+1. Search web for official docs
+2. Find second source (tutorial/SO)
+3. Cross-reference both sources
+4. Document in `operational_memory.md`
+5. THEN implement
 
 This applies to: Railway, Modal, Vercel, new APIs, new libraries, etc.
 
