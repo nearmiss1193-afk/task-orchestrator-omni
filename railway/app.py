@@ -20,6 +20,7 @@ brain = EmpireBrain()
 
 # ==== CONFIG ====
 APOLLO_KEY = os.environ.get("APOLLO_API_KEY")
+LUSHA_KEY = os.environ.get("LUSHA_API_KEY")
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY") 
 VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
@@ -71,9 +72,38 @@ def supabase_request(method, table, data=None, params=None):
     except:
         return None
 
+# ==== LUSHA ENRICHMENT ====
+def enrich_with_lusha(company_name, website_url=None):
+    """Enrich company with direct decision-maker contact via Lusha"""
+    if not LUSHA_KEY:
+        return None
+    
+    try:
+        # Try company enrichment first
+        r = requests.get(
+            "https://api.lusha.com/person",
+            headers={"api_key": LUSHA_KEY},
+            params={
+                "company": company_name,
+                "property": "directDials,emailAddresses"
+            },
+            timeout=15
+        )
+        
+        if r.ok:
+            data = r.json()
+            return {
+                "email": data.get("emailAddresses", [{}])[0].get("email") if data.get("emailAddresses") else None,
+                "phone": data.get("directDialPhones", [{}])[0].get("phone") if data.get("directDialPhones") else None,
+                "decision_maker": data.get("firstName", "") + " " + data.get("lastName", "")
+            }
+    except:
+        pass
+    return None
+
 # ==== PROSPECTOR ====
 def prospect_niche(niche):
-    """Find leads using Apollo API"""
+    """Find leads using Apollo API + Lusha Enrichment"""
     global stats
     if not APOLLO_KEY:
         print("[PROSPECT] No Apollo key")
@@ -105,6 +135,7 @@ def prospect_niche(niche):
             companies = r.json().get("organizations", [])
             saved = 0
             for company in companies:
+                # Base lead data from Apollo
                 lead = {
                     "company_name": company.get("name"),
                     "website_url": company.get("website_url"),
@@ -114,6 +145,18 @@ def prospect_niche(niche):
                     "status": "new",
                     "source": "railway_cloud"
                 }
+                
+                # Enrich with Lusha for direct contacts
+                enriched = enrich_with_lusha(company.get("name"), company.get("website_url"))
+                if enriched:
+                    if enriched.get("email"):
+                        lead["email"] = enriched["email"]
+                    if enriched.get("phone"):
+                        lead["phone"] = enriched["phone"]  # Override with direct dial
+                    if enriched.get("decision_maker"):
+                        lead["decision_maker"] = enriched["decision_maker"]
+                    print(f"[LUSHA] Enriched {company.get('name')}")
+                
                 # Save to Supabase
                 result = supabase_request("POST", "leads", lead)
                 if result:
