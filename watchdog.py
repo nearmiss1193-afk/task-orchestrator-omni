@@ -4,7 +4,7 @@ import psutil
 import os
 
 # Configuration
-TARGET_SCRIPT = os.path.abspath('inbound_poller.py')
+TARGET_SCRIPT = os.path.abspath('continuous_swarm.py')
 MAX_RUNTIME_SECONDS = 30 * 60  # 30 minutes
 CHECK_INTERVAL = 60  # check every minute
 
