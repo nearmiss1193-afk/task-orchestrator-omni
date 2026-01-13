@@ -6,11 +6,13 @@ description: Standard operating procedure for session end - ALWAYS run this
 
 ## Required Actions at Session End
 
-### 1. Git Commit
+### 1. Git Commit & Push
+
+// turbo
 
 ```bash
-// turbo
 git add -A && git commit -m "💾 SAVE PROTOCOL: [brief description]"
+git push origin main
 ```
 
 ### 2. Status Report (Always Include)
@@ -33,25 +35,57 @@ git add -A && git commit -m "💾 SAVE PROTOCOL: [brief description]"
 **Active Systems:**
 - Campaign Status: [Running/Idle]
 - Sarah AI: [Active/Standby]
+- Modal Cloud: [✅/❌]
 - GHL Integration: [✅/❌]
 - Supabase: [✅/❌]
-
-**Dashboard:** https://www.aiserviceco.com/dashboard.html
 
 **Git Commits:**
 - [commit hash] - [message]
 ```
 
-### 4. Update Brain
+### 4. Recovery Instructions (REQUIRED)
+
+Send user exact commands to restart system:
+
+```bash
+# Start watchdog (auto-restarts swarm):
+cd C:\Users\nearm\.gemini\antigravity\scratch\empire-unified
+python watchdog.py
+
+# Or start swarm directly:
+python continuous_swarm.py
+
+# Start portal:
+cd apps\portal && npm start
+
+# Check Modal cloud:
+python -m modal app list
+```
+
+### 5. Current Capabilities Summary (REQUIRED)
+
+Include what the system CAN do:
+
+- Prospecting (Apollo API)
+- Email outreach (GHL webhooks)
+- SMS outreach (GHL webhooks)
+- AI Calls (Vapi - Rachel/Sarah)
+- Lead tracking (Supabase)
+- Cloud webhooks (Modal)
+
+### 6. Recommendations (REQUIRED)
+
+Include 2-3 next priority actions.
+
+### 7. Update Brain
 
 - Update `knowledge_base/operational_memory.md` with learnings
 - Log any new credentials or configurations
 
-### 5. Browser Cleanup
+### 8. Browser Cleanup
 
 - Close duplicate tabs
 - Keep max 5 tabs open
-- Clear about:blank tabs
 
 ## Quick Links
 
@@ -61,3 +95,12 @@ git add -A && git commit -m "💾 SAVE PROTOCOL: [brief description]"
 | GHL | <https://app.gohighlevel.com> |
 | Vapi | <https://dashboard.vapi.ai> |
 | Supabase | <https://supabase.com/dashboard> |
+| Modal | <https://modal.com/apps> |
+
+## Cloud Endpoints
+
+| Endpoint | URL |
+|----------|-----|
+| Health | nearmiss1193-afk--empire-webhooks-health.modal.run |
+| Outreach Trigger | nearmiss1193-afk--empire-webhooks-trigger-outreach.modal.run |
+| Inbound Lead | nearmiss1193-afk--empire-webhooks-inbound-lead.modal.run |
