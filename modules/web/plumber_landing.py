@@ -579,6 +579,23 @@ def get_plumber_landing_html(calendly_url="#", stripe_url="#"):
             </div>
         </div>
     </section>
+
+    <!-- VIDEO DEMO -->
+    <section id="video" style="padding: 80px 0; background: var(--dark);">
+        <div class="container" style="text-align: center;">
+            <div class="section-label">See It In Action</div>
+            <h2 class="section-title">Watch Sarah Handle a Live Call</h2>
+            <p class="section-subtitle" style="margin-bottom: 40px;">See how our AI negotiates prices, books appointments, and filters spam in real-time.</p>
+            
+            <div style="max-width: 800px; margin: 0 auto; aspect-ratio: 16/9; background: var(--black-soft); border: 1px solid var(--gray-dark); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+                <!-- Placeholder for actual video embed -->
+                <div style="text-align: center;">
+                    <div style="font-size: 64px; margin-bottom: 16px;">▶️</div>
+                    <p style="color: var(--gray);">Demo Video Placeholder</p>
+                </div>
+            </div>
+        </div>
+    </section>
     
     <!-- FEATURES -->
     <section class="solution-section">

@@ -1,74 +1,62 @@
-import psycopg2
+import os
+import sqlite3
+from dotenv import load_dotenv
+from supabase import create_client
 
-DB_URL = 'postgresql://postgres:Inez11752990%40@db.rzcpfwkygdvoshtwxncs.supabase.co:5432/postgres'
+load_dotenv()
 
-conn = psycopg2.connect(DB_URL)
-cur = conn.cursor()
+def check_learning_status():
+    print("\n🧠 OPTIMIZED LEARNING SYSTEM CHECK")
+    print("=" * 40)
 
-print("=" * 60)
-print("AI LEARNING & TRANSCRIPTS CHECK")
-print("=" * 60)
+    # 1. Config Check
+    rl_enabled = os.getenv("RL_TRAINING_ENABLED", "false")
+    print(f"Config: RL_TRAINING_ENABLED = {rl_enabled}")
+    
+    # 2. Module Check
+    modules = ["modules/rl_trainer.py", "modules/meta_learner.py", "modules/graph_store.py"]
+    print("\n📦 Modules:")
+    for mod in modules:
+        exists = os.path.exists(mod)
+        print(f"  - {mod}: {'✅ Found' if exists else '❌ Missing'}")
 
-# Check which tables exist
-print("\n📦 TABLES IN DATABASE:")
-cur.execute("""
-    SELECT table_name FROM information_schema.tables 
-    WHERE table_schema = 'public' 
-    ORDER BY table_name
-""")
-tables = [r[0] for r in cur.fetchall()]
-for t in tables:
-    cur.execute(f"SELECT COUNT(*) FROM \"{t}\"")
-    count = cur.fetchone()[0]
-    if count > 0:
-        print(f"  ✓ {t}: {count} rows")
+    # 3. Knowledge Graph (Local SQLite)
+    print("\n🕸️  Knowledge Graph (Local):")
+    if os.path.exists("graph_store.db"):
+        try:
+            conn = sqlite3.connect("graph_store.db")
+            cursor = conn.cursor()
+            count = cursor.execute("SELECT count(*) FROM nodes").fetchone()[0]
+            print(f"  - Status: ✅ Active")
+            print(f"  - Nodes: {count}")
+            conn.close()
+        except Exception as e:
+            print(f"  - Status: ⚠️ Error reading DB: {e}")
     else:
-        print(f"  - {t}: empty")
+        print("  - Status: ❌ Database file not found (graph_store.db)")
 
-# Check for call_transcripts
-print("\n📞 CALL TRANSCRIPTS:")
-if 'call_transcripts' in tables:
-    cur.execute("SELECT call_id, phone_number, summary, created_at FROM call_transcripts ORDER BY created_at DESC LIMIT 5")
-    rows = cur.fetchall()
-    if rows:
-        for r in rows:
-            print(f"  {r[1]} - {str(r[2])[:50]}... ({r[3]})")
-    else:
-        print("  No transcripts yet")
-else:
-    print("  Table 'call_transcripts' does not exist")
+    # 4. Agent Learnings (Supabase)
+    print("\n💾 Agent Learnings (Central):")
+    try:
+        url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+        key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+        client = create_client(url, key)
+        
+        # Check 'agent_learnings' table
+        learnings = client.table("agent_learnings").select("*", count="exact").execute()
+        count = learnings.count
+        print(f"  - Total Learning Records: {count}")
+        
+        if count > 0:
+            latest = client.table("agent_learnings").select("created_at, category, insight").order("created_at", desc=True).limit(1).execute()
+            if latest.data:
+                l = latest.data[0]
+                print(f"  - Latest Insight ({l['created_at'][:16]}): [{l['category']}] {l['insight'][:50]}...")
+        else:
+            print("  - ⚠️ No learnings recorded yet (System might be too new or no errors triggered)")
 
-# Check brain memory
-print("\n🧠 BRAIN MEMORY:")
-cur.execute("SELECT key FROM system_memory")
-for r in cur.fetchall():
-    print(f"  - {r[0]}")
+    except Exception as e:
+        print(f"  - Status: ❌ Error connecting to Supabase: {e}")
 
-# Check agent_learnings
-print("\n📚 AGENT LEARNINGS:")
-if 'agent_learnings' in tables:
-    cur.execute("SELECT agent_name, topic, insight FROM agent_learnings ORDER BY created_at DESC LIMIT 5")
-    rows = cur.fetchall()
-    if rows:
-        for r in rows:
-            print(f"  [{r[0]}] {r[1]}: {str(r[2])[:50]}...")
-    else:
-        print("  No agent learnings recorded yet")
-else:
-    print("  Table 'agent_learnings' does not exist - create it to enable learning")
-
-# Check outbound events
-print("\n📤 OUTBOUND EVENTS:")
-if 'outbound_events' in tables:
-    cur.execute("SELECT event_type, COUNT(*) FROM outbound_events GROUP BY event_type")
-    rows = cur.fetchall()
-    if rows:
-        for r in rows:
-            print(f"  {r[0]}: {r[1]}")
-    else:
-        print("  No outbound events")
-else:
-    print("  Table 'outbound_events' does not exist")
-
-conn.close()
-print("\n" + "=" * 60)
+if __name__ == "__main__":
+    check_learning_status()

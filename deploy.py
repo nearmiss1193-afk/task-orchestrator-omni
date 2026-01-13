@@ -1471,7 +1471,7 @@ def turbo_dispatch_all():
         headers = {"Authorization": f"Bearer {ghl_token}", "Version": "2021-04-15", "Content-Type": "application/json"}
         
         subject = f"Question for {name.split()[0]}" if name else "Quick Question"
-        body = f"Hi {name.split()[0] if name else 'there'},\n\n{hook}\n\nI built a quick breakdown for your missed call ROI here: https://link.aiserviceco.com/audit\n\n- Spartan"
+        body = f"Hi {name.split()[0] if name else 'there'},\n\n{hook}\n\nI ran a full audit on your site and found some gaps.\n\nHere is your Deficiency Report: https://prod.analyzemy.business/#/share/report/6963979e609283d9e6a99e6f/\n\n- Spartan"
         
         html_body = body.replace('\n', '<br>')
         payload = {"type": "Email", "contactId": cid, "subject": subject, "html": f"<p>{html_body}</p>"}
