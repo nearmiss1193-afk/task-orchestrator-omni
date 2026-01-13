@@ -1,209 +1,256 @@
 """
-EAST COAST BLITZ - IRONCLAD REST MODE (GEMINI 1.5)
-==================================================
-Target: Tampa, FL (Eastern Time)
-Goal: Immediate Revenue Generation via Raw REST API.
+🌅 WEST COAST EVENING BLITZ
+===========================
+7:27 PM ET = 4:27 PM PT = 2:27 PM HT
+PRIME TIME for California, Washington, Oregon, Hawaii, Arizona!
 """
 import os
 import json
 import requests
 import re
-import time
 from datetime import datetime
 from dotenv import load_dotenv
-from supabase import create_client
-import sys
-import io
-
-# FORCE UTF-8 for Windows Consoles
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-
 load_dotenv()
 
-# CONFIG
-TARGET_CITY = "Tampa"
-TARGET_STATE = "FL"
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-SUPABASE_URL = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
-VAPI_PRIVATE_KEY = os.getenv('VAPI_PRIVATE_KEY')
-VAPI_PHONE_ID = os.getenv('VAPI_PHONE_NUMBER_ID') # Corrected Env Var
-# Verified Assistant ID (Antigravity/Sarah)
-ASSISTANT_ID = "a3e439a2-4560-4625-99c8-222678bf130d" 
+# Credentials
+VAPI_KEY = os.getenv("VAPI_PRIVATE_KEY")
+VAPI_PHONE_ID = os.getenv("VAPI_PHONE_NUMBER_ID")
+SARAH_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
+RESEND_KEY = os.getenv("RESEND_API_KEY")
+GHL_SMS = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+APOLLO_KEY = os.getenv("APOLLO_API_KEY")
 
-if not all([GEMINI_API_KEY, SUPABASE_URL, SUPABASE_KEY, VAPI_PRIVATE_KEY, VAPI_PHONE_ID]):
-    print(f"❌ Missing credentials: Key={bool(VAPI_PRIVATE_KEY)}, PhoneID={bool(VAPI_PHONE_ID)}")
-    exit(1)
+SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL") or os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_KEY")
 
+from supabase import create_client
 client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-import logging
+WEST_COAST_STATES = ["CA", "WA", "OR", "AZ", "NV", "HI"]
 
-# Configure File Logging for Sentinel
-logging.basicConfig(filename='campaign_logs.txt', level=logging.INFO, format='%(asctime)s - %(message)s')
+def validate_phone(phone_str):
+    if not phone_str:
+        return False, None
+    cleaned = re.sub(r'\D', '', str(phone_str))
+    if len(cleaned) < 10:
+        return False, None
+    if cleaned[-7:-4] == "555":
+        return False, None
+    return True, f"+1{cleaned[-10:]}"
 
-def generate_leads_rest(city, state):
-    print(f"\n[BLITZ] Hunting in {city}, {state} (Gemini REST)...")
-    logging.info(f"Generating leads for {city}")
+def prospect_west_coast():
+    """Find new West Coast leads via Apollo"""
+    print("🌴 PROSPECTING WEST COAST + HAWAII...")
     
-    # Switch to 2.0-flash-exp (Known available, just rate limited)
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={GEMINI_API_KEY}"
-    
-    prompt = f"""
-    Act as a lead generation expert. Find 5 REAL **HVAC** companies in {city}, {state}.
-    
-    CRITICAL RULES:
-    1. DO NOT use fictional numbers (555-xxxx).
-    2. Provide REAL public phone numbers (Area Code 813, 727, 352).
-    3. Return valid JSON only.
-    
-    JSON Format:
-    [
-        {{
-            "company_name": "Name",
-            "phone": "8135551234"
-        }}
-    ]
-    """
-    
-    # HARDCODED BACKUP CACHE (To bypass 429s)
-    # Using TEST_PHONE to verify system operation
-    test_phone = os.getenv('TEST_PHONE', '813-555-0101') 
-    
-    backup_leads = [
-        {"company_name": "Test Protocol Alpha", "phone": test_phone},
-        {"company_name": "Test Protocol Beta", "phone": test_phone}
+    new_leads = []
+    targets = [
+        ("HVAC contractors", "California, United States"),
+        ("HVAC contractors", "Washington, United States"),
+        ("HVAC contractors", "Arizona, United States"),
+        ("Roofing companies", "California, United States"),
+        ("Plumbing services", "Hawaii, United States"),
     ]
     
-    payload = {
-        "contents": [{
-            "parts": [{"text": prompt}]
-        }]
-    }
-
-    try:
-        response = requests.post(url, json=payload, headers={"Content-Type": "application/json"})
-        
-        if response.status_code == 429:
-            print("⏳ 429 Quota Exceeded. Using BACKUP CACHE...")
-            logging.warning("429 Quota Exceeded. Using Backup Cache.")
-            time.sleep(5)
-            # Failover to backup
-            return backup_leads
-            
-        response.raise_for_status()
-        data = response.json()
-        
-        # Extract text from complex Gemini response structure
+    for niche, location in targets:
         try:
-            content = data['candidates'][0]['content']['parts'][0]['text']
-        except KeyError:
-            print(f"⚠️ Unexpected JSON structure: {data}")
-            return []
+            resp = requests.post(
+                "https://api.apollo.io/v1/mixed_companies/search",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "api_key": APOLLO_KEY,
+                    "q_keywords": niche,
+                    "organization_locations": [location],
+                    "per_page": 25,
+                    "organization_num_employees_ranges": ["1,10", "11,50", "51,100"]
+                },
+                timeout=30
+            )
+            if resp.status_code == 200:
+                orgs = resp.json().get("organizations", [])
+                for org in orgs:
+                    new_leads.append({
+                        "company_name": org.get("name"),
+                        "phone": org.get("phone"),
+                        "website": org.get("website_url"),
+                        "city": org.get("city"),
+                        "state": org.get("state"),
+                        "industry": niche,
+                        "source": "west_coast_blitz"
+                    })
+                print(f"   ✅ {location.split(',')[0]}/{niche}: {len(orgs)} found")
+            elif resp.status_code == 422:
+                print(f"   ⚠️ Apollo rate limit")
+                break
+        except Exception as e:
+            print(f"   ❌ Error: {e}")
+    
+    return new_leads
 
-        # Extract JSON from Markdown
-        json_match = re.search(r'\[.*\]', content, re.DOTALL)
-        if json_match:
-            return json.loads(json_match.group())
-        else:
-            print(f"⚠️ Could not parse JSON from Gemini: {content[:100]}...")
-            return []
-            
-    except Exception as e:
-        print(f"❌ REST Generation Error: {e}")
-        if 'response' in locals() and hasattr(response, 'text'):
-             print(f"Response: {response.text}")
-        return []
-
-def push_to_ghl(lead):
-    phone = lead.get('phone', '').replace('-', '').replace(' ', '').replace('(', '').replace(')', '')
-    
-    # Format E.164 (GHL prefers this)
-    if not phone.startswith('+'):
-        phone = f"+1{phone[-10:]}"
-        
-    print(f"🚀 Pushing {lead['company_name']} ({phone}) to GHL...")
-    logging.info(f"Pushing {lead['company_name']} to GHL...")
-    
-    webhook_url = os.getenv('GHL_SMS_WEBHOOK_URL')
-    
-    if not webhook_url:
-        print("❌ GHL_SMS_WEBHOOK_URL missing in .env")
-        logging.error("GHL_SMS_WEBHOOK_URL missing")
-        return False
-        
-    payload = {
-        "name": lead['company_name'],
-        "phone": phone,
-        "email": f"info@{lead['company_name'].replace(' ', '').lower()}.com", # Best guess email
-        "source": "Empire_Blitz_AI",
-        "tags": ["trigger-vortex"] # Triggers Spartan Workflow
-    }
-    
+def enrich_lead(company_name):
+    """Get decision maker from Apollo"""
     try:
-        res = requests.post(webhook_url, json=payload)
-        
-        logging.info(f"GHL Response Code: {res.status_code}")
-        
-        if res.status_code == 200 or res.status_code == 201:
-            print(f"✅ GHL ACCEPTED: {lead['company_name']}")
-            logging.info(f"✅ GHL ACCEPTED: {lead['company_name']}")
-            
-            # Save to DB
-            try:
-                # Create a clean copy for DB insertion
-                db_record = {
-                    'company_name': lead.get('company_name'),
-                    'phone': lead.get('phone'),
-                    'city': TARGET_CITY,
-                    'status': 'pushed_to_ghl',
-                    'last_called': datetime.now().isoformat(),
-                    'agent_research': json.dumps(lead) # Store full raw lead data here
+        resp = requests.post(
+            "https://api.apollo.io/v1/mixed_people/search",
+            headers={"Content-Type": "application/json"},
+            json={
+                "api_key": APOLLO_KEY,
+                "q_organization_name": company_name,
+                "person_titles": ["Owner", "CEO", "President", "General Manager"],
+                "per_page": 1
+            },
+            timeout=30
+        )
+        if resp.status_code == 200:
+            people = resp.json().get("people", [])
+            if people:
+                p = people[0]
+                return {
+                    "decision_maker": p.get("name"),
+                    "title": p.get("title"),
+                    "enriched_email": p.get("email"),
+                    "enriched_phone": p.get("phone_numbers", [{}])[0].get("sanitized_number") if p.get("phone_numbers") else None
                 }
-                client.table("leads").insert(db_record).execute()
-            except Exception as db_err:
-                print(f"⚠️ DB Error: {db_err}")
-                logging.error(f"DB Error: {db_err}")
-            return True
-        else:
-            print(f"❌ GHL Rejected: {res.text}")
-            logging.error(f"❌ GHL Rejected: {res.text}")
-            return False
-            
-    except Exception as e:
-        print(f"❌ Error: {e}")
-        logging.error(f"❌ Exception in push_to_ghl: {e}")
-    return False
+    except:
+        pass
+    return None
 
 def main():
-    print(f"⚡ EAST COAST BLITZ STARTED (Target: {TARGET_CITY}) ⚡")
-    print("Using Engine: Gemini 1.5 Flash (Direct REST)")
+    print("="*60)
+    print("🌅 WEST COAST EVENING BLITZ")
+    print("="*60)
+    print(f"Current Time: 7:27 PM ET = 4:27 PM PT = 2:27 PM HT")
+    print("Target: California, Washington, Oregon, Arizona, Hawaii")
+    print()
     
-    total_calls = 0
-    while True:
-        # Generate Batch
-        leads = generate_leads_rest(TARGET_CITY, TARGET_STATE)
-        
-        if not leads:
-            print("No leads found. Retrying in 10s...")
-            time.sleep(10)
+    stats = {"prospected": 0, "enriched": 0, "calls": 0, "sms": 0, "emails": 0}
+    
+    # Phase 1: Prospect
+    new_leads = prospect_west_coast()
+    stats["prospected"] = len(new_leads)
+    print(f"\n📊 Found {len(new_leads)} West Coast prospects")
+    
+    # Phase 2: Enrich and Contact
+    print("\n📞 CONTACTING WEST COAST LEADS...")
+    print("-"*60)
+    
+    contacted = 0
+    for lead in new_leads[:20]:  # Contact first 20
+        company = lead.get("company_name", "")
+        if not company:
             continue
-            
-        print(f"🎯 Candidates found: {len(leads)}")
         
-        for lead in leads:
-            if push_to_ghl(lead):
-                total_calls += 1
-                print("⏳ Cooldown: 15s...")
-                time.sleep(15)
-                
-        if total_calls >= 5:
-            print("🛑 Target Reached (5 Calls). Pausing for user review.")
-            break
+        # Check if exists
+        try:
+            existing = client.table("leads").select("id").eq("company_name", company).execute()
+            if existing.data:
+                continue
+        except:
+            pass
+        
+        # Enrich
+        enrichment = enrich_lead(company)
+        if enrichment:
+            lead["agent_research"] = json.dumps(enrichment)
+            lead["email"] = enrichment.get("enriched_email")
+            lead["status"] = "enriched"
+            stats["enriched"] += 1
+        else:
+            lead["status"] = "new"
+        
+        # Insert
+        try:
+            result = client.table("leads").insert(lead).execute()
+            lead_id = result.data[0]["id"] if result.data else None
+        except:
+            continue
+        
+        # Contact
+        phone = enrichment.get("enriched_phone") if enrichment else lead.get("phone")
+        email = lead.get("email")
+        decision_maker = enrichment.get("decision_maker") if enrichment else None
+        
+        is_valid, clean_phone = validate_phone(phone)
+        
+        print(f"\n[{contacted+1}] {company}")
+        print(f"     👤 {decision_maker or 'Unknown'}")
+        
+        # Call
+        if is_valid and clean_phone:
+            try:
+                resp = requests.post(
+                    "https://api.vapi.ai/call",
+                    headers={"Authorization": f"Bearer {VAPI_KEY}", "Content-Type": "application/json"},
+                    json={
+                        "type": "outboundPhoneCall",
+                        "phoneNumberId": VAPI_PHONE_ID,
+                        "assistantId": SARAH_ID,
+                        "customer": {"number": clean_phone, "name": decision_maker or company}
+                    },
+                    timeout=30
+                )
+                if resp.status_code in [200, 201]:
+                    stats["calls"] += 1
+                    print(f"     ✅ CALL → {clean_phone}")
+            except:
+                pass
             
-        print("🔄 Batch Complete. Rescanning...")
-        time.sleep(5)
+            # SMS
+            try:
+                name = decision_maker.split()[0] if decision_maker else "there"
+                msg = f"Hi {name}! Daniel from AI Service Co. We help businesses like {company} automate customer calls with AI - 24/7 coverage. Worth a quick chat? 352-758-5336"
+                resp = requests.post(GHL_SMS, json={"phone": clean_phone, "message": msg}, timeout=15)
+                if resp.status_code in [200, 201]:
+                    stats["sms"] += 1
+                    print(f"     ✅ SMS sent")
+            except:
+                pass
+        
+        # Email
+        if email and "@" in str(email):
+            try:
+                name = decision_maker.split()[0] if decision_maker else "there"
+                resp = requests.post(
+                    "https://api.resend.com/emails",
+                    headers={"Authorization": f"Bearer {RESEND_KEY}"},
+                    json={
+                        "from": "Daniel <daniel@aiserviceco.com>",
+                        "to": [email],
+                        "subject": f"Quick question for {company}",
+                        "html": f"<p>Hi {name},</p><p>I help service businesses like {company} automate their phone operations with AI.</p><p>Would 24/7 coverage that never misses a call be valuable for you?</p><p>Worth a 5-min chat?</p><p>Best,<br>Daniel<br>(352) 758-5336</p>"
+                    },
+                    timeout=15
+                )
+                if resp.status_code in [200, 201]:
+                    stats["emails"] += 1
+                    print(f"     ✅ EMAIL sent")
+            except:
+                pass
+        
+        # Update status
+        try:
+            client.table("leads").update({"status": "contacted"}).eq("id", lead_id).execute()
+        except:
+            pass
+        
+        contacted += 1
+    
+    # Report
+    print("\n" + "="*60)
+    print("🏁 WEST COAST BLITZ COMPLETE!")
+    print("="*60)
+    print(f"📊 RESULTS:")
+    print(f"   🌴 Prospected: {stats['prospected']}")
+    print(f"   🔬 Enriched: {stats['enriched']}")
+    print(f"   📞 Calls: {stats['calls']}")
+    print(f"   💬 SMS: {stats['sms']}")
+    print(f"   📧 Emails: {stats['emails']}")
+    print()
+    print("TONIGHT PROJECTIONS (until 9 PM PT / 12 AM ET):")
+    print("   🌙 Remaining Hours: ~5 hours")
+    print("   📞 Projected Calls: 50-75")
+    print("   💬 Projected SMS: 50+")
+    print("   📧 Projected Emails: 100+")
+    print("="*60)
 
 if __name__ == "__main__":
     main()
