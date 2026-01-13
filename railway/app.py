@@ -13,8 +13,10 @@ import schedule
 from datetime import datetime
 from flask import Flask, request, jsonify
 from threading import Thread
+from brain import EmpireBrain
 
 app = Flask(__name__)
+brain = EmpireBrain()
 
 # ==== CONFIG ====
 APOLLO_KEY = os.environ.get("APOLLO_API_KEY")
@@ -124,10 +126,24 @@ def prospect_niche(niche):
     return 0
 
 def run_prospector():
-    """Run prospector on random niches"""
-    print(f"\n[{datetime.now().strftime('%H:%M')}] PROSPECTOR RUNNING")
-    niche = random.choice(NICHES)
-    prospect_niche(niche)
+    """Run prospector based on Learned Strategy"""
+    print(f"\n[{datetime.now().strftime('%H:%M')}] PROSPECTOR RUNNING (AI CONTROLLED)")
+    
+    # Brain decides which niche to target
+    best_niche_key = brain.get_strategy()
+    niche_config = brain.get_assets(best_niche_key)
+    
+    # Map back to API format
+    target_niche = {
+        "keywords": niche_config["keywords"],
+        "location": niche_config["location"] 
+    }
+    
+    saved = prospect_niche(target_niche)
+    
+    # Log learning
+    if saved > 0:
+        brain.record_outcome("prospecting_success", best_niche_key, {"count": saved})
 
 # ==== OUTREACH ====
 def send_email(email, company, name):
