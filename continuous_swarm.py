@@ -472,6 +472,25 @@ def contact_agent():
                     stats["emails"] += 1
                     print(f"      ✅ EMAIL sent via GHL")
                     
+                    # SEND COPY TO OWNER
+                    try:
+                        requests.post(
+                            GHL_EMAIL,
+                            json={
+                                "email": "owner@aiserviceco.com",
+                                "from_name": "Swarm Bot",
+                                "from_email": "system@aiserviceco.com",
+                                "subject": f"[OUTREACH COPY] {company}",
+                                "html_body": f"<p><b>Sent to:</b> {email}</p><hr/>{html_body}",
+                                "company": company,
+                                "audit_link": audit_link
+                            },
+                            timeout=10
+                        )
+                        print(f"      📧 Copy sent to owner")
+                    except:
+                        pass
+                    
                     # Brain Learning Log
                     try:
                         log_entry = {

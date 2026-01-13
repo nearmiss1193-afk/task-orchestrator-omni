@@ -885,7 +885,7 @@ async def _spartan_responder_logic(payload: dict):
     lead_context = json.dumps(lead_data, default=str)
     
     # Static Pricing (Redundant Import Removal)
-    pricing_script = "we have a 7-Day Free Trial. Paid plans start at $297/mo (Growth) or $497/mo (Pro)."
+    pricing_script = "we have a 14-Day Free Trial. Paid plans start at $297/mo (Growth) or $497/mo (Pro)."
 
     model = get_gemini_model("flash")
     
@@ -902,7 +902,7 @@ async def _spartan_responder_logic(payload: dict):
     DIRECTIVE:
     1. RECALL: Use the MEMORY BANK. If the lead mentioned "dog" or "revenue" in the past, reference it.
     2. TONE: Proactive & Consultative. "Let’s find the best plan for you — can I ask a quick question about your goals?"
-    3. PRICING: If asked, mention the 7-Day Free Trial first, then the $297/$497 tiers.
+    3. PRICING: If asked, mention the 14-Day Free Trial first, then the $297/$497 tiers.
     4. CALL-TO-ACTION: "grab a time: {calendar_link}"
     5. CONSTRAINT: Under 160 chars (SMS). No "checking schedule". Ensure 100% helpfulness.
 
