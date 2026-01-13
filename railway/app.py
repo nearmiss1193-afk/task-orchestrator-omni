@@ -81,10 +81,12 @@ def prospect_niche(niche):
     
     try:
         r = requests.post(
-            "https://api.apollo.io/v1/mixed_companies/search",
-            headers={"Content-Type": "application/json"},
+            "https://api.apollo.io/v1/organizations/search",
+            headers={
+                "Content-Type": "application/json",
+                "X-Api-Key": APOLLO_KEY
+            },
             json={
-                "api_key": APOLLO_KEY,
                 "q_keywords": niche["keywords"],
                 "organization_locations": [niche["location"]],
                 "organization_num_employees_ranges": ["1,50"],
