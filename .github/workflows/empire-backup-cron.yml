@@ -1,0 +1,136 @@
+name: Empire Backup Cron
+
+on:
+  schedule:
+    # Every 2 hours for prospector
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: 'Force run all jobs regardless of Modal health'
+        required: false
+        default: 'false'
+
+env:
+  MODAL_HEALTH_URL: https://nearmiss1193--empire-sovereign-v2-health.modal.run
+
+jobs:
+  check-modal-health:
+    runs-on: ubuntu-latest
+    outputs:
+      modal_healthy: ${{ steps.health.outputs.healthy }}
+    steps:
+      - name: Check Modal Health
+        id: health
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" $MODAL_HEALTH_URL --max-time 10 || echo "000")
+          if [ "$response" == "200" ]; then
+            echo "healthy=true" >> $GITHUB_OUTPUT
+            echo "✅ Modal is healthy"
+          else
+            echo "healthy=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Modal returned $response"
+          fi
+
+  backup-prospector:
+    needs: check-modal-health
+    if: ${{ needs.check-modal-health.outputs.modal_healthy == 'false' || github.event.inputs.force_run == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests python-dotenv supabase google-generativeai
+
+      - name: Run Prospector Backup
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          APOLLO_API_KEY: ${{ secrets.APOLLO_API_KEY }}
+        run: |
+          echo "🔍 Running backup prospector..."
+          python -c "
+          import os
+          import json
+          import requests
+          import re
+          from datetime import datetime
+          from supabase import create_client
+          import google.generativeai as genai
+
+          print('[BACKUP PROSPECTOR] Starting...')
+          
+          supa_url = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
+          supa_key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+          gemini_key = os.getenv('GEMINI_API_KEY')
+          
+          if not all([supa_url, supa_key, gemini_key]):
+              print('Missing credentials')
+              exit(0)
+          
+          client = create_client(supa_url, supa_key)
+          genai.configure(api_key=gemini_key)
+          model = genai.GenerativeModel('gemini-2.0-flash-exp')
+          
+          # Target city based on hour
+          cities = ['Tampa', 'Orlando', 'Miami', 'Jacksonville', 'Sarasota']
+          target_city = cities[datetime.now().hour % len(cities)]
+          
+          prompt = f'''
+          Find 3 REAL HVAC companies in {target_city}, FL.
+          Return JSON array with: company_name, phone (10 digit), city, industry
+          '''
+          
+          try:
+              response = model.generate_content(prompt)
+              text = response.text
+              json_match = re.search(r'\[.*\]', text, re.DOTALL)
+              if json_match:
+                  leads = json.loads(json_match.group())
+                  added = 0
+                  for lead in leads:
+                      phone = str(lead.get('phone', '')).replace('-', '')
+                      if '555' in phone or len(phone) < 10:
+                          continue
+                      try:
+                          dup = client.table('leads').select('id').eq('company_name', lead['company_name']).execute()
+                          if not dup.data:
+                              lead['status'] = 'new'
+                              lead['source'] = 'github_backup'
+                              client.table('leads').insert(lead).execute()
+                              added += 1
+                      except:
+                          pass
+                  print(f'[BACKUP PROSPECTOR] Added {added} leads from {target_city}')
+              else:
+                  print('[BACKUP PROSPECTOR] No JSON in response')
+          except Exception as e:
+              print(f'[BACKUP PROSPECTOR] Error: {e}')
+          "
+
+  notify-backup-active:
+    needs: [check-modal-health, backup-prospector]
+    if: ${{ always() && needs.check-modal-health.outputs.modal_healthy == 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send backup notification
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          curl -X POST https://api.resend.com/emails \
+            -H "Authorization: Bearer $RESEND_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "from": "Empire AI <alerts@aiserviceco.com>",
+              "to": ["nearmiss1193@gmail.com"],
+              "subject": "🛡️ GitHub Backup Cron Activated",
+              "html": "<h2>Modal was down - GitHub Actions ran backup jobs</h2><p>Time: '"$(date)"'</p>"
+            }' || true
