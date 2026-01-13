@@ -1,184 +1,108 @@
 """
-TURBO OUTREACH - Direct calls to enriched leads
-Bypasses Modal scheduling to get calls moving NOW
+TURBO OUTREACH - Direct webhook triggers
+Sends emails and SMS immediately via GHL webhooks
 """
-
-import os
-import sys
-import json
 import requests
-import re
+import time
 from datetime import datetime
 
-# Load environment
-from dotenv import load_dotenv
-load_dotenv()
+# GHL Webhooks
+GHL_EMAIL = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/5148d523-9899-446a-9410-144465ab96d8"
+GHL_SMS = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
 
-# Get credentials
-VAPI_KEY = os.getenv("VAPI_PRIVATE_KEY")
-VAPI_PHONE_ID = os.getenv("VAPI_PHONE_NUMBER_ID")
-SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
+# Test prospects - these will receive outreach
+PROSPECTS = [
+    {
+        "business": "ABC Air Conditioning & Heating",
+        "email": "owner@aiserviceco.com",  # Send to owner for verification
+        "phone": "+13527585336",
+        "city": "Orlando",
+        "audit_link": "https://prod.analyzemy.business/#/share/report/test-abc-hvac"
+    },
+]
 
-SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL") or os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_KEY")
-
-GHL_SMS_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
-
-def validate_phone(phone_str):
-    """Validate phone - reject fakes"""
-    if not phone_str:
-        return False, None, "missing"
-    cleaned = re.sub(r'\D', '', str(phone_str))
-    if len(cleaned) < 10:
-        return False, None, "too_short"
-    exchange = cleaned[-7:-4] if len(cleaned) >= 7 else ""
-    if exchange == "555":
-        return False, None, "fake_555"
-    return True, cleaned[-10:], None
-
-def get_enriched_leads():
-    """Fetch leads with valid enriched phones"""
-    from supabase import create_client
-    client = create_client(SUPABASE_URL, SUPABASE_KEY)
+def send_email(prospect):
+    """Send email via GHL webhook"""
+    html_body = f"""
+    <p>Hey there,</p>
     
-    # Get leads that have NOT been called recently
-    result = client.table("leads").select("*")\
-        .in_("status", ["new", "processing_email", "enriched"])\
-        .limit(10)\
-        .execute()
+    <p>I just ran a quick audit on <b>{prospect['business']}</b> and found some missed call patterns that are costing you revenue.</p>
     
-    callable_leads = []
-    for lead in result.data:
-        meta = lead.get("agent_research", {})
-        if isinstance(meta, str):
-            try:
-                meta = json.loads(meta)
-            except:
-                meta = {}
-        if not meta or not isinstance(meta, dict):
-            meta = {}
-            
-        # Priority: enriched_phone > phone field > research phone
-        for phone in [meta.get("enriched_phone"), lead.get("phone"), meta.get("phone")]:
-            is_valid, cleaned, _ = validate_phone(phone)
-            if is_valid:
-                callable_leads.append({
-                    "id": lead["id"],
-                    "company": lead.get("company_name", "Prospect"),
-                    "phone": f"+1{cleaned}",
-                    "email": meta.get("enriched_email") or meta.get("email") or lead.get("email")
-                })
-                break
+    <p><b>Your Free Deficiency Report:</b><br>
+    <a href="{prospect['audit_link']}">{prospect['audit_link']}</a></p>
     
-    return callable_leads
-
-def make_call(phone, company):
-    """Make outbound call via Vapi"""
-    print(f"📞 Calling {company} at {phone}...")
+    <p>The report shows exactly where calls are falling through. Most businesses in {prospect['city']} are losing 20-30 calls per week.</p>
     
-    resp = requests.post(
-        "https://api.vapi.ai/call",
-        headers={
-            "Authorization": f"Bearer {VAPI_KEY}",
-            "Content-Type": "application/json"
-        },
-        json={
-            "type": "outboundPhoneCall",
-            "phoneNumberId": VAPI_PHONE_ID,
-            "assistantId": SARAH_ASSISTANT_ID,
-            "customer": {
-                "number": phone,
-                "name": company
-            }
-        },
-        timeout=30
-    )
+    <p>We can fix this with AI that answers 24/7 and books jobs while you sleep. <b>14-Day Free Trial</b> - no credit card.</p>
     
-    if resp.status_code in [200, 201]:
-        data = resp.json()
-        print(f"   ✅ Call initiated! ID: {data.get('id', 'unknown')}")
-        return True, data
-    else:
-        print(f"   ❌ Call failed: {resp.status_code} - {resp.text[:200]}")
-        return False, resp.text
-
-def send_sms(phone, company):
-    """Send SMS via GHL webhook"""
-    print(f"💬 Sending SMS to {company} at {phone}...")
+    <p>Best,<br>
+    Daniel<br>
+    AI Service Co<br>
+    (352) 758-5336</p>
+    """
     
-    message = f"Hi! This is Daniel from AI Service Co. I help businesses like {company} automate phone calls with AI. Would you be open to a quick chat? Call/text: 352-758-5336"
+    payload = {
+        "email": prospect['email'],
+        "from_name": "Daniel",
+        "from_email": "daniel@aiserviceco.com",
+        "subject": f"Missed calls at {prospect['business']}?",
+        "html_body": html_body,
+        "company": prospect['business'],
+        "audit_link": prospect['audit_link']
+    }
     
-    resp = requests.post(
-        GHL_SMS_WEBHOOK,
-        headers={"Content-Type": "application/json"},
-        json={"phone": phone, "message": message},
-        timeout=15
-    )
-    
-    if resp.status_code in [200, 201]:
-        print(f"   ✅ SMS sent!")
+    try:
+        resp = requests.post(GHL_EMAIL, json=payload, timeout=15)
+        print(f"✅ EMAIL sent to {prospect['email']} - Status: {resp.status_code}")
         return True
-    else:
-        print(f"   ⚠️ SMS webhook returned: {resp.status_code}")
+    except Exception as e:
+        print(f"❌ EMAIL failed: {e}")
+        return False
+
+def send_sms(prospect):
+    """Send SMS via GHL webhook"""
+    message = f"Hey! I just ran a free audit on {prospect['business']} - found some missed calls costing you money. Check it out: {prospect['audit_link']} Reply STOP to opt out. - Daniel, AI Service Co"
+    
+    payload = {
+        "phone": prospect['phone'],
+        "message": message,
+        "company": prospect['business']
+    }
+    
+    try:
+        resp = requests.post(GHL_SMS, json=payload, timeout=15)
+        print(f"✅ SMS sent to {prospect['phone']} - Status: {resp.status_code}")
+        return True
+    except Exception as e:
+        print(f"❌ SMS failed: {e}")
         return False
 
 def main():
     print("="*60)
-    print("🚀 TURBO OUTREACH - Getting calls moving NOW!")
+    print("🚀 TURBO OUTREACH - DIRECT WEBHOOK MODE")
+    print(f"   Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("="*60)
-    print(f"Time: {datetime.now().isoformat()}")
-    print()
     
-    # Check credentials
-    if not VAPI_KEY:
-        print("❌ Missing VAPI_PRIVATE_KEY")
-        sys.exit(1)
-    if not VAPI_PHONE_ID:
-        print("❌ Missing VAPI_PHONE_NUMBER_ID")
-        sys.exit(1)
-    if not SUPABASE_URL:
-        print("❌ Missing SUPABASE_URL")
-        sys.exit(1)
+    stats = {"emails": 0, "sms": 0}
+    
+    for prospect in PROSPECTS:
+        print(f"\n📧 Processing: {prospect['business']}")
         
-    print(f"✅ Vapi Key: {VAPI_KEY[:10]}...")
-    print(f"✅ Vapi Phone ID: {VAPI_PHONE_ID}")
-    print(f"✅ Sarah Assistant: {SARAH_ASSISTANT_ID}")
-    print()
-    
-    # Get enriched leads
-    print("📋 Fetching enriched leads from Supabase...")
-    leads = get_enriched_leads()
-    print(f"   Found {len(leads)} callable leads")
-    print()
-    
-    if not leads:
-        print("⚠️ No leads with valid phone numbers found!")
-        print("   Run the prospector or lead_quality_guardian first.")
-        return
-    
-    # Process up to 5 leads
-    results = {"calls": 0, "sms": 0, "errors": 0}
-    
-    for i, lead in enumerate(leads[:5]):
-        print(f"\n--- Lead {i+1}: {lead['company']} ---")
-        print(f"   Phone: {lead['phone']}")
-        print(f"   Email: {lead.get('email', 'N/A')}")
+        if send_email(prospect):
+            stats["emails"] += 1
         
-        # Send SMS first
-        if send_sms(lead["phone"], lead["company"]):
-            results["sms"] += 1
+        time.sleep(2)
         
-        # Make call
-        success, _ = make_call(lead["phone"], lead["company"])
-        if success:
-            results["calls"] += 1
-        else:
-            results["errors"] += 1
+        if send_sms(prospect):
+            stats["sms"] += 1
+        
+        time.sleep(2)
     
-    print()
+    print("\n" + "="*60)
+    print(f"RESULTS: Emails: {stats['emails']}, SMS: {stats['sms']}")
     print("="*60)
-    print(f"📊 RESULTS: Calls: {results['calls']}, SMS: {results['sms']}, Errors: {results['errors']}")
-    print("="*60)
+    
+    return stats
 
 if __name__ == "__main__":
     main()

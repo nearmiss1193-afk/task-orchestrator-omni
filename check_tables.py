@@ -1,43 +1,27 @@
-"""Check ALL tables in Supabase to find where leads are going."""
+"""Check what tables exist and their structure"""
 import os
 from dotenv import load_dotenv
-from supabase import create_client
-import json
-
 load_dotenv()
+from supabase import create_client
 
-url = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
-key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+url = os.getenv('NEXT_PUBLIC_SUPABASE_URL') or os.getenv('SUPABASE_URL')
+key = os.getenv('SUPABASE_SERVICE_ROLE_KEY') or os.getenv('SUPABASE_SERVICE_KEY')
 
-client = create_client(url, key)
+sb = create_client(url, key)
 
-print("🔍 CHECKING SUPABASE TABLES:")
-print("=" * 60)
+# Try different table names that might exist
+tables_to_check = ['leads', 'contacts_master', 'contacts', 'prospects', 'brain_logs']
 
-# Check leads table
-print("\n📋 LEADS TABLE (last 5):")
-try:
-    result = client.table("leads").select("id,company_name,status,phone,last_called").order("id", desc=True).limit(5).execute()
-    for lead in result.data:
-        print(f"  {lead}")
-except Exception as e:
-    print(f"  Error: {e}")
-
-# Check system_logs table  
-print("\n📋 SYSTEM_LOGS TABLE (last 5):")
-try:
-    result = client.table("system_logs").select("*").order("id", desc=True).limit(5).execute()
-    for log in result.data:
-        print(f"  {log.get('level')} - {log.get('message', '')[:50]}")
-except Exception as e:
-    print(f"  Error: {e}")
-
-# Check if there's a campaigns table
-print("\n📋 CAMPAIGNS TABLE:")
-try:
-    result = client.table("campaigns").select("*").limit(3).execute()
-    print(f"  Found {len(result.data)} campaigns")
-    for c in result.data:
-        print(f"  {c}")
-except Exception as e:
-    print(f"  Not found or error: {e}")
+for table in tables_to_check:
+    try:
+        result = sb.table(table).select('*').limit(1).execute()
+        count = len(result.data) if result.data else 0
+        print(f"✅ {table}: EXISTS ({count} sample rows)")
+        if result.data:
+            print(f"   Columns: {list(result.data[0].keys())}")
+    except Exception as e:
+        err = str(e)
+        if 'does not exist' in err.lower() or '42P01' in err:
+            print(f"❌ {table}: NOT FOUND")
+        else:
+            print(f"⚠️ {table}: ERROR - {err[:80]}")

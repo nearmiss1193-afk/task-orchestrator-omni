@@ -1,131 +1,119 @@
-
+"""
+MODAL LIGHT - Split deployment for reliability
+Just the core operations: Prospecting, Outreach, Responder
+"""
 import modal
 import os
 
-# Define a lightweight image without Playwright/Chromium
-# This ensures fast build and fewer failure points for simple HTML serving.
-image = (
-    modal.Image.debian_slim(python_version="3.11")
-    .pip_install("fastapi", "python-dotenv", "requests")
-    # Surgical Mounts to avoid uploading 30,000+ files from polluted directory
-    .add_local_file("modules/__init__.py", remote_path="/root/modules/__init__.py")
-    .add_local_file("modules/web/__init__.py", remote_path="/root/modules/web/__init__.py")
-    .add_local_file("modules/web/hvac_landing.py", remote_path="/root/modules/web/hvac_landing.py")
-    .add_local_file("modules/web/plumber_landing.py", remote_path="/root/modules/web/plumber_landing.py")
-    .add_local_file("modules/web/roofer_landing.py", remote_path="/root/modules/web/roofer_landing.py")
-    .add_local_file("modules/web/electrician_landing.py", remote_path="/root/modules/web/electrician_landing.py")
-    .add_local_file("modules/web/solar_landing.py", remote_path="/root/modules/web/solar_landing.py")
-    .add_local_file("modules/web/landscaping_landing.py", remote_path="/root/modules/web/landscaping_landing.py")
-    .add_local_file("modules/web/pest_landing.py", remote_path="/root/modules/web/pest_landing.py")
-    .add_local_file("modules/web/cleaning_landing.py", remote_path="/root/modules/web/cleaning_landing.py")
-    .add_local_file("modules/web/restoration_landing.py", remote_path="/root/modules/web/restoration_landing.py")
-    .add_local_file("modules/web/autodetail_landing.py", remote_path="/root/modules/web/autodetail_landing.py")
-    .add_local_file("sovereign_config.json", remote_path="/root/sovereign_config.json")
-
+# Lightweight image
+image = modal.Image.debian_slim(python_version="3.11").pip_install(
+    "requests", "supabase", "python-dotenv"
 )
 
-app = modal.App("ghl-omni-light")
+app = modal.App("empire-core")
 
-# Mount Secrets (Safe Defaults)
-import dotenv
-dotenv.load_dotenv()
-dotenv.load_dotenv(".env.local")
+# Secrets
+VAULT = modal.Secret.from_name("empire-vault")
 
-def safe_env(key):
-    return os.environ.get(key) or ""
+# ============ CORE FUNCTIONS ============
 
-VAULT = modal.Secret.from_dict({
-    "SUPABASE_URL": safe_env("NEXT_PUBLIC_SUPABASE_URL"),
-    "SUPABASE_SERVICE_ROLE_KEY": safe_env("SUPABASE_SERVICE_ROLE_KEY"),
-})
+@app.function(image=image, secrets=[VAULT], schedule=modal.Period(hours=2))
+def prospect_loop():
+    """Find new leads every 2 hours"""
+    import requests
+    import os
+    
+    print("[MODAL] Starting prospect loop...")
+    
+    apollo_key = os.environ.get("APOLLO_API_KEY")
+    if not apollo_key:
+        print("[MODAL] Missing APOLLO_API_KEY")
+        return {"status": "error", "reason": "no_key"}
+    
+    niches = ["HVAC contractors Florida", "Plumbing services Texas", "Roofing companies Georgia"]
+    leads_found = 0
+    
+    for niche in niches:
+        try:
+            resp = requests.post(
+                "https://api.apollo.io/v1/mixed_companies/search",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "api_key": apollo_key,
+                    "q_keywords": niche,
+                    "per_page": 10,
+                    "organization_num_employees_ranges": ["1,10", "11,50"]
+                },
+                timeout=30
+            )
+            if resp.ok:
+                data = resp.json()
+                companies = data.get("organizations", [])
+                leads_found += len(companies)
+                print(f"[MODAL] Found {len(companies)} for {niche}")
+        except Exception as e:
+            print(f"[MODAL] Apollo error: {e}")
+    
+    return {"status": "ok", "leads_found": leads_found}
 
 
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def hello():
-    return "Sovereign Light System Online"
+@app.function(image=image, secrets=[VAULT], schedule=modal.Period(hours=1))
+def outreach_loop():
+    """Send outreach every hour (8am-6pm ET)"""
+    import requests
+    import os
+    from datetime import datetime
+    import pytz
+    
+    print("[MODAL] Starting outreach loop...")
+    
+    # Time gate: Only run 8am-6pm ET
+    et = pytz.timezone("US/Eastern")
+    now = datetime.now(et)
+    if not (8 <= now.hour < 18):
+        print(f"[MODAL] Outside business hours ({now.hour}:00 ET)")
+        return {"status": "skipped", "reason": "outside_hours"}
+    
+    # GHL Webhooks
+    GHL_EMAIL = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/5148d523-9899-446a-9410-144465ab96d8"
+    GHL_SMS = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+    
+    # For now, just log that we're running
+    # In full version, this would pull from Supabase and send outreach
+    print("[MODAL] Outreach ready - checking for leads...")
+    
+    return {"status": "ok", "time": now.isoformat()}
 
-# Re-declare the endpoints using the lightweight image
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def hvac_landing():
-    # Dynamic Import to avoid top-level dependency issues
-    from modules.web.hvac_landing import get_hvac_landing_html
-    html = get_hvac_landing_html(
-        calendly_url="https://calendar.google.com/calendar", 
-        stripe_url="/checkout"
-    )
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
 
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def plumber_landing():
-    from modules.web.plumber_landing import get_plumber_landing_html
-    html = get_plumber_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="POST")
+def ghl_webhook(payload: dict):
+    """Handle inbound GHL webhooks"""
+    import json
+    
+    print(f"[MODAL] Webhook received: {json.dumps(payload)[:200]}")
+    
+    msg_type = payload.get("type", "unknown")
+    contact_id = payload.get("contactId") or payload.get("contact_id")
+    
+    return {
+        "status": "received",
+        "type": msg_type,
+        "contact_id": contact_id
+    }
 
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def roofer_landing():
-    from modules.web.roofer_landing import get_roofer_landing_html
-    html = get_roofer_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
 
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def electrician_landing():
-    from modules.web.electrician_landing import get_electrician_landing_html
-    html = get_electrician_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="GET")
+def health():
+    """Health check endpoint"""
+    from datetime import datetime
+    return {
+        "status": "healthy",
+        "service": "empire-core",
+        "timestamp": datetime.utcnow().isoformat()
+    }
 
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def solar_landing():
-    from modules.web.solar_landing import get_solar_landing_html
-    html = get_solar_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
 
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def landscaping_landing():
-    from modules.web.landscaping_landing import get_landscaping_landing_html
-    html = get_landscaping_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
-
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def pest_landing():
-    from modules.web.pest_landing import get_pest_landing_html
-    html = get_pest_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
-
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def cleaning_landing():
-    from modules.web.cleaning_landing import get_cleaning_landing_html
-    html = get_cleaning_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
-
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def restoration_landing():
-    from modules.web.restoration_landing import get_restoration_landing_html
-    html = get_restoration_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
-
-@app.function(image=image)
-@modal.fastapi_endpoint()
-def autodetail_landing():
-    from modules.web.autodetail_landing import get_autodetail_landing_html
-    html = get_autodetail_landing_html()
-    from fastapi.responses import HTMLResponse
-    return HTMLResponse(content=html, status_code=200)
+if __name__ == "__main__":
+    print("Deploy with: python -m modal deploy deploy_light.py")

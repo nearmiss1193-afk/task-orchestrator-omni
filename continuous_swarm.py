@@ -535,7 +535,7 @@ def run_production_loop(stop_event):
 
             # 1. Prospect
             # Pass the optimized niche to the prospector
-            prospect_agent(niche=target_niche) 
+            prospect_agent(niche_strategy=target_niche) 
             time.sleep(2)
             
             # 2. Enrich
