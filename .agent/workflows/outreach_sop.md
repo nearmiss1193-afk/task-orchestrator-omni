@@ -56,16 +56,16 @@ For each lead:
 
 ## 🔄 Scheduler Intervals
 
-| Task | Interval | Hours | Description |
-|------|----------|-------|-------------|
-| Prospecting | Every 10 min | 24/7 | Find new companies via Apollo |
-| Email Outreach | Every 3 min | **24/7** | Process new leads, send emails anytime |
-| SMS Outreach | Every 3 min | Business Hours | Only during timezone call window |
-| Calling | Every 3 min | Business Hours | 20 calls/hour target, timezone-aware |
-| Status Report | Every 6 hours | 24/7 | Send stats to owner |
+| Task            | Interval     | Hours          | Batch Size | Description                           |
+|-----------------|--------------|----------------|------------|---------------------------------------|
+| Prospecting     | Every 10 min | 24/7           | 10 leads   | Find new companies via Apollo         |
+| Email Outreach  | Every 10 min | **24/7**       | 10 leads   | 60 emails/hr = 1,440/day              |
+| SMS Outreach    | Every 10 min | Business Hours | 10 leads   | Only during timezone call window      |
+| Calling         | Every 3 min  | Business Hours | 1 call     | 20 calls/hour target, timezone-aware  |
+| Status Report   | Every 6 hours| 24/7           | N/A        | Send stats to owner                   |
 
 > [!IMPORTANT]
-> **EMAILS run 24/7** - No timezone restriction
+> **EMAILS run 24/7** - No timezone restriction, 10 per batch every 10 minutes
 > **CALLS and SMS** - Only during business hours (8 AM - 6 PM local time)
 
 ---

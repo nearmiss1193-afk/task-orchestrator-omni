@@ -547,18 +547,19 @@ def run_scheduler():
     
     SCHEDULE:
     - PROSPECTOR: Every 10 mins (24/7) - Find new leads
-    - OUTREACH:   Every 3 mins (24/7 emails, SMS during business hours only)
-    - CALLER:     Every 3 mins (business hours only, timezone-aware)
+    - OUTREACH:   Every 10 mins, 10 leads per batch (24/7 emails, SMS business hours)
+    - CALLER:     Every 3 mins (business hours only, 20 calls/hr target)
     - STATUS:     Every 6 hours
     
-    TARGETS:
+    THROUGHPUT TARGETS:
     - 20 calls per hour during business hours
-    - Continuous email flow 24/7
+    - 60 emails per hour (10 every 10 min) = 1,440/day
+    - 60 SMS per hour during business hours
     - Never stop prospecting
     """
-    # AGGRESSIVE schedule - maximum throughput
-    schedule.every(3).minutes.do(lambda: safe_run(run_caller, "CALLER"))       # 20/hr calls
-    schedule.every(3).minutes.do(lambda: safe_run(run_outreach, "OUTREACH"))   # 24/7 emails
+    # AUTONOMOUS schedule - sustainable high throughput
+    schedule.every(3).minutes.do(lambda: safe_run(run_caller, "CALLER"))        # 20 calls/hr
+    schedule.every(10).minutes.do(lambda: safe_run(run_outreach, "OUTREACH"))   # 10 leads per batch
     schedule.every(10).minutes.do(lambda: safe_run(run_prospector, "PROSPECTOR")) # Continuous leads
     schedule.every(6).hours.do(lambda: safe_run(send_status_report, "STATUS"))
     
