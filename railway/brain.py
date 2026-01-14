@@ -10,8 +10,9 @@ class EmpireBrain:
     Uses Supabase for memory and strategy persistence.
     """
     def __init__(self):
-        self.supabase_url = os.environ.get("SUPABASE_URL")
-        self.supabase_key = os.environ.get("SUPABASE_KEY")
+        # Support both naming conventions
+        self.supabase_url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
+        self.supabase_key = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
         self.default_niche = "hvac" # Default to HVAC as requested
 
     def _sb_request(self, method, endpoint, data=None):
