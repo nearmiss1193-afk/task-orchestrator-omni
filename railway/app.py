@@ -171,11 +171,20 @@ def prospect_niche(niche):
                 
                 # Enrich with Lusha for direct contacts
                 enriched = enrich_with_lusha(company.get("name"), company.get("website_url"))
-                if enriched:
-                    if enriched.get("email"):
-                        lead["email"] = enriched["email"]
-                    # Note: phone and decision_maker columns don't exist in Supabase yet
+                if enriched and enriched.get("email"):
+                    lead["email"] = enriched["email"]
                     print(f"[LUSHA] Enriched {company.get('name')}")
+                else:
+                    # Fallback: Generate generic email from website domain
+                    website = company.get("website_url", "")
+                    if website:
+                        # Extract domain from website URL
+                        import re
+                        domain_match = re.search(r'https?://(?:www\.)?([^/]+)', website)
+                        if domain_match:
+                            domain = domain_match.group(1)
+                            lead["email"] = f"info@{domain}"
+                            print(f"[EMAIL] Generated fallback: info@{domain}")
                 
                 # Save to Supabase (Primary)
                 result = supabase_request("POST", "leads", lead)
