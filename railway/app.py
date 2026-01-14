@@ -148,15 +148,13 @@ def prospect_niche(niche):
             print(f"[APOLLO] Returned {len(companies)} companies")
             saved = 0
             for company in companies:
-                # Base lead data from Apollo
+                # Base lead data from Apollo - ONLY columns that exist in Supabase
+                # Existing columns: id, created_at, ghl_contact_id, email, website_url, 
+                # company_name, agent_research, personalized_copy, status, last_called, sales_dossier
                 lead = {
                     "company_name": company.get("name"),
                     "website_url": company.get("website_url"),
-                    "phone": company.get("phone"),
-                    "city": company.get("city"),
-                    "state": company.get("state"),
                     "status": "new"
-                    # Note: 'source' column doesn't exist in Supabase yet
                 }
                 
                 # Enrich with Lusha for direct contacts
@@ -164,10 +162,7 @@ def prospect_niche(niche):
                 if enriched:
                     if enriched.get("email"):
                         lead["email"] = enriched["email"]
-                    if enriched.get("phone"):
-                        lead["phone"] = enriched["phone"]  # Override with direct dial
-                    if enriched.get("decision_maker"):
-                        lead["decision_maker"] = enriched["decision_maker"]
+                    # Note: phone and decision_maker columns don't exist in Supabase yet
                     print(f"[LUSHA] Enriched {company.get('name')}")
                 
                 # Save to Supabase (Primary)
