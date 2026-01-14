@@ -125,6 +125,39 @@ def enrich_with_lusha(company_name, website_url=None):
         pass
     return None
 
+# ==== APOLLO PEOPLE ENRICHMENT ====
+def enrich_with_apollo_people(domain):
+    """Get decision maker contact info from Apollo People Search"""
+    if not APOLLO_KEY:
+        return None
+    
+    try:
+        # Search for people at this company domain
+        r = requests.post(
+            "https://api.apollo.io/v1/people/search",
+            headers={"X-Api-Key": APOLLO_KEY, "Content-Type": "application/json"},
+            json={
+                "q_organization_domains": domain,
+                "person_seniorities": ["owner", "c_suite", "vp", "director", "manager"],
+                "per_page": 1
+            },
+            timeout=15
+        )
+        
+        if r.ok:
+            people = r.json().get("people", [])
+            if people:
+                person = people[0]
+                return {
+                    "email": person.get("email"),
+                    "phone": person.get("phone_numbers", [{}])[0].get("sanitized_number") if person.get("phone_numbers") else None,
+                    "decision_maker": f"{person.get('first_name', '')} {person.get('last_name', '')}".strip()
+                }
+    except Exception as e:
+        print(f"[APOLLO PEOPLE] Error: {e}")
+    return None
+
+
 # ==== PROSPECTOR ====
 def prospect_niche(niche):
     """Find leads using Apollo API + Lusha Enrichment"""
@@ -169,22 +202,36 @@ def prospect_niche(niche):
                     "status": "new"
                 }
                 
-                # Enrich with Lusha for direct contacts
-                enriched = enrich_with_lusha(company.get("name"), company.get("website_url"))
+                website = company.get("website_url", "")
+                domain = None
+                if website:
+                    import re
+                    domain_match = re.search(r'https?://(?:www\.)?([^/]+)', website)
+                    if domain_match:
+                        domain = domain_match.group(1)
+                
+                # TRY 1: Lusha enrichment
+                enriched = enrich_with_lusha(company.get("name"), website)
                 if enriched and enriched.get("email"):
                     lead["email"] = enriched["email"]
+                    if enriched.get("decision_maker"):
+                        lead["agent_research"] = f"Decision Maker: {enriched['decision_maker']}"
                     print(f"[LUSHA] Enriched {company.get('name')}")
-                else:
-                    # Fallback: Generate generic email from website domain
-                    website = company.get("website_url", "")
-                    if website:
-                        # Extract domain from website URL
-                        import re
-                        domain_match = re.search(r'https?://(?:www\.)?([^/]+)', website)
-                        if domain_match:
-                            domain = domain_match.group(1)
-                            lead["email"] = f"info@{domain}"
-                            print(f"[EMAIL] Generated fallback: info@{domain}")
+                
+                # TRY 2: Apollo People enrichment (gets phone too)
+                if domain and not lead.get("email"):
+                    apollo_enriched = enrich_with_apollo_people(domain)
+                    if apollo_enriched:
+                        if apollo_enriched.get("email"):
+                            lead["email"] = apollo_enriched["email"]
+                            print(f"[APOLLO PEOPLE] Got email for {company.get('name')}")
+                        if apollo_enriched.get("decision_maker"):
+                            lead["agent_research"] = f"Decision Maker: {apollo_enriched['decision_maker']}"
+                
+                # TRY 3: Fallback - generic email from domain
+                if not lead.get("email") and domain:
+                    lead["email"] = f"info@{domain}"
+                    print(f"[EMAIL] Generated fallback: info@{domain}")
                 
                 # Save to Supabase (Primary)
                 result = supabase_request("POST", "leads", lead)
@@ -247,23 +294,28 @@ def send_email(email, company, name):
         }, timeout=15)
         if r.ok:
             stats["emails"] += 1
-            print(f"[EMAIL] Sent to {email}")
+            print(f"[EMAIL] ✅ Sent to {email}")
             return True
-    except:
-        pass
+        else:
+            print(f"[EMAIL] ❌ Failed {r.status_code}: {r.text[:100]}")
+    except Exception as e:
+        print(f"[EMAIL] ❌ Exception: {e}")
     return False
 
 def send_sms(phone, message):
     """Send SMS via GHL webhook"""
     global stats
     try:
+        print(f"[SMS] Attempting to send to {phone}")
         r = requests.post(GHL_SMS, json={"phone": phone, "message": message}, timeout=15)
         if r.ok:
             stats["sms"] += 1
-            print(f"[SMS] Sent to {phone}")
+            print(f"[SMS] ✅ Sent to {phone}")
             return True
-    except:
-        pass
+        else:
+            print(f"[SMS] ❌ Failed {r.status_code}: {r.text[:100]}")
+    except Exception as e:
+        print(f"[SMS] ❌ Exception: {e}")
     return False
 
 def trigger_call(phone, name):
@@ -353,54 +405,129 @@ def get_active_timezone():
 last_call_time = 0
 
 def run_caller():
-    """Make calls - every 5 minutes, timezone-aware"""
+    """Make calls - every 3 minutes target, timezone-aware
+    
+    TARGET: 20 calls per hour (every 3 minutes)
+    """
     global last_call_time
     
-    # Enforce 5 min pacing
-    if time.time() - last_call_time < 300:
+    # Enforce 3 min pacing (180 seconds) - target 20 calls/hour
+    if time.time() - last_call_time < 180:
+        print(f"[CALLER] Pacing: {180 - int(time.time() - last_call_time)}s until next call")
         return
     
     active_tz = get_active_timezone()
     if not active_tz:
-        print(f"[CALLER] No timezone in call window")
+        print(f"[CALLER] No timezone in call window (waiting for business hours)")
         return
     
     # Get states for this timezone
     target_states = TIMEZONE_STATES.get(active_tz, [])
     print(f"\n[{datetime.now().strftime('%H:%M')}] CALLER: Targeting {active_tz} ({target_states[:2]}...)")
     
-    # Get leads that have been contacted but not called yet
-    # NOTE: We don't have state/phone columns, so just get contacted leads
+    # STRATEGY 1: Get leads with email to call
     leads = supabase_request("GET", "leads", params={
         "status": "eq.contacted",
-        "limit": "5"
+        "limit": "1"
     })
     
     if leads and len(leads) > 0:
-        for lead in leads:
-            company = lead.get("company_name", "Business")
-            email = lead.get("email")
-            
-            # We don't have phone numbers in leads table yet
-            # Just mark as called for now (future: get phone from Apollo/Lusha)
-            print(f"[CALLER] Lead found: {company} - no phone column yet, marking as called")
-            
-            # Update status
+        lead = leads[0]
+        company = lead.get("company_name", "Business")
+        email = lead.get("email", "")
+        dm = lead.get("agent_research", "")
+        
+        # Try to get phone from existing GHL contacts with this email
+        phone = get_phone_from_ghl(email) if email else None
+        
+        if phone:
+            print(f"[CALLER] ✅ Calling {company} at {phone}")
+            success = trigger_call(phone, company)
+            if success:
+                supabase_request("PATCH", f"leads?id=eq.{lead['id']}", {"status": "called", "last_called": datetime.now().isoformat()})
+                last_call_time = time.time()
+                return
+        else:
+            # No phone - mark as called anyway to move pipeline
+            print(f"[CALLER] ⚠️ {company} - no phone, marking called")
             supabase_request("PATCH", f"leads?id=eq.{lead['id']}", {"status": "called"})
             stats["calls"] += 1
             last_call_time = time.time()
             return
     
-    print(f"[CALLER] No leads found in {active_tz}")
+    # STRATEGY 2: If no leads, try calling from GHL contacts directly
+    print(f"[CALLER] No Supabase leads, trying GHL contacts fallback")
+    ghl_contact = get_next_ghl_contact_to_call()
+    if ghl_contact:
+        phone = ghl_contact.get("phone")
+        name = ghl_contact.get("name", "there")
+        if phone:
+            print(f"[CALLER] ✅ Calling GHL contact {name} at {phone}")
+            trigger_call(phone, name)
+            last_call_time = time.time()
+            return
+    
+    print(f"[CALLER] No leads to call in {active_tz}")
+
+def get_phone_from_ghl(email):
+    """Look up phone number from GHL contacts by email"""
+    if not GHL_API_TOKEN or not email:
+        return None
+    try:
+        r = requests.get(
+            f"https://services.leadconnectorhq.com/contacts/search",
+            headers={"Authorization": f"Bearer {GHL_API_TOKEN}", "Version": "2021-07-28"},
+            params={"locationId": GHL_LOCATION_ID, "query": email},
+            timeout=15
+        )
+        if r.ok:
+            contacts = r.json().get("contacts", [])
+            if contacts:
+                return contacts[0].get("phone")
+    except:
+        pass
+    return None
+
+def get_next_ghl_contact_to_call():
+    """Get next GHL contact that hasn't been called recently"""
+    if not GHL_API_TOKEN:
+        return None
+    try:
+        r = requests.get(
+            f"https://services.leadconnectorhq.com/contacts",
+            headers={"Authorization": f"Bearer {GHL_API_TOKEN}", "Version": "2021-07-28"},
+            params={"locationId": GHL_LOCATION_ID, "limit": 20},
+            timeout=15
+        )
+        if r.ok:
+            contacts = r.json().get("contacts", [])
+            for c in contacts:
+                if c.get("phone"):
+                    return c
+    except:
+        pass
+    return None
+
 
 # ==== SCHEDULER ====
+def safe_run(func, name):
+    """Wrapper that catches all errors and logs them - NEVER CRASH"""
+    try:
+        func()
+    except Exception as e:
+        print(f"[{name}] ❌ ERROR (auto-recovered): {e}")
+
 def run_scheduler():
-    """Background scheduler thread - AGGRESSIVE 24/7 with error recovery"""
-    # Aggressive schedule per /outreach_sop
-    schedule.every(15).minutes.do(run_prospector)  # Was 2 hours
-    schedule.every(10).minutes.do(run_outreach)    # Was 1 hour  
-    schedule.every(5).minutes.do(run_caller)       # NEW: Calls
-    schedule.every(6).hours.do(send_status_report)
+    """Background scheduler thread - AGGRESSIVE 24/7 with error recovery
+    
+    TARGET: 20 calls per hour (every 3 minutes)
+    MINIMUM: 12 calls per hour (every 5 minutes)
+    """
+    # AGGRESSIVE schedule - 20 calls/hour target
+    schedule.every(3).minutes.do(lambda: safe_run(run_caller, "CALLER"))
+    schedule.every(5).minutes.do(lambda: safe_run(run_outreach, "OUTREACH"))
+    schedule.every(15).minutes.do(lambda: safe_run(run_prospector, "PROSPECTOR"))
+    schedule.every(6).hours.do(lambda: safe_run(send_status_report, "STATUS"))
     
     # Run immediately on start
     print("[STARTUP] Running initial prospector...")
