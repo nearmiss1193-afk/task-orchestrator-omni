@@ -77,8 +77,11 @@ def supabase_request(method, table, data=None, params=None):
             r = requests.post(url, headers=headers, json=data, timeout=30)
         elif method == "PATCH":
             r = requests.patch(url, headers=headers, json=data, timeout=30)
+        if not r.ok:
+            print(f"[SUPABASE ERROR] {r.status_code}: {r.text[:200]}")
         return r.json() if r.ok else None
-    except:
+    except Exception as e:
+        print(f"[SUPABASE EXCEPTION] {e}")
         return None
 
 # ==== LUSHA ENRICHMENT ====
@@ -142,6 +145,7 @@ def prospect_niche(niche):
         
         if r.ok:
             companies = r.json().get("organizations", [])
+            print(f"[APOLLO] Returned {len(companies)} companies")
             saved = 0
             for company in companies:
                 # Base lead data from Apollo
@@ -170,12 +174,17 @@ def prospect_niche(niche):
                 result = supabase_request("POST", "leads", lead)
                 if result:
                     saved += 1
+                    print(f"[SUPABASE] Saved: {company.get('name')}")
                     # Dual-write to Firebase (Backup)
                     if FIREBASE_ENABLED:
                         save_lead_to_firebase(lead)
+                else:
+                    print(f"[SUPABASE] FAILED to save: {company.get('name')}")
             stats["prospects"] += saved
-            print(f"[PROSPECT] Saved {saved} leads")
+            print(f"[PROSPECT] Saved {saved} of {len(companies)} leads")
             return saved
+        else:
+            print(f"[APOLLO] Error {r.status_code}: {r.text[:200]}")
     except Exception as e:
         print(f"[PROSPECT] Error: {e}")
     return 0
