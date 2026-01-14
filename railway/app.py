@@ -151,8 +151,8 @@ def prospect_niche(niche):
                     "phone": company.get("phone"),
                     "city": company.get("city"),
                     "state": company.get("state"),
-                    "status": "new",
-                    "source": "railway_cloud"
+                    "status": "new"
+                    # Note: 'source' column doesn't exist in Supabase yet
                 }
                 
                 # Enrich with Lusha for direct contacts
