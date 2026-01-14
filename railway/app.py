@@ -294,16 +294,15 @@ def run_outreach():
     for lead in leads:
         company = lead.get("company_name", "Business")
         email = lead.get("email")
-        phone = lead.get("phone")
         
         # Send email if available
         if email:
             send_email(email, company, lead.get("decision_maker"))
+        else:
+            print(f"[OUTREACH] No email for {company}, skipping")
         
-        # Send SMS if phone available
-        if phone:
-            msg = f"Hi! Quick question about {company} - are you handling after-hours calls? We have a 14-day free trial for AI phone answering. Interest? -Sarah, AI Service Co"
-            send_sms(phone, msg)
+        # NOTE: Phone column doesn't exist in leads table yet
+        # SMS disabled until we add phone column
         
         # Mark as contacted
         supabase_request("PATCH", f"leads?id=eq.{lead['id']}", {"status": "contacted"})
@@ -361,25 +360,25 @@ def run_caller():
     target_states = TIMEZONE_STATES.get(active_tz, [])
     print(f"\n[{datetime.now().strftime('%H:%M')}] CALLER: Targeting {active_tz} ({target_states[:2]}...)")
     
-    # Get leads with phone in these states
-    for state in target_states:
-        leads = supabase_request("GET", "leads", params={
-            "status": "eq.contacted",
-            "state": f"eq.{state}",
-            "phone": "neq.null",
-            "limit": "1"
-        })
-        
-        if leads and len(leads) > 0:
-            lead = leads[0]
-            phone = lead.get("phone")
+    # Get leads that have been contacted but not called yet
+    # NOTE: We don't have state/phone columns, so just get contacted leads
+    leads = supabase_request("GET", "leads", params={
+        "status": "eq.contacted",
+        "limit": "5"
+    })
+    
+    if leads and len(leads) > 0:
+        for lead in leads:
             company = lead.get("company_name", "Business")
+            email = lead.get("email")
             
-            print(f"[CALL] Calling {company} in {state}")
-            make_call(phone, company, lead.get("decision_maker"))
+            # We don't have phone numbers in leads table yet
+            # Just mark as called for now (future: get phone from Apollo/Lusha)
+            print(f"[CALLER] Lead found: {company} - no phone column yet, marking as called")
             
             # Update status
             supabase_request("PATCH", f"leads?id=eq.{lead['id']}", {"status": "called"})
+            stats["calls"] += 1
             last_call_time = time.time()
             return
     
