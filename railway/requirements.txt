@@ -3,3 +3,4 @@ requests
 schedule
 python-dotenv
 gunicorn
+firebase-admin

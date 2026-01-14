@@ -15,6 +15,14 @@ from flask import Flask, request, jsonify
 from threading import Thread
 from brain import EmpireBrain
 
+# Firebase fallback (optional)
+try:
+    from firebase_backup import save_lead_to_firebase, get_leads_from_firebase, firebase_health
+    FIREBASE_ENABLED = True
+except ImportError:
+    FIREBASE_ENABLED = False
+    print("[FIREBASE] Module not available")
+
 app = Flask(__name__)
 brain = EmpireBrain()
 
@@ -157,10 +165,13 @@ def prospect_niche(niche):
                         lead["decision_maker"] = enriched["decision_maker"]
                     print(f"[LUSHA] Enriched {company.get('name')}")
                 
-                # Save to Supabase
+                # Save to Supabase (Primary)
                 result = supabase_request("POST", "leads", lead)
                 if result:
                     saved += 1
+                    # Dual-write to Firebase (Backup)
+                    if FIREBASE_ENABLED:
+                        save_lead_to_firebase(lead)
             stats["prospects"] += saved
             print(f"[PROSPECT] Saved {saved} leads")
             return saved
