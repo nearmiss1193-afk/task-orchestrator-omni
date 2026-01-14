@@ -16,6 +16,7 @@ from flask_cors import CORS
 from threading import Thread
 from brain import EmpireBrain
 from modules.communications.reliable_email import send_email as reliable_send_email
+from memory import resolve_or_create_contact, write_event, get_memory_context_string, acquire_job_lock, release_job_lock
 
 # Firebase fallback (optional)
 try:
@@ -34,9 +35,10 @@ APOLLO_KEY = os.environ.get("APOLLO_API_KEY")
 LUSHA_KEY = os.environ.get("LUSHA_API_KEY")
 # Support both naming conventions - prefer service role key (correct one)
 SUPABASE_URL = os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or os.environ.get("SUPABASE_URL")
-# Hardcoded Service Role Key Backup (RLS Bypass for Vapi Logging)
-_BACKUP_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or _BACKUP_KEY
+# IMPORTANT: Set SUPABASE_SERVICE_ROLE_KEY in Railway env vars
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+if not SUPABASE_KEY:
+    print("[CRITICAL] No Supabase key configured! Set SUPABASE_SERVICE_ROLE_KEY in Railway.")
 VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
 GHL_API_TOKEN = os.environ.get("GHL_API_TOKEN")
 GHL_LOCATION_ID = os.environ.get("GHL_LOCATION_ID")
@@ -686,6 +688,63 @@ def resend_webhook():
             
     return jsonify({"status": "received"})
 
+@app.route("/ghl/webhook", methods=["POST"])
+def ghl_webhook():
+    """
+    Handle incoming GHL events (SMS replies, conversation updates).
+    Configure GHL Workflow: Inbound Webhook → POST to this endpoint
+    """
+    data = request.json
+    print(f"[GHL WEBHOOK] Received: {json.dumps(data)[:200]}")
+    
+    # Extract contact info from GHL payload
+    contact_id = data.get("contact_id") or data.get("contactId")
+    phone = data.get("phone") or data.get("contact", {}).get("phone")
+    email = data.get("email") or data.get("contact", {}).get("email")
+    company = data.get("company_name") or data.get("contact", {}).get("companyName")
+    message = data.get("message") or data.get("body") or data.get("text")
+    message_type = data.get("type", "sms_in")
+    external_id = data.get("message_id") or data.get("id") or f"ghl-{int(time.time())}"
+    
+    if not phone and not email and not contact_id:
+        print("[GHL WEBHOOK] No contact identifier found")
+        return jsonify({"status": "error", "reason": "no contact identifier"}), 400
+    
+    # Resolve or create contact in memory system
+    contact = resolve_or_create_contact(
+        phone=phone,
+        email=email,
+        ghl_id=contact_id,
+        company_name=company
+    )
+    
+    if not contact:
+        print("[GHL WEBHOOK] Failed to resolve contact")
+        return jsonify({"status": "error", "reason": "contact resolution failed"}), 500
+    
+    # Determine event type
+    event_type = "sms_in"
+    if "reply" in message_type.lower() or "inbound" in message_type.lower():
+        event_type = "sms_in"
+    elif "outbound" in message_type.lower():
+        event_type = "sms_out"
+    
+    # Generate summary
+    summary = f"SMS from {phone or 'unknown'}: {message[:100]}..." if message and len(message) > 100 else message
+    
+    # Write event to memory
+    write_event(
+        contact_id=contact["id"],
+        event_type=event_type,
+        source="ghl",
+        external_id=external_id,
+        payload=data,
+        summary=summary
+    )
+    
+    print(f"[GHL WEBHOOK] ✅ Logged event for contact {contact['id']}")
+    return jsonify({"status": "received", "contact_id": contact["id"]})
+
 @app.route("/trigger/prospect", methods=["POST"])
 def api_prospect():
     run_prospector()
@@ -695,6 +754,7 @@ def api_prospect():
 def api_outreach():
     run_outreach()
     return jsonify({"status": "triggered"})
+
 
 @app.route("/vapi/webhook", methods=["POST"])
 def vapi_webhook():
@@ -770,6 +830,24 @@ def vapi_webhook():
             print(f"[VAPI] ✅ Saved call transcript {call_record['call_id']}")
         else:
             print(f"[VAPI] ❌ Failed to save transcript")
+        
+        # === NEW: Log to Memory System ===
+        call_id = call_record.get("call_id")
+        if customer:
+            # Resolve contact in memory system
+            contact = resolve_or_create_contact(phone=customer)
+            if contact:
+                # Write call_end event
+                event_summary = summary or f"Call ended: {ended}"
+                write_event(
+                    contact_id=contact["id"],
+                    event_type="call_end",
+                    source="vapi",
+                    external_id=call_id,
+                    payload=metadata,
+                    summary=event_summary
+                )
+                print(f"[VAPI] ✅ Logged call to memory system for contact {contact['id']}")
 
         if ended in ["no-answer", "failed", "voicemail"]:
             if customer:
