@@ -51,11 +51,15 @@ NICHES = [
     {"keywords": "Electrical contractor", "location": "Arizona"},
 ]
 
+# Global scheduler thread reference for auto-restart
+scheduler_thread = None
+
 stats = {
     "prospects": 0, 
     "emails": 0, 
     "sms": 0, 
-    "calls": 0, 
+    "calls": 0,
+    "restarts": 0, 
     "last_heartbeat": time.time()
 }
 
@@ -446,10 +450,32 @@ def home():
 
 @app.route("/health")
 def health():
-    # Deep Health Check: Ensure worker thread is alive (heartbeat within 5 mins)
-    if time.time() - stats.get("last_heartbeat", 0) > 300:
-        return jsonify({"status": "unhealthy", "reason": "thread_dead"}), 500
-    return jsonify({"status": "healthy"})
+    global scheduler_thread
+    heartbeat_age = time.time() - stats.get("last_heartbeat", 0)
+    
+    # Auto-restart dead scheduler thread
+    if heartbeat_age > 300:
+        if scheduler_thread is None or not scheduler_thread.is_alive():
+            print("[RECOVERY] Scheduler thread dead - restarting...")
+            scheduler_thread = Thread(target=run_scheduler, daemon=True)
+            scheduler_thread.start()
+            stats["restarts"] = stats.get("restarts", 0) + 1
+            stats["last_heartbeat"] = time.time()
+            return jsonify({"status": "recovered", "restarts": stats["restarts"]})
+        return jsonify({"status": "unhealthy", "reason": "thread_dead", "age_seconds": heartbeat_age}), 500
+    return jsonify({"status": "healthy", "heartbeat_age": heartbeat_age})
+
+@app.route("/stats")
+def get_stats():
+    return jsonify({
+        "prospects": stats.get("prospects", 0),
+        "emails": stats.get("emails", 0),
+        "sms": stats.get("sms", 0),
+        "calls": stats.get("calls", 0),
+        "restarts": stats.get("restarts", 0),
+        "last_heartbeat": stats.get("last_heartbeat", 0),
+        "uptime_check": "ok" if scheduler_thread and scheduler_thread.is_alive() else "dead"
+    })
 
 @app.route("/trigger/prospect", methods=["POST"])
 def api_prospect():
@@ -485,9 +511,11 @@ if __name__ == "__main__":
     print("EMPIRE RAILWAY WORKER STARTING")
     print("="*50)
     
-    # Start scheduler in background
+    # Start scheduler in background (global for auto-restart)
+    global scheduler_thread
     scheduler_thread = Thread(target=run_scheduler, daemon=True)
     scheduler_thread.start()
+    stats["last_heartbeat"] = time.time()  # Initialize heartbeat
     
     # Run Flask server
     port = int(os.environ.get("PORT", 8080))
