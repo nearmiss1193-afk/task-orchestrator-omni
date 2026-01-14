@@ -371,7 +371,7 @@ def run_caller():
 
 # ==== SCHEDULER ====
 def run_scheduler():
-    """Background scheduler thread - AGGRESSIVE 24/7"""
+    """Background scheduler thread - AGGRESSIVE 24/7 with error recovery"""
     # Aggressive schedule per /outreach_sop
     schedule.every(15).minutes.do(run_prospector)  # Was 2 hours
     schedule.every(10).minutes.do(run_outreach)    # Was 1 hour  
@@ -380,13 +380,25 @@ def run_scheduler():
     
     # Run immediately on start
     print("[STARTUP] Running initial prospector...")
-    run_prospector()
-    print("[STARTUP] Running initial outreach...")
-    run_outreach()
+    try:
+        run_prospector()
+    except Exception as e:
+        print(f"[STARTUP] Prospector error: {e}")
     
+    print("[STARTUP] Running initial outreach...")
+    try:
+        run_outreach()
+    except Exception as e:
+        print(f"[STARTUP] Outreach error: {e}")
+    
+    # Main loop with error recovery
     while True:
-        schedule.run_pending()
-        stats["last_heartbeat"] = time.time()
+        try:
+            schedule.run_pending()
+            stats["last_heartbeat"] = time.time()
+        except Exception as e:
+            print(f"[SCHEDULER] Error: {e}")
+            # Don't crash - just log and continue
         time.sleep(60)
 
 def send_status_report():
