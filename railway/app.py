@@ -658,7 +658,7 @@ def get_stats():
 
 @app.route("/resend/webhook", methods=["POST"])
 def resend_webhook():
-    """Handle Resend email events (Open/Click)"""
+    """Handle Resend email events (Open/Click) - logs to memory system"""
     data = request.json
     event_type = data.get("type")
     
@@ -666,7 +666,10 @@ def resend_webhook():
     
     # Check for lead_id tag
     lead_id = None
+    email_to = data.get("data", {}).get("to", [None])[0]
+    email_subject = data.get("data", {}).get("subject", "")
     tags = data.get("data", {}).get("tags", [])
+    
     # Resend sometimes sends tags as dict, sometimes list, handle list safely
     if isinstance(tags, list):
         for tag in tags:
@@ -674,17 +677,63 @@ def resend_webhook():
                 lead_id = tag.get("value")
                 break
     
+    # Generate external_id for deduplication
+    email_id = data.get("data", {}).get("email_id") or data.get("email_id") or f"resend-{int(time.time())}"
+    
     if event_type == "email.opened":
         stats["opens"] += 1
         if lead_id:
             supabase_request("PATCH", f"leads?id=eq.{lead_id}", {"status": "opened"})
             print(f"[TRACKING] Lead {lead_id} OPENED email")
+        
+        # Log to memory system
+        if email_to:
+            contact = resolve_or_create_contact(email=email_to)
+            if contact:
+                write_event(
+                    contact_id=contact["id"],
+                    event_type="email_open",
+                    source="resend",
+                    external_id=f"{email_id}-open",
+                    payload={"subject": email_subject, "lead_id": lead_id},
+                    summary=f"Opened email: {email_subject[:50]}"
+                )
+                print(f"[RESEND] ✅ Logged email open for contact {contact['id']}")
             
     elif event_type == "email.clicked":
         stats["clicks"] += 1
+        link_url = data.get("data", {}).get("click", {}).get("link", "")
         if lead_id:
             supabase_request("PATCH", f"leads?id=eq.{lead_id}", {"status": "clicked"})
             print(f"[TRACKING] Lead {lead_id} CLICKED link")
+        
+        # Log to memory system
+        if email_to:
+            contact = resolve_or_create_contact(email=email_to)
+            if contact:
+                write_event(
+                    contact_id=contact["id"],
+                    event_type="email_click",
+                    source="resend",
+                    external_id=f"{email_id}-click",
+                    payload={"subject": email_subject, "link": link_url, "lead_id": lead_id},
+                    summary=f"Clicked link in '{email_subject[:30]}': {link_url[:50]}"
+                )
+                print(f"[RESEND] ✅ Logged email click for contact {contact['id']}")
+    
+    elif event_type == "email.delivered":
+        # Log delivery for completeness
+        if email_to:
+            contact = resolve_or_create_contact(email=email_to)
+            if contact:
+                write_event(
+                    contact_id=contact["id"],
+                    event_type="email_out",
+                    source="resend",
+                    external_id=f"{email_id}-delivered",
+                    payload={"subject": email_subject, "lead_id": lead_id},
+                    summary=f"Email delivered: {email_subject[:50]}"
+                )
             
     return jsonify({"status": "received"})
 
