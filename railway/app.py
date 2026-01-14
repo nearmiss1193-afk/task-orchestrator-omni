@@ -29,9 +29,9 @@ brain = EmpireBrain()
 # ==== CONFIG ====
 APOLLO_KEY = os.environ.get("APOLLO_API_KEY")
 LUSHA_KEY = os.environ.get("LUSHA_API_KEY")
-# Support both naming conventions
-SUPABASE_URL = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+# Support both naming conventions - prefer service role key (correct one)
+SUPABASE_URL = os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
 VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
 GHL_API_TOKEN = os.environ.get("GHL_API_TOKEN")
 GHL_LOCATION_ID = os.environ.get("GHL_LOCATION_ID")
