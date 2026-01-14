@@ -56,12 +56,17 @@ For each lead:
 
 ## 🔄 Scheduler Intervals
 
-| Task | Interval | Description |
-|------|----------|-------------|
-| Prospecting | Every 15 min | Find new companies via Apollo |
-| Email/SMS | Every 10 min | Process new leads queue |
-| Calling | Every 5 min | Call next lead in timezone window |
-| Status Report | Every 6 hours | Send stats to owner |
+| Task | Interval | Hours | Description |
+|------|----------|-------|-------------|
+| Prospecting | Every 10 min | 24/7 | Find new companies via Apollo |
+| Email Outreach | Every 3 min | **24/7** | Process new leads, send emails anytime |
+| SMS Outreach | Every 3 min | Business Hours | Only during timezone call window |
+| Calling | Every 3 min | Business Hours | 20 calls/hour target, timezone-aware |
+| Status Report | Every 6 hours | 24/7 | Send stats to owner |
+
+> [!IMPORTANT]
+> **EMAILS run 24/7** - No timezone restriction
+> **CALLS and SMS** - Only during business hours (8 AM - 6 PM local time)
 
 ---
 
@@ -121,11 +126,74 @@ def get_priority_timezone():
 The `railway/app.py` scheduler must implement:
 
 ```python
-# Aggressive schedule
-schedule.every(15).minutes.do(run_prospector)
-schedule.every(10).minutes.do(run_outreach)
-schedule.every(5).minutes.do(run_caller)
+# AGGRESSIVE AUTONOMOUS schedule
+schedule.every(3).minutes.do(run_caller)      # 20 calls/hr (business hours)
+schedule.every(3).minutes.do(run_outreach)    # 24/7 emails
+schedule.every(10).minutes.do(run_prospector) # 24/7 prospecting
 schedule.every(6).hours.do(send_status_report)
 ```
 
 With timezone-aware lead selection for calls.
+
+---
+
+## 🤖 AUTONOMOUS CLOUD OPERATIONS
+
+> [!CAUTION]
+> The system MUST operate fully autonomously in the cloud without human intervention.
+
+### Self-Healing Requirements
+
+1. **safe_run() Wrapper**: ALL scheduled tasks wrapped in error handlers
+   - Catches ALL exceptions
+   - Logs error but NEVER crashes
+   - Continues to next iteration
+
+2. **Auto-Restart Mechanism**:
+   - `/health` endpoint monitors scheduler heartbeat
+   - If heartbeat > 5 minutes stale, auto-restart scheduler thread
+   - Track restart count in `/stats`
+
+3. **Fallback Strategies**:
+   - If Supabase fails → Log and continue
+   - If GHL fails → Retry 3x with backoff
+   - If Vapi fails → Mark lead as "call_failed", move to next
+   - If no leads → Pull from GHL contacts directly
+
+### Research-First Protocol
+
+Before making ANY external API call to a new service:
+
+1. **Search official documentation** first
+2. **Verify endpoint and auth method** from 2 sources
+3. **Log findings** in operational_memory.md
+4. **Test locally** before deploying
+
+### Error Recovery Steps (Automated)
+
+```
+1. ERROR occurs in any function
+2. safe_run() catches and logs: "[FUNC] ❌ ERROR (auto-recovered): {msg}"
+3. Scheduler continues immediately
+4. Error count tracked in stats
+5. If error_count > 10 in 1 hour → Send alert to owner
+```
+
+### Cloud Autonomy Checklist
+
+- [x] Runs on Railway (always-on)
+- [x] Auto-restarts on crash (Railway restart policy)
+- [x] Scheduler thread auto-recovery (/health endpoint)
+- [x] All functions wrapped in safe_run()
+- [x] No human intervention required for normal operation
+- [x] Self-healing on transient API failures
+- [x] Fallback to GHL contacts when Supabase empty
+
+---
+
+## 📧 Owner Notification
+
+All outbound emails are BCC'd to owner for verification:
+
+- `OWNER_EMAIL = "nearmiss1193@gmail.com"`
+- Subject: `📧 SENT: {company} ({email})`

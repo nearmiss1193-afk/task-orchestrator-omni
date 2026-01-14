@@ -273,8 +273,10 @@ def run_prospector():
         brain.record_outcome("prospecting_success", best_niche_key, {"count": saved})
 
 # ==== OUTREACH ====
+OWNER_EMAIL = "nearmiss1193@gmail.com"  # BCC for verification
+
 def send_email(email, company, name):
-    """Send outreach email via GHL webhook"""
+    """Send outreach email via GHL webhook - with owner BCC for verification"""
     global stats
     html = f"""
     <p>Hi {name or 'there'},</p>
@@ -285,6 +287,7 @@ def send_email(email, company, name):
     <p>- Daniel, AI Service Co<br>(352) 758-5336</p>
     """
     try:
+        # Send to prospect
         r = requests.post(GHL_EMAIL, json={
             "email": email,
             "from_name": "Daniel",
@@ -292,9 +295,20 @@ def send_email(email, company, name):
             "subject": f"Quick question for {company}",
             "html_body": html
         }, timeout=15)
+        
         if r.ok:
             stats["emails"] += 1
             print(f"[EMAIL] ✅ Sent to {email}")
+            
+            # Send copy to owner for verification
+            requests.post(GHL_EMAIL, json={
+                "email": OWNER_EMAIL,
+                "from_name": "Empire Bot",
+                "from_email": "daniel@aiserviceco.com",
+                "subject": f"📧 SENT: {company} ({email})",
+                "html_body": f"<p><b>Copy of email sent to:</b> {email}</p><hr>{html}"
+            }, timeout=15)
+            
             return True
         else:
             print(f"[EMAIL] ❌ Failed {r.status_code}: {r.text[:100]}")
@@ -342,33 +356,44 @@ def trigger_call(phone, name):
     return False
 
 def run_outreach():
-    """Contact new leads"""
-    print(f"\n[{datetime.now().strftime('%H:%M')}] OUTREACH RUNNING")
+    """Contact new leads - EMAILS RUN 24/7, SMS only during business hours"""
+    print(f"\n[{datetime.now().strftime('%H:%M')}] OUTREACH RUNNING (24/7 emails)")
     
-    # Get uncontacted leads
-    leads = supabase_request("GET", "leads", params={"status": "eq.new", "limit": "5"})
+    # Get uncontacted leads - process 10 at a time for faster throughput
+    leads = supabase_request("GET", "leads", params={"status": "eq.new", "limit": "10"})
     
     if not leads:
         print("[OUTREACH] No new leads")
         return
     
+    emails_sent = 0
+    sms_sent = 0
+    
     for lead in leads:
         company = lead.get("company_name", "Business")
         email = lead.get("email")
         
-        # Send email if available
+        # EMAILS: Send 24/7 - no timezone restriction
         if email:
-            send_email(email, company, lead.get("decision_maker"))
+            if send_email(email, company, lead.get("agent_research")):
+                emails_sent += 1
         else:
-            print(f"[OUTREACH] No email for {company}, skipping")
+            print(f"[OUTREACH] No email for {company}, skipping email")
         
-        # NOTE: Phone column doesn't exist in leads table yet
-        # SMS disabled until we add phone column
+        # SMS: Only during business hours (timezone-aware)
+        # Check if any timezone is in business hours before sending SMS
+        active_tz = get_active_timezone()
+        if active_tz:
+            phone = get_phone_from_ghl(email) if email else None
+            if phone:
+                msg = f"Hi! Quick question about {company} - are you handling after-hours calls? 14-day free trial for AI phone answering. Interest? -Daniel, AI Service Co"
+                if send_sms(phone, msg):
+                    sms_sent += 1
         
         # Mark as contacted
         supabase_request("PATCH", f"leads?id=eq.{lead['id']}", {"status": "contacted"})
     
-    print(f"[OUTREACH] Processed {len(leads)} leads")
+    print(f"[OUTREACH] ✅ Processed {len(leads)} leads | Emails: {emails_sent} | SMS: {sms_sent}")
 
 # ==== TIMEZONE-AWARE CALLER ====
 TIMEZONE_STATES = {
@@ -518,15 +543,23 @@ def safe_run(func, name):
         print(f"[{name}] ❌ ERROR (auto-recovered): {e}")
 
 def run_scheduler():
-    """Background scheduler thread - AGGRESSIVE 24/7 with error recovery
+    """Background scheduler thread - FULLY AUTONOMOUS 24/7
     
-    TARGET: 20 calls per hour (every 3 minutes)
-    MINIMUM: 12 calls per hour (every 5 minutes)
+    SCHEDULE:
+    - PROSPECTOR: Every 10 mins (24/7) - Find new leads
+    - OUTREACH:   Every 3 mins (24/7 emails, SMS during business hours only)
+    - CALLER:     Every 3 mins (business hours only, timezone-aware)
+    - STATUS:     Every 6 hours
+    
+    TARGETS:
+    - 20 calls per hour during business hours
+    - Continuous email flow 24/7
+    - Never stop prospecting
     """
-    # AGGRESSIVE schedule - 20 calls/hour target
-    schedule.every(3).minutes.do(lambda: safe_run(run_caller, "CALLER"))
-    schedule.every(5).minutes.do(lambda: safe_run(run_outreach, "OUTREACH"))
-    schedule.every(15).minutes.do(lambda: safe_run(run_prospector, "PROSPECTOR"))
+    # AGGRESSIVE schedule - maximum throughput
+    schedule.every(3).minutes.do(lambda: safe_run(run_caller, "CALLER"))       # 20/hr calls
+    schedule.every(3).minutes.do(lambda: safe_run(run_outreach, "OUTREACH"))   # 24/7 emails
+    schedule.every(10).minutes.do(lambda: safe_run(run_prospector, "PROSPECTOR")) # Continuous leads
     schedule.every(6).hours.do(lambda: safe_run(send_status_report, "STATUS"))
     
     # Run immediately on start

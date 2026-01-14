@@ -50,6 +50,16 @@ git add -A && git commit -m "💾 SAVE PROTOCOL: [brief description]"
 git push origin main
 ```
 
+### 1.5 SEND EMAIL SUMMARY (MANDATORY)
+
+// turbo
+
+```bash
+python send_session_summary.py
+```
+
+This sends the session summary to <nearmiss1193@gmail.com> via GHL webhook.
+
 ### 2. Status Report (Always Include)
 
 **Dashboard:** <https://www.aiserviceco.com/dashboard.html>
