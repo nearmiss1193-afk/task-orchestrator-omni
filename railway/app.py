@@ -706,8 +706,70 @@ def vapi_webhook():
     
     if msg_type == "end-of-call-report":
         ended = data.get("message", {}).get("endedReason", "")
+        call = data.get("message", {}).get("call", {})
+        analysis = data.get("message", {}).get("analysis", {})
+        conf = data.get("message", {}).get("assistant", {}).get("model", {})
+        
+        # safely extract number
+        customer = call.get("customer", {}).get("number")
+        
+        # 1. Save to Supabase (Call Transcripts)
+        if customer:
+            # excessive logic to find lead? just try generic match
+            # Phone format might vary... +1 vs 1. Vapi sends +1 usually.
+            # We assume database has consistent format or we try fuzzy?
+            # For now, simplistic match.
+            pass
+
+        transcript = data.get("message", {}).get("transcript")
+        summary = analysis.get("summary")
+        recording_url = data.get("message", {}).get("recordingUrl")
+        
+        metadata = {
+            "transcript": transcript,
+            "summary": summary,
+            "recording_url": recording_url,
+            "ended_reason": ended,
+            "cost": data.get("message", {}).get("cost"),
+            "customer_number": customer
+        }
+        
+        # Link to lead?
+        # We can try to look up lead by phone to tag it
+        lead_id = None
+        if customer:
+            # We need to clean phone?
+            # Start with direct query
+            leads = supabase_request("GET", "leads", params={"phone": f"eq.{customer}"})
+            if not leads and customer.startswith("+1"):
+                 # Try without +1
+                 leads = supabase_request("GET", "leads", params={"phone": f"eq.{customer[2:]}"})
+            
+            if leads:
+                lead_id = leads[0]['id']
+                metadata['lead_id'] = lead_id
+                print(f"[VAPI] Linked call to lead {lead_id}")
+                
+                # Update lead sentiment/status based on call?
+                if analysis.get("successEvaluation") == "true":
+                     supabase_request("PATCH", f"leads?id=eq.{lead_id}", {"status": "interested"})
+
+        # Insert Record
+        call_record = {
+            "call_id": data.get("message", {}).get("call", {}).get("id"),
+            "assistant_id": data.get("message", {}).get("assistantId"),
+            "sentiment": analysis.get("sentiment"),
+            "metadata": metadata,
+            # created_at auto-generated
+        }
+        
+        res = supabase_request("POST", "call_transcripts", call_record)
+        if res:
+            print(f"[VAPI] ✅ Saved call transcript {call_record['call_id']}")
+        else:
+            print(f"[VAPI] ❌ Failed to save transcript")
+
         if ended in ["no-answer", "failed", "voicemail"]:
-            customer = data.get("message", {}).get("call", {}).get("customer", {}).get("number")
             if customer:
                 send_sms(BACKUP_PHONE, f"MISSED: {customer} - {ended}")
     
