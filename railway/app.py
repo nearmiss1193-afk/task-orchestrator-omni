@@ -64,7 +64,8 @@ def supabase_request(method, table, data=None, params=None):
     headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Prefer": "return=representation"  # Get data back from POSTs
     }
     url = f"{SUPABASE_URL}/rest/v1/{table}"
     if params:
@@ -79,7 +80,14 @@ def supabase_request(method, table, data=None, params=None):
             r = requests.patch(url, headers=headers, json=data, timeout=30)
         if not r.ok:
             print(f"[SUPABASE ERROR] {r.status_code}: {r.text[:200]}")
-        return r.json() if r.ok else None
+            return None
+        # Handle empty responses safely
+        if r.text.strip():
+            result = r.json()
+            if method == "POST" and result:
+                print(f"[SUPABASE] Saved: {data.get('company_name', 'unknown')}")
+            return result
+        return True  # Success but empty response
     except Exception as e:
         print(f"[SUPABASE EXCEPTION] {e}")
         return None
