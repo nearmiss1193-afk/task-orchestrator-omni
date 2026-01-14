@@ -511,8 +511,7 @@ if __name__ == "__main__":
     print("EMPIRE RAILWAY WORKER STARTING")
     print("="*50)
     
-    # Start scheduler in background (global for auto-restart)
-    global scheduler_thread
+    # Start scheduler in background (uses module-level scheduler_thread)
     scheduler_thread = Thread(target=run_scheduler, daemon=True)
     scheduler_thread.start()
     stats["last_heartbeat"] = time.time()  # Initialize heartbeat
