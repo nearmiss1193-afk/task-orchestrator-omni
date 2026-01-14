@@ -15,7 +15,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from threading import Thread
 from brain import EmpireBrain
-from modules.communications.reliable_email import send_email as reliable_send_email
+from reliable_email import send_email as reliable_send_email
 from memory import resolve_or_create_contact, write_event, get_memory_context_string, acquire_job_lock, release_job_lock
 
 # Firebase fallback (optional)
