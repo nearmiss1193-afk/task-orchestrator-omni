@@ -6,3 +6,6 @@ resend
 stripe
 pg8000
 sentry-sdk
+supabase
+python-dotenv
+schedule
