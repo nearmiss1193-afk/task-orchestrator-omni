@@ -34,7 +34,9 @@ APOLLO_KEY = os.environ.get("APOLLO_API_KEY")
 LUSHA_KEY = os.environ.get("LUSHA_API_KEY")
 # Support both naming conventions - prefer service role key (correct one)
 SUPABASE_URL = os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+# Hardcoded Service Role Key Backup (RLS Bypass for Vapi Logging)
+_BACKUP_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or _BACKUP_KEY
 VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
 GHL_API_TOKEN = os.environ.get("GHL_API_TOKEN")
 GHL_LOCATION_ID = os.environ.get("GHL_LOCATION_ID")
