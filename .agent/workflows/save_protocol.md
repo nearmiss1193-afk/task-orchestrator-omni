@@ -60,6 +60,8 @@ python send_session_summary.py
 
 This sends the session summary to <nearmiss1193@gmail.com> via GHL webhook.
 
+**CRITICAL: CHECK YOUR INBOX. IF EMAIL DOES NOT ARRIVE, DO NOT EXIT.**
+
 ### 2. Status Report (Always Include)
 
 **Dashboard:** <https://www.aiserviceco.com/dashboard.html>
@@ -141,6 +143,7 @@ Include 2-3 next priority actions.
 | Vapi | <https://dashboard.vapi.ai> |
 | Supabase | <https://supabase.com/dashboard> |
 | Modal | <https://modal.com/apps> |
+| Resend | <https://resend.com/emails> |
 
 ## Cloud Endpoints
 

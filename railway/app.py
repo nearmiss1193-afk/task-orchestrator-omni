@@ -14,6 +14,7 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 from threading import Thread
 from brain import EmpireBrain
+from modules.communications.reliable_email import send_email as reliable_send_email
 
 # Firebase fallback (optional)
 try:
@@ -59,6 +60,8 @@ stats = {
     "emails": 0, 
     "sms": 0, 
     "calls": 0,
+    "opens": 0,
+    "clicks": 0,
     "restarts": 0, 
     "last_heartbeat": time.time()
 }
@@ -275,46 +278,8 @@ def run_prospector():
 # ==== OUTREACH ====
 OWNER_EMAIL = "nearmiss1193@gmail.com"  # BCC for verification
 
-def send_email(email, company, name):
-    """Send outreach email via GHL webhook - with owner BCC for verification"""
-    global stats
-    html = f"""
-    <p>Hi {name or 'there'},</p>
-    <p>Quick question about <b>{company}</b> - are you still fielding after-hours calls yourself?</p>
-    <p>We built an AI phone agent that answers 24/7, books jobs, and never misses a call. 
-    <b>14-Day Free Trial</b>, no credit card needed.</p>
-    <p>Worth a quick look? <a href="https://aiserviceco.com">See Demo</a></p>
-    <p>- Daniel, AI Service Co<br>(352) 758-5336</p>
-    """
-    try:
-        # Send to prospect
-        r = requests.post(GHL_EMAIL, json={
-            "email": email,
-            "from_name": "Daniel",
-            "from_email": "daniel@aiserviceco.com",
-            "subject": f"Quick question for {company}",
-            "html_body": html
-        }, timeout=15)
-        
-        if r.ok:
-            stats["emails"] += 1
-            print(f"[EMAIL] ✅ Sent to {email}")
-            
-            # Send copy to owner for verification
-            requests.post(GHL_EMAIL, json={
-                "email": OWNER_EMAIL,
-                "from_name": "Empire Bot",
-                "from_email": "daniel@aiserviceco.com",
-                "subject": f"📧 SENT: {company} ({email})",
-                "html_body": f"<p><b>Copy of email sent to:</b> {email}</p><hr>{html}"
-            }, timeout=15)
-            
-            return True
-        else:
-            print(f"[EMAIL] ❌ Failed {r.status_code}: {r.text[:100]}")
-    except Exception as e:
-        print(f"[EMAIL] ❌ Exception: {e}")
-    return False
+# Removed local send_email function - replaced by modules.communications.reliable_email
+
 
 def send_sms(phone, message):
     """Send SMS via GHL webhook"""
@@ -375,8 +340,44 @@ def run_outreach():
         
         # EMAILS: Send 24/7 - no timezone restriction
         if email:
-            if send_email(email, company, lead.get("agent_research")):
+            # Construct personalized email
+            # Determine Niche Link for higher conversion
+            niche_url = "https://aiserviceco.com"
+            comp_lower = company.lower()
+            
+            if any(k in comp_lower for k in ["hvac", "air", "cool", "heat"]):
+                niche_url += "/hvac.html"
+            elif any(k in comp_lower for k in ["plumb", "pipe", "water"]):
+                niche_url += "/plumber.html"
+            elif any(k in comp_lower for k in ["roof"]):
+                niche_url += "/roofer.html"
+            elif any(k in comp_lower for k in ["electric", "power", "volt"]):
+                niche_url += "/electrician.html"
+            elif any(k in comp_lower for k in ["solar", "energy"]):
+                niche_url += "/solar.html"
+            elif any(k in comp_lower for k in ["landscape", "lawn", "garden"]):
+                niche_url += "/landscaping.html"
+            elif any(k in comp_lower for k in ["pest", "bug", "ant"]):
+                niche_url += "/pest.html"
+            elif any(k in comp_lower for k in ["clean", "maid"]):
+                niche_url += "/cleaning.html"
+            
+            html_body = f"""
+            <p>Hi {name or 'there'},</p>
+            <p>Quick question about <b>{company}</b> - are you still fielding after-hours calls yourself?</p>
+            <p>We built an AI phone agent that answers 24/7, books jobs, and never misses a call. 
+            <b>14-Day Free Trial</b>, no credit card needed.</p>
+            <p>Worth a quick look? <a href="{niche_url}">See Demo</a></p>
+            <p>- Daniel, AI Service Co<br>(352) 758-5336</p>
+            """
+            
+            # Tag with lead ID for tracking
+            tags = [{"name": "lead_id", "value": str(lead.get("id"))}]
+            
+            result = reliable_send_email(email, subject, html_body, tags=tags)
+            if result.get("success"):
                 emails_sent += 1
+                stats["emails"] += 1
         else:
             print(f"[OUTREACH] No email for {company}, skipping email")
         
@@ -641,10 +642,45 @@ def get_stats():
         "emails": stats.get("emails", 0),
         "sms": stats.get("sms", 0),
         "calls": stats.get("calls", 0),
+        "calls": stats.get("calls", 0),
+        "opens": stats.get("opens", 0),
+        "clicks": stats.get("clicks", 0),
         "restarts": stats.get("restarts", 0),
         "last_heartbeat": stats.get("last_heartbeat", 0),
         "uptime_check": "ok" if scheduler_thread and scheduler_thread.is_alive() else "dead"
     })
+
+@app.route("/resend/webhook", methods=["POST"])
+def resend_webhook():
+    """Handle Resend email events (Open/Click)"""
+    data = request.json
+    event_type = data.get("type")
+    
+    print(f"[RESEND WEBHOOK] {event_type}")
+    
+    # Check for lead_id tag
+    lead_id = None
+    tags = data.get("data", {}).get("tags", [])
+    # Resend sometimes sends tags as dict, sometimes list, handle list safely
+    if isinstance(tags, list):
+        for tag in tags:
+            if tag.get("name") == "lead_id":
+                lead_id = tag.get("value")
+                break
+    
+    if event_type == "email.opened":
+        stats["opens"] += 1
+        if lead_id:
+            supabase_request("PATCH", f"leads?id=eq.{lead_id}", {"status": "opened"})
+            print(f"[TRACKING] Lead {lead_id} OPENED email")
+            
+    elif event_type == "email.clicked":
+        stats["clicks"] += 1
+        if lead_id:
+            supabase_request("PATCH", f"leads?id=eq.{lead_id}", {"status": "clicked"})
+            print(f"[TRACKING] Lead {lead_id} CLICKED link")
+            
+    return jsonify({"status": "received"})
 
 @app.route("/trigger/prospect", methods=["POST"])
 def api_prospect():
