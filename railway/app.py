@@ -326,6 +326,92 @@ def trigger_call(phone, name):
         pass
     return False
 
+
+# ==== GHL CONVERSATIONS API ====
+def send_ghl_message(ghl_contact_id, message_text, conversation_id=None):
+    """Send SMS reply via GHL Conversations API"""
+    if not GHL_API_TOKEN:
+        print("[GHL] No API token configured")
+        return None
+    
+    payload = {
+        "type": "SMS",
+        "contactId": ghl_contact_id,
+        "message": message_text
+    }
+    if conversation_id:
+        payload["conversationId"] = conversation_id
+    
+    try:
+        r = requests.post(
+            "https://services.leadconnectorhq.com/conversations/messages",
+            headers={
+                "Authorization": f"Bearer {GHL_API_TOKEN}",
+                "Content-Type": "application/json",
+                "Version": "2021-04-15"
+            },
+            json=payload,
+            timeout=30
+        )
+        if r.ok:
+            result = r.json()
+            print(f"[GHL] ✅ Sent SMS to {ghl_contact_id}: {message_text[:50]}...")
+            return result.get("messageId") or result.get("id")
+        else:
+            print(f"[GHL] ❌ Send failed {r.status_code}: {r.text[:200]}")
+            return None
+    except Exception as e:
+        print(f"[GHL] ❌ Exception: {e}")
+        return None
+
+
+def generate_sarah_reply(contact_id, inbound_message, ghl_contact_id=None):
+    """Generate AI reply using Sarah persona + memory context"""
+    if not GEMINI_KEY:
+        print("[SARAH] No Gemini key configured")
+        return None
+    
+    # Get memory context
+    memory_context = get_memory_context_string(contact_id)
+    
+    prompt = f"""You are Sarah, a friendly and professional AI assistant for AI Service Co.
+You help home service businesses (HVAC, Plumbing, Roofing, etc.) with AI phone answering.
+
+CONTEXT FROM PREVIOUS INTERACTIONS:
+{memory_context}
+
+CUSTOMER MESSAGE:
+{inbound_message}
+
+INSTRUCTIONS:
+- Reply naturally and conversationally via SMS (keep under 160 chars if possible)
+- Reference any prior context if relevant
+- If they're interested, mention our 14-day free trial
+- If they want to schedule, ask for their preferred time
+- Be helpful, not pushy
+- Sign off as "- Sarah, AI Service Co" only if it's a longer message
+
+REPLY:"""
+
+    try:
+        r = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_KEY}",
+            json={
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"maxOutputTokens": 200}
+            },
+            timeout=15
+        )
+        
+        if r.ok:
+            reply = r.json().get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+            print(f"[SARAH] Generated reply: {reply[:100]}...")
+            return reply.strip() if reply else None
+    except Exception as e:
+        print(f"[SARAH] ❌ Generation failed: {e}")
+    
+    return None
+
 def run_outreach():
     """Contact new leads - EMAILS RUN 24/7, SMS only during business hours"""
     print(f"\n[{datetime.now().strftime('%H:%M')}] OUTREACH RUNNING (24/7 emails)")
@@ -741,29 +827,53 @@ def resend_webhook():
 def ghl_webhook():
     """
     Handle incoming GHL events (SMS replies, conversation updates).
-    Configure GHL Workflow: Inbound Webhook → POST to this endpoint
+    AUTO-REPLY ENABLED: Inbound messages trigger Sarah AI response via GHL API.
+    
+    Loop Prevention: Only respond to direction=inbound
+    Idempotency: Skip if messageId already processed
     """
     data = request.json
-    print(f"[GHL WEBHOOK] Received: {json.dumps(data)[:200]}")
+    print(f"[GHL WEBHOOK] Received: {json.dumps(data)[:300]}")
     
-    # Extract contact info from GHL payload
-    contact_id = data.get("contact_id") or data.get("contactId")
+    # Extract all possible field names from GHL payloads
+    ghl_contact_id = data.get("contactId") or data.get("contact_id")
+    conversation_id = data.get("conversationId") or data.get("conversation_id")
     phone = data.get("phone") or data.get("contact", {}).get("phone")
     email = data.get("email") or data.get("contact", {}).get("email")
     company = data.get("company_name") or data.get("contact", {}).get("companyName")
-    message = data.get("message") or data.get("body") or data.get("text")
-    message_type = data.get("type", "sms_in")
-    external_id = data.get("message_id") or data.get("id") or f"ghl-{int(time.time())}"
     
-    if not phone and not email and not contact_id:
+    # Message content
+    message = data.get("body") or data.get("message") or data.get("text")
+    message_id = data.get("messageId") or data.get("message_id") or data.get("id")
+    direction = data.get("direction", "inbound").lower()
+    message_type = data.get("type", "SMS").upper()
+    
+    # LOOP PREVENTION: Only respond to inbound messages
+    if direction != "inbound":
+        print(f"[GHL WEBHOOK] Skipping {direction} message (loop prevention)")
+        return jsonify({"status": "skipped", "reason": "not inbound"})
+    
+    # Only handle SMS for now
+    if message_type not in ["SMS", "TYPE_SMS"]:
+        print(f"[GHL WEBHOOK] Skipping non-SMS message type: {message_type}")
+        return jsonify({"status": "skipped", "reason": f"type={message_type}"})
+    
+    if not message:
+        print("[GHL WEBHOOK] No message body found")
+        return jsonify({"status": "skipped", "reason": "no message body"})
+    
+    if not ghl_contact_id and not phone and not email:
         print("[GHL WEBHOOK] No contact identifier found")
         return jsonify({"status": "error", "reason": "no contact identifier"}), 400
+    
+    # Generate external_id for idempotency
+    external_id = f"ghl-{message_id}" if message_id else f"ghl-{int(time.time())}"
     
     # Resolve or create contact in memory system
     contact = resolve_or_create_contact(
         phone=phone,
         email=email,
-        ghl_id=contact_id,
+        ghl_id=ghl_contact_id,
         company_name=company
     )
     
@@ -771,28 +881,58 @@ def ghl_webhook():
         print("[GHL WEBHOOK] Failed to resolve contact")
         return jsonify({"status": "error", "reason": "contact resolution failed"}), 500
     
-    # Determine event type
-    event_type = "sms_in"
-    if "reply" in message_type.lower() or "inbound" in message_type.lower():
-        event_type = "sms_in"
-    elif "outbound" in message_type.lower():
-        event_type = "sms_out"
-    
     # Generate summary
-    summary = f"SMS from {phone or 'unknown'}: {message[:100]}..." if message and len(message) > 100 else message
+    summary = f"SMS from {phone or 'contact'}: {message[:100]}..." if len(message) > 100 else f"SMS: {message}"
     
-    # Write event to memory
-    write_event(
+    # Write inbound event to memory (IDEMPOTENT via external_id UNIQUE constraint)
+    event_result = write_event(
         contact_id=contact["id"],
-        event_type=event_type,
+        event_type="sms_in",
         source="ghl",
         external_id=external_id,
         payload=data,
         summary=summary
     )
     
-    print(f"[GHL WEBHOOK] ✅ Logged event for contact {contact['id']}")
-    return jsonify({"status": "received", "contact_id": contact["id"]})
+    # If event already exists (duplicate), skip auto-reply
+    if not event_result:
+        print(f"[GHL WEBHOOK] Event already processed: {external_id}")
+        return jsonify({"status": "skipped", "reason": "duplicate"})
+    
+    print(f"[GHL WEBHOOK] ✅ Logged inbound SMS for contact {contact['id']}")
+    
+    # === AUTO-REPLY: Generate Sarah response ===
+    if ghl_contact_id:
+        reply = generate_sarah_reply(contact["id"], message, ghl_contact_id)
+        
+        if reply:
+            # Send reply via GHL Conversations API
+            outbound_msg_id = send_ghl_message(ghl_contact_id, reply, conversation_id)
+            
+            if outbound_msg_id:
+                # Log outbound event
+                write_event(
+                    contact_id=contact["id"],
+                    event_type="sms_out",
+                    source="ghl",
+                    external_id=f"ghl-out-{outbound_msg_id}",
+                    payload={"message": reply, "ghl_message_id": outbound_msg_id},
+                    summary=f"Sarah replied: {reply[:100]}"
+                )
+                print(f"[GHL WEBHOOK] ✅ Sarah auto-replied to {ghl_contact_id}")
+                return jsonify({
+                    "status": "replied",
+                    "contact_id": contact["id"],
+                    "reply_sent": True
+                })
+            else:
+                print(f"[GHL WEBHOOK] ⚠️ Failed to send reply via GHL API")
+        else:
+            print(f"[GHL WEBHOOK] ⚠️ Sarah did not generate a reply")
+    else:
+        print(f"[GHL WEBHOOK] ⚠️ No GHL contact ID - cannot auto-reply")
+    
+    return jsonify({"status": "received", "contact_id": contact["id"], "reply_sent": False})
 
 @app.route("/trigger/prospect", methods=["POST"])
 def api_prospect():
