@@ -9,3 +9,4 @@ sentry-sdk
 supabase
 python-dotenv
 schedule
+flask-cors

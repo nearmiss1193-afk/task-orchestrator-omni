@@ -12,6 +12,7 @@ import requests
 import schedule
 from datetime import datetime
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from threading import Thread
 from brain import EmpireBrain
 from modules.communications.reliable_email import send_email as reliable_send_email
@@ -25,6 +26,7 @@ except ImportError:
     print("[FIREBASE] Module not available")
 
 app = Flask(__name__)
+CORS(app)
 brain = EmpireBrain()
 
 # ==== CONFIG ====
