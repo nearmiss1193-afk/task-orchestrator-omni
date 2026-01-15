@@ -1,31 +1,26 @@
-"""Check recent leads in Supabase."""
-import os
-from dotenv import load_dotenv
-from supabase import create_client
+"""Check valid leads with phones for contactor"""
+import psycopg2
+import re
 
-load_dotenv()
+conn = psycopg2.connect(
+    host="db.rzcpfwkygdvoshtwxncs.supabase.co",
+    port=5432, database="postgres", user="postgres", password="Inez11752990@"
+)
+cur = conn.cursor()
 
-url = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
-key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+# Get leads with phones that aren't fake
+cur.execute("""
+    SELECT company_name, phone FROM leads 
+    WHERE status = 'new' AND phone IS NOT NULL 
+    AND phone NOT LIKE '%9999%' 
+    AND phone NOT LIKE '%0000%'
+    AND phone NOT LIKE '%555%'
+""")
+rows = cur.fetchall()
 
-client = create_client(url, key)
+print(f"Valid NEW leads ready for contact: {len(rows)}")
+for company, phone in rows[:15]:
+    print(f"  {company}: {phone}")
 
-print("🔍 RECENT LEADS IN SUPABASE:")
-print("-" * 60)
-
-try:
-    result = client.table("leads").select("*").order("id", desc=True).limit(10).execute()
-    
-    if result.data:
-        for lead in result.data:
-            print(f"ID: {lead.get('id')}")
-            print(f"  Company: {lead.get('company_name', 'N/A')}")
-            print(f"  Status: {lead.get('status', 'N/A')}")
-            print(f"  Phone: {lead.get('phone', 'N/A')}")
-            print(f"  Last Called: {lead.get('last_called', 'N/A')}")
-            print("-" * 40)
-    else:
-        print("No leads found in table!")
-        
-except Exception as e:
-    print(f"Error: {e}")
+cur.close()
+conn.close()
