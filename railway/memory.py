@@ -171,13 +171,19 @@ def get_or_create_conversation(contact_id, channel):
 # Event Logging (Append-Only)
 # ============================================
 def write_event(contact_id, event_type, source, external_id, payload, summary=None):
-    """
-    Write an event to the conversation log.
+    """Write an event to the conversation log.
     Uses external_id to prevent duplicates.
     
     event_type: sms_in|sms_out|call_start|call_end|email_in|email_out|note|booking
     source: ghl|vapi|resend|system
     """
+    # Defensive defaults for NOT NULL constraints
+    if not event_type:
+        event_type = "unknown"
+    if not source:
+        source = "system"
+    if summary is None:
+        summary = ""
     # Determine channel from event type
     if "sms" in event_type:
         channel = "sms"
@@ -187,23 +193,23 @@ def write_event(contact_id, event_type, source, external_id, payload, summary=No
         channel = "email"
     else:
         channel = "other"
-    
     # Get or create conversation
     conv = get_or_create_conversation(contact_id, channel)
     if not conv:
         print(f"[MEMORY] Failed to get conversation for {contact_id}")
         return None
-    
-    # Create event
+    # Ensure payload is a dict
+    if not isinstance(payload, dict):
+        payload = {"raw": payload}
+    # Build event dict with required fields
     event = {
         "conversation_id": conv["id"],
         "event_type": event_type,
         "source": source,
         "external_id": external_id,
-        "payload": payload if isinstance(payload, dict) else {"raw": payload},
-        "summary": summary
+        "payload": payload,
+        "summary": summary,
     }
-    
     result = _supabase_request("POST", "conversation_events", event)
     if result:
         print(f"[MEMORY] Logged event: {event_type} from {source}")
@@ -214,7 +220,6 @@ def write_event(contact_id, event_type, source, external_id, payload, summary=No
         # Trigger memory summary update (async in production)
         update_memory_summary(contact_id)
         return result[0] if isinstance(result, list) and len(result) > 0 else result
-    
     return None
 
 
