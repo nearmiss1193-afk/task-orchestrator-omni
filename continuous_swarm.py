@@ -1,5 +1,5 @@
 """
-🔥 CONTINUOUS AGENT SWARM - NEVER STOPS
+ CONTINUOUS AGENT SWARM - NEVER STOPS
 ========================================
 Runs locally in a loop. Prospects, enriches, and contacts continuously.
 When cloud rests, this picks up. When this rests, cloud picks up.
@@ -10,10 +10,19 @@ import json
 import requests
 import re
 import time
+import sys
 import threading
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
+
+# Force UTF-8 for Windows console
+if sys.stdout.encoding != 'utf-8':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except:
+        pass
+
 load_dotenv()
 
 # === CREDENTIALS ===
@@ -48,14 +57,14 @@ def get_active_regions():
 # === AGENT 1: PROSPECTOR ===
 def prospect_agent(niche_strategy=None):
     """Finds new leads from Apollo"""
-    print(f"\n🔍 [PROSPECTOR] Starting search...")
+    print(f"\n [PROSPECTOR] Starting search...")
     
     regions = get_active_regions()
     niches = ["HVAC contractors", "Roofing companies", "Plumbing services"]
     
     # Brain Strategy Injection
     if niche_strategy:
-        print(f"   🧠 Focusing on STRATEGIC NICHE: {niche_strategy}")
+        print(f"    Focusing on STRATEGIC NICHE: {niche_strategy}")
         # Map common names to Apollo keywords if needed
         strategies = {
             "plumber": "Plumbing services",
@@ -111,20 +120,20 @@ def prospect_agent(niche_strategy=None):
                             new_leads += 1
                         except:
                             pass
-                    print(f"   ✅ {region}/{niche}: {len(orgs)} found, {new_leads} new")
+                    print(f"    {region}/{niche}: {len(orgs)} found, {new_leads} new")
                 elif resp.status_code == 422:
-                    print(f"   ⚠️ Apollo rate limit - backing off")
-                    time.sleep(60)  # Wait 1 minute
+                    print(f"    Apollo rate limit - backing off (60s)")
+                    time.sleep(60) 
             except Exception as e:
-                print(f"   ❌ Error: {e}")
+                print(f"    Error: {e}")
     
-    print(f"🔍 [PROSPECTOR] Added {new_leads} new leads")
+    print(f" [PROSPECTOR] Added {new_leads} new leads")
     return new_leads
 
 # === AGENT 2: ENRICHER ===
 def enrich_agent():
     """Enriches leads with decision maker info - uses Apollo + Lusha fallback"""
-    print(f"\n🔬 [ENRICHER] Starting enrichment...")
+    print(f"\n [ENRICHER] Starting enrichment...")
     
     # Import Lusha for fallback
     try:
@@ -132,7 +141,7 @@ def enrich_agent():
         lusha_available = True
     except:
         lusha_available = False
-        print("   ⚠️ Lusha not available")
+        print("    Lusha not available")
     
     # Get leads needing enrichment
     try:
@@ -180,12 +189,12 @@ def enrich_agent():
                     
                     enriched += 1
                     apollo_success = True
-                    print(f"   ✅ {company} → {p.get('name')} (Apollo)")
+                    print(f"    {company}  {p.get('name')} (Apollo)")
             elif resp.status_code == 422:
-                print(f"   ⚠️ Apollo rate limit")
+                print(f"    Apollo rate limit")
                 time.sleep(30)
         except Exception as e:
-            print(f"   ⚠️ Apollo error: {e}")
+            print(f"    Apollo error: {e}")
         
         # LUSHA FALLBACK - if Apollo failed or rate limited
         if not apollo_success and lusha_available:
@@ -202,7 +211,7 @@ def enrich_agent():
                         domain = website.replace("https://", "").replace("http://", "").replace("www.", "").split("/")[0]
                         company_data = lusha.enrich_company(domain)
                         if company_data:
-                            print(f"   ✅ {company} company data (Lusha)")
+                            print(f"    {company} company data (Lusha)")
                 else:
                     result = lusha.enrich_person(first_name, last_name, company, "both")
                     if result and (result.get("email") or result.get("phone")):
@@ -221,25 +230,25 @@ def enrich_agent():
                         }).eq("id", lead["id"]).execute()
                         
                         enriched += 1
-                        print(f"   ✅ {company} → {first_name} {last_name} (Lusha)")
+                        print(f"    {company}  {first_name} {last_name} (Lusha)")
             except Exception as e:
-                print(f"   ⚠️ Lusha error: {e}")
+                print(f"    Lusha error: {e}")
         
         # If both failed, mark as no_contact
         if not apollo_success and not lusha_available:
             client.table("leads").update({"status": "no_contact"}).eq("id", lead["id"]).execute()
     
-    print(f"🔬 [ENRICHER] Enriched {enriched} leads")
+    print(f" [ENRICHER] Enriched {enriched} leads")
     return enriched
 
 # === AGENT 2.5: AUDITOR (GHL PROSPECTOR) ===
 def audit_agent():
     """Generates GHL Deficiency Reports for enriched leads"""
-    print(f"\n🕵️ [AUDITOR] Checking for leads to audit...")
+    print(f"\n [AUDITOR] Checking for leads to audit...")
     
     # Check if we have credentials
     if not os.getenv("GHL_EMAIL") or not os.getenv("GHL_PASSWORD"):
-        print("   ⚠️ Missing GHL_EMAIL/PASSWORD in .env - skipping audit")
+        print("    Missing GHL_EMAIL/PASSWORD in .env - skipping audit")
         return 0
 
     try:
@@ -264,7 +273,7 @@ def audit_agent():
         city = lead.get("city") or "Lakeland" # Fallback
         state = lead.get("state") or "FL"
         
-        print(f"   🕵️ Auditing: {company}...")
+        print(f"    Auditing: {company}...")
         
         try:
             # Generate Report
@@ -286,16 +295,16 @@ def audit_agent():
                     "agent_research": json.dumps(meta)
                 }).eq("id", lead["id"]).execute()
                 
-                print(f"   ✅ Report Generated: {report_link}")
+                print(f"    Report Generated: {report_link}")
                 audited_count += 1
             else:
-                print(f"   ⚠️ Failed to generate report")
+                print(f"    Failed to generate report")
                 # Mark as 'skipped_audit' so we don't loop forever? 
                 # Or just leave as enriched and let Contactor pick it up without audit (need to ensure Contactor handles both)
                 pass
 
         except Exception as e:
-            print(f"   ❌ Audit Error: {e}")
+            print(f"    Audit Error: {e}")
 
     return audited_count
 
@@ -315,16 +324,23 @@ def validate_phone(phone_str):
 def contact_agent():
     """Contacts enriched leads via call, SMS, email"""
     global last_call_time
-    print(f"\n📞 [CONTACTOR] Starting outreach...")
+    print(f"\n [CONTACTOR] Starting outreach...")
     
-    # Get leads to contact (prioritize audited, then enriched)
+    # Get leads to contact (prioritize audited, then enriched, then new)
     try:
         # First try Audited
         leads = client.table("leads").select("*").eq("status", "audited").limit(5).execute()
+        
         if not leads.data:
             # Fallback to Enriched
             leads = client.table("leads").select("*").eq("status", "enriched").limit(5).execute()
-    except:
+            
+            if not leads.data:
+                # Fallback to New (if they have a phone number)
+                # This ensures *movement* even if Apollo enrichment is rate-limited
+                leads = client.table("leads").select("*").eq("status", "new").not_.is_("phone", "null").order("created_at", desc=True).limit(5).execute()
+    except Exception as e:
+        print(f"       Database Error in Contactor: {e}")
         return {"calls": 0, "sms": 0, "emails": 0}
     
     stats = {"calls": 0, "sms": 0, "emails": 0}
@@ -346,8 +362,8 @@ def contact_agent():
         
         is_valid, clean_phone = validate_phone(phone)
         
-        print(f"\n   📍 {company}")
-        print(f"      👤 {decision_maker or 'Unknown'}")
+        print(f"\n    {company}")
+        print(f"       {decision_maker or 'Unknown'}")
         
         # TIME CHECK FOR CALLS
         current_hour = datetime.now().hour
@@ -358,7 +374,7 @@ def contact_agent():
             if time_since_last_call >= 120: # 2 minutes
                 if is_valid and clean_phone:
                     try:
-                        print("      📞 Initiating Call...")
+                        print("       Initiating Call...")
                         resp = requests.post(
                             "https://api.vapi.ai/call",
                             headers={"Authorization": f"Bearer {VAPI_KEY}", "Content-Type": "application/json"},
@@ -373,7 +389,7 @@ def contact_agent():
                         if resp.status_code in [200, 201]:
                             stats["calls"] += 1
                             last_call_time = time.time() # Update last call time
-                            print(f"      ✅ CALL → {clean_phone}")
+                            print(f"       CALL  {clean_phone}")
                             
                             # SMS FOLLOW-UP
                             try:
@@ -382,23 +398,23 @@ def contact_agent():
                                 resp = requests.post(GHL_SMS, json={"phone": clean_phone, "message": msg}, timeout=15)
                                 if resp.status_code in [200, 201]:
                                     stats["sms"] += 1
-                                    print(f"      ✅ SMS sent")
+                                    print(f"       SMS sent")
                             except:
                                 pass
                                 
                     except Exception as e:
-                        print(f"      ❌ Call failed: {e}")
+                        print(f"       Call failed: {e}")
             else:
-                print(f"      ⏳ Skipping call (pacing: {int(120 - time_since_last_call)}s remaining)")
+                print(f"       Skipping call (pacing: {int(120 - time_since_last_call)}s remaining)")
         else:
-            print(f"      ⏳ Skipping call (Before 8 AM)")
+            print(f"       Skipping call (Before 8 AM)")
         
         # EMAIL (Always send if we have an audit, regardless of time)
         if email and "@" in str(email):
             try:
                 audit_link = meta.get("audit_link")
                 if not audit_link:
-                    print(f"      ⚠️ No Audit Link - SKIPPING EMAIL (SOP Violation)")
+                    print(f"       No Audit Link - SKIPPING EMAIL (SOP Violation)")
                     continue
 
                 name = decision_maker.split()[0] if decision_maker else "there"
@@ -470,7 +486,7 @@ def contact_agent():
                 )
                 if resp.status_code in [200, 201]:
                     stats["emails"] += 1
-                    print(f"      ✅ EMAIL sent via GHL")
+                    print(f"       EMAIL sent via GHL")
                     
                     # SEND COPY TO OWNER
                     try:
@@ -487,7 +503,7 @@ def contact_agent():
                             },
                             timeout=10
                         )
-                        print(f"      📧 Copy sent to owner")
+                        print(f"       Copy sent to owner")
                     except:
                         pass
                     
@@ -505,7 +521,7 @@ def contact_agent():
                     except:
                         pass
             except:
-                print("      ❌ Email failed")
+                print("       Email failed")
                 pass
         
         # Update status
@@ -514,13 +530,13 @@ def contact_agent():
         except:
             pass
     
-    print(f"📞 [CONTACTOR] Calls: {stats['calls']}, SMS: {stats['sms']}, Emails: {stats['emails']}")
+    print(f" [CONTACTOR] Calls: {stats['calls']}, SMS: {stats['sms']}, Emails: {stats['emails']}")
     return stats
 
 # === THREADED LOOPS ===
 def run_production_loop(stop_event):
     """Loop for Finding, Enriching, and Auditing Leads (The Factory)"""
-    print("🏭 [PRODUCTION] Thread started...")
+    print(" [PRODUCTION] Thread started...")
     
     # Initialize The Brain
     from modules.learning.brain import EmpireBrain
@@ -531,7 +547,7 @@ def run_production_loop(stop_event):
             # 0. Learn & Optimize
             strategy = brain.reflect_and_optimize()
             target_niche = strategy.get("focus_niche", "plumber")
-            print(f"   🧠 Strategy Update: Targeting '{target_niche}'")
+            print(f"    Strategy Update: Targeting '{target_niche}'")
 
             # 1. Prospect
             # Pass the optimized niche to the prospector
@@ -548,28 +564,28 @@ def run_production_loop(stop_event):
             # Rest briefly to avoid hammering APIs
             time.sleep(5)
         except Exception as e:
-            print(f"   ❌ Production Loop Error: {e}")
+            print(f"   [ERROR] Production Loop: {e}")
             time.sleep(10)
 
 def run_outreach_loop(stop_event):
     """Loop for contacting leads (The Sales Floor)"""
-    print("☎️ [OUTREACH] Thread started...")
+    print("[OUTREACH] Thread started...")
     while not stop_event.is_set():
         try:
             contact_agent()
             # Check more frequently than production
             time.sleep(5)
         except Exception as e:
-            print(f"   ❌ Outreach Loop Error: {e}")
+            print(f"   [ERROR] Outreach Loop: {e}")
             time.sleep(10)
 
 # === MAIN SWARM LOOP ===
 def main():
     print("="*60)
-    print("🔥 CONTINUOUS AGENT SWARM - PARALLEL MODE 🔥")
+    print("CONTINUOUS AGENT SWARM - PARALLEL MODE")
     print("="*60)
-    print("   🏭 Thread 1: Prospecting, Enriching, Auditing")
-    print("   ☎️ Thread 2: Calling, SMS, Emailing")
+    print("   [THREAD 1] Prospecting, Enriching, Auditing")
+    print("   [THREAD 2] Calling, SMS, Emailing")
     print("="*60)
     print("Press Ctrl+C to stop")
     print()
@@ -587,14 +603,14 @@ def main():
         # Main thread just monitors
         while True:
             time.sleep(60)
-            print(f"\n✅ SWARM ACTIVE - {datetime.now().strftime('%I:%M %p ET')}")
+            print(f"\n[ACTIVE] SWARM STATUS - {datetime.now().strftime('%I:%M %p ET')}")
             
     except KeyboardInterrupt:
-        print("\n\n🛑 STOPPING SWARM...")
+        print("\n\n[STOP] STOPPING SWARM...")
         stop_event.set()
         # Allow threads a moment to finish current task
         time.sleep(2)
-        print("🏁 Swarm Shutdown Complete.")
+        print("[DONE] Swarm Shutdown Complete.")
 
 if __name__ == "__main__":
     main()

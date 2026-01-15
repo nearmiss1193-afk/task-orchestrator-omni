@@ -523,9 +523,9 @@ def get_plumber_landing_html(calendly_url="#", stripe_url="#"):
                     <div class="hero-badge-dot"></div>
                     <span>AI Dispatcher Active • 24/7/365</span>
                 </div>
-                <h1>Stop Losing <span class="highlight">$500</span> Emergency Jobs to Voicemail.</h1>
+                <h1>Stop Losing <span class="highlight">$500</span> Emergency Appointments to Voicemail.</h1>
                 <p class="hero-subtitle">
-                    Your current process misses 30% of calls. Dispatch Dan answers instantly, quotes leak repairs, and books jobs directly into ServiceTitan.
+                    Your current process misses 30% of calls. Dispatch Dan answers instantly, quotes leak repairs, and books appointments directly into ServiceTitan.
                 </p>
                 <div class="hero-proof">
                     "We saved 12 jobs last weekend alone. That's $6k in pure profit." - <strong>Mike's Plumbing (Tampa)</strong>
@@ -561,7 +561,7 @@ def get_plumber_landing_html(calendly_url="#", stripe_url="#"):
                     </div>
                     
                     <div class="stat-row">
-                        <span class="stat-label">Jobs Rescued (Wk)</span>
+                        <span class="stat-label">Appointments Rescued (Wk)</span>
                         <div class="stat-value">14 <span style="font-size: 14px; font-weight: 500; color: #64748b; color: #22c55e;">(+$7,400)</span></div>
                     </div>
                     

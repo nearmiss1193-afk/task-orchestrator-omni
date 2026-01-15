@@ -41,6 +41,37 @@
 </head>
 
 <body class="p-8 overflow-x-hidden">
+    <!-- PASSWORD GATE -->
+    <div id="authGate"
+        style="position:fixed;top:0;left:0;right:0;bottom:0;background:#020617;z-index:10000;display:flex;align-items:center;justify-content:center;">
+        <div
+            style="background:rgba(30,41,59,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:40px;text-align:center;max-width:400px;backdrop-filter:blur(10px);">
+            <div style="font-size:48px;margin-bottom:16px;">🏰</div>
+            <h1 style="color:white;font-size:24px;font-weight:bold;margin-bottom:8px;">Sovereign Vault</h1>
+            <p style="color:#94a3b8;font-size:14px;margin-bottom:24px;">Enter Authorization Code</p>
+            <input type="password" id="authPassword" placeholder="Enter Code..."
+                style="width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:white;text-align:center;font-family:monospace;letter-spacing:4px;margin-bottom:16px;outline:none;"
+                onkeypress="if(event.key==='Enter')checkAuth()">
+            <button onclick="checkAuth()"
+                style="width:100%;padding:12px;background:#2563eb;border:none;border-radius:8px;color:white;font-weight:bold;cursor:pointer;">UNSEAL
+                ACCESS</button>
+        </div>
+    </div>
+    <script>
+        function checkAuth() {
+            const pw = document.getElementById('authPassword').value;
+            if (pw === 'empire' || pw === 'sovereign') {
+                document.getElementById('authGate').style.display = 'none';
+                localStorage.setItem('sovereign_auth', 'true');
+            } else {
+                alert('Access Denied');
+            }
+        }
+        // Auto-unlock if previously authenticated
+        if (localStorage.getItem('sovereign_auth') === 'true') {
+            document.getElementById('authGate').style.display = 'none';
+        }
+    </script>
     <!-- CONFIG -->
     <script>
         // SOVEREIGN CREDENTIALS (Client-Side Safe for Dashboard)

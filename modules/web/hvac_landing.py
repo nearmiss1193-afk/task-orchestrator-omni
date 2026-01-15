@@ -2087,7 +2087,7 @@
             <div class="testimonials-grid">
                 <div class="testimonial-card">
                     <div class="testimonial-stars">˜…˜…˜…˜…˜…</div>
-                    <p class="testimonial-text">"I was skeptical at first, but this thing booked 4 jobs while I was asleep the first night. It paid for itself in 12 hours."</p>
+                    <p class="testimonial-text">"I was skeptical at first, but this thing booked 4 qualified appointments while I was asleep the first night. It paid for itself in 12 hours."</p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">JD</div>
                         <div class="testimonial-info">

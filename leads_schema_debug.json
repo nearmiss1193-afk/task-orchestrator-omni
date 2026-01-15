@@ -1,0 +1,28 @@
+{
+  "columns": [
+    "id",
+    "created_at",
+    "ghl_contact_id",
+    "email",
+    "website_url",
+    "company_name",
+    "agent_research",
+    "personalized_copy",
+    "status",
+    "last_called",
+    "sales_dossier"
+  ],
+  "sample_data": {
+    "id": "ec44463b-24af-4681-97cc-f257a40a758d",
+    "created_at": "2026-01-10T15:59:28.531587+00:00",
+    "ghl_contact_id": null,
+    "email": null,
+    "website_url": null,
+    "company_name": null,
+    "agent_research": null,
+    "personalized_copy": null,
+    "status": "called",
+    "last_called": "2026-01-10T10:59:28.727941",
+    "sales_dossier": null
+  }
+}

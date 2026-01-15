@@ -101,6 +101,48 @@ export default function MissionControl() {
         systemHealth: 'OPERATIONAL'
     });
 
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [password, setPassword] = useState('');
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (password === (process.env.DASHBOARD_PASSWORD || 'empire')) {
+            setIsAuthenticated(true);
+        } else {
+            alert('Access Denied');
+        }
+    };
+
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]">
+                <div className="w-full max-w-sm bg-slate-900 border border-white/10 p-8 rounded-2xl shadow-2xl backdrop-blur-xl">
+                    <div className="text-center mb-8">
+                        <div className="text-4xl mb-4">🏰</div>
+                        <h1 className="text-2xl font-bold text-white mb-2">Sovereign Vault</h1>
+                        <p className="text-slate-400 text-sm">Enter Authorization Code</p>
+                    </div>
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter Code..."
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 text-white text-center font-mono tracking-widest"
+                            autoFocus
+                        />
+                        <button
+                            type="submit"
+                            className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95"
+                        >
+                            UNSEAL ACCESS
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
     // Landing pages
     const landingPages = [
         { name: 'HVAC Landing', url: '/hvac_landing.html', status: 'ready' },
