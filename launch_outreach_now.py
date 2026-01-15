@@ -58,7 +58,7 @@ for i, lead in enumerate(leads):
             <p>I just ran a quick audit on <b>{company}</b> and noticed you might be missing calls after hours.</p>
             <p>Most service businesses lose 20-30 calls per week when they can't pick up. We built an AI that answers 24/7, sounds like a real person, and books jobs while you sleep.</p>
             <p><b>14-Day Free Trial</b> - no credit card needed. Let me know if you want to try it.</p>
-            <p>Best,<br>Daniel<br>AI Service Co<br>(407) 289-1784</p>
+            <p>Best,<br>Daniel<br>AI Service Co<br>(352) 758-5336</p>
             """
             resp = requests.post(GHL_EMAIL, json={
                 "email": email,
@@ -82,7 +82,7 @@ for i, lead in enumerate(leads):
         clean_phone = ''.join(filter(str.isdigit, str(phone)))
         if len(clean_phone) >= 10:
             try:
-                msg = f"Hi! Daniel here from AI Service Co. Just emailed you about an AI receptionist for {company}. 14-day free trial, no card needed. Interested? (407) 289-1784"
+                msg = f"Hi! Daniel here from AI Service Co. Just emailed you about an AI receptionist for {company}. 14-day free trial, no card needed. Interested? (352) 758-5336"
                 resp = requests.post(GHL_SMS, json={
                     "phone": f"+1{clean_phone[-10:]}",
                     "message": msg

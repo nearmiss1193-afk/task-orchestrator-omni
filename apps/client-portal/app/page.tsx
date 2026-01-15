@@ -518,12 +518,12 @@ export default function MissionControl() {
                                 <div className="text-5xl mb-4 opacity-50">📞</div>
                                 <h3 className="text-xl font-medium text-slate-300">No Calls Recorded Yet</h3>
                                 <p className="text-slate-500 mt-2 max-w-md mx-auto">
-                                    Calls made to your Vapi agent <strong>(407) 289-1784</strong> will appear here automatically with transcripts and summaries.
+                                    Calls made to your Vapi agent <strong>(352) 758-5336</strong> will appear here automatically with transcripts and summaries.
                                 </p>
                                 <div className="mt-8">
                                     <p className="text-sm text-slate-400 mb-2">Try it now:</p>
                                     <div className="inline-block bg-white/5 px-4 py-2 rounded font-mono text-purple-400 border border-purple-500/30">
-                                        (407) 289-1784
+                                        (352) 758-5336
                                     </div>
                                 </div>
                             </div>

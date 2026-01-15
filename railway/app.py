@@ -334,12 +334,12 @@ def trigger_call(phone, name):
 
 # ==== GHL CONVERSATIONS API ====
 # GHL SMS-capable number (NOT the Vapi voice number)
-GHL_SMS_NUMBER = "+1(407) 289-1784"  # (407) 289-1784 - SMS capable in GHL
+GHL_SMS_NUMBER = "+1(352) 758-5336"  # (352) 758-5336 - SMS capable in GHL
 
 def send_ghl_message(ghl_contact_id, message_text, conversation_id=None, to_number=None):
     """Send SMS reply via GHL Conversations API
     
-    IMPORTANT: Uses GHL's SMS-capable number ((407) 289-1784), NOT Vapi's voice number.
+    IMPORTANT: Uses GHL's SMS-capable number ((352) 758-5336), NOT Vapi's voice number.
     The Vapi number (863-213-2505) is VOICE ONLY and will return 'invalid number'.
     """
     if not GHL_API_TOKEN:
@@ -457,27 +457,44 @@ Reply naturally, sign as "- Sarah".
 REPLY:"""
 
     try:
-        log(f"[SARAH] Calling Gemini 1.5-Flash...")
+        log(f\"[SARAH] Calling Gemini 1.5-Flash...\")
         r = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}",
+            f\"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}\",
             json={
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {"maxOutputTokens": 200}
+                \"contents\": [{\"parts\": [{\"text\": prompt}]}],
+                \"generationConfig\": {
+                    \"maxOutputTokens\": 200,
+                    \"temperature\": 0.7
+                }
             },
             timeout=15
         )
         
         if r.ok:
             data = r.json()
-            reply = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-            if reply:
-                log(f"[SARAH] ✅ Success")
-                return reply.strip()
-            log(f"[SARAH] ⚠️ Empty reply. Body: {json.dumps(data)}")
+            # More robust parsing
+            candidates = data.get(\"candidates\", [])
+            if candidates:
+                first_candidate = candidates[0]
+                content = first_candidate.get(\"content\", {})
+                parts = content.get(\"parts\", [])
+                if parts:
+                    reply = parts[0].get(\"text\", \"\")
+                    if reply:
+                        log(f\"[SARAH] ✅ Success\")
+                        return reply.strip()
+            
+            # If we reach here, we had candidates but no text, or no candidates
+            log(f\"[SARAH] ⚠️ Empty/Blocked reply. Body: {json.dumps(data)}\")
+            
+            # Fallback if it was just a status check or greeting
+            if \"test\" in inbound_message.lower() or \"hi\" in inbound_message.lower():
+                log(\"[SARAH] 🔄 Using fallback for test/greeting\")
+                return \"Hi! Sarah here from AI Service Co. How can I help you?\"
         else:
-            log(f"[SARAH] ❌ API Error {r.status_code}: {r.text[:200]}")
+            log(f\"[SARAH] ❌ API Error {r.status_code}: {r.text[:200]}\")
     except Exception as e:
-        log(f"[SARAH] ❌ Exception: {e}")
+        log(f\"[SARAH] ❌ Exception: {e}\")
     
     return None
 
@@ -529,7 +546,7 @@ def run_outreach():
             <p>We built an AI phone agent that answers 24/7, books jobs, and never misses a call. 
             <b>14-Day Free Trial</b>, no credit card needed.</p>
             <p>Worth a quick look? <a href="{niche_url}">See Demo</a></p>
-            <p>- Daniel, AI Service Co<br>(407) 289-1784</p>
+            <p>- Daniel, AI Service Co<br>(352) 758-5336</p>
             """
             
             # Tag with lead ID for tracking

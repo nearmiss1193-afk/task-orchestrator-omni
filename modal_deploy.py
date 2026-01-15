@@ -373,7 +373,7 @@ def cloud_drip_campaign():
                     "from": "Daniel @ AI Service Co <system@aiserviceco.com>",
                     "to": [email],
                     "subject": f"Following up - {company}",
-                    "html": f"<p>Hi! Just wanted to follow up on my previous message about AI phone agents for {company}.</p><p>Would love to show you how it works. Reply to chat!</p><p>- Daniel<br>(407) 289-1784</p>"
+                    "html": f"<p>Hi! Just wanted to follow up on my previous message about AI phone agents for {company}.</p><p>Would love to show you how it works. Reply to chat!</p><p>- Daniel<br>(352) 758-5336</p>"
                 }
             )
             if res.status_code in [200, 201]:
@@ -747,7 +747,7 @@ def cloud_multi_touch():
                     "company": company,
                     "action": "send_email",
                     "subject": f"Quick question for {company}",
-                    "message": f"Hi! I noticed {company} might benefit from AI phone agents that can answer calls 24/7, book appointments, and qualify leads. Worth a quick 5-minute chat?\n\n- Daniel\n(407) 289-1784"
+                    "message": f"Hi! I noticed {company} might benefit from AI phone agents that can answer calls 24/7, book appointments, and qualify leads. Worth a quick 5-minute chat?\n\n- Daniel\n(352) 758-5336"
                 }
                 res = requests.post(
                     GHL_EMAIL_WEBHOOK,
@@ -768,7 +768,7 @@ def cloud_multi_touch():
             try:
                 sms_payload = {
                     "phone": phone,
-                    "message": f"Hi! This is Daniel from AI Service Co. I help businesses like {company} automate phone calls with AI. Would you be open to a quick chat? Call/text: (407) 289-1784"
+                    "message": f"Hi! This is Daniel from AI Service Co. I help businesses like {company} automate phone calls with AI. Would you be open to a quick chat? Call/text: (352) 758-5336"
                 }
                 sms_res = requests.post(
                     GHL_SMS_WEBHOOK,

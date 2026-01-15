@@ -104,7 +104,7 @@ def make_call(phone, company):
 def send_sms(phone, company):
     """SMS via GHL"""
     try:
-        msg = f"Hi! This is Daniel from AI Service Co. I help businesses like {company} automate phone calls with AI. Worth a quick chat? (407) 289-1784"
+        msg = f"Hi! This is Daniel from AI Service Co. I help businesses like {company} automate phone calls with AI. Worth a quick chat? (352) 758-5336"
         resp = requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": msg}, timeout=15)
         return resp.status_code in [200, 201]
     except:
@@ -123,7 +123,7 @@ def send_email(email, company):
                 "from": "Daniel @ AI Service Co <daniel@aiserviceco.com>",
                 "to": [email],
                 "subject": f"Quick question for {company}",
-                "html": f"<p>Hi!</p><p>I noticed {company} might benefit from AI phone automation for appointment setting, customer service, and lead qualification.</p><p>Would you be open to a quick 5-minute call this week?</p><p>Best,<br>Daniel<br>AI Service Co<br>(407) 289-1784</p>"
+                "html": f"<p>Hi!</p><p>I noticed {company} might benefit from AI phone automation for appointment setting, customer service, and lead qualification.</p><p>Would you be open to a quick 5-minute call this week?</p><p>Best,<br>Daniel<br>AI Service Co<br>(352) 758-5336</p>"
             },
             timeout=15
         )

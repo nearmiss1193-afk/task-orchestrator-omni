@@ -317,7 +317,7 @@ def contactor_agent():
             # SMS
             try:
                 name = decision_maker.split()[0] if decision_maker else "there"
-                msg = f"Hi {name}! Daniel from AI Service Co. We help businesses like {company} automate customer calls with AI. Worth a chat? (407) 289-1784"
+                msg = f"Hi {name}! Daniel from AI Service Co. We help businesses like {company} automate customer calls with AI. Worth a chat? (352) 758-5336"
                 resp = requests.post(GHL_SMS, json={"phone": clean_phone, "message": msg}, timeout=15)
                 if resp.status_code in [200, 201]:
                     stats["sms"] += 1
@@ -337,7 +337,7 @@ def contactor_agent():
                         "from": "Daniel <daniel@aiserviceco.com>",
                         "to": [email],
                         "subject": f"AI phone automation for {company}?",
-                        "html": f"<p>Hi {name},</p><p>Quick question - would AI that answers your phones 24/7 help {company}?</p><p>We help service businesses automate customer calls. Worth a 5-min chat?</p><p>Best,<br>Daniel<br>(407) 289-1784</p>"
+                        "html": f"<p>Hi {name},</p><p>Quick question - would AI that answers your phones 24/7 help {company}?</p><p>We help service businesses automate customer calls. Worth a 5-min chat?</p><p>Best,<br>Daniel<br>(352) 758-5336</p>"
                     },
                     timeout=15
                 )

@@ -302,7 +302,7 @@ handling leads right now?"
 "Here's where it gets interesting. I'm going to call 
 your new AI right now - listen to this..."
 
-[Call the Vapi demo number: (407) 289-1784]
+[Call the Vapi demo number: (352) 758-5336]
 [Have them hear the AI answer, qualify, book appointment]
 ```
 

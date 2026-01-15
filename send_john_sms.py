@@ -7,7 +7,7 @@ load_dotenv()
 
 TOKEN = os.getenv("GHL_AGENCY_API_TOKEN")
 LOCATION_ID = "RnK4OjX0oDcqtWw00VyLr" # AI Service Company
-YOUR_NUMBER = "+1(407) 289-1784"
+YOUR_NUMBER = "+1(352) 758-5336"
 
 url = "https://services.leadconnectorhq.com/conversations/messages"
 headers = {

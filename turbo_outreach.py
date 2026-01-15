@@ -15,7 +15,7 @@ PROSPECTS = [
     {
         "business": "ABC Air Conditioning & Heating",
         "email": "owner@aiserviceco.com",  # Send to owner for verification
-        "phone": "+1(407) 289-1784",
+        "phone": "+1(352) 758-5336",
         "city": "Orlando",
         "audit_link": "https://prod.analyzemy.business/#/share/report/test-abc-hvac"
     },
@@ -38,7 +38,7 @@ def send_email(prospect):
     <p>Best,<br>
     Daniel<br>
     AI Service Co<br>
-    (407) 289-1784</p>
+    (352) 758-5336</p>
     """
     
     payload = {

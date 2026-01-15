@@ -15,7 +15,7 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def create_test_lead():
-    user_phone = "+1(407) 289-1784" # User's verified number
+    user_phone = "+1(352) 758-5336" # User's verified number
     
     import uuid
     

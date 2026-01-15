@@ -65,7 +65,7 @@ Worth a quick chat?
 
 - Daniel
 AI Service Co
-(407) 289-1784
+(352) 758-5336
 """
 
     try:
@@ -94,7 +94,7 @@ def send_sms(phone: str, company: str) -> bool:
         print(f"  [SMS] ⚠️ No Twilio credentials")
         return False
     
-    message = f"Hi! Just sent you an email about AI phone agents for {company}. Have a minute to chat? Reply YES or call (407) 289-1784 - Sarah will answer!"
+    message = f"Hi! Just sent you an email about AI phone agents for {company}. Have a minute to chat? Reply YES or call (352) 758-5336 - Sarah will answer!"
     
     try:
         # Use requests instead of Twilio SDK

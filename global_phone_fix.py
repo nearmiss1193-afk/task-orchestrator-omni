@@ -6,16 +6,16 @@ ROOT_DIR = r"C:\Users\nearm\.gemini\antigravity\scratch\empire-unified"
 EXCLUDE_DIRS = ['backups', '.git', '.vercel', 'node_modules', '__pycache__']
 
 OLD_NUMBERS = [
-    r"352-758-5336",
-    r"\(352\) 758-5336",
-    r"3527585336",
-    r"1-352-758-5336",
-    r"\+1 352-758-5336",
-    r"\+1 \(352\) 758-5336"
+    r"407-289-1784",
+    r"\(407\) 289-1784",
+    r"4072891784",
+    r"1-407-289-1784",
+    r"\+1 407-289-1784",
+    r"\+1 \(407\) 289-1784"
 ]
 
-NEW_DISPLAY = "(407) 289-1784"
-NEW_LINK = "+14072891784"
+NEW_DISPLAY = "(352) 758-5336"
+NEW_LINK = "+13527585336"
 
 def global_replace():
     print(f"🚀 Starting GLOBAL Identity Transition to {NEW_DISPLAY}")

@@ -35,7 +35,7 @@ def debug_vapi_resources():
 
     # 2. Get Phone Numbers
     phone_id = None
-    phone_number_str = "1(407) 289-1784" # Target business number
+    phone_number_str = "1(352) 758-5336" # Target business number
     try:
         res = requests.get("https://api.vapi.ai/phone-number", headers=headers)
         phones = res.json()
