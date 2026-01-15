@@ -117,7 +117,7 @@ def make_call(phone, company_name):
 
 def process_lead(lead_id, company_name, website, email, phone, city, state):
     """Full Manus-style audit + outreach for one lead"""
-    print(f"\n🎯 Processing: {company_name}")
+    print(f"\n[TARGET] Processing: {company_name}")
     
     # Step 1: Generate Site Audit (our own)
     audit_report = None
@@ -207,7 +207,7 @@ def run_campaign_cycle():
 
 def main():
     """Main loop - run every 10 minutes like Manus"""
-    print("🔥 TURBO MANUS-STYLE CAMPAIGN STARTED")
+    print("TURBO MANUS-STYLE CAMPAIGN STARTED")
     print("   Generating audits + Email + SMS every 10 minutes")
     print("   Press Ctrl+C to stop\n")
     
