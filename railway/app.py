@@ -1009,115 +1009,111 @@ def ghl_webhook():
 
 @app.route("/ghl/inbound-sms", methods=["POST"])
 def ghl_inbound_sms():
-    """
-    2-WORKFLOW BOUNCE ENDPOINT
-    ==========================
-    Workflow A: Customer Replied → POST here
-    This endpoint: Generate Sarah reply → POST to Workflow B
-    Workflow B: Inbound Webhook → Send SMS (native GHL action)
-    
-    NO API NEEDED - uses GHL's native SMS sending which bypasses all API issues.
-    """
-    data = request.json
-    print(f"[INBOUND SMS] Received: {json.dumps(data)[:300]}")
-    
-    # Extract fields - support multiple GHL payload formats
-    phone = data.get("phone") or data.get("contact_phone") or data.get("contact", {}).get("phone")
-    email = data.get("email") or data.get("contact_email") or data.get("contact", {}).get("email")
-    message = data.get("body") or data.get("message") or data.get("text") or data.get("message_body")
-    message_id = data.get("messageId") or data.get("message_id") or data.get("id")
-    contact_id = data.get("contactId") or data.get("contact_id")
-    conversation_id = data.get("conversationId") or data.get("conversation_id")
-    direction = data.get("direction", "inbound").lower()
-    
-    # LOOP PREVENTION
-    if direction != "inbound":
-        print(f"[INBOUND SMS] Skipping {direction} message (loop prevention)")
-        return jsonify({"status": "skipped", "reason": "not inbound"})
-    
-    if not message:
-        print("[INBOUND SMS] No message body")
-        return jsonify({"status": "skipped", "reason": "no message"})
-    
-    if not phone and not email:
-        print("[INBOUND SMS] No phone or email - cannot reply")
-        return jsonify({"status": "error", "reason": "no contact identifier"}), 400
-    
-    # Generate external_id for idempotency
-    external_id = f"sms-{message_id}" if message_id else f"sms-{int(time.time())}"
-    
-    # Resolve contact in memory
-    contact = resolve_or_create_contact(
-        phone=phone,
-        email=email,
-        ghl_id=contact_id
-    )
-    
-    if not contact:
-        print("[INBOUND SMS] Failed to resolve contact")
-        return jsonify({"status": "error", "reason": "contact resolution failed"}), 500
-    
-    # Log inbound event (idempotent)
-    summary = f"SMS: {message[:100]}" if len(message) <= 100 else f"SMS: {message[:97]}..."
-    event_result = write_event(
-        contact_id=contact["id"],
-        event_type="sms_in",
-        source="ghl_workflow",
-        external_id=external_id,
-        payload=data,
-        summary=summary,
-        ghl_contact_id=contact_id,
-        direction="inbound"
-    )
-    
-    if not event_result:
-        print(f"[INBOUND SMS] Duplicate: {external_id}")
-        return jsonify({"status": "skipped", "reason": "duplicate"})
-    
-    print(f"[INBOUND SMS] ✅ Logged for contact {contact['id']}")
-    
-    # === GENERATE SARAH REPLY ===
-    reply = generate_sarah_reply(contact["id"], message, contact_id)
-    
-    if not reply:
-        print("[INBOUND SMS] ⚠️ No reply generated")
-        return jsonify({"status": "received", "contact_id": contact["id"], "reply_sent": False})
-    
-    # === 2-WORKFLOW BOUNCE: POST to Workflow B ===
-    success = send_reply_via_workflow_b(
-        phone=phone,
-        reply_text=reply,
-        source_message_id=external_id
-    )
-    
-    if success:
-        # Log outbound event
-        write_event(
-            contact_id=contact["id"],
-            event_type="sms_out",
-            source="ghl_workflow",
-            external_id=f"out-{external_id}",
-            payload={"message": reply, "method": "workflow_bounce"},
-            summary=f"Sarah replied: {reply[:100]}",
-            ghl_contact_id=contact_id,
-            direction="outbound"
+    try:
+        data = request.json
+        print(f"[INBOUND SMS] Received: {json.dumps(data)[:300]}")
+        
+        # Extract fields - support multiple GHL payload formats
+        phone = data.get("phone") or data.get("contact_phone") or data.get("contact", {}).get("phone")
+        email = data.get("email") or data.get("contact_email") or data.get("contact", {}).get("email")
+        message = data.get("body") or data.get("message") or data.get("text") or data.get("message_body")
+        message_id = data.get("messageId") or data.get("message_id") or data.get("id")
+        contact_id = data.get("contactId") or data.get("contact_id")
+        conversation_id = data.get("conversationId") or data.get("conversation_id")
+        direction = data.get("direction", "inbound").lower()
+        
+        # LOOP PREVENTION
+        if direction != "inbound":
+            print(f"[INBOUND SMS] Skipping {direction} message (loop prevention)")
+            return jsonify({"status": "skipped", "reason": "not inbound"})
+        
+        if not message:
+            print("[INBOUND SMS] No message body")
+            return jsonify({"status": "skipped", "reason": "no message"})
+        
+        if not phone and not email:
+            print("[INBOUND SMS] No phone or email - cannot reply")
+            return jsonify({"status": "error", "reason": "no contact identifier"}), 400
+        
+        # Generate external_id for idempotency
+        external_id = f"sms-{message_id}" if message_id else f"sms-{int(time.time())}"
+        
+        # Resolve contact in memory
+        contact = resolve_or_create_contact(
+            phone=phone,
+            email=email,
+            ghl_id=contact_id
         )
-        print(f"[INBOUND SMS] ✅ Reply queued via Workflow B")
-        return jsonify({
-            "status": "replied",
-            "contact_id": contact["id"],
-            "reply_sent": True,
-            "method": "workflow_bounce"
-        })
-    else:
-        print(f"[INBOUND SMS] ⚠️ Workflow B POST failed")
-        return jsonify({
-            "status": "received",
-            "contact_id": contact["id"],
-            "reply_sent": False,
-            "error": "workflow_b_failed"
-        })
-
+        
+        if not contact:
+            print("[INBOUND SMS] Failed to resolve contact")
+            return jsonify({"status": "error", "reason": "contact resolution failed"}), 500
+        
+        # Log inbound event (idempotent)
+        summary = f"SMS: {message[:100]}" if len(message) <= 100 else f"SMS: {message[:97]}..."
+        event_result = write_event(
+            contact_id=contact["id"],
+            event_type="sms_in",
+            source="ghl_workflow",
+            external_id=external_id,
+            payload=data,
+            summary=summary,
+            ghl_contact_id=contact_id,
+            direction="inbound"
+        )
+        
+        if not event_result:
+            print(f"[INBOUND SMS] Duplicate or DB Error: {external_id}")
+            return jsonify({"status": "skipped", "reason": "duplicate or db_error"})
+        
+        print(f"[INBOUND SMS] Logged for contact {contact['id']}")
+        
+        # === GENERATE SARAH REPLY ===
+        reply = generate_sarah_reply(contact["id"], message, contact_id)
+        
+        if not reply:
+            print("[INBOUND SMS] No reply generated")
+            return jsonify({"status": "received", "contact_id": contact["id"], "reply_sent": False})
+        
+        # === 2-WORKFLOW BOUNCE: POST to Workflow B ===
+        success = send_reply_via_workflow_b(
+            phone=phone,
+            reply_text=reply,
+            source_message_id=external_id
+        )
+        
+        if success:
+            # Log outbound event
+            write_event(
+                contact_id=contact["id"],
+                event_type="sms_out",
+                source="ghl_workflow",
+                external_id=f"out-{external_id}",
+                payload={"message": reply, "method": "workflow_bounce"},
+                ghl_contact_id=contact_id,
+                direction="outbound"
+            )
+            return jsonify({
+                "status": "received", 
+                "contact_id": contact["id"], 
+                "reply_sent": True, 
+                "method": "workflow_bounce"
+            })
+        else:
+            print(f"[INBOUND SMS] Workflow B POST failed")
+            return jsonify({
+                "status": "received",
+                "contact_id": contact["id"],
+                "reply_sent": False,
+                "error": "workflow_b_failed"
+            })
+            
+    except Exception as e:
+        import traceback
+        error_msg = traceback.format_exc()
+        print(f"[INBOUND SMS] CRASH: {error_msg}")
+        return jsonify({"status": "error", "reason": str(e), "traceback": error_msg}), 500
+    
 @app.route("/trigger/prospect", methods=["POST"])
 def api_prospect():
     run_prospector()

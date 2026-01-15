@@ -239,21 +239,24 @@ def write_event(contact_id, event_type, source, external_id, payload, summary=No
     }
     
     result = _supabase_request("POST", "conversation_events", event)
-    if result:
-        print(f"[MEMORY] Logged event: {event_type} (Dir: {direction}, Ch: {channel})")
-        # Update conversation last_event_at
-        _supabase_request("PATCH", f"conversations?id=eq.{conv['id']}", {
-            "last_event_at": datetime.utcnow().isoformat()
-        })
-        # Trigger memory summary update (async if possible)
-        try:
-            update_memory_summary(contact_id)
-        except Exception as e:
-            print(f"[MEMORY] Update summary failed: {e}")
-            
-        return result[0] if isinstance(result, list) and len(result) > 0 else result
     
-    return None
+    # If Supabase returns an error (dict with 'code') or None, return None to indicate failure
+    if not result or (isinstance(result, dict) and result.get("code")):
+        return None
+        
+    print(f"[MEMORY] Logged event: {event_type} (Dir: {direction}, Ch: {channel})")
+    # Update conversation last_event_at
+    _supabase_request("PATCH", f"conversations?id=eq.{conv['id']}", {
+        "last_event_at": datetime.utcnow().isoformat()
+    })
+    
+    # Trigger memory summary update (async if possible)
+    try:
+        update_memory_summary(contact_id)
+    except Exception as e:
+        print(f"[MEMORY] Update summary failed: {e}")
+            
+    return result[0] if isinstance(result, list) and len(result) > 0 else result
 
 
 # ============================================
