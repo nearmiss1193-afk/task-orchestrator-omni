@@ -457,14 +457,14 @@ Reply naturally, sign as "- Sarah".
 REPLY:"""
 
     try:
-        log(f\"[SARAH] Calling Gemini 1.5-Flash...\")
+        log(f"[SARAH] Calling Gemini 1.5-Flash...")
         r = requests.post(
-            f\"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}\",
+            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}",
             json={
-                \"contents\": [{\"parts\": [{\"text\": prompt}]}],
-                \"generationConfig\": {
-                    \"maxOutputTokens\": 200,
-                    \"temperature\": 0.7
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {
+                    "maxOutputTokens": 200,
+                    "temperature": 0.7
                 }
             },
             timeout=15
@@ -473,28 +473,28 @@ REPLY:"""
         if r.ok:
             data = r.json()
             # More robust parsing
-            candidates = data.get(\"candidates\", [])
+            candidates = data.get("candidates", [])
             if candidates:
                 first_candidate = candidates[0]
-                content = first_candidate.get(\"content\", {})
-                parts = content.get(\"parts\", [])
+                content = first_candidate.get("content", {})
+                parts = content.get("parts", [])
                 if parts:
-                    reply = parts[0].get(\"text\", \"\")
+                    reply = parts[0].get("text", "")
                     if reply:
-                        log(f\"[SARAH] ✅ Success\")
+                        log(f"[SARAH] ✅ Success")
                         return reply.strip()
             
             # If we reach here, we had candidates but no text, or no candidates
-            log(f\"[SARAH] ⚠️ Empty/Blocked reply. Body: {json.dumps(data)}\")
+            log(f"[SARAH] ⚠️ Empty/Blocked reply. Body: {json.dumps(data)}")
             
             # Fallback if it was just a status check or greeting
-            if \"test\" in inbound_message.lower() or \"hi\" in inbound_message.lower():
-                log(\"[SARAH] 🔄 Using fallback for test/greeting\")
-                return \"Hi! Sarah here from AI Service Co. How can I help you?\"
+            if "test" in inbound_message.lower() or "hi" in inbound_message.lower():
+                log("[SARAH] 🔄 Using fallback for test/greeting")
+                return "Hi! Sarah here from AI Service Co. How can I help you?"
         else:
-            log(f\"[SARAH] ❌ API Error {r.status_code}: {r.text[:200]}\")
+            log(f"[SARAH] ❌ API Error {r.status_code}: {r.text[:200]}")
     except Exception as e:
-        log(f\"[SARAH] ❌ Exception: {e}\")
+        log(f"[SARAH] ❌ Exception: {e}")
     
     return None
 
