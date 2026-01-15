@@ -50,8 +50,7 @@ GHL_EMAIL = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/web
 # === 2-WORKFLOW BOUNCE: AI Reply Webhook ===
 # Workflow B: "AI Reply → Send SMS" - Inbound Webhook Trigger URL
 # Create this workflow in GHL: Trigger=Inbound Webhook → Action=Send SMS using {{replyText}}
-# REPLACE THIS URL with the one GHL generates when you create Workflow B
-GHL_REPLY_WEBHOOK = os.environ.get("GHL_REPLY_WEBHOOK") or "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/REPLACE_WITH_WORKFLOW_B_URL"
+GHL_REPLY_WEBHOOK = os.environ.get("GHL_REPLY_WEBHOOK") or "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/44e67279-2ad5-491c-82f0-f8eaadea085c"
 
 SARAH_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
 PHONE_ID = "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"
