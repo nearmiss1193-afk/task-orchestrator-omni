@@ -226,15 +226,12 @@ def write_event(contact_id, event_type, source, external_id, payload, summary=No
     if not isinstance(payload, dict):
         payload = {"raw": payload}
         
-    # DEBUG: Append timestamp to external_id to force new insert during test
-    debug_external_id = f"{external_id}-{int(time.time())}"
-    
     event = {
         "conversation_id": conv["id"],
         "ghl_contact_id": ghl_contact_id,
         "event_type": event_type,
         "source": source,
-        "external_id": debug_external_id,
+        "external_id": external_id,
         "payload": payload,
         "summary": summary,
         "direction": direction,
@@ -243,13 +240,17 @@ def write_event(contact_id, event_type, source, external_id, payload, summary=No
     
     result = _supabase_request("POST", "conversation_events", event)
     if result:
-        print(f"[MEMORY] Logged event: {event_type} from {source} (Direction: {direction})")
+        print(f"[MEMORY] Logged event: {event_type} (Dir: {direction}, Ch: {channel})")
         # Update conversation last_event_at
         _supabase_request("PATCH", f"conversations?id=eq.{conv['id']}", {
             "last_event_at": datetime.utcnow().isoformat()
         })
-        # Trigger memory summary update (async in production)
-        update_memory_summary(contact_id)
+        # Trigger memory summary update (async if possible)
+        try:
+            update_memory_summary(contact_id)
+        except Exception as e:
+            print(f"[MEMORY] Update summary failed: {e}")
+            
         return result[0] if isinstance(result, list) and len(result) > 0 else result
     
     return None

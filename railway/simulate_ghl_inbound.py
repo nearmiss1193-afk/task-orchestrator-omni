@@ -36,18 +36,18 @@ def simulate_inbound_sms():
         if response.ok:
             data = response.json()
             if data.get("reply_sent"):
-                print("[DEBUG] ✅ SUCCESS: Railway processed message and sent reply to Workflow B.")
+                print("[DEBUG] SUCCESS: Railway processed message and sent reply to Workflow B.")
                 print(f"[DEBUG] Reply Method: {data.get('method')}")
                 print("[ANALYSIS] If you received this SMS, the issue is UPSTREAM (GHL Workflow A not triggering).")
                 print("[ANALYSIS] If you did NOT receive this SMS, the issue is DOWNSTREAM (Workflow B configuration).")
             else:
-                print("[DEBUG] ⚠️ RECEIVED but NO REPLY sent.")
+                print("[DEBUG] WARNING: RECEIVED but NO REPLY sent.")
                 print(f"[DEBUG] Reason: {data.get('reason')}")
         else:
-            print("[DEBUG] ❌ FAILED: Server returned error.")
+            print("[DEBUG] FAILED: Server returned error.")
             
     except Exception as e:
-        print(f"[DEBUG] ❌ EXCEPTION: {e}")
+        print(f"[DEBUG] ERROR: {e}")
 
 if __name__ == "__main__":
     simulate_inbound_sms()
