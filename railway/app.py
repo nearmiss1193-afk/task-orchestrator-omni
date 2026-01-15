@@ -456,6 +456,7 @@ INSTRUCTIONS:
 REPLY:"""
 
     try:
+        print(f"[SARAH] Generating reply for contact {contact_id}...")
         r = requests.post(
             f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_KEY}",
             json={
@@ -466,11 +467,18 @@ REPLY:"""
         )
         
         if r.ok:
-            reply = r.json().get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-            print(f"[SARAH] Generated reply: {reply[:100]}...")
-            return reply.strip() if reply else None
+            data = r.json()
+            reply = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+            if reply:
+                print(f"[SARAH] ✅ Generated reply: {reply[:100]}...")
+                return reply.strip()
+            else:
+                print(f"[SARAH] ⚠️ Empty reply from Gemini. Data: {json.dumps(data)}")
+        else:
+            print(f"[SARAH] ❌ Gemini API Error {r.status_code}: {r.text[:300]}")
+            
     except Exception as e:
-        print(f"[SARAH] ❌ Generation failed: {e}")
+        print(f"[SARAH] ❌ Generation exception: {e}")
     
     return None
 
