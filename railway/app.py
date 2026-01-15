@@ -427,38 +427,39 @@ def send_reply_via_workflow_b(phone: str, reply_text: str, source_message_id: st
         print(f"[WORKFLOW B] ❌ Exception: {e}")
         return False
 
-def generate_sarah_reply(contact_id, inbound_message, ghl_contact_id=None):
+def generate_sarah_reply(contact_id, inbound_message, ghl_contact_id=None, logger=None):
     """Generate AI reply using Sarah persona + memory context"""
+    def log(msg):
+        if logger:
+            logger(msg)
+        else:
+            print(msg)
+            
     if not GEMINI_KEY:
-        print("[SARAH] No Gemini key configured")
+        log("[SARAH] ❌ No Gemini key configured")
         return None
     
     # Get memory context
-    memory_context = get_memory_context_string(contact_id)
+    try:
+        memory_context = get_memory_context_string(contact_id)
+    except Exception as e:
+        log(f"[SARAH] ❌ memory_context failed: {e}")
+        memory_context = "No context available."
     
-    prompt = f"""You are Sarah, a friendly and professional AI assistant for AI Service Co.
-You help home service businesses (HVAC, Plumbing, Roofing, etc.) with AI phone answering.
-
-CONTEXT FROM PREVIOUS INTERACTIONS:
+    prompt = f"""You are Sarah, a professional AI assistant for AI Service Co.
+CUSTOMER CONTEXT:
 {memory_context}
 
-CUSTOMER MESSAGE:
+MESSAGE:
 {inbound_message}
 
-INSTRUCTIONS:
-- Reply naturally and conversationally via SMS (keep under 160 chars if possible)
-- Reference any prior context if relevant
-- If they're interested, mention our 14-day free trial
-- If they want to schedule, ask for their preferred time
-- Be helpful, not pushy
-- Sign off as "- Sarah, AI Service Co" only if it's a longer message
-
+Reply naturally, sign as "- Sarah".
 REPLY:"""
 
     try:
-        print(f"[SARAH] Generating reply for contact {contact_id}...")
+        log(f"[SARAH] Calling Gemini 1.5-Flash...")
         r = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_KEY}",
+            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}",
             json={
                 "contents": [{"parts": [{"text": prompt}]}],
                 "generationConfig": {"maxOutputTokens": 200}
@@ -470,15 +471,13 @@ REPLY:"""
             data = r.json()
             reply = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
             if reply:
-                print(f"[SARAH] ✅ Generated reply: {reply[:100]}...")
+                log(f"[SARAH] ✅ Success")
                 return reply.strip()
-            else:
-                print(f"[SARAH] ⚠️ Empty reply from Gemini. Data: {json.dumps(data)}")
+            log(f"[SARAH] ⚠️ Empty reply. Body: {json.dumps(data)}")
         else:
-            print(f"[SARAH] ❌ Gemini API Error {r.status_code}: {r.text[:300]}")
-            
+            log(f"[SARAH] ❌ API Error {r.status_code}: {r.text[:200]}")
     except Exception as e:
-        print(f"[SARAH] ❌ Generation exception: {e}")
+        log(f"[SARAH] ❌ Exception: {e}")
     
     return None
 
@@ -1069,7 +1068,7 @@ def ghl_inbound_sms():
         if not GEMINI_KEY:
             dprint("[INBOUND SMS] ❌ GEMINI_API_KEY IS MISSING IN PRODUCTION ENV")
         
-        reply = generate_sarah_reply(contact["id"], message, contact_id)
+        reply = generate_sarah_reply(contact["id"], message, contact_id, logger=dprint)
         
         if not reply:
             dprint("[INBOUND SMS] ❌ AI Generation returned None")
