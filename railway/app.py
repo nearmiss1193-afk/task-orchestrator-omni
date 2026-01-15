@@ -47,6 +47,12 @@ GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
 GHL_SMS = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
 GHL_EMAIL = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/5148d523-9899-446a-9410-144465ab96d8"
 
+# === 2-WORKFLOW BOUNCE: AI Reply Webhook ===
+# Workflow B: "AI Reply → Send SMS" - Inbound Webhook Trigger URL
+# Create this workflow in GHL: Trigger=Inbound Webhook → Action=Send SMS using {{replyText}}
+# REPLACE THIS URL with the one GHL generates when you create Workflow B
+GHL_REPLY_WEBHOOK = os.environ.get("GHL_REPLY_WEBHOOK") or "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/REPLACE_WITH_WORKFLOW_B_URL"
+
 SARAH_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
 PHONE_ID = "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"
 BACKUP_PHONE = "+13529368152"
@@ -379,6 +385,48 @@ def send_ghl_message(ghl_contact_id, message_text, conversation_id=None, to_numb
         print(f"[GHL] ❌ Exception: {e}")
         return None
 
+
+def send_reply_via_workflow_b(phone: str, reply_text: str, source_message_id: str = None) -> bool:
+    """
+    2-WORKFLOW BOUNCE: Send AI reply back to GHL via Workflow B inbound webhook.
+    
+    This bypasses the GHL Conversations API and uses GHL's native Send SMS action,
+    which is guaranteed to work with your LeadConnector number.
+    
+    Args:
+        phone: Contact's phone number in E.164 format (e.g., +15551234567)
+        reply_text: The AI-generated reply to send
+        source_message_id: Original message ID for loop prevention
+    
+    Returns:
+        True if POST succeeded, False otherwise
+    """
+    if not GHL_REPLY_WEBHOOK or "REPLACE_WITH" in GHL_REPLY_WEBHOOK:
+        print("[WORKFLOW B] ❌ GHL_REPLY_WEBHOOK not configured! Set in Railway env vars.")
+        return False
+    
+    payload = {
+        "phone": phone,
+        "replyText": reply_text,
+        "sourceMessageId": source_message_id or f"auto-{int(time.time())}"
+    }
+    
+    print(f"[WORKFLOW B] Posting reply to GHL inbound webhook...")
+    print(f"[WORKFLOW B] Payload: {json.dumps(payload)[:200]}")
+    
+    try:
+        r = requests.post(GHL_REPLY_WEBHOOK, json=payload, timeout=15)
+        print(f"[WORKFLOW B] Response {r.status_code}: {r.text[:200]}")
+        
+        if r.ok:
+            print(f"[WORKFLOW B] ✅ Reply sent to Workflow B for delivery")
+            return True
+        else:
+            print(f"[WORKFLOW B] ❌ Failed {r.status_code}: {r.text[:300]}")
+            return False
+    except Exception as e:
+        print(f"[WORKFLOW B] ❌ Exception: {e}")
+        return False
 
 def generate_sarah_reply(contact_id, inbound_message, ghl_contact_id=None):
     """Generate AI reply using Sarah persona + memory context"""
@@ -948,6 +996,114 @@ def ghl_webhook():
         print(f"[GHL WEBHOOK] ⚠️ No GHL contact ID - cannot auto-reply")
     
     return jsonify({"status": "received", "contact_id": contact["id"], "reply_sent": False})
+
+
+@app.route("/ghl/inbound-sms", methods=["POST"])
+def ghl_inbound_sms():
+    """
+    2-WORKFLOW BOUNCE ENDPOINT
+    ==========================
+    Workflow A: Customer Replied → POST here
+    This endpoint: Generate Sarah reply → POST to Workflow B
+    Workflow B: Inbound Webhook → Send SMS (native GHL action)
+    
+    NO API NEEDED - uses GHL's native SMS sending which bypasses all API issues.
+    """
+    data = request.json
+    print(f"[INBOUND SMS] Received: {json.dumps(data)[:300]}")
+    
+    # Extract fields - support multiple GHL payload formats
+    phone = data.get("phone") or data.get("contact_phone") or data.get("contact", {}).get("phone")
+    email = data.get("email") or data.get("contact_email") or data.get("contact", {}).get("email")
+    message = data.get("body") or data.get("message") or data.get("text") or data.get("message_body")
+    message_id = data.get("messageId") or data.get("message_id") or data.get("id")
+    contact_id = data.get("contactId") or data.get("contact_id")
+    conversation_id = data.get("conversationId") or data.get("conversation_id")
+    direction = data.get("direction", "inbound").lower()
+    
+    # LOOP PREVENTION
+    if direction != "inbound":
+        print(f"[INBOUND SMS] Skipping {direction} message (loop prevention)")
+        return jsonify({"status": "skipped", "reason": "not inbound"})
+    
+    if not message:
+        print("[INBOUND SMS] No message body")
+        return jsonify({"status": "skipped", "reason": "no message"})
+    
+    if not phone and not email:
+        print("[INBOUND SMS] No phone or email - cannot reply")
+        return jsonify({"status": "error", "reason": "no contact identifier"}), 400
+    
+    # Generate external_id for idempotency
+    external_id = f"sms-{message_id}" if message_id else f"sms-{int(time.time())}"
+    
+    # Resolve contact in memory
+    contact = resolve_or_create_contact(
+        phone=phone,
+        email=email,
+        ghl_id=contact_id
+    )
+    
+    if not contact:
+        print("[INBOUND SMS] Failed to resolve contact")
+        return jsonify({"status": "error", "reason": "contact resolution failed"}), 500
+    
+    # Log inbound event (idempotent)
+    summary = f"SMS: {message[:100]}" if len(message) <= 100 else f"SMS: {message[:97]}..."
+    event_result = write_event(
+        contact_id=contact["id"],
+        event_type="sms_in",
+        source="ghl_workflow",
+        external_id=external_id,
+        payload=data,
+        summary=summary
+    )
+    
+    if not event_result:
+        print(f"[INBOUND SMS] Duplicate: {external_id}")
+        return jsonify({"status": "skipped", "reason": "duplicate"})
+    
+    print(f"[INBOUND SMS] ✅ Logged for contact {contact['id']}")
+    
+    # === GENERATE SARAH REPLY ===
+    reply = generate_sarah_reply(contact["id"], message, contact_id)
+    
+    if not reply:
+        print("[INBOUND SMS] ⚠️ No reply generated")
+        return jsonify({"status": "received", "contact_id": contact["id"], "reply_sent": False})
+    
+    # === 2-WORKFLOW BOUNCE: POST to Workflow B ===
+    success = send_reply_via_workflow_b(
+        phone=phone,
+        reply_text=reply,
+        source_message_id=external_id
+    )
+    
+    if success:
+        # Log outbound event
+        write_event(
+            contact_id=contact["id"],
+            event_type="sms_out",
+            source="ghl_workflow",
+            external_id=f"out-{external_id}",
+            payload={"message": reply, "method": "workflow_bounce"},
+            summary=f"Sarah replied: {reply[:100]}"
+        )
+        print(f"[INBOUND SMS] ✅ Reply queued via Workflow B")
+        return jsonify({
+            "status": "replied",
+            "contact_id": contact["id"],
+            "reply_sent": True,
+            "method": "workflow_bounce"
+        })
+    else:
+        print(f"[INBOUND SMS] ⚠️ Workflow B POST failed")
+        return jsonify({
+            "status": "received",
+            "contact_id": contact["id"],
+            "reply_sent": False,
+            "error": "workflow_b_failed"
+        })
 
 @app.route("/trigger/prospect", methods=["POST"])
 def api_prospect():
