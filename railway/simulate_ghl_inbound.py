@@ -13,7 +13,7 @@ def simulate_inbound_sms():
     
     # Payload mimicking what GHL Workflow A sends
     payload = {
-        "contactId": "test_contact_debug_001",
+        "contactId": f"test_contact_{int(time.time())}",
         "phone": TEST_PHONE,
         "body": "Hello Sarah, are you there? This is a debug test.",
         "direction": "inbound",

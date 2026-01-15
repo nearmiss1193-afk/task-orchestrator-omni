@@ -844,7 +844,9 @@ def resend_webhook():
                     source="resend",
                     external_id=f"{email_id}-open",
                     payload={"subject": email_subject, "lead_id": lead_id},
-                    summary=f"Opened email: {email_subject[:50]}"
+                    summary=f"Opened email: {email_subject[:50]}",
+                    ghl_contact_id=contact.get("ghl_contact_id"),
+                    direction="inbound"
                 )
                 print(f"[RESEND] ✅ Logged email open for contact {contact['id']}")
             
@@ -865,7 +867,9 @@ def resend_webhook():
                     source="resend",
                     external_id=f"{email_id}-click",
                     payload={"subject": email_subject, "link": link_url, "lead_id": lead_id},
-                    summary=f"Clicked link in '{email_subject[:30]}': {link_url[:50]}"
+                    summary=f"Clicked link in '{email_subject[:30]}': {link_url[:50]}",
+                    ghl_contact_id=contact.get("ghl_contact_id"),
+                    direction="inbound"
                 )
                 print(f"[RESEND] ✅ Logged email click for contact {contact['id']}")
     
@@ -880,7 +884,9 @@ def resend_webhook():
                     source="resend",
                     external_id=f"{email_id}-delivered",
                     payload={"subject": email_subject, "lead_id": lead_id},
-                    summary=f"Email delivered: {email_subject[:50]}"
+                    summary=f"Email delivered: {email_subject[:50]}",
+                    ghl_contact_id=contact.get("ghl_contact_id"),
+                    direction="outbound"
                 )
             
     return jsonify({"status": "received"})
@@ -953,7 +959,9 @@ def ghl_webhook():
         source="ghl",
         external_id=external_id,
         payload=data,
-        summary=summary
+        summary=summary,
+        ghl_contact_id=ghl_contact_id,
+        direction="inbound"
     )
     
     # If event already exists (duplicate), skip auto-reply
@@ -979,7 +987,9 @@ def ghl_webhook():
                     source="ghl",
                     external_id=f"ghl-out-{outbound_msg_id}",
                     payload={"message": reply, "ghl_message_id": outbound_msg_id},
-                    summary=f"Sarah replied: {reply[:100]}"
+                    summary=f"Sarah replied: {reply[:100]}",
+                    ghl_contact_id=ghl_contact_id,
+                    direction="outbound"
                 )
                 print(f"[GHL WEBHOOK] ✅ Sarah auto-replied to {ghl_contact_id}")
                 return jsonify({
@@ -1055,7 +1065,9 @@ def ghl_inbound_sms():
         source="ghl_workflow",
         external_id=external_id,
         payload=data,
-        summary=summary
+        summary=summary,
+        ghl_contact_id=contact_id,
+        direction="inbound"
     )
     
     if not event_result:
@@ -1086,7 +1098,9 @@ def ghl_inbound_sms():
             source="ghl_workflow",
             external_id=f"out-{external_id}",
             payload={"message": reply, "method": "workflow_bounce"},
-            summary=f"Sarah replied: {reply[:100]}"
+            summary=f"Sarah replied: {reply[:100]}",
+            ghl_contact_id=contact_id,
+            direction="outbound"
         )
         print(f"[INBOUND SMS] ✅ Reply queued via Workflow B")
         return jsonify({
@@ -1204,7 +1218,9 @@ def vapi_webhook():
                     source="vapi",
                     external_id=call_id,
                     payload=metadata,
-                    summary=event_summary
+                    summary=event_summary,
+                    ghl_contact_id=contact.get("ghl_contact_id"),
+                    direction="outbound"
                 )
                 print(f"[VAPI] ✅ Logged call to memory system for contact {contact['id']}")
 

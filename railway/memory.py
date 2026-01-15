@@ -170,8 +170,9 @@ def get_or_create_conversation(contact_id, channel):
 # ============================================
 # Event Logging (Append-Only)
 # ============================================
-def write_event(contact_id, event_type, source, external_id, payload, summary=None):
-    """Write an event to the conversation log.
+def write_event(contact_id, event_type, source, external_id, payload, summary=None, ghl_contact_id=None, direction=None):
+    """
+    Write an event to the conversation log.
     Uses external_id to prevent duplicates.
     
     event_type: sms_in|sms_out|call_start|call_end|email_in|email_out|note|booking
@@ -184,6 +185,7 @@ def write_event(contact_id, event_type, source, external_id, payload, summary=No
         source = "system"
     if summary is None:
         summary = ""
+    
     # Determine channel from event type
     if "sms" in event_type:
         channel = "sms"
@@ -193,26 +195,46 @@ def write_event(contact_id, event_type, source, external_id, payload, summary=No
         channel = "email"
     else:
         channel = "other"
+    
+    # Determine direction if not provided
+    if not direction:
+        if any(x in event_type for x in ["_in", "start", "open", "click"]):
+            direction = "inbound"
+        else:
+            direction = "outbound"
+            
+    # Fetch ghl_contact_id if not provided
+    if not ghl_contact_id:
+        profile = _supabase_request("GET", "contact_profiles", params={"id": f"eq.{contact_id}", "limit": "1"})
+        if profile and len(profile) > 0:
+            ghl_contact_id = profile[0].get("ghl_contact_id")
+    
     # Get or create conversation
     conv = get_or_create_conversation(contact_id, channel)
     if not conv:
         print(f"[MEMORY] Failed to get conversation for {contact_id}")
         return None
+    
     # Ensure payload is a dict
     if not isinstance(payload, dict):
         payload = {"raw": payload}
-    # Build event dict with required fields
+        
+    # Build complete event dict for 11-column schema
     event = {
         "conversation_id": conv["id"],
+        "ghl_contact_id": ghl_contact_id,
         "event_type": event_type,
         "source": source,
         "external_id": external_id,
         "payload": payload,
         "summary": summary,
+        "direction": direction,
+        "channel": channel
     }
+    
     result = _supabase_request("POST", "conversation_events", event)
     if result:
-        print(f"[MEMORY] Logged event: {event_type} from {source}")
+        print(f"[MEMORY] Logged event: {event_type} from {source} (Direction: {direction})")
         # Update conversation last_event_at
         _supabase_request("PATCH", f"conversations?id=eq.{conv['id']}", {
             "last_event_at": datetime.utcnow().isoformat()
@@ -220,6 +242,7 @@ def write_event(contact_id, event_type, source, external_id, payload, summary=No
         # Trigger memory summary update (async in production)
         update_memory_summary(contact_id)
         return result[0] if isinstance(result, list) and len(result) > 0 else result
+    
     return None
 
 
