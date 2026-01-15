@@ -11,13 +11,15 @@ TEST_PHONE = "+13529368152"
 def simulate_inbound_sms():
     print(f"[DEBUG] Simulating GHL Inbound SMS to: {ENDPOINT}")
     
+    unique_id = int(time.time())
+    
     # Payload mimicking what GHL Workflow A sends
     payload = {
-        "contactId": f"test_contact_{int(time.time())}",
+        "contactId": f"test_contact_{unique_id}",
         "phone": TEST_PHONE,
-        "body": "Hello Sarah, are you there? This is a debug test.",
+        "body": "Hi Sarah, verified constraint logic test.",
         "direction": "inbound",
-        "messageId": f"debug_msg_{int(time.time())}",
+        "messageId": f"debug_msg_{unique_id}",
         "type": "SMS"
     }
     
