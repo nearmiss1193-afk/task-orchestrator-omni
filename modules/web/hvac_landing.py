@@ -1762,9 +1762,9 @@
             </nav>
             
             <div class="header-cta-group">
-                <a href="tel:+18555983794" class="header-phone">
+                <a href="tel:+14072891784" class="header-phone">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                    (855) 598-3794
+                    (407) 289-1784
                 </a>
                 <a href="#" class="header-cta" onclick="openFunnel()">Get Started</a>
             </div>
@@ -1925,7 +1925,7 @@
                     <div class="agent-name">Spartan AI</div>
                     <h3>AI Receptionist</h3>
                     <p>Answers calls, qualifies leads, and books appointments 24/7. Never sleeps, never sick.</p>
-                    <div class="solution-status live">— Active</div>
+                    <div class="solution-status live">—  Active</div>
                 </div>
                 
                 <div class="solution-card">
@@ -1933,23 +1933,23 @@
                     <div class="agent-name">Follow-up Bot</div>
                     <h3>Instant Reactivation</h3>
                     <p>Text-backs every missed call instantly. Turns "I'll call back" into "I'm booked."</p>
-                    <div class="solution-status live">— Active</div>
+                    <div class="solution-status live">—  Active</div>
                 </div>
                 
                 <div class="solution-card">
-                    <div class="solution-icon">­</div>
+                    <div class="solution-icon">­ </div>
                     <div class="agent-name">Reputation Guard</div>
                     <h3>Review Automation</h3>
                     <p>Automatically requests reviews after service. Intercepts negative feedback before it goes public.</p>
-                    <div class="solution-status live">— Active</div>
+                    <div class="solution-status live">—  Active</div>
                 </div>
                 
                 <div class="solution-card">
-                    <div class="solution-icon">•¸ï¸</div>
+                    <div class="solution-icon">•¸ï¸ </div>
                     <div class="agent-name">Lead Net</div>
                     <h3>Database Reactivation</h3>
                     <p>Mines your old customer list to generate new jobs during slow seasons automatically.</p>
-                    <div class="solution-status ready">— Ready</div>
+                    <div class="solution-status ready">—  Ready</div>
                 </div>
             </div>
         </div>
@@ -2165,7 +2165,7 @@
                 <div class="footer-links">
                     <h4>Contact</h4>
                     <a href="mailto:support@aiserviceco.com">support@aiserviceco.com</a>
-                    <a href="tel:+18555983794">(855) 598-3794</a>
+                    <a href="tel:+14072891784">(407) 289-1784</a>
                     <p style="margin-top: 10px; color: var(--gray);">123 Innovation Dr.<br>Austin, TX 78701</p>
                 </div>
             </div>

@@ -117,7 +117,7 @@ def send_sms(phone, company, decision_maker=None):
     """SMS via GHL"""
     try:
         name = decision_maker.split()[0] if decision_maker else "there"
-        msg = f"Hi {name}! This is Daniel from AI Service Co. I help businesses like {company} automate customer calls with AI - 24/7 coverage, no missed calls. Worth a quick chat? Reply or call 352-758-5336"
+        msg = f"Hi {name}! This is Daniel from AI Service Co. I help businesses like {company} automate customer calls with AI - 24/7 coverage, no missed calls. Worth a quick chat? Reply or call (407) 289-1784"
         resp = requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": msg}, timeout=15)
         return resp.status_code in [200, 201]
     except:
@@ -145,7 +145,7 @@ def send_email(email, company, decision_maker=None):
                     <li>Lead qualification on autopilot</li>
                 </ul>
                 <p>Would love to show you a quick demo. Are you available for a 5-minute call this week?</p>
-                <p>Best,<br>Daniel<br>AI Service Co<br>(352) 758-5336</p>"""
+                <p>Best,<br>Daniel<br>AI Service Co<br>(407) 289-1784</p>"""
             },
             timeout=15
         )

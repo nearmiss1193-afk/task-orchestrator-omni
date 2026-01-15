@@ -32,7 +32,7 @@ We'd be happy to provide you with a free quote. To give you the most accurate es
 2. Your location (City/Zip Code)
 3. A brief description of the issue or project
 
-Alternatively, you can call us directly at 1-352-758-5336 and speak with Sarah, our AI assistant, who can help you 24/7.
+Alternatively, you can call us directly at 1-(407) 289-1784 and speak with Sarah, our AI assistant, who can help you 24/7.
 
 Looking forward to helping you!
 
@@ -49,7 +49,7 @@ https://aiserviceco.com
 Thanks for wanting to schedule with us!
 
 You can book an appointment instantly by:
-1. Calling 1-352-758-5336 (Sarah will help you find the perfect time)
+1. Calling 1-(407) 289-1784 (Sarah will help you find the perfect time)
 2. Visiting our website: https://aiserviceco.com
 
 We have availability this week! What day works best for you?
@@ -65,7 +65,7 @@ The AI Service Company Team
 
 Thank you for contacting AI Service Company!
 
-We received your message and will get back to you within 24 hours. For immediate assistance, please call us at 1-352-758-5336.
+We received your message and will get back to you within 24 hours. For immediate assistance, please call us at 1-(407) 289-1784.
 
 Our services include:
 - HVAC (Heating, Ventilation, Air Conditioning)

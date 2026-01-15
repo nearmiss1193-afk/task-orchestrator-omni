@@ -13,7 +13,7 @@ JOHN_ASSISTANT_ID = "78b4c14a-b44a-4096-82f5-a10106d1bfd2"
 SARAH_PHONE_ID = "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"  # +1 863-213-2505
 
 # YOUR NUMBER
-YOUR_NUMBER = "+13527585336"
+YOUR_NUMBER = "+1(407) 289-1784"
 
 url = "https://api.vapi.ai/call"
 headers = {

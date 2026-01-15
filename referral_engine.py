@@ -32,7 +32,7 @@ REFERRAL_EMAIL_BODY = """
 <strong>🎁 Referral Reward:</strong><br>
 For every person you refer who becomes a customer, you BOTH get <strong>$50 off</strong> your next service!
 </div>
-<p>Just have them mention your name when they call us at <a href="tel:+13527585336">+1 (352) 758-5336</a>.</p>
+<p>Just have them mention your name when they call us at <a href="tel:+1(407) 289-1784">+1 (407) 289-1784</a>.</p>
 <p>Thanks again!<br>The {company} Team</p>
 </body>
 </html>

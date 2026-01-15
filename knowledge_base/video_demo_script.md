@@ -24,7 +24,7 @@
 **VOICEOVER:**
 > "Let me show you what your customers will experience...
 >
-> [DIAL THE DEMO NUMBER: (352) 758-5336]
+> [DIAL THE DEMO NUMBER: (407) 289-1784]
 >
 > Listen to this..."
 
@@ -100,7 +100,7 @@ Sample interaction to demonstrate:
 ### CTA Options
 
 - "Book a call: calendly.com/aiserviceco/demo"
-- "Text 'DEMO' to (352) 758-5336"
+- "Text 'DEMO' to (407) 289-1784"
 - "Reply to this email"
 
 ---

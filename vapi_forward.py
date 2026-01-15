@@ -47,11 +47,11 @@ if r.status_code == 200:
     print("\n[NOTE] Call forwarding for UNANSWERED calls is configured on the")
     print("       Vapi PHONE NUMBER, not the assistant.")
     print(f"       User should configure +1-352-936-8152 as fallback in Vapi dashboard")
-    print(f"       for Sarah's phone number: +1 (352) 758-5336")
+    print(f"       for Sarah's phone number: +1 (407) 289-1784")
     print("\n[ACTION REQUIRED] Configure in Vapi Dashboard:")
     print("  1. Go to vapi.ai/dashboard")
     print("  2. Select Phone Numbers")
-    print("  3. Edit the 352-758-5336 number")
+    print("  3. Edit the (407) 289-1784 number")
     print(f"  4. Set Fallback Number to: {FALLBACK_PHONE}")
     
 else:

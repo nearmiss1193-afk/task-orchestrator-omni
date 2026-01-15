@@ -197,7 +197,7 @@ def main():
             # SMS
             try:
                 name = decision_maker.split()[0] if decision_maker else "there"
-                msg = f"Hi {name}! Daniel from AI Service Co. We help businesses like {company} automate customer calls with AI - 24/7 coverage. Worth a quick chat? 352-758-5336"
+                msg = f"Hi {name}! Daniel from AI Service Co. We help businesses like {company} automate customer calls with AI - 24/7 coverage. Worth a quick chat? (407) 289-1784"
                 resp = requests.post(GHL_SMS, json={"phone": clean_phone, "message": msg}, timeout=15)
                 if resp.status_code in [200, 201]:
                     stats["sms"] += 1
@@ -216,7 +216,7 @@ def main():
                         "from": "Daniel <daniel@aiserviceco.com>",
                         "to": [email],
                         "subject": f"Quick question for {company}",
-                        "html": f"<p>Hi {name},</p><p>I help service businesses like {company} automate their phone operations with AI.</p><p>Would 24/7 coverage that never misses a call be valuable for you?</p><p>Worth a 5-min chat?</p><p>Best,<br>Daniel<br>(352) 758-5336</p>"
+                        "html": f"<p>Hi {name},</p><p>I help service businesses like {company} automate their phone operations with AI.</p><p>Would 24/7 coverage that never misses a call be valuable for you?</p><p>Worth a 5-min chat?</p><p>Best,<br>Daniel<br>(407) 289-1784</p>"
                     },
                     timeout=15
                 )

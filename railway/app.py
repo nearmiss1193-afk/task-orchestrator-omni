@@ -334,12 +334,12 @@ def trigger_call(phone, name):
 
 # ==== GHL CONVERSATIONS API ====
 # GHL SMS-capable number (NOT the Vapi voice number)
-GHL_SMS_NUMBER = "+13527585336"  # (352) 758-5336 - SMS capable in GHL
+GHL_SMS_NUMBER = "+1(407) 289-1784"  # (407) 289-1784 - SMS capable in GHL
 
 def send_ghl_message(ghl_contact_id, message_text, conversation_id=None, to_number=None):
     """Send SMS reply via GHL Conversations API
     
-    IMPORTANT: Uses GHL's SMS-capable number (352-758-5336), NOT Vapi's voice number.
+    IMPORTANT: Uses GHL's SMS-capable number ((407) 289-1784), NOT Vapi's voice number.
     The Vapi number (863-213-2505) is VOICE ONLY and will return 'invalid number'.
     """
     if not GHL_API_TOKEN:
@@ -529,7 +529,7 @@ def run_outreach():
             <p>We built an AI phone agent that answers 24/7, books jobs, and never misses a call. 
             <b>14-Day Free Trial</b>, no credit card needed.</p>
             <p>Worth a quick look? <a href="{niche_url}">See Demo</a></p>
-            <p>- Daniel, AI Service Co<br>(352) 758-5336</p>
+            <p>- Daniel, AI Service Co<br>(407) 289-1784</p>
             """
             
             # Tag with lead ID for tracking

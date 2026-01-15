@@ -378,7 +378,7 @@ def contact_agent():
                             # SMS FOLLOW-UP
                             try:
                                 name = decision_maker.split()[0] if decision_maker else "there"
-                                msg = f"Hi {name}! Sarah here from AI Service Co. Just tried calling about automating your phones. We have a free text line for the first 25 partners this month. Chat soon? 352-758-5336"
+                                msg = f"Hi {name}! Sarah here from AI Service Co. Just tried calling about automating your phones. We have a free text line for the first 25 partners this month. Chat soon? (407) 289-1784"
                                 resp = requests.post(GHL_SMS, json={"phone": clean_phone, "message": msg}, timeout=15)
                                 if resp.status_code in [200, 201]:
                                     stats["sms"] += 1
@@ -451,7 +451,7 @@ def contact_agent():
                 <p>Best,<br>
                 {branding['sender']}<br>
                 {branding['company']}<br>
-                (352) 758-5336</p>
+                (407) 289-1784</p>
                 """
                 
                 

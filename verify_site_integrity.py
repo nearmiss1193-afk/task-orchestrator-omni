@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 # Configuration
 TARGET_DIR = r"c:\Users\nearm\.gemini\antigravity\scratch\empire-unified\public"
-ALLOWED_PHONES = ["+1 (352) 758-5336", "+13527585336", "352-758-5336", "1-352-758-5336"]
+ALLOWED_PHONES = ["+1 (407) 289-1784", "+1(407) 289-1784", "(407) 289-1784", "1-(407) 289-1784"]
 LEGACY_PHONES = ["863-213-2505", "863.213.2505", "(863) 213-2505", "+18632132505", "863-260-5336", "(863) 260-5336"]
 PHONE_REGEX = r"\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}"
 

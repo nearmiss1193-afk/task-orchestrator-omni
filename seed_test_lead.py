@@ -16,7 +16,7 @@ test_leads = [
     {
         "company_name": "Test HVAC Co",
         "email": "owner@aiserviceco.com",  # Send to owner for testing
-        "phone": "+13527585336",
+        "phone": "+1(407) 289-1784",
         "industry": "hvac",
         "audit_link": "https://prod.analyzemy.business/#/share/report/test123",
         "status": "ready"

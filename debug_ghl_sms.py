@@ -9,7 +9,7 @@ load_dotenv(override=True)
 
 TOKEN = os.getenv("GHL_AGENCY_API_TOKEN")
 LOCATION_ID = "RnK4OjX0oDcqtWw00VyLr" 
-TARGET_PHONE = "+13527585336"
+TARGET_PHONE = "+1(407) 289-1784"
 
 print(f"Using Token: {TOKEN[:0]}... (Hidden)")
 
