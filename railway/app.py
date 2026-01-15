@@ -1017,110 +1017,86 @@ def ghl_webhook():
 
 @app.route("/ghl/inbound-sms", methods=["POST"])
 def ghl_inbound_sms():
+    debug_log = []
+    def dprint(msg):
+        print(msg)
+        debug_log.append(msg)
+        
     try:
         data = request.json
-        print(f"[INBOUND SMS] Received: {json.dumps(data)[:300]}")
+        dprint(f"[INBOUND SMS] Received message from {data.get('phone')}")
         
-        # Extract fields - support multiple GHL payload formats
+        # Extract fields
         phone = data.get("phone") or data.get("contact_phone") or data.get("contact", {}).get("phone")
         email = data.get("email") or data.get("contact_email") or data.get("contact", {}).get("email")
         message = data.get("body") or data.get("message") or data.get("text") or data.get("message_body")
         message_id = data.get("messageId") or data.get("message_id") or data.get("id")
         contact_id = data.get("contactId") or data.get("contact_id")
-        conversation_id = data.get("conversationId") or data.get("conversation_id")
         direction = data.get("direction", "inbound").lower()
         
-        # LOOP PREVENTION
         if direction != "inbound":
-            print(f"[INBOUND SMS] Skipping {direction} message (loop prevention)")
-            return jsonify({"status": "skipped", "reason": "not inbound"})
-        
+            return jsonify({"status": "skipped", "reason": "not inbound", "debug": debug_log})
+            
         if not message:
-            print("[INBOUND SMS] No message body")
-            return jsonify({"status": "skipped", "reason": "no message"})
-        
-        if not phone and not email:
-            print("[INBOUND SMS] No phone or email - cannot reply")
-            return jsonify({"status": "error", "reason": "no contact identifier"}), 400
-        
-        # Generate external_id for idempotency
+            return jsonify({"status": "skipped", "reason": "no message", "debug": debug_log})
+            
+        # Generate external_id
         external_id = f"sms-{message_id}" if message_id else f"sms-{int(time.time())}"
         
-        # Resolve contact in memory
-        contact = resolve_or_create_contact(
-            phone=phone,
-            email=email,
-            ghl_id=contact_id
-        )
-        
+        # Resolve contact
+        contact = resolve_or_create_contact(phone=phone, email=email, ghl_id=contact_id)
         if not contact:
-            print("[INBOUND SMS] Failed to resolve contact")
-            return jsonify({"status": "error", "reason": "contact resolution failed"}), 500
-        
-        # Log inbound event (idempotent)
-        summary = f"SMS: {message[:100]}" if len(message) <= 100 else f"SMS: {message[:97]}..."
+            return jsonify({"status": "error", "reason": "contact resolution failed", "debug": debug_log}), 500
+            
+        # Log inbound
         event_result = write_event(
             contact_id=contact["id"],
             event_type="sms_in",
             source="ghl_workflow",
             external_id=external_id,
             payload=data,
-            summary=summary,
             ghl_contact_id=contact_id,
             direction="inbound"
         )
         
         if not event_result:
-            print(f"[INBOUND SMS] Duplicate or DB Error: {external_id}")
-            return jsonify({"status": "skipped", "reason": "duplicate or db_error"})
+            dprint(f"[INBOUND SMS] write_event returned None (Duplicate or DB Error)")
+            return jsonify({"status": "skipped", "reason": "duplicate or db_error", "debug": debug_log})
+            
+        dprint(f"[INBOUND SMS] DB Write Success for {contact['id']}")
         
-        print(f"[INBOUND SMS] Logged for contact {contact['id']}")
+        # === GENERATE REPLY ===
+        if not GEMINI_KEY:
+            dprint("[INBOUND SMS] ❌ GEMINI_API_KEY IS MISSING IN PRODUCTION ENV")
         
-        # === GENERATE SARAH REPLY ===
         reply = generate_sarah_reply(contact["id"], message, contact_id)
         
         if not reply:
-            print("[INBOUND SMS] No reply generated")
-            return jsonify({"status": "received", "contact_id": contact["id"], "reply_sent": False})
-        
-        # === 2-WORKFLOW BOUNCE: POST to Workflow B ===
-        success = send_reply_via_workflow_b(
-            phone=phone,
-            reply_text=reply,
-            source_message_id=external_id
-        )
+            dprint("[INBOUND SMS] ❌ AI Generation returned None")
+            return jsonify({"status": "received", "contact_id": contact["id"], "reply_sent": False, "debug": debug_log})
+            
+        # === SEND ===
+        success = send_reply_via_workflow_b(phone=phone, reply_text=reply, source_message_id=external_id)
         
         if success:
-            # Log outbound event
             write_event(
                 contact_id=contact["id"],
                 event_type="sms_out",
                 source="ghl_workflow",
                 external_id=f"out-{external_id}",
-                payload={"message": reply, "method": "workflow_bounce"},
+                payload={"message": reply},
                 ghl_contact_id=contact_id,
                 direction="outbound"
             )
-            return jsonify({
-                "status": "received", 
-                "contact_id": contact["id"], 
-                "reply_sent": True, 
-                "method": "workflow_bounce"
-            })
+            return jsonify({"status": "replied", "contact_id": contact["id"], "reply_sent": True, "debug": debug_log})
         else:
-            print(f"[INBOUND SMS] Workflow B POST failed")
-            return jsonify({
-                "status": "received",
-                "contact_id": contact["id"],
-                "reply_sent": False,
-                "error": "workflow_b_failed"
-            })
+            dprint("[INBOUND SMS] ❌ Workflow B POST failed")
+            return jsonify({"status": "error", "reason": "workflow_b_failed", "debug": debug_log})
             
     except Exception as e:
         import traceback
-        error_msg = traceback.format_exc()
-        print(f"[INBOUND SMS] CRASH: {error_msg}")
-        return jsonify({"status": "error", "reason": str(e), "traceback": error_msg}), 500
+        err = traceback.format_exc()
+        return jsonify({"status": "error", "traceback": err, "debug": debug_log}), 500
     
 @app.route("/trigger/prospect", methods=["POST"])
 def api_prospect():
