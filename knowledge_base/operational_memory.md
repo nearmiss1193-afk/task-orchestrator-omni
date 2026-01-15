@@ -295,6 +295,22 @@ For each company (~2 min each):
 
 ## 🧠 Learnings Log
 
+### 2026-01-15 (Session)
+
+- **Outbound Calls VERIFIED:** Vapi API returns 201 (call queued) for valid US phones
+- **Outbound SMS VERIFIED:** GHL webhook successfully sends SMS
+- **Phone Validation Added:** `turbo_contact.py` and `scrape_phones.py` now reject:
+  - Canadian area codes (204, 226, 250, 289, 306, 403, 416, 604, 647, etc.)
+  - Fake patterns (9999, 0000, 555 exchange)
+- **Railway Health:** `https://empire-unified-backup-production.up.railway.app/health` confirmed healthy
+- **New Scripts Created:**
+  - `turbo_contact.py` - Direct outbound calling with phone validation
+  - `import_manus_leads.py` - Import Manus HVAC campaign CSV
+  - `check_leads.py` - Query valid leads in database
+  - `check_vapi.py` - Check Vapi phone number config
+- **SOP Note:** Campaign runs LOCALLY but calls Vapi/GHL cloud. For true 24/7, deploy to Modal.
+- **Blocked:** Sarah inbound SMS needs GHL Workflow A to route to Railway endpoint.
+
 ### 2026-01-10
 
 - **Vapi Hit Daily Limit:** Vapi-purchased numbers have daily outbound call caps
