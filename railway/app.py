@@ -328,8 +328,15 @@ def trigger_call(phone, name):
 
 
 # ==== GHL CONVERSATIONS API ====
-def send_ghl_message(ghl_contact_id, message_text, conversation_id=None):
-    """Send SMS reply via GHL Conversations API"""
+# GHL SMS-capable number (NOT the Vapi voice number)
+GHL_SMS_NUMBER = "+13527585336"  # (352) 758-5336 - SMS capable in GHL
+
+def send_ghl_message(ghl_contact_id, message_text, conversation_id=None, to_number=None):
+    """Send SMS reply via GHL Conversations API
+    
+    IMPORTANT: Uses GHL's SMS-capable number (352-758-5336), NOT Vapi's voice number.
+    The Vapi number (863-213-2505) is VOICE ONLY and will return 'invalid number'.
+    """
     if not GHL_API_TOKEN:
         print("[GHL] No API token configured")
         return None
@@ -337,10 +344,16 @@ def send_ghl_message(ghl_contact_id, message_text, conversation_id=None):
     payload = {
         "type": "SMS",
         "contactId": ghl_contact_id,
-        "message": message_text
+        "message": message_text,
+        "fromNumber": GHL_SMS_NUMBER  # Explicit SMS source number
     }
     if conversation_id:
         payload["conversationId"] = conversation_id
+    if to_number:
+        payload["toNumber"] = to_number
+    
+    print(f"[GHL API] Sending SMS from {GHL_SMS_NUMBER} to contact {ghl_contact_id}")
+    print(f"[GHL API] Payload: {json.dumps(payload)[:200]}")
     
     try:
         r = requests.post(
@@ -353,12 +366,14 @@ def send_ghl_message(ghl_contact_id, message_text, conversation_id=None):
             json=payload,
             timeout=30
         )
+        print(f"[GHL API] Response {r.status_code}: {r.text[:300]}")
+        
         if r.ok:
             result = r.json()
             print(f"[GHL] ✅ Sent SMS to {ghl_contact_id}: {message_text[:50]}...")
             return result.get("messageId") or result.get("id")
         else:
-            print(f"[GHL] ❌ Send failed {r.status_code}: {r.text[:200]}")
+            print(f"[GHL] ❌ Send failed {r.status_code}: {r.text[:500]}")
             return None
     except Exception as e:
         print(f"[GHL] ❌ Exception: {e}")
