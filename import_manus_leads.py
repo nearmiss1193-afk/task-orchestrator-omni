@@ -1,84 +1,72 @@
-"""Manual HVAC Lead Import - for Manus campaign follow-up calls
-User should paste leads from Manus CSV here, or save CSV and run this.
-"""
-import psycopg2
 import csv
 import os
+from dotenv import load_dotenv
+from supabase import create_client
+from datetime import datetime
 
-# Direct DB connection
-conn = psycopg2.connect(
-    host="db.rzcpfwkygdvoshtwxncs.supabase.co",
-    port=5432, database="postgres", user="postgres", password="Inez11752990@"
-)
-cur = conn.cursor()
+# Load environment variables
+load_dotenv()
 
-# Check if CSV file exists
-csv_path = "manus_hvac.csv"
+url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
-# Sample leads - USER CAN REPLACE THIS WITH ACTUAL MANUS DATA
-# Format: company_name, phone, email, city, state
-sample_leads = [
-    # PASTE MANUS LEADS HERE - format:
-    # ("Company Name", "+1XXXXXXXXXX", "email@domain.com", "City", "State"),
-]
+if not url or not key:
+    print("❌ ERROR: Missing Supabase credentials in .env")
+    exit(1)
 
-def import_leads(leads):
-    added = 0
-    for lead in leads:
-        company, phone, email, city, state = lead
+supabase = create_client(url, key)
+
+def import_leads():
+    print(f"Starting import of Manus leads to {url}...")
+    
+    leads_to_insert = []
+    count = 0
+    skipped = 0
+    
+    try:
+        with open('manus_leads.csv', mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                company_name = row.get('Company Name', '').strip()
+                phone = row.get('Phone', '').strip()
+                email = row.get('Email', '').strip()
+                batch = row.get('Batch', '1')
+                
+                # Clean missing values
+                if email.lower() in ['not found', 'n/a', 'null', 'none']:
+                    email = None
+                if not email:
+                    email = None
+                
+                if phone.lower() in ['not found', 'n/a', 'null', 'none']:
+                    phone = None
+                if not phone:
+                    phone = None
+
+                lead_data = {
+                    "company_name": company_name,
+                    "phone": phone,
+                    "email": email,
+                    "status": "pending",
+                    "created_at": datetime.now().isoformat()
+                }
+                
+                # Simple insert
+                try:
+                    res = supabase.table('leads').insert(lead_data).execute()
+                    count += 1
+                    if count % 20 == 0:
+                        print(f"Processed {count} leads...")
+                except Exception as e:
+                    print(f"Error inserting {company_name}: {e}")
+                    skipped += 1
         
-        # Check duplicate
-        cur.execute("SELECT id FROM leads WHERE company_name = %s", (company,))
-        if cur.fetchone():
-            print(f"  Skip (exists): {company}")
-            continue
+        print(f"✅ Successfully finished. Imported/Updated: {count}, Skipped: {skipped}")
         
-        # Insert
-        cur.execute("""
-            INSERT INTO leads (company_name, phone, email, city, state, industry, status, source)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """, (company, phone, email, city, state, "HVAC", "new", "manus_campaign"))
-        conn.commit()
-        print(f"  ✅ Added: {company}")
-        added += 1
-    
-    print(f"\n=== IMPORTED {added} HVAC LEADS ===")
-    return added
-
-def import_from_csv():
-    if not os.path.exists(csv_path):
-        print(f"CSV file not found: {csv_path}")
-        print("Please save Manus CSV as 'manus_hvac.csv' and run again")
-        return 0
-    
-    leads = []
-    with open(csv_path, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            # Adjust column names based on actual CSV
-            company = row.get('Company Name', row.get('company', row.get('name', '')))
-            phone = row.get('Phone', row.get('phone', ''))
-            email = row.get('Email', row.get('email', ''))
-            city = row.get('City', row.get('city', ''))
-            state = row.get('State', row.get('state', ''))
-            
-            if company and phone:
-                leads.append((company, phone, email, city, state))
-    
-    print(f"Found {len(leads)} leads in CSV")
-    return import_leads(leads)
+    except FileNotFoundError:
+        print("❌ ERROR: manus_leads.csv not found")
+    except Exception as e:
+        print(f"❌ ERROR: {e}")
 
 if __name__ == "__main__":
-    print("=== MANUS HVAC LEAD IMPORTER ===")
-    
-    if sample_leads:
-        import_leads(sample_leads)
-    else:
-        import_from_csv()
-    
-    # Show total ready leads
-    cur.execute("SELECT COUNT(*) FROM leads WHERE status = 'new' AND phone IS NOT NULL")
-    print(f"\nTotal NEW leads with phone: {cur.fetchone()[0]}")
-    
-    cur.close()
-    conn.close()
+    import_leads()
