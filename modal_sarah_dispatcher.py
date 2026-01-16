@@ -15,6 +15,26 @@ SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 GEMINI_API_KEY = "AIzaSyAfqN89E6mIoKT3OWNKKXrN4xZIqoOHHNo"
 HEADERS = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
 
+# Memory Policy - NEVER store these
+FORBIDDEN_PATTERNS = ["ssn", "social security", "driver license", "bank account", 
+    "credit card", "card number", "cvv", "routing number", "passport",
+    "health", "medical", "religion", "political"]
+
+def is_safe_to_store(value: str) -> bool:
+    """Check if memory is safe to store"""
+    text = value.lower()
+    return not any(p in text for p in FORBIDDEN_PATTERNS)
+
+def log_event(event_type: str, phone: str, success: bool, error: str = None, retry: int = 0):
+    """Log event to event_log table"""
+    import requests
+    try:
+        requests.post(f"{SUPABASE_URL}/rest/v1/event_log", headers=HEADERS, 
+            json={"event_type": event_type, "phone": phone, "success": success, 
+                  "error_message": error, "retry_count": retry}, timeout=5)
+    except:
+        pass
+
 
 SARAH_SYSTEM_PROMPT = """You are "Sarah," the professional dispatcher for AI Service Co.
 
