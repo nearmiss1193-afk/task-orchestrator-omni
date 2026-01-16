@@ -1,36 +1,36 @@
+import psycopg2
 
-import os
-from supabase import create_client
-from dotenv import load_dotenv
+DB_URL = "postgresql://postgres:Inez11752990@db.rzcpfwkygdvoshtwxncs.supabase.co:5432/postgres"
 
-load_dotenv(dotenv_path=".env")
+def check():
+    conn = psycopg2.connect(DB_URL)
+    cur = conn.cursor()
+    
+    # Get all indices and constraints for 'leads'
+    cur.execute("""
+        SELECT
+            ix.relname as index_name,
+            a.attname as column_name,
+            indisunique as is_unique
+        FROM
+            pg_class t,
+            pg_class ix,
+            pg_index i,
+            pg_attribute a
+        WHERE
+            t.oid = i.indrelid
+            AND ix.oid = i.indexrelid
+            AND a.attrelid = t.oid
+            AND a.attnum = ANY(i.indkey)
+            AND t.relkind = 'r'
+            AND t.relname = 'leads'
+    """)
+    print("Indices on 'leads' table:")
+    for row in cur.fetchall():
+        print(row)
+        
+    cur.close()
+    conn.close()
 
-url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
-# Use Service Role Key to bypass RLS for this admin check
-key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
-
-print(f"URL: {url}")
-print(f"Key Length: {len(key) if key else 0}")
-
-if not url or not key:
-    print("Missing credentials!")
-    exit(1)
-
-supabase = create_client(url, key)
-
-print("Checking 'brain_logs' table...")
-try:
-    # Attempt to select from the table
-    res = supabase.table("brain_logs").select("*").limit(1).execute()
-    print("Table exists!")
-    print(res.data)
-except Exception as e:
-    print(f"Error accessing table: {e}")
-
-print("\nAttempting Insert...")
-try:
-    res = supabase.table("brain_logs").insert({"message": "Sovereign Stack Admin Check"}).execute()
-    print("Insert success!")
-    print(res.data)
-except Exception as e:
-    print(f"Insert failed: {e}")
+if __name__ == "__main__":
+    check()

@@ -46,6 +46,31 @@
 
 ---
 
+### Jan 15 Night - Vapi International Call Error (Verified Jan 15, 2026)
+
+**Sources:**
+
+- [Vapi Docs: Call Ended Reasons](https://docs.vapi.ai/calls/call-ended-reason)
+- [Vapi Docs: Outbound Calling](https://docs.vapi.ai/phone-calling/outbound-calls)
+
+**Root Cause:** All outbound calls failing with `call.start.error-vapi-number-international`
+
+**Cross-Reference Table:**
+
+| Aspect | Source 1 (Vapi Docs) | Source 2 (Community) | Match? |
+|--------|---------------------|----------------------|--------|
+| Error Meaning | Free Vapi# can't call international | Free Vapi numbers are US-only | ✅ |
+| Target Number | +1 (250) = British Columbia, Canada | Canadian numbers are international | ✅ |
+| Fix | Import Twilio# OR filter international | Use Twilio-imported number | ✅ |
+
+**Key Findings:**
+
+- FREE Vapi phone numbers (like +1 863 213 2505) can ONLY call US domestic numbers
+- +1 (250) is a CANADIAN area code (British Columbia) - treated as international
+- Solution: Filter out non-US numbers from outreach, OR import Twilio number w/ international enabled
+
+---
+
 ### Jan 14 - Railway Schema Fix & Resend Webhooks
 
 **Completed:**

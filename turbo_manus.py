@@ -26,6 +26,29 @@ VAPI_KEY = "c23c884d-0008-4b14-ad5d-530e98d0c9da"
 VAPI_PHONE_ID = "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"
 SARAH_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
 
+# Canadian area codes (Vapi free numbers can't call these - treated as international)
+CANADIAN_AREA_CODES = [
+    '204', '226', '236', '249', '250', '289', '306', '343', '365', '367',
+    '403', '416', '418', '431', '437', '438', '450', '506', '514', '519',
+    '548', '579', '581', '587', '604', '613', '639', '647', '672', '705',
+    '709', '778', '780', '782', '807', '819', '825', '867', '873', '902', '905'
+]
+
+def is_us_phone(phone):
+    """Check if phone number is US (not Canadian) - Vapi free # can only call US"""
+    if not phone:
+        return False
+    # Normalize: remove +1, spaces, dashes, parens
+    clean = ''.join(c for c in phone if c.isdigit())
+    if clean.startswith('1') and len(clean) == 11:
+        clean = clean[1:]  # Remove country code
+    if len(clean) != 10:
+        return False
+    area_code = clean[:3]
+    if area_code in CANADIAN_AREA_CODES:
+        return False
+    return True
+
 # Database
 DB_CONFIG = {
     "host": "db.rzcpfwkygdvoshtwxncs.supabase.co",
@@ -102,7 +125,10 @@ def send_sms(phone, company_name, audit_link):
         return False
 
 def make_call(phone, company_name):
-    """Initiate Vapi call"""
+    """Initiate Vapi call - ONLY for US numbers (free Vapi # can't call international)"""
+    if not is_us_phone(phone):
+        print(f"   [SKIP] Call skipped - non-US phone: {phone}")
+        return False
     try:
         resp = requests.post(
             "https://api.vapi.ai/call",
