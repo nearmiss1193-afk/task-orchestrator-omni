@@ -24,7 +24,25 @@
 - **Trigger:** Customer Replied → SMS channel
 - **Action:** Webhook POST to `https://empire-unified-backup-production.up.railway.app/ghl/inbound-sms`
 - **Payload:** contactId, phone, email, message
-- **Status:** Needs "Publish" to activate
+- **Status**: ✅ Published and tested via `test_railway_sms.py`
+
+---
+
+### Jan 15 Evening - Manus Import & Deployment
+
+**Completed:**
+
+- ✅ Scraped 290 HVAC leads from Manus share link
+- ✅ `import_manus_leads.py`: Imported 290 leads to Supabase (Schema fix: removed `contact_name` which was missing from DB)
+- ✅ `railway/app.py`: Sarah SMS fix. Changed model from `gemini-1.5-flash` to `gemini-2.0-flash` (fixed 404 API error on Railway)
+- ✅ `modal_turbo_manus.py`: Deployed turbo manus campaign to Modal Cloud for 24/7 operation (optimized with logic to skip `node_modules`)
+- ✅ `turbo_manus.py`: Fixed Windows encoding errors and replaced emojis with ASCII for console stability
+
+**Key Learnings:**
+
+- **Gemini API (Early 2026)**: `gemini-1.5-flash` returning 404 on `v1beta`/`v1`. `gemini-2.0-flash` is the stable replacement.
+- **Supabase Schema**: `leads` table does NOT have `contact_name`. Use `company_name` as unique identifier.
+- **Modal Deployment**: Use `ignore` in `add_local_dir` to avoid 10k+ file uploads from `node_modules`.
 
 ---
 
