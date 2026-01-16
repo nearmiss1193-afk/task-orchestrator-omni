@@ -13,7 +13,7 @@ SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
 GEMINI_API_KEY = "AIzaSyAfqN89E6mIoKT3OWNKKXrN4xZIqoOHHNo"
 GHL_SMS_WEBHOOK = "https://services.leadconnectorhq.com/hooks/e7OGCxJpH6q7AXQPcRgR/webhook-trigger/c30d2de3-90c7-4401-bf44-5f41e9122d9f"
-RESEND_API_KEY = "re_6q5Rx16W_NJbL5MjDAzf9FhGEEBqhcfrm"
+RESEND_API_KEY = "re_6q5Rx16W_NJbL5Mj44uFy6u1e1MFAq8gy"
 
 
 @app.function(image=image, schedule=modal.Period(minutes=10), timeout=600)
