@@ -84,30 +84,43 @@ def generate_premium_audit(company_name, website, audit_data=None):
         return f"https://www.aiserviceco.com/audits/{company_name.replace(' ', '-').lower()}.html"
 
 def send_email(email, company_name, audit_link, missed_revenue=0):
-    """Send personalized email via GHL webhook"""
+    """Send personalized email via Resend API (GHL webhook not processing emails)"""
+    RESEND_API_KEY = "re_6q5Rx16W_NJbL5MjDAzf9FhGEEBqhcfrm"  # From .env
+    
     subject = f"ALERT - {company_name}: We Found ${missed_revenue:,} You're Missing"
-    body = f"""Hi,
-
-I ran a free website and phone audit for {company_name}.
-
-**Your Custom Report:** {audit_link}
-
-Key Finding: Our analysis shows you're potentially leaving ${missed_revenue:,}/year on the table due to missed calls and manual scheduling.
-
-I'd love to show you how we can fix this in 15 minutes.
-
-Reply to this email or call (863) 337-3705.
-
-Best,
-Sarah
-AI Service Co
+    html_body = f"""
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #3b82f6;">Your Marketing Audit is Ready!</h2>
+    
+    <p>Hi!</p>
+    
+    <p>I ran a free website and phone audit for <strong>{company_name}</strong>.</p>
+    
+    <p><strong>Your Custom Report:</strong> <a href="{audit_link}" style="color: #3b82f6;">{audit_link}</a></p>
+    
+    <p><strong>Key Finding:</strong> Our analysis shows you're potentially leaving <span style="color: #ef4444; font-weight: bold;">${missed_revenue:,}/year</span> on the table due to missed calls and manual scheduling.</p>
+    
+    <p>I'd love to show you how we can fix this in 15 minutes.</p>
+    
+    <p>Reply to this email or call <strong>(863) 337-3705</strong>.</p>
+    
+    <p>Best,<br>
+    <strong>Sarah</strong><br>
+    AI Service Co</p>
+</div>
 """
     try:
-        resp = requests.post(GHL_EMAIL_WEBHOOK, json={
-            "email": email,
-            "subject": subject,
-            "body": body
-        }, timeout=15)
+        resp = requests.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+            json={
+                "from": "Sarah <sarah@aiserviceco.com>",
+                "to": [email],
+                "subject": subject,
+                "html": html_body
+            },
+            timeout=15
+        )
         return resp.status_code in [200, 201]
     except:
         return False
