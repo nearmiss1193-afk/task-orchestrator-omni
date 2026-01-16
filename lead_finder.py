@@ -1,175 +1,175 @@
 """
-Lead Finder - Manus-Style Web Scraping
-Finds HVAC businesses without paid APIs (Apollo, etc.)
-Uses Google Search + website scraping to extract contact info
+Improved Lead Finder - Yellow Pages + Direct Website Scraping
+Works without any paid APIs - pure web scraping like Manus
 """
 import requests
 from bs4 import BeautifulSoup
 import re
 import time
 import random
+import sys
 
 # Supabase config
 SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
 
-# User agent for requests
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-}
-
-# US cities to search
-US_CITIES = [
-    ("Tampa", "FL"),
-    ("Orlando", "FL"),
-    ("Jacksonville", "FL"),
-    ("Miami", "FL"),
-    ("Atlanta", "GA"),
-    ("Charlotte", "NC"),
-    ("Houston", "TX"),
-    ("Dallas", "TX"),
-    ("San Antonio", "TX"),
-    ("Phoenix", "AZ"),
-    ("Denver", "CO"),
-    ("Nashville", "TN"),
-    ("Austin", "TX"),
-    ("Raleigh", "NC"),
-    ("Las Vegas", "NV")
+# Rotate user agents
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
 ]
 
-def extract_email(text):
-    """Extract email from text"""
-    pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
-    matches = re.findall(pattern, text)
-    # Filter out common non-business emails
-    exclude = ['example.com', 'email.com', 'yourcompany', 'domain.com']
-    for email in matches:
-        if not any(ex in email.lower() for ex in exclude):
-            return email
-    return None
+# US cities with area codes
+US_CITIES = [
+    ("tampa-fl", "Tampa", "FL", "813"),
+    ("orlando-fl", "Orlando", "FL", "407"),
+    ("miami-fl", "Miami", "FL", "305"),
+    ("jacksonville-fl", "Jacksonville", "FL", "904"),
+    ("atlanta-ga", "Atlanta", "GA", "404"),
+    ("houston-tx", "Houston", "TX", "713"),
+    ("dallas-tx", "Dallas", "TX", "214"),
+    ("phoenix-az", "Phoenix", "AZ", "602"),
+    ("denver-co", "Denver", "CO", "303"),
+    ("las-vegas-nv", "Las Vegas", "NV", "702"),
+    ("charlotte-nc", "Charlotte", "NC", "704"),
+    ("nashville-tn", "Nashville", "TN", "615"),
+    ("austin-tx", "Austin", "TX", "512"),
+    ("san-antonio-tx", "San Antonio", "TX", "210"),
+    ("raleigh-nc", "Raleigh", "NC", "919")
+]
+
+def get_headers():
+    return {"User-Agent": random.choice(USER_AGENTS)}
 
 def extract_phone(text):
-    """Extract US phone number from text"""
+    """Extract US phone numbers"""
     patterns = [
         r'\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}',
-        r'\d{3}[-.\s]\d{3}[-.\s]\d{4}',
-        r'1[-.\s]?\d{3}[-.\s]?\d{3}[-.\s]?\d{4}'
     ]
     for pattern in patterns:
         match = re.search(pattern, text)
         if match:
             phone = match.group()
-            # Format as +1 (XXX) XXX-XXXX
             digits = re.sub(r'\D', '', phone)
             if len(digits) == 10:
                 return f"+1 ({digits[:3]}) {digits[3:6]}-{digits[6:]}"
-            elif len(digits) == 11 and digits.startswith('1'):
-                return f"+1 ({digits[1:4]}) {digits[4:7]}-{digits[7:]}"
     return None
 
-def scrape_website(url):
-    """Scrape a website for contact info"""
-    try:
-        resp = requests.get(url, headers=HEADERS, timeout=10)
-        if resp.status_code != 200:
-            return None, None
-        
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        text = soup.get_text()
-        
-        email = extract_email(text)
-        phone = extract_phone(text)
-        
-        # Also check contact page
-        for link in soup.find_all('a', href=True):
-            href = link.get('href', '').lower()
-            if 'contact' in href:
-                contact_url = href if href.startswith('http') else url.rstrip('/') + '/' + href.lstrip('/')
-                try:
-                    contact_resp = requests.get(contact_url, headers=HEADERS, timeout=10)
-                    if contact_resp.status_code == 200:
-                        contact_soup = BeautifulSoup(contact_resp.text, 'html.parser')
-                        contact_text = contact_soup.get_text()
-                        if not email:
-                            email = extract_email(contact_text)
-                        if not phone:
-                            phone = extract_phone(contact_text)
-                except:
-                    pass
-                break
-        
-        return email, phone
-    except Exception as e:
-        print(f"    Scrape error: {e}")
-        return None, None
+def extract_email(text):
+    """Extract email addresses"""
+    pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+    matches = re.findall(pattern, text)
+    exclude = ['example', 'email.com', 'domain', 'your', 'test', 'sample']
+    for email in matches:
+        if not any(ex in email.lower() for ex in exclude):
+            return email.lower()
+    return None
 
-def search_yelp(city, state, industry="hvac"):
-    """Search Yelp for businesses (no API needed)"""
+def scrape_yellow_pages(city_slug, city_name, state, industry="hvac"):
+    """Scrape Yellow Pages for local businesses"""
     leads = []
-    url = f"https://www.yelp.com/search?find_desc={industry}&find_loc={city}%2C+{state}"
+    url = f"https://www.yellowpages.com/{city_slug}/{industry}-contractors"
+    
+    print(f"  Scraping: {url}")
     
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=15)
+        resp = requests.get(url, headers=get_headers(), timeout=15)
         if resp.status_code != 200:
-            print(f"  Yelp returned {resp.status_code}")
+            print(f"    Status: {resp.status_code}")
             return leads
         
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # Find business cards
-        for biz in soup.find_all('div', {'class': re.compile(r'businessName')}):
-            name = biz.get_text(strip=True)
-            if name:
-                leads.append({
-                    "company_name": name,
-                    "city": city,
-                    "state": state,
-                    "industry": industry.upper(),
-                    "status": "new"
-                })
+        # Find business result cards
+        results = soup.find_all('div', {'class': 'result'})
+        if not results:
+            results = soup.find_all('div', {'class': 'v-card'})
+        if not results:
+            results = soup.find_all('div', {'class': 'info'})
         
-        return leads[:5]  # Limit to 5 per city
-    except Exception as e:
-        print(f"  Yelp error: {e}")
-        return leads
-
-def search_google_organic(city, state, industry="hvac"):
-    """
-    Search using Duck Duck Go (no API needed, no rate limits)
-    Returns business names to research
-    """
-    leads = []
-    query = f"{industry} companies in {city} {state}"
-    url = f"https://html.duckduckgo.com/html/?q={query.replace(' ', '+')}"
-    
-    try:
-        resp = requests.get(url, headers=HEADERS, timeout=15)
-        if resp.status_code != 200:
-            return leads
+        print(f"    Found {len(results)} results")
         
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        
-        # Extract result titles and URLs
-        for result in soup.find_all('a', {'class': 'result__a'}):
-            title = result.get_text(strip=True)
-            href = result.get('href', '')
-            
-            # Filter for business-looking results
-            if any(kw in title.lower() for kw in ['hvac', 'heating', 'cooling', 'air', 'climate']):
-                if href and 'http' in href:
-                    leads.append({
-                        "company_name": title[:100],
-                        "website_url": href,
-                        "city": city,
+        for result in results[:5]:  # Limit to 5 per city
+            try:
+                # Get business name
+                name_elem = result.find(['a', 'h2'], {'class': re.compile(r'business-name|name')})
+                if not name_elem:
+                    name_elem = result.find('a', href=True)
+                
+                name = name_elem.get_text(strip=True) if name_elem else None
+                
+                if not name or len(name) < 3:
+                    continue
+                
+                # Get phone
+                phone_elem = result.find(['div', 'span'], {'class': re.compile(r'phone')})
+                phone = extract_phone(phone_elem.get_text()) if phone_elem else None
+                if not phone:
+                    phone = extract_phone(result.get_text())
+                
+                # Get website
+                website = None
+                for link in result.find_all('a', href=True):
+                    href = link.get('href', '')
+                    if 'website' in link.get_text().lower() or 'http' in href:
+                        if href.startswith('http') and 'yellowpages' not in href:
+                            website = href
+                            break
+                
+                if name and (phone or website):
+                    lead = {
+                        "company_name": name[:100],
+                        "phone": phone,
+                        "website_url": website,
+                        "city": city_name,
                         "state": state,
                         "industry": industry.upper(),
                         "status": "new"
-                    })
+                    }
+                    
+                    # Try to get email from website
+                    if website:
+                        email = scrape_website_for_email(website)
+                        if email:
+                            lead["email"] = email
+                    
+                    leads.append(lead)
+                    print(f"    + {name[:40]} | {phone or 'no phone'}")
+                    
+            except Exception as e:
+                continue
         
-        return leads[:3]  # Limit per city
-    except Exception as e:
-        print(f"  Search error: {e}")
         return leads
+    except Exception as e:
+        print(f"    Error: {e}")
+        return leads
+
+def scrape_website_for_email(url):
+    """Quick scrape for email"""
+    try:
+        resp = requests.get(url, headers=get_headers(), timeout=8)
+        if resp.status_code == 200:
+            email = extract_email(resp.text)
+            if email:
+                return email
+            # Check contact page
+            soup = BeautifulSoup(resp.text, 'html.parser')
+            for link in soup.find_all('a', href=True):
+                if 'contact' in link.get('href', '').lower():
+                    contact_url = link['href']
+                    if not contact_url.startswith('http'):
+                        contact_url = url.rstrip('/') + '/' + contact_url.lstrip('/')
+                    try:
+                        contact_resp = requests.get(contact_url, headers=get_headers(), timeout=5)
+                        if contact_resp.status_code == 200:
+                            return extract_email(contact_resp.text)
+                    except:
+                        pass
+                    break
+    except:
+        pass
+    return None
 
 def save_lead(lead):
     """Save lead to Supabase"""
@@ -191,51 +191,40 @@ def save_lead(lead):
     except:
         return False
 
-def find_leads(num_cities=5):
-    """Main function to find leads like Manus"""
+def find_leads(num_cities=3, industry="hvac"):
+    """Find leads from Yellow Pages - no APIs needed"""
     print("=" * 60)
-    print("MANUS-STYLE LEAD FINDER")
-    print("Finding HVAC businesses without Apollo")
+    print("MANUS-STYLE LEAD FINDER v2")
+    print("Scraping Yellow Pages - No APIs Required")
     print("=" * 60)
     
     all_leads = []
-    cities_to_search = random.sample(US_CITIES, min(num_cities, len(US_CITIES)))
+    cities = random.sample(US_CITIES, min(num_cities, len(US_CITIES)))
     
-    for city, state in cities_to_search:
-        print(f"\nSearching {city}, {state}...")
+    for city_slug, city_name, state, area_code in cities:
+        print(f"\n[{city_name}, {state}]")
         
-        # Try DuckDuckGo first
-        leads = search_google_organic(city, state, "hvac")
+        leads = scrape_yellow_pages(city_slug, city_name, state, industry)
         
         for lead in leads:
-            print(f"  Found: {lead['company_name'][:40]}")
-            
-            # Try to scrape contact info if we have URL
-            if lead.get('website_url'):
-                email, phone = scrape_website(lead['website_url'])
-                if email:
-                    lead['email'] = email
-                    print(f"    Email: {email}")
-                if phone:
-                    lead['phone'] = phone
-                    print(f"    Phone: {phone}")
-            
-            # Save to database
-            if lead.get('email') or lead.get('phone'):
-                if save_lead(lead):
-                    print(f"    [SAVED]")
-                    all_leads.append(lead)
-                else:
-                    print(f"    [SAVE FAILED]")
+            if save_lead(lead):
+                all_leads.append(lead)
+                print(f"      [SAVED]")
+            else:
+                print(f"      [SAVE FAILED]")
         
         # Rate limiting
         time.sleep(2)
     
     print("\n" + "=" * 60)
-    print(f"FOUND {len(all_leads)} LEADS WITH CONTACT INFO")
+    print(f"IMPORTED {len(all_leads)} LEADS TO DATABASE")
     print("=" * 60)
+    
+    for lead in all_leads:
+        print(f"  - {lead['company_name'][:35]} | {lead.get('phone', 'N/A')} | {lead['city']}, {lead['state']}")
     
     return all_leads
 
 if __name__ == "__main__":
-    find_leads(num_cities=3)  # Start with 3 cities
+    num = int(sys.argv[1]) if len(sys.argv) > 1 else 3
+    find_leads(num_cities=num)
