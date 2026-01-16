@@ -34,20 +34,22 @@ def send_sms(phone: str, message: str) -> dict:
 
 def send_email(to_email: str, subject: str, body: str, from_name: str = "Sarah", company: str = "") -> dict:
     """
-    Send Email via GHL workflow webhook
-    The GHL workflow must be configured to:
-    1. Receive webhook with email, subject, body
-    2. Send email to the recipient
+    Send Email via Resend API (more reliable than GHL webhook)
     """
+    RESEND_API_KEY = "re_6q5Rx16W_NJbL5Mj44uFy6u1e1MFAq8gy"
+    
     try:
         r = requests.post(
-            GHL_EMAIL_WEBHOOK,
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Content-Type": "application/json"
+            },
             json={
-                "email": to_email,
+                "from": f"{from_name} <sarah@aiserviceco.com>",
+                "to": [to_email],
                 "subject": subject,
-                "body": body,
-                "from_name": from_name,
-                "company": company
+                "html": f"<div style='font-family: Arial, sans-serif;'>{body}</div>"
             },
             timeout=15
         )
