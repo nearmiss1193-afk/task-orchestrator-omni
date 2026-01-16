@@ -10,6 +10,10 @@ import psycopg2
 import requests
 from datetime import datetime
 
+# Fix Windows console encoding for Unicode characters
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 # Add modules to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -58,12 +62,12 @@ def generate_premium_audit(company_name, website, audit_data=None):
 
 def send_email(email, company_name, audit_link, missed_revenue=0):
     """Send personalized email via GHL webhook"""
-    subject = f"🚨 {company_name}: We Found ${missed_revenue:,} You're Missing"
+    subject = f"ALERT - {company_name}: We Found ${missed_revenue:,} You're Missing"
     body = f"""Hi,
 
 I ran a free website and phone audit for {company_name}.
 
-📊 **Your Custom Report:** {audit_link}
+**Your Custom Report:** {audit_link}
 
 Key Finding: Our analysis shows you're potentially leaving ${missed_revenue:,}/year on the table due to missed calls and manual scheduling.
 
@@ -87,7 +91,7 @@ AI Service Co
 
 def send_sms(phone, company_name, audit_link):
     """Send SMS via GHL webhook"""
-    msg = f"Hi! I just finished an audit for {company_name} and found some interesting opportunities. Check it out: {audit_link} — Reply for a free 15-min consultation. -Sarah"
+    msg = f"Hi! I just finished an audit for {company_name} and found some interesting opportunities. Check it out: {audit_link}  Reply for a free 15-min consultation. -Sarah"
     try:
         resp = requests.post(GHL_SMS_WEBHOOK, json={
             "phone": phone,
@@ -123,13 +127,13 @@ def process_lead(lead_id, company_name, website, email, phone, city, state):
     audit_report = None
     missed_revenue = 144000  # Default estimate
     if website:
-        print(f"   📊 Running site audit...")
+        print(f"   Running site audit...")
         audit_report = generate_site_audit(website)
         if audit_report and 'financials' in audit_report:
             missed_revenue = audit_report['financials'].get('total_opportunity', 144000)
     
     # Step 2: Generate Premium Audit Report (our own - better than Manus)
-    print(f"   🔗 Generating premium audit report...")
+    print(f"   Generating premium audit report...")
     audit_link = generate_premium_audit(company_name, website, audit_data={
         'has_chat': False,
         'has_booking': False,
@@ -140,23 +144,23 @@ def process_lead(lead_id, company_name, website, email, phone, city, state):
     # Step 3: Send Email
     email_sent = False
     if email:
-        print(f"   📧 Sending email to {email}...")
+        print(f"   Sending email to {email}...")
         email_sent = send_email(email, company_name, audit_link, missed_revenue)
-        print(f"   {'✅' if email_sent else '❌'} Email")
+        print(f"   {'[OK]' if email_sent else '[FAIL]'} Email")
     
     # Step 4: Send SMS
     sms_sent = False
     if phone:
-        print(f"   📱 Sending SMS to {phone}...")
+        print(f"   Sending SMS to {phone}...")
         sms_sent = send_sms(phone, company_name, audit_link)
-        print(f"   {'✅' if sms_sent else '❌'} SMS")
+        print(f"   {'[OK]' if sms_sent else '[FAIL]'} SMS")
     
     # Step 5: Make Call (ENABLED)
     call_made = False
     if phone:
-        print(f"   📞 Calling {phone}...")
+        print(f"   Calling {phone}...")
         call_made = make_call(phone, company_name)
-        print(f"   {'✅' if call_made else '❌'} Call")
+        print(f"   {'[OK]' if call_made else '[FAIL]'} Call")
     
     # Step 6: Update database - mark as contacted
     conn = get_db()
@@ -165,14 +169,14 @@ def process_lead(lead_id, company_name, website, email, phone, city, state):
     conn.commit()
     cur.close()
     conn.close()
-    print(f"   ✅ Database updated")
+    print(f"   [OK] Database updated")
     
     return {"email": email_sent, "sms": sms_sent, "call": call_made, "audit_link": audit_link}
 
 def run_campaign_cycle():
     """Run one cycle - process up to 5 leads"""
     print(f"\n{'='*50}")
-    print(f"🚀 MANUS-STYLE CAMPAIGN CYCLE - {datetime.now().strftime('%H:%M:%S')}")
+    print(f"[CAMPAIGN] MANUS-STYLE CAMPAIGN CYCLE - {datetime.now().strftime('%H:%M:%S')}")
     print(f"{'='*50}")
     
     conn = get_db()
@@ -202,7 +206,7 @@ def run_campaign_cycle():
         if result["call"]: results["calls"] += 1
         time.sleep(2)  # Rate limit
     
-    print(f"\n📊 Cycle Complete: {results['emails']} emails, {results['sms']} SMS, {results['calls']} calls")
+    print(f"\n[STATS] Cycle Complete: {results['emails']} emails, {results['sms']} SMS, {results['calls']} calls")
     return results
 
 def main():
@@ -214,13 +218,13 @@ def main():
     while True:
         try:
             run_campaign_cycle()
-            print(f"\n⏰ Next cycle in 10 minutes...")
+            print(f"\n[WAIT] Next cycle in 10 minutes...")
             time.sleep(600)  # 10 minutes
         except KeyboardInterrupt:
-            print("\n🛑 Campaign stopped by user")
+            print("\n[STOP] Campaign stopped by user")
             break
         except Exception as e:
-            print(f"\n❌ Error: {e}")
+            print(f"\n[ERROR] Error: {e}")
             print("   Retrying in 60 seconds...")
             time.sleep(60)
 
