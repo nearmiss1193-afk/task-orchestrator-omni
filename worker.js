@@ -14,8 +14,14 @@ addEventListener("scheduled", event => {
     event.waitUntil(handleScheduled(event));
 });
 
-// Basic Auth check for protected routes
+// Basic Auth check for protected routes - SECRETS ONLY, no fallbacks
 function checkBasicAuth(request) {
+    // Fail closed: if secrets not configured, deny access
+    if (typeof BASIC_AUTH_USER === "undefined" || typeof BASIC_AUTH_PASS === "undefined") {
+        console.error("BASIC_AUTH_USER or BASIC_AUTH_PASS not configured");
+        return false;
+    }
+
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Basic ")) {
         return false;
@@ -25,11 +31,7 @@ function checkBasicAuth(request) {
     const decoded = atob(base64);
     const [user, pass] = decoded.split(":");
 
-    // Check against Worker secrets (set via wrangler secret put)
-    const validUser = typeof DASHBOARD_USER !== "undefined" ? DASHBOARD_USER : "sovereign";
-    const validPass = typeof DASHBOARD_PASS !== "undefined" ? DASHBOARD_PASS : "command2026";
-
-    return user === validUser && pass === validPass;
+    return user === BASIC_AUTH_USER && pass === BASIC_AUTH_PASS;
 }
 
 function unauthorized() {

@@ -1,4 +1,4 @@
-name = "sovereign-console"
+name = "sovereign-console-20260117"
 main = "worker.js"
 compatibility_date = "2026-01-01"
 
