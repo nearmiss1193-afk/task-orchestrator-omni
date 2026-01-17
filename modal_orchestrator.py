@@ -277,6 +277,144 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         return result
     
+    @api.get("/api/policy-optimize")
+    def policy_optimizer():
+        """
+        Adjust policy weights based on task metrics using simple Bayesian update.
+        Analyzes last 24h of task_metrics, adjusts retries/timeouts/weights.
+        Run via cron every 4 hours or on-demand.
+        """
+        from datetime import timedelta
+        import random
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        since = (datetime.utcnow() - timedelta(hours=24)).isoformat()
+        
+        # Fetch recent task metrics
+        try:
+            r = requests.get(f"{SUPABASE_URL}/rest/v1/task_metrics?ts=gte.{since}&order=ts.desc&limit=500", headers=headers, timeout=15)
+            metrics = r.json() if r.status_code == 200 else []
+        except:
+            metrics = []
+        
+        if len(metrics) < 10:
+            return {"status": "skip", "reason": "insufficient_data", "metrics_count": len(metrics)}
+        
+        # Calculate aggregate stats
+        total = len(metrics)
+        successes = sum(1 for m in metrics if m.get("success"))
+        success_rate = successes / total
+        avg_latency = sum(m.get("latency_ms", 0) for m in metrics) / total
+        avg_retries = sum(m.get("retries", 0) for m in metrics) / total
+        
+        # Fetch current policy
+        try:
+            r = requests.get(f"{SUPABASE_URL}/rest/v1/policy_weights?active=eq.true&order=version.desc&limit=1", headers=headers, timeout=10)
+            current_policy = r.json()[0] if r.status_code == 200 and r.json() else None
+        except:
+            current_policy = None
+        
+        if not current_policy:
+            return {"status": "error", "reason": "no_active_policy"}
+        
+        old_version = current_policy.get("version", 1)
+        changes_made = {}
+        
+        # Bayesian-style weight adjustments based on performance
+        new_policy = {}
+        
+        # 1. Adjust max_retries: If high failure rate, increase; if low, decrease
+        failure_rate = 1 - success_rate
+        if failure_rate > 0.3:
+            new_policy["max_retries"] = min(current_policy.get("max_retries", 3) + 1, 5)
+            changes_made["max_retries"] = "increased (high failure rate)"
+        elif failure_rate < 0.1 and current_policy.get("max_retries", 3) > 1:
+            new_policy["max_retries"] = current_policy.get("max_retries", 3) - 1
+            changes_made["max_retries"] = "decreased (low failure rate)"
+        
+        # 2. Adjust timeouts: If high latency, increase timeout
+        if avg_latency > 25000:  # > 25s avg
+            new_policy["tool_timeout_ms"] = min(current_policy.get("tool_timeout_ms", 30000) + 10000, 60000)
+            changes_made["tool_timeout_ms"] = "increased (high latency)"
+        elif avg_latency < 5000 and current_policy.get("tool_timeout_ms", 30000) > 15000:
+            new_policy["tool_timeout_ms"] = current_policy.get("tool_timeout_ms", 30000) - 5000
+            changes_made["tool_timeout_ms"] = "decreased (low latency)"
+        
+        # 3. Adjust concurrency: If high success rate, can increase
+        if success_rate > 0.9 and avg_retries < 0.5:
+            new_policy["max_concurrent_tasks"] = min(current_policy.get("max_concurrent_tasks", 5) + 1, 10)
+            changes_made["max_concurrent_tasks"] = "increased (high success)"
+        elif success_rate < 0.7:
+            new_policy["max_concurrent_tasks"] = max(current_policy.get("max_concurrent_tasks", 5) - 1, 2)
+            changes_made["max_concurrent_tasks"] = "decreased (low success)"
+        
+        # 4. Adjust Gemini/fallback weights using Thompson Sampling approach
+        gemini_tasks = [m for m in metrics if m.get("payload", {}).get("tool") == "gemini"]
+        if gemini_tasks:
+            gemini_success = sum(1 for m in gemini_tasks if m.get("success")) / len(gemini_tasks)
+            # Simple exploration-exploitation: add noise
+            adjusted_weight = gemini_success * 0.8 + random.uniform(0.1, 0.3)
+            new_policy["weight_gemini"] = min(max(adjusted_weight, 0.3), 0.9)
+            new_policy["weight_fallback"] = 1.0 - new_policy["weight_gemini"]
+            changes_made["weight_gemini"] = f"adjusted to {new_policy['weight_gemini']:.2f}"
+        
+        # Only update if changes were made
+        if not changes_made:
+            return {"status": "no_changes", "success_rate": success_rate, "avg_latency_ms": avg_latency}
+        
+        # Create new policy version
+        new_version = old_version + 1
+        new_policy_record = {**current_policy}
+        new_policy_record.update(new_policy)
+        new_policy_record["version"] = new_version
+        new_policy_record["updated_by"] = "optimizer"
+        new_policy_record["notes"] = f"Auto-adjusted from success_rate={success_rate:.2f}, latency={avg_latency:.0f}ms"
+        del new_policy_record["id"]
+        del new_policy_record["created_at"]
+        new_policy_record["created_at"] = datetime.utcnow().isoformat()
+        
+        # Deactivate old policy
+        try:
+            requests.patch(f"{SUPABASE_URL}/rest/v1/policy_weights?version=eq.{old_version}", headers=headers, json={"active": False}, timeout=10)
+        except: pass
+        
+        # Insert new policy
+        try:
+            requests.post(f"{SUPABASE_URL}/rest/v1/policy_weights", headers=headers, json=new_policy_record, timeout=10)
+        except Exception as e:
+            return {"status": "error", "reason": f"failed to save: {e}"}
+        
+        # Log optimizer run
+        confidence = success_rate * 0.6 + (1 - min(avg_retries, 3) / 3) * 0.4
+        run_log = {
+            "tasks_analyzed": total,
+            "success_rate": success_rate,
+            "avg_latency_ms": int(avg_latency),
+            "old_policy_version": old_version,
+            "new_policy_version": new_version,
+            "changes_made": changes_made,
+            "confidence_score": confidence
+        }
+        try:
+            requests.post(f"{SUPABASE_URL}/rest/v1/optimizer_runs", headers=headers, json=run_log, timeout=10)
+        except: pass
+        
+        log_event("policy.updated", "modal", "info", payload={"old_version": old_version, "new_version": new_version, "changes": changes_made})
+        
+        return {
+            "status": "optimized",
+            "old_version": old_version,
+            "new_version": new_version,
+            "changes_made": changes_made,
+            "metrics": {
+                "tasks_analyzed": total,
+                "success_rate": round(success_rate, 3),
+                "avg_latency_ms": int(avg_latency),
+                "avg_retries": round(avg_retries, 2)
+            },
+            "rollback_command": "SELECT rollback_policy();"
+        }
+    
     @api.get("/prospect")
     def run_prospecting():
         """Run Apollo prospecting and queue new leads. Triggered by Cloudflare cron every 4 hours."""
