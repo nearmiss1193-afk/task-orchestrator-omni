@@ -197,6 +197,19 @@
                     INITIATE LINK
                 </button>
                 <div id="statusUplink" class="mt-3 text-xs text-slate-500 font-mono">Status: Standby</div>
+                <div id="voiceDiagnostics" class="mt-2 text-[10px] text-slate-600 font-mono"></div>
+
+                <!-- Text Uplink Fallback -->
+                <div class="mt-4 w-full border-t border-white/10 pt-4">
+                    <div class="text-xs text-slate-400 mb-2">📝 Text Fallback</div>
+                    <div class="flex gap-2">
+                        <input type="text" id="textUplinkInput" placeholder="Type message..."
+                            class="flex-1 bg-slate-900 text-xs px-3 py-2 rounded border border-slate-700 outline-none focus:border-blue-500">
+                        <button onclick="sendTextUplink()"
+                            class="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded text-xs">Send</button>
+                    </div>
+                    <div id="textUplinkResponse" class="mt-2 text-xs text-slate-400 max-h-24 overflow-y-auto"></div>
+                </div>
             </div>
 
             <!-- ACTIVE CAMPAIGN FEED -->
@@ -266,8 +279,12 @@
                 <h3 class="font-bold flex items-center gap-2">
                     <span>📞</span> Call Transcripts & AI Learnings
                 </h3>
-                <button onclick="fetchTranscripts()" class="text-xs text-blue-400 hover:text-blue-300">↻
-                    Refresh</button>
+                <div class="flex gap-2">
+                    <button onclick="forceSyncCalls()"
+                        class="text-xs px-2 py-1 bg-green-600 hover:bg-green-500 rounded">⚡ Force Sync</button>
+                    <button onclick="fetchTranscripts()" class="text-xs text-blue-400 hover:text-blue-300">↻
+                        Refresh</button>
+                </div>
             </div>
             <div id="transcriptsContainer" class="space-y-3 max-h-[400px] overflow-y-auto">
                 <div class="text-center text-slate-500 py-6">Loading transcripts...</div>
@@ -510,6 +527,25 @@
                     // Increment call count
                     state.stats.calls += 1;
                     state.activity.calls += 1;
+
+                    // Prepend to transcripts list with stable keys
+                    if (payload && payload.call_id) {
+                        const callRecord = {
+                            call_id: payload.call_id,
+                            from_number: payload.from_number || null,
+                            to_number: payload.to_number || null,
+                            timestamp: payload.timestamp || ts || new Date().toISOString(),
+                            disposition: payload.disposition || 'completed',
+                            summary: payload.summary || null,
+                            transcript: payload.transcript || null,
+                            duration_seconds: payload.duration_seconds || 0
+                        };
+                        // Dedupe by call_id
+                        const exists = state.transcripts.some(t => t.call_id === callRecord.call_id);
+                        if (!exists) {
+                            state.transcripts = [callRecord, ...state.transcripts].slice(0, 50);
+                        }
+                    }
                     break;
 
                 case 'task.updated':
@@ -968,6 +1004,107 @@
             }
         }
 
+        // --- 2b. VOICE PREFLIGHT CHECK ---
+        async function voicePreflightCheck() {
+            const diagnostics = document.getElementById('voiceDiagnostics');
+            const results = [];
+
+            // Check 1: SDK script loaded
+            if (window.Vapi) {
+                results.push("✅ SDK loaded");
+            } else {
+                results.push("❌ SDK not loaded (check CDN/CSP)");
+            }
+
+            // Check 2: Public token present
+            if (VAPI_PUBLIC_KEY && VAPI_PUBLIC_KEY.length > 10) {
+                results.push("✅ Token present");
+            } else {
+                results.push("❌ Missing VAPI_PUBLIC_KEY");
+            }
+
+            // Check 3: Mic permissions
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                stream.getTracks().forEach(t => t.stop());
+                results.push("✅ Mic available");
+            } catch (e) {
+                results.push("❌ Mic: " + e.message);
+            }
+
+            // Check 4: Backend reachable
+            try {
+                const res = await fetch(API_BASE + '/health', { method: 'GET' });
+                if (res.ok) {
+                    results.push("✅ Backend OK");
+                } else {
+                    results.push("⚠️ Backend: " + res.status);
+                }
+            } catch (e) {
+                results.push("❌ Backend unreachable");
+            }
+
+            diagnostics.innerHTML = results.join(' | ');
+            console.log('[Voice Preflight]', results);
+        }
+
+        // --- 2c. FORCE SYNC CALLS ---
+        async function forceSyncCalls() {
+            const container = document.getElementById('transcriptsContainer');
+            container.innerHTML = '<div class="text-center text-blue-400 py-4">⚡ Syncing calls...</div>';
+
+            try {
+                const res = await fetch(API_BASE + '/api/calls?limit=20');
+                const data = await res.json();
+
+                if (data.calls && data.calls.length > 0) {
+                    // Emit synthetic call.logged events for each call
+                    data.calls.forEach(call => {
+                        dispatch({
+                            type: 'call.logged',
+                            ts: call.timestamp || new Date().toISOString(),
+                            payload: call
+                        });
+                    });
+                    console.log(`[Force Sync] Synced ${data.calls.length} calls`);
+                } else {
+                    container.innerHTML = '<div class="text-center text-slate-500 py-6">No calls found</div>';
+                }
+            } catch (e) {
+                console.error('[Force Sync] Error:', e);
+                container.innerHTML = '<div class="text-center text-red-400 py-4">Sync failed: ' + e.message + '</div>';
+            }
+        }
+
+        // --- 2d. TEXT UPLINK FALLBACK ---
+        async function sendTextUplink() {
+            const input = document.getElementById('textUplinkInput');
+            const responseEl = document.getElementById('textUplinkResponse');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            responseEl.innerHTML = '<span class="text-yellow-400">Sending...</span>';
+            input.value = '';
+
+            try {
+                const res = await fetch(API_BASE + '/api/orchestrator/message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, source: 'dashboard_text_uplink' })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    responseEl.innerHTML = '<span class="text-green-400">' + (data.response || data.message || 'Sent!') + '</span>';
+                } else {
+                    responseEl.innerHTML = '<span class="text-red-400">Error: ' + res.status + '</span>';
+                }
+            } catch (e) {
+                responseEl.innerHTML = '<span class="text-red-400">Failed: ' + e.message + '</span>';
+            }
+        }
+
         // --- 3. ASSET INBOX ---
         async function saveAsset() {
             const url = document.getElementById('assetInput').value;
@@ -1189,6 +1326,9 @@
 
             // Connect SSE for realtime updates
             connectSSE();
+
+            // Run voice preflight diagnostics
+            voicePreflightCheck();
 
             // Fallback polling (reduced frequency since SSE handles most updates)
             setInterval(fetchStats, 60000);      // Every 60s as backup

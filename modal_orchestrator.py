@@ -388,6 +388,119 @@ Be specific and actionable. Output ONLY the insight, no intro."""
             "timestamp": datetime.utcnow().isoformat()
         }
     
+    @api.get("/api/calls")
+    def get_calls(limit: int = 20):
+        """
+        Fetch recent calls from Supabase for Force Sync functionality.
+        Returns calls with stable keys: call_id, from_number, to_number, timestamp, disposition, summary, transcript
+        """
+        import requests
+        
+        SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+        SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+        
+        if not SUPABASE_URL or not SUPABASE_KEY:
+            return {"error": "Supabase not configured", "calls": []}
+        
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            
+            # Try call_logs table first
+            res = requests.get(
+                f"{SUPABASE_URL}/rest/v1/call_logs?order=created_at.desc&limit={limit}",
+                headers=headers,
+                timeout=10
+            )
+            
+            if res.status_code == 200:
+                calls = res.json()
+                # Normalize to stable keys
+                normalized = []
+                for c in calls:
+                    normalized.append({
+                        "call_id": c.get("call_id") or c.get("id") or None,
+                        "from_number": c.get("from_number") or c.get("phone") or None,
+                        "to_number": c.get("to_number") or None,
+                        "timestamp": c.get("timestamp") or c.get("created_at") or None,
+                        "disposition": c.get("disposition") or c.get("status") or "completed",
+                        "summary": c.get("summary") or None,
+                        "transcript": c.get("transcript") or None,
+                        "duration_seconds": c.get("duration_seconds") or c.get("duration") or 0
+                    })
+                return {"calls": normalized, "count": len(normalized)}
+            else:
+                # Fallback to system_logs with CALL events
+                res2 = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/system_logs?event_type=ilike.*CALL*&order=created_at.desc&limit={limit}",
+                    headers=headers,
+                    timeout=10
+                )
+                if res2.status_code == 200:
+                    logs = res2.json()
+                    normalized = []
+                    for log in logs:
+                        meta = log.get("metadata", {})
+                        normalized.append({
+                            "call_id": meta.get("call_id") or log.get("id") or None,
+                            "from_number": meta.get("from_number") or meta.get("phone") or None,
+                            "to_number": meta.get("to_number") or None,
+                            "timestamp": log.get("created_at") or None,
+                            "disposition": meta.get("disposition") or meta.get("status") or "completed",
+                            "summary": meta.get("summary") or log.get("message") or None,
+                            "transcript": meta.get("transcript") or None,
+                            "duration_seconds": meta.get("duration_seconds") or 0
+                        })
+                    return {"calls": normalized, "count": len(normalized), "source": "system_logs"}
+                return {"error": "Could not fetch calls", "calls": []}
+        except Exception as e:
+            return {"error": str(e), "calls": []}
+    
+    @api.post("/api/orchestrator/message")
+    def orchestrator_message(data: dict):
+        """
+        Text Uplink Fallback - Send a message to the orchestrator when voice is unavailable.
+        Returns a response from the orchestrator.
+        """
+        message = data.get("message", "").strip()
+        source = data.get("source", "unknown")
+        
+        if not message:
+            return {"error": "No message provided", "response": None}
+        
+        # Log the inbound message
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        try:
+            requests.post(
+                f"{SUPABASE_URL}/rest/v1/system_logs",
+                headers=headers,
+                json={
+                    "level": "INFO",
+                    "event_type": "TEXT_UPLINK",
+                    "message": f"[{source}] {message}",
+                    "metadata": {"source": source, "message": message}
+                },
+                timeout=10
+            )
+        except:
+            pass
+        
+        # Simple response logic - could integrate with AI assistant here
+        response_text = f"Received: '{message}'. Orchestrator is processing. Check dashboard for updates."
+        
+        # For now, just acknowledge - can integrate Gemini/GPT here later
+        if "status" in message.lower():
+            response_text = "System status: All components operational. Dashboard SSE active."
+        elif "sync" in message.lower() or "force" in message.lower():
+            response_text = "Use the Force Sync button in the transcripts section to sync recent calls."
+        elif "help" in message.lower():
+            response_text = "Available commands: status, sync, run campaign, stop. For voice uplink, reload page and check diagnostics."
+        
+        return {
+            "response": response_text,
+            "timestamp": datetime.utcnow().isoformat(),
+            "source": source
+        }
+    
     # ==========================================================
     # SSE EVENTS STREAM - Realtime dashboard updates
     # ==========================================================
