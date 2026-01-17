@@ -1,18 +1,55 @@
 /**
- * Empire Webhook Fallback + Scheduled Automation Worker
- * Handles: webhook routing, health checks, prospecting, campaigns, optimization
+ * Empire Webhook Fallback + Scheduled Automation + Static Site Worker
+ * Handles: static files (dashboard), webhook routing, health checks, prospecting, campaigns, optimization
+ * Build: 20260117-1114-2d01424
  */
 
+import { getAssetFromKV } from "@cloudflare/kv-asset-handler";
+
 addEventListener("fetch", event => {
-    event.respondWith(handleRequest(event.request, event));
+    event.respondWith(handleRequest(event));
 });
 
 addEventListener("scheduled", event => {
     event.waitUntil(handleScheduled(event));
 });
 
-async function handleRequest(request, event) {
+async function handleRequest(event) {
+    const request = event.request;
     const url = new URL(request.url);
+    const pathname = url.pathname;
+
+    // Serve static files for dashboard and assets
+    if (pathname === "/" || pathname === "/dashboard.html" || pathname.startsWith("/assets/") || pathname.endsWith(".html") || pathname.endsWith(".js") || pathname.endsWith(".css") || pathname.endsWith(".png") || pathname.endsWith(".jpg") || pathname.endsWith(".ico")) {
+        try {
+            // Use KV asset handler for static files
+            let response = await getAssetFromKV(event, {
+                mapRequestToAsset: (req) => {
+                    const url = new URL(req.url);
+                    // Serve index.html for root
+                    if (url.pathname === "/") {
+                        url.pathname = "/dashboard.html";
+                    }
+                    return new Request(url.toString(), req);
+                }
+            });
+
+            // Add cache control headers for dashboard
+            if (pathname === "/dashboard.html" || pathname === "/") {
+                response = new Response(response.body, response);
+                response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+                response.headers.set("Pragma", "no-cache");
+                response.headers.set("Expires", "0");
+            }
+
+            return response;
+        } catch (e) {
+            // If asset not found, continue to webhook handler
+            console.log("Asset not found:", pathname, e.message);
+        }
+    }
+
+    // Webhook handler (POST requests)
     if (request.method === "POST") {
         try {
             const body = await request.json();
@@ -47,7 +84,21 @@ async function handleRequest(request, event) {
             });
         }
     }
-    return new Response("Use POST for webhook", { status: 405 });
+
+    // Health check endpoint
+    if (pathname === "/health" || pathname === "/api/health") {
+        return new Response(JSON.stringify({
+            status: "ok",
+            build: "20260117-1114-2d01424",
+            worker: "empire-webhook-fallback",
+            timestamp: new Date().toISOString()
+        }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" }
+        });
+    }
+
+    return new Response("Empire Worker - Use POST for webhook or GET /dashboard.html", { status: 405 });
 }
 
 async function handleScheduled(event) {
