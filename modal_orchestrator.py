@@ -36,8 +36,24 @@ Push for the booking. Be direct but not pushy."""
 @modal.asgi_app()
 def orchestration_api():
     import requests
+    from fastapi.middleware.cors import CORSMiddleware
     
     api = FastAPI(title="Sovereign Orchestrator", version="2.0")
+    
+    # Add CORS middleware - allows aiserviceco.com dashboard to call Modal APIs
+    api.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "https://www.aiserviceco.com",
+            "https://aiserviceco.com",
+            "http://localhost:3000",
+            "http://127.0.0.1:5500",
+            "*"  # Fallback for development
+        ],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     
     @api.get("/health")
     def health():
@@ -405,30 +421,32 @@ Be specific and actionable. Output ONLY the insight, no intro."""
         try:
             headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
             
-            # Try call_logs table first
+            # Try call_transcripts table first (this is the main table)
             res = requests.get(
-                f"{SUPABASE_URL}/rest/v1/call_logs?order=created_at.desc&limit={limit}",
+                f"{SUPABASE_URL}/rest/v1/call_transcripts?order=created_at.desc&limit={limit}",
                 headers=headers,
                 timeout=10
             )
             
             if res.status_code == 200:
                 calls = res.json()
-                # Normalize to stable keys
+                # Normalize to stable keys from call_transcripts schema
                 normalized = []
                 for c in calls:
                     normalized.append({
                         "call_id": c.get("call_id") or c.get("id") or None,
-                        "from_number": c.get("from_number") or c.get("phone") or None,
+                        "from_number": c.get("customer_phone") or c.get("from_number") or None,
                         "to_number": c.get("to_number") or None,
-                        "timestamp": c.get("timestamp") or c.get("created_at") or None,
-                        "disposition": c.get("disposition") or c.get("status") or "completed",
+                        "timestamp": c.get("created_at") or c.get("timestamp") or None,
+                        "disposition": c.get("ended_reason") or c.get("disposition") or "completed",
                         "summary": c.get("summary") or None,
                         "transcript": c.get("transcript") or None,
-                        "duration_seconds": c.get("duration_seconds") or c.get("duration") or 0
+                        "duration_seconds": c.get("duration_seconds") or c.get("duration") or 0,
+                        "customer_name": c.get("customer_name") or None
                     })
-                return {"calls": normalized, "count": len(normalized)}
+                return {"calls": normalized, "count": len(normalized), "source": "call_transcripts"}
             else:
+                print(f"[/api/calls] call_transcripts failed: {res.status_code} - {res.text[:200]}")
                 # Fallback to system_logs with CALL events
                 res2 = requests.get(
                     f"{SUPABASE_URL}/rest/v1/system_logs?event_type=ilike.*CALL*&order=created_at.desc&limit={limit}",
@@ -453,6 +471,7 @@ Be specific and actionable. Output ONLY the insight, no intro."""
                     return {"calls": normalized, "count": len(normalized), "source": "system_logs"}
                 return {"error": "Could not fetch calls", "calls": []}
         except Exception as e:
+            print(f"[/api/calls] Exception: {e}")
             return {"error": str(e), "calls": []}
     
     @api.post("/api/orchestrator/message")

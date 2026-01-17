@@ -84,6 +84,9 @@
         // "John" as the Orchestrator
         const ORCHESTRATOR_ID = "78b4c14a-4db3-4416-9289-d1bfd2409606";
 
+        // MODAL BACKEND API - All API calls MUST use this base URL
+        const API_BASE = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run";
+
         const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // Vapi initialization with Retry Logic
@@ -1135,7 +1138,7 @@
         }
 
         // --- 4. SSE REALTIME UPDATES ---
-        const SSE_URL = 'https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/events';
+        const SSE_URL = API_BASE + '/api/events';
         let eventSource = null;
         let sseRetryCount = 0;
         const MAX_RETRY_DELAY = 60000; // Max 60 seconds
