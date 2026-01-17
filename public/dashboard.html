@@ -112,8 +112,12 @@
         // "John" as the Orchestrator
         const ORCHESTRATOR_ID = "78b4c14a-4db3-4416-9289-d1bfd2409606";
 
-        // MODAL BACKEND API - All API calls MUST use this base URL
-        const API_BASE = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run";
+        // MODAL BACKEND API - Global for debugging (not in closure)
+        window.API_BASE = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run";
+        window.BUILD_ID = "20260117-1107-ebea019";
+
+        // Self-identification on load
+        console.log("DASHBOARD_BUILD", window.BUILD_ID, window.API_BASE);
 
         const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -1398,7 +1402,7 @@
 
     <!-- BUILD VERSION - Update on each deploy -->
     <div id="buildId" class="fixed bottom-1 right-2 text-[9px] text-slate-600 font-mono opacity-50">
-        Build: 2026-01-17-59cc081
+        Build: 20260117-1107-ebea019
     </div>
 </body>
 
