@@ -183,8 +183,15 @@
                     <div id="systemStatus" class="text-xs text-green-400">● Systems Online</div>
                     <div id="lastUpdate" class="text-[10px] text-slate-500">Last update: --</div>
                     <div id="modalApiStatus" class="text-[10px] text-yellow-400">Modal API: checking...</div>
+                    <div id="hostBadge"
+                        class="text-[9px] font-mono px-2 py-0.5 mt-1 rounded bg-slate-800 text-cyan-400 inline-block">
+                    </div>
                 </div>
             </div>
+            <script>
+                // Populate host badge immediately
+                document.getElementById('hostBadge').innerText = location.hostname + ' | ' + (window.BUILD_ID || 'NO_BUILD');
+            </script>
             <div class="flex gap-2">
                 <button onclick="window.open('https://app.gohighlevel.com')"
                     class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition text-sm">Targeting
