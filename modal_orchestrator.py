@@ -142,4 +142,76 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         return {"agent": "christina", "touch": touch, "sent": True}
     
+    @api.get("/optimize")
+    def self_improvement_optimizer():
+        """Analyze logs and suggest improvements. Trigger via Cloudflare cron every 2 hours."""
+        from datetime import timedelta
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        since = (datetime.utcnow() - timedelta(hours=24)).isoformat()
+        
+        # Fetch logs
+        health_logs, webhook_logs = [], []
+        try:
+            r = requests.get(f"{SUPABASE_URL}/rest/v1/health_logs?created_at=gte.{since}&order=created_at.desc&limit=100", headers=headers, timeout=15)
+            if r.status_code == 200: health_logs = r.json()
+        except: pass
+        try:
+            r = requests.get(f"{SUPABASE_URL}/rest/v1/webhook_logs?timestamp=gte.{since}&order=timestamp.desc&limit=100", headers=headers, timeout=15)
+            if r.status_code == 200: webhook_logs = r.json()
+        except: pass
+        
+        # Analyze patterns
+        patterns = []
+        health_failures = [l for l in health_logs if l.get("status") != "ok"]
+        if health_failures:
+            failure_counts = {}
+            for log in health_failures:
+                c = log.get("component", "unknown")
+                failure_counts[c] = failure_counts.get(c, 0) + 1
+            for comp, count in failure_counts.items():
+                if count >= 2:
+                    patterns.append({"type": "recurring_health_failure", "component": comp, "occurrences": count, "severity": "high" if count >= 5 else "medium"})
+        
+        webhook_failures = [l for l in webhook_logs if l.get("result_status", 200) >= 400]
+        if webhook_failures:
+            error_codes = {}
+            for log in webhook_failures:
+                code = log.get("result_status", 0)
+                error_codes[code] = error_codes.get(code, 0) + 1
+            for code, count in error_codes.items():
+                patterns.append({"type": "webhook_error_pattern", "error_code": code, "occurrences": count, "severity": "high" if code >= 500 else "medium"})
+        
+        fallback_uses = [l for l in webhook_logs if l.get("forwarded_to") == "fallback"]
+        if fallback_uses:
+            patterns.append({"type": "fallback_activation", "occurrences": len(fallback_uses), "severity": "medium"})
+        
+        # Generate suggestions
+        suggested_code_changes = []
+        suggested_deploy_actions = []
+        for p in patterns:
+            if p["type"] == "recurring_health_failure":
+                suggested_code_changes.append({"target": f"{p['component']}_handler", "change": "Add retry logic with exponential backoff", "risk_level": "low", "test_validation": "Run health check 10x and verify 100% success"})
+            elif p["type"] == "webhook_error_pattern" and p.get("error_code", 0) >= 500:
+                suggested_code_changes.append({"target": "webhook_handler", "change": "Add circuit breaker pattern", "risk_level": "medium", "test_validation": "Simulate 5 failures, verify circuit opens after 3"})
+            elif p["type"] == "fallback_activation":
+                suggested_code_changes.append({"target": "primary_orchestrator", "change": "Add keep-alive pings every 5 min", "risk_level": "low", "test_validation": "Monitor fallback activations for 24h"})
+            if p.get("severity") == "high":
+                suggested_deploy_actions.append({"action": f"Scale up {p.get('component', 'affected service')}", "priority": "high", "risk_level": "medium", "test_validation": "Load test with 2x traffic"})
+        
+        result = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "logs_analyzed": {"health_logs": len(health_logs), "webhook_logs": len(webhook_logs)},
+            "patterns": patterns,
+            "suggested_code_changes": suggested_code_changes,
+            "suggested_deploy_actions": suggested_deploy_actions
+        }
+        
+        # Log to Supabase
+        try:
+            requests.post(f"{SUPABASE_URL}/rest/v1/optimization_logs", headers=headers, json={"timestamp": result["timestamp"], "analysis": result, "patterns_found": len(patterns)}, timeout=15)
+        except: pass
+        
+        return result
+    
     return api

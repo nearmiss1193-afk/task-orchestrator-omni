@@ -3,6 +3,29 @@
 // Returns structured JSON only
 
 export default {
+    // Scheduled trigger - runs every 2 hours to trigger self-improvement optimizer
+    async scheduled(event, env, ctx) {
+        const optimizeUrl = (env.PRIMARY_URL || "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run") + "/optimize";
+        try {
+            const response = await fetch(optimizeUrl, { method: "GET", headers: { "Content-Type": "application/json" } });
+            const result = await response.json();
+            console.log("Self-improvement optimizer result:", JSON.stringify(result));
+
+            // Log to Supabase
+            const supabaseUrl = env.SUPABASE_URL || "https://rzcpfwkygdvoshtwxncs.supabase.co";
+            const supabaseKey = env.SUPABASE_KEY || "";
+            if (supabaseKey) {
+                await fetch(`${supabaseUrl}/rest/v1/cron_logs`, {
+                    method: "POST",
+                    headers: { "apikey": supabaseKey, "Authorization": `Bearer ${supabaseKey}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({ trigger: "scheduled", action: "self_improvement_optimizer", result: result, timestamp: new Date().toISOString() })
+                });
+            }
+        } catch (e) {
+            console.error("Scheduled optimizer trigger failed:", e.message);
+        }
+    },
+
     async fetch(request, env, ctx) {
         const timestamp = new Date().toISOString();
 
