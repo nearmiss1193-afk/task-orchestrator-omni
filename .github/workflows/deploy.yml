@@ -27,6 +27,33 @@ jobs:
         run: |
           python -m modal deploy modal_orchestrator.py --name empire-api-v1 --stream-logs
 
+  smoke-tests:
+    needs: modal-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      
+      - name: Install dependencies
+        run: pip install requests
+      
+      - name: Run smoke tests
+        run: python tests/smoke_test.py
+      
+      - name: Rollback if smoke fails
+        if: failure()
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+        run: |
+          pip install modal
+          chmod +x ./rollback.sh
+          ./rollback.sh
+
   railway-deploy:
     runs-on: ubuntu-latest
     steps:
