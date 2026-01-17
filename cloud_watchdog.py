@@ -15,7 +15,8 @@ TARGETS = {
     "INBOUND_WEBHOOK": "https://nearmiss1193-afk--webhook-server-health.modal.run",
     "CAMPAIGN_SCHEDULER": "https://nearmiss1193-afk--orchestrator-monitor-health.modal.run"
 }
-FALLBACK_URL = "https://your-fallback-url.fly.dev"
+# FALLBACK_URL: Valid endpoint for secondary runner (e.g. Railway/Fly)
+FALLBACK_URL = "https://empire-fallback-runner.up.railway.app" 
 
 # --- Config ---
 SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
@@ -78,6 +79,7 @@ def watchdog_check():
             log("PRIMARY_ORCHESTRATOR", "healing", "redeploy_success")
         except Exception as redeploy_err:
             log("PRIMARY_ORCHESTRATOR", "critical", "redeploy_failed", str(redeploy_err))
+            log("FALLBACK", "activation", "switch_to_fallback", f"Target: {FALLBACK_URL}")
 
     # 2. Check Webhook Listener
     try:
