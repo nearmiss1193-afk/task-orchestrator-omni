@@ -1,137 +1,79 @@
 """
-MODAL INBOUND FORWARDER
-=======================
-Handles Vapi webhooks for inbound calls and failover routing.
-Runs on Modal cloud for 24/7 availability.
+SOVEREIGN ORCHESTRATOR - INBOUND HANDLER (Sarah)
+Single-function app for reliable deployment
 """
 import modal
+from datetime import datetime
 
+app = modal.App("orch-inbound")
 image = modal.Image.debian_slim(python_version="3.11").pip_install("requests", "fastapi")
-app = modal.App("empire-inbound")
-VAULT = modal.Secret.from_name("empire-vault")
 
-# Backup phone for missed calls
-BACKUP_PHONE = "+13529368152"
+SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
+GEMINI_API_KEY = "AIzaSyAfqN89E6mIoKT3OWNKKXrN4xZIqoOHHNo"
 GHL_SMS_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+BOOKING_LINK = "https://link.aiserviceco.com/discovery"
 
-@app.function(image=image, secrets=[VAULT])
+SARAH_PROMPT = """You are Sarah, the inbound contact handler for AI Service Co.
+You handle incoming SMS and calls. You qualify leads, answer questions, and book appointments.
+Be warm, professional, and helpful. Offer the booking link early: {booking_link}
+Pricing: $297 Starter, $497 Lite, $997 Growth (no contracts)
+If frustrated or emergency, escalate. If STOP, opt out immediately."""
+
+@app.function(image=image, timeout=60)
 @modal.web_endpoint(method="POST")
-def vapi_webhook(payload: dict):
-    """
-    Handle ALL Vapi webhooks - call status, assistant request, etc.
-    This is the main endpoint that Vapi should point to.
-    """
-    import requests
-    import json
-    from datetime import datetime
-    
-    msg_type = payload.get('message', {}).get('type') or payload.get('type', 'unknown')
-    
-    print(f"[VAPI WEBHOOK] Type: {msg_type}")
-    print(f"[VAPI WEBHOOK] Payload: {json.dumps(payload)[:500]}")
-    
-    # Handle assistant-request (inbound call needs assistant)
-    if msg_type == 'assistant-request':
-        # Return Sarah as the assistant for inbound calls
-        return {
-            "assistantId": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"  # Sarah
-        }
-    
-    # Handle end-of-call-report
-    if msg_type == 'end-of-call-report':
-        call = payload.get('message', {}).get('call', {})
-        ended_reason = payload.get('message', {}).get('endedReason', '')
-        customer = call.get('customer', {}).get('number', 'unknown')
-        
-        print(f"[CALL ENDED] Customer: {customer}, Reason: {ended_reason}")
-        
-        # If call failed/no-answer, notify backup
-        if ended_reason in ['no-answer', 'voicemail', 'machine-detected', 'busy', 'failed']:
-            notify_backup(customer, ended_reason)
-        
-        return {"status": "logged", "reason": ended_reason}
-    
-    # Handle status-update
-    if msg_type == 'status-update':
-        status = payload.get('message', {}).get('status', '')
-        print(f"[STATUS] {status}")
-        return {"status": "received"}
-    
-    # Handle function-call (if assistant needs to call external functions)
-    if msg_type == 'function-call':
-        func_name = payload.get('message', {}).get('functionCall', {}).get('name', '')
-        print(f"[FUNCTION CALL] {func_name}")
-        return {"result": f"Function {func_name} executed"}
-    
-    return {"status": "received", "type": msg_type}
-
-
-def notify_backup(caller_phone: str, reason: str):
-    """Send SMS to backup number about missed call"""
+def handle_inbound(data: dict):
+    """Handle inbound SMS/call - Routes to Sarah"""
     import requests
     
-    message = f"MISSED CALL: {caller_phone} - Reason: {reason}. Call them back ASAP!"
+    phone = data.get("phone", "")
+    message = data.get("message", "")
+    channel = data.get("channel", "sms")
     
+    print(f"[INBOUND] {phone}: {message[:50]}...")
+    
+    headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+    
+    # Check for opt-out
+    if any(word in message.upper() for word in ["STOP", "UNSUBSCRIBE", "CANCEL"]):
+        requests.post(f"{SUPABASE_URL}/rest/v1/event_log", headers=headers, json={
+            "event_type": "opt_out", "phone": phone, "success": True, "details": {"message": message}
+        })
+        return {"agent": "sarah", "action": "opt_out", "response": None}
+    
+    # Get memory for this contact
+    memory_resp = requests.get(f"{SUPABASE_URL}/rest/v1/memories?phone=eq.{phone}", headers=headers)
+    memories = memory_resp.json() if memory_resp.status_code == 200 else []
+    memory_context = "\n".join([f"- {m['key']}: {m['value']}" for m in memories]) or "No previous memory."
+    
+    # Generate Sarah's response
+    prompt = f"""{SARAH_PROMPT.format(booking_link=BOOKING_LINK)}
+
+Customer memory:
+{memory_context}
+
+Customer message: "{message}"
+
+Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push for booking if appropriate."""
+
     try:
-        requests.post(GHL_SMS_WEBHOOK, json={
-            "phone": BACKUP_PHONE,
-            "message": message
-        }, timeout=10)
-        print(f"[SMS] Backup notified: {message}")
-    except Exception as e:
-        print(f"[ERROR] Failed to notify backup: {e}")
-
-
-@app.function(image=image)
-@modal.web_endpoint(method="GET")
-def health():
-    """Health check endpoint"""
-    from datetime import datetime
-    return {
-        "status": "healthy",
-        "service": "empire-inbound",
-        "time": datetime.utcnow().isoformat(),
-        "capabilities": ["vapi_webhook", "failover_sms", "assistant_routing"]
-    }
-
-
-@app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="POST")
-def trigger_call(payload: dict):
-    """Trigger an outbound call via Vapi"""
-    import requests
-    import os
-    
-    customer_phone = payload.get("phone")
-    customer_name = payload.get("name", "there")
-    
-    if not customer_phone:
-        return {"error": "Missing phone number"}
-    
-    VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
-    SARAH_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
-    PHONE_ID = "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"  # AI Service Co phone
-    
-    try:
-        resp = requests.post(
-            "https://api.vapi.ai/call",
-            headers={"Authorization": f"Bearer {VAPI_KEY}", "Content-Type": "application/json"},
-            json={
-                "type": "outboundPhoneCall",
-                "phoneNumberId": PHONE_ID,
-                "assistantId": SARAH_ID,
-                "customer": {"number": customer_phone, "name": customer_name}
-            },
+        r = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}",
+            headers={"Content-Type": "application/json"},
+            json={"contents": [{"parts": [{"text": prompt}]}]},
             timeout=30
         )
-        
-        if resp.ok:
-            return {"status": "call_initiated", "data": resp.json()}
-        else:
-            return {"status": "error", "code": resp.status_code, "message": resp.text[:200]}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-
-
-if __name__ == "__main__":
-    print("Deploy: modal deploy modal_inbound.py")
+        response_text = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+    except:
+        response_text = f"Hi! Thanks for reaching out. Book a free call here: {BOOKING_LINK} -Sarah"
+    
+    # Log interaction
+    requests.post(f"{SUPABASE_URL}/rest/v1/interactions", headers=headers, json={
+        "phone": phone, "direction": "inbound", "channel": channel,
+        "message": message, "response": response_text, "agent": "sarah"
+    })
+    
+    # Send response via GHL
+    requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": response_text}, timeout=15)
+    
+    return {"agent": "sarah", "response": response_text}

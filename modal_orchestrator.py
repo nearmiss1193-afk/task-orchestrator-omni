@@ -33,7 +33,7 @@ Push for the booking. Be direct but not pushy."""
 
 
 @app.function(image=image, timeout=60)
-@modal.fastapi_endpoint(method="POST")
+@modal.web_endpoint(method="POST")
 def handle_inbound(data: dict):
     """Handle inbound SMS/call - Routes to Sarah"""
     import requests
@@ -93,7 +93,7 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
 
 
 @app.function(image=image, timeout=60)
-@modal.fastapi_endpoint(method="POST")
+@modal.web_endpoint(method="POST")
 def handle_outbound(data: dict):
     """Handle outbound campaign task - Routes to Christina"""
     import requests
@@ -133,7 +133,7 @@ def handle_outbound(data: dict):
 
 
 @app.function(image=image, timeout=30)
-@modal.fastapi_endpoint(method="GET")
+@modal.web_endpoint(method="GET")
 def health():
     """Health check endpoint"""
     return {"status": "ok", "orchestrator": "sovereign", "agents": ["sarah", "christina"], "timestamp": datetime.utcnow().isoformat()}
