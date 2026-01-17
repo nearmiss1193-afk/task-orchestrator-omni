@@ -8,16 +8,27 @@ from datetime import datetime
 import json
 
 image = modal.Image.debian_slim(python_version="3.11").pip_install("fastapi[standard]", "requests")
-app = modal.App("empire-api-v1", image=image)
 
-# Config (Constants)
+# Define secrets - these MUST be set via `modal secret create`
+secrets = modal.Secret.from_name("empire-secrets")
+
+app = modal.App("empire-api-v1", image=image, secrets=[secrets])
+
+# Config (Non-sensitive constants only)
 SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
-GEMINI_API_KEY = "AIzaSyAfqN89E6mIoKT3OWNKKXrN4xZIqoOHHNo"
-RESEND_API_KEY = "re_6q5Rx16W_NJbL5Mj44uFy6u1e1MFAq8gy"
 GHL_SMS_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
 BOOKING_LINK = "https://link.aiserviceco.com/discovery"
 ESCALATION_PHONE = "+13529368152"
+
+# Secrets loaded at runtime from modal.Secret
+# Set via: modal secret create empire-secrets SUPABASE_KEY=xxx GEMINI_API_KEY=xxx RESEND_API_KEY=xxx
+def get_secrets():
+    import os
+    return {
+        "SUPABASE_KEY": os.environ.get("SUPABASE_KEY", ""),
+        "GEMINI_API_KEY": os.environ.get("GEMINI_API_KEY", ""),
+        "RESEND_API_KEY": os.environ.get("RESEND_API_KEY", "")
+    }
 
 # ==========================================================
 # EVENT LOGGER - Durable event log with correlation support
@@ -37,11 +48,16 @@ def log_event(event_type: str, source: str, severity: str = "info",
     """
     import requests as req
     try:
+        secrets = get_secrets()
+        supabase_key = secrets["SUPABASE_KEY"]
+        if not supabase_key:
+            print("[EventLog] SUPABASE_KEY not configured")
+            return
         req.post(
             f"{SUPABASE_URL}/rest/v1/event_log",
             headers={
-                "apikey": SUPABASE_KEY,
-                "Authorization": f"Bearer {SUPABASE_KEY}",
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
                 "Content-Type": "application/json"
             },
             json={
@@ -75,6 +91,15 @@ Push for the booking. Be direct but not pushy."""
 def orchestration_api():
     import requests
     from fastapi.middleware.cors import CORSMiddleware
+    
+    # Fetch secrets at function start
+    _secrets = get_secrets()
+    SUPABASE_KEY = _secrets["SUPABASE_KEY"]
+    GEMINI_API_KEY = _secrets["GEMINI_API_KEY"]
+    RESEND_API_KEY = _secrets["RESEND_API_KEY"]
+    
+    if not SUPABASE_KEY:
+        print("[CRITICAL] SUPABASE_KEY not configured! Run: modal secret create empire-secrets SUPABASE_KEY=xxx")
     
     api = FastAPI(title="Sovereign Orchestrator", version="2.0")
     
