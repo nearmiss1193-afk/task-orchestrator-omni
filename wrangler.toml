@@ -1,0 +1,7 @@
+name = "empire-webhook-fallback"
+main = "cloudflare_fallback_worker.js"
+compatibility_date = "2023-10-30"
+
+[vars]
+PRIMARY_URL = "https://nearmiss1193-afk--sovereign-orchestrator-webhook.modal.run"
+FALLBACK_URL = "https://empire-fallback-runner.up.railway.app/webhook"
