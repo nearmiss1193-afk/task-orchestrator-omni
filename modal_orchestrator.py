@@ -214,4 +214,157 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         return result
     
+    @api.get("/prospect")
+    def run_prospecting():
+        """Run Apollo prospecting and queue new leads. Triggered by Cloudflare cron every 4 hours."""
+        from datetime import timedelta
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        
+        # Get prospect targets from Supabase
+        try:
+            r = requests.get(f"{SUPABASE_URL}/rest/v1/prospect_targets?status=eq.pending&limit=20", headers=headers, timeout=15)
+            targets = r.json() if r.status_code == 200 else []
+        except:
+            targets = []
+        
+        prospects_added = 0
+        for target in targets:
+            industry = target.get("industry", "home services")
+            location = target.get("location", "Florida")
+            
+            # Generate personalized audit message using Gemini
+            audit_prompt = f"""Generate a brief 2-sentence business audit insight for a {industry} company in {location}.
+Focus on a specific marketing gap like missing Google reviews, no online booking, or weak social presence.
+Be specific and actionable. Output ONLY the insight, no intro."""
+            
+            try:
+                r = requests.post(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}",
+                    headers={"Content-Type": "application/json"},
+                    json={"contents": [{"parts": [{"text": audit_prompt}]}]},
+                    timeout=30
+                )
+                audit_insight = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+            except:
+                audit_insight = f"Your {industry} business could benefit from automated lead capture and follow-up."
+            
+            # Add to contacts_master for outreach
+            try:
+                requests.post(f"{SUPABASE_URL}/rest/v1/contacts_master", headers=headers, json={
+                    "industry": industry,
+                    "location": location,
+                    "source": "auto_prospect",
+                    "personal_audit": audit_insight,
+                    "status": "new",
+                    "created_at": datetime.utcnow().isoformat()
+                }, timeout=10)
+                prospects_added += 1
+            except:
+                pass
+            
+            # Mark target as processed
+            try:
+                requests.patch(f"{SUPABASE_URL}/rest/v1/prospect_targets?id=eq.{target.get('id')}", headers=headers, json={"status": "processed"}, timeout=10)
+            except:
+                pass
+        
+        # Log prospecting run
+        try:
+            requests.post(f"{SUPABASE_URL}/rest/v1/cron_logs", headers=headers, json={
+                "trigger": "cloudflare_cron",
+                "action": "prospecting",
+                "result": {"prospects_added": prospects_added, "targets_processed": len(targets)},
+                "timestamp": datetime.utcnow().isoformat()
+            }, timeout=10)
+        except:
+            pass
+        
+        return {
+            "status": "ok",
+            "action": "prospecting",
+            "prospects_added": prospects_added,
+            "targets_processed": len(targets),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    @api.get("/campaign")
+    def run_campaign():
+        """Run scheduled 8 AM outreach campaign. Triggered by Cloudflare cron at 8 AM CT daily."""
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        
+        # Get contacts due for outreach
+        try:
+            r = requests.get(f"{SUPABASE_URL}/rest/v1/contacts_master?status=in.(new,follow_up)&limit=50", headers=headers, timeout=15)
+            contacts = r.json() if r.status_code == 200 else []
+        except:
+            contacts = []
+        
+        messages_sent = 0
+        for contact in contacts:
+            phone = contact.get("phone")
+            company = contact.get("company", contact.get("industry", "your business"))
+            personal_audit = contact.get("personal_audit", "")
+            touch = contact.get("touch_count", 0) + 1
+            
+            if not phone:
+                continue
+            
+            # Personalized message with audit
+            if personal_audit and touch == 1:
+                message = f"Hi! I'm Christina from AI Service Co. Quick insight for {company}: {personal_audit[:100]} Let's chat: {BOOKING_LINK}"
+            elif touch == 1:
+                message = f"Hi! I'm Christina from AI Service Co. I found opportunities for {company} to get more leads. Got 15 min? {BOOKING_LINK}"
+            elif touch == 2:
+                message = f"Following up on {company} - still have those insights ready. Last call: {BOOKING_LINK}"
+            else:
+                message = f"Final notice for {company}: Free strategy session expires today. {BOOKING_LINK}"
+            
+            # Send via GHL
+            try:
+                requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": message}, timeout=15)
+                messages_sent += 1
+            except:
+                continue
+            
+            # Update contact
+            new_status = "contacted" if touch == 1 else ("follow_up" if touch < 3 else "max_reached")
+            try:
+                requests.patch(f"{SUPABASE_URL}/rest/v1/contacts_master?id=eq.{contact.get('id')}", headers=headers, json={
+                    "touch_count": touch,
+                    "last_contacted": datetime.utcnow().isoformat(),
+                    "status": new_status
+                }, timeout=10)
+            except:
+                pass
+            
+            # Log interaction
+            try:
+                requests.post(f"{SUPABASE_URL}/rest/v1/interactions", headers=headers, json={
+                    "phone": phone, "direction": "outbound", "channel": "sms",
+                    "message": message, "agent": "christina", "touch": touch
+                }, timeout=10)
+            except:
+                pass
+        
+        # Log campaign run
+        try:
+            requests.post(f"{SUPABASE_URL}/rest/v1/cron_logs", headers=headers, json={
+                "trigger": "cloudflare_cron",
+                "action": "campaign_8am",
+                "result": {"messages_sent": messages_sent, "contacts_processed": len(contacts)},
+                "timestamp": datetime.utcnow().isoformat()
+            }, timeout=10)
+        except:
+            pass
+        
+        return {
+            "status": "ok",
+            "action": "campaign",
+            "messages_sent": messages_sent,
+            "contacts_processed": len(contacts),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
     return api
