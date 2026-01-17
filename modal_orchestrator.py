@@ -412,11 +412,13 @@ Be specific and actionable. Output ONLY the insight, no intro."""
         """
         import requests
         
-        SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-        SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+        # Use module-level constants (already defined at top)
+        # Adding logging to confirm presence
+        print(f"[/api/calls] SUPABASE_URL present: {bool(SUPABASE_URL)}")
+        print(f"[/api/calls] SUPABASE_KEY present: {bool(SUPABASE_KEY)}")
         
         if not SUPABASE_URL or not SUPABASE_KEY:
-            return {"error": "Supabase not configured", "calls": []}
+            return {"error": "Supabase not configured", "error_code": "MISSING_ENV", "missing_env": ["SUPABASE_URL", "SUPABASE_KEY"], "calls": []}
         
         try:
             headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}

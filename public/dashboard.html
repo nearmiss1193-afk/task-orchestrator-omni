@@ -8,8 +8,31 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Vapi SDK (Browser UMD Build) - Switched to jsDelivr for reliability -->
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/vapi.umd.js"></script>
+    <!-- Vapi SDK - Local first (to avoid CDN blocking), CDN fallback -->
+    <script>
+        // Load Vapi SDK: local first, CDN fallback
+        function loadVapiSDK(src, isLocal) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = () => {
+                    console.log(`✅ Vapi SDK loaded from ${isLocal ? 'LOCAL' : 'CDN'}: ${src}`);
+                    resolve(true);
+                };
+                script.onerror = () => {
+                    console.warn(`❌ Failed to load Vapi SDK from ${isLocal ? 'LOCAL' : 'CDN'}: ${src}`);
+                    reject(new Error('Failed to load'));
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        // Try local first, then CDN
+        loadVapiSDK('/assets/vapi.min.js', true)
+            .catch(() => loadVapiSDK('https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi.min.js', false))
+            .then(() => console.log('Vapi SDK loaded: true'))
+            .catch(() => console.error('Vapi SDK loaded: false - ALL SOURCES FAILED'));
+    </script>
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
