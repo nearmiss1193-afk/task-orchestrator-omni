@@ -54,7 +54,7 @@ def log_event(event_type: str, source: str, severity: str = "info",
             print("[EventLog] SUPABASE_KEY not configured")
             return
         req.post(
-            f"{SUPABASE_URL}/rest/v1/event_log",
+            f"{SUPABASE_URL}/rest/v1/event_log_v2",
             headers={
                 "apikey": supabase_key,
                 "Authorization": f"Bearer {supabase_key}",
@@ -1101,9 +1101,9 @@ Be specific and actionable. Output ONLY the insight, no intro."""
         import hashlib
         
         try:
-            # Get recent errors from event_log
+            # Get recent errors from event_log_v2
             errors_resp = requests.get(
-                f"{SUPABASE_URL}/rest/v1/event_log?severity=in.(error,critical)&order=ts.desc&limit=50",
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?severity=in.(error,critical)&order=ts.desc&limit=50",
                 headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
                 timeout=15
             )
