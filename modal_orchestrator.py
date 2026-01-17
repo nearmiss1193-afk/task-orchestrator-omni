@@ -905,6 +905,283 @@ Be specific and actionable. Output ONLY the insight, no intro."""
             }
         )
     
+    # ==========================================================
+    # SELF-ANNEALING LOOPS
+    # ==========================================================
+    
+    @api.get("/api/kpi-snapshot")
+    def kpi_snapshot():
+        """Emit KPI snapshot to event_log (triggered every 10 min via cron)"""
+        try:
+            # Fetch current KPIs from Supabase
+            leads_resp = requests.get(f"{SUPABASE_URL}/rest/v1/contacts_master?select=count", 
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Prefer": "count=exact"})
+            lead_count = int(leads_resp.headers.get("content-range", "0-0/0").split("/")[-1])
+            
+            bookings_resp = requests.get(f"{SUPABASE_URL}/rest/v1/interactions?outcome=eq.booked&select=count",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Prefer": "count=exact"})
+            booking_count = int(bookings_resp.headers.get("content-range", "0-0/0").split("/")[-1])
+            
+            # Calculate rates
+            booking_rate = booking_count / max(lead_count, 1)
+            
+            kpi_data = {
+                "leads_total": lead_count,
+                "bookings_total": booking_count,
+                "booking_rate": round(booking_rate, 4),
+                "timestamp": datetime.utcnow().isoformat()
+            }
+            
+            log_event("kpi.snapshot", "modal", "info", payload=kpi_data)
+            return {"status": "ok", "kpi": kpi_data}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.get("/api/reliability-check")
+    def reliability_check():
+        """Check for incident patterns and trigger auto-heal actions"""
+        import hashlib
+        
+        try:
+            # Get recent errors from event_log
+            errors_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log?severity=in.(error,critical)&order=ts.desc&limit=50",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                timeout=15
+            )
+            errors = errors_resp.json() if errors_resp.status_code == 200 else []
+            
+            actions_taken = []
+            
+            for error in errors:
+                # Create incident signature hash
+                error_type = error.get("type", "unknown")
+                error_source = error.get("source", "unknown")
+                error_msg = str(error.get("payload", {}).get("error", ""))[:100]
+                signature = f"{error_type}:{error_source}:{error_msg}"
+                pattern_hash = hashlib.sha256(signature.encode()).hexdigest()[:16]
+                
+                # Check if pattern exists
+                pattern_resp = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/incident_patterns?pattern_hash=eq.{pattern_hash}",
+                    headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                    timeout=10
+                )
+                patterns = pattern_resp.json() if pattern_resp.status_code == 200 else []
+                
+                if patterns:
+                    # Update existing pattern
+                    pattern = patterns[0]
+                    new_count = pattern.get("occurrence_count", 1) + 1
+                    threshold = pattern.get("threshold_for_patch", 3)
+                    
+                    requests.patch(
+                        f"{SUPABASE_URL}/rest/v1/incident_patterns?id=eq.{pattern['id']}",
+                        headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
+                        json={"occurrence_count": new_count, "last_seen": datetime.utcnow().isoformat()},
+                        timeout=10
+                    )
+                    
+                    # Trigger auto-heal if threshold reached
+                    if new_count >= threshold and not pattern.get("patch_proposed"):
+                        action = {
+                            "pattern_hash": pattern_hash,
+                            "occurrence_count": new_count,
+                            "action": "increase_retry_backoff",
+                            "component": error_source
+                        }
+                        log_event("autoheal.triggered", "modal", "warn", payload=action)
+                        actions_taken.append(action)
+                        
+                        # Mark as patch proposed
+                        requests.patch(
+                            f"{SUPABASE_URL}/rest/v1/incident_patterns?id=eq.{pattern['id']}",
+                            headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
+                            json={"patch_proposed": True},
+                            timeout=10
+                        )
+                else:
+                    # Create new pattern
+                    requests.post(
+                        f"{SUPABASE_URL}/rest/v1/incident_patterns",
+                        headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
+                        json={
+                            "pattern_hash": pattern_hash,
+                            "pattern_type": "error",
+                            "component": error_source,
+                            "error_message": error_msg
+                        },
+                        timeout=10
+                    )
+            
+            log_event("reliability.check", "modal", "info", payload={"errors_analyzed": len(errors), "actions_taken": len(actions_taken)})
+            return {"status": "ok", "errors_analyzed": len(errors), "actions_taken": actions_taken}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.post("/api/record-task-metric")
+    def record_task_metric(data: dict):
+        """Record task execution metrics for optimizer analysis"""
+        try:
+            metric = {
+                "task_type": data.get("task_type", "unknown"),
+                "correlation_id": data.get("correlation_id"),
+                "tool_calls": data.get("tool_calls", 1),
+                "latency_ms": data.get("latency_ms", 0),
+                "failures": data.get("failures", 0),
+                "retries": data.get("retries", 0),
+                "success": data.get("success", True),
+                "result_quality": data.get("result_quality"),
+                "payload": data.get("payload", {})
+            }
+            
+            requests.post(
+                f"{SUPABASE_URL}/rest/v1/task_metrics",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
+                json=metric,
+                timeout=10
+            )
+            return {"status": "ok", "recorded": metric["task_type"]}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.post("/api/record-outcome")
+    def record_outcome(data: dict):
+        """Record conversation outcome for sales learning loop"""
+        try:
+            outcome = {
+                "call_id": data.get("call_id"),
+                "outcome": data.get("outcome", "unknown"),  # booked, callback, rejection, etc.
+                "outcome_confidence": data.get("confidence", 0.8),
+                "agent": data.get("agent", "sarah"),
+                "vertical": data.get("vertical", "general"),
+                "phone": data.get("phone"),
+                "duration_seconds": data.get("duration_seconds", 0),
+                "prompt_variant_id": data.get("variant_id"),
+                "variant_name": data.get("variant_name"),
+                "transcript": data.get("transcript"),
+                "summary": data.get("summary"),
+                "scores": data.get("scores", {}),  # {rapport: 85, clarity: 90, ...}
+                "total_score": data.get("total_score")
+            }
+            
+            # Record to conversation_outcomes
+            requests.post(
+                f"{SUPABASE_URL}/rest/v1/conversation_outcomes",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
+                json=outcome,
+                timeout=10
+            )
+            
+            # Update variant performance if variant_id provided
+            if outcome["prompt_variant_id"]:
+                # Call Supabase function to update variant
+                requests.post(
+                    f"{SUPABASE_URL}/rest/v1/rpc/update_variant_outcome",
+                    headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
+                    json={
+                        "p_variant_id": outcome["prompt_variant_id"],
+                        "p_outcome": outcome["outcome"],
+                        "p_score": outcome["total_score"] or 0
+                    },
+                    timeout=10
+                )
+            
+            log_event("outcome.recorded", "modal", "info", correlation_id=outcome["phone"], payload={"outcome": outcome["outcome"], "variant": outcome["variant_name"]})
+            return {"status": "ok", "recorded": outcome["call_id"]}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.get("/api/get-variant")
+    def get_variant(vertical: str = "general", agent: str = "sarah"):
+        """Get best prompt variant using Thompson Sampling"""
+        try:
+            # Call Supabase function for Thompson Sampling selection
+            resp = requests.post(
+                f"{SUPABASE_URL}/rest/v1/rpc/get_best_variant",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
+                json={"p_vertical": vertical, "p_agent": agent},
+                timeout=10
+            )
+            
+            if resp.status_code == 200:
+                variant = resp.json()
+                return {"status": "ok", "variant": variant}
+            else:
+                # Fallback: get any active variant
+                fallback_resp = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/prompt_variants?vertical=eq.{vertical}&agent=eq.{agent}&active=eq.true&limit=1",
+                    headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                    timeout=10
+                )
+                variants = fallback_resp.json() if fallback_resp.status_code == 200 else []
+                return {"status": "fallback", "variant": variants[0] if variants else None}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.get("/api/learning-status")
+    def learning_status():
+        """Dashboard endpoint: Get current self-annealing status"""
+        try:
+            # Get active policy weights
+            policy_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/policy_weights?active=eq.true&order=version.desc&limit=1",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                timeout=10
+            )
+            policy = policy_resp.json()[0] if policy_resp.status_code == 200 and policy_resp.json() else None
+            
+            # Get active variants by vertical
+            variants_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/prompt_variants?active=eq.true&order=alpha.desc&limit=10",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                timeout=10
+            )
+            variants = variants_resp.json() if variants_resp.status_code == 200 else []
+            
+            # Get recent incident patterns
+            incidents_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/incident_patterns?resolved=eq.false&order=last_seen.desc&limit=5",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                timeout=10
+            )
+            incidents = incidents_resp.json() if incidents_resp.status_code == 200 else []
+            
+            # Get active canary deployments
+            canary_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/canary_deployments?status=eq.active&limit=3",
+                headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                timeout=10
+            )
+            canaries = canary_resp.json() if canary_resp.status_code == 200 else []
+            
+            return {
+                "status": "ok",
+                "policy": {
+                    "version": policy.get("version") if policy else 0,
+                    "max_retries": policy.get("max_retries") if policy else 3,
+                    "weight_gemini": policy.get("weight_gemini") if policy else 0.7
+                },
+                "variants": [{
+                    "name": v.get("name"),
+                    "vertical": v.get("vertical"),
+                    "success_rate": v.get("successes", 0) / max(v.get("impressions", 1), 1),
+                    "impressions": v.get("impressions", 0)
+                } for v in variants[:5]],
+                "incidents": [{
+                    "component": i.get("component"),
+                    "count": i.get("occurrence_count"),
+                    "patch_proposed": i.get("patch_proposed")
+                } for i in incidents],
+                "canaries": [{
+                    "percent": c.get("canary_percent"),
+                    "requests": c.get("canary_requests"),
+                    "decision": c.get("decision")
+                } for c in canaries]
+            }
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
     return api
 
 
