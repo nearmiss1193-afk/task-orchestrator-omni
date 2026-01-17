@@ -19,6 +19,44 @@ GHL_SMS_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0Vy
 BOOKING_LINK = "https://link.aiserviceco.com/discovery"
 ESCALATION_PHONE = "+13529368152"
 
+# ==========================================================
+# EVENT LOGGER - Durable event log with correlation support
+# ==========================================================
+def log_event(event_type: str, source: str, severity: str = "info", 
+              correlation_id: str = None, entity_id: str = None, payload: dict = None):
+    """
+    Log event to Supabase event_log table for tracking and SSE mirroring.
+    
+    Args:
+        event_type: e.g. 'lead.inbound', 'task.completed', 'error.occurred'
+        source: 'modal', 'worker', 'vapi', 'ghl', 'system'
+        severity: 'debug', 'info', 'warn', 'error', 'critical'
+        correlation_id: Stable ID spanning workflow (e.g., phone number or lead_id)
+        entity_id: Specific entity ID (call_id, task_id)
+        payload: Additional event data
+    """
+    import requests as req
+    try:
+        req.post(
+            f"{SUPABASE_URL}/rest/v1/event_log",
+            headers={
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "type": event_type,
+                "source": source,
+                "severity": severity,
+                "correlation_id": correlation_id,
+                "entity_id": entity_id,
+                "payload": payload or {}
+            },
+            timeout=5
+        )
+    except Exception as e:
+        print(f"[EventLog] Error logging {event_type}: {e}")
+
 # Agent system prompts
 SARAH_PROMPT = """You are Sarah, the inbound contact handler for AI Service Co.
 You handle incoming SMS and calls. You qualify leads, answer questions, and book appointments.
@@ -74,6 +112,9 @@ def orchestration_api():
         
         print(f"[INBOUND] {phone}: {message[:50]}...")
         
+        # Log inbound event
+        log_event("lead.inbound", "modal", "info", correlation_id=phone, payload={"message": message[:100], "channel": channel})
+        
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
         
         # Check for opt-out
@@ -120,6 +161,9 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         # Send response via GHL
         requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": response_text}, timeout=15)
         
+        # Log response sent
+        log_event("task.completed", "modal", "info", correlation_id=phone, payload={"agent": "sarah", "response": response_text[:100]})
+        
         return {"agent": "sarah", "response": response_text}
     
     @api.post("/outbound")
@@ -130,6 +174,9 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         touch = data.get("touch", 1)
         
         print(f"[OUTBOUND] Touch {touch} to {phone}")
+        
+        # Log outbound task start
+        log_event("task.outbound_started", "modal", "info", correlation_id=phone, payload={"company": company, "touch": touch})
         
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
         
@@ -286,6 +333,8 @@ Be specific and actionable. Output ONLY the insight, no intro."""
                 pass
         
         # Log prospecting run
+        batch_id = f"prospect_{datetime.utcnow().strftime('%Y%m%d_%H%M')}"
+        log_event("prospecting.completed", "modal", "info", correlation_id=batch_id, payload={"prospects_added": prospects_added, "targets_processed": len(targets)})
         try:
             requests.post(f"{SUPABASE_URL}/rest/v1/cron_logs", headers=headers, json={
                 "trigger": "cloudflare_cron",
@@ -307,6 +356,8 @@ Be specific and actionable. Output ONLY the insight, no intro."""
     @api.get("/campaign")
     def run_campaign():
         """Run scheduled 8 AM outreach campaign. Triggered by Cloudflare cron at 8 AM CT daily."""
+        campaign_id = f"campaign_{datetime.utcnow().strftime('%Y%m%d')}"
+        log_event("campaign.started", "modal", "info", correlation_id=campaign_id)
         
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
         
@@ -365,6 +416,7 @@ Be specific and actionable. Output ONLY the insight, no intro."""
                 pass
         
         # Log campaign run
+        log_event("campaign.completed", "modal", "info", correlation_id=campaign_id, payload={"messages_sent": messages_sent, "contacts_processed": len(contacts)})
         try:
             requests.post(f"{SUPABASE_URL}/rest/v1/cron_logs", headers=headers, json={
                 "trigger": "cloudflare_cron",
