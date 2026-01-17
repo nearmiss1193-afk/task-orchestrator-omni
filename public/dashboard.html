@@ -173,6 +173,7 @@
                     <h1 class="font-bold text-xl">Sovereign Command</h1>
                     <div id="systemStatus" class="text-xs text-green-400">● Systems Online</div>
                     <div id="lastUpdate" class="text-[10px] text-slate-500">Last update: --</div>
+                    <div id="modalApiStatus" class="text-[10px] text-yellow-400">Modal API: checking...</div>
                 </div>
             </div>
             <div class="flex gap-2">
@@ -1355,6 +1356,27 @@
 
             // Run voice preflight diagnostics
             voicePreflightCheck();
+
+            // MODAL HEALTH PING - Proves frontend is hitting Modal
+            (async function pingModalHealth() {
+                const statusEl = document.getElementById('modalApiStatus');
+                try {
+                    const res = await fetch(API_BASE + "/health", { mode: "cors" });
+                    if (res.ok) {
+                        console.log("MODAL_HEALTH_OK");
+                        statusEl.innerText = "Modal API: OK";
+                        statusEl.className = "text-[10px] text-green-400";
+                    } else {
+                        console.error("MODAL_HEALTH_FAIL: status " + res.status);
+                        statusEl.innerText = "Modal API: FAIL (" + res.status + ")";
+                        statusEl.className = "text-[10px] text-red-400";
+                    }
+                } catch (e) {
+                    console.error("MODAL_HEALTH_ERROR:", e.message);
+                    statusEl.innerText = "Modal API: ERROR";
+                    statusEl.className = "text-[10px] text-red-400";
+                }
+            })();
 
             // Fallback polling (reduced frequency since SSE handles most updates)
             setInterval(fetchStats, 60000);      // Every 60s as backup
