@@ -485,6 +485,119 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
             "rollback_command": "SELECT rollback_policy();"
         }
     
+    @api.get("/campaign")
+    def run_campaign(override: bool = False, catchup: bool = False):
+        """Run 8 AM CT campaign with idempotency. Only runs once per day unless override=true."""
+        import time
+        from datetime import timedelta
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        
+        # Check if campaign already ran today (idempotency)
+        if not override:
+            try:
+                r = requests.post(
+                    f"{SUPABASE_URL}/rest/v1/rpc/job_ran_today",
+                    headers=headers,
+                    json={"p_job_name": "campaign", "p_window_id": "8am_ct"},
+                    timeout=10
+                )
+                if r.status_code == 200 and r.json() == True:
+                    log_event("campaign.skipped", "modal", "info", payload={"reason": "already_ran_today"})
+                    return {"status": "skip", "reason": "already_ran_today", "next": "tomorrow 8am CT"}
+            except Exception as e:
+                print(f"[Campaign] Idempotency check failed: {e}, proceeding anyway")
+        
+        # Check send window (weekdays 9am-6pm CT = 15:00-23:00 UTC)
+        now_utc = datetime.utcnow()
+        ct_hour = (now_utc.hour - 6) % 24  # Rough CT conversion
+        weekday = now_utc.weekday()  # 0=Monday, 6=Sunday
+        
+        if not override and (weekday >= 5 or ct_hour < 9 or ct_hour >= 18):
+            log_event("campaign.skipped", "modal", "info", payload={"reason": "outside_send_window", "ct_hour": ct_hour, "weekday": weekday})
+            return {"status": "skip", "reason": "outside_send_window", "ct_hour": ct_hour, "weekday": weekday}
+        
+        start_time = time.time()
+        campaign_type = "catchup" if catchup else "scheduled"
+        batch_id = f"campaign_{datetime.utcnow().strftime('%Y%m%d_%H%M')}"
+        
+        log_event(f"campaign.{campaign_type}", "modal", "info", correlation_id=batch_id, payload={"override": override})
+        
+        # Get contacts due for outreach
+        try:
+            r = requests.get(
+                f"{SUPABASE_URL}/rest/v1/contacts_master?status=in.(new,active)&touch_count=lt.3&limit=50",
+                headers=headers, timeout=15
+            )
+            contacts = r.json() if r.status_code == 200 else []
+        except:
+            contacts = []
+        
+        sent_count = 0
+        errors = 0
+        
+        for contact in contacts:
+            phone = contact.get("phone")
+            company = contact.get("company", "your business")
+            touch = contact.get("touch_count", 0) + 1
+            vertical = contact.get("industry", "general")
+            
+            if not phone:
+                continue
+            
+            try:
+                # Call /outbound which handles variant selection and GHL sending
+                outbound_resp = requests.post(
+                    f"http://localhost:8000/outbound",  # Internal call
+                    json={"phone": phone, "company": company, "touch": touch, "vertical": vertical},
+                    timeout=30
+                )
+                if outbound_resp.status_code == 200:
+                    sent_count += 1
+                    # Update touch count
+                    requests.patch(
+                        f"{SUPABASE_URL}/rest/v1/contacts_master?id=eq.{contact.get('id')}",
+                        headers=headers,
+                        json={"touch_count": touch, "last_touch": datetime.utcnow().isoformat()},
+                        timeout=10
+                    )
+                else:
+                    errors += 1
+            except Exception as e:
+                print(f"[Campaign] Error sending to {phone}: {e}")
+                errors += 1
+        
+        latency_ms = int((time.time() - start_time) * 1000)
+        status = "success" if errors == 0 else ("partial" if sent_count > 0 else "fail")
+        
+        # Record job run (idempotency marker)
+        try:
+            requests.post(
+                f"{SUPABASE_URL}/rest/v1/rpc/record_job_run",
+                headers=headers,
+                json={
+                    "p_job_name": "campaign",
+                    "p_window_id": "8am_ct",
+                    "p_status": "catchup" if catchup else status,
+                    "p_details": {"sent": sent_count, "errors": errors, "contacts": len(contacts)}
+                },
+                timeout=10
+            )
+        except Exception as e:
+            print(f"[Campaign] Failed to record job run: {e}")
+        
+        log_event("campaign.completed", "modal", "info", correlation_id=batch_id, payload={"sent": sent_count, "errors": errors, "latency_ms": latency_ms})
+        
+        return {
+            "status": status,
+            "batch_id": batch_id,
+            "sent": sent_count,
+            "errors": errors,
+            "contacts_processed": len(contacts),
+            "latency_ms": latency_ms,
+            "type": campaign_type
+        }
+    
     @api.get("/prospect")
     def run_prospecting():
         """Run Apollo prospecting and queue new leads. Triggered by Cloudflare cron every 4 hours."""
@@ -1059,8 +1172,48 @@ Be specific and actionable. Output ONLY the insight, no intro."""
                         timeout=10
                     )
             
-            log_event("reliability.check", "modal", "info", payload={"errors_analyzed": len(errors), "actions_taken": len(actions_taken)})
-            return {"status": "ok", "errors_analyzed": len(errors), "actions_taken": actions_taken}
+            # =========================================
+            # 9:30 AM CT CAMPAIGN CATCH-UP
+            # =========================================
+            now_utc = datetime.utcnow()
+            ct_hour = (now_utc.hour - 6) % 24  # Rough CT conversion
+            weekday = now_utc.weekday()  # 0=Monday, 6=Sunday
+            
+            campaign_catchup_triggered = False
+            # Check if it's past 9:30 AM CT (15:30 UTC) on a weekday
+            if weekday < 5 and ct_hour >= 9 and ct_hour < 18:
+                # Check if today's campaign ran
+                try:
+                    job_check = requests.post(
+                        f"{SUPABASE_URL}/rest/v1/rpc/job_ran_today",
+                        headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
+                        json={"p_job_name": "campaign", "p_window_id": "8am_ct"},
+                        timeout=10
+                    )
+                    campaign_ran = job_check.status_code == 200 and job_check.json() == True
+                    
+                    if not campaign_ran and ct_hour >= 9:  # 9:30 AM CT or later
+                        # Trigger catch-up campaign
+                        log_event("campaign.catchup_triggered", "modal", "warn", payload={"ct_hour": ct_hour})
+                        try:
+                            # Call the /campaign endpoint with catchup=true
+                            catchup_resp = requests.get(
+                                f"http://localhost:8000/campaign?catchup=true",
+                                timeout=120
+                            )
+                            campaign_catchup_triggered = True
+                            actions_taken.append({
+                                "action": "campaign_catchup",
+                                "status": catchup_resp.status_code,
+                                "ct_hour": ct_hour
+                            })
+                        except Exception as e:
+                            log_event("campaign.catchup_failed", "modal", "error", payload={"error": str(e)})
+                except Exception as e:
+                    print(f"[Reliability] Campaign catch-up check failed: {e}")
+            
+            log_event("reliability.check", "modal", "info", payload={"errors_analyzed": len(errors), "actions_taken": len(actions_taken), "campaign_catchup": campaign_catchup_triggered})
+            return {"status": "ok", "errors_analyzed": len(errors), "actions_taken": actions_taken, "campaign_catchup_triggered": campaign_catchup_triggered}
         except Exception as e:
             return {"status": "error", "error": str(e)}
     
