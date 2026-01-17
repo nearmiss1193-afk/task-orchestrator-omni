@@ -145,7 +145,8 @@
                 <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-xl">⚡</div>
                 <div>
                     <h1 class="font-bold text-xl">Sovereign Command</h1>
-                    <div class="text-xs text-green-400">● Systems Online</div>
+                    <div id="systemStatus" class="text-xs text-green-400">● Systems Online</div>
+                    <div id="lastUpdate" class="text-[10px] text-slate-500">Last update: --</div>
                 </div>
             </div>
             <div class="flex gap-2">
@@ -671,21 +672,133 @@
             }
         }
 
-        // --- 4. INIT WITH AUTO-REFRESH ---
+        // --- 4. SSE REALTIME UPDATES ---
+        const SSE_URL = 'https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/events';
+        let eventSource = null;
+        let sseRetryCount = 0;
+        const MAX_RETRY_DELAY = 60000; // Max 60 seconds
+
+        function updateLastUpdate() {
+            const now = new Date().toLocaleTimeString();
+            document.getElementById('lastUpdate').innerText = `Last update: ${now}`;
+        }
+
+        function updateSystemStatus(status) {
+            const el = document.getElementById('systemStatus');
+            if (status === 'healthy' || status === 'ok') {
+                el.innerHTML = '● Systems Online';
+                el.className = 'text-xs text-green-400';
+            } else if (status === 'connecting') {
+                el.innerHTML = '◐ Connecting...';
+                el.className = 'text-xs text-yellow-400 animate-pulse';
+            } else {
+                el.innerHTML = '○ Reconnecting...';
+                el.className = 'text-xs text-orange-400';
+            }
+        }
+
+        function handleSSEMessage(event) {
+            try {
+                const data = JSON.parse(event.data);
+                sseRetryCount = 0; // Reset retry on success
+                updateLastUpdate();
+
+                // Update stats from SSE payload
+                if (data.payload && data.payload.stats) {
+                    const stats = data.payload.stats;
+                    if (stats.leads !== undefined) {
+                        document.getElementById('statLeads').innerText = stats.leads;
+                        document.getElementById('statPipeline').innerText = '$' + (stats.leads * 1000).toLocaleString();
+                    }
+                    if (stats.health) {
+                        updateSystemStatus(stats.health);
+                    }
+                }
+
+                // Process individual events
+                if (data.payload && data.payload.events) {
+                    data.payload.events.forEach(evt => {
+                        if (evt.type === 'lead.updated') {
+                            console.log('[SSE] Lead updated:', evt.payload);
+                            // Trigger leads refresh for new data
+                            fetchLeads();
+                        }
+                        if (evt.type === 'call.logged') {
+                            console.log('[SSE] Call logged:', evt.payload);
+                            // Update call count
+                            const callEl = document.getElementById('statCalls');
+                            const current = parseInt(callEl.innerText) || 0;
+                            callEl.innerText = current + 1;
+                        }
+                        if (evt.type === 'health.changed') {
+                            updateSystemStatus(evt.payload.status);
+                        }
+                    });
+                }
+            } catch (e) {
+                console.warn('[SSE] Parse error:', e);
+            }
+        }
+
+        function connectSSE() {
+            // Get auth from localStorage or default
+            const auth = localStorage.getItem('sovereign_auth') === 'true' ? 'sovereign' : 'empire';
+
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            updateSystemStatus('connecting');
+            eventSource = new EventSource(`${SSE_URL}?auth=${auth}`);
+
+            eventSource.addEventListener('update', handleSSEMessage);
+            eventSource.addEventListener('ping', () => {
+                console.log('[SSE] Keepalive ping received');
+                updateLastUpdate();
+            });
+
+            eventSource.onopen = () => {
+                console.log('[SSE] Connected');
+                sseRetryCount = 0;
+                updateSystemStatus('healthy');
+            };
+
+            eventSource.onerror = (e) => {
+                console.warn('[SSE] Connection error, will retry...');
+                eventSource.close();
+
+                // Exponential backoff: 1s, 2s, 4s, 8s, 16s, 32s, max 60s
+                sseRetryCount++;
+                const delay = Math.min(1000 * Math.pow(2, sseRetryCount - 1), MAX_RETRY_DELAY);
+                updateSystemStatus('reconnecting');
+                console.log(`[SSE] Retry ${sseRetryCount} in ${delay}ms`);
+                setTimeout(connectSSE, delay);
+            };
+        }
+
+        // --- 5. INIT ---
         window.addEventListener('load', () => {
+            // Initial fetch (immediate data)
             fetchStats();
             fetchLeads();
             fetchTranscripts();
             fetchActivity();
 
-            // Auto-refresh every 30 seconds
-            setInterval(fetchStats, 30000);
-            setInterval(fetchLeads, 30000);
-            setInterval(fetchTranscripts, 60000);
-            setInterval(fetchActivity, 60000);
+            // Connect SSE for realtime updates
+            connectSSE();
+
+            // Fallback polling (reduced frequency since SSE handles most updates)
+            setInterval(fetchStats, 60000);      // Every 60s as backup
+            setInterval(fetchLeads, 60000);      // Every 60s as backup
+            setInterval(fetchTranscripts, 120000); // Every 2 min
+            setInterval(fetchActivity, 120000);    // Every 2 min
         });
 
     </script>
-    <!-- GHL Chat Widget --><script src="https://beta.leadconnectorhq.com/loader.js" data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="69507213261ca136120c2fe0"></script></body>
+    <!-- GHL Chat Widget -->
+    <script src="https://beta.leadconnectorhq.com/loader.js"
+        data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js"
+        data-widget-id="69507213261ca136120c2fe0"></script>
+</body>
 
 </html>
