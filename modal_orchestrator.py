@@ -193,42 +193,87 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
     
     @api.post("/outbound")
     def handle_outbound(data: dict):
-        """Handle outbound campaign task - Routes to Christina"""
+        """Handle outbound campaign task - Routes to Christina with variant selection"""
+        import time
+        start_time = time.time()
+        
         phone = data.get("phone", "")
         company = data.get("company", "your business")
         touch = data.get("touch", 1)
+        vertical = data.get("vertical", "general")
         
-        print(f"[OUTBOUND] Touch {touch} to {phone}")
+        print(f"[OUTBOUND] Touch {touch} to {phone} (vertical: {vertical})")
         
         # Log outbound task start
-        log_event("task.outbound_started", "modal", "info", correlation_id=phone, payload={"company": company, "touch": touch})
+        log_event("task.outbound_started", "modal", "info", correlation_id=phone, payload={"company": company, "touch": touch, "vertical": vertical})
         
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
         
-        # Get memory context
-        memory_resp = requests.get(f"{SUPABASE_URL}/rest/v1/memories?phone=eq.{phone}", headers=headers)
-        memories = memory_resp.json() if memory_resp.status_code == 200 else []
-        memory_context = "\n".join([f"- {m['key']}: {m['value']}" for m in memories]) or "New lead."
+        # === VARIANT SELECTION (Thompson Sampling) ===
+        variant_id = None
+        variant_name = None
+        try:
+            variant_resp = requests.post(
+                f"{SUPABASE_URL}/rest/v1/rpc/get_best_variant",
+                headers=headers,
+                json={"p_vertical": vertical, "p_agent": "christina"},
+                timeout=10
+            )
+            if variant_resp.status_code == 200 and variant_resp.json():
+                variant = variant_resp.json()
+                variant_id = variant.get("id")
+                variant_name = variant.get("name")
+                # Use variant opener if available
+                opener = variant.get("opener")
+                if opener and touch == 1:
+                    response_text = opener.replace("{name}", "").replace("{company}", company).strip()
+                else:
+                    response_text = None
+        except Exception as e:
+            print(f"[VARIANT] Error fetching variant: {e}")
+            response_text = None
         
-        # Christina's touch messages
-        touch_templates = {
-            1: f"Hi! I'm Christina from AI Service Co. I just reviewed {company}'s marketing - there are quick wins you're missing. Book a free call: {BOOKING_LINK}",
-            2: f"Quick follow-up on {company} - I found 3 things that could help you get more leads this month. Got 15 min? {BOOKING_LINK}",
-            3: f"Last chance - I'm moving on tomorrow. If you want the free strategy session for {company}, grab it now: {BOOKING_LINK}"
-        }
+        # Fallback to static templates if variant not available
+        if not response_text:
+            touch_templates = {
+                1: f"Hi! I'm Christina from AI Service Co. I just reviewed {company}'s marketing - there are quick wins you're missing. Book a free call: {BOOKING_LINK}",
+                2: f"Quick follow-up on {company} - I found 3 things that could help you get more leads this month. Got 15 min? {BOOKING_LINK}",
+                3: f"Last chance - I'm moving on tomorrow. If you want the free strategy session for {company}, grab it now: {BOOKING_LINK}"
+            }
+            response_text = touch_templates.get(touch, touch_templates[1])
         
-        response_text = touch_templates.get(touch, touch_templates[1])
-        
-        # Log interaction
+        # Log interaction with variant tracking
         requests.post(f"{SUPABASE_URL}/rest/v1/interactions", headers=headers, json={
             "phone": phone, "direction": "outbound", "channel": "sms",
-            "message": response_text, "agent": "christina", "touch": touch
+            "message": response_text, "agent": "christina", "touch": touch,
+            "metadata": {"variant_id": variant_id, "variant_name": variant_name, "vertical": vertical}
         })
         
         # Send via GHL
-        requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": response_text}, timeout=15)
+        success = False
+        try:
+            ghl_resp = requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": response_text}, timeout=15)
+            success = ghl_resp.status_code < 400
+        except Exception as e:
+            print(f"[GHL] Send failed: {e}")
         
-        return {"agent": "christina", "touch": touch, "sent": True}
+        # === RECORD TASK METRIC ===
+        latency_ms = int((time.time() - start_time) * 1000)
+        try:
+            requests.post(f"{SUPABASE_URL}/rest/v1/task_metrics", headers=headers, json={
+                "task_type": "outbound",
+                "correlation_id": phone,
+                "latency_ms": latency_ms,
+                "success": success,
+                "failures": 0 if success else 1,
+                "payload": {"touch": touch, "variant_id": variant_id, "vertical": vertical}
+            }, timeout=5)
+        except:
+            pass
+        
+        log_event("task.outbound_completed", "modal", "info", correlation_id=phone, payload={"success": success, "latency_ms": latency_ms, "variant": variant_name})
+        
+        return {"agent": "christina", "touch": touch, "sent": success, "variant_id": variant_id, "variant_name": variant_name}
     
     @api.get("/optimize")
     def self_improvement_optimizer():
