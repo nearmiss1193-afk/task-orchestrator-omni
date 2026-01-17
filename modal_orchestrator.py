@@ -368,6 +368,27 @@ Be specific and actionable. Output ONLY the insight, no intro."""
         }
     
     # ==========================================================
+    # SSE DIAGNOSTICS - Track active clients
+    # ==========================================================
+    sse_diagnostics = {
+        "active_clients": 0,
+        "total_connections": 0,
+        "total_disconnections": 0,
+        "last_event_id": 0
+    }
+    
+    @api.get("/api/events/stats")
+    def get_sse_stats():
+        """Get SSE connection diagnostics"""
+        return {
+            "active_clients": sse_diagnostics["active_clients"],
+            "total_connections": sse_diagnostics["total_connections"],
+            "total_disconnections": sse_diagnostics["total_disconnections"],
+            "last_event_id": sse_diagnostics["last_event_id"],
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    # ==========================================================
     # SSE EVENTS STREAM - Realtime dashboard updates
     # ==========================================================
     @api.get("/api/events")
@@ -387,127 +408,143 @@ Be specific and actionable. Output ONLY the insight, no intro."""
         if auth not in ["empire", "sovereign"]:
             return {"error": "unauthorized", "message": "Add ?auth=empire or ?auth=sovereign"}
         
+        # Track connection
+        client_id = str(uuid.uuid4())[:8]
+        sse_diagnostics["active_clients"] += 1
+        sse_diagnostics["total_connections"] += 1
+        print(f"[SSE] Client {client_id} connected. Active: {sse_diagnostics['active_clients']}")
+        
         async def event_generator():
             """Generate SSE events with realtime data from Supabase"""
+            nonlocal client_id
             event_id = 0
             last_lead_count = 0
             last_health_status = "unknown"
+            health_version = 0
             
-            while True:
-                try:
-                    event_id += 1
-                    now = datetime.utcnow().isoformat()
-                    
-                    # Fetch latest stats from Supabase
-                    headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
-                    
-                    # Get lead count
+            try:
+                while True:
                     try:
-                        r = requests.get(f"{SUPABASE_URL}/rest/v1/leads?select=id&limit=1", headers={**headers, "Prefer": "count=exact"}, timeout=5)
-                        lead_count = int(r.headers.get("content-range", "0-0/0").split("/")[-1])
-                    except:
-                        lead_count = last_lead_count
-                    
-                    # Get recent interactions (for activity)
-                    try:
-                        r = requests.get(f"{SUPABASE_URL}/rest/v1/interactions?order=created_at.desc&limit=5", headers=headers, timeout=5)
-                        recent_interactions = r.json() if r.status_code == 200 else []
-                    except:
-                        recent_interactions = []
-                    
-                    # Get recent cron logs (for task events)
-                    try:
-                        r = requests.get(f"{SUPABASE_URL}/rest/v1/cron_logs?order=timestamp.desc&limit=3", headers=headers, timeout=5)
-                        recent_crons = r.json() if r.status_code == 200 else []
-                    except:
-                        recent_crons = []
-                    
-                    # Get health status
-                    try:
-                        r = requests.get(f"{SUPABASE_URL}/rest/v1/health_logs?order=created_at.desc&limit=1", headers=headers, timeout=5)
-                        health_data = r.json()[0] if r.status_code == 200 and r.json() else {"status": "unknown"}
-                        health_status = health_data.get("status", "unknown")
-                    except:
-                        health_status = last_health_status
-                    
-                    # Build events payload
-                    events = []
-                    
-                    # lead.updated event (if count changed)
-                    if lead_count != last_lead_count:
-                        events.append({
-                            "id": f"evt_{event_id}_lead",
-                            "type": "lead.updated",
-                            "ts": now,
-                            "payload": {"total_leads": lead_count, "delta": lead_count - last_lead_count}
-                        })
-                        last_lead_count = lead_count
-                    
-                    # health.changed event (if status changed)
-                    if health_status != last_health_status:
-                        events.append({
-                            "id": f"evt_{event_id}_health",
-                            "type": "health.changed",
-                            "ts": now,
-                            "payload": {"status": health_status, "previous": last_health_status}
-                        })
-                        last_health_status = health_status
-                    
-                    # task.created events from cron logs
-                    for cron in recent_crons[:1]:
-                        events.append({
-                            "id": f"evt_{event_id}_task",
-                            "type": "task.updated",
-                            "ts": cron.get("timestamp", now),
-                            "payload": {"action": cron.get("action"), "result": cron.get("result")}
-                        })
-                    
-                    # call.logged events from interactions
-                    for interaction in recent_interactions[:2]:
-                        if interaction.get("channel") in ["call", "sms"]:
+                        event_id += 1
+                        sse_diagnostics["last_event_id"] = event_id
+                        now = datetime.utcnow().isoformat()
+                        
+                        # Fetch latest stats from Supabase
+                        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+                        
+                        # Get lead count
+                        try:
+                            r = requests.get(f"{SUPABASE_URL}/rest/v1/leads?select=id&limit=1", headers={**headers, "Prefer": "count=exact"}, timeout=5)
+                            lead_count = int(r.headers.get("content-range", "0-0/0").split("/")[-1])
+                        except:
+                            lead_count = last_lead_count
+                        
+                        # Get recent interactions (for activity)
+                        try:
+                            r = requests.get(f"{SUPABASE_URL}/rest/v1/interactions?order=created_at.desc&limit=5", headers=headers, timeout=5)
+                            recent_interactions = r.json() if r.status_code == 200 else []
+                        except:
+                            recent_interactions = []
+                        
+                        # Get recent cron logs (for task events)
+                        try:
+                            r = requests.get(f"{SUPABASE_URL}/rest/v1/cron_logs?order=timestamp.desc&limit=3", headers=headers, timeout=5)
+                            recent_crons = r.json() if r.status_code == 200 else []
+                        except:
+                            recent_crons = []
+                        
+                        # Get health status
+                        try:
+                            r = requests.get(f"{SUPABASE_URL}/rest/v1/health_logs?order=created_at.desc&limit=1", headers=headers, timeout=5)
+                            health_data = r.json()[0] if r.status_code == 200 and r.json() else {"status": "unknown"}
+                            health_status = health_data.get("status", "unknown")
+                        except:
+                            health_status = last_health_status
+                        
+                        # Build events payload
+                        events = []
+                        
+                        # lead.updated event (if count changed)
+                        if lead_count != last_lead_count:
                             events.append({
-                                "id": f"evt_{event_id}_call_{interaction.get('id', '')}",
-                                "type": "call.logged",
-                                "ts": interaction.get("created_at", now),
-                                "payload": {
-                                    "channel": interaction.get("channel"),
-                                    "direction": interaction.get("direction"),
-                                    "agent": interaction.get("agent")
-                                }
+                                "id": f"evt_{event_id}_lead",
+                                "type": "lead.updated",
+                                "ts": now,
+                                "payload": {"total_leads": lead_count, "delta": lead_count - last_lead_count}
                             })
-                    
-                    # Send data event with all updates
-                    data_payload = {
-                        "id": f"evt_{event_id}",
-                        "type": "dashboard.update",
-                        "ts": now,
-                        "payload": {
-                            "stats": {
-                                "leads": lead_count,
-                                "health": health_status
-                            },
-                            "events": events
+                            last_lead_count = lead_count
+                        
+                        # health.changed event (if status changed)
+                        if health_status != last_health_status:
+                            health_version += 1
+                            events.append({
+                                "id": f"evt_{event_id}_health",
+                                "type": "health.changed",
+                                "ts": now,
+                                "payload": {"status": health_status, "previous": last_health_status, "version": health_version}
+                            })
+                            last_health_status = health_status
+                        
+                        # task.updated events from cron logs
+                        for cron in recent_crons[:1]:
+                            events.append({
+                                "id": f"evt_{event_id}_task",
+                                "type": "task.updated",
+                                "ts": cron.get("timestamp", now),
+                                "payload": {"action": cron.get("action"), "result": cron.get("result"), "version": event_id}
+                            })
+                        
+                        # call.logged events from interactions
+                        for interaction in recent_interactions[:2]:
+                            if interaction.get("channel") in ["call", "sms"]:
+                                events.append({
+                                    "id": f"evt_{event_id}_call_{interaction.get('id', '')}",
+                                    "type": "call.logged",
+                                    "ts": interaction.get("created_at", now),
+                                    "payload": {
+                                        "channel": interaction.get("channel"),
+                                        "direction": interaction.get("direction"),
+                                        "agent": interaction.get("agent")
+                                    }
+                                })
+                        
+                        # Send data event with all updates
+                        data_payload = {
+                            "id": f"evt_{event_id}",
+                            "type": "dashboard.update",
+                            "ts": now,
+                            "payload": {
+                                "stats": {
+                                    "leads": lead_count,
+                                    "health": health_status
+                                },
+                                "events": events
+                            }
                         }
-                    }
-                    
-                    yield f"id: {event_id}\n"
-                    yield f"event: update\n"
-                    yield f"data: {json.dumps(data_payload)}\n\n"
-                    
-                    # Wait 5 seconds between updates
-                    await asyncio.sleep(5)
-                    
-                    # Send keepalive ping every 15 seconds (3 cycles)
-                    if event_id % 3 == 0:
-                        yield f"id: {event_id}_ping\n"
-                        yield f"event: ping\n"
-                        yield f"data: {json.dumps({'type': 'ping', 'ts': now})}\n\n"
-                    
-                except Exception as e:
-                    # Send error event but keep stream alive
-                    yield f"event: error\n"
-                    yield f"data: {json.dumps({'error': str(e)})}\n\n"
-                    await asyncio.sleep(15)
+                        
+                        yield f"id: {event_id}\n"
+                        yield f"event: update\n"
+                        yield f"data: {json.dumps(data_payload)}\n\n"
+                        
+                        # Wait 5 seconds between updates
+                        await asyncio.sleep(5)
+                        
+                        # Send keepalive ping every 15 seconds (3 cycles)
+                        if event_id % 3 == 0:
+                            yield f"id: {event_id}_ping\n"
+                            yield f"event: ping\n"
+                            yield f"data: {json.dumps({'type': 'ping', 'ts': now})}\n\n"
+                        
+                    except Exception as e:
+                        # Send error event but keep stream alive
+                        yield f"event: error\n"
+                        yield f"data: {json.dumps({'error': str(e)})}\n\n"
+                        await asyncio.sleep(15)
+            finally:
+                # Track disconnection
+                sse_diagnostics["active_clients"] -= 1
+                sse_diagnostics["total_disconnections"] += 1
+                print(f"[SSE] Client {client_id} disconnected. Active: {sse_diagnostics['active_clients']}")
         
         return StreamingResponse(
             event_generator(),
@@ -520,4 +557,5 @@ Be specific and actionable. Output ONLY the insight, no intro."""
         )
     
     return api
+
 

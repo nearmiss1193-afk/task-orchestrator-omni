@@ -293,11 +293,335 @@
             </div>
         </div>
 
+        <!-- DEBUG PANEL (Collapsible) -->
+        <details class="glass p-4 rounded-2xl mt-6">
+            <summary class="font-bold cursor-pointer flex items-center gap-2">
+                🔧 Debug Panel
+                <span id="debugStatus" class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">Connected</span>
+            </summary>
+            <div class="mt-4 space-y-4">
+                <!-- Connection Status -->
+                <div class="grid grid-cols-3 gap-4 text-xs">
+                    <div class="bg-slate-800/50 p-3 rounded">
+                        <div class="text-slate-400">SSE State</div>
+                        <div id="debugSseState" class="font-mono text-green-400">CONNECTING</div>
+                    </div>
+                    <div class="bg-slate-800/50 p-3 rounded">
+                        <div class="text-slate-400">Retry Count</div>
+                        <div id="debugRetryCount" class="font-mono">0</div>
+                    </div>
+                    <div class="bg-slate-800/50 p-3 rounded">
+                        <div class="text-slate-400">Events Received</div>
+                        <div id="debugEventCount" class="font-mono">0</div>
+                    </div>
+                </div>
+
+                <!-- Event Log -->
+                <div>
+                    <div class="text-xs text-slate-400 mb-2">Last 20 Events:</div>
+                    <div id="debugEventLog"
+                        class="bg-slate-900 rounded p-2 max-h-48 overflow-y-auto font-mono text-[10px] space-y-1">
+                        <div class="text-slate-500">Waiting for events...</div>
+                    </div>
+                </div>
+
+                <!-- Failure Mode Checklist -->
+                <details class="text-xs">
+                    <summary class="text-slate-400 cursor-pointer">⚠️ Troubleshooting Checklist</summary>
+                    <div class="mt-2 space-y-1 text-slate-500 pl-4">
+                        <div>☐ <strong>CORS</strong>: Check if Access-Control-Allow-Origin header is present</div>
+                        <div>☐ <strong>Auth Expiry</strong>: Verify ?auth=sovereign is in URL</div>
+                        <div>☐ <strong>Proxy Buffering</strong>: nginx/cloudflare may buffer SSE (X-Accel-Buffering: no)
+                        </div>
+                        <div>☐ <strong>Server Timeout</strong>: Modal may timeout after 5 min idle</div>
+                        <div>☐ <strong>Network</strong>: Check browser DevTools Network tab for EventSource</div>
+                        <div>☐ <strong>Console Errors</strong>: Look for [SSE] prefixed messages</div>
+                    </div>
+                </details>
+            </div>
+        </details>
+
     </div>
 
     <!-- LOGIC -->
     <script>
-        // --- 1. DATA FETCHING ---
+        // ==========================================================
+        // CANONICAL STATE MODEL - Single Source of Truth
+        // ==========================================================
+        const dashboardState = {
+            // KPI Stats
+            stats: {
+                leads: 0,
+                contacted: 0,
+                calls: 0,
+                appointments: 0,
+                pipelineValue: 0
+            },
+            // System Health
+            system: {
+                status: 'unknown',      // 'healthy', 'connecting', 'reconnecting', 'error'
+                lastUpdate: null,       // ISO timestamp
+                sseConnected: false,
+                version: 0              // Monotonic version for idempotency
+            },
+            // Leads List
+            leads: [],                  // Array of lead objects
+            // Activity Feed
+            activity: {
+                emails: 0,
+                sms: 0,
+                calls: 0,
+                items: []               // Recent activity items
+            },
+            // Transcripts
+            transcripts: [],            // Array of call transcripts
+
+            // ==========================================================
+            // TASKS - Lifecycle: queued -> running -> success|failed|canceled
+            // ==========================================================
+            tasks: {},                  // Map of task_id -> task object
+            taskVersions: {}            // Map of task_id -> last seen version (for idempotency)
+        };
+
+        // Task status constants
+        const TASK_STATUS = {
+            QUEUED: 'queued',
+            RUNNING: 'running',
+            SUCCESS: 'success',
+            FAILED: 'failed',
+            CANCELED: 'canceled'
+        };
+
+        // ==========================================================
+        // PAYLOAD CONTRACTS (Event Schemas)
+        // ==========================================================
+        /*
+        task.created: {
+            id: string,             // Unique event ID
+            type: 'task.created',
+            ts: string,             // ISO timestamp
+            payload: {
+                task_id: string,    // Unique task identifier
+                version: number,    // Monotonically increasing version
+                status: 'queued',   // Initial status
+                action: string,     // e.g., 'prospecting', 'campaign', 'optimize'
+                created_at: string, // ISO timestamp
+                metadata: object    // Optional additional data
+            }
+        }
+
+        task.updated: {
+            id: string,
+            type: 'task.updated',
+            ts: string,
+            payload: {
+                task_id: string,
+                version: number,        // Must be > previous version to apply
+                status: 'queued'|'running'|'success'|'failed'|'canceled',
+                progress: number,       // 0-100 percentage (optional)
+                result: object,         // Result data (optional)
+                error: string,          // Error message if failed (optional)
+                updated_at: string
+            }
+        }
+
+        task.log: {
+            id: string,
+            type: 'task.log',
+            ts: string,
+            payload: {
+                task_id: string,
+                version: number,
+                level: 'info'|'warn'|'error',
+                message: string,
+                timestamp: string
+            }
+        }
+
+        health.changed: {
+            id: string,
+            type: 'health.changed',
+            ts: string,
+            payload: {
+                status: 'healthy'|'degraded'|'error'|'unknown',
+                previous: string,
+                version: number,        // For idempotency
+                components: {           // Optional component health
+                    modal: 'ok'|'error',
+                    supabase: 'ok'|'error',
+                    cloudflare: 'ok'|'error'
+                }
+            }
+        }
+        */
+
+        // ==========================================================
+        // IDEMPOTENCY - Check if event is stale
+        // ==========================================================
+        function isStaleEvent(state, event) {
+            const { type, payload } = event;
+
+            // Task events: check version
+            if (type.startsWith('task.') && payload?.task_id && payload?.version !== undefined) {
+                const lastVersion = state.taskVersions[payload.task_id] || 0;
+                if (payload.version <= lastVersion) {
+                    console.log(`[Idempotency] Stale task event ignored: ${payload.task_id} v${payload.version} <= v${lastVersion}`);
+                    return true;
+                }
+            }
+
+            // Health events: check version
+            if (type === 'health.changed' && payload?.version !== undefined) {
+                if (payload.version <= state.system.version) {
+                    console.log(`[Idempotency] Stale health event ignored: v${payload.version} <= v${state.system.version}`);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // ==========================================================
+        // APPLY EVENT - Reducer-like state updates
+        // ==========================================================
+        function applyEvent(state, event) {
+            const { type, payload, ts } = event;
+
+            switch (type) {
+                // --- Stats Events ---
+                case 'stats.hydrate':
+                    // Full stats hydration from REST
+                    state.stats = { ...state.stats, ...payload };
+                    state.stats.pipelineValue = (payload.contacted || 0) * 1000;
+                    break;
+
+                case 'lead.updated':
+                    // Incremental lead count update
+                    if (payload.total_leads !== undefined) {
+                        state.stats.leads = payload.total_leads;
+                        state.stats.pipelineValue = payload.total_leads * 1000;
+                    }
+                    if (payload.delta) {
+                        console.log(`[State] Lead delta: +${payload.delta}`);
+                    }
+                    break;
+
+                case 'call.logged':
+                    // Increment call count
+                    state.stats.calls += 1;
+                    state.activity.calls += 1;
+                    break;
+
+                case 'task.updated':
+                case 'task.created':
+                    // Log task events (could add to activity feed)
+                    console.log('[State] Task event:', payload);
+                    break;
+
+                // --- Health Events ---
+                case 'health.changed':
+                    state.system.status = payload.status || 'unknown';
+                    break;
+
+                case 'system.connected':
+                    state.system.sseConnected = true;
+                    state.system.status = 'healthy';
+                    break;
+
+                case 'system.disconnected':
+                    state.system.sseConnected = false;
+                    state.system.status = 'reconnecting';
+                    break;
+
+                case 'system.update':
+                    state.system.lastUpdate = ts || new Date().toISOString();
+                    break;
+
+                // --- Leads List Events ---
+                case 'leads.hydrate':
+                    state.leads = payload.leads || [];
+                    break;
+
+                case 'leads.prepend':
+                    // Add new lead to top of list
+                    state.leads = [payload, ...state.leads].slice(0, 50);
+                    break;
+
+                // --- Activity Events ---
+                case 'activity.hydrate':
+                    state.activity = { ...state.activity, ...payload };
+                    break;
+
+                // --- Transcripts Events ---
+                case 'transcripts.hydrate':
+                    state.transcripts = payload.transcripts || [];
+                    break;
+
+                // --- Dashboard Update (SSE batch) ---
+                case 'dashboard.update':
+                    // Handle SSE dashboard.update payload
+                    if (payload.stats) {
+                        if (payload.stats.leads !== undefined) {
+                            state.stats.leads = payload.stats.leads;
+                            state.stats.pipelineValue = payload.stats.leads * 1000;
+                        }
+                        if (payload.stats.health) {
+                            state.system.status = payload.stats.health;
+                        }
+                    }
+                    // Process nested events
+                    if (payload.events && Array.isArray(payload.events)) {
+                        payload.events.forEach(evt => applyEvent(state, evt));
+                    }
+                    state.system.lastUpdate = ts || new Date().toISOString();
+                    break;
+
+                default:
+                    console.log('[State] Unknown event type:', type);
+            }
+
+            return state;
+        }
+
+        // ==========================================================
+        // RENDER FROM STATE - UI updates from state
+        // ==========================================================
+        function renderFromState(state) {
+            // KPI Tiles
+            document.getElementById('statLeads').innerText = state.stats.leads || 0;
+            document.getElementById('statPipeline').innerText = '$' + (state.stats.pipelineValue || 0).toLocaleString();
+            document.getElementById('statCalls').innerText = state.stats.calls || 0;
+            document.getElementById('statAppts').innerText = state.stats.appointments || 0;
+
+            // System Status
+            const statusEl = document.getElementById('systemStatus');
+            if (state.system.status === 'healthy' || state.system.status === 'ok') {
+                statusEl.innerHTML = '● Systems Online';
+                statusEl.className = 'text-xs text-green-400';
+            } else if (state.system.status === 'connecting') {
+                statusEl.innerHTML = '◐ Connecting...';
+                statusEl.className = 'text-xs text-yellow-400 animate-pulse';
+            } else {
+                statusEl.innerHTML = '○ Reconnecting...';
+                statusEl.className = 'text-xs text-orange-400';
+            }
+
+            // Last Update
+            if (state.system.lastUpdate) {
+                const time = new Date(state.system.lastUpdate).toLocaleTimeString();
+                document.getElementById('lastUpdate').innerText = `Last update: ${time}`;
+            }
+        }
+
+        // Helper: Apply event and re-render
+        function dispatch(event) {
+            applyEvent(dashboardState, event);
+            renderFromState(dashboardState);
+        }
+
+        // ==========================================================
+        // 1. DATA FETCHING (Hydrates State)
+        // ==========================================================
         async function fetchStats() {
             // Simple counts
             const { count: total } = await sbClient.from('leads').select('*', { count: 'exact', head: true });
@@ -315,11 +639,12 @@
             // "Appointments" approximated
             const { count: appts } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).in('status', ['converted', 'appointment_set']);
 
-            document.getElementById('statLeads').innerText = total || 0;
-            // Dummy logic: $1000 per contacted lead for pipeline
-            document.getElementById('statPipeline').innerText = "$" + ((contacted || 0) * 1000).toLocaleString();
-            document.getElementById('statCalls').innerText = calls || 0;
-            document.getElementById('statAppts').innerText = appts || 0;
+            // Dispatch hydration event
+            dispatch({
+                type: 'stats.hydrate',
+                payload: { leads: total || 0, contacted: contacted || 0, calls: calls || 0, appointments: appts || 0 },
+                ts: new Date().toISOString()
+            });
         }
 
         async function fetchLeads() {
@@ -678,6 +1003,69 @@
         let sseRetryCount = 0;
         const MAX_RETRY_DELAY = 60000; // Max 60 seconds
 
+        // Debug panel state
+        const debugState = {
+            eventLog: [],       // Last 20 events
+            eventCount: 0,
+            sseState: 'INIT'    // INIT, CONNECTING, CONNECTED, RECONNECTING, OFFLINE
+        };
+
+        function updateDebugPanel() {
+            // Update SSE state display
+            const stateEl = document.getElementById('debugSseState');
+            const stateColors = {
+                'INIT': 'text-slate-400',
+                'CONNECTING': 'text-yellow-400',
+                'CONNECTED': 'text-green-400',
+                'RECONNECTING': 'text-orange-400',
+                'OFFLINE': 'text-red-400'
+            };
+            stateEl.innerText = debugState.sseState;
+            stateEl.className = `font-mono ${stateColors[debugState.sseState] || 'text-slate-400'}`;
+
+            // Update debug status badge
+            const statusEl = document.getElementById('debugStatus');
+            if (debugState.sseState === 'CONNECTED') {
+                statusEl.innerText = 'Connected';
+                statusEl.className = 'text-xs px-2 py-1 rounded bg-green-500/20 text-green-400';
+            } else if (debugState.sseState === 'CONNECTING' || debugState.sseState === 'RECONNECTING') {
+                statusEl.innerText = debugState.sseState;
+                statusEl.className = 'text-xs px-2 py-1 rounded bg-yellow-500/20 text-yellow-400';
+            } else {
+                statusEl.innerText = 'Offline';
+                statusEl.className = 'text-xs px-2 py-1 rounded bg-red-500/20 text-red-400';
+            }
+
+            // Update retry count
+            document.getElementById('debugRetryCount').innerText = sseRetryCount;
+
+            // Update event count
+            document.getElementById('debugEventCount').innerText = debugState.eventCount;
+
+            // Update event log
+            const logEl = document.getElementById('debugEventLog');
+            if (debugState.eventLog.length === 0) {
+                logEl.innerHTML = '<div class="text-slate-500">Waiting for events...</div>';
+            } else {
+                logEl.innerHTML = debugState.eventLog.map(evt => {
+                    const time = new Date(evt.ts).toLocaleTimeString();
+                    const typeColor = evt.type.includes('error') ? 'text-red-400' :
+                        evt.type.includes('health') ? 'text-blue-400' :
+                            evt.type.includes('lead') ? 'text-green-400' : 'text-slate-400';
+                    return `<div class="${typeColor}">[${time}] ${evt.type}: ${JSON.stringify(evt.payload || {}).substring(0, 80)}</div>`;
+                }).join('');
+            }
+        }
+
+        function logDebugEvent(event) {
+            debugState.eventCount++;
+            debugState.eventLog.unshift(event);
+            if (debugState.eventLog.length > 20) {
+                debugState.eventLog.pop();
+            }
+            updateDebugPanel();
+        }
+
         function updateLastUpdate() {
             const now = new Date().toLocaleTimeString();
             document.getElementById('lastUpdate').innerText = `Last update: ${now}`;
@@ -703,6 +1091,9 @@
                 sseRetryCount = 0; // Reset retry on success
                 updateLastUpdate();
 
+                // Log to debug panel
+                logDebugEvent({ type: data.type || 'update', ts: data.ts || new Date().toISOString(), payload: data.payload?.stats });
+
                 // Update stats from SSE payload
                 if (data.payload && data.payload.stats) {
                     const stats = data.payload.stats;
@@ -718,6 +1109,9 @@
                 // Process individual events
                 if (data.payload && data.payload.events) {
                     data.payload.events.forEach(evt => {
+                        // Log each sub-event
+                        logDebugEvent(evt);
+
                         if (evt.type === 'lead.updated') {
                             console.log('[SSE] Lead updated:', evt.payload);
                             // Trigger leads refresh for new data
@@ -737,6 +1131,7 @@
                 }
             } catch (e) {
                 console.warn('[SSE] Parse error:', e);
+                logDebugEvent({ type: 'error', ts: new Date().toISOString(), payload: { error: e.message } });
             }
         }
 
@@ -748,6 +1143,8 @@
                 eventSource.close();
             }
 
+            debugState.sseState = 'CONNECTING';
+            updateDebugPanel();
             updateSystemStatus('connecting');
             eventSource = new EventSource(`${SSE_URL}?auth=${auth}`);
 
@@ -755,23 +1152,29 @@
             eventSource.addEventListener('ping', () => {
                 console.log('[SSE] Keepalive ping received');
                 updateLastUpdate();
+                logDebugEvent({ type: 'ping', ts: new Date().toISOString(), payload: {} });
             });
 
             eventSource.onopen = () => {
                 console.log('[SSE] Connected');
                 sseRetryCount = 0;
+                debugState.sseState = 'CONNECTED';
+                updateDebugPanel();
                 updateSystemStatus('healthy');
             };
 
             eventSource.onerror = (e) => {
                 console.warn('[SSE] Connection error, will retry...');
                 eventSource.close();
+                debugState.sseState = 'RECONNECTING';
+                updateDebugPanel();
 
                 // Exponential backoff: 1s, 2s, 4s, 8s, 16s, 32s, max 60s
                 sseRetryCount++;
                 const delay = Math.min(1000 * Math.pow(2, sseRetryCount - 1), MAX_RETRY_DELAY);
                 updateSystemStatus('reconnecting');
                 console.log(`[SSE] Retry ${sseRetryCount} in ${delay}ms`);
+                logDebugEvent({ type: 'connection.error', ts: new Date().toISOString(), payload: { retry: sseRetryCount, delay } });
                 setTimeout(connectSSE, delay);
             };
         }
