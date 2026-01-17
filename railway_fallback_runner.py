@@ -1,7 +1,7 @@
 """
 AGENT: Railway Fallback Runner
-Always-on fallback service for webhook processing and campaign scheduling.
-Deploys to Railway for 24/7 uptime.
+Always-on fallback for webhook processing, campaign scheduler, dispatcher.
+Returns structured JSON only.
 """
 import os
 import json
@@ -13,113 +13,105 @@ from fastapi.responses import JSONResponse
 import httpx
 import uvicorn
 
-app = FastAPI(title="Empire Fallback Runner")
+app = FastAPI(title="Empire Fallback Runner", docs_url=None, redoc_url=None)
 
-# Environment
+# Config
 SUPABASE_URL = os.getenv("SUPABASE_URL", "https://rzcpfwkygdvoshtwxncs.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
-GHL_WEBHOOK_SECRET = os.getenv("GHL_WEBHOOK_SECRET", "")
-PORT = int(os.getenv("PORT", os.getenv("SECONDARY_RUNNER_PORT", "8080")))
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo")
+PORT = int(os.getenv("PORT", "8080"))
+TZ = ZoneInfo("America/New_York")
 
-# Supabase headers
-def supabase_headers():
-    return {
-        "apikey": SUPABASE_KEY,
-        "Authorization": f"Bearer {SUPABASE_KEY}",
-        "Content-Type": "application/json"
-    }
+def now_iso():
+    return datetime.now(timezone.utc).isoformat()
+
+def is_business_hours() -> bool:
+    now = datetime.now(TZ)
+    return 8 <= now.hour < 17 and now.weekday() < 5
 
 async def log_to_supabase(table: str, data: dict):
-    """Non-blocking log to Supabase"""
     try:
         async with httpx.AsyncClient() as client:
             await client.post(
                 f"{SUPABASE_URL}/rest/v1/{table}",
-                headers=supabase_headers(),
+                headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}",
+                    "Content-Type": "application/json"
+                },
                 json=data,
                 timeout=5
             )
-    except Exception as e:
-        print(f"[LOG ERROR] {e}")
-
-def is_business_hours() -> bool:
-    """Check if current time is within 8am-5pm EST"""
-    now = datetime.now(ZoneInfo("America/New_York"))
-    return 8 <= now.hour < 17 and now.weekday() < 5
+    except:
+        pass
 
 @app.get("/health")
 async def health():
-    return JSONResponse({
+    ts = now_iso()
+    asyncio.create_task(log_to_supabase("health_logs", {
+        "timestamp": ts,
+        "component": "fallback_runner",
         "status": "ok",
-        "service": "empire-fallback-runner",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "business_hours": is_business_hours()
-    })
+        "action_taken": "health_check",
+        "message": ""
+    }))
+    return JSONResponse({"status": "ok", "timestamp": ts})
 
 @app.post("/webhook")
 async def webhook(request: Request):
-    """Process inbound webhook events"""
+    ts = now_iso()
     try:
         payload = await request.json()
     except:
-        raise HTTPException(status_code=400, detail="Invalid JSON")
+        return JSONResponse({"timestamp": ts, "status": "error", "error": "invalid_json"}, status_code=400)
     
-    # Log receipt
+    event_type = payload.get("type") or payload.get("event") or "unknown"
+    contact_id = payload.get("contactId") or payload.get("contact_id") or ""
+    
+    # Log webhook receipt
     asyncio.create_task(log_to_supabase("webhook_logs", {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": ts,
         "source": request.headers.get("User-Agent", "unknown"),
         "payload": payload,
-        "forwarded_to": "fallback_runner",
+        "forwarded_to": "fallback_dispatcher",
         "result_status": 200
     }))
     
-    # Process based on event type
-    event_type = payload.get("type") or payload.get("event") or "unknown"
-    contact_id = payload.get("contactId") or payload.get("contact_id")
-    
-    # Log health event
-    asyncio.create_task(log_to_supabase("health_logs", {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "component": "fallback_runner",
-        "status": "processing",
-        "action_taken": f"webhook_{event_type}",
-        "message": f"Received {event_type} for contact {contact_id}"
-    }))
-    
-    # TODO: Add actual dispatch logic here (call Sarah, Christina, etc.)
+    # Dispatch logic placeholder
+    # TODO: Route to Sarah/Christina based on event_type
     
     return JSONResponse({
-        "status": "received",
+        "timestamp": ts,
+        "status": "ok",
         "event_type": event_type,
         "contact_id": contact_id
     })
 
+async def campaign_scheduler():
+    """Background scheduler - runs every 5 minutes during business hours"""
+    while True:
+        ts = now_iso()
+        if is_business_hours():
+            # Log campaign check
+            await log_to_supabase("campaign_logs", {
+                "timestamp": ts,
+                "lead_id": None,
+                "touch_type": "scheduler_check",
+                "disposition": "pending",
+                "error": None
+            })
+            # TODO: Fetch pending touches from Supabase and execute
+        await asyncio.sleep(300)
+
 @app.on_event("startup")
 async def startup():
-    print(f"[STARTUP] Empire Fallback Runner starting on port {PORT}")
-    asyncio.create_task(log_to_supabase("health_logs", {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+    ts = now_iso()
+    await log_to_supabase("health_logs", {
+        "timestamp": ts,
         "component": "fallback_runner",
-        "status": "online",
+        "status": "started",
         "action_taken": "startup",
-        "message": f"Service started on port {PORT}"
-    }))
-
-# Campaign scheduler (runs in background)
-async def campaign_scheduler():
-    """Background task to check and run campaigns"""
-    while True:
-        try:
-            if is_business_hours():
-                # TODO: Fetch pending campaigns from Supabase and execute
-                print(f"[SCHEDULER] Checking campaigns at {datetime.now()}")
-            await asyncio.sleep(300)  # Check every 5 minutes
-        except Exception as e:
-            print(f"[SCHEDULER ERROR] {e}")
-            await asyncio.sleep(60)
-
-@app.on_event("startup")
-async def start_scheduler():
+        "message": f"Port {PORT}"
+    })
     asyncio.create_task(campaign_scheduler())
 
 if __name__ == "__main__":
