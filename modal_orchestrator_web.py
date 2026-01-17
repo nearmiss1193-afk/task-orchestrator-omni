@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from datetime import datetime
 
 image = modal.Image.debian_slim(python_version="3.11").pip_install("fastapi[standard]", "requests")
-app = modal.App("sovereign-orchestrator", image=image)
+app = modal.App("empire-api", image=image)
 
 # Config
 SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
