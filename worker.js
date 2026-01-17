@@ -148,6 +148,12 @@ async function handleScheduled(event) {
     // Always run health check (every 10 min trigger)
     await runEndpoint(baseUrl + "/health", "health_check");
 
+    // KPI Snapshot - every 10 min for self-annealing
+    await runEndpoint(baseUrl + "/api/kpi-snapshot", "kpi_snapshot");
+
+    // Reliability Check - every 10 min for auto-heal
+    await runEndpoint(baseUrl + "/api/reliability-check", "reliability_check");
+
     // 8 AM CT Campaign (14:00 UTC, minute 0)
     if (hour === 14 && minute < 10) {
         console.log("Running 8 AM CT campaign...");
