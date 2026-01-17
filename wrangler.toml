@@ -25,4 +25,4 @@ crons = [
 [vars]
 PRIMARY_URL = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
 FALLBACK_URL = "https://empire-fallback-runner.up.railway.app/webhook"
-BUILD_ID = "20260117-1114-2d01424"
+# BUILD_ID is injected at deploy time via sed replacement in workflow

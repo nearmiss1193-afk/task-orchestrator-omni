@@ -1,7 +1,7 @@
 /**
  * Empire Webhook Fallback + Scheduled Automation + Static Site Worker
- * Handles: static files (dashboard), webhook routing, health checks, prospecting, campaigns, optimization
- * Build: 20260117-1114-2d01424
+ * Handles: static files (dashboard with Basic Auth), webhook routing, health checks
+ * Build: 20260117-1227-f854b4e
  */
 
 import { getAssetFromKV } from "@cloudflare/kv-asset-handler";
@@ -14,19 +14,54 @@ addEventListener("scheduled", event => {
     event.waitUntil(handleScheduled(event));
 });
 
+// Basic Auth check for protected routes
+function checkBasicAuth(request) {
+    const authHeader = request.headers.get("Authorization");
+    if (!authHeader || !authHeader.startsWith("Basic ")) {
+        return false;
+    }
+
+    const base64 = authHeader.slice(6);
+    const decoded = atob(base64);
+    const [user, pass] = decoded.split(":");
+
+    // Check against Worker secrets (set via wrangler secret put)
+    const validUser = typeof DASHBOARD_USER !== "undefined" ? DASHBOARD_USER : "sovereign";
+    const validPass = typeof DASHBOARD_PASS !== "undefined" ? DASHBOARD_PASS : "command2026";
+
+    return user === validUser && pass === validPass;
+}
+
+function unauthorized() {
+    return new Response("Unauthorized - Sovereign Access Required", {
+        status: 401,
+        headers: {
+            "WWW-Authenticate": 'Basic realm="Sovereign Command Center"',
+            "Content-Type": "text/plain"
+        }
+    });
+}
+
 async function handleRequest(event) {
     const request = event.request;
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // Serve static files for dashboard and assets
-    if (pathname === "/" || pathname === "/dashboard.html" || pathname.startsWith("/assets/") || pathname.endsWith(".html") || pathname.endsWith(".js") || pathname.endsWith(".css") || pathname.endsWith(".png") || pathname.endsWith(".jpg") || pathname.endsWith(".ico")) {
+    // Protected routes: dashboard and assets
+    const isProtectedRoute = pathname === "/" || pathname === "/dashboard.html" || pathname.startsWith("/assets/");
+
+    // Serve static files for dashboard and assets (with Basic Auth)
+    if (isProtectedRoute || pathname.endsWith(".html") || pathname.endsWith(".js") || pathname.endsWith(".css") || pathname.endsWith(".png") || pathname.endsWith(".jpg") || pathname.endsWith(".ico")) {
+
+        // Require Basic Auth for protected routes only
+        if (isProtectedRoute && !checkBasicAuth(request)) {
+            return unauthorized();
+        }
+
         try {
-            // Use KV asset handler for static files
             let response = await getAssetFromKV(event, {
                 mapRequestToAsset: (req) => {
                     const url = new URL(req.url);
-                    // Serve index.html for root
                     if (url.pathname === "/") {
                         url.pathname = "/dashboard.html";
                     }
@@ -44,7 +79,6 @@ async function handleRequest(event) {
 
             return response;
         } catch (e) {
-            // If asset not found, continue to webhook handler
             console.log("Asset not found:", pathname, e.message);
         }
     }

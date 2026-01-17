@@ -69,6 +69,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Inject BUILD_ID into dashboard
+        run: |
+          BUILD_ID="$(date +%Y%m%d-%H%M)-$(git rev-parse --short HEAD)"
+          echo "BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
+          sed -i "s/__BUILD_ID__/$BUILD_ID/g" public/dashboard.html
+          # Also update footer
+          sed -i "s/Build: __BUILD_ID__/Build: $BUILD_ID/g" public/dashboard.html
+          echo "Injected BUILD_ID: $BUILD_ID"
+      
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
