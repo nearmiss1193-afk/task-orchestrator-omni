@@ -3,26 +3,52 @@
 // Returns structured JSON only
 
 export default {
-    // Scheduled trigger - runs every 2 hours to trigger self-improvement optimizer
+    // Scheduled trigger - runs every 10 minutes for health monitoring
     async scheduled(event, env, ctx) {
-        const optimizeUrl = (env.PRIMARY_URL || "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run") + "/optimize";
-        try {
-            const response = await fetch(optimizeUrl, { method: "GET", headers: { "Content-Type": "application/json" } });
-            const result = await response.json();
-            console.log("Self-improvement optimizer result:", JSON.stringify(result));
+        const baseUrl = env.PRIMARY_URL || "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run";
+        const healthUrl = baseUrl + "/health";
+        const optimizeUrl = baseUrl + "/optimize";
+        const supabaseUrl = env.SUPABASE_URL || "https://rzcpfwkygdvoshtwxncs.supabase.co";
+        const supabaseKey = env.SUPABASE_KEY || "";
+        const now = new Date();
 
-            // Log to Supabase
-            const supabaseUrl = env.SUPABASE_URL || "https://rzcpfwkygdvoshtwxncs.supabase.co";
-            const supabaseKey = env.SUPABASE_KEY || "";
-            if (supabaseKey) {
-                await fetch(`${supabaseUrl}/rest/v1/cron_logs`, {
-                    method: "POST",
-                    headers: { "apikey": supabaseKey, "Authorization": `Bearer ${supabaseKey}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({ trigger: "scheduled", action: "self_improvement_optimizer", result: result, timestamp: new Date().toISOString() })
-                });
-            }
+        // Always ping health (every 10 min) - prevents cold starts
+        let healthStatus = "unknown";
+        try {
+            const healthResp = await fetch(healthUrl, { method: "GET", headers: { "Content-Type": "application/json" } });
+            healthStatus = healthResp.ok ? "healthy" : "unhealthy";
+            console.log("Health check:", healthStatus);
         } catch (e) {
-            console.error("Scheduled optimizer trigger failed:", e.message);
+            healthStatus = "error:" + e.message;
+            console.error("Health check failed:", e.message);
+        }
+
+        // Log health to Supabase
+        if (supabaseKey) {
+            await fetch(`${supabaseUrl}/rest/v1/health_logs`, {
+                method: "POST",
+                headers: { "apikey": supabaseKey, "Authorization": `Bearer ${supabaseKey}`, "Content-Type": "application/json" },
+                body: JSON.stringify({ component: "cloudflare_cron", status: healthStatus, action_taken: "health_ping", timestamp: now.toISOString() })
+            });
+        }
+
+        // Run optimizer every 2 hours (minute 0 of even hours)
+        if (now.getMinutes() < 10 && now.getHours() % 2 === 0) {
+            try {
+                const response = await fetch(optimizeUrl, { method: "GET", headers: { "Content-Type": "application/json" } });
+                const result = await response.json();
+                console.log("Self-improvement optimizer result:", JSON.stringify(result));
+
+                if (supabaseKey) {
+                    await fetch(`${supabaseUrl}/rest/v1/cron_logs`, {
+                        method: "POST",
+                        headers: { "apikey": supabaseKey, "Authorization": `Bearer ${supabaseKey}`, "Content-Type": "application/json" },
+                        body: JSON.stringify({ trigger: "scheduled", action: "self_improvement_optimizer", result: result, timestamp: now.toISOString() })
+                    });
+                }
+            } catch (e) {
+                console.error("Scheduled optimizer trigger failed:", e.message);
+            }
         }
     },
 
