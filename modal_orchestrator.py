@@ -329,6 +329,13 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         """
         event_type = data.get("type", "unknown")
         
+        # Always emit webhook.inbound event first
+        log_event("webhook.inbound", "ghl", "info", payload={
+            "source": "ghl",
+            "type": event_type,
+            "contact_id": data.get("contactId", data.get("appointment", {}).get("contactId", ""))
+        })
+        
         # Route appointment events
         if "Appointment" in event_type:
             return ghl_appointment_webhook(data, token)
@@ -671,7 +678,7 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
                     timeout=10
                 )
                 if r.status_code == 200 and len(r.json()) > 0:
-                    log_event("campaign.skipped", "modal", "info", payload={"reason": "already_ran_today"})
+                    log_event("campaign.skip", "modal", "info", payload={"reason": "already_ran_today", "window_id": "8am_ct"})
                     return {"status": "skip", "reason": "already_ran_today", "next": "tomorrow 8am CT"}
             except Exception as e:
                 print(f"[Campaign] Idempotency check failed: {e}, proceeding anyway")
@@ -682,14 +689,14 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         weekday = now_utc.weekday()  # 0=Monday, 6=Sunday
         
         if not override and (weekday >= 5 or ct_hour < 9 or ct_hour >= 18):
-            log_event("campaign.skipped", "modal", "info", payload={"reason": "outside_send_window", "ct_hour": ct_hour, "weekday": weekday})
+            log_event("campaign.skip", "modal", "info", payload={"reason": "outside_send_window", "window_id": "8am_ct", "ct_hour": ct_hour, "weekday": weekday})
             return {"status": "skip", "reason": "outside_send_window", "ct_hour": ct_hour, "weekday": weekday}
         
         start_time = time.time()
         campaign_type = "catchup" if catchup else "scheduled"
         batch_id = f"campaign_{datetime.utcnow().strftime('%Y%m%d_%H%M')}"
         
-        log_event(f"campaign.{campaign_type}", "modal", "info", correlation_id=batch_id, payload={"override": override})
+        log_event("campaign.run", "modal", "info", correlation_id=batch_id, payload={"campaign_type": campaign_type, "window_id": "8am_ct", "override": override})
         
         # Get contacts due for outreach
         try:
@@ -755,7 +762,11 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         except Exception as e:
             print(f"[Campaign] Failed to record job run: {e}")
         
-        log_event("campaign.completed", "modal", "info", correlation_id=batch_id, payload={"sent": sent_count, "errors": errors, "latency_ms": latency_ms})
+        # Emit appropriate event based on status
+        if status == "fail":
+            log_event("campaign.error", "modal", "error", correlation_id=batch_id, payload={"sent": sent_count, "errors": errors, "latency_ms": latency_ms, "window_id": "8am_ct"})
+        else:
+            log_event("campaign.run", "modal", "info", correlation_id=batch_id, payload={"sent": sent_count, "errors": errors, "contacts": len(contacts), "latency_ms": latency_ms, "window_id": "8am_ct", "status": status})
         
         return {
             "status": status,
@@ -1362,8 +1373,8 @@ Be specific and actionable. Output ONLY the insight, no intro."""
                     campaign_ran = job_check.status_code == 200 and job_check.json() == True
                     
                     if not campaign_ran and ct_hour >= 9:  # 9:30 AM CT or later
-                        # Trigger catch-up campaign
-                        log_event("campaign.catchup_triggered", "modal", "warn", payload={"ct_hour": ct_hour})
+                        # Emit reliability.catchup event BEFORE triggering
+                        log_event("reliability.catchup", "modal", "warn", payload={"triggered_by": "missed_8am", "window_id": "8am_ct", "ct_hour": ct_hour})
                         try:
                             # Call the /campaign endpoint with catchup=true
                             catchup_resp = requests.get(
