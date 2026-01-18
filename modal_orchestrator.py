@@ -1769,3 +1769,89 @@ Be specific and actionable. Output ONLY the insight, no intro."""
     return api
 
 
+# ==========================================================
+# SCHEDULED FUNCTIONS - 24/7 Autonomous Cloud Operation
+# These run on Modal's infrastructure without any local dependencies
+# ==========================================================
+
+@app.function(schedule=modal.Cron("*/10 * * * *"))  # Every 10 minutes
+def scheduled_health_and_kpi():
+    """Health check + KPI snapshot every 10 minutes for self-annealing"""
+    import requests
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    results = []
+    for endpoint in ["/health", "/api/kpi-snapshot", "/api/reliability-check"]:
+        try:
+            resp = requests.get(f"{base_url}{endpoint}", timeout=30)
+            results.append({"endpoint": endpoint, "status": resp.status_code})
+        except Exception as e:
+            results.append({"endpoint": endpoint, "error": str(e)})
+    
+    print(f"[CRON 10min] Results: {results}")
+    return results
+
+
+@app.function(schedule=modal.Cron("0 14 * * 1-5"))  # 8 AM CT weekdays (14:00 UTC)
+def scheduled_8am_campaign():
+    """8 AM CT daily campaign - weekdays only"""
+    import requests
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    try:
+        resp = requests.get(f"{base_url}/campaign", timeout=120)
+        result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
+        print(f"[CRON 8am] Campaign result: {result}")
+        return result
+    except Exception as e:
+        print(f"[CRON 8am] Error: {e}")
+        return {"error": str(e)}
+
+
+@app.function(schedule=modal.Cron("0 */4 * * *"))  # Every 4 hours
+def scheduled_prospecting():
+    """Prospecting run every 4 hours"""
+    import requests
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    try:
+        resp = requests.get(f"{base_url}/prospect", timeout=60)
+        result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
+        print(f"[CRON 4hr] Prospecting result: {result}")
+        return result
+    except Exception as e:
+        print(f"[CRON 4hr] Error: {e}")
+        return {"error": str(e)}
+
+
+@app.function(schedule=modal.Cron("0 */2 * * *"))  # Every 2 hours
+def scheduled_optimizer():
+    """Self-improvement optimizer every 2 hours"""
+    import requests
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    try:
+        resp = requests.get(f"{base_url}/optimize", timeout=60)
+        result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
+        print(f"[CRON 2hr] Optimizer result: {result}")
+        return result
+    except Exception as e:
+        print(f"[CRON 2hr] Error: {e}")
+        return {"error": str(e)}
+
+
+@app.function(schedule=modal.Cron("0 * * * *"))  # Every hour
+def scheduled_policy_optimizer():
+    """Policy weight adjustment every hour"""
+    import requests
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    try:
+        resp = requests.get(f"{base_url}/api/policy-optimize", timeout=60)
+        result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
+        print(f"[CRON 1hr] Policy optimizer result: {result}")
+        return result
+    except Exception as e:
+        print(f"[CRON 1hr] Error: {e}")
+        return {"error": str(e)}
+
