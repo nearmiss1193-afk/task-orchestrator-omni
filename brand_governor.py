@@ -141,6 +141,85 @@ def scan_file(filepath: str, config: dict) -> list:
             "match": phone["match"]
         })
     
+    # Offer Governance Checks (only for main public HTML, not audits)
+    if filepath.endswith('.html') and "/audits/" not in filepath.replace("\\", "/"):
+        issues.extend(check_offer_governance(filepath, content, config))
+    
+    return issues
+
+
+def check_offer_governance(filepath: str, content: str, config: dict) -> list:
+    """Check for offer/CTA/pricing drift."""
+    issues = []
+    offer_gov = config.get("offer_governance", {})
+    
+    if not offer_gov:
+        return issues
+    
+    lines = content.split('\n')
+    
+    # 1. Check for forbidden offer phrases
+    forbidden_phrases = offer_gov.get("forbidden_offer_phrases", [])
+    for line_num, line in enumerate(lines, 1):
+        line_lower = line.lower()
+        for phrase in forbidden_phrases:
+            if phrase.lower() in line_lower:
+                issues.append({
+                    "type": "forbidden_phrase",
+                    "severity": 10,
+                    "file": filepath,
+                    "line": line_num,
+                    "match": phrase,
+                    "auto_fix": False
+                })
+    
+    # 2. Check CTA button text (look for common button patterns)
+    allowed_cta_texts = offer_gov.get("allowed_cta_texts", [])
+    # Find button/a elements with text
+    import re
+    button_pattern = re.compile(r'<(?:button|a)[^>]*>([^<]+)</(?:button|a)>', re.IGNORECASE)
+    for line_num, line in enumerate(lines, 1):
+        for match in button_pattern.finditer(line):
+            button_text = match.group(1).strip()
+            # Skip very short or obviously non-CTA text
+            if len(button_text) < 3 or button_text in ['X', '×', '←', '→', '↻']:
+                continue
+            # Check if it's an allowed CTA
+            if button_text not in allowed_cta_texts and not any(allowed in button_text for allowed in allowed_cta_texts):
+                # Only flag if it looks like a CTA (has action words)
+                action_words = ['get', 'book', 'start', 'call', 'schedule', 'sign', 'join', 'try', 'free', 'demo']
+                if any(word in button_text.lower() for word in action_words):
+                    issues.append({
+                        "type": "cta_text_drift",
+                        "severity": 6,
+                        "file": filepath,
+                        "line": line_num,
+                        "match": button_text,
+                        "auto_fix": button_text in offer_gov.get("old_cta_replacements", {})
+                    })
+    
+    # 3. Check CTA hrefs
+    allowed_prefixes = offer_gov.get("allowed_cta_href_prefixes", [])
+    href_pattern = re.compile(r'href=["\']([^"\']+)["\']', re.IGNORECASE)
+    for line_num, line in enumerate(lines, 1):
+        for match in href_pattern.finditer(line):
+            href = match.group(1)
+            # Skip internal links, anchors, javascript
+            if href.startswith('#') or href.startswith('javascript:') or href.startswith('/'):
+                continue
+            # Check if it matches allowed prefixes
+            if not any(href.startswith(prefix) for prefix in allowed_prefixes):
+                # Check if it's a booking/CTA link (not just any external link)
+                if 'calendly' in href.lower() or 'booking' in href.lower() or 'schedule' in href.lower():
+                    issues.append({
+                        "type": "cta_link_drift",
+                        "severity": 8,
+                        "file": filepath,
+                        "line": line_num,
+                        "match": href,
+                        "auto_fix": any(old in href for old in offer_gov.get("old_href_replacements", {}).keys())
+                    })
+    
     return issues
 
 

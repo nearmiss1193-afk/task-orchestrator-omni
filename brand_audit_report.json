@@ -1,9 +1,64 @@
 {
-  "scan_time": "2026-01-18T17:14:19.125152+00:00",
+  "scan_time": "2026-01-18T17:31:41.344365+00:00",
   "scanned": 371,
-  "severity_score": 0,
-  "total_issues": 0,
-  "top_issue_types": [],
-  "top_files_by_severity": [],
-  "issues": []
+  "severity_score": 32,
+  "total_issues": 4,
+  "top_issue_types": [
+    [
+      "cta_link_drift",
+      4
+    ]
+  ],
+  "top_files_by_severity": [
+    [
+      "public\\payment.html",
+      8
+    ],
+    [
+      "public\\plumber.html",
+      8
+    ],
+    [
+      "public\\roofer.html",
+      8
+    ],
+    [
+      "public\\thank-you.html",
+      8
+    ]
+  ],
+  "issues": [
+    {
+      "type": "cta_link_drift",
+      "severity": 8,
+      "file": "public\\payment.html",
+      "line": 335,
+      "match": "booking.html",
+      "auto_fix": false
+    },
+    {
+      "type": "cta_link_drift",
+      "severity": 8,
+      "file": "public\\plumber.html",
+      "line": 555,
+      "match": "{calendly_url}",
+      "auto_fix": false
+    },
+    {
+      "type": "cta_link_drift",
+      "severity": 8,
+      "file": "public\\roofer.html",
+      "line": 549,
+      "match": "{calendly_url}",
+      "auto_fix": false
+    },
+    {
+      "type": "cta_link_drift",
+      "severity": 8,
+      "file": "public\\thank-you.html",
+      "line": 252,
+      "match": "https://calendly.com/aiserviceco/onboarding",
+      "auto_fix": true
+    }
+  ]
 }
