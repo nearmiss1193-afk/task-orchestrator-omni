@@ -1334,9 +1334,9 @@ Be specific and actionable. Output ONLY the insight, no intro."""
                         headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"},
                         json={
                             "pattern_hash": pattern_hash,
-                            "pattern_type": "error",
-                            "component": error_source,
-                            "error_message": error_msg
+                            "error_type": error_type,
+                            "error_source": error_source,
+                            "error_signature": error_msg
                         },
                         timeout=10
                     )
