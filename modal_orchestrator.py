@@ -191,6 +191,103 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         return {"agent": "sarah", "response": response_text}
     
+    # =========================================
+    # GHL WEBHOOK ENDPOINTS
+    # =========================================
+    
+    @api.post("/webhook/ghl/appointment")
+    def ghl_appointment_webhook(data: dict, token: str = ""):
+        """
+        GHL AppointmentCreate webhook receiver.
+        Logs to event_log_v2 as appointment.created for Thompson Sampling learning.
+        
+        Expected payload (from GHL):
+        {
+            "type": "AppointmentCreate",
+            "locationId": "...",
+            "appointment": {
+                "id": "...",
+                "calendarId": "...",
+                "contactId": "...",
+                "appointmentStatus": "confirmed",
+                "startTime": "...",
+                "endTime": "...",
+                "source": "...",
+                "assignedUserId": "..."
+            }
+        }
+        """
+        # Simple token auth (shared secret)
+        expected_token = os.environ.get("GHL_WEBHOOK_TOKEN", "empire_ghl_2026")
+        if token and token != expected_token:
+            return {"status": "error", "message": "invalid_token"}
+        
+        # Parse appointment data
+        event_type = data.get("type", "")
+        location_id = data.get("locationId", "")
+        appointment = data.get("appointment", {})
+        
+        if not appointment:
+            # Try alternate payload structure
+            appointment = data
+        
+        appt_id = appointment.get("id", "")
+        contact_id = appointment.get("contactId", "")
+        calendar_id = appointment.get("calendarId", "")
+        status = appointment.get("appointmentStatus", appointment.get("status", ""))
+        start_time = appointment.get("startTime", appointment.get("start_time", ""))
+        end_time = appointment.get("endTime", appointment.get("end_time", ""))
+        source = appointment.get("source", "ghl")
+        
+        # Log to event_log_v2
+        log_event(
+            "appointment.created",
+            "ghl",
+            "info",
+            correlation_id=contact_id or appointment.get("phone", ""),
+            entity_id=appt_id,
+            payload={
+                "appointment_id": appt_id,
+                "calendar_id": calendar_id,
+                "contact_id": contact_id,
+                "location_id": location_id,
+                "status": status,
+                "start_time": start_time,
+                "end_time": end_time,
+                "source": source,
+                "raw_type": event_type
+            }
+        )
+        
+        # Also emit SSE event for dashboard
+        # (event is stored in event_log_v2 which SSE reads)
+        
+        print(f"[GHL Appointment] Received: {appt_id} for contact {contact_id} status={status}")
+        
+        return {"status": "ok", "appointment_id": appt_id, "logged": True}
+    
+    @api.post("/webhook/ghl")
+    def ghl_generic_webhook(data: dict, token: str = ""):
+        """
+        Generic GHL webhook receiver for any event type.
+        Routes to specific handlers based on type.
+        """
+        event_type = data.get("type", "unknown")
+        
+        # Route appointment events
+        if "Appointment" in event_type:
+            return ghl_appointment_webhook(data, token)
+        
+        # Log generic event
+        log_event(
+            f"ghl.{event_type.lower()}",
+            "ghl",
+            "info",
+            payload=data
+        )
+        
+        return {"status": "ok", "event_type": event_type}
+    
     @api.post("/outbound")
     def handle_outbound(data: dict):
         """Handle outbound campaign task - Routes to Christina with variant selection"""
