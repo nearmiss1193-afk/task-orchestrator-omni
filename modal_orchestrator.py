@@ -252,9 +252,74 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         # Also emit SSE event for dashboard
         # (event is stored in event_log_v2 which SSE reads)
         
-        print(f"[GHL Appointment] Received: {appt_id} for contact {contact_id} status={status}")
+        # === VARIANT ATTRIBUTION LOOKUP (for Thompson Sampling) ===
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        variant_id = None
+        variant_name = None
+        attribution_id = None
+        phone = appointment.get("phone", "")
         
-        return {"status": "ok", "appointment_id": appt_id, "logged": True}
+        # Look up most recent outreach to this contact (within 14 days)
+        try:
+            attr_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/outreach_attribution?contact_id=eq.{contact_id}&order=ts.desc&limit=1",
+                headers=headers, timeout=10
+            )
+            if attr_resp.status_code == 200 and attr_resp.json():
+                attr = attr_resp.json()[0]
+                attribution_id = attr.get("id")
+                variant_id = attr.get("variant_id")
+                variant_name = attr.get("variant_name")
+                phone = attr.get("phone", phone)
+        except Exception as e:
+            print(f"[Attribution] Lookup failed: {e}")
+        
+        # If no contact_id match, try by phone
+        if not attribution_id and phone:
+            try:
+                attr_resp = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/outreach_attribution?phone=eq.{phone}&order=ts.desc&limit=1",
+                    headers=headers, timeout=10
+                )
+                if attr_resp.status_code == 200 and attr_resp.json():
+                    attr = attr_resp.json()[0]
+                    attribution_id = attr.get("id")
+                    variant_id = attr.get("variant_id")
+                    variant_name = attr.get("variant_name")
+            except:
+                pass
+        
+        # Record appointment outcome (links appointment to variant)
+        try:
+            requests.post(f"{SUPABASE_URL}/rest/v1/appointment_outcomes", headers=headers, json={
+                "contact_id": contact_id,
+                "phone": phone,
+                "appointment_id": appt_id,
+                "variant_id": variant_id,
+                "variant_name": variant_name,
+                "outcome": "booked",
+                "attribution_id": attribution_id,
+                "metadata": {"calendar_id": calendar_id, "start_time": start_time}
+            }, timeout=5)
+        except Exception as e:
+            print(f"[Outcome] Failed to record: {e}")
+        
+        # Update variant alpha (success) for Thompson Sampling
+        if variant_id:
+            try:
+                requests.post(
+                    f"{SUPABASE_URL}/rest/v1/rpc/update_variant_outcome",
+                    headers=headers,
+                    json={"p_variant_id": variant_id, "p_success": True},
+                    timeout=5
+                )
+                print(f"[Thompson] Updated variant {variant_name} alpha+1")
+            except Exception as e:
+                print(f"[Thompson] Failed to update: {e}")
+        
+        print(f"[GHL Appointment] Received: {appt_id} for contact {contact_id} status={status} variant={variant_name}")
+        
+        return {"status": "ok", "appointment_id": appt_id, "logged": True, "variant_attributed": variant_name}
     
     @api.post("/webhook/ghl")
     def ghl_generic_webhook(data: dict, token: str = ""):
@@ -335,6 +400,22 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
             "message": response_text, "agent": "christina", "touch": touch,
             "metadata": {"variant_id": variant_id, "variant_name": variant_name, "vertical": vertical}
         })
+        
+        # === OUTREACH ATTRIBUTION (for Thompson Sampling credit assignment) ===
+        contact_id = data.get("contact_id", "")
+        try:
+            requests.post(f"{SUPABASE_URL}/rest/v1/outreach_attribution", headers=headers, json={
+                "phone": phone,
+                "contact_id": contact_id,
+                "channel": "sms",
+                "variant_id": variant_id,
+                "variant_name": variant_name,
+                "touch": touch,
+                "correlation_id": phone,
+                "metadata": {"company": company, "vertical": vertical}
+            }, timeout=5)
+        except Exception as e:
+            print(f"[Attribution] Failed to record: {e}")
         
         # Send via GHL
         success = False
