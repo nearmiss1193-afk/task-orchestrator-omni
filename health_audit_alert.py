@@ -12,8 +12,8 @@ SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo"
 
 # Endpoints
-ORCHESTRATOR_PROD = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/health"
-ORCHESTRATOR_DEV = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/optimize"
+ORCHESTRATOR_PROD = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/health"
+ORCHESTRATOR_DEV = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/optimize"
 FALLBACK_RUNNER = "https://empire-fallback-runner.up.railway.app/health"
 CLOUDFLARE_WORKER = "https://empire-webhook-fallback.workers.dev"
 

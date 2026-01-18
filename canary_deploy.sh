@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-CANARY_NAME="empire-api-v1-canary"
-PRIMARY_NAME="empire-api-v1"
+CANARY_NAME="empire-api-v3-canary"
+PRIMARY_NAME="empire-api-v3"
 
 echo "🚀 Starting canary deployment for $CANARY_NAME"
 

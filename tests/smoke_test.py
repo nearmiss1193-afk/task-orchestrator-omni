@@ -8,8 +8,8 @@ import sys
 import argparse
 
 ENDPOINTS = {
-    "modal_health": "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/health",
-    "modal_optimize": "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/optimize",
+    "modal_health": "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/health",
+    "modal_optimize": "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/optimize",
     "cloudflare_webhook": "https://empire-webhook-fallback.workers.dev",
 }
 

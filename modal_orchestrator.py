@@ -13,7 +13,7 @@ image = modal.Image.debian_slim(python_version="3.11").pip_install("fastapi[stan
 # Define secrets - these MUST be set via `modal secret create`
 secrets = modal.Secret.from_name("empire-secrets")
 
-app = modal.App("empire-api-v2", image=image, secrets=[secrets])
+app = modal.App("empire-api-v3", image=image, secrets=[secrets])
 
 # Config (Non-sensitive constants only)
 SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
@@ -2455,7 +2455,7 @@ def scheduled_health_and_kpi():
     
     run_id = f"health_kpi_{uuid.uuid4().hex[:8]}"
     start_time = time.time()
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     # Record job start
     record_job_run_safe("health_kpi", "10min", "running", {"run_id": run_id}, run_id)
@@ -2518,7 +2518,7 @@ def scheduled_8am_campaign():
     
     run_id = f"campaign_8am_{uuid.uuid4().hex[:8]}"
     start_time = time.time()
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     # Record job start
     record_job_run_safe("campaign_8am", "14:00_utc", "running", {"run_id": run_id}, run_id)
@@ -2569,7 +2569,7 @@ def scheduled_campaign_catchup_check():
     import uuid
     
     run_id = f"catchup_check_{uuid.uuid4().hex[:8]}"
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
         "job_name": "campaign_catchup_check", "schedule": "30 15 * * 1-5", "run_id": run_id
@@ -2619,7 +2619,7 @@ def scheduled_prospecting():
     
     run_id = f"prospect_{uuid.uuid4().hex[:8]}"
     start_time = time.time()
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     record_job_run_safe("prospecting", "4hr", "running", {"run_id": run_id}, run_id)
     emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
@@ -2668,7 +2668,7 @@ def scheduled_optimizer():
     
     run_id = f"optimizer_{uuid.uuid4().hex[:8]}"
     start_time = time.time()
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     record_job_run_safe("optimizer", "2hr", "running", {"run_id": run_id}, run_id)
     emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
@@ -2714,7 +2714,7 @@ def scheduled_policy_optimizer():
     
     run_id = f"policy_{uuid.uuid4().hex[:8]}"
     start_time = time.time()
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     record_job_run_safe("policy_optimizer", "1hr", "running", {"run_id": run_id}, run_id)
     emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
@@ -2770,7 +2770,7 @@ def scheduled_off_hours_prep():
     
     run_id = f"prep_{uuid.uuid4().hex[:8]}"
     start_time = time.time()
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     record_job_run_safe("off_hours_prep", "2hr", "running", {"run_id": run_id}, run_id)
     emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
@@ -2862,7 +2862,7 @@ def scheduled_timezone_aware_campaign():
     
     run_id = f"tz_campaign_{uuid.uuid4().hex[:8]}"
     start_time = time.time()
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
         "job_name": "timezone_aware_campaign", "schedule": "0,30 * * * 1-5", "run_id": run_id
@@ -2929,7 +2929,7 @@ def scheduled_kickoff_once():
     
     run_id = f"kickoff_{uuid.uuid4().hex[:8]}"
     start_time = time.time()
-    base_url = "https://nearmiss1193-afk--empire-api-v2-orchestration-api.modal.run"
+    base_url = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
     
     # Check if there's a pending kickoff for today
     try:

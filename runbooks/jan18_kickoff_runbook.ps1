@@ -6,19 +6,19 @@
 # =====================================================
 
 # Health check
-curl -s "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/health" | ConvertFrom-Json | ConvertTo-Json -Depth 5
+curl -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/health" | ConvertFrom-Json | ConvertTo-Json -Depth 5
 
 # Marketing status (autopost should be OFF)
-curl -s "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/marketing/status" | ConvertFrom-Json | ConvertTo-Json -Depth 5
+curl -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/marketing/status" | ConvertFrom-Json | ConvertTo-Json -Depth 5
 
 # Kickoff status (should show kickoff_scheduled_for_tomorrow=true, readiness=GO)
-curl -s "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/kickoff/status" | ConvertFrom-Json | ConvertTo-Json -Depth 5
+curl -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/kickoff/status" | ConvertFrom-Json | ConvertTo-Json -Depth 5
 
 # Reliability check (kickoff.deadman check)
-curl -s "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/reliability-check" | ConvertFrom-Json | ConvertTo-Json -Depth 5
+curl -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/reliability-check" | ConvertFrom-Json | ConvertTo-Json -Depth 5
 
 # Learning metrics (variant performance)
-curl -s "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/learning-metrics" | ConvertFrom-Json | ConvertTo-Json -Depth 5
+curl -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/learning-metrics" | ConvertFrom-Json | ConvertTo-Json -Depth 5
 
 # =====================================================
 # SECTION C2: DRY RUN TEST (1 fake contact)
@@ -39,7 +39,7 @@ $dryRunPayload = @{
     run_id   = "test_dry_run_jan17"
 } | ConvertTo-Json -Depth 5
 
-curl -X POST "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/campaign-batch" -H "Content-Type: application/json" -d $dryRunPayload
+curl -X POST "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/campaign-batch" -H "Content-Type: application/json" -d $dryRunPayload
 
 # =====================================================
 # SECTION C3: LIVE FIRE TEST (5 contacts max)
@@ -74,7 +74,7 @@ $livePayload = @{
 } | ConvertTo-Json -Depth 5
 
 # Uncomment to run:
-# curl -X POST "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/campaign-batch" -H "Content-Type: application/json" -d $livePayload
+# curl -X POST "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/campaign-batch" -H "Content-Type: application/json" -d $livePayload
 
 # =====================================================
 # SECTION C4: SUPABASE VERIFICATION QUERIES
@@ -123,10 +123,10 @@ $livePayload = @{
 # =====================================================
 
 # 1. Check kickoff status (should show readiness=GO)
-curl -s "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/kickoff/status" | ConvertFrom-Json
+curl -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/kickoff/status" | ConvertFrom-Json
 
 # 2. Check reliability (should be healthy, no incidents)
-curl -s "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/api/reliability-check" | ConvertFrom-Json
+curl -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/reliability-check" | ConvertFrom-Json
 
 # 3. Monitor event_log_v2 for:
 #    - kickoff.scheduled (should appear when /api/kickoff/status is called)
@@ -149,4 +149,4 @@ cd C:\Users\nearm\.gemini\antigravity\scratch\empire-unified
 modal deploy modal_orchestrator.py
 
 # Verify deployment:
-curl -s "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/health"
+curl -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/health"
