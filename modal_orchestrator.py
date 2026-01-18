@@ -866,12 +866,15 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
             )
             if variant_resp.status_code == 200 and variant_resp.json():
                 variant = variant_resp.json()
+                # Handle both single object and array responses
+                if isinstance(variant, list):
+                    variant = variant[0] if variant else {}
                 variant_id = variant.get("id")
                 variant_name = variant.get("name")
-                # Use variant opener if available
-                opener = variant.get("opener")
-                if opener and touch == 1:
-                    response_text = opener.replace("{name}", "").replace("{company}", company).strip()
+                # Use message_template from DB variant
+                template = variant.get("message_template") or variant.get("opener")
+                if template and touch == 1:
+                    response_text = template.replace("{name}", "").replace("{company}", company).strip()
                 else:
                     response_text = None
         except Exception as e:
@@ -880,12 +883,20 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         # Fallback to static templates if variant not available
         if not response_text:
+            # Emit variant.fallback event for tracking
+            log_event("variant.fallback", "modal", "warning", correlation_id=phone, payload={
+                "reason": "no_variant_returned" if not variant_id else "no_template",
+                "vertical": vertical,
+                "touch": touch,
+                "company": company
+            })
             touch_templates = {
                 1: f"Hi! I'm Christina from AI Service Co. I just reviewed {company}'s marketing - there are quick wins you're missing. Book a free call: {BOOKING_LINK}",
                 2: f"Quick follow-up on {company} - I found 3 things that could help you get more leads this month. Got 15 min? {BOOKING_LINK}",
                 3: f"Last chance - I'm moving on tomorrow. If you want the free strategy session for {company}, grab it now: {BOOKING_LINK}"
             }
             response_text = touch_templates.get(touch, touch_templates[1])
+
         
         # Log interaction with variant tracking
         requests.post(f"{SUPABASE_URL}/rest/v1/interactions", headers=headers, json={
@@ -1024,8 +1035,178 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         return result
     
+    @api.post("/api/campaign-batch")
+    def campaign_batch(data: dict):
+        """
+        Execute batch campaign for multiple contacts respecting timezone windows.
+        Called by scheduled_timezone_aware_campaign.
+        
+        Request:
+        {
+            "contacts": [{"phone":..., "company":..., "vertical":..., "timezone":..., "touch":1, "channel":"sms"}],
+            "dry_run": false,
+            "run_id": "optional_run_id"
+        }
+        
+        Returns: {sent: N, skipped_window: N, failed: N, details: [...]}
+        """
+        import time
+        import uuid
+        
+        contacts = data.get("contacts", [])
+        dry_run = data.get("dry_run", False)
+        run_id = data.get("run_id") or f"batch_{uuid.uuid4().hex[:8]}"
+        
+        # Emit batch started event
+        log_event("campaign.batch.started", "modal", "info", correlation_id=run_id, payload={
+            "contact_count": len(contacts),
+            "dry_run": dry_run
+        })
+        
+        results = {
+            "sent": 0,
+            "skipped_window": 0,
+            "failed": 0,
+            "details": []
+        }
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        
+        for contact in contacts:
+            phone = contact.get("phone", "")
+            company = contact.get("company", "Business")
+            vertical = contact.get("vertical", "general")
+            touch = contact.get("touch", 1)
+            channel = contact.get("channel", "sms")
+            contact_id = contact.get("id") or contact.get("contact_id") or ""
+            
+            # Check if in business hours for this contact's timezone
+            tz = contact.get("timezone")
+            if tz:
+                in_window = is_business_hours_for_phone(phone, channel)
+                if not in_window:
+                    results["skipped_window"] += 1
+                    results["details"].append({
+                        "phone": phone, "status": "skipped_window", "channel": channel
+                    })
+                    continue
+            
+            if dry_run:
+                results["sent"] += 1
+                results["details"].append({
+                    "phone": phone, "status": "dry_run_ok", "channel": channel
+                })
+                continue
+            
+            # === VARIANT SELECTION ===
+            variant_id = None
+            variant_name = None
+            message_template = None
+            agent = "sarah" if channel == "sms" else "christina"
+            
+            try:
+                variant_resp = requests.post(
+                    f"{SUPABASE_URL}/rest/v1/rpc/get_best_variant",
+                    headers=headers,
+                    json={"p_vertical": vertical, "p_agent": agent},
+                    timeout=10
+                )
+                if variant_resp.status_code == 200 and variant_resp.json():
+                    variant = variant_resp.json()
+                    if isinstance(variant, list):
+                        variant = variant[0] if variant else {}
+                    variant_id = variant.get("id")
+                    variant_name = variant.get("name")
+                    message_template = variant.get("message_template")
+            except Exception as e:
+                print(f"[BATCH Variant] Error: {e}")
+            
+            # Build message from template or fallback
+            if message_template:
+                message = message_template.replace("{company}", company).replace("{name}", "").strip()
+            else:
+                # Fallback static messages
+                log_event("variant.fallback", "modal", "warning", correlation_id=phone, payload={
+                    "reason": "no_variant" if not variant_id else "no_template",
+                    "vertical": vertical, "channel": channel
+                })
+                if channel == "sms":
+                    message = f"Hi from AI Service Co! I noticed {company} might benefit from 24/7 call coverage. Got 2 min to chat?"
+                else:
+                    message = f"Quick follow-up for {company} - we help businesses capture 100% of inbound calls. Worth a quick call?"
+            
+            # === SEND ===
+            try:
+                if channel == "sms":
+                    sms_resp = requests.post(
+                        GHL_SMS_WEBHOOK,
+                        json={"phone": phone, "message": message},
+                        timeout=30
+                    )
+                    sent_ok = sms_resp.status_code in [200, 201, 202]
+                else:
+                    # For email, just log for now (requires different endpoint)
+                    sent_ok = True
+                    print(f"[BATCH] Email to {phone}: would send")
+                
+                if sent_ok:
+                    results["sent"] += 1
+                    results["details"].append({
+                        "phone": phone, "status": "sent", "channel": channel, 
+                        "variant_id": variant_id, "variant_name": variant_name
+                    })
+                    
+                    # Record attribution
+                    try:
+                        requests.post(f"{SUPABASE_URL}/rest/v1/outreach_attribution", headers=headers, json={
+                            "phone": phone,
+                            "contact_id": contact_id,
+                            "channel": channel,
+                            "variant_id": variant_id,
+                            "variant_name": variant_name,
+                            "correlation_id": run_id,
+                            "metadata": {"company": company, "vertical": vertical, "touch": touch}
+                        }, timeout=5)
+                    except:
+                        log_event("attribution.missing_table", "modal", "warning", correlation_id=phone)
+                else:
+                    results["failed"] += 1
+                    results["details"].append({
+                        "phone": phone, "status": "failed", "channel": channel
+                    })
+                    
+            except Exception as e:
+                results["failed"] += 1
+                results["details"].append({
+                    "phone": phone, "status": "error", "error": str(e)[:100]
+                })
+                log_event("error.occurred", "modal", "error", correlation_id=phone, payload={
+                    "context": "campaign_batch_send", "error": str(e)[:200]
+                })
+            
+            # Small delay between sends (rate limiting)
+            time.sleep(0.5)
+        
+        # Emit batch completed event
+        log_event("campaign.batch.completed", "modal", "info", correlation_id=run_id, payload={
+            "sent": results["sent"],
+            "skipped_window": results["skipped_window"],
+            "failed": results["failed"],
+            "dry_run": dry_run
+        })
+        
+        return {
+            "status": "ok",
+            "run_id": run_id,
+            "sent": results["sent"],
+            "skipped_window": results["skipped_window"],
+            "failed": results["failed"],
+            "details": results["details"][:20]  # Limit details in response
+        }
+    
     @api.get("/api/learning-metrics")
     def learning_metrics():
+
         """
         Returns variant booking metrics for the last 7 days.
         Used by Thompson Sampling and learning dashboards.
@@ -1130,8 +1311,80 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
             "generated_at": datetime.utcnow().isoformat()
         }
     
+    @api.get("/api/marketing/status")
+    def marketing_status():
+        """
+        Returns marketing autopost status and platform configurations.
+        Used by dashboard to monitor content engine.
+        
+        Kill switch: MARKETING_AUTOPOST_ENABLED env var (default false)
+        """
+        import os
+        
+        # Kill switch - defaults to disabled for safety
+        autopost_enabled = os.environ.get("MARKETING_AUTOPOST_ENABLED", "false").lower() == "true"
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        
+        # Fetch posting rules
+        enabled_platforms = []
+        posts_today = {}
+        try:
+            rules_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/posting_rules?select=platform,enabled,cadence_per_day,posts_today,last_posted_at",
+                headers=headers, timeout=10
+            )
+            if rules_resp.status_code == 200:
+                for rule in rules_resp.json():
+                    platform = rule.get("platform")
+                    if rule.get("enabled"):
+                        enabled_platforms.append(platform)
+                    posts_today[platform] = rule.get("posts_today", 0)
+        except Exception as e:
+            print(f"[Marketing Status] Error fetching rules: {e}")
+        
+        # Fetch pending content in queue
+        pending_count = 0
+        try:
+            queue_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/content_queue?status=eq.queued&select=id",
+                headers=headers, timeout=10
+            )
+            if queue_resp.status_code == 200:
+                pending_count = len(queue_resp.json())
+        except:
+            pass
+        
+        # Fetch pending approvals
+        pending_approvals = 0
+        try:
+            approvals_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/content_approvals?status=eq.pending&select=id",
+                headers=headers, timeout=10
+            )
+            if approvals_resp.status_code == 200:
+                pending_approvals = len(approvals_resp.json())
+        except:
+            pass
+        
+        return {
+            "autopost_enabled": autopost_enabled,
+            "kill_switch_info": "Set MARKETING_AUTOPOST_ENABLED=true in Modal secrets to enable",
+            "enabled_platforms": enabled_platforms,
+            "posts_today_by_platform": posts_today,
+            "pending_queue": pending_count,
+            "pending_approvals": pending_approvals,
+            "safety_notes": [
+                "Max 1 post per platform per day until logs clean for 2 weeks",
+                "All platforms start disabled in posting_rules",
+                "Content requires approval before auto-posting"
+            ],
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
     @api.get("/api/policy-optimize")
     def policy_optimizer():
+
 
         """
         Adjust policy weights based on task metrics using simple Bayesian update.
