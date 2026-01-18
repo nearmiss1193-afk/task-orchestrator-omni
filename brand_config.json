@@ -1,0 +1,136 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "version": "1.0.0",
+    "last_updated": "2026-01-18T01:00:00Z",
+    "offer": {
+        "name": "HVAC Business Diagnostic",
+        "summary": "AI-powered diagnostic report reveals revenue leaks in 48 hours, free",
+        "headline": "Your HVAC Business Is Leaking Money—We'll Find It In 48 Hours, Free.",
+        "subheadline": "AI-powered diagnostic report reveals exactly where you're losing leads, wasting ad spend, and missing appointments—delivered within 48 hours, no charge.",
+        "primary_cta_text": "Get My Free Diagnostic Report",
+        "primary_cta_url": "https://link.aiserviceco.com/discovery",
+        "secondary_cta_text": "Book a 15-Min Strategy Call",
+        "secondary_cta_url": "https://link.aiserviceco.com/discovery"
+    },
+    "pricing": {
+        "tiers": [
+            {
+                "name": "Starter",
+                "monthly_price": 297,
+                "setup_fee": 0,
+                "target_audience": "Solo operators, 1-2 trucks",
+                "includes": [
+                    "AI follow-up bot",
+                    "Review request automation",
+                    "SMS/email reminders",
+                    "Basic dashboard access"
+                ]
+            },
+            {
+                "name": "Growth Partner",
+                "monthly_price": 497,
+                "setup_fee": 297,
+                "target_audience": "Growing teams (3-10 trucks)",
+                "includes": [
+                    "Everything in Starter",
+                    "AI calling (Sarah/Rachel)",
+                    "Lead scoring engine",
+                    "Competitor intelligence",
+                    "Weekly performance reports"
+                ]
+            },
+            {
+                "name": "Dominance",
+                "monthly_price": 997,
+                "setup_fee": "custom",
+                "target_audience": "Established operators (10+ crews)",
+                "includes": [
+                    "Everything in Growth Partner",
+                    "Full-service automation",
+                    "Ad management integration",
+                    "Dedicated success manager",
+                    "Priority support"
+                ]
+            }
+        ],
+        "guarantee_text": "If you don't see measurable improvement in booked appointments within 30 days, we'll work free until you do—or refund your setup fee, no questions."
+    },
+    "contact": {
+        "phones": {
+            "sarah_ai": "+13527585336",
+            "rachel_ai": "+18632132505",
+            "escalation": "+13529368152"
+        },
+        "emails": {
+            "support": "support@aiserviceco.com",
+            "owner": "nearmiss1193@gmail.com"
+        },
+        "domains": [
+            "aiserviceco.com",
+            "www.aiserviceco.com",
+            "hvacreports-nearmiss1193-afk.vercel.app"
+        ]
+    },
+    "urls": {
+        "booking_link": "https://link.aiserviceco.com/discovery",
+        "main_website": "https://www.aiserviceco.com",
+        "hvac_landing": "https://www.aiserviceco.com/hvac.html",
+        "dashboard": "https://www.aiserviceco.com/dashboard.html",
+        "api_base": "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
+    },
+    "value_props": [
+        "We book more jobs, period. Every touchpoint is designed to convert.",
+        "AI that works 24/7. Sarah/Rachel answer calls, follow up, and never sleep.",
+        "Competitors can't hide. We show you exactly what they're doing and how to beat them.",
+        "No guesswork. Data-driven reports tell you where to focus.",
+        "Works with your stack. GHL, ServiceTitan, Housecall Pro—we integrate."
+    ],
+    "voice": {
+        "style": "direct, advisory, data-driven",
+        "max_paragraph_lines": 2,
+        "approved_phrases": [
+            "Your free diagnostic is ready",
+            "We found $X in missed revenue",
+            "Reply YES to get your report",
+            "Book a 15-min strategy call",
+            "Here's what your competitors are doing"
+        ],
+        "forbidden_phrases": [
+            "synergy",
+            "leverage",
+            "optimization",
+            "10X your revenue",
+            "guaranteed revenue increase"
+        ]
+    },
+    "compliance": {
+        "required_legal_lines": [
+            "Reply STOP to opt out at any time.",
+            "Msg & data rates may apply.",
+            "For emergencies, call 911."
+        ],
+        "forbidden_claims": [
+            "Guaranteed revenue increase",
+            "We handle payments",
+            "Specific income claims without proof"
+        ]
+    },
+    "brand_lint": {
+        "scan_targets": [
+            "public/*.html",
+            "apps/**/public/*.html",
+            "knowledge_base/*.md"
+        ],
+        "auto_fix_types": [
+            "wrong_url",
+            "wrong_phone",
+            "wrong_cta_text",
+            "missing_legal_footer"
+        ],
+        "approval_required_types": [
+            "price_change",
+            "guarantee_change",
+            "new_claim"
+        ]
+    }
+}
