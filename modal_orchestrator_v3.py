@@ -77,12 +77,40 @@ def orchestration_api():
                                       campaign_id: str = None, variant_id: str = None,
                                       metadata: dict = None) -> dict:
         """
-        Send marketing/campaign emails via GHL webhook.
-        Returns: {"success": bool, "provider": "ghl", "message_id": str or None, "error": str or None}
+        Send marketing/campaign emails. Tries Resend first, then GHL fallback.
+        Returns: {"success": bool, "provider": str, "message_id": str or None, "error": str or None}
         """
         import uuid
         correlation_id = f"email_{uuid.uuid4().hex[:8]}"
+        RESEND_API_KEY = secrets.get("RESEND_API_KEY", "")
         
+        # Try Resend first (more reliable delivery)
+        if RESEND_API_KEY:
+            try:
+                resend_resp = requests.post(
+                    "https://api.resend.com/emails",
+                    headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+                    json={
+                        "from": "AI Service Co <hello@aiserviceco.com>",
+                        "to": [to_email],
+                        "subject": subject,
+                        "html": html_body
+                    },
+                    timeout=15
+                )
+                
+                if resend_resp.status_code in [200, 201]:
+                    log_event("email.sent", "modal", "info", correlation_id, to_email, {
+                        "provider": "resend",
+                        "subject": subject,
+                        "campaign_id": campaign_id,
+                        "variant_id": variant_id
+                    })
+                    return {"success": True, "provider": "resend", "message_id": correlation_id, "error": None}
+            except Exception as e:
+                print(f"[Resend Error] {e}, falling back to GHL")
+        
+        # Fallback to GHL webhook
         try:
             payload = {
                 "email": to_email,
