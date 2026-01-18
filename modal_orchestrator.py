@@ -207,6 +207,162 @@ def check_campaign_ran_today():
         return True
 
 
+# ==========================================================
+# TIMEZONE-AWARE SCHEDULING - 24/7 Operations
+# ==========================================================
+
+# US Area Code -> Timezone mapping (major codes)
+AREA_CODE_TIMEZONES = {
+    # Pacific (UTC-8)
+    "209": "America/Los_Angeles", "213": "America/Los_Angeles", "310": "America/Los_Angeles",
+    "323": "America/Los_Angeles", "408": "America/Los_Angeles", "415": "America/Los_Angeles",
+    "510": "America/Los_Angeles", "530": "America/Los_Angeles", "559": "America/Los_Angeles",
+    "562": "America/Los_Angeles", "619": "America/Los_Angeles", "626": "America/Los_Angeles",
+    "650": "America/Los_Angeles", "661": "America/Los_Angeles", "707": "America/Los_Angeles",
+    "714": "America/Los_Angeles", "760": "America/Los_Angeles", "805": "America/Los_Angeles",
+    "818": "America/Los_Angeles", "831": "America/Los_Angeles", "858": "America/Los_Angeles",
+    "909": "America/Los_Angeles", "916": "America/Los_Angeles", "925": "America/Los_Angeles",
+    "949": "America/Los_Angeles", "951": "America/Los_Angeles",
+    "503": "America/Los_Angeles", "541": "America/Los_Angeles", "971": "America/Los_Angeles",  # Oregon
+    "206": "America/Los_Angeles", "253": "America/Los_Angeles", "360": "America/Los_Angeles",  # Washington
+    "425": "America/Los_Angeles", "509": "America/Los_Angeles",
+    "702": "America/Los_Angeles", "725": "America/Los_Angeles", "775": "America/Los_Angeles",  # Nevada
+    # Mountain (UTC-7)
+    "303": "America/Denver", "719": "America/Denver", "720": "America/Denver", "970": "America/Denver",  # Colorado
+    "480": "America/Phoenix", "520": "America/Phoenix", "602": "America/Phoenix", "623": "America/Phoenix",  # Arizona
+    "505": "America/Denver", "575": "America/Denver",  # New Mexico
+    "801": "America/Denver", "385": "America/Denver",  # Utah
+    # Central (UTC-6)
+    "214": "America/Chicago", "254": "America/Chicago", "281": "America/Chicago", "361": "America/Chicago",
+    "409": "America/Chicago", "432": "America/Chicago", "469": "America/Chicago", "512": "America/Chicago",
+    "682": "America/Chicago", "713": "America/Chicago", "737": "America/Chicago", "806": "America/Chicago",
+    "817": "America/Chicago", "830": "America/Chicago", "832": "America/Chicago", "903": "America/Chicago",
+    "915": "America/Chicago", "936": "America/Chicago", "940": "America/Chicago", "956": "America/Chicago",
+    "972": "America/Chicago", "979": "America/Chicago",  # Texas
+    "312": "America/Chicago", "331": "America/Chicago", "618": "America/Chicago", "630": "America/Chicago",
+    "708": "America/Chicago", "773": "America/Chicago", "815": "America/Chicago", "847": "America/Chicago",  # Illinois
+    # Eastern (UTC-5)
+    "239": "America/New_York", "305": "America/New_York", "321": "America/New_York", "352": "America/New_York",
+    "386": "America/New_York", "407": "America/New_York", "561": "America/New_York", "727": "America/New_York",
+    "754": "America/New_York", "772": "America/New_York", "786": "America/New_York", "813": "America/New_York",
+    "850": "America/New_York", "863": "America/New_York", "904": "America/New_York", "941": "America/New_York",
+    "954": "America/New_York",  # Florida
+    "212": "America/New_York", "315": "America/New_York", "347": "America/New_York", "516": "America/New_York",
+    "518": "America/New_York", "585": "America/New_York", "607": "America/New_York", "631": "America/New_York",
+    "646": "America/New_York", "716": "America/New_York", "718": "America/New_York", "845": "America/New_York",
+    "914": "America/New_York", "917": "America/New_York", "929": "America/New_York",  # New York
+    # Hawaii (UTC-10)
+    "808": "Pacific/Honolulu",
+    # Alaska (UTC-9)
+    "907": "America/Anchorage",
+    # Guam/Saipan (UTC+10)
+    "671": "Pacific/Guam",
+    "670": "Pacific/Guam",  # Saipan/CNMI
+}
+
+
+def get_timezone_from_phone(phone: str) -> str:
+    """Extract timezone from US phone number area code, default to CT"""
+    import re
+    if not phone:
+        return "America/Chicago"
+    
+    # Extract area code
+    digits = re.sub(r'\D', '', phone)
+    if len(digits) == 11 and digits.startswith('1'):
+        digits = digits[1:]
+    if len(digits) >= 3:
+        area_code = digits[:3]
+        return AREA_CODE_TIMEZONES.get(area_code, "America/Chicago")
+    return "America/Chicago"
+
+
+def is_business_hours_for_phone(phone: str, channel: str = "sms") -> bool:
+    """
+    Check if it's currently within send window for the contact's timezone.
+    
+    HVAC B2B Rules (LOCKED):
+    - Calls: weekdays 9am-6pm local
+    - SMS: weekdays 9am-7pm local
+    - Email: weekdays 8-11am + 1-4pm local (except transactional/urgent)
+    """
+    from datetime import datetime
+    try:
+        tz_name = get_timezone_from_phone(phone)
+        
+        # Manual UTC offset calculation (no pytz dependency)
+        utc_now = datetime.utcnow()
+        utc_hour = utc_now.hour
+        
+        # Simple offset map
+        offsets = {
+            "America/Los_Angeles": -8, "America/Denver": -7, "America/Phoenix": -7,
+            "America/Chicago": -6, "America/New_York": -5,
+            "Pacific/Honolulu": -10, "America/Anchorage": -9, "Pacific/Guam": 10
+        }
+        offset = offsets.get(tz_name, -6)
+        local_hour = (utc_hour + offset) % 24
+        
+        # Check weekday (0=Monday, 6=Sunday)
+        weekday = utc_now.weekday()
+        if weekday >= 5:  # Weekend - no outreach
+            return False
+        
+        # Channel-specific windows (LOCKED CONSTANTS)
+        if channel == "call":
+            return 9 <= local_hour < 18  # 9am-6pm
+        elif channel == "sms":
+            return 9 <= local_hour < 19  # 9am-7pm
+        elif channel == "email":
+            # 8-11am OR 1-4pm
+            return (8 <= local_hour < 11) or (13 <= local_hour < 16)
+        else:
+            return 9 <= local_hour < 18  # Default to call window
+    except Exception as e:
+        print(f"[is_business_hours_for_phone] Error: {e}")
+        return True  # Fail open
+
+
+def is_email_urgent_or_transactional(email_type: str) -> bool:
+    """Check if email bypasses time windows (transactional or urgent response)"""
+    bypass_types = ["transactional", "receipt", "confirmation", "urgent_reply", "inbound_response"]
+    return email_type.lower() in bypass_types
+
+
+def can_send_email_now(phone: str, email_type: str = "marketing") -> bool:
+    """Check if email can be sent now - considers windows and exceptions"""
+    if is_email_urgent_or_transactional(email_type):
+        return True  # Always allowed
+    return is_business_hours_for_phone(phone, channel="email")
+
+
+def get_contacts_in_business_hours(channel: str = "sms"):
+    """Get contacts whose local time is currently within business hours for the given channel"""
+    import requests as req
+    try:
+
+        secrets = get_secrets()
+        supabase_key = secrets["SUPABASE_KEY"]
+        if not supabase_key:
+            return []
+        
+        # Get contacts due for outreach
+        resp = req.get(
+            f"{SUPABASE_URL}/rest/v1/contacts_master?status=in.(new,active)&touch_count=lt.3&limit=100",
+            headers={"apikey": supabase_key, "Authorization": f"Bearer {supabase_key}"},
+            timeout=15
+        )
+        if resp.status_code != 200:
+            return []
+        
+        contacts = resp.json()
+        # Filter to those in business hours for given channel
+        return [c for c in contacts if is_business_hours_for_phone(c.get("phone", ""), channel)]
+    except Exception as e:
+        print(f"[get_contacts_in_business_hours] Error: {e}")
+        return []
+
+
 
 # Agent system prompts
 SARAH_PROMPT = """You are Sarah, the inbound contact handler for AI Service Co.
@@ -2203,5 +2359,163 @@ def scheduled_policy_optimizer():
             "job_name": "policy_optimizer", "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
         })
         print(f"[CRON 1hr] Error: {e}")
+        return {"status": "fail", "error": str(e)}
+
+
+@app.function(schedule=modal.Cron("30 */2 * * *"))  # Every 2 hours at :30
+def scheduled_off_hours_prep():
+    """
+    24/7 Prep Work - Runs ALWAYS, handles work appropriate for any time:
+    - Generate audit reports for queued contacts
+    - Build dossiers (company research) for leads
+    - Queue emails for next business window
+    - Enrichment and lead scoring
+    
+    SMS/Calls only go out during business hours (handled by campaign endpoint).
+    This job prepares materials so they're ready when windows open.
+    """
+    import requests
+    import time
+    import uuid
+    from datetime import datetime
+    
+    run_id = f"prep_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    record_job_run_safe("off_hours_prep", "2hr", "running", {"run_id": run_id}, run_id)
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "off_hours_prep", "schedule": "30 */2 * * *", "run_id": run_id
+    })
+    
+    results = {
+        "reports_generated": 0,
+        "dossiers_built": 0,
+        "emails_queued": 0,
+        "leads_enriched": 0
+    }
+    
+    try:
+        # 1. Generate audit reports for contacts due for outreach tomorrow
+        try:
+            resp = requests.get(f"{base_url}/api/generate-reports?prefetch=true", timeout=60)
+            if resp.status_code == 200:
+                data = resp.json()
+                results["reports_generated"] = data.get("generated", 0)
+        except Exception as e:
+            print(f"[PREP] Report generation error: {e}")
+        
+        # 2. Build dossiers for new leads
+        try:
+            resp = requests.get(f"{base_url}/api/build-dossiers?limit=10", timeout=60)
+            if resp.status_code == 200:
+                data = resp.json()
+                results["dossiers_built"] = data.get("built", 0)
+        except Exception as e:
+            print(f"[PREP] Dossier building error: {e}")
+        
+        # 3. Enrich leads (add company info, scoring)
+        try:
+            resp = requests.get(f"{base_url}/api/enrich-leads?limit=20", timeout=60)
+            if resp.status_code == 200:
+                data = resp.json()
+                results["leads_enriched"] = data.get("enriched", 0)
+        except Exception as e:
+            print(f"[PREP] Lead enrichment error: {e}")
+        
+        # 4. Queue marketing emails (will only send during email windows)
+        try:
+            resp = requests.get(f"{base_url}/api/queue-emails?type=marketing", timeout=60)
+            if resp.status_code == 200:
+                data = resp.json()
+                results["emails_queued"] = data.get("queued", 0)
+        except Exception as e:
+            print(f"[PREP] Email queueing error: {e}")
+        
+        duration_ms = int((time.time() - start_time) * 1000)
+        
+        record_job_run_safe("off_hours_prep", "2hr", "success", {
+            "run_id": run_id, "duration_ms": duration_ms, **results
+        }, run_id)
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "off_hours_prep", "schedule": "30 */2 * * *", "run_id": run_id,
+            "duration_ms": duration_ms, **results
+        })
+        
+        print(f"[CRON 2hr:30] Off-hours prep complete in {duration_ms}ms: {results}")
+        return {"status": "success", "results": results, "duration_ms": duration_ms}
+        
+    except Exception as e:
+        duration_ms = int((time.time() - start_time) * 1000)
+        record_job_run_safe("off_hours_prep", "2hr", "fail", {
+            "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
+        }, run_id)
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "off_hours_prep", "run_id": run_id, "error": str(e)
+        })
+        print(f"[CRON 2hr:30] Error: {e}")
+        return {"status": "fail", "error": str(e)}
+
+
+@app.function(schedule=modal.Cron("0,30 * * * 1-5"))  # Every 30 min on weekdays
+def scheduled_timezone_aware_campaign():
+    """
+    Timezone-aware campaign trigger - runs every 30 min on weekdays.
+    Checks which contacts are currently in their local business hours
+    and triggers outreach only for those contacts.
+    
+    This enables true 24/7 operation across all US timezones.
+    """
+    import requests
+    import time
+    import uuid
+    from datetime import datetime
+    
+    run_id = f"tz_campaign_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "timezone_aware_campaign", "schedule": "0,30 * * * 1-5", "run_id": run_id
+    })
+    
+    try:
+        # Get contacts currently in their business hours
+        contacts_in_window = get_contacts_in_business_hours(channel="sms")
+        
+        if not contacts_in_window:
+            emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+                "job_name": "timezone_aware_campaign", "run_id": run_id,
+                "contacts_in_window": 0, "action": "skip"
+            })
+            print(f"[CRON TZ] No contacts in business hours window")
+            return {"status": "skip", "reason": "no_contacts_in_window"}
+        
+        # Trigger campaign for these specific contacts
+        contact_ids = [c.get("id") for c in contacts_in_window if c.get("id")]
+        
+        resp = requests.post(
+            f"{base_url}/api/campaign-batch",
+            json={"contact_ids": contact_ids, "channel": "sms", "run_id": run_id},
+            timeout=120
+        )
+        
+        result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
+        duration_ms = int((time.time() - start_time) * 1000)
+        
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "timezone_aware_campaign", "run_id": run_id,
+            "contacts_in_window": len(contacts_in_window),
+            "sent": result.get("sent", 0), "duration_ms": duration_ms
+        })
+        
+        print(f"[CRON TZ] Processed {len(contacts_in_window)} contacts in window: {result}")
+        return {"status": "success", "contacts": len(contacts_in_window), "result": result}
+        
+    except Exception as e:
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "timezone_aware_campaign", "run_id": run_id, "error": str(e)
+        })
+        print(f"[CRON TZ] Error: {e}")
         return {"status": "fail", "error": str(e)}
 
