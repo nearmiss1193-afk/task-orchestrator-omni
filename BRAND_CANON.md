@@ -97,7 +97,7 @@
 
 | Channel | Value |
 |---------|-------|
-| Primary Phone (AI - Sarah) | +1 (352) 758-5336 |
+| Primary Phone (AI - Sarah) | +1 (863) 213-2505 |
 | Primary Phone (AI - Rachel) | +1 (863) 213-2505 |
 | Booking Link | <https://link.aiserviceco.com/discovery> |
 | Main Website | <https://www.aiserviceco.com> |
