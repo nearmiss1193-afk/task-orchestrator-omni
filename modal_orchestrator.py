@@ -651,6 +651,27 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         except Exception as e:
             print(f"[Outcome] Failed to record: {e}")
         
+        # CONTRACT: outcome.booking event for learning system
+        log_event(
+            "outcome.booking",
+            "modal",
+            "info",
+            correlation_id=correlation_id,
+            entity_id=appt_id,
+            payload={
+                "appointment_id": appt_id,
+                "contact_id": contact_id,
+                "phone": normalized_phone or phone,
+                "variant_id": variant_id,
+                "variant_name": variant_name,
+                "attribution_id": attribution_id,
+                "attribution_ts": datetime.utcnow().isoformat(),
+                "calendar_id": calendar_id,
+                "start_time": start_time,
+                "status": status
+            }
+        )
+        
         # Update variant alpha (success) for Thompson Sampling
         if variant_id:
             try:
@@ -1003,8 +1024,115 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         return result
     
+    @api.get("/api/learning-metrics")
+    def learning_metrics():
+        """
+        Returns variant booking metrics for the last 7 days.
+        Used by Thompson Sampling and learning dashboards.
+        
+        Response:
+        {
+            "variants": {variant_id: {bookings, last_booking_ts, outreach_count, booking_rate}},
+            "top_variant": {id, name, booking_rate},
+            "total_bookings": int,
+            "period_days": 7
+        }
+        """
+        from datetime import timedelta
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        since = (datetime.utcnow() - timedelta(days=7)).isoformat()
+        
+        # Fetch outcome.booking events from last 7 days
+        try:
+            bookings_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.outcome.booking&ts=gte.{since}&order=ts.desc",
+                headers=headers, timeout=15
+            )
+            bookings = bookings_resp.json() if bookings_resp.status_code == 200 else []
+        except Exception as e:
+            print(f"[LearningMetrics] Failed to fetch bookings: {e}")
+            bookings = []
+        
+        # Fetch outreach attribution counts by variant
+        try:
+            outreach_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/outreach_attribution?ts=gte.{since}&select=variant_id,variant_name",
+                headers=headers, timeout=15
+            )
+            outreach = outreach_resp.json() if outreach_resp.status_code == 200 else []
+        except Exception as e:
+            print(f"[LearningMetrics] Failed to fetch outreach: {e}")
+            outreach = []
+        
+        # Aggregate by variant
+        variants = {}
+        
+        # Count outreach per variant
+        for o in outreach:
+            vid = o.get("variant_id")
+            if not vid:
+                continue
+            if vid not in variants:
+                variants[vid] = {
+                    "name": o.get("variant_name", "unknown"),
+                    "bookings": 0,
+                    "last_booking_ts": None,
+                    "outreach_count": 0
+                }
+            variants[vid]["outreach_count"] += 1
+        
+        # Count bookings per variant
+        for b in bookings:
+            payload = b.get("payload", {})
+            vid = payload.get("variant_id")
+            if not vid:
+                continue
+            if vid not in variants:
+                variants[vid] = {
+                    "name": payload.get("variant_name", "unknown"),
+                    "bookings": 0,
+                    "last_booking_ts": None,
+                    "outreach_count": 0
+                }
+            variants[vid]["bookings"] += 1
+            if not variants[vid]["last_booking_ts"]:
+                variants[vid]["last_booking_ts"] = b.get("ts")
+        
+        # Calculate booking rates
+        for vid, data in variants.items():
+            if data["outreach_count"] > 0:
+                data["booking_rate"] = round(data["bookings"] / data["outreach_count"], 4)
+            else:
+                data["booking_rate"] = 0.0
+        
+        # Find top variant
+        top_variant = None
+        if variants:
+            sorted_variants = sorted(
+                variants.items(),
+                key=lambda x: (x[1]["bookings"], x[1]["booking_rate"]),
+                reverse=True
+            )
+            top_id, top_data = sorted_variants[0]
+            top_variant = {
+                "id": top_id,
+                "name": top_data["name"],
+                "bookings": top_data["bookings"],
+                "booking_rate": top_data["booking_rate"]
+            }
+        
+        return {
+            "variants": variants,
+            "top_variant": top_variant,
+            "total_bookings": len(bookings),
+            "period_days": 7,
+            "generated_at": datetime.utcnow().isoformat()
+        }
+    
     @api.get("/api/policy-optimize")
     def policy_optimizer():
+
         """
         Adjust policy weights based on task metrics using simple Bayesian update.
         Analyzes last 24h of task_metrics, adjusts retries/timeouts/weights.
