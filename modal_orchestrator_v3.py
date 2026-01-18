@@ -305,6 +305,60 @@ def orchestration_api():
         except Exception as e:
             return {"status": "error", "error": str(e)}
     
+    @api.post("/webhook/ghl/appointment")
+    async def ghl_appointment_webhook(request: Request):
+        """
+        Handle GHL appointment webhooks.
+        Expected to be called by GHL workflow on appointment creation/update.
+        """
+        import uuid
+        
+        try:
+            body = await request.json()
+        except:
+            return {"status": "error", "message": "Invalid JSON"}
+        
+        # Map GHL event types to our types
+        ghl_type = body.get("type", body.get("event_type", "unknown"))
+        type_map = {
+            "AppointmentCreated": "appointment.created",
+            "AppointmentUpdated": "appointment.updated",
+            "AppointmentDeleted": "appointment.cancelled",
+            "AppointmentStatusChanged": "appointment.status_changed",
+            "created": "appointment.created",
+            "updated": "appointment.updated"
+        }
+        
+        mapped_type = type_map.get(ghl_type, f"appointment.{ghl_type.lower()}")
+        
+        # Extract contact info
+        contact = body.get("contact", {})
+        contact_id = body.get("contactId") or contact.get("id") or body.get("contact_id")
+        
+        log_event(
+            mapped_type,
+            "ghl",
+            "info",
+            correlation_id=f"appt_{uuid.uuid4().hex[:8]}",
+            entity_id=contact_id,
+            payload={
+                "appointment_id": body.get("appointmentId") or body.get("appointment_id"),
+                "calendar_id": body.get("calendarId") or body.get("calendar_id"),
+                "contact_id": contact_id,
+                "start_time": body.get("startTime") or body.get("start_time"),
+                "end_time": body.get("endTime") or body.get("end_time"),
+                "status": body.get("status"),
+                "title": body.get("title"),
+                "contact_name": contact.get("name") or body.get("contact_name"),
+                "contact_phone": contact.get("phone") or body.get("phone"),
+                "contact_email": contact.get("email") or body.get("email"),
+                "location_id": body.get("locationId") or GHL_LOCATION_ID,
+                "raw_type": ghl_type
+            }
+        )
+        
+        return {"status": "ok", "event_type": mapped_type, "contact_id": contact_id}
+    
     @api.get("/api/reliability-check")
     def reliability_check():
         """Basic reliability check"""
