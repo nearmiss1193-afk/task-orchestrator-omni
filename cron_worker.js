@@ -10,7 +10,7 @@ export default {
         const hour = now.getUTCHours();
         const minute = now.getUTCMinutes();
         const dayOfWeek = now.getUTCDay(); // 0=Sunday, 6=Saturday
-        const baseUrl = env.MODAL_API_URL || "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run";
+        const baseUrl = env.MODAL_API_URL || "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run";
 
         console.log(`[CRON] Triggered at ${now.toISOString()} (UTC h:${hour} m:${minute} dow:${dayOfWeek})`);
 

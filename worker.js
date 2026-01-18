@@ -91,7 +91,7 @@ async function handleRequest(event) {
             const body = await request.json();
             event.waitUntil(logToSupabase("webhook", body));
 
-            const primaryUrl = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run/inbound";
+            const primaryUrl = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/inbound";
             const fallbackUrl = "https://empire-fallback-runner.up.railway.app/webhook";
 
             let targetUrl = primaryUrl;
@@ -141,7 +141,7 @@ async function handleScheduled(event) {
     const now = new Date();
     const hour = now.getUTCHours();
     const minute = now.getUTCMinutes();
-    const baseUrl = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run";
+    const baseUrl = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run";
 
     console.log(`Scheduled trigger at ${now.toISOString()} (UTC hour: ${hour}, minute: ${minute})`);
 
