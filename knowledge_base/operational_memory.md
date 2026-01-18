@@ -17,6 +17,7 @@ make sure it doesnt break snything, do deepthink type resea# Empire Operational 
 | **Supabase** | ✅ ACTIVE | Database | `.env` line 13 |
 | **Anthropic Claude** | ✅ ACTIVE | AI assistant | `.env` line 70 |
 | **Grok AI** | ✅ ACTIVE | xAI research | `.env` line 76 |
+| **Creatomate** | ✅ ACTIVE (2026-01-17) | Video generation API | Modal secrets |
 
 ### Decision Maker Enrichment
 
