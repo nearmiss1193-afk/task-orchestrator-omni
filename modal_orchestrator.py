@@ -229,9 +229,21 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         end_time = appointment.get("endTime", appointment.get("end_time", ""))
         source = appointment.get("source", "ghl")
         
-        # Log to event_log_v2
+        # CONTRACT: webhook.inbound event first
+        log_event("webhook.inbound", "ghl", "info", entity_id=appt_id, payload={
+            "provider": "ghl",
+            "event": event_type or "AppointmentCreate",
+            "id": appt_id,
+            "path": "/webhook/ghl/appointment"
+        })
+        
+        # Determine event type (created vs updated)
+        is_update = "Update" in event_type or status in ["confirmed", "cancelled", "rescheduled"]
+        appt_event_type = "appointment.updated" if is_update else "appointment.created"
+        
+        # CONTRACT: appointment.created / appointment.updated payload
         log_event(
-            "appointment.created",
+            appt_event_type,
             "ghl",
             "info",
             correlation_id=contact_id or appointment.get("phone", ""),
@@ -240,12 +252,12 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
                 "appointment_id": appt_id,
                 "calendar_id": calendar_id,
                 "contact_id": contact_id,
-                "location_id": location_id,
-                "status": status,
+                "status": status or "confirmed",
                 "start_time": start_time,
                 "end_time": end_time,
-                "source": source,
-                "raw_type": event_type
+                "location_id": location_id,
+                "pipeline_stage": "Booked",
+                "source": source
             }
         )
         
@@ -329,11 +341,12 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         """
         event_type = data.get("type", "unknown")
         
-        # Always emit webhook.inbound event first
+        # CONTRACT: webhook.inbound event first
         log_event("webhook.inbound", "ghl", "info", payload={
-            "source": "ghl",
-            "type": event_type,
-            "contact_id": data.get("contactId", data.get("appointment", {}).get("contactId", ""))
+            "provider": "ghl",
+            "event": event_type,
+            "id": data.get("id", data.get("contactId", "")),
+            "path": "/webhook/ghl"
         })
         
         # Route appointment events
@@ -426,11 +439,27 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         # Send via GHL
         success = False
+        message_id = f"msg_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{phone[-4:]}"
         try:
             ghl_resp = requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": response_text}, timeout=15)
             success = ghl_resp.status_code < 400
         except Exception as e:
             print(f"[GHL] Send failed: {e}")
+        
+        # CONTRACT: sms.sent / sms.failed events
+        if success:
+            log_event("sms.sent", "modal", "info", correlation_id=phone, entity_id=message_id, payload={
+                "message_id": message_id,
+                "to": phone,
+                "template": f"touch_{touch}_{vertical}",
+                "variant_id": variant_id
+            })
+        else:
+            log_event("sms.failed", "modal", "error", correlation_id=phone, entity_id=message_id, payload={
+                "message_id": message_id,
+                "to": phone,
+                "error": "ghl_send_failed"
+            })
         
         # === RECORD TASK METRIC ===
         latency_ms = int((time.time() - start_time) * 1000)
@@ -678,7 +707,8 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
                     timeout=10
                 )
                 if r.status_code == 200 and len(r.json()) > 0:
-                    log_event("campaign.skip", "modal", "info", payload={"reason": "already_ran_today", "window_id": "8am_ct"})
+                    # CONTRACT: campaign.skip payload
+                    log_event("campaign.skip", "modal", "info", payload={"window_id": "8am_ct", "reason": "already_ran_today", "next": "tomorrow 8am CT"})
                     return {"status": "skip", "reason": "already_ran_today", "next": "tomorrow 8am CT"}
             except Exception as e:
                 print(f"[Campaign] Idempotency check failed: {e}, proceeding anyway")
@@ -689,14 +719,16 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         weekday = now_utc.weekday()  # 0=Monday, 6=Sunday
         
         if not override and (weekday >= 5 or ct_hour < 9 or ct_hour >= 18):
-            log_event("campaign.skip", "modal", "info", payload={"reason": "outside_send_window", "window_id": "8am_ct", "ct_hour": ct_hour, "weekday": weekday})
+            # CONTRACT: campaign.skip payload
+            log_event("campaign.skip", "modal", "info", payload={"window_id": "8am_ct", "reason": "outside_send_window", "next": "next business day 8am CT"})
             return {"status": "skip", "reason": "outside_send_window", "ct_hour": ct_hour, "weekday": weekday}
         
         start_time = time.time()
         campaign_type = "catchup" if catchup else "scheduled"
         batch_id = f"campaign_{datetime.utcnow().strftime('%Y%m%d_%H%M')}"
         
-        log_event("campaign.run", "modal", "info", correlation_id=batch_id, payload={"campaign_type": campaign_type, "window_id": "8am_ct", "override": override})
+        # CONTRACT: campaign.run payload (start of execution)
+        log_event("campaign.run", "modal", "info", correlation_id=batch_id, payload={"window_id": "8am_ct", "sent": 0, "latency_ms": 0, "channels": ["sms"], "override": override})
         
         # Get contacts due for outreach
         try:
@@ -762,11 +794,11 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         except Exception as e:
             print(f"[Campaign] Failed to record job run: {e}")
         
-        # Emit appropriate event based on status
+        # CONTRACT: Emit campaign.run (completion) or campaign.error based on status
         if status == "fail":
-            log_event("campaign.error", "modal", "error", correlation_id=batch_id, payload={"sent": sent_count, "errors": errors, "latency_ms": latency_ms, "window_id": "8am_ct"})
+            log_event("campaign.error", "modal", "error", correlation_id=batch_id, payload={"window_id": "8am_ct", "error": f"Campaign failed: {errors} errors", "stack": None})
         else:
-            log_event("campaign.run", "modal", "info", correlation_id=batch_id, payload={"sent": sent_count, "errors": errors, "contacts": len(contacts), "latency_ms": latency_ms, "window_id": "8am_ct", "status": status})
+            log_event("campaign.run", "modal", "info", correlation_id=batch_id, payload={"window_id": "8am_ct", "sent": sent_count, "latency_ms": latency_ms, "channels": ["sms"], "override": override})
         
         return {
             "status": status,
@@ -1263,16 +1295,20 @@ Be specific and actionable. Output ONLY the insight, no intro."""
             # Calculate rates
             booking_rate = booking_count / max(lead_count, 1)
             
+            # CONTRACT: kpi.snapshot payload
             kpi_data = {
                 "leads_total": lead_count,
                 "bookings_total": booking_count,
                 "booking_rate": round(booking_rate, 4),
-                "timestamp": datetime.utcnow().isoformat()
+                "window": "24h",
+                "computed_from": ["supabase.contacts_master", "supabase.interactions"],
+                "version": "v1"
             }
             
             log_event("kpi.snapshot", "modal", "info", payload=kpi_data)
             return {"status": "ok", "kpi": kpi_data}
         except Exception as e:
+            log_event("error.occurred", "modal", "error", payload={"component": "kpi_snapshot", "error": str(e), "code": 500, "context": {"endpoint": "/api/kpi-snapshot"}})
             return {"status": "error", "error": str(e)}
     
     @api.get("/api/reliability-check")
