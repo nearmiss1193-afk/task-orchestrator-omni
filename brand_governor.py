@@ -110,28 +110,50 @@ class BrandGovernor:
         return issues
     
     def _check_phones(self, filepath: str, content: str) -> list:
-        """Check for incorrect phone numbers."""
+        """Check for incorrect phone numbers including forbidden patterns."""
         issues = []
+        
+        # Get canonical and approved phones
+        canonical_e164 = self.config["contact"].get("canonical_phone_e164", "")
+        canonical_display = self.config["contact"].get("canonical_phone_display", "")
         approved_phones = [
-            self.config["contact"]["phones"]["sarah_ai"],
-            self.config["contact"]["phones"]["rachel_ai"],
-            self.config["contact"]["phones"]["escalation"]
+            canonical_e164,
+            canonical_display,
+            self.config["contact"]["phones"].get("sarah_ai", ""),
+            self.config["contact"]["phones"].get("rachel_ai", ""),
+            self.config["contact"]["phones"].get("christina_outbound", ""),
+            self.config["contact"]["phones"].get("escalation", "")
         ]
+        
+        # Check for FORBIDDEN phone patterns (highest priority)
+        forbidden = self.config["contact"].get("forbidden_phone_patterns", [])
+        for pattern in forbidden:
+            if pattern in content:
+                issues.append({
+                    "type": "wrong_phone",
+                    "file": filepath,
+                    "found": pattern,
+                    "description": f"FORBIDDEN phone pattern detected - must remove",
+                    "severity": "critical",
+                    "auto_fix": True,
+                    "fix_from": pattern,
+                    "fix_to": canonical_display
+                })
         
         # Find all phone-like patterns
         phone_patterns = re.findall(r'\+?1?[\s.-]?\(?([0-9]{3})\)?[\s.-]?([0-9]{3})[\s.-]?([0-9]{4})', content)
         
         for match in phone_patterns:
             found_phone = f"+1{match[0]}{match[1]}{match[2]}"
-            if found_phone not in approved_phones:
+            if found_phone not in approved_phones and found_phone.replace('+1', '') not in [p.replace('+1', '') for p in approved_phones]:
                 # Check if it's a test/placeholder
-                if match[0] not in ['555', '123', '000']:
+                if match[0] not in ['555', '123', '000', '800', '888', '877']:
                     issues.append({
-                        "type": "unapproved_phone",
+                        "type": "unknown_phone",
                         "file": filepath,
                         "found": found_phone,
-                        "description": f"Phone number not in approved list",
-                        "severity": "medium",
+                        "description": f"Unknown phone number - verify if correct",
+                        "severity": "high",
                         "auto_fix": False
                     })
         
@@ -239,33 +261,44 @@ class BrandGovernor:
         return issues
     
     def scan_all(self, base_dir: str = None) -> dict:
-        """Scan all target files."""
+        """Scan all target files (PUBLIC scope only)."""
         if base_dir is None:
             base_dir = Path(__file__).parent
         
         base_dir = Path(base_dir)
         all_issues = []
         files_scanned = 0
+        scanned_files = set()
         
-        # Scan HTML files
-        for pattern in self.config.get("brand_lint", {}).get("scan_targets", ["public/*.html"]):
+        # Get scope from config
+        scan_scope = self.config.get("brand_lint", {}).get("scan_scope", {})
+        include_patterns = scan_scope.get("include", ["public/*.html", "public/audits/*.html"])
+        exclude_patterns = scan_scope.get("exclude", ["backups/**", "node_modules/**", ".git/**"])
+        
+        # Helper to check if file should be excluded
+        def should_exclude(fpath):
+            fpath_str = str(fpath).replace("\\", "/")
+            for excl in exclude_patterns:
+                # Simple pattern matching
+                if excl.startswith("*") and fpath_str.endswith(excl[1:]):
+                    return True
+                if excl.endswith("**") and excl[:-2].replace("*", "") in fpath_str:
+                    return True
+                if excl in fpath_str:
+                    return True
+            return False
+        
+        # Scan ONLY the include patterns (no extra patterns)
+        for pattern in include_patterns:
             for filepath in glob.glob(str(base_dir / pattern), recursive=True):
+                if should_exclude(filepath):
+                    continue
+                if filepath in scanned_files:
+                    continue
+                scanned_files.add(filepath)
                 files_scanned += 1
                 issues = self.scan_file(filepath)
                 all_issues.extend(issues)
-        
-        # Also scan common locations
-        extra_patterns = [
-            "*.html",
-            "public/**/*.html",
-            "apps/**/public/*.html",
-        ]
-        for pattern in extra_patterns:
-            for filepath in glob.glob(str(base_dir / pattern), recursive=True):
-                if not any(i["file"] == filepath for i in all_issues):
-                    files_scanned += 1
-                    issues = self.scan_file(filepath)
-                    all_issues.extend(issues)
         
         # Categorize issues
         auto_fix = [i for i in all_issues if i.get("auto_fix")]
@@ -360,15 +393,30 @@ class BrandGovernor:
 def main():
     """Run brand governor scan."""
     import argparse
+    import sys
     
     parser = argparse.ArgumentParser(description="Brand Governor - Lint & Fix")
     parser.add_argument("--fix", action="store_true", help="Apply auto-fixes")
     parser.add_argument("--dir", default=".", help="Base directory to scan")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
+    parser.add_argument("--report", default=None, help="Write JSON report to file")
     args = parser.parse_args()
     
     governor = BrandGovernor()
     result = governor.scan_all(args.dir)
+    
+    # Get severity budget
+    severity_budget = BRAND_CONFIG.get("brand_lint", {}).get("severity_budget", {})
+    max_score = severity_budget.get("max_public_score", 50)
+    fail_on_exceed = severity_budget.get("fail_on_exceed", True)
+    
+    # Check if we exceed budget
+    exceeds_budget = result['severity_score'] > max_score
+    
+    if args.report:
+        with open(args.report, 'w') as f:
+            json.dump(result, f, indent=2)
+        print(f"Report written to {args.report}")
     
     if args.json:
         print(json.dumps(result, indent=2))
@@ -376,8 +424,13 @@ def main():
         print(f"\n{'='*60}")
         print("BRAND GOVERNOR SCAN REPORT")
         print(f"{'='*60}")
-        print(f"Scanned: {result['files_scanned']} files")
+        print(f"Scanned: {result['files_scanned']} files (PUBLIC scope only)")
         print(f"Issues: {result['total_issues']} (severity score: {result['severity_score']})")
+        print(f"Severity Budget: {max_score} (current: {result['severity_score']})")
+        if exceeds_budget:
+            print(f"⚠️  BUDGET EXCEEDED - score {result['severity_score']} > {max_score}")
+        else:
+            print(f"✅ Within budget")
         print(f"Auto-fixable: {result['auto_fixable']}")
         print(f"Needs approval: {result['needs_approval']}")
         print(f"\n{result['summary']}")
@@ -388,6 +441,11 @@ def main():
             print(f"Applied {fix_result['fixes_proposed']} fixes")
         elif result['auto_fixable'] > 0:
             print(f"Run with --fix to apply {result['auto_fixable']} auto-fixes")
+    
+    # Exit with code 1 if exceeds budget and fail_on_exceed is true
+    if exceeds_budget and fail_on_exceed:
+        sys.exit(1)
+    sys.exit(0)
 
 
 if __name__ == "__main__":

@@ -56,11 +56,22 @@
         "guarantee_text": "If you don't see measurable improvement in booked appointments within 30 days, we'll work free until you do—or refund your setup fee, no questions."
     },
     "contact": {
+        "canonical_phone_e164": "+18632132505",
+        "canonical_phone_display": "(863) 213-2505",
         "phones": {
-            "sarah_ai": "+13527585336",
+            "sarah_ai": "+18632132505",
+            "christina_outbound": "+18632132505",
             "rachel_ai": "+18632132505",
             "escalation": "+13529368152"
         },
+        "forbidden_phone_patterns": [
+            "(352) 758-5336",
+            "352-758-5336",
+            "3527585336",
+            "+13527585336",
+            "+1 (352) 758-5336",
+            "352.758.5336"
+        ],
         "emails": {
             "support": "support@aiserviceco.com",
             "owner": "nearmiss1193@gmail.com"
@@ -116,10 +127,35 @@
         ]
     },
     "brand_lint": {
+        "scan_scope": {
+            "include": [
+                "public/*.html",
+                "public/audits/*.html",
+                "public/assets/**"
+            ],
+            "exclude": [
+                "node_modules/**",
+                ".git/**",
+                "backups/**",
+                "manifests/**",
+                "runbooks/**",
+                "sql/**",
+                "directives/**",
+                "execution/**",
+                "*.md",
+                "*.json",
+                "*.py",
+                "*.js",
+                "*.sh"
+            ]
+        },
+        "severity_budget": {
+            "max_public_score": 500,
+            "fail_on_exceed": true
+        },
         "scan_targets": [
             "public/*.html",
-            "apps/**/public/*.html",
-            "knowledge_base/*.md"
+            "public/audits/*.html"
         ],
         "auto_fix_types": [
             "wrong_url",
