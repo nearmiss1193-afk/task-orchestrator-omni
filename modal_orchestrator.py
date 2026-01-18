@@ -3,7 +3,7 @@ SOVEREIGN ORCHESTRATOR - Unified ASGI App
 All routes bundled into one FastAPI app for reliable Modal deployment.
 """
 import modal
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from datetime import datetime
 import json
 
@@ -196,27 +196,16 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
     # =========================================
     
     @api.post("/webhook/ghl/appointment")
-    def ghl_appointment_webhook(data: dict, token: str = ""):
+    async def ghl_appointment_webhook(request: Request, token: str = ""):
         """
         GHL AppointmentCreate webhook receiver.
         Logs to event_log_v2 as appointment.created for Thompson Sampling learning.
-        
-        Expected payload (from GHL):
-        {
-            "type": "AppointmentCreate",
-            "locationId": "...",
-            "appointment": {
-                "id": "...",
-                "calendarId": "...",
-                "contactId": "...",
-                "appointmentStatus": "confirmed",
-                "startTime": "...",
-                "endTime": "...",
-                "source": "...",
-                "assignedUserId": "..."
-            }
-        }
         """
+        try:
+            data = await request.json()
+        except:
+            data = {}
+        
         # Simple token auth (shared secret)
         expected_token = os.environ.get("GHL_WEBHOOK_TOKEN", "empire_ghl_2026")
         if token and token != expected_token:
