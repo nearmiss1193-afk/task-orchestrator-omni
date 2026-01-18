@@ -493,16 +493,16 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
         
-        # Check if campaign already ran today (idempotency)
+        # Check if campaign already ran today (idempotency via direct query)
+        today = datetime.utcnow().strftime('%Y-%m-%d')
         if not override:
             try:
-                r = requests.post(
-                    f"{SUPABASE_URL}/rest/v1/rpc/job_ran_today",
+                r = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/job_runs?job_name=eq.campaign&window_id=eq.8am_ct&scheduled_for=eq.{today}&status=in.(success,catchup)&limit=1",
                     headers=headers,
-                    json={"p_job_name": "campaign", "p_window_id": "8am_ct"},
                     timeout=10
                 )
-                if r.status_code == 200 and r.json() == True:
+                if r.status_code == 200 and len(r.json()) > 0:
                     log_event("campaign.skipped", "modal", "info", payload={"reason": "already_ran_today"})
                     return {"status": "skip", "reason": "already_ran_today", "next": "tomorrow 8am CT"}
             except Exception as e:
@@ -570,16 +570,17 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         latency_ms = int((time.time() - start_time) * 1000)
         status = "success" if errors == 0 else ("partial" if sent_count > 0 else "fail")
         
-        # Record job run (idempotency marker)
+        # Record job run (idempotency marker) via direct INSERT
         try:
             requests.post(
-                f"{SUPABASE_URL}/rest/v1/rpc/record_job_run",
-                headers=headers,
+                f"{SUPABASE_URL}/rest/v1/job_runs",
+                headers={**headers, "Prefer": "resolution=merge-duplicates"},
                 json={
-                    "p_job_name": "campaign",
-                    "p_window_id": "8am_ct",
-                    "p_status": "catchup" if catchup else status,
-                    "p_details": {"sent": sent_count, "errors": errors, "contacts": len(contacts)}
+                    "job_name": "campaign",
+                    "window_id": "8am_ct",
+                    "scheduled_for": today,
+                    "status": "catchup" if catchup else status,
+                    "details": {"sent": sent_count, "errors": errors, "contacts": len(contacts)}
                 },
                 timeout=10
             )
