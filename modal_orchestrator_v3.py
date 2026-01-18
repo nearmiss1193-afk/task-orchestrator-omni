@@ -101,9 +101,10 @@ def orchestration_api():
                 "variant_id": variant_id,
                 "variant_name": variant_name,
                 "run_id": run_id,
-                "vertical": vertical,
+                "vertical": vertical or "hvac",
                 "company": company,
                 "correlation_id": correlation_id,
+                "status": "sent",
                 "payload": payload or {}
             }
             headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
@@ -127,20 +128,26 @@ def orchestration_api():
         Returns {touch: {...}, confidence: float} or {touch: None, confidence: 0.0}
         """
         try:
+            from urllib.parse import quote
             phone_normalized = normalize_phone(phone)
+            phone_encoded = quote(phone_normalized, safe='')  # URL encode the + sign
             cutoff = (datetime.now(timezone.utc) - timedelta(days=max_days)).isoformat()
+            cutoff_encoded = quote(cutoff, safe='')  # URL encode the + in timezone
             
             headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
             resp = requests.get(
-                f"{SUPABASE_URL}/rest/v1/outbound_touches?phone=eq.{phone_normalized}&ts=gte.{cutoff}&order=ts.desc&limit=1",
+                f"{SUPABASE_URL}/rest/v1/outbound_touches?phone=eq.{phone_encoded}&ts=gte.{cutoff_encoded}&order=ts.desc&limit=1",
                 headers=headers, timeout=10
             )
             
             if resp.status_code != 200:
+                log_event("error.occurred", "modal", "warn", payload={"error": f"find_touch query failed: {resp.status_code}", "phone": phone_normalized, "response": resp.text[:100] if resp.text else ""})
                 return {"touch": None, "confidence": 0.0}
             
             touches = resp.json()
             if not touches:
+                # Log for debugging - no touches found
+                log_event("attribution.debug", "modal", "info", payload={"phone": phone_normalized, "cutoff": cutoff, "result": "no_touches_found"})
                 return {"touch": None, "confidence": 0.0}
             
             touch = touches[0]
@@ -148,15 +155,16 @@ def orchestration_api():
             now = datetime.now(timezone.utc)
             hours_ago = (now - touch_ts).total_seconds() / 3600
             
-            # Confidence based on recency
-            if hours_ago <= 24:
+            # Confidence based on recency (per spec)
+            # <= 15min (0.25h): 1.0, <= 24h: 0.7, <= 72h: 0.4, else: 0.2
+            if hours_ago <= 0.25:  # 15 minutes
                 confidence = 1.0
-            elif hours_ago <= 72:
+            elif hours_ago <= 24:
                 confidence = 0.7
-            elif hours_ago <= 168:  # 7 days
+            elif hours_ago <= 72:
                 confidence = 0.4
             else:
-                confidence = 0.0
+                confidence = 0.2
             
             return {"touch": touch, "confidence": confidence}
         except Exception as e:
@@ -338,6 +346,23 @@ def orchestration_api():
             "orchestrator": "sovereign-v3-emergency",
             "agents": ["sarah", "christina"],
             "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    @api.get("/api/debug/secrets")
+    def debug_secrets():
+        """Check which secrets are present (boolean flags only, no values)"""
+        import os
+        return {
+            "SUPABASE_SERVICE_ROLE_KEY": bool(os.environ.get("SUPABASE_SERVICE_ROLE_KEY")),
+            "SUPABASE_KEY": bool(os.environ.get("SUPABASE_KEY")),
+            "SUPABASE_ANON_KEY": bool(os.environ.get("SUPABASE_ANON_KEY")),
+            "GEMINI_API_KEY": bool(os.environ.get("GEMINI_API_KEY")),
+            "RESEND_API_KEY": bool(os.environ.get("RESEND_API_KEY")),
+            "GHL_API_KEY": bool(os.environ.get("GHL_API_KEY")),
+            "TWILIO_ACCOUNT_SID": bool(os.environ.get("TWILIO_ACCOUNT_SID")),
+            "TWILIO_AUTH_TOKEN": bool(os.environ.get("TWILIO_AUTH_TOKEN")),
+            "key_in_use": "SERVICE_ROLE" if os.environ.get("SUPABASE_SERVICE_ROLE_KEY") else ("ANON" if os.environ.get("SUPABASE_KEY") else "NONE"),
+            "key_length": len(os.environ.get("SUPABASE_SERVICE_ROLE_KEY", os.environ.get("SUPABASE_KEY", "")))
         }
     
     @api.get("/api/truth")
@@ -796,14 +821,30 @@ def orchestration_api():
         
         # Extract contact info - check multiple GHL payload locations
         contact = body.get("contact", {})
+        customer = body.get("customer", {})
         contact_id = body.get("contactId") or contact.get("id") or body.get("contact_id")
-        # Phone extraction priority: contact.phone > contact.phoneNumber > body.phone > body.contactPhone
-        contact_phone = (contact.get("phone") or contact.get("phoneNumber") or 
-                         body.get("phone") or body.get("contactPhone"))
-        # Appointment ID priority: appointmentId > appointment.id > id
-        appointment_id = (body.get("appointmentId") or 
-                          (body.get("appointment", {}) or {}).get("id") or 
-                          body.get("id") or f"appt_{uuid.uuid4().hex[:8]}")
+        
+        # Phone extraction priority (per spec):
+        # 1) body.contact.phone  2) body.contact.phoneNumber  3) body.contact_phone (TOP LEVEL)
+        # 4) body.phone  5) body.contactPhone  6) body.customer.phone
+        contact_phone = (
+            contact.get("phone") or 
+            contact.get("phoneNumber") or 
+            body.get("contact_phone") or  # TOP LEVEL - GHL puts it here
+            body.get("phone") or 
+            body.get("contactPhone") or
+            customer.get("phone")
+        )
+        
+        # Appointment ID priority (per spec):
+        # 1) appointmentId  2) appointment.id  3) appointment_id (TOP LEVEL)  4) id
+        appointment_id = (
+            body.get("appointmentId") or 
+            (body.get("appointment", {}) or {}).get("id") or 
+            body.get("appointment_id") or  # TOP LEVEL
+            body.get("id") or 
+            f"appt_{uuid.uuid4().hex[:8]}"
+        )
         correlation_id = f"appt_{uuid.uuid4().hex[:8]}"
         
         # Normalize phone for attribution lookup
@@ -891,9 +932,9 @@ def orchestration_api():
                         }
                     )
             else:
-                # No phone available - still record with no attribution
+                # No phone available - emit attribution.missing_phone
                 log_event(
-                    "attribution.missing",
+                    "attribution.missing_phone",  # Per spec: distinct event type
                     "modal",
                     "warn",
                     correlation_id=f"{correlation_id}_no_phone",
@@ -1469,5 +1510,262 @@ def orchestration_api():
             "last_errors": last_errors,
             "timestamp": datetime.utcnow().isoformat()
         }
+    
+    # ============================================================
+    # GHL SMS INTEGRATION (Weekend Mode - No Twilio)
+    # ============================================================
+    
+    def generate_sms_reply(inbound_message: str, phone: str) -> str:
+        """Generate AI reply using Gemini for HVAC qualification."""
+        try:
+            GEMINI_API_KEY = secrets.get("GEMINI_API_KEY", "")
+            if not GEMINI_API_KEY:
+                return "Thanks for reaching out! I'll have someone get back to you shortly. If urgent, call us at +1-352-758-5336."
+            
+            prompt = f"""You are Sarah, an AI assistant for a home services company specializing in HVAC.
+A potential customer sent this text: "{inbound_message}"
+
+Your goal:
+1. Be warm and helpful
+2. Qualify if they need HVAC service (install, repair, maintenance)
+3. Offer our free efficiency report: https://aiserviceco.com/hvac
+4. Ask ONE follow-up question to understand their need
+
+Keep response under 160 characters. Be conversational, not salesy."""
+
+            resp = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}",
+                json={"contents": [{"parts": [{"text": prompt}]}]},
+                headers={"Content-Type": "application/json"},
+                timeout=10
+            )
+            
+            if resp.status_code == 200:
+                data = resp.json()
+                reply = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+                return reply[:300] if reply else "Thanks for your message! What HVAC service can we help with?"
+            else:
+                log_event("error.occurred", "gemini", "warn", payload={"error": f"Gemini API: {resp.status_code}"})
+                return "Thanks for your message! What HVAC service can we help with today?"
+        except Exception as e:
+            log_event("error.occurred", "gemini", "error", payload={"error": str(e)})
+            return "Thanks for your message! We'll get back to you shortly."
+    
+    def send_sms_via_ghl(to_phone: str, message: str, contact_id: str = None, conversation_id: str = None, correlation_id: str = None) -> dict:
+        """Send SMS reply via GHL Conversations API."""
+        try:
+            GHL_API_KEY = secrets.get("GHL_API_KEY", "")
+            if not GHL_API_KEY:
+                log_event("error.occurred", "ghl", "error", correlation_id=correlation_id, payload={"error": "GHL_API_KEY not configured"})
+                return {"success": False, "error": "GHL_API_KEY missing"}
+            
+            headers = {
+                "Authorization": f"Bearer {GHL_API_KEY}",
+                "Content-Type": "application/json",
+                "Version": "2021-07-28"
+            }
+            
+            # Try Conversations API first if we have conversation_id
+            if conversation_id:
+                resp = requests.post(
+                    f"https://services.leadconnectorhq.com/conversations/{conversation_id}/messages",
+                    headers=headers,
+                    json={
+                        "type": "SMS",
+                        "message": message,
+                        "locationId": GHL_LOCATION_ID
+                    },
+                    timeout=10
+                )
+                
+                if resp.status_code in [200, 201]:
+                    log_event("sms.reply.sent", "ghl", "info", correlation_id=correlation_id, entity_id=to_phone, payload={
+                        "to": to_phone,
+                        "message": message[:50],
+                        "conversation_id": conversation_id,
+                        "method": "conversations_api"
+                    })
+                    return {"success": True, "method": "conversations_api", "response_code": resp.status_code}
+            
+            # Fallback: Create contact message via contacts API
+            if contact_id:
+                resp = requests.post(
+                    f"https://services.leadconnectorhq.com/contacts/{contact_id}/messages",
+                    headers=headers,
+                    json={
+                        "type": "SMS",
+                        "message": message
+                    },
+                    timeout=10
+                )
+                
+                if resp.status_code in [200, 201]:
+                    log_event("sms.reply.sent", "ghl", "info", correlation_id=correlation_id, entity_id=to_phone, payload={
+                        "to": to_phone,
+                        "message": message[:50],
+                        "contact_id": contact_id,
+                        "method": "contacts_api"
+                    })
+                    return {"success": True, "method": "contacts_api", "response_code": resp.status_code}
+            
+            # Final fallback: webhook trigger
+            resp = requests.post(
+                GHL_SMS_WEBHOOK,
+                json={
+                    "phone": to_phone,
+                    "message": message,
+                    "source": "modal_sms_reply"
+                },
+                timeout=10
+            )
+            
+            if resp.status_code in [200, 201]:
+                log_event("sms.reply.sent", "ghl", "info", correlation_id=correlation_id, entity_id=to_phone, payload={
+                    "to": to_phone,
+                    "message": message[:50],
+                    "method": "webhook_fallback"
+                })
+                return {"success": True, "method": "webhook_fallback", "response_code": resp.status_code}
+            
+            # All attempts failed
+            error_msg = f"All GHL send methods failed. Last status: {resp.status_code}"
+            log_event("sms.reply.failed", "ghl", "error", correlation_id=correlation_id, entity_id=to_phone, payload={
+                "to": to_phone,
+                "error": error_msg
+            })
+            return {"success": False, "error": error_msg}
+            
+        except Exception as e:
+            log_event("sms.reply.failed", "ghl", "error", correlation_id=correlation_id, entity_id=to_phone, payload={
+                "to": to_phone,
+                "error": str(e)
+            })
+            return {"success": False, "error": str(e)}
+    
+    @api.post("/webhook/ghl/sms/inbound")
+    async def ghl_sms_inbound_webhook(request: Request):
+        """
+        Handle inbound SMS from GHL.
+        - Log webhook and sms.inbound events
+        - Generate AI reply
+        - Send reply via GHL
+        - Alert if reply fails
+        """
+        import uuid
+        correlation_id = f"ghl_sms_{uuid.uuid4().hex[:8]}"
+        
+        try:
+            body = await request.json()
+        except:
+            body = {}
+        
+        # Log raw webhook
+        log_event("webhook.inbound", "ghl", "info", correlation_id=correlation_id, payload={
+            "provider": "ghl",
+            "type": "sms_inbound",
+            "raw": body
+        })
+        
+        # Extract fields - GHL sends various formats
+        phone_raw = (
+            body.get("phone") or 
+            body.get("from") or 
+            body.get("contactPhone") or 
+            (body.get("contact", {}) or {}).get("phone") or
+            body.get("fromNumber")
+        )
+        message_body = (
+            body.get("message") or 
+            body.get("body") or 
+            body.get("text") or 
+            body.get("smsBody") or
+            ""
+        )
+        contact_id = body.get("contactId") or body.get("contact_id") or (body.get("contact", {}) or {}).get("id")
+        conversation_id = body.get("conversationId") or body.get("conversation_id")
+        
+        phone_normalized = normalize_phone(phone_raw) if phone_raw else None
+        
+        # Log structured inbound event
+        log_event("sms.inbound", "ghl", "info", correlation_id=correlation_id, entity_id=phone_normalized, payload={
+            "phone": phone_normalized,
+            "phone_raw": phone_raw,
+            "body": message_body[:200] if message_body else None,
+            "contact_id": contact_id,
+            "conversation_id": conversation_id
+        })
+        
+        # Generate AI reply if we have a phone
+        if phone_normalized and message_body:
+            log_event("sms.reply.attempt", "modal", "info", correlation_id=correlation_id, entity_id=phone_normalized, payload={
+                "phone": phone_normalized,
+                "inbound_preview": message_body[:50]
+            })
+            
+            # Generate reply
+            reply_text = generate_sms_reply(message_body, phone_normalized)
+            
+            # Send via GHL
+            send_result = send_sms_via_ghl(phone_normalized, reply_text, contact_id, conversation_id, correlation_id)
+            
+            if not send_result.get("success"):
+                # Alert on failure
+                send_alert_email(
+                    subject=f"🚨 SMS Reply Failed - {phone_normalized}",
+                    body=f"Failed to send SMS reply to {phone_normalized}.\n\nInbound: {message_body[:100]}\nReply: {reply_text[:100]}\nError: {send_result.get('error')}",
+                    severity="error"
+                )
+        
+        return {"status": "ok", "correlation_id": correlation_id}
+    
+    @api.get("/api/sms/health")
+    def sms_health():
+        """SMS health check - last inbound, last reply, unreplied count."""
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            
+            # Last SMS inbound
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            last_inbound_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            
+            # Last SMS reply sent
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            last_reply_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            
+            # Count unreplied in last 60s
+            cutoff_60s = (datetime.now(timezone.utc) - timedelta(seconds=60)).isoformat()
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&ts=gte.{cutoff_60s}&select=entity_id",
+                headers=headers, timeout=5
+            )
+            inbound_phones_60s = set()
+            if resp.status_code == 200:
+                inbound_phones_60s = {e.get("entity_id") for e in resp.json() if e.get("entity_id")}
+            
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&ts=gte.{cutoff_60s}&select=entity_id",
+                headers=headers, timeout=5
+            )
+            replied_phones_60s = set()
+            if resp.status_code == 200:
+                replied_phones_60s = {e.get("entity_id") for e in resp.json() if e.get("entity_id")}
+            
+            unreplied_count = len(inbound_phones_60s - replied_phones_60s)
+            
+            return {
+                "status": "ok",
+                "last_sms_inbound_ts": last_inbound_ts,
+                "last_sms_reply_ts": last_reply_ts,
+                "unreplied_count_60s": unreplied_count,
+                "sms_pipeline_healthy": unreplied_count == 0
+            }
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
     
     return api
