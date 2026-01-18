@@ -24,14 +24,26 @@ GHL_LOCATION_ID = "RnK4OjX0oDcqtWw0VyLr"  # Empire Main location
 BOOKING_LINK = "https://link.aiserviceco.com/discovery"
 ESCALATION_PHONE = "+13529368152"
 
+# Unified Comms System - Canonical Number
+CANONICAL_NUMBER = "+13527585336"  # Single source of truth for all comms
+SMS_PROVIDER = "twilio"  # "twilio" | "telnyx" | "ghl_fallback"
+VOICE_PROVIDER = "vapi"
+
 # Secrets loaded at runtime from modal.Secret
 def get_secrets():
     return {
         "SUPABASE_KEY": os.environ.get("SUPABASE_KEY", ""),
         "GEMINI_API_KEY": os.environ.get("GEMINI_API_KEY", ""),
         "RESEND_API_KEY": os.environ.get("RESEND_API_KEY", ""),
-        "GHL_API_KEY": os.environ.get("GHL_API_KEY", "")
+        "GHL_API_KEY": os.environ.get("GHL_API_KEY", ""),
+        # Twilio for SMS
+        "TWILIO_ACCOUNT_SID": os.environ.get("TWILIO_ACCOUNT_SID", ""),
+        "TWILIO_AUTH_TOKEN": os.environ.get("TWILIO_AUTH_TOKEN", ""),
+        # Vapi for voice
+        "VAPI_WEBHOOK_SECRET": os.environ.get("VAPI_WEBHOOK_SECRET", ""),
+        "VAPI_ASSISTANT_ID": os.environ.get("VAPI_ASSISTANT_ID", "")
     }
+
 
 @app.function()
 @modal.asgi_app()
@@ -500,6 +512,258 @@ def orchestration_api():
             "failed": results["failed"],
             "provider": "ghl" if not dry_run else "dry_run",
             "details": results["details"][:10]  # Limit response size
+        }
+    
+    # =========================================
+    # UNIFIED COMMS SYSTEM ENDPOINTS
+    # =========================================
+    
+    def send_sms_via_twilio(to_phone: str, message: str, from_phone: str = None) -> dict:
+        """Send SMS via Twilio API. Returns success/failure dict."""
+        import uuid
+        from base64 import b64encode
+        
+        correlation_id = f"sms_{uuid.uuid4().hex[:8]}"
+        from_phone = from_phone or CANONICAL_NUMBER
+        
+        TWILIO_SID = secrets.get("TWILIO_ACCOUNT_SID", "")
+        TWILIO_TOKEN = secrets.get("TWILIO_AUTH_TOKEN", "")
+        
+        if not TWILIO_SID or not TWILIO_TOKEN:
+            # Fallback to GHL
+            log_event("sms.fallback", "modal", "warn", correlation_id, to_phone, {
+                "reason": "Twilio credentials missing, using GHL fallback"
+            })
+            try:
+                ghl_resp = requests.post(GHL_SMS_WEBHOOK, json={
+                    "phone": to_phone,
+                    "message": message
+                }, timeout=30)
+                if ghl_resp.status_code in [200, 201]:
+                    log_event("sms.sent", "modal", "info", correlation_id, to_phone, {
+                        "provider": "ghl_fallback", "message_preview": message[:50]
+                    })
+                    return {"success": True, "provider": "ghl_fallback", "message_sid": correlation_id}
+            except:
+                pass
+            log_event("sms.failed", "modal", "error", correlation_id, to_phone, {"error": "All SMS providers failed"})
+            return {"success": False, "provider": "none", "error": "All SMS providers failed"}
+        
+        try:
+            # Twilio API call
+            auth_str = b64encode(f"{TWILIO_SID}:{TWILIO_TOKEN}".encode()).decode()
+            twilio_resp = requests.post(
+                f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_SID}/Messages.json",
+                headers={"Authorization": f"Basic {auth_str}"},
+                data={"From": from_phone, "To": to_phone, "Body": message},
+                timeout=30
+            )
+            
+            if twilio_resp.status_code in [200, 201]:
+                resp_data = twilio_resp.json()
+                log_event("sms.sent", "modal", "info", correlation_id, to_phone, {
+                    "provider": "twilio",
+                    "message_sid": resp_data.get("sid"),
+                    "from": from_phone,
+                    "message_preview": message[:50]
+                })
+                return {"success": True, "provider": "twilio", "message_sid": resp_data.get("sid")}
+            else:
+                error = twilio_resp.json().get("message", f"HTTP {twilio_resp.status_code}")
+                log_event("sms.failed", "modal", "error", correlation_id, to_phone, {
+                    "provider": "twilio", "error": error, "status_code": twilio_resp.status_code
+                })
+                return {"success": False, "provider": "twilio", "error": error}
+        except Exception as e:
+            log_event("sms.failed", "modal", "error", correlation_id, to_phone, {
+                "provider": "twilio", "error": str(e)
+            })
+            return {"success": False, "provider": "twilio", "error": str(e)}
+    
+    @api.post("/webhook/sms/inbound")
+    async def sms_inbound_webhook(request: Request):
+        """
+        Receive inbound SMS from Twilio/carrier.
+        Twilio sends form-urlencoded: From, To, Body, MessageSid
+        """
+        import uuid
+        from urllib.parse import parse_qs
+        
+        try:
+            body = await request.body()
+            content_type = request.headers.get("content-type", "")
+            
+            if "application/x-www-form-urlencoded" in content_type:
+                params = parse_qs(body.decode())
+                from_phone = params.get("From", [""])[0]
+                to_phone = params.get("To", [""])[0]
+                message_body = params.get("Body", [""])[0]
+                message_sid = params.get("MessageSid", [""])[0]
+            else:
+                data = json.loads(body)
+                from_phone = data.get("From") or data.get("from", "")
+                to_phone = data.get("To") or data.get("to", "")
+                message_body = data.get("Body") or data.get("body", "")
+                message_sid = data.get("MessageSid") or data.get("message_sid", "")
+            
+            # Normalize phone
+            from_phone = from_phone.replace(" ", "").replace("-", "")
+            if not from_phone.startswith("+"):
+                from_phone = f"+1{from_phone}" if len(from_phone) == 10 else f"+{from_phone}"
+            
+            correlation_id = message_sid or f"inbound_{uuid.uuid4().hex[:8]}"
+            
+            # Log webhook received
+            log_event("webhook.sms.inbound", "modal", "info", correlation_id, from_phone, {
+                "to": to_phone, "body_preview": message_body[:100], "message_sid": message_sid
+            })
+            
+            # Log sms.received
+            log_event("sms.received", "modal", "info", correlation_id, from_phone, {
+                "message": message_body, "to": to_phone
+            })
+            
+            # Generate AI reply (simple for now, can enhance with Gemini)
+            message_upper = message_body.strip().upper()
+            
+            if message_upper in ["STOP", "UNSUBSCRIBE", "CANCEL"]:
+                reply = "You have been unsubscribed. Reply START to re-subscribe."
+                log_event("contact.optout", "modal", "info", correlation_id, from_phone, {
+                    "keyword": message_upper
+                })
+            elif message_upper in ["YES", "Y", "INTERESTED", "INFO"]:
+                reply = f"Great! Your free HVAC diagnostic report is being prepared. Book a call here: {BOOKING_LINK}"
+                log_event("contact.engaged", "modal", "info", correlation_id, from_phone, {
+                    "keyword": message_upper, "action": "positive_reply"
+                })
+            elif message_upper in ["HELP", "?"]:
+                reply = f"Reply YES to get your free diagnostic, or call {CANONICAL_NUMBER}. Reply STOP to opt out."
+            else:
+                # Default acknowledgment
+                reply = "Thanks for your message! A team member will follow up shortly. Reply STOP to opt out."
+            
+            # Send reply
+            send_result = send_sms_via_twilio(from_phone, reply)
+            
+            # Return TwiML response for Twilio
+            return {
+                "status": "ok",
+                "from": from_phone,
+                "received": message_body[:50],
+                "reply_sent": send_result["success"],
+                "correlation_id": correlation_id
+            }
+            
+        except Exception as e:
+            log_event("webhook.sms.error", "modal", "error", None, None, {"error": str(e)})
+            return {"status": "error", "error": str(e)}
+    
+    @api.post("/api/sms/send")
+    def sms_send(data: dict):
+        """
+        Send outbound SMS via carrier (Twilio).
+        Payload: {"to": "+1555...", "message": "...", "dry_run": false}
+        """
+        import uuid
+        
+        to_phone = data.get("to", "")
+        message = data.get("message", "")
+        dry_run = data.get("dry_run", False)
+        campaign_id = data.get("campaign_id")
+        variant_id = data.get("variant_id")
+        
+        if not to_phone or not message:
+            return {"status": "error", "error": "Missing 'to' or 'message'"}
+        
+        # Normalize phone
+        to_phone = to_phone.replace(" ", "").replace("-", "")
+        if not to_phone.startswith("+"):
+            to_phone = f"+1{to_phone}" if len(to_phone) == 10 else f"+{to_phone}"
+        
+        run_id = f"sms_send_{uuid.uuid4().hex[:8]}"
+        
+        if dry_run:
+            log_event("sms.dry_run", "modal", "info", run_id, to_phone, {
+                "message_preview": message[:50], "campaign_id": campaign_id
+            })
+            return {
+                "status": "ok",
+                "run_id": run_id,
+                "dry_run": True,
+                "to": to_phone,
+                "message_preview": message[:50],
+                "provider": "dry_run"
+            }
+        
+        result = send_sms_via_twilio(to_phone, message)
+        
+        return {
+            "status": "ok" if result["success"] else "error",
+            "run_id": run_id,
+            "to": to_phone,
+            "provider": result.get("provider"),
+            "message_sid": result.get("message_sid"),
+            "error": result.get("error")
+        }
+    
+    @api.get("/api/comms/status")
+    def comms_status():
+        """
+        Return unified comms system health status.
+        """
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        
+        # Get last events
+        last_inbound_call = None
+        last_inbound_sms = None
+        last_outbound_sms = None
+        last_errors = []
+        
+        try:
+            # Last inbound call
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.call.answered&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            if resp.status_code == 200 and resp.json():
+                last_inbound_call = resp.json()[0].get("ts")
+            
+            # Last inbound SMS
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.received&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            if resp.status_code == 200 and resp.json():
+                last_inbound_sms = resp.json()[0].get("ts")
+            
+            # Last outbound SMS
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.sent&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            if resp.status_code == 200 and resp.json():
+                last_outbound_sms = resp.json()[0].get("ts")
+            
+            # Last errors
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=in.(sms.failed,call.failed)&order=ts.desc&limit=5",
+                headers=headers, timeout=5
+            )
+            if resp.status_code == 200:
+                last_errors = [{"ts": e.get("ts"), "type": e.get("type"), "payload": e.get("payload")} for e in resp.json()]
+        except Exception as e:
+            last_errors.append({"error": str(e)})
+        
+        return {
+            "status": "ok",
+            "canonical_number": CANONICAL_NUMBER,
+            "voice_provider": VOICE_PROVIDER,
+            "sms_provider": SMS_PROVIDER,
+            "last_inbound_call_ts": last_inbound_call,
+            "last_inbound_sms_ts": last_inbound_sms,
+            "last_outbound_sms_ts": last_outbound_sms,
+            "last_errors": last_errors,
+            "timestamp": datetime.utcnow().isoformat()
         }
     
     return api
