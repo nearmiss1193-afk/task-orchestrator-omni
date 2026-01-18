@@ -74,6 +74,140 @@ def log_event(event_type: str, source: str, severity: str = "info",
     except Exception as e:
         print(f"[EventLog] Error logging {event_type}: {e}")
 
+
+# ==========================================================
+# HARDENED HELPER FUNCTIONS - For scheduled job observability
+# ==========================================================
+
+def emit_event_safe(event_type: str, source: str, severity: str = "info", 
+                    correlation_id: str = None, entity_id: str = None, payload: dict = None):
+    """Fail-safe event emission - never throws, always logs errors"""
+    try:
+        log_event(event_type, source, severity, correlation_id, entity_id, payload)
+    except Exception as e:
+        print(f"[emit_event_safe] Failed to emit {event_type}: {e}")
+
+
+def record_job_run_safe(job_name: str, window_id: str, status: str, 
+                        details: dict = None, run_id: str = None):
+    """Record job run to job_runs table - fail-safe, never throws"""
+    import requests as req
+    from datetime import datetime
+    try:
+        secrets = get_secrets()
+        supabase_key = secrets["SUPABASE_KEY"]
+        if not supabase_key:
+            return None
+        
+        today = datetime.utcnow().strftime('%Y-%m-%d')
+        resp = req.post(
+            f"{SUPABASE_URL}/rest/v1/job_runs",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json",
+                "Prefer": "return=representation"
+            },
+            json={
+                "job_name": job_name,
+                "window_id": window_id,
+                "scheduled_for": today,
+                "status": status,
+                "details": details or {},
+                "correlation_id": run_id
+            },
+            timeout=10
+        )
+        if resp.status_code in [200, 201]:
+            result = resp.json()
+            return result[0].get("id") if result else None
+        return None
+    except Exception as e:
+        print(f"[record_job_run_safe] Error: {e}")
+        return None
+
+
+def send_alert_email(subject: str, body: str, severity: str = "warning"):
+    """Send alert email via Resend - fail-safe"""
+    import requests as req
+    try:
+        secrets = get_secrets()
+        resend_key = secrets.get("RESEND_API_KEY", "")
+        if not resend_key:
+            print(f"[Alert] No RESEND_API_KEY - would send: {subject}")
+            return False
+        
+        resp = req.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {resend_key}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "from": "Sovereign <alerts@aiserviceco.com>",
+                "to": ["nearmiss1193@gmail.com"],
+                "subject": f"[{severity.upper()}] {subject}",
+                "html": f"<h2>{subject}</h2><pre>{body}</pre><p>Timestamp: {datetime.utcnow().isoformat()}Z</p>"
+            },
+            timeout=15
+        )
+        return resp.status_code < 400
+    except Exception as e:
+        print(f"[send_alert_email] Error: {e}")
+        return False
+
+
+def check_deadman_kpi():
+    """Check if KPI snapshot was recorded in last 30 minutes"""
+    import requests as req
+    from datetime import datetime, timedelta
+    try:
+        secrets = get_secrets()
+        supabase_key = secrets["SUPABASE_KEY"]
+        if not supabase_key:
+            return True  # Fail open if no key
+        
+        cutoff = (datetime.utcnow() - timedelta(minutes=30)).isoformat()
+        resp = req.get(
+            f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.kpi.snapshot&ts=gte.{cutoff}&limit=1",
+            headers={"apikey": supabase_key, "Authorization": f"Bearer {supabase_key}"},
+            timeout=10
+        )
+        if resp.status_code == 200:
+            events = resp.json()
+            return len(events) > 0
+        return True  # Fail open
+    except Exception as e:
+        print(f"[check_deadman_kpi] Error: {e}")
+        return True
+
+
+def check_campaign_ran_today():
+    """Check if campaign ran today by 9:30 AM CT"""
+    import requests as req
+    from datetime import datetime
+    try:
+        secrets = get_secrets()
+        supabase_key = secrets["SUPABASE_KEY"]
+        if not supabase_key:
+            return True
+        
+        today = datetime.utcnow().strftime('%Y-%m-%d')
+        resp = req.get(
+            f"{SUPABASE_URL}/rest/v1/job_runs?job_name=eq.campaign&scheduled_for=eq.{today}&status=in.(success,catchup,partial)&limit=1",
+            headers={"apikey": supabase_key, "Authorization": f"Bearer {supabase_key}"},
+            timeout=10
+        )
+        if resp.status_code == 200:
+            runs = resp.json()
+            return len(runs) > 0
+        return True
+    except Exception as e:
+        print(f"[check_campaign_ran_today] Error: {e}")
+        return True
+
+
+
 # Agent system prompts
 SARAH_PROMPT = """You are Sarah, the inbound contact handler for AI Service Co.
 You handle incoming SMS and calls. You qualify leads, answer questions, and book appointments.
@@ -1770,88 +1904,304 @@ Be specific and actionable. Output ONLY the insight, no intro."""
 
 
 # ==========================================================
-# SCHEDULED FUNCTIONS - 24/7 Autonomous Cloud Operation
+# SCHEDULED FUNCTIONS - 24/7 Autonomous Cloud Operation (HARDENED)
 # These run on Modal's infrastructure without any local dependencies
+# Each function records job_runs, emits events, and handles deadman checks
 # ==========================================================
 
 @app.function(schedule=modal.Cron("*/10 * * * *"))  # Every 10 minutes
 def scheduled_health_and_kpi():
     """Health check + KPI snapshot every 10 minutes for self-annealing"""
     import requests
+    import time
+    import uuid
+    
+    run_id = f"health_kpi_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
     base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
     
+    # Record job start
+    record_job_run_safe("health_kpi", "10min", "running", {"run_id": run_id}, run_id)
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "health_kpi", "schedule": "*/10 * * * *", "run_id": run_id
+    })
+    
     results = []
+    errors = 0
     for endpoint in ["/health", "/api/kpi-snapshot", "/api/reliability-check"]:
         try:
             resp = requests.get(f"{base_url}{endpoint}", timeout=30)
             results.append({"endpoint": endpoint, "status": resp.status_code})
+            if resp.status_code >= 400:
+                errors += 1
         except Exception as e:
             results.append({"endpoint": endpoint, "error": str(e)})
+            errors += 1
     
-    print(f"[CRON 10min] Results: {results}")
-    return results
+    duration_ms = int((time.time() - start_time) * 1000)
+    status = "success" if errors == 0 else ("partial" if errors < 3 else "fail")
+    
+    # Record job completion
+    record_job_run_safe("health_kpi", "10min", status, {
+        "run_id": run_id, "duration_ms": duration_ms, "results": results, "errors": errors
+    }, run_id)
+    
+    if status == "fail":
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "health_kpi", "schedule": "*/10 * * * *", "run_id": run_id,
+            "duration_ms": duration_ms, "errors": errors
+        })
+    else:
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "health_kpi", "schedule": "*/10 * * * *", "run_id": run_id,
+            "duration_ms": duration_ms, "errors": errors
+        })
+    
+    # DEADMAN CHECK: KPI snapshot in last 30 min
+    if not check_deadman_kpi():
+        emit_event_safe("incident.deadman", "modal_cron", "critical", run_id, None, {
+            "check": "kpi_snapshot", "threshold_minutes": 30, "action": "alert_sent"
+        })
+        send_alert_email(
+            "DEADMAN: No KPI Snapshot in 30 Minutes",
+            f"The kpi.snapshot event has not been recorded in the last 30 minutes.\nRun ID: {run_id}\nResults: {results}",
+            "critical"
+        )
+    
+    print(f"[CRON 10min] {status} in {duration_ms}ms: {results}")
+    return {"status": status, "results": results, "duration_ms": duration_ms}
 
 
 @app.function(schedule=modal.Cron("0 14 * * 1-5"))  # 8 AM CT weekdays (14:00 UTC)
 def scheduled_8am_campaign():
     """8 AM CT daily campaign - weekdays only"""
     import requests
+    import time
+    import uuid
+    
+    run_id = f"campaign_8am_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
     base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    # Record job start
+    record_job_run_safe("campaign_8am", "14:00_utc", "running", {"run_id": run_id}, run_id)
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "campaign_8am", "schedule": "0 14 * * 1-5", "run_id": run_id
+    })
     
     try:
         resp = requests.get(f"{base_url}/campaign", timeout=120)
         result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
-        print(f"[CRON 8am] Campaign result: {result}")
-        return result
+        duration_ms = int((time.time() - start_time) * 1000)
+        
+        sent = result.get("sent", 0)
+        errors = result.get("errors", 0)
+        status = result.get("status", "success" if resp.status_code == 200 else "fail")
+        
+        record_job_run_safe("campaign_8am", "14:00_utc", status, {
+            "run_id": run_id, "duration_ms": duration_ms, "sent": sent, "errors": errors, "result": result
+        }, run_id)
+        
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "campaign_8am", "schedule": "0 14 * * 1-5", "run_id": run_id,
+            "duration_ms": duration_ms, "sent": sent, "errors": errors
+        })
+        
+        print(f"[CRON 8am] {status} in {duration_ms}ms: sent={sent}, errors={errors}")
+        return {"status": status, "result": result, "duration_ms": duration_ms}
+        
     except Exception as e:
+        duration_ms = int((time.time() - start_time) * 1000)
+        record_job_run_safe("campaign_8am", "14:00_utc", "fail", {
+            "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
+        }, run_id)
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "campaign_8am", "schedule": "0 14 * * 1-5", "run_id": run_id,
+            "duration_ms": duration_ms, "error": str(e)
+        })
+        send_alert_email("Campaign 8am FAILED", f"Error: {e}\nRun ID: {run_id}", "critical")
         print(f"[CRON 8am] Error: {e}")
-        return {"error": str(e)}
+        return {"status": "fail", "error": str(e)}
+
+
+@app.function(schedule=modal.Cron("30 15 * * 1-5"))  # 9:30 AM CT weekdays - CATCHUP CHECK
+def scheduled_campaign_catchup_check():
+    """9:30 AM CT check - trigger catchup if campaign missed"""
+    import requests
+    import time
+    import uuid
+    
+    run_id = f"catchup_check_{uuid.uuid4().hex[:8]}"
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "campaign_catchup_check", "schedule": "30 15 * * 1-5", "run_id": run_id
+    })
+    
+    if not check_campaign_ran_today():
+        emit_event_safe("incident.deadman", "modal_cron", "critical", run_id, None, {
+            "check": "campaign_8am", "threshold": "9:30am CT", "action": "catchup_triggered"
+        })
+        
+        send_alert_email(
+            "Campaign Missed - Triggering Catchup",
+            f"The 8am CT campaign did not run by 9:30 AM CT.\nTriggering catchup now.\nRun ID: {run_id}",
+            "warning"
+        )
+        
+        # Trigger catchup
+        try:
+            resp = requests.get(f"{base_url}/campaign?catchup=true", timeout=120)
+            result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
+            
+            emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+                "job_name": "campaign_catchup_check", "run_id": run_id, "catchup_triggered": True, "result": result
+            })
+            return {"status": "catchup_triggered", "result": result}
+        except Exception as e:
+            emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+                "job_name": "campaign_catchup_check", "run_id": run_id, "error": str(e)
+            })
+            return {"status": "fail", "error": str(e)}
+    else:
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "campaign_catchup_check", "run_id": run_id, "campaign_ran": True
+        })
+        print(f"[CRON 9:30am] Campaign already ran today")
+        return {"status": "ok", "campaign_ran": True}
 
 
 @app.function(schedule=modal.Cron("0 */4 * * *"))  # Every 4 hours
 def scheduled_prospecting():
     """Prospecting run every 4 hours"""
     import requests
+    import time
+    import uuid
+    
+    run_id = f"prospect_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
     base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    record_job_run_safe("prospecting", "4hr", "running", {"run_id": run_id}, run_id)
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "prospecting", "schedule": "0 */4 * * *", "run_id": run_id
+    })
     
     try:
         resp = requests.get(f"{base_url}/prospect", timeout=60)
         result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
-        print(f"[CRON 4hr] Prospecting result: {result}")
-        return result
+        duration_ms = int((time.time() - start_time) * 1000)
+        
+        leads = result.get("prospects_added", 0)
+        status = "success" if resp.status_code == 200 else "fail"
+        
+        record_job_run_safe("prospecting", "4hr", status, {
+            "run_id": run_id, "duration_ms": duration_ms, "leads": leads, "result": result
+        }, run_id)
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "prospecting", "schedule": "0 */4 * * *", "run_id": run_id,
+            "duration_ms": duration_ms, "leads": leads
+        })
+        
+        print(f"[CRON 4hr] Prospecting {status} in {duration_ms}ms: leads={leads}")
+        return {"status": status, "result": result, "duration_ms": duration_ms}
+        
     except Exception as e:
+        duration_ms = int((time.time() - start_time) * 1000)
+        record_job_run_safe("prospecting", "4hr", "fail", {
+            "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
+        }, run_id)
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "prospecting", "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
+        })
         print(f"[CRON 4hr] Error: {e}")
-        return {"error": str(e)}
+        return {"status": "fail", "error": str(e)}
 
 
 @app.function(schedule=modal.Cron("0 */2 * * *"))  # Every 2 hours
 def scheduled_optimizer():
     """Self-improvement optimizer every 2 hours"""
     import requests
+    import time
+    import uuid
+    
+    run_id = f"optimizer_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
     base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    record_job_run_safe("optimizer", "2hr", "running", {"run_id": run_id}, run_id)
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "optimizer", "schedule": "0 */2 * * *", "run_id": run_id
+    })
     
     try:
         resp = requests.get(f"{base_url}/optimize", timeout=60)
         result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
-        print(f"[CRON 2hr] Optimizer result: {result}")
-        return result
+        duration_ms = int((time.time() - start_time) * 1000)
+        status = "success" if resp.status_code == 200 else "fail"
+        
+        record_job_run_safe("optimizer", "2hr", status, {
+            "run_id": run_id, "duration_ms": duration_ms, "result": result
+        }, run_id)
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "optimizer", "schedule": "0 */2 * * *", "run_id": run_id, "duration_ms": duration_ms
+        })
+        
+        print(f"[CRON 2hr] Optimizer {status} in {duration_ms}ms")
+        return {"status": status, "result": result, "duration_ms": duration_ms}
+        
     except Exception as e:
+        duration_ms = int((time.time() - start_time) * 1000)
+        record_job_run_safe("optimizer", "2hr", "fail", {
+            "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
+        }, run_id)
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "optimizer", "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
+        })
         print(f"[CRON 2hr] Error: {e}")
-        return {"error": str(e)}
+        return {"status": "fail", "error": str(e)}
 
 
 @app.function(schedule=modal.Cron("0 * * * *"))  # Every hour
 def scheduled_policy_optimizer():
     """Policy weight adjustment every hour"""
     import requests
+    import time
+    import uuid
+    
+    run_id = f"policy_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
     base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    record_job_run_safe("policy_optimizer", "1hr", "running", {"run_id": run_id}, run_id)
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "policy_optimizer", "schedule": "0 * * * *", "run_id": run_id
+    })
     
     try:
         resp = requests.get(f"{base_url}/api/policy-optimize", timeout=60)
         result = resp.json() if resp.status_code == 200 else {"error": resp.status_code}
-        print(f"[CRON 1hr] Policy optimizer result: {result}")
-        return result
+        duration_ms = int((time.time() - start_time) * 1000)
+        status = "success" if resp.status_code == 200 else "fail"
+        
+        record_job_run_safe("policy_optimizer", "1hr", status, {
+            "run_id": run_id, "duration_ms": duration_ms, "result": result
+        }, run_id)
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "policy_optimizer", "schedule": "0 * * * *", "run_id": run_id, "duration_ms": duration_ms
+        })
+        
+        print(f"[CRON 1hr] Policy optimizer {status} in {duration_ms}ms")
+        return {"status": status, "result": result, "duration_ms": duration_ms}
+        
     except Exception as e:
+        duration_ms = int((time.time() - start_time) * 1000)
+        record_job_run_safe("policy_optimizer", "1hr", "fail", {
+            "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
+        }, run_id)
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "policy_optimizer", "run_id": run_id, "duration_ms": duration_ms, "error": str(e)
+        })
         print(f"[CRON 1hr] Error: {e}")
-        return {"error": str(e)}
+        return {"status": "fail", "error": str(e)}
 
