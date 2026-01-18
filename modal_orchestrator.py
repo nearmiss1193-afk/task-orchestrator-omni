@@ -2771,3 +2771,166 @@ def scheduled_kickoff_once():
         print(f"[KICKOFF] Error: {e}")
         return {"status": "fail", "error": str(e)}
 
+
+@app.function(schedule=modal.Cron("0 */6 * * *"))  # Every 6 hours (4x daily, respects API limits)
+def scheduled_continuous_learning():
+    """
+    24/7 Continuous Sales Training from HuggingFace Datasets
+    
+    Fetches sales conversations, extracts patterns, and stores learnings.
+    Rate-limited to 4 runs per day to stay within HuggingFace free tier.
+    
+    Datasets:
+    - Call center scripts (92k conversations)
+    - SaaS sales conversations
+    - Customer support interactions
+    
+    Patterns extracted:
+    - Objection handling
+    - Closing techniques
+    - Persuasion phrases
+    """
+    import requests
+    import time
+    import uuid
+    from datetime import datetime
+    import json
+    
+    run_id = f"learn_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
+    
+    # Config
+    HF_TOKEN = "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"
+    HF_HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"}
+    SAMPLES_PER_RUN = 100  # Conservative for rate limiting
+    
+    # Patterns to learn
+    PATTERNS = {
+        "objection": ["too expensive", "not interested", "already have", "call back later", "no time", 
+                      "need to think", "not ready", "budget", "competitor", "don't need"],
+        "closing": ["sounds good", "let's do it", "sign me up", "interested", "tell me more", 
+                    "yes", "perfect", "schedule", "book", "ready"],
+        "persuasion": ["imagine", "because", "results", "guarantee", "save", "quick", 
+                       "easy", "free", "limited", "exclusive", "value"]
+    }
+    
+    # Datasets to learn from
+    DATASETS = [
+        ("AIxBlock/92k-real-world-call-center-scripts-english", "call_center"),
+        ("DeepMostInnovations/saas-sales-conversations", "sales"),
+        ("bitext/Bitext-customer-support-llm-chatbot-training-dataset", "support")
+    ]
+    
+    record_job_run_safe("continuous_learning", "6hr", "running", {"run_id": run_id}, run_id)
+    emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+        "job_name": "continuous_learning", "schedule": "0 */6 * * *", "run_id": run_id
+    })
+    
+    results = {
+        "fetched": 0,
+        "stored": 0,
+        "patterns_found": {"objections": 0, "closing": 0, "persuasion": 0}
+    }
+    
+    try:
+        secrets = get_secrets()
+        supabase_key = secrets["SUPABASE_KEY"]
+        db_headers = {"apikey": supabase_key, "Authorization": f"Bearer {supabase_key}", "Content-Type": "application/json"}
+        
+        for dataset_id, source in DATASETS:
+            try:
+                # Fetch from HuggingFace
+                url = "https://datasets-server.huggingface.co/rows"
+                # Use random offset for variety
+                offset = int(time.time()) % 1000
+                params = {"dataset": dataset_id, "config": "default", "split": "train", 
+                          "offset": offset, "length": SAMPLES_PER_RUN}
+                
+                resp = requests.get(url, params=params, headers=HF_HEADERS, timeout=60)
+                if resp.status_code != 200:
+                    print(f"[LEARN] {source}: Status {resp.status_code}")
+                    continue
+                
+                rows = resp.json().get("rows", [])
+                results["fetched"] += len(rows)
+                print(f"[LEARN] {source}: Fetched {len(rows)} rows")
+                
+                # Process each row
+                for row in rows:
+                    row_data = row.get("row", row)
+                    text = str(row_data.get("text", "") or row_data.get("conversation", "") or 
+                               row_data.get("instruction", "") or row_data.get("input", ""))[:2000]
+                    
+                    if len(text) < 50:
+                        continue
+                    
+                    # Extract patterns
+                    text_lower = text.lower()
+                    patterns_found = {
+                        "objections": [p for p in PATTERNS["objection"] if p in text_lower],
+                        "closing": [p for p in PATTERNS["closing"] if p in text_lower],
+                        "persuasion": [p for p in PATTERNS["persuasion"] if p in text_lower]
+                    }
+                    
+                    # Count patterns
+                    results["patterns_found"]["objections"] += len(patterns_found["objections"])
+                    results["patterns_found"]["closing"] += len(patterns_found["closing"])
+                    results["patterns_found"]["persuasion"] += len(patterns_found["persuasion"])
+                    
+                    # Store to training_data table
+                    try:
+                        store_resp = requests.post(
+                            f"{SUPABASE_URL}/rest/v1/training_data",
+                            headers=db_headers,
+                            json={
+                                "raw_text": text,
+                                "scenario": source,
+                                "outcome": "converted" if patterns_found["closing"] else "neutral",
+                                "emotional_cues": json.dumps(patterns_found),
+                                "agent": "continuous_learning",
+                                "learning_extracted": True
+                            },
+                            timeout=10
+                        )
+                        if store_resp.status_code in [200, 201]:
+                            results["stored"] += 1
+                    except:
+                        pass
+                
+                # Rate limiting between datasets
+                time.sleep(2)
+                
+            except Exception as e:
+                print(f"[LEARN] {source} error: {e}")
+                continue
+        
+        duration_ms = int((time.time() - start_time) * 1000)
+        
+        # Record completion
+        record_job_run_safe("continuous_learning", "6hr", "success", {
+            "run_id": run_id, "duration_ms": duration_ms, **results
+        }, run_id)
+        
+        emit_event_safe("job.completed", "modal_cron", "info", run_id, None, {
+            "job_name": "continuous_learning", "schedule": "0 */6 * * *", "run_id": run_id,
+            "duration_ms": duration_ms, **results
+        })
+        
+        # Emit learning event for tracking
+        emit_event_safe("learning.completed", "modal_cron", "info", run_id, None, {
+            "fetched": results["fetched"],
+            "stored": results["stored"],
+            "patterns": results["patterns_found"],
+            "duration_ms": duration_ms
+        })
+        
+        print(f"[LEARN] Complete in {duration_ms}ms: {results}")
+        return {"status": "success", "results": results, "duration_ms": duration_ms}
+        
+    except Exception as e:
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "continuous_learning", "run_id": run_id, "error": str(e)
+        })
+        print(f"[LEARN] Error: {e}")
+        return {"status": "fail", "error": str(e)}
+
