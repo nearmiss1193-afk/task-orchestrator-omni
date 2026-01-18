@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-OUTBOUND CALL SCRIPT - Uses assistantOverrides to tell Sarah this is OUTBOUND
+OUTBOUND CALL SCRIPT - Uses Christina (outbound specialist)
+Christina = Outbound calls (she's calling them)
+Sarah = Inbound calls (they're calling us)
 """
 import os
 import sys
@@ -11,29 +13,31 @@ load_dotenv()
 
 VAPI_PRIVATE_KEY = os.getenv('VAPI_PRIVATE_KEY')
 PHONE_NUMBER_ID = os.getenv('VAPI_PHONE_NUMBER_ID')
+
+# Load Christina ID from file or use fallback
+try:
+    with open("christina_id.txt", "r") as f:
+        CHRISTINA_ID = f.read().strip()
+except:
+    CHRISTINA_ID = "2610dad5e610"  # Fallback - update if changed
+
+# Sarah for inbound reference
 SARAH_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
 
 def call_outbound(phone: str, company: str = "your company", contact_name: str = "there"):
-    """Make an outbound call with proper context so Sarah knows it's outbound."""
+    """Make an outbound call using Christina (outbound specialist)."""
     
-    print(f"📞 Outbound call to {phone} ({contact_name} at {company})...")
-    
-    # Override Sarah's first message for outbound context
-    outbound_first_message = f"""Hi {contact_name}, this is Sarah from AI Service Company. 
-I'm following up on the free HVAC business diagnostic we offered. 
-I have some insights about {company} that I'd love to share with you. 
-Do you have a quick minute?"""
+    print(f"📞 CHRISTINA outbound call to {phone} ({contact_name} at {company})...")
+    print(f"📋 Using Christina ID: {CHRISTINA_ID}")
     
     payload = {
-        "assistantId": SARAH_ID,
+        "assistantId": CHRISTINA_ID,  # Christina for outbound!
         "phoneNumberId": PHONE_NUMBER_ID,
         "customer": {
             "number": phone,
             "name": contact_name
         },
-        # Override for outbound context
         "assistantOverrides": {
-            "firstMessage": outbound_first_message,
             "metadata": {
                 "call_direction": "outbound",
                 "company": company,
@@ -52,7 +56,7 @@ Do you have a quick minute?"""
         print(f"Status: {res.status_code}")
         print(f"Response: {res.text[:200]}")
         if res.status_code in [200, 201]:
-            print("✅ OUTBOUND call dispatched - Sarah knows this is outbound!")
+            print("✅ CHRISTINA outbound call dispatched!")
             return True
         else:
             print(f"❌ Failed: {res.text}")
