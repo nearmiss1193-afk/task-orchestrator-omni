@@ -199,35 +199,50 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
     @api.post("/webhook/ghl/appointment")
     async def ghl_appointment_webhook(request: Request, token: str = ""):
         """
-        GHL AppointmentCreate webhook receiver.
-        Logs to event_log_v2 as appointment.created for Thompson Sampling learning.
+        GHL AppointmentCreate/Update webhook receiver.
+        Robust field parsing for various GHL payload structures.
+        Logs to event_log_v2 as appointment.created/updated.
         """
+        import re
+        
+        # Phone normalizer helper
+        def normalize_phone(phone: str) -> str:
+            if not phone:
+                return ""
+            digits = re.sub(r'\D', '', phone)
+            if len(digits) == 10:
+                return f"+1{digits}"
+            elif len(digits) == 11 and digits.startswith('1'):
+                return f"+{digits}"
+            return f"+{digits}" if digits else ""
+        
         try:
             data = await request.json()
         except:
             data = {}
         
-        # Simple token auth (shared secret)
-        expected_token = os.environ.get("GHL_WEBHOOK_TOKEN", "empire_ghl_2026")
+        # Token auth via env WEBHOOK_TOKEN (fall back to GHL_WEBHOOK_TOKEN)
+        expected_token = os.environ.get("WEBHOOK_TOKEN", os.environ.get("GHL_WEBHOOK_TOKEN", "sovereign_default"))
         if token and token != expected_token:
             return {"status": "error", "message": "invalid_token"}
         
-        # Parse appointment data
-        event_type = data.get("type", "")
-        location_id = data.get("locationId", "")
-        appointment = data.get("appointment", {})
+        # Robust field extraction (handles various GHL payload structures)
+        appointment = data.get("appointment", data)  # Nested or flat
         
-        if not appointment:
-            # Try alternate payload structure
-            appointment = data
+        # Field paths: try appointment.X first, then body.X
+        appt_id = appointment.get("id") or data.get("id", "")
+        contact_id = appointment.get("contactId") or data.get("contactId", "")
+        calendar_id = appointment.get("calendarId") or data.get("calendarId", "")
+        start_time = appointment.get("startTime") or appointment.get("start_time") or data.get("startTime", "")
+        end_time = appointment.get("endTime") or appointment.get("end_time") or data.get("endTime", "")
+        status = appointment.get("appointmentStatus") or appointment.get("status") or data.get("status", "confirmed")
+        location_id = data.get("locationId") or appointment.get("locationId", "")
+        event_type = data.get("type") or data.get("event") or ""
         
-        appt_id = appointment.get("id", "")
-        contact_id = appointment.get("contactId", "")
-        calendar_id = appointment.get("calendarId", "")
-        status = appointment.get("appointmentStatus", appointment.get("status", ""))
-        start_time = appointment.get("startTime", appointment.get("start_time", ""))
-        end_time = appointment.get("endTime", appointment.get("end_time", ""))
-        source = appointment.get("source", "ghl")
+        # Get phone and normalize for correlation_id
+        raw_phone = appointment.get("phone") or data.get("phone", "")
+        normalized_phone = normalize_phone(raw_phone)
+        correlation_id = normalized_phone if normalized_phone else contact_id
         
         # CONTRACT: webhook.inbound event first
         log_event("webhook.inbound", "ghl", "info", entity_id=appt_id, payload={
@@ -238,7 +253,7 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         })
         
         # Determine event type (created vs updated)
-        is_update = "Update" in event_type or status in ["confirmed", "cancelled", "rescheduled"]
+        is_update = "Update" in event_type or status.lower() in ["confirmed", "cancelled", "rescheduled", "completed", "no_show"]
         appt_event_type = "appointment.updated" if is_update else "appointment.created"
         
         # CONTRACT: appointment.created / appointment.updated payload
@@ -246,18 +261,18 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
             appt_event_type,
             "ghl",
             "info",
-            correlation_id=contact_id or appointment.get("phone", ""),
+            correlation_id=correlation_id,
             entity_id=appt_id,
             payload={
                 "appointment_id": appt_id,
                 "calendar_id": calendar_id,
                 "contact_id": contact_id,
-                "status": status or "confirmed",
+                "status": status,
                 "start_time": start_time,
                 "end_time": end_time,
                 "location_id": location_id,
                 "pipeline_stage": "Booked",
-                "source": source
+                "source": "ghl"
             }
         )
         
