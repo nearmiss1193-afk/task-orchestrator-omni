@@ -32,7 +32,8 @@ VOICE_PROVIDER = "vapi"
 # Secrets loaded at runtime from modal.Secret
 def get_secrets():
     return {
-        "SUPABASE_KEY": os.environ.get("SUPABASE_KEY", ""),
+        # Prefer service role key (bypasses RLS) for write operations
+        "SUPABASE_KEY": os.environ.get("SUPABASE_SERVICE_ROLE_KEY", os.environ.get("SUPABASE_KEY", "")),
         "GEMINI_API_KEY": os.environ.get("GEMINI_API_KEY", ""),
         "RESEND_API_KEY": os.environ.get("RESEND_API_KEY", ""),
         "GHL_API_KEY": os.environ.get("GHL_API_KEY", ""),
@@ -103,12 +104,19 @@ def orchestration_api():
                 "vertical": vertical,
                 "company": company,
                 "correlation_id": correlation_id,
-                "status": "sent",
                 "payload": payload or {}
             }
             headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
             resp = requests.post(f"{SUPABASE_URL}/rest/v1/outbound_touches", headers=headers, json=touch, timeout=10)
-            return resp.status_code in [200, 201]
+            
+            if resp.status_code in [200, 201]:
+                return True
+            else:
+                log_event("error.occurred", "modal", "error", correlation_id, phone, {
+                    "error": f"record_touch failed: {resp.status_code}",
+                    "response": resp.text[:200] if resp.text else "no response"
+                })
+                return False
         except Exception as e:
             log_event("error.occurred", "modal", "error", correlation_id, phone, {"error": f"record_touch: {e}"})
             return False
@@ -155,24 +163,41 @@ def orchestration_api():
             log_event("error.occurred", "modal", "error", payload={"error": f"find_touch: {e}"})
             return {"touch": None, "confidence": 0.0}
     
-    def record_attribution(appointment_id: str, phone: str, touch: dict, confidence: float) -> bool:
-        """Record attribution to outreach_attribution table"""
+    def record_attribution(appointment_id: str, phone: str, touch: dict, confidence: float, hours_since: float = None) -> bool:
+        """
+        Record attribution to outreach_attribution table.
+        Uses EXACT column names: attributed_touch_id, attributed_variant_id, attributed_variant_name,
+        attributed_channel, hours_since_touch, confidence, attribution_source
+        """
         try:
+            # Calculate hours_since_touch if not provided
+            if hours_since is None and touch and touch.get("ts"):
+                touch_ts = datetime.fromisoformat(touch["ts"].replace("Z", "+00:00"))
+                hours_since = (datetime.now(timezone.utc) - touch_ts).total_seconds() / 3600
+            
             attribution = {
                 "appointment_id": appointment_id,
                 "phone": normalize_phone(phone),
+                "attributed_touch_id": touch.get("id") if touch else None,
                 "attributed_variant_id": touch.get("variant_id") if touch else None,
                 "attributed_variant_name": touch.get("variant_name") if touch else None,
-                "attributed_run_id": touch.get("run_id") if touch else None,
-                "attributed_touch_id": touch.get("id") if touch else None,
-                "attributed_touch_ts": touch.get("ts") if touch else None,
                 "attributed_channel": touch.get("channel") if touch else None,
-                "attribution_confidence": confidence,
-                "payload": touch or {}
+                "hours_since_touch": round(hours_since, 2) if hours_since else None,
+                "confidence": confidence,
+                "attribution_source": "auto" if touch else "none"
             }
-            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json", "Prefer": "return=representation"}
             resp = requests.post(f"{SUPABASE_URL}/rest/v1/outreach_attribution", headers=headers, json=attribution, timeout=10)
-            return resp.status_code in [200, 201]
+            
+            if resp.status_code in [200, 201]:
+                return True
+            else:
+                log_event("error.occurred", "modal", "error", payload={
+                    "error": f"record_attribution failed: {resp.status_code}",
+                    "response": resp.text[:300] if resp.text else "no response",
+                    "attribution": attribution
+                })
+                return False
         except Exception as e:
             log_event("error.occurred", "modal", "error", payload={"error": f"record_attribution: {e}"})
             return False
@@ -769,11 +794,16 @@ def orchestration_api():
         
         mapped_type = type_map.get(ghl_type, f"appointment.{ghl_type.lower()}")
         
-        # Extract contact info
+        # Extract contact info - check multiple GHL payload locations
         contact = body.get("contact", {})
         contact_id = body.get("contactId") or contact.get("id") or body.get("contact_id")
-        contact_phone = contact.get("phone") or body.get("phone") or body.get("contact_phone")
-        appointment_id = body.get("appointmentId") or body.get("appointment_id") or f"appt_{uuid.uuid4().hex[:8]}"
+        # Phone extraction priority: contact.phone > contact.phoneNumber > body.phone > body.contactPhone
+        contact_phone = (contact.get("phone") or contact.get("phoneNumber") or 
+                         body.get("phone") or body.get("contactPhone"))
+        # Appointment ID priority: appointmentId > appointment.id > id
+        appointment_id = (body.get("appointmentId") or 
+                          (body.get("appointment", {}) or {}).get("id") or 
+                          body.get("id") or f"appt_{uuid.uuid4().hex[:8]}")
         correlation_id = f"appt_{uuid.uuid4().hex[:8]}"
         
         # Normalize phone for attribution lookup
@@ -803,53 +833,78 @@ def orchestration_api():
         )
         
         # ===== ATTRIBUTION LOGIC =====
+        # ALWAYS create attribution record for appointment.created events
         attribution_result = {"attributed": False, "confidence": 0.0, "variant_id": None}
         
-        if contact_phone_normalized and mapped_type == "appointment.created":
-            # Find most recent outbound touch for this phone
-            touch_result = find_attributed_touch(contact_phone_normalized, max_days=7)
-            touch = touch_result.get("touch")
-            confidence = touch_result.get("confidence", 0.0)
-            
-            if touch and confidence > 0:
-                # Record attribution
-                success = record_attribution(appointment_id, contact_phone_normalized, touch, confidence)
+        if mapped_type == "appointment.created":
+            if contact_phone_normalized:
+                # Find most recent outbound touch for this phone
+                touch_result = find_attributed_touch(contact_phone_normalized, max_days=7)
+                touch = touch_result.get("touch")
+                confidence = touch_result.get("confidence", 0.0)
                 
-                attribution_result = {
-                    "attributed": success,
-                    "confidence": confidence,
-                    "variant_id": touch.get("variant_id"),
-                    "variant_name": touch.get("variant_name"),
-                    "run_id": touch.get("run_id"),
-                    "channel": touch.get("channel"),
-                    "touch_ts": touch.get("ts")
-                }
-                
-                # Emit appointment.attributed event
+                if touch and confidence > 0:
+                    # Record attribution WITH touch
+                    success = record_attribution(appointment_id, contact_phone_normalized, touch, confidence)
+                    
+                    attribution_result = {
+                        "attributed": success,
+                        "confidence": confidence,
+                        "variant_id": touch.get("variant_id"),
+                        "variant_name": touch.get("variant_name"),
+                        "channel": touch.get("channel"),
+                        "touch_id": touch.get("id")
+                    }
+                    
+                    # Emit attribution.created event
+                    log_event(
+                        "attribution.created",
+                        "modal",
+                        "info",
+                        correlation_id=f"{correlation_id}_attr",
+                        entity_id=contact_id,
+                        payload={
+                            "appointment_id": appointment_id,
+                            "touch_id": touch.get("id"),
+                            "variant_id": touch.get("variant_id"),
+                            "hours_since_touch": round((datetime.now(timezone.utc) - 
+                                datetime.fromisoformat(touch["ts"].replace("Z", "+00:00"))).total_seconds() / 3600, 2) if touch.get("ts") else None,
+                            "confidence": confidence
+                        }
+                    )
+                else:
+                    # No touch found - record with confidence=0, attribution_source='none'
+                    success = record_attribution(appointment_id, contact_phone_normalized, None, 0.0)
+                    attribution_result = {"attributed": False, "confidence": 0.0, "variant_id": None}
+                    
+                    # Emit attribution.missing event
+                    log_event(
+                        "attribution.missing",
+                        "modal",
+                        "warn",
+                        correlation_id=f"{correlation_id}_no_attr",
+                        entity_id=contact_id,
+                        payload={
+                            "appointment_id": appointment_id,
+                            "phone": contact_phone_normalized,
+                            "reason": "no_recent_touch"
+                        }
+                    )
+            else:
+                # No phone available - still record with no attribution
                 log_event(
-                    "appointment.attributed",
+                    "attribution.missing",
                     "modal",
-                    "info",
-                    correlation_id=f"{correlation_id}_attr",
+                    "warn",
+                    correlation_id=f"{correlation_id}_no_phone",
                     entity_id=contact_id,
                     payload={
                         "appointment_id": appointment_id,
-                        "phone": contact_phone_normalized,
-                        "variant_id": touch.get("variant_id"),
-                        "variant_name": touch.get("variant_name"),
-                        "run_id": touch.get("run_id"),
-                        "channel": touch.get("channel"),
-                        "confidence": confidence,
-                        "touch_ts": touch.get("ts")
+                        "reason": "no_phone_in_payload"
                     }
                 )
         
-        return {
-            "status": "ok", 
-            "event_type": mapped_type, 
-            "contact_id": contact_id,
-            "attribution": attribution_result
-        }
+        return {"status": "ok", "attributed": attribution_result.get("attributed", False)}
     
     @api.get("/api/reliability-check")
     def reliability_check():
