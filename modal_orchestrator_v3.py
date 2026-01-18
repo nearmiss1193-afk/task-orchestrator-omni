@@ -18,6 +18,9 @@ app = modal.App("empire-api-v3", image=image, secrets=[secrets])
 # Config (Non-sensitive constants only)
 SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
 GHL_SMS_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+# GHL Email Webhook - send marketing emails via GHL workflow
+GHL_EMAIL_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/email-outbound"
+GHL_LOCATION_ID = "RnK4OjX0oDcqtWw0VyLr"  # Empire Main location
 BOOKING_LINK = "https://link.aiserviceco.com/discovery"
 ESCALATION_PHONE = "+13529368152"
 
@@ -26,7 +29,8 @@ def get_secrets():
     return {
         "SUPABASE_KEY": os.environ.get("SUPABASE_KEY", ""),
         "GEMINI_API_KEY": os.environ.get("GEMINI_API_KEY", ""),
-        "RESEND_API_KEY": os.environ.get("RESEND_API_KEY", "")
+        "RESEND_API_KEY": os.environ.get("RESEND_API_KEY", ""),
+        "GHL_API_KEY": os.environ.get("GHL_API_KEY", "")
     }
 
 @app.function()
@@ -55,6 +59,106 @@ def orchestration_api():
             requests.post(f"{SUPABASE_URL}/rest/v1/event_log_v2", headers=headers, json=event, timeout=10)
         except Exception as e:
             print(f"[Log Error] {e}")
+    
+    def send_marketing_email_via_ghl(to_email: str, subject: str, html_body: str, 
+                                      text_body: str = None, contact_id: str = None,
+                                      campaign_id: str = None, variant_id: str = None,
+                                      metadata: dict = None) -> dict:
+        """
+        Send marketing/campaign emails via GHL webhook.
+        Returns: {"success": bool, "provider": "ghl", "message_id": str or None, "error": str or None}
+        """
+        import uuid
+        correlation_id = f"email_{uuid.uuid4().hex[:8]}"
+        
+        try:
+            payload = {
+                "email": to_email,
+                "subject": subject,
+                "html": html_body,
+                "text": text_body or "",
+                "contact_id": contact_id,
+                "campaign_id": campaign_id,
+                "variant_id": variant_id,
+                "location_id": GHL_LOCATION_ID,
+                "metadata": metadata or {}
+            }
+            
+            ghl_resp = requests.post(GHL_EMAIL_WEBHOOK, json=payload, timeout=30)
+            
+            if ghl_resp.status_code in [200, 201]:
+                log_event("email.sent", "modal", "info", correlation_id, to_email, {
+                    "provider": "ghl",
+                    "subject": subject,
+                    "campaign_id": campaign_id,
+                    "variant_id": variant_id,
+                    "contact_id": contact_id
+                })
+                return {"success": True, "provider": "ghl", "message_id": correlation_id, "error": None}
+            else:
+                error_msg = f"GHL returned {ghl_resp.status_code}"
+                log_event("email.failed", "modal", "error", correlation_id, to_email, {
+                    "provider": "ghl",
+                    "subject": subject,
+                    "error": error_msg,
+                    "status_code": ghl_resp.status_code
+                })
+                return {"success": False, "provider": "ghl", "message_id": None, "error": error_msg}
+        except Exception as e:
+            log_event("email.failed", "modal", "error", correlation_id, to_email, {
+                "provider": "ghl",
+                "subject": subject,
+                "error": str(e)
+            })
+            return {"success": False, "provider": "ghl", "message_id": None, "error": str(e)}
+    
+    def send_alert_email(subject: str, body: str, severity: str = "warning") -> dict:
+        """
+        Send system alert emails via Resend. 
+        Only for internal alerts (deadman checks, incidents) - NOT for marketing.
+        Returns: {"success": bool, "provider": "resend", "message_id": str or None, "error": str or None}
+        """
+        import uuid
+        correlation_id = f"alert_{uuid.uuid4().hex[:8]}"
+        RESEND_API_KEY = secrets.get("RESEND_API_KEY", "")
+        
+        if not RESEND_API_KEY:
+            log_event("alert.skipped", "modal", "warn", correlation_id, None, {
+                "reason": "RESEND_API_KEY not configured",
+                "subject": subject
+            })
+            return {"success": False, "provider": "resend", "message_id": None, "error": "No RESEND_API_KEY"}
+        
+        try:
+            resend_resp = requests.post(
+                "https://api.resend.com/emails",
+                headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+                json={
+                    "from": "Sovereign Alert <alerts@aiserviceco.com>",
+                    "to": ["nearmiss1193@gmail.com"],
+                    "subject": f"[{severity.upper()}] {subject}",
+                    "html": f"<h3>{subject}</h3><pre>{body}</pre>"
+                },
+                timeout=15
+            )
+            
+            if resend_resp.status_code in [200, 201]:
+                log_event("alert.sent", "modal", "info", correlation_id, None, {
+                    "provider": "resend",
+                    "subject": subject,
+                    "severity": severity
+                })
+                return {"success": True, "provider": "resend", "message_id": correlation_id, "error": None}
+            else:
+                log_event("alert.failed", "modal", "error", correlation_id, None, {
+                    "provider": "resend",
+                    "subject": subject,
+                    "error": f"Resend returned {resend_resp.status_code}"
+                })
+                return {"success": False, "provider": "resend", "message_id": None, "error": f"Resend error: {resend_resp.status_code}"}
+        except Exception as e:
+            print(f"[send_alert_email] Error: {e}")
+            return {"success": False, "provider": "resend", "message_id": None, "error": str(e)}
     
     @api.get("/health")
     def health():
@@ -317,6 +421,85 @@ def orchestration_api():
             "effective_windows": effective_windows,
             "auto_reverts": "Jan 20 or WEEKEND_LAUNCH_MODE=false",
             "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    @api.post("/api/email-batch")
+    def email_batch(data: dict):
+        """
+        Send batch marketing emails via GHL.
+        Payload: {
+            "contacts": [{"email": "...", "company": "...", "subject": "...", "html": "...", "text": "..."}],
+            "dry_run": true/false,
+            "campaign_id": "optional",
+            "variant_id": "optional"
+        }
+        """
+        import time
+        import uuid
+        
+        contacts = data.get("contacts", [])
+        dry_run = data.get("dry_run", False)
+        campaign_id = data.get("campaign_id")
+        variant_id = data.get("variant_id")
+        run_id = data.get("run_id") or f"email_batch_{uuid.uuid4().hex[:8]}"
+        
+        results = {"sent": 0, "failed": 0, "details": []}
+        
+        log_event("email.batch.started", "modal", "info", run_id, None, {
+            "contact_count": len(contacts),
+            "dry_run": dry_run,
+            "campaign_id": campaign_id,
+            "variant_id": variant_id
+        })
+        
+        for contact in contacts[:25]:  # Limit to 25 per batch
+            email = contact.get("email")
+            subject = contact.get("subject", "Your Free HVAC Business Diagnostic Report")
+            html_body = contact.get("html", f"<p>Hi! We have a diagnostic report ready for {contact.get('company', 'your business')}.</p>")
+            text_body = contact.get("text", "")
+            company = contact.get("company", "")
+            
+            if not email:
+                results["failed"] += 1
+                results["details"].append({"email": email, "status": "no_email"})
+                continue
+            
+            if dry_run:
+                results["sent"] += 1
+                results["details"].append({"email": email, "status": "dry_run", "company": company})
+            else:
+                result = send_marketing_email_via_ghl(
+                    to_email=email,
+                    subject=subject,
+                    html_body=html_body,
+                    text_body=text_body,
+                    contact_id=contact.get("contact_id"),
+                    campaign_id=campaign_id,
+                    variant_id=variant_id,
+                    metadata={"company": company, "run_id": run_id}
+                )
+                if result["success"]:
+                    results["sent"] += 1
+                    results["details"].append({"email": email, "status": "sent", "company": company})
+                else:
+                    results["failed"] += 1
+                    results["details"].append({"email": email, "status": "failed", "error": result["error"]})
+            
+            time.sleep(0.3)  # Rate limiting
+        
+        log_event("email.batch.completed", "modal", "info", run_id, None, {
+            "sent": results["sent"],
+            "failed": results["failed"],
+            "dry_run": dry_run
+        })
+        
+        return {
+            "status": "ok",
+            "run_id": run_id,
+            "sent": results["sent"],
+            "failed": results["failed"],
+            "provider": "ghl" if not dry_run else "dry_run",
+            "details": results["details"][:10]  # Limit response size
         }
     
     return api
