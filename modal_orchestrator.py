@@ -177,6 +177,14 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         except Exception as e:
             print(f"Gemini error: {e}")
             response_text = f"Hi! Thanks for reaching out. Book a free call here: {BOOKING_LINK} -Sarah"
+            # CONTRACT: error.occurred for AI failures
+            log_event("error.occurred", "modal", "error", correlation_id=phone, payload={
+                "error": "gemini_generation_failed",
+                "message": str(e)[:200],
+                "component": "inbound_handler",
+                "severity": "warn",
+                "recoverable": True
+            })
         
         # Log interaction
         requests.post(f"{SUPABASE_URL}/rest/v1/interactions", headers=headers, json={
@@ -185,10 +193,32 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         })
         
         # Send response via GHL
-        requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": response_text}, timeout=15)
+        message_id = f"msg_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{phone[-4:]}"
+        sms_success = False
+        try:
+            ghl_resp = requests.post(GHL_SMS_WEBHOOK, json={"phone": phone, "message": response_text}, timeout=15)
+            sms_success = ghl_resp.status_code < 400
+        except Exception as e:
+            print(f"[GHL] Inbound response failed: {e}")
         
-        # Log response sent
-        log_event("task.completed", "modal", "info", correlation_id=phone, payload={"agent": "sarah", "response": response_text[:100]})
+        # CONTRACT: sms.sent / sms.failed events
+        if sms_success:
+            log_event("sms.sent", "modal", "info", correlation_id=phone, entity_id=message_id, payload={
+                "message_id": message_id,
+                "to": phone,
+                "template": "inbound_response",
+                "agent": "sarah"
+            })
+        else:
+            log_event("sms.failed", "modal", "error", correlation_id=phone, entity_id=message_id, payload={
+                "message_id": message_id,
+                "to": phone,
+                "error": "ghl_send_failed",
+                "agent": "sarah"
+            })
+        
+        # Log task completion
+        log_event("task.completed", "modal", "info", correlation_id=phone, payload={"agent": "sarah", "response": response_text[:100], "sms_sent": sms_success})
         
         return {"agent": "sarah", "response": response_text}
     
@@ -377,6 +407,123 @@ Respond as Sarah. Keep it short (under 160 chars for SMS). Be helpful and push f
         )
         
         return {"status": "ok", "event_type": event_type}
+    
+    @api.post("/webhook/vapi")
+    async def vapi_webhook(request: Request, token: str = ""):
+        """
+        VAPI.ai webhook receiver for voice call events.
+        Emits call.answered / call.missed events per the strict event taxonomy.
+        """
+        try:
+            data = await request.json()
+        except:
+            data = {}
+        
+        # Token auth (optional)
+        expected_token = os.environ.get("VAPI_WEBHOOK_TOKEN", os.environ.get("WEBHOOK_TOKEN", "sovereign_default"))
+        if token and token != expected_token:
+            return {"status": "error", "message": "invalid_token"}
+        
+        # Parse VAPI payload structure
+        call_id = data.get("call", {}).get("id") or data.get("callId") or data.get("id", "")
+        call_type = data.get("type") or data.get("event") or data.get("status", "")
+        phone_number = data.get("call", {}).get("customer", {}).get("number") or data.get("phoneNumber") or data.get("from", "")
+        
+        # Extract call metadata
+        duration_seconds = data.get("call", {}).get("duration") or data.get("duration") or 0
+        ended_reason = data.get("call", {}).get("endedReason") or data.get("endedReason") or ""
+        assistant_id = data.get("call", {}).get("assistantId") or data.get("assistantId") or ""
+        
+        # Normalize phone for correlation
+        import re
+        def normalize_phone(p: str) -> str:
+            if not p: return ""
+            digits = re.sub(r'\D', '', p)
+            if len(digits) == 10: return f"+1{digits}"
+            elif len(digits) == 11 and digits.startswith('1'): return f"+{digits}"
+            return f"+{digits}" if digits else ""
+        
+        normalized_phone = normalize_phone(phone_number)
+        
+        # CONTRACT: webhook.inbound event first
+        log_event("webhook.inbound", "vapi", "info", entity_id=call_id, payload={
+            "provider": "vapi",
+            "event": call_type,
+            "id": call_id,
+            "path": "/webhook/vapi"
+        })
+        
+        # Determine call event type based on VAPI status
+        # VAPI events: call-started, assistant-message, user-message, call-ended, etc.
+        if call_type in ["call-started", "call-answered", "assistant-request"]:
+            # CONTRACT: call.answered payload
+            log_event("call.answered", "vapi", "info", correlation_id=normalized_phone, entity_id=call_id, payload={
+                "call_id": call_id,
+                "from": normalized_phone,
+                "assistant_id": assistant_id,
+                "provider": "vapi",
+                "duration_seconds": duration_seconds
+            })
+            
+        elif call_type in ["call-ended", "completed"]:
+            # Check if it was answered or missed based on duration/reason
+            was_answered = duration_seconds > 0 or ended_reason not in ["no-answer", "missed", "busy", "voicemail"]
+            
+            if was_answered:
+                # CONTRACT: call.answered (completion) payload
+                log_event("call.answered", "vapi", "info", correlation_id=normalized_phone, entity_id=call_id, payload={
+                    "call_id": call_id,
+                    "from": normalized_phone,
+                    "assistant_id": assistant_id,
+                    "provider": "vapi",
+                    "duration_seconds": duration_seconds,
+                    "ended_reason": ended_reason,
+                    "status": "completed"
+                })
+            else:
+                # CONTRACT: call.missed payload
+                log_event("call.missed", "vapi", "warn", correlation_id=normalized_phone, entity_id=call_id, payload={
+                    "call_id": call_id,
+                    "from": normalized_phone,
+                    "reason": ended_reason or "no_answer",
+                    "provider": "vapi",
+                    "follow_up": "scheduled"
+                })
+                
+        elif call_type in ["no-answer", "missed", "busy", "failed"]:
+            # CONTRACT: call.missed payload
+            log_event("call.missed", "vapi", "warn", correlation_id=normalized_phone, entity_id=call_id, payload={
+                "call_id": call_id,
+                "from": normalized_phone,
+                "reason": call_type,
+                "provider": "vapi",
+                "follow_up": "scheduled"
+            })
+        
+        # Store call transcript if present
+        transcript = data.get("transcript") or data.get("call", {}).get("transcript")
+        summary = data.get("summary") or data.get("call", {}).get("summary")
+        
+        if transcript or summary:
+            try:
+                requests.post(f"{SUPABASE_URL}/rest/v1/call_transcripts", headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}",
+                    "Content-Type": "application/json"
+                }, json={
+                    "call_id": call_id,
+                    "customer_phone": normalized_phone,
+                    "transcript": transcript,
+                    "summary": summary,
+                    "duration_seconds": duration_seconds,
+                    "ended_reason": ended_reason,
+                    "assistant_id": assistant_id
+                }, timeout=10)
+            except Exception as e:
+                print(f"[VAPI] Failed to store transcript: {e}")
+        
+        print(f"[VAPI Webhook] {call_type} call_id={call_id} phone={normalized_phone}")
+        return {"status": "ok", "call_id": call_id, "event_type": call_type}
     
     @api.post("/outbound")
     def handle_outbound(data: dict):
@@ -857,8 +1004,16 @@ Be specific and actionable. Output ONLY the insight, no intro."""
                     timeout=30
                 )
                 audit_insight = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-            except:
+            except Exception as e:
                 audit_insight = f"Your {industry} business could benefit from automated lead capture and follow-up."
+                # CONTRACT: error.occurred for AI failures
+                log_event("error.occurred", "modal", "error", payload={
+                    "error": "gemini_audit_failed",
+                    "message": str(e)[:200],
+                    "component": "prospecting",
+                    "severity": "warn",
+                    "recoverable": True
+                })
             
             # Add to contacts_master for outreach
             try:
