@@ -4,7 +4,7 @@ Only essential endpoints, NO scheduled functions
 """
 import modal
 from fastapi import FastAPI, Request
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import json
 import os
 
@@ -271,17 +271,131 @@ def orchestration_api():
         except Exception as e:
             result["notes"]["campaign_error"] = str(e)
         
-        # 4. Log this truth check (debug level)
+        # 4. Get SMS counts for last 24 hours
+        sms_sent_24h = 0
+        sms_failed_24h = 0
+        try:
+            # Count SMS sent
+            sms_sent_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.sent&ts=gte.{(datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()}&select=id",
+                headers={**headers, "Prefer": "count=exact"}, timeout=10
+            )
+            if sms_sent_resp.status_code == 200:
+                sms_sent_24h = int(sms_sent_resp.headers.get("content-range", "0-0/0").split("/")[-1])
+            
+            # Count SMS failed
+            sms_failed_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.failed&ts=gte.{(datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()}&select=id",
+                headers={**headers, "Prefer": "count=exact"}, timeout=10
+            )
+            if sms_failed_resp.status_code == 200:
+                sms_failed_24h = int(sms_failed_resp.headers.get("content-range", "0-0/0").split("/")[-1])
+        except Exception as e:
+            result["notes"]["sms_count_error"] = str(e)
+        
+        result["sms_sent_last_24h"] = sms_sent_24h
+        result["sms_failed_last_24h"] = sms_failed_24h
+        
+        # 5. Log this truth check (debug level)
         try:
             log_event("dashboard.truth_checked", "modal", "debug", 
                       correlation_id=f"truth_{uuid.uuid4().hex[:6]}",
                       payload={
                           "last_event_ts": result["last_event_ts"],
                           "last_kpi_ts": result["last_kpi_ts"],
-                          "last_campaign_ran_at": result["last_campaign_ran_at"]
+                          "last_campaign_ran_at": result["last_campaign_ran_at"],
+                          "sms_sent_24h": sms_sent_24h,
+                          "sms_failed_24h": sms_failed_24h
                       })
         except:
             pass
+        
+        return result
+    
+    @api.get("/api/sms/status")
+    def sms_status(since_hours: int = 24):
+        """
+        SMS Campaign Status - Returns SMS sent/failed counts and recent entries.
+        Query: ?since_hours=24 (default)
+        """
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=since_hours)
+        
+        result = {
+            "status": "ok",
+            "since_hours": since_hours,
+            "cutoff_time": cutoff.isoformat(),
+            "sms_sent": 0,
+            "sms_failed": 0,
+            "sms_fallback": 0,
+            "sms_dry_run": 0,
+            "sms_queued": 0,
+            "total_sms_events": 0,
+            "failure_reasons": {},
+            "recent_entries": [],
+            "errors": []
+        }
+        
+        try:
+            # Fetch all SMS-related events (last 500)
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?select=type,ts,entity_id,payload&order=ts.desc&limit=500",
+                headers=headers, timeout=15
+            )
+            
+            if resp.status_code != 200:
+                result["errors"].append(f"fetch_error: HTTP {resp.status_code}")
+                return result
+            
+            events = resp.json()
+            
+            # Filter SMS events within time range
+            for evt in events:
+                etype = evt.get("type", "")
+                if not etype.startswith("sms."):
+                    continue
+                    
+                # Parse timestamp
+                ts_str = evt.get("ts")
+                if not ts_str:
+                    continue
+                try:
+                    ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                    if ts < cutoff:
+                        continue  # Skip events older than cutoff
+                except:
+                    continue
+                
+                result["total_sms_events"] += 1
+                payload = evt.get("payload") or {}
+                
+                # Count by type
+                if etype == "sms.sent":
+                    result["sms_sent"] += 1
+                elif etype == "sms.failed":
+                    result["sms_failed"] += 1
+                    if payload.get("error"):
+                        reason = str(payload.get("error"))[:50]
+                        result["failure_reasons"][reason] = result["failure_reasons"].get(reason, 0) + 1
+                elif etype == "sms.fallback":
+                    result["sms_fallback"] += 1
+                elif etype == "sms.dry_run":
+                    result["sms_dry_run"] += 1
+                elif etype == "sms.queued":
+                    result["sms_queued"] += 1
+                
+                # Add to recent entries (first 10)
+                if len(result["recent_entries"]) < 10:
+                    result["recent_entries"].append({
+                        "type": etype,
+                        "ts": ts_str,
+                        "phone": payload.get("phone") or payload.get("to_phone") or evt.get("entity_id"),
+                        "contact": payload.get("contact_name") or payload.get("company_name"),
+                        "error": payload.get("error")
+                    })
+                    
+        except Exception as e:
+            result["errors"].append(f"exception: {str(e)}")
         
         return result
     
