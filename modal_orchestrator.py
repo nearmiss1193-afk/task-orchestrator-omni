@@ -2647,3 +2647,127 @@ def scheduled_timezone_aware_campaign():
         print(f"[CRON TZ] Error: {e}")
         return {"status": "fail", "error": str(e)}
 
+
+@app.function(schedule=modal.Cron("*/10 * * * *"))  # Every 10 minutes
+def scheduled_kickoff_once():
+    """
+    One-time kickoff run per day.
+    
+    Checks kickoff_runs table:
+    - If exists row where date=today AND executed=false
+    - Run timezone-aware campaign respecting windows
+    - Mark executed=true
+    - Record job_runs and emit kickoff.run event
+    
+    Use case: Schedule a specific date for campaign start.
+    """
+    import requests
+    import time
+    import uuid
+    from datetime import datetime
+    
+    run_id = f"kickoff_{uuid.uuid4().hex[:8]}"
+    start_time = time.time()
+    base_url = "https://nearmiss1193-afk--empire-api-v1-orchestration-api.modal.run"
+    
+    # Check if there's a pending kickoff for today
+    try:
+        secrets = get_secrets()
+        supabase_key = secrets["SUPABASE_KEY"]
+        headers = {"apikey": supabase_key, "Authorization": f"Bearer {supabase_key}", "Content-Type": "application/json"}
+        
+        today = datetime.utcnow().strftime('%Y-%m-%d')
+        
+        # Check for pending kickoff
+        resp = requests.get(
+            f"{SUPABASE_URL}/rest/v1/kickoff_runs?date=eq.{today}&executed=eq.false&limit=1",
+            headers=headers, timeout=10
+        )
+        
+        if resp.status_code != 200 or not resp.json():
+            # No pending kickoff for today
+            return {"status": "skip", "reason": "no_pending_kickoff", "date": today}
+        
+        kickoff = resp.json()[0]
+        print(f"[KICKOFF] Found pending kickoff for {today}")
+        
+        # Record job start
+        record_job_run_safe("kickoff", "once", "running", {"run_id": run_id, "date": today}, run_id)
+        emit_event_safe("job.started", "modal_cron", "info", run_id, None, {
+            "job_name": "kickoff", "schedule": "once", "run_id": run_id, "date": today
+        })
+        
+        # Get contacts in their business hours window
+        contacts_in_window = get_contacts_in_business_hours(channel="sms")
+        
+        if not contacts_in_window:
+            # No contacts in window yet - don't mark executed, try again in 10 min
+            emit_event_safe("kickoff.waiting", "modal_cron", "info", run_id, None, {
+                "date": today, "reason": "no_contacts_in_window", "will_retry": True
+            })
+            print(f"[KICKOFF] No contacts in window yet, will retry")
+            return {"status": "waiting", "reason": "no_contacts_in_window", "will_retry": True}
+        
+        # Execute campaign for contacts in window
+        contact_ids = [c.get("id") for c in contacts_in_window if c.get("id")]
+        
+        try:
+            campaign_resp = requests.post(
+                f"{base_url}/api/campaign-batch",
+                json={"contact_ids": contact_ids, "channel": "sms", "run_id": run_id},
+                headers={"Content-Type": "application/json"},
+                timeout=120
+            )
+            result = campaign_resp.json() if campaign_resp.status_code == 200 else {"error": campaign_resp.status_code}
+        except Exception as e:
+            result = {"error": str(e)}
+        
+        duration_ms = int((time.time() - start_time) * 1000)
+        contacts_reached = result.get("sent", len(contacts_in_window))
+        
+        # Mark kickoff as executed
+        try:
+            requests.patch(
+                f"{SUPABASE_URL}/rest/v1/kickoff_runs?date=eq.{today}",
+                headers=headers,
+                json={
+                    "executed": True,
+                    "executed_at": datetime.utcnow().isoformat(),
+                    "run_id": run_id,
+                    "contacts_reached": contacts_reached,
+                    "details": {"result": result, "duration_ms": duration_ms}
+                },
+                timeout=10
+            )
+        except Exception as e:
+            print(f"[KICKOFF] Failed to mark executed: {e}")
+        
+        # Record job completion
+        record_job_run_safe("kickoff", "once", "success", {
+            "run_id": run_id, "date": today, "contacts_reached": contacts_reached,
+            "duration_ms": duration_ms, "result": result
+        }, run_id)
+        
+        # Emit kickoff.run event
+        emit_event_safe("kickoff.run", "modal_cron", "info", run_id, None, {
+            "date": today,
+            "contacts_reached": contacts_reached,
+            "duration_ms": duration_ms,
+            "result": result
+        })
+        
+        print(f"[KICKOFF] Complete! Reached {contacts_reached} contacts in {duration_ms}ms")
+        return {
+            "status": "success",
+            "date": today,
+            "contacts_reached": contacts_reached,
+            "duration_ms": duration_ms
+        }
+        
+    except Exception as e:
+        emit_event_safe("job.failed", "modal_cron", "error", run_id, None, {
+            "job_name": "kickoff", "run_id": run_id, "error": str(e)
+        })
+        print(f"[KICKOFF] Error: {e}")
+        return {"status": "fail", "error": str(e)}
+
