@@ -210,6 +210,81 @@ def orchestration_api():
             "timestamp": datetime.utcnow().isoformat()
         }
     
+    @api.get("/api/truth")
+    def truth():
+        """
+        Dashboard Truth Strip - returns system health metrics in one call.
+        Used by dashboard to show staleness alerts.
+        """
+        from datetime import timezone
+        import uuid
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        server_time = datetime.now(timezone.utc).isoformat()
+        
+        result = {
+            "status": "ok",
+            "api_base": "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run",
+            "server_time": server_time,
+            "last_event_ts": None,
+            "last_kpi_ts": None,
+            "last_campaign_ran_at": None,
+            "notes": {}
+        }
+        
+        # 1. Get last event from event_log_v2
+        try:
+            evt_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?select=ts,type&order=ts.desc&limit=1",
+                headers=headers, timeout=10
+            )
+            if evt_resp.status_code == 200:
+                data = evt_resp.json()
+                if data and len(data) > 0:
+                    result["last_event_ts"] = data[0].get("ts")
+        except Exception as e:
+            result["notes"]["event_error"] = str(e)
+        
+        # 2. Get last KPI snapshot
+        try:
+            kpi_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.kpi.snapshot&select=ts&order=ts.desc&limit=1",
+                headers=headers, timeout=10
+            )
+            if kpi_resp.status_code == 200:
+                data = kpi_resp.json()
+                if data and len(data) > 0:
+                    result["last_kpi_ts"] = data[0].get("ts")
+        except Exception as e:
+            result["notes"]["kpi_error"] = str(e)
+        
+        # 3. Get last campaign run from job_runs
+        try:
+            job_resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/job_runs?job_name=in.(campaign,campaign_8am,campaign_batch,scheduled_timezone_aware_campaign)&select=ran_at,job_name&order=ran_at.desc&limit=1",
+                headers=headers, timeout=10
+            )
+            if job_resp.status_code == 200:
+                data = job_resp.json()
+                if data and len(data) > 0:
+                    result["last_campaign_ran_at"] = data[0].get("ran_at")
+        except Exception as e:
+            result["notes"]["campaign_error"] = str(e)
+        
+        # 4. Log this truth check (debug level)
+        try:
+            log_event("dashboard.truth_checked", "modal", "debug", 
+                      correlation_id=f"truth_{uuid.uuid4().hex[:6]}",
+                      payload={
+                          "last_event_ts": result["last_event_ts"],
+                          "last_kpi_ts": result["last_kpi_ts"],
+                          "last_campaign_ran_at": result["last_campaign_ran_at"]
+                      })
+        except:
+            pass
+        
+        return result
+    
     @api.get("/api/kpi-snapshot")
     def kpi_snapshot():
         """Emit KPI snapshot - simplified"""
