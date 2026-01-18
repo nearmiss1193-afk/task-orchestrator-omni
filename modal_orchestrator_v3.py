@@ -265,4 +265,58 @@ def orchestration_api():
             "canaries": []
         }
     
+    @api.get("/api/launch/mode")
+    def launch_mode():
+        """
+        Weekend Launch Mode endpoint for Jan 18-19.
+        Returns effective time windows and mode status.
+        """
+        from datetime import timedelta
+        
+        utc_now = datetime.utcnow()
+        ct_now = utc_now - timedelta(hours=6)  # CT is UTC-6
+        today_str = ct_now.strftime('%Y-%m-%d')
+        today_day = ct_now.day
+        today_month = ct_now.month
+        
+        # Check if weekend launch mode is enabled
+        weekend_launch_mode = os.environ.get("WEEKEND_LAUNCH_MODE", "true").lower() == "true"
+        
+        # Jan 18-19 specific windows (weekend launch exception)
+        is_launch_weekend = (today_month == 1 and today_day in [18, 19])
+        
+        if weekend_launch_mode and is_launch_weekend:
+            effective_windows = {
+                "mode": "weekend_launch",
+                "sms": {"start": 10, "end": 14, "description": "10am-2pm local"},
+                "phone": {"start": 10, "end": 13, "description": "10am-1pm local"},
+                "email": {"start": 9, "end": 12, "description": "9am-12pm local"}
+            }
+            # Log override once per call
+            log_event("launch.weekend_override_enabled", "modal", "info", payload={
+                "date": today_str,
+                "sms_window": "10-14",
+                "phone_window": "10-13",
+                "email_window": "9-12"
+            })
+        else:
+            # Standard weekday windows
+            effective_windows = {
+                "mode": "standard_weekday",
+                "sms": {"start": 9, "end": 18, "description": "9am-6pm local"},
+                "phone": {"start": 9, "end": 17, "description": "9am-5pm local"},
+                "email": {"start": 8, "end": 18, "description": "8am-6pm local"}
+            }
+        
+        return {
+            "status": "ok",
+            "weekend_launch_mode": weekend_launch_mode,
+            "is_launch_weekend": is_launch_weekend,
+            "today_ct": today_str,
+            "ct_hour": ct_now.hour,
+            "effective_windows": effective_windows,
+            "auto_reverts": "Jan 20 or WEEKEND_LAUNCH_MODE=false",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
     return api

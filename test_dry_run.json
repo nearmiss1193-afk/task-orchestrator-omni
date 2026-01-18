@@ -1,0 +1,10 @@
+{
+    "contacts": [
+        {
+            "phone": "+15551234567",
+            "company": "TestHVAC",
+            "vertical": "hvac"
+        }
+    ],
+    "dry_run": true
+}
