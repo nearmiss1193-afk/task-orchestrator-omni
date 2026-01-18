@@ -1,186 +1,97 @@
--- KPI Views Migration
--- Creates daily aggregate views and health check function
+-- KPI Views Migration v2
+-- Updated views and health check per strict contract
 -- ============================================================
--- VIEW: kpi_daily
--- Daily aggregates of key events for dashboard and analytics
+-- 3A) View: kpi_daily
 -- ============================================================
-CREATE OR REPLACE VIEW kpi_daily AS
-SELECT DATE(ts) as day,
-    COUNT(*) FILTER (
-        WHERE type = 'appointment.created'
+create or replace view public.kpi_daily as
+select date_trunc('day', ts) as day,
+    count(*) filter (
+        where type = 'appointment.created'
     ) as appointments_booked,
-    COUNT(*) FILTER (
-        WHERE type = 'appointment.updated'
-            AND payload->>'status' = 'confirmed'
-    ) as appointments_confirmed,
-    COUNT(*) FILTER (
-        WHERE type = 'call.answered'
-    ) as calls_answered,
-    COUNT(*) FILTER (
-        WHERE type = 'call.missed'
-    ) as calls_missed,
-    COUNT(*) FILTER (
-        WHERE type = 'sms.sent'
+    count(*) filter (
+        where type = 'call.answered'
+    ) as answered_calls,
+    count(*) filter (
+        where type = 'call.missed'
+    ) as missed_calls,
+    count(*) filter (
+        where type = 'sms.sent'
     ) as sms_sent,
-    COUNT(*) FILTER (
-        WHERE type = 'sms.failed'
+    count(*) filter (
+        where type = 'sms.failed'
     ) as sms_failed,
-    COUNT(*) FILTER (
-        WHERE type LIKE 'lead.%'
-    ) as leads_total,
-    COUNT(*) FILTER (
-        WHERE severity = 'error'
-    ) as errors,
-    COUNT(*) FILTER (
-        WHERE severity = 'critical'
-    ) as critical_errors,
-    COUNT(*) as total_events
-FROM event_log_v2
-GROUP BY DATE(ts)
-ORDER BY day DESC;
-COMMENT ON VIEW kpi_daily IS 'Daily KPI aggregates from event_log_v2';
+    count(*) filter (
+        where severity in ('error', 'critical')
+            or type like '%.error'
+    ) as errors
+from public.event_log_v2
+group by 1
+order by 1 desc;
 -- ============================================================
--- VIEW: job_runs_daily  
--- Daily job execution summary for monitoring
+-- 3B) View: job_runs_daily
 -- ============================================================
-CREATE OR REPLACE VIEW job_runs_daily AS
-SELECT scheduled_for as day,
-    COUNT(*) FILTER (
-        WHERE job_name = 'campaign'
-            AND status = 'success'
-    ) as campaign_success,
-    COUNT(*) FILTER (
-        WHERE job_name = 'campaign'
-            AND status = 'catchup'
-    ) as campaign_catchup,
-    COUNT(*) FILTER (
-        WHERE job_name = 'campaign'
-            AND status = 'fail'
-    ) as campaign_fail,
-    COUNT(*) FILTER (
-        WHERE job_name = 'campaign'
-            AND status = 'skipped'
-    ) as campaign_skipped,
-    COUNT(*) FILTER (
-        WHERE job_name = 'prospect'
-            AND status = 'success'
-    ) as prospect_success,
-    COUNT(*) FILTER (
-        WHERE job_name = 'prospect'
-            AND status = 'fail'
-    ) as prospect_fail,
-    COUNT(*) FILTER (
-        WHERE job_name = 'optimize'
-            AND status = 'success'
-    ) as optimize_success,
-    COUNT(*) FILTER (
-        WHERE job_name = 'kpi_snapshot'
-    ) as kpi_snapshots,
-    COUNT(*) FILTER (
-        WHERE job_name = 'reliability_check'
-    ) as reliability_checks,
-    COUNT(*) as total_runs
-FROM job_runs
-GROUP BY scheduled_for
-ORDER BY day DESC;
-COMMENT ON VIEW job_runs_daily IS 'Daily job execution summary from job_runs';
+create or replace view public.job_runs_daily as
+select scheduled_for as day,
+    job_name,
+    window_id,
+    max(ran_at) as last_ran_at,
+    max(status) as last_status
+from public.job_runs
+group by 1,
+    2,
+    3
+order by 1 desc,
+    2 asc;
 -- ============================================================
--- FUNCTION: kpi_health_check()
--- Returns missing/failed jobs and error spikes for alerting
+-- 3C) Function: kpi_health_check()
+-- Returns: missing required jobs today, error spike in last 24h
 -- ============================================================
-CREATE OR REPLACE FUNCTION kpi_health_check() RETURNS TABLE (
-        issue_type TEXT,
-        issue_severity TEXT,
-        -- Renamed to avoid ambiguity with event_log_v2.severity
-        description TEXT,
-        details JSONB,
-        detected_at TIMESTAMPTZ
-    ) AS $$
-DECLARE today DATE := CURRENT_DATE;
-current_hour INTEGER := EXTRACT(
-    HOUR
-    FROM NOW()
-);
-errors_24h INTEGER;
-errors_prev_24h INTEGER;
-campaign_ran BOOLEAN;
-BEGIN -- Check 1: Campaign didn't run today (after 9 AM)
-IF current_hour >= 9 THEN
-SELECT EXISTS(
-        SELECT 1
-        FROM job_runs
-        WHERE job_name = 'campaign'
-            AND scheduled_for = today
-            AND status IN ('success', 'catchup')
-    ) INTO campaign_ran;
-IF NOT campaign_ran THEN RETURN QUERY
-SELECT 'missing_job'::TEXT,
-    'critical'::TEXT,
-    'Campaign did not run today'::TEXT,
-    jsonb_build_object(
-        'job_name',
-        'campaign',
-        'expected_window',
-        '8am_ct'
-    ),
-    NOW();
-END IF;
-END IF;
--- Check 2: Error spike (2x increase vs prev 24h)
-SELECT COUNT(*) INTO errors_24h
-FROM event_log_v2 e
-WHERE e.severity IN ('error', 'critical')
-    AND e.ts > NOW() - INTERVAL '24 hours';
-SELECT COUNT(*) INTO errors_prev_24h
-FROM event_log_v2 e
-WHERE e.severity IN ('error', 'critical')
-    AND e.ts BETWEEN NOW() - INTERVAL '48 hours'
-    AND NOW() - INTERVAL '24 hours';
-IF errors_24h > 5
-AND errors_24h > (errors_prev_24h * 2) THEN RETURN QUERY
-SELECT 'error_spike'::TEXT,
-    'warning'::TEXT,
-    'Error rate increased significantly'::TEXT,
-    jsonb_build_object(
-        'errors_24h',
-        errors_24h,
-        'errors_prev_24h',
-        errors_prev_24h,
-        'ratio',
-        ROUND(
-            errors_24h::NUMERIC / GREATEST(errors_prev_24h, 1),
-            2
+create or replace function public.kpi_health_check() returns table(issue text, detail jsonb) language plpgsql as $$
+declare required_jobs text [] := array ['campaign','prospect','reliability_check','kpi_snapshot'];
+j text;
+begin -- missing jobs today
+foreach j in array required_jobs loop if not exists (
+    select 1
+    from public.job_runs
+    where job_name = j
+        and scheduled_for = current_date
+        and status in ('success', 'catchup', 'skipped')
+) then issue := 'missing_job_today';
+detail := jsonb_build_object('job_name', j, 'date', current_date);
+return next;
+end if;
+end loop;
+-- error spike last 24h (>= 10 errors)
+if (
+    select count(*)
+    from public.event_log_v2
+    where ts > now() - interval '24 hours'
+        and (
+            severity in ('error', 'critical')
+            or type like '%.error'
         )
-    ),
-    NOW();
-END IF;
--- Check 3: No KPI snapshots in last 30 minutes
-IF NOT EXISTS(
-    SELECT 1
-    FROM event_log_v2 e
-    WHERE e.type = 'kpi.snapshot'
-        AND e.ts > NOW() - INTERVAL '30 minutes'
-) THEN RETURN QUERY
-SELECT 'stale_kpi'::TEXT,
-    'warning'::TEXT,
-    'No KPI snapshots in last 30 minutes'::TEXT,
-    jsonb_build_object('expected_interval', '10 minutes'),
-    NOW();
-END IF;
--- Check 4: Zero appointments in last 7 days
-IF NOT EXISTS(
-    SELECT 1
-    FROM event_log_v2 e
-    WHERE e.type = 'appointment.created'
-        AND e.ts > NOW() - INTERVAL '7 days'
-) THEN RETURN QUERY
-SELECT 'no_appointments'::TEXT,
-    'warning'::TEXT,
-    'No appointments booked in last 7 days'::TEXT,
-    jsonb_build_object('primary_kpi', 'appointments_booked'),
-    NOW();
-END IF;
-RETURN;
-END;
-$$ LANGUAGE plpgsql;
-COMMENT ON FUNCTION kpi_health_check IS 'Returns system health issues: missing jobs, error spikes, stale KPIs';
+) >= 10 then issue := 'error_spike_24h';
+detail := jsonb_build_object(
+    'errors_24h',
+    (
+        select count(*)
+        from public.event_log_v2
+        where ts > now() - interval '24 hours'
+            and (
+                severity in ('error', 'critical')
+                or type like '%.error'
+            )
+    )
+);
+return next;
+end if;
+-- ok marker
+if not found then issue := 'ok';
+detail := jsonb_build_object('timestamp', now());
+return next;
+end if;
+end;
+$$;
+COMMENT ON VIEW public.kpi_daily IS 'Daily KPI aggregates from event_log_v2';
+COMMENT ON VIEW public.job_runs_daily IS 'Daily job run summary grouped by job_name and window_id';
+COMMENT ON FUNCTION public.kpi_health_check IS 'Returns missing jobs and error spikes for self-annealing';
