@@ -1,132 +1,63 @@
--- Outreach Attribution + Appointment Outcomes Migration
--- For Thompson Sampling credit assignment: which variant produced the booking?
--- Table to track every outreach attempt with its variant
+-- ============================================================
+-- VARIANT ATTRIBUTION SCHEMA MIGRATION
+-- Run in Supabase SQL Editor
+-- ============================================================
+-- 1. Outbound Touches - records every outbound SMS/email with variant
+CREATE TABLE IF NOT EXISTS outbound_touches (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    ts TIMESTAMPTZ DEFAULT NOW(),
+    phone TEXT NOT NULL,
+    channel TEXT NOT NULL CHECK (channel IN ('sms', 'email', 'call')),
+    variant_id TEXT,
+    variant_name TEXT,
+    run_id TEXT,
+    vertical TEXT DEFAULT 'hvac',
+    company TEXT,
+    status TEXT DEFAULT 'sent',
+    correlation_id TEXT,
+    payload JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+-- Indexes for fast lookup
+CREATE INDEX IF NOT EXISTS idx_outbound_touches_phone ON outbound_touches(phone);
+CREATE INDEX IF NOT EXISTS idx_outbound_touches_ts ON outbound_touches(ts DESC);
+CREATE INDEX IF NOT EXISTS idx_outbound_touches_variant ON outbound_touches(variant_id);
+-- 2. Outreach Attribution - links appointments back to touches
 CREATE TABLE IF NOT EXISTS outreach_attribution (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    ts TIMESTAMPTZ NOT NULL DEFAULT now(),
-    location_id TEXT,
-    contact_id TEXT,
-    phone TEXT,
-    channel TEXT NOT NULL,
-    -- 'sms', 'email', 'call'
-    variant_id UUID,
-    variant_name TEXT,
-    touch INTEGER DEFAULT 1,
-    correlation_id TEXT,
-    metadata JSONB DEFAULT '{}'::jsonb
-);
-CREATE INDEX IF NOT EXISTS idx_outreach_attr_contact ON outreach_attribution(contact_id);
-CREATE INDEX IF NOT EXISTS idx_outreach_attr_phone ON outreach_attribution(phone);
-CREATE INDEX IF NOT EXISTS idx_outreach_attr_ts ON outreach_attribution(ts DESC);
-CREATE INDEX IF NOT EXISTS idx_outreach_attr_variant ON outreach_attribution(variant_id);
--- Lightweight appointment outcomes table for quick learning
-CREATE TABLE IF NOT EXISTS appointment_outcomes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    ts TIMESTAMPTZ NOT NULL DEFAULT now(),
-    contact_id TEXT,
-    phone TEXT,
     appointment_id TEXT NOT NULL,
-    variant_id UUID,
-    variant_name TEXT,
-    outcome TEXT NOT NULL DEFAULT 'booked',
-    -- 'booked', 'no_show', 'cancelled', 'completed'
-    attribution_id UUID REFERENCES outreach_attribution(id),
-    metadata JSONB DEFAULT '{}'::jsonb
+    phone TEXT,
+    attributed_variant_id TEXT,
+    attributed_variant_name TEXT,
+    attributed_run_id TEXT,
+    attributed_touch_id UUID REFERENCES outbound_touches(id),
+    attributed_touch_ts TIMESTAMPTZ,
+    attributed_channel TEXT,
+    attribution_confidence FLOAT DEFAULT 0.0,
+    payload JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
-CREATE INDEX IF NOT EXISTS idx_appt_outcomes_variant ON appointment_outcomes(variant_id);
-CREATE INDEX IF NOT EXISTS idx_appt_outcomes_ts ON appointment_outcomes(ts DESC);
-CREATE INDEX IF NOT EXISTS idx_appt_outcomes_contact ON appointment_outcomes(contact_id);
--- Prompt variants table for Thompson Sampling (if not exists)
-CREATE TABLE IF NOT EXISTS prompt_variants (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    vertical TEXT DEFAULT 'general',
-    agent TEXT DEFAULT 'christina',
-    -- 'christina', 'sarah'
-    opener TEXT,
-    follow_up TEXT,
-    closer TEXT,
-    alpha INTEGER DEFAULT 1,
-    -- Prior successes (Bayesian)
-    beta INTEGER DEFAULT 1,
-    -- Prior failures (Bayesian)
-    active BOOLEAN DEFAULT true,
-    created_at TIMESTAMPTZ DEFAULT now(),
-    CONSTRAINT unique_variant_name UNIQUE (name, vertical, agent)
-);
--- Insert some default variants for testing
-INSERT INTO prompt_variants (name, vertical, agent, opener, alpha, beta)
-VALUES (
-        'direct_value',
-        'general',
-        'christina',
-        'Hi! I just reviewed {company}''s marketing - there are quick wins you''re missing. Got 15 min? {booking_link}',
-        1,
-        1
-    ),
-    (
-        'curiosity_hook',
-        'general',
-        'christina',
-        'Hey! Noticed something interesting about {company}. Mind if I share? {booking_link}',
-        1,
-        1
-    ),
-    (
-        'urgency_limited',
-        'general',
-        'christina',
-        'Quick heads up - I''m reaching out to just 10 businesses this week. {company} is on my list. Interested? {booking_link}',
-        1,
-        1
-    ),
-    (
-        'social_proof',
-        'general',
-        'christina',
-        'We just helped a {vertical} company boost leads 40% in 30 days. {company} could be next. Free call? {booking_link}',
-        1,
-        1
-    ) ON CONFLICT (name, vertical, agent) DO NOTHING;
--- Function to get best variant using Thompson Sampling
-CREATE OR REPLACE FUNCTION get_best_variant(
-        p_vertical TEXT DEFAULT 'general',
-        p_agent TEXT DEFAULT 'christina'
-    ) RETURNS TABLE (
-        id UUID,
-        name TEXT,
-        opener TEXT,
-        alpha INTEGER,
-        beta INTEGER
-    ) AS $$ BEGIN RETURN QUERY
-SELECT pv.id,
-    pv.name,
-    pv.opener,
-    pv.alpha,
-    pv.beta
-FROM prompt_variants pv
-WHERE pv.vertical = COALESCE(p_vertical, 'general')
-    AND pv.agent = COALESCE(p_agent, 'christina')
-    AND pv.active = true
-ORDER BY random() * (pv.alpha::float / (pv.alpha + pv.beta)) DESC
-LIMIT 1;
-END;
-$$ LANGUAGE plpgsql;
--- Function to update variant based on outcome
-CREATE OR REPLACE FUNCTION update_variant_outcome(
-        p_variant_id UUID,
-        p_success BOOLEAN DEFAULT true
-    ) RETURNS VOID AS $$ BEGIN IF p_success THEN
-UPDATE prompt_variants
-SET alpha = alpha + 1
-WHERE id = p_variant_id;
-ELSE
-UPDATE prompt_variants
-SET beta = beta + 1
-WHERE id = p_variant_id;
-END IF;
-END;
-$$ LANGUAGE plpgsql;
-COMMENT ON TABLE outreach_attribution IS 'Tracks outreach attempts with variant for credit assignment';
-COMMENT ON TABLE appointment_outcomes IS 'Links appointments to variants for Thompson Sampling learning';
-COMMENT ON TABLE prompt_variants IS 'Message variants for A/B testing with Bayesian scoring';
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_outreach_attribution_appointment ON outreach_attribution(appointment_id);
+CREATE INDEX IF NOT EXISTS idx_outreach_attribution_variant ON outreach_attribution(attributed_variant_id);
+-- 3. Enable Row Level Security (optional but recommended)
+ALTER TABLE outbound_touches ENABLE ROW LEVEL SECURITY;
+ALTER TABLE outreach_attribution ENABLE ROW LEVEL SECURITY;
+-- Allow service role full access
+CREATE POLICY IF NOT EXISTS "Service role has full access to outbound_touches" ON outbound_touches FOR ALL USING (true);
+CREATE POLICY IF NOT EXISTS "Service role has full access to outreach_attribution" ON outreach_attribution FOR ALL USING (true);
+-- ============================================================
+-- VERIFICATION QUERIES
+-- ============================================================
+-- Check tables exist
+SELECT table_name
+FROM information_schema.tables
+WHERE table_name IN ('outbound_touches', 'outreach_attribution');
+-- Count rows
+SELECT 'outbound_touches' as tbl,
+    COUNT(*)
+FROM outbound_touches
+UNION ALL
+SELECT 'outreach_attribution',
+    COUNT(*)
+FROM outreach_attribution;

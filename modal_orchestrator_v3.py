@@ -72,6 +72,111 @@ def orchestration_api():
         except Exception as e:
             print(f"[Log Error] {e}")
     
+    def normalize_phone(phone: str) -> str:
+        """Normalize phone to E.164 format"""
+        if not phone:
+            return ""
+        digits = ''.join(c for c in phone if c.isdigit())
+        if len(digits) == 10:
+            return f"+1{digits}"
+        elif len(digits) == 11 and digits.startswith("1"):
+            return f"+{digits}"
+        elif len(digits) > 11:
+            return f"+{digits}"
+        return phone
+    
+    def record_outbound_touch(phone: str, channel: str, variant_id: str = None, 
+                               variant_name: str = None, run_id: str = None,
+                               vertical: str = "hvac", company: str = None,
+                               correlation_id: str = None, payload: dict = None) -> bool:
+        """
+        Record outbound touch to outbound_touches table for attribution.
+        Returns True on success, False on failure (fail-safe).
+        """
+        try:
+            touch = {
+                "phone": normalize_phone(phone),
+                "channel": channel,
+                "variant_id": variant_id,
+                "variant_name": variant_name,
+                "run_id": run_id,
+                "vertical": vertical,
+                "company": company,
+                "correlation_id": correlation_id,
+                "status": "sent",
+                "payload": payload or {}
+            }
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+            resp = requests.post(f"{SUPABASE_URL}/rest/v1/outbound_touches", headers=headers, json=touch, timeout=10)
+            return resp.status_code in [200, 201]
+        except Exception as e:
+            log_event("error.occurred", "modal", "error", correlation_id, phone, {"error": f"record_touch: {e}"})
+            return False
+    
+    def find_attributed_touch(phone: str, max_days: int = 7) -> dict:
+        """
+        Find most recent outbound touch for phone within max_days.
+        Returns {touch: {...}, confidence: float} or {touch: None, confidence: 0.0}
+        """
+        try:
+            phone_normalized = normalize_phone(phone)
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=max_days)).isoformat()
+            
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/outbound_touches?phone=eq.{phone_normalized}&ts=gte.{cutoff}&order=ts.desc&limit=1",
+                headers=headers, timeout=10
+            )
+            
+            if resp.status_code != 200:
+                return {"touch": None, "confidence": 0.0}
+            
+            touches = resp.json()
+            if not touches:
+                return {"touch": None, "confidence": 0.0}
+            
+            touch = touches[0]
+            touch_ts = datetime.fromisoformat(touch["ts"].replace("Z", "+00:00"))
+            now = datetime.now(timezone.utc)
+            hours_ago = (now - touch_ts).total_seconds() / 3600
+            
+            # Confidence based on recency
+            if hours_ago <= 24:
+                confidence = 1.0
+            elif hours_ago <= 72:
+                confidence = 0.7
+            elif hours_ago <= 168:  # 7 days
+                confidence = 0.4
+            else:
+                confidence = 0.0
+            
+            return {"touch": touch, "confidence": confidence}
+        except Exception as e:
+            log_event("error.occurred", "modal", "error", payload={"error": f"find_touch: {e}"})
+            return {"touch": None, "confidence": 0.0}
+    
+    def record_attribution(appointment_id: str, phone: str, touch: dict, confidence: float) -> bool:
+        """Record attribution to outreach_attribution table"""
+        try:
+            attribution = {
+                "appointment_id": appointment_id,
+                "phone": normalize_phone(phone),
+                "attributed_variant_id": touch.get("variant_id") if touch else None,
+                "attributed_variant_name": touch.get("variant_name") if touch else None,
+                "attributed_run_id": touch.get("run_id") if touch else None,
+                "attributed_touch_id": touch.get("id") if touch else None,
+                "attributed_touch_ts": touch.get("ts") if touch else None,
+                "attributed_channel": touch.get("channel") if touch else None,
+                "attribution_confidence": confidence,
+                "payload": touch or {}
+            }
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+            resp = requests.post(f"{SUPABASE_URL}/rest/v1/outreach_attribution", headers=headers, json=attribution, timeout=10)
+            return resp.status_code in [200, 201]
+        except Exception as e:
+            log_event("error.occurred", "modal", "error", payload={"error": f"record_attribution: {e}"})
+            return False
+    
     def send_marketing_email_via_ghl(to_email: str, subject: str, html_body: str, 
                                       text_body: str = None, contact_id: str = None,
                                       campaign_id: str = None, variant_id: str = None,
@@ -399,6 +504,222 @@ def orchestration_api():
         
         return result
     
+    # ========== UNIFIED TELEPHONY: SMS ENDPOINTS ==========
+    
+    def send_sms_via_twilio(from_phone: str, to_phone: str, message: str, correlation_id: str = None) -> dict:
+        """Send SMS via Twilio API - for outbound and reply"""
+        import uuid
+        correlation_id = correlation_id or f"sms_out_{uuid.uuid4().hex[:8]}"
+        
+        TWILIO_ACCOUNT_SID = secrets.get("TWILIO_ACCOUNT_SID", "")
+        TWILIO_AUTH_TOKEN = secrets.get("TWILIO_AUTH_TOKEN", "")
+        
+        if not TWILIO_ACCOUNT_SID or not TWILIO_AUTH_TOKEN:
+            log_event("sms.failed", "twilio", "error", correlation_id, to_phone, {
+                "error": "Missing Twilio credentials"
+            })
+            return {"success": False, "error": "Missing Twilio credentials"}
+        
+        try:
+            resp = requests.post(
+                f"https://api.twilio.com/2010-04-01/Accounts/{TWILIO_ACCOUNT_SID}/Messages.json",
+                auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN),
+                data={
+                    "From": from_phone,
+                    "To": to_phone,
+                    "Body": message
+                },
+                timeout=15
+            )
+            
+            if resp.status_code in [200, 201]:
+                sid = resp.json().get("sid", "")
+                log_event("sms.sent", "twilio", "info", correlation_id, to_phone, {
+                    "from": from_phone,
+                    "to": to_phone,
+                    "body": message[:100],
+                    "sid": sid
+                })
+                return {"success": True, "sid": sid}
+            else:
+                log_event("sms.failed", "twilio", "error", correlation_id, to_phone, {
+                    "error": resp.text[:200],
+                    "status_code": resp.status_code
+                })
+                return {"success": False, "error": resp.text[:200]}
+        except Exception as e:
+            log_event("sms.failed", "twilio", "error", correlation_id, to_phone, {"error": str(e)})
+            return {"success": False, "error": str(e)}
+    
+    @api.post("/webhook/sms/inbound")
+    async def sms_inbound_webhook(request: Request):
+        """
+        Handle inbound SMS from Twilio.
+        - Log to event_log_v2
+        - Optionally generate AI reply
+        - Return empty TwiML (replies sent separately)
+        """
+        import uuid
+        from urllib.parse import parse_qs
+        from fastapi.responses import Response
+        
+        try:
+            body = await request.body()
+            params = parse_qs(body.decode())
+        except:
+            return Response(
+                content='<?xml version="1.0" encoding="UTF-8"?><Response></Response>',
+                media_type="application/xml"
+            )
+        
+        from_phone = params.get("From", [""])[0]
+        to_phone = params.get("To", [""])[0]
+        message_body = params.get("Body", [""])[0]
+        sms_sid = params.get("MessageSid", [""])[0]
+        
+        correlation_id = f"sms_in_{uuid.uuid4().hex[:8]}"
+        
+        # Log inbound SMS
+        log_event("sms.inbound", "twilio", "info", 
+                  correlation_id=correlation_id,
+                  entity_id=from_phone,
+                  payload={
+                      "from": from_phone,
+                      "to": to_phone,
+                      "body": message_body,
+                      "sms_sid": sms_sid
+                  })
+        
+        # Check for STOP/opt-out
+        if message_body.strip().upper() in ["STOP", "UNSUBSCRIBE", "CANCEL", "END", "QUIT"]:
+            log_event("sms.optout", "twilio", "warn", correlation_id, from_phone, {
+                "keyword": message_body.strip().upper()
+            })
+            # Return empty - Twilio handles STOP automatically
+            return Response(
+                content='<?xml version="1.0" encoding="UTF-8"?><Response></Response>',
+                media_type="application/xml"
+            )
+        
+        # Auto-reply for common keywords (can be enhanced with AI)
+        reply = None
+        msg_lower = message_body.strip().lower()
+        
+        if msg_lower in ["yes", "y", "interested", "info"]:
+            reply = "Great! Our AI assistant Sarah will reach out shortly. You can also book directly: https://link.aiserviceco.com/discovery"
+        elif msg_lower in ["help", "?"]:
+            reply = "Reply YES for info on our AI business tools for HVAC. Call (863) 213-2505 to speak with Sarah. Reply STOP to opt out."
+        
+        if reply:
+            send_sms_via_twilio(to_phone, from_phone, reply, f"{correlation_id}_reply")
+        
+        return Response(
+            content='<?xml version="1.0" encoding="UTF-8"?><Response></Response>',
+            media_type="application/xml"
+        )
+    
+    @api.post("/webhook/sms/status")
+    async def sms_status_callback(request: Request):
+        """Handle Twilio SMS status callbacks (delivered, failed, etc.)"""
+        import uuid
+        from urllib.parse import parse_qs
+        from fastapi.responses import Response
+        
+        try:
+            body = await request.body()
+            params = parse_qs(body.decode())
+        except:
+            return {"status": "ok"}
+        
+        sms_sid = params.get("MessageSid", [""])[0]
+        status = params.get("MessageStatus", [""])[0]
+        to_phone = params.get("To", [""])[0]
+        error_code = params.get("ErrorCode", [""])[0]
+        
+        log_event(f"sms.status.{status}", "twilio", "info" if status == "delivered" else "warn",
+                  correlation_id=f"status_{sms_sid[:8]}",
+                  entity_id=to_phone,
+                  payload={
+                      "sms_sid": sms_sid,
+                      "status": status,
+                      "error_code": error_code
+                  })
+        
+        return {"status": "ok"}
+    
+    @api.post("/api/sms/send")
+    async def api_sms_send(request: Request):
+        """
+        Manual SMS send endpoint.
+        POST body: {"to": "+1234567890", "message": "Hello"}
+        """
+        import uuid
+        
+        try:
+            body = await request.json()
+        except:
+            return {"success": False, "error": "Invalid JSON"}
+        
+        to_phone = body.get("to", "")
+        message = body.get("message", "")
+        from_phone = body.get("from", "+18632132505")  # Default to canonical number
+        
+        if not to_phone or not message:
+            return {"success": False, "error": "Missing 'to' or 'message'"}
+        
+        # Normalize phone
+        if not to_phone.startswith("+"):
+            to_phone = f"+1{to_phone.replace('-', '').replace(' ', '').replace('(', '').replace(')', '')}"
+        
+        correlation_id = f"api_sms_{uuid.uuid4().hex[:8]}"
+        result = send_sms_via_twilio(from_phone, to_phone, message, correlation_id)
+        
+        return result
+    
+    @api.post("/api/test/record-touch")
+    async def test_record_touch(request: Request):
+        """
+        Test endpoint: Record an outbound touch with variant_id.
+        POST body: {"phone": "+1...", "channel": "sms", "variant_id": "v_abc", "variant_name": "Control A"}
+        """
+        import uuid
+        
+        try:
+            body = await request.json()
+        except:
+            return {"success": False, "error": "Invalid JSON"}
+        
+        phone = body.get("phone")
+        if not phone:
+            return {"success": False, "error": "Missing phone"}
+        
+        correlation_id = f"test_touch_{uuid.uuid4().hex[:8]}"
+        
+        # Record the touch
+        success = record_outbound_touch(
+            phone=phone,
+            channel=body.get("channel", "sms"),
+            variant_id=body.get("variant_id", "test_variant"),
+            variant_name=body.get("variant_name", "Test Variant"),
+            run_id=body.get("run_id", f"test_run_{datetime.now(timezone.utc).strftime('%Y%m%d')}"),
+            vertical=body.get("vertical", "hvac"),
+            company=body.get("company"),
+            correlation_id=correlation_id,
+            payload=body
+        )
+        
+        # Also log sms.sent with variant
+        log_event("sms.sent", "test", "info", correlation_id, phone, {
+            "phone": normalize_phone(phone),
+            "variant_id": body.get("variant_id", "test_variant"),
+            "variant_name": body.get("variant_name", "Test Variant"),
+            "channel": body.get("channel", "sms"),
+            "run_id": body.get("run_id"),
+            "test": True
+        })
+        
+        return {"success": success, "correlation_id": correlation_id, "phone_normalized": normalize_phone(phone)}
+    
     @api.get("/api/kpi-snapshot")
     def kpi_snapshot():
         """Emit KPI snapshot - simplified"""
@@ -422,8 +743,11 @@ def orchestration_api():
     @api.post("/webhook/ghl/appointment")
     async def ghl_appointment_webhook(request: Request):
         """
-        Handle GHL appointment webhooks.
-        Expected to be called by GHL workflow on appointment creation/update.
+        Handle GHL appointment webhooks with variant attribution.
+        - Log appointment event
+        - Find attributed outbound touch
+        - Record attribution
+        - Emit appointment.attributed event
         """
         import uuid
         
@@ -448,15 +772,22 @@ def orchestration_api():
         # Extract contact info
         contact = body.get("contact", {})
         contact_id = body.get("contactId") or contact.get("id") or body.get("contact_id")
+        contact_phone = contact.get("phone") or body.get("phone") or body.get("contact_phone")
+        appointment_id = body.get("appointmentId") or body.get("appointment_id") or f"appt_{uuid.uuid4().hex[:8]}"
+        correlation_id = f"appt_{uuid.uuid4().hex[:8]}"
         
+        # Normalize phone for attribution lookup
+        contact_phone_normalized = normalize_phone(contact_phone) if contact_phone else None
+        
+        # Log the base appointment event
         log_event(
             mapped_type,
             "ghl",
             "info",
-            correlation_id=f"appt_{uuid.uuid4().hex[:8]}",
+            correlation_id=correlation_id,
             entity_id=contact_id,
             payload={
-                "appointment_id": body.get("appointmentId") or body.get("appointment_id"),
+                "appointment_id": appointment_id,
                 "calendar_id": body.get("calendarId") or body.get("calendar_id"),
                 "contact_id": contact_id,
                 "start_time": body.get("startTime") or body.get("start_time"),
@@ -464,14 +795,61 @@ def orchestration_api():
                 "status": body.get("status"),
                 "title": body.get("title"),
                 "contact_name": contact.get("name") or body.get("contact_name"),
-                "contact_phone": contact.get("phone") or body.get("phone"),
+                "contact_phone": contact_phone_normalized,
                 "contact_email": contact.get("email") or body.get("email"),
                 "location_id": body.get("locationId") or GHL_LOCATION_ID,
                 "raw_type": ghl_type
             }
         )
         
-        return {"status": "ok", "event_type": mapped_type, "contact_id": contact_id}
+        # ===== ATTRIBUTION LOGIC =====
+        attribution_result = {"attributed": False, "confidence": 0.0, "variant_id": None}
+        
+        if contact_phone_normalized and mapped_type == "appointment.created":
+            # Find most recent outbound touch for this phone
+            touch_result = find_attributed_touch(contact_phone_normalized, max_days=7)
+            touch = touch_result.get("touch")
+            confidence = touch_result.get("confidence", 0.0)
+            
+            if touch and confidence > 0:
+                # Record attribution
+                success = record_attribution(appointment_id, contact_phone_normalized, touch, confidence)
+                
+                attribution_result = {
+                    "attributed": success,
+                    "confidence": confidence,
+                    "variant_id": touch.get("variant_id"),
+                    "variant_name": touch.get("variant_name"),
+                    "run_id": touch.get("run_id"),
+                    "channel": touch.get("channel"),
+                    "touch_ts": touch.get("ts")
+                }
+                
+                # Emit appointment.attributed event
+                log_event(
+                    "appointment.attributed",
+                    "modal",
+                    "info",
+                    correlation_id=f"{correlation_id}_attr",
+                    entity_id=contact_id,
+                    payload={
+                        "appointment_id": appointment_id,
+                        "phone": contact_phone_normalized,
+                        "variant_id": touch.get("variant_id"),
+                        "variant_name": touch.get("variant_name"),
+                        "run_id": touch.get("run_id"),
+                        "channel": touch.get("channel"),
+                        "confidence": confidence,
+                        "touch_ts": touch.get("ts")
+                    }
+                )
+        
+        return {
+            "status": "ok", 
+            "event_type": mapped_type, 
+            "contact_id": contact_id,
+            "attribution": attribution_result
+        }
     
     @api.get("/api/reliability-check")
     def reliability_check():
