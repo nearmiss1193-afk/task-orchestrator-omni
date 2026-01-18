@@ -90,7 +90,8 @@ COMMENT ON VIEW job_runs_daily IS 'Daily job execution summary from job_runs';
 -- ============================================================
 CREATE OR REPLACE FUNCTION kpi_health_check() RETURNS TABLE (
         issue_type TEXT,
-        severity TEXT,
+        issue_severity TEXT,
+        -- Renamed to avoid ambiguity with event_log_v2.severity
         description TEXT,
         details JSONB,
         detected_at TIMESTAMPTZ
@@ -127,13 +128,13 @@ END IF;
 END IF;
 -- Check 2: Error spike (2x increase vs prev 24h)
 SELECT COUNT(*) INTO errors_24h
-FROM event_log_v2
-WHERE severity IN ('error', 'critical')
-    AND ts > NOW() - INTERVAL '24 hours';
+FROM event_log_v2 e
+WHERE e.severity IN ('error', 'critical')
+    AND e.ts > NOW() - INTERVAL '24 hours';
 SELECT COUNT(*) INTO errors_prev_24h
-FROM event_log_v2
-WHERE severity IN ('error', 'critical')
-    AND ts BETWEEN NOW() - INTERVAL '48 hours'
+FROM event_log_v2 e
+WHERE e.severity IN ('error', 'critical')
+    AND e.ts BETWEEN NOW() - INTERVAL '48 hours'
     AND NOW() - INTERVAL '24 hours';
 IF errors_24h > 5
 AND errors_24h > (errors_prev_24h * 2) THEN RETURN QUERY
@@ -156,9 +157,9 @@ END IF;
 -- Check 3: No KPI snapshots in last 30 minutes
 IF NOT EXISTS(
     SELECT 1
-    FROM event_log_v2
-    WHERE type = 'kpi.snapshot'
-        AND ts > NOW() - INTERVAL '30 minutes'
+    FROM event_log_v2 e
+    WHERE e.type = 'kpi.snapshot'
+        AND e.ts > NOW() - INTERVAL '30 minutes'
 ) THEN RETURN QUERY
 SELECT 'stale_kpi'::TEXT,
     'warning'::TEXT,
@@ -169,9 +170,9 @@ END IF;
 -- Check 4: Zero appointments in last 7 days
 IF NOT EXISTS(
     SELECT 1
-    FROM event_log_v2
-    WHERE type = 'appointment.created'
-        AND ts > NOW() - INTERVAL '7 days'
+    FROM event_log_v2 e
+    WHERE e.type = 'appointment.created'
+        AND e.ts > NOW() - INTERVAL '7 days'
 ) THEN RETURN QUERY
 SELECT 'no_appointments'::TEXT,
     'warning'::TEXT,
