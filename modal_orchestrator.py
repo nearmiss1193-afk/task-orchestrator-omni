@@ -6,6 +6,7 @@ import modal
 from fastapi import FastAPI, Request
 from datetime import datetime
 import json
+import os
 
 image = modal.Image.debian_slim(python_version="3.11").pip_install("fastapi[standard]", "requests")
 
