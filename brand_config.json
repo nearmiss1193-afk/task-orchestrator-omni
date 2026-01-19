@@ -1,256 +1,40 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
     "version": "1.0.0",
-    "last_updated": "2026-01-18T01:00:00Z",
-    "offer": {
-        "name": "HVAC Business Diagnostic",
-        "summary": "AI-powered diagnostic report reveals revenue leaks in 48 hours, free",
-        "headline": "Your HVAC Business Is Leaking Money—We'll Find It In 48 Hours, Free.",
-        "subheadline": "AI-powered diagnostic report reveals exactly where you're losing leads, wasting ad spend, and missing appointments—delivered within 48 hours, no charge.",
-        "primary_cta_text": "Get My Free Diagnostic Report",
-        "primary_cta_url": "https://link.aiserviceco.com/discovery",
-        "secondary_cta_text": "Book a 15-Min Strategy Call",
-        "secondary_cta_url": "https://link.aiserviceco.com/discovery"
-    },
-    "pricing": {
-        "tiers": [
-            {
-                "name": "Starter",
-                "monthly_price": 297,
-                "setup_fee": 0,
-                "target_audience": "Solo operators, 1-2 trucks",
-                "includes": [
-                    "AI follow-up bot",
-                    "Review request automation",
-                    "SMS/email reminders",
-                    "Basic dashboard access"
-                ]
-            },
-            {
-                "name": "Growth Partner",
-                "monthly_price": 497,
-                "setup_fee": 297,
-                "target_audience": "Growing teams (3-10 trucks)",
-                "includes": [
-                    "Everything in Starter",
-                    "AI calling (Sarah/Rachel)",
-                    "Lead scoring engine",
-                    "Competitor intelligence",
-                    "Weekly performance reports"
-                ]
-            },
-            {
-                "name": "Dominance",
-                "monthly_price": 997,
-                "setup_fee": "custom",
-                "target_audience": "Established operators (10+ crews)",
-                "includes": [
-                    "Everything in Growth Partner",
-                    "Full-service automation",
-                    "Ad management integration",
-                    "Dedicated success manager",
-                    "Priority support"
-                ]
-            }
-        ],
-        "guarantee_text": "If you don't see measurable improvement in booked appointments within 30 days, we'll work free until you do—or refund your setup fee, no questions."
-    },
-    "offer_governance": {
-        "canonical_offer_headline": "Your HVAC Business Is Leaking Money—We'll Find It In 48 Hours, Free.",
-        "canonical_offer_subheadline": "AI-powered diagnostic report reveals exactly where you're losing leads, wasting ad spend, and missing appointments—delivered within 48 hours, no charge.",
-        "canonical_primary_cta_text": "Get My Free Diagnostic Report",
-        "canonical_primary_cta_href": "https://link.aiserviceco.com/discovery",
-        "canonical_demo_cta_text": "Book a 15-Min Strategy Call",
-        "canonical_demo_cta_href": "https://link.aiserviceco.com/discovery",
-        "allowed_cta_texts": [
-            "Get My Free Diagnostic Report",
-            "Book a 15-Min Strategy Call",
-            "Get Your Free Audit",
-            "Start Free Diagnostic",
-            "Get Started",
-            "Book Now",
-            "Schedule Call",
-            "Talk to Sarah",
-            "Call Now",
-            "Text Us",
-            "Watch Demo",
-            "Select Starter",
-            "Select Growth Partner",
-            "Select Dominance",
-            "Start 14-Day Trial",
-            "Start Free Trial",
-            "Start Free Trial →",
-            "Contact Sales",
-            "Refresh",
-            "View",
-            "VIEW",
-            "Send",
-            "Submit",
-            "Close",
-            "Back",
-            "Next",
-            "Learn More",
-            "Book Demo",
-            "Book Demo Session",
-            "Live Demo",
-            "Demo",
-            "Start Free Search",
-            "Start Qualifying ($297/mo)",
-            "Open Checkout (Starter)",
-            "Start Free Listing"
-        ],
-        "allowed_cta_href_prefixes": [
-            "https://link.aiserviceco.com/",
-            "https://www.aiserviceco.com/",
-            "tel:",
-            "sms:",
-            "mailto:"
-        ],
-        "allowed_pricing_strings": [
-            "$297/mo",
-            "$297/month",
-            "$297",
-            "$497/mo",
-            "$497/month",
-            "$497",
-            "$997/mo",
-            "$997/month",
-            "$997",
-            "custom",
-            "Custom",
-            "Free"
-        ],
-        "forbidden_offer_phrases": [
-            "date planner",
-            "Date Planner",
-            "guaranteed income",
-            "make $10,000",
-            "get rich",
-            "MLM",
-            "network marketing"
-        ],
-        "canonical_report_url_prefix": "https://hvacreports-",
-        "old_cta_replacements": {
-            "Get Started Now": "Get My Free Diagnostic Report",
-            "Book Demo": "Book a 15-Min Strategy Call",
-            "Learn More": "Get My Free Diagnostic Report"
+    "last_updated": "2026-01-19T18:45:00Z",
+    "canonical_numbers": {
+        "voice": {
+            "e164": "+18632132505",
+            "display": "(863) 213-2505",
+            "provider": "vapi",
+            "purpose": "Inbound/outbound voice calls"
         },
-        "old_href_replacements": {
-            "https://calendly.com/": "https://link.aiserviceco.com/discovery"
+        "sms": {
+            "e164": "+13527585336",
+            "display": "(352) 758-5336",
+            "provider": "ghl",
+            "purpose": "Inbound/outbound SMS"
         }
     },
-    "contact": {
-        "canonical_phone_e164": "+18632132505",
-        "canonical_phone_display": "(863) 213-2505",
-        "phones": {
-            "sarah_ai": "+18632132505",
-            "christina_outbound": "+18632132505",
-            "rachel_ai": "+18632132505",
-            "escalation": "+13529368152"
-        },
-        "forbidden_phone_patterns": [
-            "(352) 758-5336",
-            "352-758-5336",
-            "3527585336",
-            "+13527585336",
-            "+1 (352) 758-5336",
-            "352.758.5336"
-        ],
-        "emails": {
-            "support": "support@aiserviceco.com",
-            "owner": "nearmiss1193@gmail.com"
-        },
-        "domains": [
-            "aiserviceco.com",
-            "www.aiserviceco.com",
-            "hvacreports-nearmiss1193-afk.vercel.app"
-        ]
-    },
-    "urls": {
+    "business": {
+        "name": "AI Service Co",
+        "website": "https://www.aiserviceco.com",
         "booking_link": "https://link.aiserviceco.com/discovery",
-        "main_website": "https://www.aiserviceco.com",
-        "hvac_landing": "https://www.aiserviceco.com/hvac.html",
-        "dashboard": "https://www.aiserviceco.com/dashboard.html",
-        "api_base": "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
+        "owner_email": "nearmiss1193@gmail.com",
+        "hours": "Mon-Fri 8am-6pm EST"
     },
-    "value_props": [
-        "We book more jobs, period. Every touchpoint is designed to convert.",
-        "AI that works 24/7. Sarah/Rachel answer calls, follow up, and never sleep.",
-        "Competitors can't hide. We show you exactly what they're doing and how to beat them.",
-        "No guesswork. Data-driven reports tell you where to focus.",
-        "Works with your stack. GHL, ServiceTitan, Housecall Pro—we integrate."
-    ],
-    "voice": {
-        "style": "direct, advisory, data-driven",
-        "max_paragraph_lines": 2,
-        "approved_phrases": [
-            "Your free diagnostic is ready",
-            "We found $X in missed revenue",
-            "Reply YES to get your report",
-            "Book a 15-min strategy call",
-            "Here's what your competitors are doing"
-        ],
-        "forbidden_phrases": [
-            "synergy",
-            "leverage",
-            "optimization",
-            "10X your revenue",
-            "guaranteed revenue increase"
-        ]
+    "pricing": {
+        "starter": 297,
+        "growth": 497,
+        "dominance": 997,
+        "currency": "USD"
     },
-    "compliance": {
-        "required_legal_lines": [
-            "Reply STOP to opt out at any time.",
-            "Msg & data rates may apply.",
-            "For emergencies, call 911."
-        ],
-        "forbidden_claims": [
-            "Guaranteed revenue increase",
-            "We handle payments",
-            "Specific income claims without proof"
-        ]
+    "regex_patterns": {
+        "voice_display": "\\(863\\)\\s*213[\\-\\.]?2505|863[\\-\\.]?213[\\-\\.]?2505",
+        "sms_display": "\\(352\\)\\s*758[\\-\\.]?5336|352[\\-\\.]?758[\\-\\.]?5336"
     },
-    "brand_lint": {
-        "scan_scope": {
-            "include": [
-                "public/*.html",
-                "public/audits/*.html",
-                "public/assets/**"
-            ],
-            "exclude": [
-                "node_modules/**",
-                ".git/**",
-                "backups/**",
-                "manifests/**",
-                "runbooks/**",
-                "sql/**",
-                "directives/**",
-                "execution/**",
-                "*.md",
-                "*.json",
-                "*.py",
-                "*.js",
-                "*.sh"
-            ]
-        },
-        "severity_budget": {
-            "max_public_score": 50,
-            "fail_on_exceed": true
-        },
-        "scan_targets": [
-            "public/*.html",
-            "public/audits/*.html"
-        ],
-        "auto_fix_types": [
-            "wrong_url",
-            "wrong_phone",
-            "wrong_cta_text",
-            "missing_legal_footer"
-        ],
-        "approval_required_types": [
-            "price_change",
-            "guarantee_change",
-            "new_claim"
-        ]
-    }
+    "forbidden_patterns": [
+        "XXX-XXX-XXXX",
+        "000-000-0000",
+        "\\(\\d{3}\\)\\s*\\d{3}[\\-\\.]?\\d{4}(?!.*863.*213.*2505)(?!.*352.*758.*5336)"
+    ]
 }

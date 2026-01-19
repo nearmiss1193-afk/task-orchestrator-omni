@@ -2050,24 +2050,88 @@ Be conversational, not salesy."""
     # ============================================================
     
     @api.get("/api/debug/sms")
-    def debug_sms():
-        """Diagnostic endpoint for SMS debugging."""
+    def debug_sms(run_audit: str = None):
+        """
+        Diagnostic endpoint for SMS debugging.
+        Add ?run_audit=1 to run synthetic SMS test and return auditor status.
+        """
         try:
             headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
             
-            # Last 10 sms.inbound events
+            # If run_audit is requested, do synthetic test first
+            audit_result = None
+            if run_audit == "1":
+                # Run synthetic SMS test
+                test_message = "SYNTHETIC_AUDIT: Test AI response capability"
+                test_phone = "+15551234567"
+                
+                try:
+                    # Call Gemini for synthetic test
+                    GEMINI_KEY = secrets.get("GEMINI_API_KEY")
+                    if GEMINI_KEY:
+                        prompt = f"""You are Sarah, an AI sales consultant for AI Service Co.
+We offer AI automation solutions for businesses: AI phone agents, SMS/email automation, lead generation, content creation, and custom AI workflows.
+
+Reply to this inquiry in under 320 characters. Ask one qualifying question about their AI automation needs. Sign off with -Sarah.
+
+Message: "{test_message}"
+"""
+                        gemini_resp = requests.post(
+                            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_KEY}",
+                            headers={"Content-Type": "application/json"},
+                            json={
+                                "contents": [{"parts": [{"text": prompt}]}],
+                                "generationConfig": {"maxOutputTokens": 100, "temperature": 0.7}
+                            },
+                            timeout=15
+                        )
+                        
+                        if gemini_resp.status_code == 200:
+                            reply_text = gemini_resp.json().get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "").strip()
+                            
+                            is_non_empty = len(reply_text) > 10
+                            is_not_literal = "reply_text" not in reply_text.lower() and "reply text" not in reply_text.lower()
+                            has_question = "?" in reply_text
+                            
+                            if is_non_empty and is_not_literal and has_question:
+                                log_event("sms.synthetic.pass", "auditor", "info",
+                                    payload={"test_message": test_message, "reply_length": len(reply_text), "reply_preview": reply_text[:60]})
+                                audit_result = {"status": "PASS", "reply_length": len(reply_text), "has_question": has_question}
+                            else:
+                                log_event("sms.synthetic.fail", "auditor", "warn",
+                                    payload={"reason": "low_quality", "reply_text": reply_text[:100], "is_empty": not is_non_empty, "is_literal": not is_not_literal})
+                                audit_result = {"status": "FAIL", "reason": "low_quality_reply", "reply_preview": reply_text[:60]}
+                        else:
+                            log_event("sms.synthetic.fail", "auditor", "error",
+                                payload={"reason": "gemini_error", "status_code": gemini_resp.status_code})
+                            audit_result = {"status": "FAIL", "reason": "gemini_api_error", "status_code": gemini_resp.status_code}
+                    else:
+                        audit_result = {"status": "FAIL", "reason": "no_gemini_key"}
+                except Exception as ae:
+                    log_event("sms.synthetic.fail", "auditor", "error",
+                        payload={"reason": "exception", "error": str(ae)})
+                    audit_result = {"status": "FAIL", "reason": "exception", "error": str(ae)}
+            
+            # Last 20 sms events (increased from 10)
             resp = requests.get(
-                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&order=ts.desc&limit=10",
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&order=ts.desc&limit=20",
                 headers=headers, timeout=5
             )
             inbound_events = resp.json() if resp.status_code == 200 else []
             
-            # Last 10 sms.reply.* events
+            # Last 20 sms.reply.* events  
             resp = requests.get(
-                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.sms.reply.*&order=ts.desc&limit=10",
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.sms.reply.*&order=ts.desc&limit=20",
                 headers=headers, timeout=5
             )
             reply_events = resp.json() if resp.status_code == 200 else []
+            
+            # Last 20 synthetic/deadman events
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?source=eq.auditor&order=ts.desc&limit=20",
+                headers=headers, timeout=5
+            )
+            auditor_events = resp.json() if resp.status_code == 200 else []
             
             # Last 10 errors with ghl source
             resp = requests.get(
@@ -2087,7 +2151,7 @@ Be conversational, not salesy."""
                         last_payload = {}
                 last_method = last_payload.get("method", "unknown")
             
-            return {
+            result = {
                 "status": "ok",
                 "ghl_location_id": GHL_LOCATION_ID[:8] + "..." if GHL_LOCATION_ID else None,
                 "canonical_sms_number": CANONICAL_NUMBER,
@@ -2100,11 +2164,20 @@ Be conversational, not salesy."""
                     {"ts": e.get("ts"), "type": e.get("type"), "phone": e.get("entity_id"), "method": (e.get("payload") or {}).get("method")}
                     for e in reply_events
                 ],
+                "auditor_events": [
+                    {"ts": e.get("ts"), "type": e.get("type"), "severity": e.get("severity")}
+                    for e in auditor_events[:10]
+                ],
                 "ghl_errors": [
                     {"ts": e.get("ts"), "error": (e.get("payload") or {}).get("error", "")[:100]}
                     for e in ghl_errors
                 ]
             }
+            
+            if audit_result:
+                result["audit_result"] = audit_result
+            
+            return result
         except Exception as e:
             return {"status": "error", "error": str(e)}
     
