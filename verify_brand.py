@@ -3,12 +3,14 @@
 verify_brand.py - Brand Governor for phone number enforcement
 
 Scans public/ directory for phone numbers that don't match canonical values.
-Can auto-fix violations with --fix flag.
+Outputs brand_audit_report.json with issues and line numbers.
+Supports --fix to auto-fix violations.
 
 Usage:
-  python verify_brand.py --dir public           # Check only
-  python verify_brand.py --dir public --fix     # Auto-fix violations
-  python verify_brand.py --dir public --strict  # Fail on any warning
+  python verify_brand.py --dir public                    # Check only
+  python verify_brand.py --dir public --fix              # Auto-fix violations
+  python verify_brand.py --dir public --strict           # Fail on any warning
+  python verify_brand.py --dir public --report           # Output JSON report
 """
 
 import argparse
@@ -17,122 +19,173 @@ import os
 import re
 import sys
 from pathlib import Path
+from datetime import datetime
 
 # Load brand config
 SCRIPT_DIR = Path(__file__).parent
 CONFIG_PATH = SCRIPT_DIR / "brand_config.json"
+REPORT_PATH = SCRIPT_DIR / "brand_audit_report.json"
 
 def load_config():
     if CONFIG_PATH.exists():
         return json.load(open(CONFIG_PATH))
+    # Fallback defaults
     return {
         "canonical_numbers": {
             "voice": {"e164": "+18632132505", "display": "(863) 213-2505"},
             "sms": {"e164": "+13527585336", "display": "(352) 758-5336"}
-        }
+        },
+        "forbidden_patterns": ["863-337-3705", "8633373705"],
+        "allowed_numbers_e164": ["+18632132505", "+13527585336", "+13529368152"]
     }
 
 CONFIG = load_config()
 
-# Canonical patterns that ARE allowed
-CANONICAL_VOICE = CONFIG["canonical_numbers"]["voice"]["display"]
-CANONICAL_SMS = CONFIG["canonical_numbers"]["sms"]["display"]
-CANONICAL_VOICE_E164 = CONFIG["canonical_numbers"]["voice"]["e164"]
-CANONICAL_SMS_E164 = CONFIG["canonical_numbers"]["sms"]["e164"]
+# Extract canonical info
+VOICE_DISPLAY = CONFIG["canonical_numbers"]["voice"]["display"]
+VOICE_E164 = CONFIG["canonical_numbers"]["voice"]["e164"]
+SMS_DISPLAY = CONFIG["canonical_numbers"]["sms"]["display"]
+SMS_E164 = CONFIG["canonical_numbers"]["sms"]["e164"]
 
-# Patterns to find any phone number
+# Build allowed digits set
+ALLOWED_DIGITS = set()
+for num in CONFIG.get("allowed_numbers_e164", []):
+    digits = ''.join(c for c in num if c.isdigit())[-10:]
+    ALLOWED_DIGITS.add(digits)
+
+# Forbidden patterns
+FORBIDDEN = set(CONFIG.get("forbidden_patterns", []))
+
+# Regex to find phone-like strings
 PHONE_PATTERN = re.compile(
     r'(\+?1?[\s\-\.]?\(?\d{3}\)?[\s\-\.]?\d{3}[\s\-\.]?\d{4})',
     re.IGNORECASE
 )
 
-# Allowed number patterns (normalized)
-ALLOWED_NUMBERS = {
-    "8632132505",  # Voice
-    "3527585336",  # SMS
-    "3529368152",  # Escalation
-}
-
 def normalize_phone(phone):
-    """Extract just digits from phone number."""
+    """Extract just digits from phone number, return last 10."""
     return ''.join(c for c in phone if c.isdigit())[-10:]
 
-def is_canonical(phone):
-    """Check if phone matches a canonical number."""
+def is_allowed(phone):
+    """Check if phone matches an allowed number."""
     normalized = normalize_phone(phone)
-    return normalized in ALLOWED_NUMBERS
+    if normalized in ALLOWED_DIGITS:
+        return True
+    # Also check if it's a forbidden pattern
+    for forbidden in FORBIDDEN:
+        if normalize_phone(forbidden) == normalized:
+            return False
+    return len(normalized) < 10  # Ignore short numbers
+
+def get_replacement(phone):
+    """Determine correct replacement for a wrong number."""
+    normalized = normalize_phone(phone)
+    
+    # If starts with 863, replace with voice
+    if normalized.startswith("863"):
+        return VOICE_DISPLAY
+    # If starts with 352, replace with SMS
+    if normalized.startswith("352"):
+        return SMS_DISPLAY
+    return None
 
 def scan_file(filepath, fix=False):
     """Scan a single file for phone number violations."""
-    violations = []
+    issues = []
+    fixed_count = 0
     
     try:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
-            content = f.read()
+            lines = f.readlines()
     except Exception as e:
-        return [f"ERROR reading {filepath}: {e}"]
+        return [{"file": str(filepath), "line": 0, "type": "error", "message": str(e)}], 0
     
-    original_content = content
-    matches = PHONE_PATTERN.findall(content)
+    original_content = ''.join(lines)
+    new_lines = []
     
-    for match in matches:
-        if not is_canonical(match):
-            # Determine correct replacement
+    for line_num, line in enumerate(lines, 1):
+        matches = PHONE_PATTERN.findall(line)
+        new_line = line
+        
+        for match in matches:
             normalized = normalize_phone(match)
             
-            # Check if it looks like a voice number (863 area) but wrong
-            if normalized.startswith("863") and normalized != "8632132505":
-                replacement = CANONICAL_VOICE
-                violations.append(f"VIOLATION in {filepath}: {match} → should be {replacement}")
-            # Check if it looks like SMS number (352 area) but wrong  
-            elif normalized.startswith("352") and normalized != "3527585336" and normalized != "3529368152":
-                replacement = CANONICAL_SMS
-                violations.append(f"VIOLATION in {filepath}: {match} → should be {replacement}")
-            # Unknown number - flag but don't auto-fix
-            elif len(normalized) == 10:
-                violations.append(f"WARNING in {filepath}: Unknown phone {match} - manual review needed")
-                replacement = None
-            else:
+            # Skip if allowed
+            if normalized in ALLOWED_DIGITS:
                 continue
             
-            if fix and replacement:
-                content = content.replace(match, replacement)
+            # Skip short numbers
+            if len(normalized) < 10:
+                continue
+            
+            # Check forbidden
+            is_forbidden = any(normalize_phone(f) == normalized for f in FORBIDDEN)
+            
+            replacement = get_replacement(match)
+            
+            if is_forbidden or not is_allowed(match):
+                issue = {
+                    "file": str(filepath),
+                    "line": line_num,
+                    "found": match,
+                    "type": "violation" if is_forbidden else "unknown",
+                    "replacement": replacement,
+                    "context": line.strip()[:80]
+                }
+                issues.append(issue)
+                
+                if fix and replacement:
+                    new_line = new_line.replace(match, replacement)
+                    fixed_count += 1
+        
+        new_lines.append(new_line)
     
     # Write fixed content
-    if fix and content != original_content:
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(content)
-        violations.append(f"FIXED: {filepath}")
+    if fix and fixed_count > 0:
+        new_content = ''.join(new_lines)
+        if new_content != original_content:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(new_content)
     
-    return violations
+    return issues, fixed_count
 
 def scan_directory(directory, fix=False, extensions=None):
     """Scan directory for phone number violations."""
     if extensions is None:
-        extensions = ['.html', '.js', '.css', '.md', '.json']
+        extensions = ['.html', '.htm', '.js', '.css', '.md', '.json', '.txt']
     
-    all_violations = []
+    all_issues = []
+    total_fixed = 0
     scanned = 0
     
+    # Specific paths to scan
+    scan_paths = [
+        os.path.join(directory, "*.html"),
+        os.path.join(directory, "audits", "*.html"),
+        os.path.join(directory, "assets", "*.html"),
+    ]
+    
     for root, dirs, files in os.walk(directory):
-        # Skip node_modules, .git, etc.
-        dirs[:] = [d for d in dirs if not d.startswith('.') and d != 'node_modules']
+        # Skip non-public dirs
+        dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['node_modules', '__pycache__']]
         
         for file in files:
             if any(file.endswith(ext) for ext in extensions):
                 filepath = os.path.join(root, file)
-                violations = scan_file(filepath, fix)
-                all_violations.extend(violations)
+                issues, fixed = scan_file(filepath, fix)
+                all_issues.extend(issues)
+                total_fixed += fixed
                 scanned += 1
     
-    return all_violations, scanned
+    return all_issues, scanned, total_fixed
 
 def main():
     parser = argparse.ArgumentParser(description="Brand Governor - Phone Number Enforcement")
     parser.add_argument("--dir", required=True, help="Directory to scan")
     parser.add_argument("--fix", action="store_true", help="Auto-fix violations")
-    parser.add_argument("--strict", action="store_true", help="Fail on any warning")
-    parser.add_argument("--json", action="store_true", help="Output as JSON")
+    parser.add_argument("--strict", action="store_true", help="Fail on any issue")
+    parser.add_argument("--report", action="store_true", help="Output JSON report")
+    parser.add_argument("--json", action="store_true", help="JSON output to stdout")
     
     args = parser.parse_args()
     
@@ -140,44 +193,66 @@ def main():
         print(f"ERROR: {args.dir} is not a valid directory")
         sys.exit(1)
     
-    violations, scanned = scan_directory(args.dir, args.fix)
+    issues, scanned, fixed = scan_directory(args.dir, args.fix)
     
-    errors = [v for v in violations if v.startswith("VIOLATION") or v.startswith("ERROR")]
-    warnings = [v for v in violations if v.startswith("WARNING")]
-    fixes = [v for v in violations if v.startswith("FIXED")]
+    violations = [i for i in issues if i.get("type") == "violation"]
+    unknowns = [i for i in issues if i.get("type") == "unknown"]
+    errors = [i for i in issues if i.get("type") == "error"]
     
-    if args.json:
-        result = {
-            "scanned": scanned,
-            "errors": len(errors),
-            "warnings": len(warnings),
-            "fixes": len(fixes),
-            "violations": violations,
-            "passed": len(errors) == 0 and (not args.strict or len(warnings) == 0)
+    passed = len(violations) == 0 and len(errors) == 0
+    if args.strict:
+        passed = passed and len(unknowns) == 0
+    
+    report = {
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "directory": args.dir,
+        "files_scanned": scanned,
+        "violations": len(violations),
+        "unknowns": len(unknowns),
+        "errors": len(errors),
+        "fixed": fixed,
+        "passed": passed,
+        "issues": issues,
+        "canonical": {
+            "voice": {"display": VOICE_DISPLAY, "e164": VOICE_E164},
+            "sms": {"display": SMS_DISPLAY, "e164": SMS_E164}
         }
-        print(json.dumps(result, indent=2))
+    }
+    
+    # Save report
+    if args.report or args.json:
+        with open(REPORT_PATH, 'w') as f:
+            json.dump(report, f, indent=2)
+    
+    # Output
+    if args.json:
+        print(json.dumps(report, indent=2))
     else:
         print(f"\n{'='*60}")
-        print(f"BRAND GOVERNOR SCAN RESULTS")
+        print(f"BRAND GOVERNOR AUDIT REPORT")
         print(f"{'='*60}")
         print(f"Directory: {args.dir}")
         print(f"Files scanned: {scanned}")
+        print(f"Violations: {len(violations)}")
+        print(f"Unknowns: {len(unknowns)}")
         print(f"Errors: {len(errors)}")
-        print(f"Warnings: {len(warnings)}")
         if args.fix:
-            print(f"Fixed: {len(fixes)}")
+            print(f"Fixed: {fixed}")
         print()
         
-        for v in violations:
-            print(v)
+        for issue in issues:
+            severity = "❌" if issue.get("type") == "violation" else "⚠️" if issue.get("type") == "unknown" else "🔴"
+            print(f"{severity} {issue['file']}:{issue.get('line', '?')} - {issue.get('found', issue.get('message', 'unknown'))}")
+            if issue.get('replacement'):
+                print(f"   → Replace with: {issue['replacement']}")
         
         print()
-        if len(errors) == 0 and (not args.strict or len(warnings) == 0):
+        if passed:
             print("✅ PASSED - All phone numbers are canonical")
-            sys.exit(0)
         else:
             print("❌ FAILED - Phone number violations detected")
-            sys.exit(1)
+    
+    sys.exit(0 if passed else 1)
 
 if __name__ == "__main__":
     main()

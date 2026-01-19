@@ -1,0 +1,69 @@
+name: Brand Verification Deploy Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  brand-verify:
+    runs-on: ubuntu-latest
+    name: Verify Phone Numbers
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run Brand Governor
+        run: |
+          python verify_brand.py --dir public --report --strict
+          echo "Brand verification passed!"
+      
+      - name: Upload Audit Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: brand-audit-report
+          path: brand_audit_report.json
+          retention-days: 7
+      
+      - name: Comment on PR (if violations)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = {};
+            try {
+              report = JSON.parse(fs.readFileSync('brand_audit_report.json', 'utf8'));
+            } catch (e) {
+              report = {violations: 'unknown', issues: []};
+            }
+            
+            const body = `## ❌ Brand Verification Failed
+            
+            **Violations found:** ${report.violations}
+            
+            ### Issues:
+            ${report.issues?.slice(0, 10).map(i => 
+              `- \`${i.file}:${i.line}\` - Found: \`${i.found}\` → Replace with: \`${i.replacement || 'manual review'}\``
+            ).join('\n') || 'See artifact for details'}
+            
+            Run locally to fix:
+            \`\`\`bash
+            python verify_brand.py --dir public --fix
+            \`\`\`
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
