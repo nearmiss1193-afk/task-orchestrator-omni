@@ -1723,9 +1723,203 @@ Keep response under 160 characters. Be conversational, not salesy."""
         
         return {"status": "ok", "correlation_id": correlation_id}
     
+    # ============================================================
+    # P0: OPTION A - REPLY TEXT ONLY (GHL sends SMS natively)
+    # ============================================================
+    
+    def generate_sms_reply_v2(inbound_message: str, phone: str) -> dict:
+        """Generate AI reply using Gemini for HVAC qualification. Returns dict with reply + metadata."""
+        import random
+        import traceback
+        
+        model = "gemini-2.0-flash"
+        intent = "unknown"
+        
+        # Detect emergency keywords
+        emergency_keywords = ["no ac", "no air", "broken", "emergency", "urgent", "hot", "dying"]
+        is_emergency = any(kw in inbound_message.lower() for kw in emergency_keywords)
+        if is_emergency:
+            intent = "emergency"
+        elif any(kw in inbound_message.lower() for kw in ["quote", "price", "cost", "estimate"]):
+            intent = "pricing"
+        elif any(kw in inbound_message.lower() for kw in ["tune", "maintenance", "check", "inspect"]):
+            intent = "maintenance"
+        elif any(kw in inbound_message.lower() for kw in ["install", "new", "replace"]):
+            intent = "install"
+        else:
+            intent = "general"
+        
+        try:
+            GEMINI_API_KEY = secrets.get("GEMINI_API_KEY", "")
+            if not GEMINI_API_KEY:
+                fallback = "Thanks for reaching out! What HVAC service can we help with today? -Sarah"
+                return {"reply_text": fallback, "model": "fallback", "intent": intent, "error": None}
+            
+            if is_emergency:
+                prompt = f"""You are Sarah, an AI assistant for an HVAC company.
+The customer sent: "{inbound_message}"
+This sounds urgent! Respond with empathy and urgency. Offer to schedule same-day service or have them call immediately at +1 (863) 213-2505.
+Keep under 300 characters. Sign off with "-Sarah"."""
+            else:
+                prompt = f"""You are Sarah, an AI assistant for an HVAC company.
+The customer sent: "{inbound_message}"
+
+Your goal:
+1. Be warm and helpful
+2. Ask ONE relevant follow-up question to understand their need
+3. Offer ONE concrete next step (schedule visit or quick diagnostic)
+4. Keep under 300 characters
+5. Sign off with "-Sarah"
+
+Be conversational, not salesy."""
+            
+            resp = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}",
+                json={"contents": [{"parts": [{"text": prompt}]}]},
+                headers={"Content-Type": "application/json"},
+                timeout=10
+            )
+            
+            if resp.status_code == 200:
+                data = resp.json()
+                reply = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+                reply = reply.strip()[:320] if reply else "Thanks for your message! What HVAC service can we help with? -Sarah"
+                if not reply.endswith("-Sarah"):
+                    reply = reply[:300] + " -Sarah"
+                return {"reply_text": reply, "model": model, "intent": intent, "error": None}
+            else:
+                return {
+                    "reply_text": "Thanks for your message! What HVAC service can we help with today? -Sarah",
+                    "model": "fallback",
+                    "intent": intent,
+                    "error": f"Gemini API: {resp.status_code}"
+                }
+        except Exception as e:
+            return {
+                "reply_text": "Thanks for your message! We'll get back to you shortly. -Sarah",
+                "model": "fallback",
+                "intent": intent,
+                "error": str(e)
+            }
+    
+    @api.post("/api/sms/reply-text")
+    async def sms_reply_text(request: Request):
+        """
+        P0: Returns reply text only - GHL sends SMS natively.
+        Input: {phone, message, contactId, conversationId}
+        Output: {reply_text, correlation_id}
+        """
+        import random
+        import traceback
+        
+        try:
+            data = await request.json()
+        except:
+            data = {}
+        
+        phone = data.get("phone", "")
+        message = data.get("message", "")
+        contact_id = data.get("contactId", "")
+        conversation_id = data.get("conversationId", "")
+        
+        # Normalize phone
+        phone_normalized = normalize_phone(phone) if phone else ""
+        
+        # Generate stable correlation_id
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+        rand4 = ''.join(random.choices('abcdef0123456789', k=4))
+        correlation_id = f"sms_{phone_normalized.replace('+', '')}_{ts}_{rand4}"
+        
+        # Emit sms.inbound immediately
+        log_event("sms.inbound", "ghl", "info",
+            correlation_id=correlation_id,
+            entity_id=phone_normalized,
+            payload={
+                "phone": phone_normalized,
+                "message_preview": message[:100] if message else "",
+                "contact_id": contact_id,
+                "conversation_id": conversation_id
+            }
+        )
+        
+        # Generate reply
+        try:
+            result = generate_sms_reply_v2(message, phone_normalized)
+            reply_text = result["reply_text"]
+            
+            # Emit sms.reply.generated
+            log_event("sms.reply.generated", "modal", "info",
+                correlation_id=correlation_id,
+                entity_id=phone_normalized,
+                payload={
+                    "reply_text_len": len(reply_text),
+                    "model": result["model"],
+                    "intent": result["intent"]
+                }
+            )
+            
+            if result["error"]:
+                log_event("error.occurred", "gemini", "warn",
+                    correlation_id=correlation_id,
+                    payload={"error": result["error"]}
+                )
+            
+            return {"reply_text": reply_text, "correlation_id": correlation_id}
+            
+        except Exception as e:
+            log_event("error.occurred", "modal", "error",
+                correlation_id=correlation_id,
+                payload={"error": str(e), "traceback": traceback.format_exc()[:500]}
+            )
+            # Still return a fallback so GHL can send something
+            return {
+                "reply_text": "Thanks for your message! We'll get back to you shortly. -Sarah",
+                "correlation_id": correlation_id
+            }
+    
+    # ============================================================
+    # P2: REPLY-SENT CALLBACK (GHL calls after sending SMS)
+    # ============================================================
+    
+    @api.post("/api/sms/reply-sent")
+    async def sms_reply_sent(request: Request):
+        """
+        Callback from GHL after SMS is sent. Logs sms.reply.sent event.
+        Input: {phone, conversationId, correlation_id, provider, message_id}
+        """
+        try:
+            data = await request.json()
+        except:
+            data = {}
+        
+        phone = data.get("phone", "")
+        conversation_id = data.get("conversationId", "")
+        correlation_id = data.get("correlation_id", "")
+        provider = data.get("provider", "ghl")
+        message_id = data.get("message_id", "")
+        
+        phone_normalized = normalize_phone(phone) if phone else ""
+        
+        log_event("sms.reply.sent", provider, "info",
+            correlation_id=correlation_id,
+            entity_id=phone_normalized,
+            payload={
+                "phone": phone_normalized,
+                "conversation_id": conversation_id,
+                "provider": provider,
+                "message_id": message_id
+            }
+        )
+        
+        return {"status": "ok", "logged": True}
+    
+    # ============================================================
+    # P3: UPGRADED SMS HEALTH (more fields)
+    # ============================================================
+    
     @api.get("/api/sms/health")
     def sms_health():
-        """SMS health check - last inbound, last reply, unreplied count."""
+        """SMS health check with extended fields."""
         try:
             headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
             
@@ -1736,12 +1930,29 @@ Keep response under 160 characters. Be conversational, not salesy."""
             )
             last_inbound_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
             
+            # Last SMS reply generated
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.generated&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            last_generated_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            
             # Last SMS reply sent
             resp = requests.get(
                 f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&order=ts.desc&limit=1",
                 headers=headers, timeout=5
             )
-            last_reply_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            last_sent_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            
+            # Last error
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.error.occurred&severity=eq.error&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            last_error = None
+            if resp.status_code == 200 and resp.json():
+                err = resp.json()[0]
+                last_error = {"ts": err.get("ts"), "payload": err.get("payload")}
             
             # Count unreplied in last 60s
             cutoff_60s = (datetime.now(timezone.utc) - timedelta(seconds=60)).isoformat()
@@ -1749,29 +1960,27 @@ Keep response under 160 characters. Be conversational, not salesy."""
                 f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&ts=gte.{cutoff_60s}&select=entity_id",
                 headers=headers, timeout=5
             )
-            inbound_phones_60s = set()
-            if resp.status_code == 200:
-                inbound_phones_60s = {e.get("entity_id") for e in resp.json() if e.get("entity_id")}
+            inbound_phones_60s = set(e.get("entity_id") for e in resp.json() if e.get("entity_id")) if resp.status_code == 200 else set()
             
             resp = requests.get(
                 f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&ts=gte.{cutoff_60s}&select=entity_id",
                 headers=headers, timeout=5
             )
-            replied_phones_60s = set()
-            if resp.status_code == 200:
-                replied_phones_60s = {e.get("entity_id") for e in resp.json() if e.get("entity_id")}
+            replied_phones_60s = set(e.get("entity_id") for e in resp.json() if e.get("entity_id")) if resp.status_code == 200 else set()
             
             unreplied_count = len(inbound_phones_60s - replied_phones_60s)
             
             return {
                 "status": "ok",
+                "sms_pipeline_healthy": unreplied_count == 0,
                 "last_sms_inbound_ts": last_inbound_ts,
-                "last_sms_reply_ts": last_reply_ts,
+                "last_sms_reply_generated_ts": last_generated_ts,
+                "last_sms_reply_sent_ts": last_sent_ts,
                 "unreplied_count_60s": unreplied_count,
-                "sms_pipeline_healthy": unreplied_count == 0
+                "last_error": last_error
             }
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "degraded", "error": str(e), "sms_pipeline_healthy": False}
     
     # ============================================================
     # P0: SMS DEBUG ENDPOINT
