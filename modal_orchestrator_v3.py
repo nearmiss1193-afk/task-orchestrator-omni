@@ -2033,6 +2033,19 @@ Be conversational, not salesy."""
             return {"status": "degraded", "error": str(e), "sms_pipeline_healthy": False}
     
     # ============================================================
+    # AUDITOR STATUS (test location)
+    # ============================================================
+    
+    @api.get("/api/auditor2/status")
+    def auditor2_status():
+        """Test auditor endpoint in working location."""
+        return {
+            "status": "GREEN",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "test": "auditor2_working"
+        }
+    
+    # ============================================================
     # P0: SMS DEBUG ENDPOINT
     # ============================================================
     
@@ -2098,6 +2111,7 @@ Be conversational, not salesy."""
     # ============================================================
     # UNIFIED AUDITOR STATUS - Customer-facing health check
     # Returns GREEN/YELLOW/RED based on all synthetic monitors
+    # Updated: 2026-01-18T23:30:00Z - Force deploy
     # ============================================================
     
     @api.get("/api/auditor/status")
