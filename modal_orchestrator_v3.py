@@ -2109,10 +2109,11 @@ Be conversational, not salesy."""
 
 # ============================================================
 # STEP 3: SMS DEADMAN WATCHDOG (Scheduled every 2 minutes)
-# Enable via Modal secrets: SMS_DEADMAN_ENABLED=true
+# TEMPORARILY DISABLED - causing Modal container crash
+# Re-enable after main API is stable
 # ============================================================
 
-@app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
+# @app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
 def scheduled_sms_deadman():
     """
     Every 2 minutes: check SMS health and alert if replies are stalled.
