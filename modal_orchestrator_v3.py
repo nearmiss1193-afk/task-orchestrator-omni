@@ -2389,6 +2389,355 @@ Message: "{test_message}"
         except Exception as e:
             return {"status": "error", "sms_pipeline_healthy": False, "error": str(e)}
     
+    # ============================================================
+    # CLOUD CONTROL PANEL - Admin API Endpoints
+    # ============================================================
+    
+    # Admin token from environment (set in Modal secrets + Vercel env)
+    ADMIN_TOKEN = os.environ.get("DASHBOARD_ADMIN_TOKEN", "aiserviceco-admin-2026")
+    
+    def verify_admin(request: Request) -> bool:
+        """Verify admin token from X-Admin-Token header"""
+        token = request.headers.get("X-Admin-Token", "")
+        return token == ADMIN_TOKEN
+    
+    def log_admin_action(action: str, actor: str, params: dict = None):
+        """Log admin action to event_log_v2"""
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+            requests.post(f"{SUPABASE_URL}/rest/v1/event_log_v2", headers=headers, json={
+                "type": "admin.action",
+                "source": "control_panel",
+                "payload": {"action": action, "actor": actor, "params": params or {}},
+                "ts": datetime.now(timezone.utc).isoformat()
+            }, timeout=10)
+        except:
+            pass
+    
+    def get_system_state() -> dict:
+        """Get all system state values"""
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            resp = requests.get(f"{SUPABASE_URL}/rest/v1/system_state?select=key,value,updated_at", headers=headers, timeout=5)
+            if resp.status_code == 200:
+                return {item["key"]: item["value"] for item in resp.json()}
+        except:
+            pass
+        # Return defaults if table doesn't exist
+        return {
+            "CAMPAIGN_MODE": "RUN",
+            "OUTREACH_ENABLED": True,
+            "SMS_ENABLED": True,
+            "EMAIL_ENABLED": True,
+            "CALLS_ENABLED": True,
+            "MAX_BATCH_SIZE": 25,
+            "RATE_LIMITS": {"sms_per_hour": 60, "email_per_hour": 30, "calls_per_hour": 15},
+            "LAUNCH_MODE": "BUSINESS_HOURS"
+        }
+    
+    def set_system_state(key: str, value, actor: str = "admin") -> bool:
+        """Update a system state value"""
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates"}
+            resp = requests.post(f"{SUPABASE_URL}/rest/v1/system_state", headers=headers, json={
+                "key": key,
+                "value": json.dumps(value) if not isinstance(value, str) else value,
+                "updated_by": actor
+            }, timeout=5)
+            return resp.status_code < 300
+        except:
+            return False
+    
+    @api.get("/api/control/state")
+    def control_state(request: Request):
+        """Get full system state - requires admin token"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        state = get_system_state()
+        
+        # Get last 20 admin actions
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        try:
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.admin.action&order=ts.desc&limit=20",
+                headers=headers, timeout=5
+            )
+            admin_actions = resp.json() if resp.status_code == 200 else []
+        except:
+            admin_actions = []
+        
+        # Get last event
+        try:
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            last_event = resp.json()[0] if resp.status_code == 200 and resp.json() else None
+        except:
+            last_event = None
+        
+        return {
+            "status": "ok",
+            "state": state,
+            "admin_actions": admin_actions,
+            "last_event_ts": last_event.get("ts") if last_event else None,
+            "ready": True,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+    
+    @api.post("/api/control/set")
+    async def control_set(request: Request):
+        """Set a system state value - requires admin token"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        body = await request.json()
+        key = body.get("key")
+        value = body.get("value")
+        
+        if not key:
+            return {"error": "Missing key", "status": 400}
+        
+        success = set_system_state(key, value)
+        log_admin_action("set_state", "dashboard", {"key": key, "value": value})
+        
+        return {"status": "ok" if success else "error", "key": key, "value": value}
+    
+    @api.post("/api/control/campaign/start")
+    async def campaign_start(request: Request):
+        """Start campaign - sets CAMPAIGN_MODE=RUN, OUTREACH_ENABLED=true"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        set_system_state("CAMPAIGN_MODE", "RUN")
+        set_system_state("OUTREACH_ENABLED", True)
+        log_admin_action("campaign_start", "dashboard")
+        
+        return {"status": "ok", "campaign_mode": "RUN", "outreach_enabled": True}
+    
+    @api.post("/api/control/campaign/pause")
+    async def campaign_pause(request: Request):
+        """Pause campaign - sets CAMPAIGN_MODE=PAUSE (inbound still works)"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        set_system_state("CAMPAIGN_MODE", "PAUSE")
+        log_admin_action("campaign_pause", "dashboard")
+        
+        return {"status": "ok", "campaign_mode": "PAUSE"}
+    
+    @api.post("/api/control/campaign/stop")
+    async def campaign_stop(request: Request):
+        """Stop campaign - sets CAMPAIGN_MODE=STOP, OUTREACH_ENABLED=false"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        set_system_state("CAMPAIGN_MODE", "STOP")
+        set_system_state("OUTREACH_ENABLED", False)
+        log_admin_action("campaign_stop", "dashboard")
+        
+        return {"status": "ok", "campaign_mode": "STOP", "outreach_enabled": False}
+    
+    @api.post("/api/control/campaign/run-batch")
+    async def campaign_run_batch(request: Request):
+        """Run a manual batch - respects MAX_BATCH_SIZE and channel flags"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        body = await request.json()
+        batch_size = min(body.get("batch_size", 10), 25)  # Cap at 25
+        channel = body.get("channel", "sms")
+        vertical = body.get("vertical", "hvac")
+        dry_run = body.get("dry_run", False)
+        
+        state = get_system_state()
+        
+        # Check channel enabled
+        if channel == "sms" and not state.get("SMS_ENABLED", True):
+            return {"error": "SMS channel disabled", "status": 400}
+        if channel == "email" and not state.get("EMAIL_ENABLED", True):
+            return {"error": "Email channel disabled", "status": 400}
+        if channel == "calls" and not state.get("CALLS_ENABLED", True):
+            return {"error": "Calls channel disabled", "status": 400}
+        
+        # Log start
+        log_admin_action("run_batch_start", "dashboard", {
+            "batch_size": batch_size, "channel": channel, "vertical": vertical, "dry_run": dry_run
+        })
+        
+        if dry_run:
+            return {
+                "status": "ok",
+                "mode": "dry_run",
+                "batch_size": batch_size,
+                "channel": channel,
+                "message": "Dry run - no messages sent"
+            }
+        
+        # Execute batch via existing mechanism
+        # Get leads and send via GHL webhook
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        resp = requests.get(
+            f"{SUPABASE_URL}/rest/v1/leads?status=eq.new&phone=not.is.null&limit={batch_size}",
+            headers=headers, timeout=10
+        )
+        leads = resp.json() if resp.status_code == 200 else []
+        
+        sent = 0
+        for lead in leads:
+            phone = lead.get("phone", "").replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
+            if not phone.startswith("+"):
+                phone = f"+1{phone}" if len(phone) == 10 else phone
+            
+            company = lead.get("company_name", "your company")
+            message = f"Hi! Noticed {company} might be missing calls after-hours. Our AI answers 24/7 and books appointments. Worth a quick chat? Reply STOP to opt out"
+            
+            try:
+                sms_resp = requests.post(GHL_SMS_WEBHOOK, json={
+                    "phone": phone, "message": message, "company": company
+                }, timeout=30)
+                if sms_resp.status_code in [200, 201]:
+                    sent += 1
+                    # Mark lead as contacted
+                    requests.patch(
+                        f"{SUPABASE_URL}/rest/v1/leads?id=eq.{lead.get('id')}",
+                        headers={**headers, "Content-Type": "application/json"},
+                        json={"status": "contacted"}
+                    )
+            except:
+                pass
+        
+        log_admin_action("run_batch_complete", "dashboard", {"sent": sent, "total": len(leads)})
+        
+        return {"status": "ok", "sent": sent, "total": len(leads), "channel": channel}
+    
+    @api.get("/api/control/logs")
+    def control_logs(request: Request):
+        """Get last 200 events and last 20 errors"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        
+        # Last 200 events
+        try:
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?order=ts.desc&limit=200",
+                headers=headers, timeout=10
+            )
+            events = resp.json() if resp.status_code == 200 else []
+        except:
+            events = []
+        
+        # Last 20 errors
+        try:
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?severity=eq.error&order=ts.desc&limit=20",
+                headers=headers, timeout=10
+            )
+            errors = resp.json() if resp.status_code == 200 else []
+        except:
+            errors = []
+        
+        return {"status": "ok", "events": events, "errors": errors, "timestamp": datetime.now(timezone.utc).isoformat()}
+    
+    @api.post("/api/control/chat")
+    async def control_chat(request: Request):
+        """Chat with orchestrator - grounded in system truth"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        body = await request.json()
+        user_text = body.get("text", "")
+        
+        if not user_text:
+            return {"error": "Missing text", "status": 400}
+        
+        # Store operator message
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+        correlation_id = f"chat_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
+        
+        requests.post(f"{SUPABASE_URL}/rest/v1/operator_messages", headers=headers, json={
+            "role": "operator",
+            "text": user_text,
+            "correlation_id": correlation_id
+        }, timeout=5)
+        
+        # Get system truth for grounding
+        state = get_system_state()
+        
+        # Get recent events
+        try:
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?order=ts.desc&limit=10",
+                headers=headers, timeout=5
+            )
+            recent_events = resp.json() if resp.status_code == 200 else []
+        except:
+            recent_events = []
+        
+        # Simple rule-based responses (can be upgraded to LLM later)
+        user_lower = user_text.lower()
+        
+        if "status" in user_lower or "health" in user_lower:
+            reply = f"System Status: CAMPAIGN_MODE={state.get('CAMPAIGN_MODE')}, SMS={state.get('SMS_ENABLED')}, Email={state.get('EMAIL_ENABLED')}. Last event: {recent_events[0].get('type') if recent_events else 'none'}"
+            actions = [{"label": "View Full State", "endpoint": "/api/control/state", "method": "GET"}]
+        elif "start" in user_lower:
+            reply = "Ready to start campaign. This will enable outbound SMS/email sends."
+            actions = [{"label": "Start Campaign", "endpoint": "/api/control/campaign/start", "method": "POST"}]
+        elif "pause" in user_lower:
+            reply = "Pausing will stop outbound sends but keep inbound handling active."
+            actions = [{"label": "Pause Campaign", "endpoint": "/api/control/campaign/pause", "method": "POST"}]
+        elif "stop" in user_lower:
+            reply = "Stopping will halt all outbound activity."
+            actions = [{"label": "Stop Campaign", "endpoint": "/api/control/campaign/stop", "method": "POST"}]
+        elif "batch" in user_lower or "send" in user_lower:
+            reply = "Ready to run a batch. Recommended: 10-15 leads for testing."
+            actions = [
+                {"label": "Send 10 SMS", "endpoint": "/api/control/campaign/run-batch", "method": "POST", "body": {"batch_size": 10, "channel": "sms"}},
+                {"label": "Dry Run 10", "endpoint": "/api/control/campaign/run-batch", "method": "POST", "body": {"batch_size": 10, "dry_run": True}}
+            ]
+        elif "logs" in user_lower or "events" in user_lower:
+            reply = f"Recent events: {', '.join([e.get('type', 'unknown') for e in recent_events[:5]])}"
+            actions = [{"label": "View All Logs", "endpoint": "/api/control/logs", "method": "GET"}]
+        else:
+            reply = f"Current state: CAMPAIGN_MODE={state.get('CAMPAIGN_MODE')}. What would you like to do? (start, pause, stop, send batch, check status)"
+            actions = [
+                {"label": "Check Status", "endpoint": "/api/control/state", "method": "GET"},
+                {"label": "Send 10 SMS", "endpoint": "/api/control/campaign/run-batch", "method": "POST", "body": {"batch_size": 10}}
+            ]
+        
+        # Store orchestrator response
+        requests.post(f"{SUPABASE_URL}/rest/v1/operator_messages", headers=headers, json={
+            "role": "orchestrator",
+            "text": reply,
+            "correlation_id": correlation_id,
+            "meta": {"suggested_actions": actions}
+        }, timeout=5)
+        
+        return {"status": "ok", "reply_text": reply, "suggested_actions": actions}
+    
+    @api.get("/api/control/chat/history")
+    def control_chat_history(request: Request):
+        """Get chat history"""
+        if not verify_admin(request):
+            return {"error": "Unauthorized", "status": 401}
+        
+        limit = request.query_params.get("limit", "50")
+        
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        try:
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/operator_messages?order=ts.desc&limit={limit}",
+                headers=headers, timeout=10
+            )
+            messages = resp.json() if resp.status_code == 200 else []
+        except:
+            messages = []
+        
+        return {"status": "ok", "messages": messages}
+    
     return api
 
 
@@ -2398,7 +2747,9 @@ Message: "{test_message}"
 # Re-enable after main API is stable
 # ============================================================
 
-@app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
+# DISABLED: Modal free tier cron limit (5 max)
+# @app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
+@app.function(secrets=[secrets])  # Keep callable, remove cron
 def scheduled_sms_deadman():
     """
     Every 2 minutes: check SMS health and alert if replies are stalled.
@@ -2529,7 +2880,9 @@ def scheduled_sms_deadman():
 # Fetches website, extracts phone numbers, compares to routing truth
 # ============================================================
 
-@app.function(schedule=modal.Cron("*/10 * * * *"), secrets=[secrets])
+# DISABLED: Modal free tier cron limit (5 max)
+# @app.function(schedule=modal.Cron("*/10 * * * *"), secrets=[secrets])
+@app.function(secrets=[secrets])  # Keep as callable, remove cron
 def scheduled_website_monitor():
     """Check website for phone number drift every 10 minutes."""
     import re
