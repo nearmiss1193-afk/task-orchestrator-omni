@@ -1752,22 +1752,24 @@ Keep response under 160 characters. Be conversational, not salesy."""
         try:
             GEMINI_API_KEY = secrets.get("GEMINI_API_KEY", "")
             if not GEMINI_API_KEY:
-                fallback = "Thanks for reaching out! What HVAC service can we help with today? -Sarah"
+                fallback = "Thanks for reaching out! How can AI Service Co help automate your business today? -Sarah"
                 return {"reply_text": fallback, "model": "fallback", "intent": intent, "error": None}
             
             if is_emergency:
-                prompt = f"""You are Sarah, an AI assistant for an HVAC company.
+                prompt = f"""You are Sarah, an AI sales consultant for AI Service Co - we help businesses automate with AI solutions.
 The customer sent: "{inbound_message}"
-This sounds urgent! Respond with empathy and urgency. Offer to schedule same-day service or have them call immediately at +1 (863) 213-2505.
+This sounds urgent! Respond with empathy and offer to schedule a quick call at +1 (863) 213-2505 to discuss their AI needs.
 Keep under 300 characters. Sign off with "-Sarah"."""
             else:
-                prompt = f"""You are Sarah, an AI assistant for an HVAC company.
+                prompt = f"""You are Sarah, an AI sales consultant for AI Service Co.
+We offer AI automation solutions for businesses: AI phone agents, SMS/email automation, lead generation, content creation, and custom AI workflows.
+
 The customer sent: "{inbound_message}"
 
 Your goal:
 1. Be warm and helpful
-2. Ask ONE relevant follow-up question to understand their need
-3. Offer ONE concrete next step (schedule visit or quick diagnostic)
+2. Ask ONE relevant follow-up question to understand their business needs
+3. Offer to schedule a free AI Strategy Session via https://link.aiserviceco.com/discovery
 4. Keep under 300 characters
 5. Sign off with "-Sarah"
 
@@ -1783,13 +1785,13 @@ Be conversational, not salesy."""
             if resp.status_code == 200:
                 data = resp.json()
                 reply = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-                reply = reply.strip()[:320] if reply else "Thanks for your message! What HVAC service can we help with? -Sarah"
+                reply = reply.strip()[:320] if reply else "Thanks for your message! How can AI Service Co help your business today? -Sarah"
                 if not reply.endswith("-Sarah"):
                     reply = reply[:300] + " -Sarah"
                 return {"reply_text": reply, "model": model, "intent": intent, "error": None}
             else:
                 return {
-                    "reply_text": "Thanks for your message! What HVAC service can we help with today? -Sarah",
+                    "reply_text": "Thanks for your message! How can AI Service Co help automate your business today? -Sarah",
                     "model": "fallback",
                     "intent": intent,
                     "error": f"Gemini API: {resp.status_code}"
@@ -1814,7 +1816,7 @@ Be conversational, not salesy."""
         import traceback
         
         # Safe fallback - NEVER return empty
-        SAFE_FALLBACK = "Thanks—what city are you in and what's going on with the AC? -Sarah"
+        SAFE_FALLBACK = "Thanks for reaching out! What AI automation challenge can we help solve for your business? -Sarah"
         
         try:
             data = await request.json()
@@ -2412,7 +2414,7 @@ def scheduled_sms_synthetic():
                 f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_KEY}",
                 headers={"Content-Type": "application/json"},
                 json={
-                    "contents": [{"parts": [{"text": f"You are Sarah, an AI assistant for an HVAC company. Reply to this customer inquiry in under 320 chars, ask one qualifying question, sign off with -Sarah: '{test_message}'"}]}],
+                    "contents": [{"parts": [{"text": f"You are Sarah, an AI sales consultant for AI Service Co. Reply to this customer inquiry in under 320 chars, ask one qualifying question about their AI automation needs, sign off with -Sarah: '{test_message}'"}]}],
                     "generationConfig": {"maxOutputTokens": 100, "temperature": 0.7}
                 },
                 timeout=15
