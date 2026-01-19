@@ -24,10 +24,15 @@ GHL_LOCATION_ID = "RnK4OjX0oDcqtWw0VyLr"  # Empire Main location
 BOOKING_LINK = "https://link.aiserviceco.com/discovery"
 ESCALATION_PHONE = "+13529368152"
 
-# Unified Comms System - Canonical Number
-CANONICAL_NUMBER = "+13527585336"  # Single source of truth for all comms
-SMS_PROVIDER = "twilio"  # "twilio" | "telnyx" | "ghl_fallback"
+# Unified Comms System - Canonical Routing Truth (STEP 0)
+# Voice: Vapi handles inbound/outbound calls
 VOICE_PROVIDER = "vapi"
+VOICE_NUMBER = "+18632132505"  # Call Sarah (Voice AI)
+# SMS: GHL handles inbound/outbound texts (A2P verified)
+SMS_PROVIDER = "ghl"
+SMS_NUMBER = "+13527585336"  # Text Sarah (SMS)
+# Legacy alias
+CANONICAL_NUMBER = SMS_NUMBER
 
 # Secrets loaded at runtime from modal.Secret
 def get_secrets():
@@ -1877,10 +1882,10 @@ Keep response under 160 characters. Be conversational, not salesy."""
             
             return {
                 "status": "ok",
-                "canonical_voice_number": "+18632132505",  # Vapi number
-                "canonical_sms_number": CANONICAL_NUMBER,   # GHL number
+                "canonical_voice_number": VOICE_NUMBER,
+                "canonical_sms_number": SMS_NUMBER,
                 "voice_provider": VOICE_PROVIDER,
-                "sms_provider": "ghl",
+                "sms_provider": SMS_PROVIDER,
                 "last_call_event_ts": last_call_ts,
                 "last_sms_inbound_ts": last_sms_inbound_ts,
                 "last_sms_reply_ts": last_sms_reply_ts,
@@ -1894,11 +1899,11 @@ Keep response under 160 characters. Be conversational, not salesy."""
 
 
 # ============================================================
-# P2: SMS DEADMAN WATCHDOG (Scheduled every 2 minutes)
-# TEMPORARILY DISABLED - uncomment after API verified
+# STEP 3: SMS DEADMAN WATCHDOG (Scheduled every 2 minutes)
+# Enable via Modal secrets: SMS_DEADMAN_ENABLED=true
 # ============================================================
 
-# @app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
+@app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
 def scheduled_sms_deadman():
     """
     Every 2 minutes: check SMS health and alert if replies are stalled.
@@ -1907,6 +1912,10 @@ def scheduled_sms_deadman():
     """
     import requests
     from datetime import datetime, timedelta, timezone
+    
+    # Check if deadman is enabled via env var
+    if os.environ.get("SMS_DEADMAN_ENABLED", "true").lower() != "true":
+        return  # Deadman disabled
     
     env_secrets = {
         "SUPABASE_KEY": os.environ.get("SUPABASE_SERVICE_ROLE_KEY", os.environ.get("SUPABASE_KEY", "")),
