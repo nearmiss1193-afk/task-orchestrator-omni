@@ -2117,10 +2117,17 @@ Be conversational, not salesy."""
             
             return {
                 "status": "ok",
+                # Canonical contact numbers
                 "canonical_voice_number": VOICE_NUMBER,
                 "canonical_sms_number": SMS_NUMBER,
                 "voice_provider": VOICE_PROVIDER,
                 "sms_provider": SMS_PROVIDER,
+                # Business info
+                "booking_link": "https://link.aiserviceco.com/discovery",
+                "business_name": "AI Service Co",
+                "hours": "Mon-Fri 8am-6pm EST",
+                "website": "https://www.aiserviceco.com",
+                # Activity timestamps
                 "last_call_event_ts": last_call_ts,
                 "last_sms_inbound_ts": last_sms_inbound_ts,
                 "last_sms_reply_ts": last_sms_reply_ts,
@@ -2139,7 +2146,7 @@ Be conversational, not salesy."""
 # Re-enable after main API is stable
 # ============================================================
 
-# @app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
+@app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
 def scheduled_sms_deadman():
     """
     Every 2 minutes: check SMS health and alert if replies are stalled.
@@ -2263,3 +2270,185 @@ def scheduled_sms_deadman():
             })
     except Exception as e:
         log_deadman_event("error.occurred", "error", {"source": "sms_deadman", "error": str(e)})
+
+
+# ============================================================
+# COMPONENT B: WEBSITE NUMBER DRIFT MONITOR (Every 10 min)
+# Fetches website, extracts phone numbers, compares to routing truth
+# ============================================================
+
+@app.function(schedule=modal.Cron("*/10 * * * *"), secrets=[secrets])
+def scheduled_website_monitor():
+    """Check website for phone number drift every 10 minutes."""
+    import re
+    import os
+    
+    SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
+    SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+    RESEND_KEY = os.environ.get("RESEND_API_KEY", "")
+    VOICE_NUMBER = "+18632132505"
+    SMS_NUMBER = "+13527585336"
+    WEBSITE_URL = "https://www.aiserviceco.com/"
+    
+    def log_monitor_event(event_type, severity, payload):
+        if not SUPABASE_KEY:
+            return
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+            requests.post(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2",
+                headers=headers, timeout=5,
+                json={"type": event_type, "source": "website_monitor", "severity": severity, "payload": payload}
+            )
+        except:
+            pass
+    
+    try:
+        # Fetch website
+        resp = requests.get(WEBSITE_URL, timeout=15, headers={"User-Agent": "Empire-Auditor/1.0"})
+        if resp.status_code != 200:
+            log_monitor_event("error.occurred", "warn", {"url": WEBSITE_URL, "status": resp.status_code})
+            return
+        
+        html = resp.text
+        
+        # Regex to extract phone numbers
+        phone_pattern = r'[\+]?1?[-.\s]?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}'
+        found_numbers = re.findall(phone_pattern, html)
+        
+        # Normalize found numbers to just digits
+        def normalize(num):
+            digits = re.sub(r'\D', '', num)
+            if len(digits) == 10:
+                digits = '1' + digits
+            return '+' + digits if digits else ''
+        
+        normalized = set(normalize(n) for n in found_numbers if len(re.sub(r'\D', '', n)) >= 10)
+        
+        # Check if canonical numbers are present
+        voice_found = VOICE_NUMBER in normalized or '+1' + VOICE_NUMBER[-10:] in normalized
+        sms_found = SMS_NUMBER in normalized or '+1' + SMS_NUMBER[-10:] in normalized
+        
+        if voice_found and sms_found:
+            log_monitor_event("website_monitor.pass", "info", {
+                "expected_voice": VOICE_NUMBER,
+                "expected_sms": SMS_NUMBER,
+                "found_numbers": list(normalized)[:10],  # Limit to 10
+                "url": WEBSITE_URL
+            })
+        else:
+            # MISMATCH - alert!
+            log_monitor_event("incident.website_number_mismatch", "error", {
+                "expected_voice": VOICE_NUMBER,
+                "expected_sms": SMS_NUMBER,
+                "voice_found": voice_found,
+                "sms_found": sms_found,
+                "found_on_page": list(normalized)[:10],
+                "url": WEBSITE_URL
+            })
+            
+            # Send alert email
+            if RESEND_KEY:
+                try:
+                    requests.post(
+                        "https://api.resend.com/emails",
+                        headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json"},
+                        json={
+                            "from": "Empire Auditor <auditor@aiserviceco.com>",
+                            "to": ["nearmiss1193@gmail.com"],
+                            "subject": "🚨 WEBSITE NUMBER MISMATCH",
+                            "html": f"<h2>Phone Number Drift Detected</h2><p><b>Expected Voice:</b> {VOICE_NUMBER} {'✅' if voice_found else '❌'}</p><p><b>Expected SMS:</b> {SMS_NUMBER} {'✅' if sms_found else '❌'}</p><p><b>Found on page:</b> {list(normalized)[:10]}</p><p><a href='{WEBSITE_URL}'>Check Website</a></p>"
+                        },
+                        timeout=10
+                    )
+                except:
+                    pass
+    except Exception as e:
+        log_monitor_event("error.occurred", "error", {"source": "website_monitor", "error": str(e)})
+
+
+# ============================================================
+# COMPONENT C: SMS SYNTHETIC MONITOR (Every 10 min)
+# Tests reply-text generation without sending real SMS
+# ============================================================
+
+@app.function(schedule=modal.Cron("*/10 * * * *"), secrets=[secrets])
+def scheduled_sms_synthetic():
+    """Run synthetic SMS test every 10 minutes."""
+    import os
+    import time
+    
+    SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
+    SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+    GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
+    
+    def log_synthetic_event(event_type, severity, payload):
+        if not SUPABASE_KEY:
+            return
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+            requests.post(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2",
+                headers=headers, timeout=5,
+                json={"type": event_type, "source": "sms_synthetic", "severity": severity, "payload": payload}
+            )
+        except:
+            pass
+    
+    try:
+        start = time.time()
+        
+        # Call the Gemini API directly for synthetic test
+        test_message = "Synthetic test: need AC tune-up pricing for my home"
+        test_phone = "+15551234567"
+        
+        if not GEMINI_KEY:
+            log_synthetic_event("sms.synthetic.fail", "error", {"error": "GEMINI_API_KEY not configured"})
+            return
+        
+        # Generate reply using Gemini
+        try:
+            gemini_resp = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_KEY}",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "contents": [{"parts": [{"text": f"You are Sarah, an AI assistant for an HVAC company. Reply to this customer inquiry in under 320 chars, ask one qualifying question, sign off with -Sarah: '{test_message}'"}]}],
+                    "generationConfig": {"maxOutputTokens": 100, "temperature": 0.7}
+                },
+                timeout=15
+            )
+            
+            latency_ms = int((time.time() - start) * 1000)
+            
+            if gemini_resp.status_code == 200:
+                data = gemini_resp.json()
+                reply_text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+                
+                # Check pass conditions
+                is_non_empty = len(reply_text.strip()) > 10
+                has_question = "?" in reply_text
+                
+                if is_non_empty and has_question:
+                    log_synthetic_event("sms.synthetic.pass", "info", {
+                        "reply_text_len": len(reply_text),
+                        "contains_question": has_question,
+                        "model": "gemini-2.0-flash",
+                        "latency_ms": latency_ms
+                    })
+                else:
+                    log_synthetic_event("sms.synthetic.fail", "warn", {
+                        "reply_text_len": len(reply_text),
+                        "contains_question": has_question,
+                        "reason": "Missing question or too short",
+                        "latency_ms": latency_ms
+                    })
+            else:
+                log_synthetic_event("sms.synthetic.fail", "error", {
+                    "error": f"Gemini API: {gemini_resp.status_code}",
+                    "latency_ms": latency_ms
+                })
+        except Exception as e:
+            log_synthetic_event("sms.synthetic.fail", "error", {"error": str(e)})
+    except Exception as e:
+        log_synthetic_event("error.occurred", "error", {"source": "sms_synthetic", "error": str(e)})
+
