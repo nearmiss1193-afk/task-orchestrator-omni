@@ -2205,6 +2205,144 @@ Message: "{test_message}"
         }
     
     # ============================================================
+    # NEAR-REAL-TIME TRUTH ENDPOINT - Dashboard polling every 10s
+    # ============================================================
+    
+    @api.get("/api/truth")
+    def api_truth():
+        """
+        Near-real-time truth for dashboard polling.
+        Returns all timestamps, counts, and staleness warnings.
+        """
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            now = datetime.now(timezone.utc)
+            
+            # Cutoffs for counts
+            cutoff_1h = (now - timedelta(hours=1)).isoformat()
+            cutoff_24h = (now - timedelta(hours=24)).isoformat()
+            
+            def get_last_event(event_type):
+                try:
+                    resp = requests.get(
+                        f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.{event_type}&order=ts.desc&limit=1",
+                        headers=headers, timeout=5
+                    )
+                    if resp.status_code == 200 and resp.json():
+                        return resp.json()[0].get("ts")
+                except:
+                    pass
+                return None
+            
+            def get_count(event_type, since):
+                try:
+                    resp = requests.get(
+                        f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.{event_type}&ts=gte.{since}&select=id",
+                        headers=headers, timeout=5
+                    )
+                    if resp.status_code == 200:
+                        return len(resp.json())
+                except:
+                    pass
+                return 0
+            
+            def get_like_count(pattern, since):
+                try:
+                    resp = requests.get(
+                        f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.{pattern}&ts=gte.{since}&select=id",
+                        headers=headers, timeout=5
+                    )
+                    if resp.status_code == 200:
+                        return len(resp.json())
+                except:
+                    pass
+                return 0
+            
+            # Timestamps
+            last_event = get_last_event("*")  # Any event
+            last_sms_inbound = get_last_event("sms.inbound")
+            last_sms_reply_sent = get_last_event("sms.reply.sent")
+            last_call_end = get_last_event("call.ended")
+            last_appointment = get_last_event("appointment.created")
+            last_campaign = get_last_event("campaign.manual.started")
+            
+            # Get actual last event of any type
+            try:
+                resp = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/event_log_v2?order=ts.desc&limit=1",
+                    headers=headers, timeout=5
+                )
+                last_event_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            except:
+                last_event_ts = None
+            
+            # 1h counts
+            sms_inbound_1h = get_count("sms.inbound", cutoff_1h)
+            sms_outbound_1h = get_count("sms.outbound.sent", cutoff_1h)
+            sms_reply_sent_1h = get_count("sms.reply.sent", cutoff_1h)
+            calls_1h = get_like_count("call.*", cutoff_1h)
+            
+            # 24h counts
+            sms_inbound_24h = get_count("sms.inbound", cutoff_24h)
+            sms_outbound_24h = get_count("sms.outbound.sent", cutoff_24h)
+            sms_reply_sent_24h = get_count("sms.reply.sent", cutoff_24h)
+            calls_24h = get_like_count("call.*", cutoff_24h)
+            appointments_24h = get_count("appointment.created", cutoff_24h)
+            
+            # Staleness detection
+            warnings = []
+            recommended_fixes = []
+            
+            def check_stale(ts_str, threshold_minutes, name, fix):
+                if ts_str:
+                    try:
+                        ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                        age_minutes = (now - ts).total_seconds() / 60
+                        if age_minutes > threshold_minutes:
+                            warnings.append(f"{name} stale ({int(age_minutes)}m)")
+                            recommended_fixes.append(fix)
+                            return True
+                    except:
+                        pass
+                return False
+            
+            check_stale(last_sms_inbound, 60, "sms_inbound", "Check GHL inbound webhook")
+            check_stale(last_sms_reply_sent, 60, "sms_reply", "Check /api/sms/reply-text endpoint")
+            
+            # Get system state
+            state = get_system_state()
+            
+            return {
+                "status": "ok",
+                "server_ts": now.isoformat(),
+                "last_event_ts": last_event_ts,
+                "last_campaign_ts": last_campaign,
+                "last_sms_inbound_ts": last_sms_inbound,
+                "last_sms_reply_sent_ts": last_sms_reply_sent,
+                "last_call_end_ts": last_call_end,
+                "last_appointment_ts": last_appointment,
+                "counts_1h": {
+                    "sms_inbound": sms_inbound_1h,
+                    "sms_outbound": sms_outbound_1h,
+                    "sms_reply_sent": sms_reply_sent_1h,
+                    "calls": calls_1h
+                },
+                "counts_24h": {
+                    "sms_inbound": sms_inbound_24h,
+                    "sms_outbound": sms_outbound_24h,
+                    "sms_reply_sent": sms_reply_sent_24h,
+                    "calls": calls_24h,
+                    "appointments": appointments_24h
+                },
+                "campaign_mode": state.get("CAMPAIGN_MODE", "RUN"),
+                "outreach_enabled": state.get("OUTREACH_ENABLED", True),
+                "warnings": warnings,
+                "recommended_fixes": recommended_fixes
+            }
+        except Exception as e:
+            return {"status": "error", "error": str(e), "server_ts": datetime.now(timezone.utc).isoformat()}
+    
+    # ============================================================
     # P3: CANONICAL ROUTING TRUTH ENDPOINT (enhanced)
     # ============================================================
     
