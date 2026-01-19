@@ -2270,6 +2270,125 @@ Message: "{test_message}"
         except Exception as e:
             return {"status": "error", "error": str(e)}
     
+    # ============================================================
+    # P4: AUDITOR TRUTH ENDPOINT - Full system health status
+    # ============================================================
+    
+    @api.get("/api/auditor/truth")
+    def auditor_truth():
+        """
+        Full auditor truth - single endpoint for all system health status.
+        Returns: sms_pipeline_healthy, last events, synthetic status, unreplied count.
+        """
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            now = datetime.now(timezone.utc)
+            
+            # Last SMS inbound
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            inbound_data = resp.json()[0] if resp.status_code == 200 and resp.json() else None
+            last_inbound_ts = inbound_data.get("ts") if inbound_data else None
+            
+            # Last SMS reply generated
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.generated&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            gen_data = resp.json()[0] if resp.status_code == 200 and resp.json() else None
+            last_reply_generated_ts = gen_data.get("ts") if gen_data else None
+            
+            # Last SMS reply sent
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            sent_data = resp.json()[0] if resp.status_code == 200 and resp.json() else None
+            last_reply_sent_ts = sent_data.get("ts") if sent_data else None
+            
+            # Last synthetic pass/fail
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.sms.synthetic.*&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            synthetic_data = resp.json()[0] if resp.status_code == 200 and resp.json() else None
+            synthetic_last_status = "pass" if synthetic_data and "pass" in synthetic_data.get("type", "") else "fail" if synthetic_data else "unknown"
+            synthetic_last_ts = synthetic_data.get("ts") if synthetic_data else None
+            
+            # Last error
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?severity=eq.error&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            error_data = resp.json()[0] if resp.status_code == 200 and resp.json() else None
+            last_error = {
+                "ts": error_data.get("ts"),
+                "type": error_data.get("type"),
+                "message": (error_data.get("payload") or {}).get("error", "")[:100]
+            } if error_data else None
+            
+            # Unreplied count in last 60 seconds
+            cutoff = (now - timedelta(seconds=60)).isoformat()
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&ts=gte.{cutoff}&select=correlation_id",
+                headers=headers, timeout=5
+            )
+            recent_inbound = resp.json() if resp.status_code == 200 else []
+            
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&ts=gte.{cutoff}&select=correlation_id",
+                headers=headers, timeout=5
+            )
+            recent_sent = resp.json() if resp.status_code == 200 else []
+            
+            inbound_ids = {e.get("correlation_id") for e in recent_inbound if e.get("correlation_id")}
+            sent_ids = {e.get("correlation_id") for e in recent_sent if e.get("correlation_id")}
+            unreplied_count = len(inbound_ids - sent_ids)
+            
+            # Calculate pipeline health
+            sms_pipeline_healthy = True
+            health_reasons = []
+            
+            # Check synthetic failure
+            if synthetic_last_status == "fail":
+                sms_pipeline_healthy = False
+                health_reasons.append("synthetic_failed")
+            
+            # Check synthetic staleness (>15 min)
+            if synthetic_last_ts:
+                try:
+                    syn_dt = datetime.fromisoformat(synthetic_last_ts.replace("Z", "+00:00"))
+                    if (now - syn_dt).total_seconds() > 900:
+                        sms_pipeline_healthy = False
+                        health_reasons.append("synthetic_stale")
+                except:
+                    pass
+            
+            # Check unreplied
+            if unreplied_count > 0:
+                sms_pipeline_healthy = False
+                health_reasons.append(f"unreplied_{unreplied_count}")
+            
+            return {
+                "status": "ok",
+                "sms_pipeline_healthy": sms_pipeline_healthy,
+                "health_reasons": health_reasons,
+                "last_inbound_ts": last_inbound_ts,
+                "last_reply_generated_ts": last_reply_generated_ts,
+                "last_reply_sent_ts": last_reply_sent_ts,
+                "synthetic_last_status": synthetic_last_status,
+                "synthetic_last_ts": synthetic_last_ts,
+                "unreplied_count_60s": unreplied_count,
+                "last_error": last_error,
+                "canonical_voice": VOICE_NUMBER,
+                "canonical_sms": SMS_NUMBER,
+                "timestamp": now.isoformat()
+            }
+        except Exception as e:
+            return {"status": "error", "sms_pipeline_healthy": False, "error": str(e)}
+    
     return api
 
 
