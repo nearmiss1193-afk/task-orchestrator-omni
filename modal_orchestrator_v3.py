@@ -1807,10 +1807,14 @@ Be conversational, not salesy."""
         """
         P0: Returns reply text only - GHL sends SMS natively.
         Input: {phone, message, contactId, conversationId}
-        Output: {reply_text, correlation_id}
+        Output: {reply_text, correlation_id, ok, error}
+        ALWAYS returns non-empty reply_text (bulletproof fallback).
         """
         import random
         import traceback
+        
+        # Safe fallback - NEVER return empty
+        SAFE_FALLBACK = "Thanks—what city are you in and what's going on with the AC? -Sarah"
         
         try:
             data = await request.json()
@@ -1830,22 +1834,41 @@ Be conversational, not salesy."""
         rand4 = ''.join(random.choices('abcdef0123456789', k=4))
         correlation_id = f"sms_{phone_normalized.replace('+', '')}_{ts}_{rand4}"
         
+        error_msg = None
+        ok = True
+        
         # Emit sms.inbound immediately
-        log_event("sms.inbound", "ghl", "info",
-            correlation_id=correlation_id,
-            entity_id=phone_normalized,
-            payload={
-                "phone": phone_normalized,
-                "message_preview": message[:100] if message else "",
-                "contact_id": contact_id,
-                "conversation_id": conversation_id
-            }
-        )
+        try:
+            log_event("sms.inbound", "ghl", "info",
+                correlation_id=correlation_id,
+                entity_id=phone_normalized,
+                payload={
+                    "phone": phone_normalized,
+                    "message_preview": message[:100] if message else "",
+                    "contact_id": contact_id,
+                    "conversation_id": conversation_id
+                }
+            )
+        except Exception as e:
+            error_msg = f"log_event failed: {str(e)}"
         
         # Generate reply
+        reply_text = SAFE_FALLBACK  # Start with fallback
         try:
             result = generate_sms_reply_v2(message, phone_normalized)
-            reply_text = result["reply_text"]
+            generated_text = result.get("reply_text", "")
+            
+            # Only use generated text if non-empty
+            if generated_text and len(generated_text.strip()) > 5:
+                reply_text = generated_text
+            else:
+                ok = False
+                error_msg = "Gemini returned empty/short response"
+            
+            # Check for Gemini errors
+            if result.get("error"):
+                ok = False
+                error_msg = result["error"]
             
             # Emit sms.reply.generated
             log_event("sms.reply.generated", "modal", "info",
@@ -1853,29 +1876,32 @@ Be conversational, not salesy."""
                 entity_id=phone_normalized,
                 payload={
                     "reply_text_len": len(reply_text),
-                    "model": result["model"],
-                    "intent": result["intent"]
+                    "model": result.get("model", "unknown"),
+                    "intent": result.get("intent", "unknown"),
+                    "used_fallback": reply_text == SAFE_FALLBACK
                 }
             )
             
-            if result["error"]:
-                log_event("error.occurred", "gemini", "warn",
-                    correlation_id=correlation_id,
-                    payload={"error": result["error"]}
-                )
-            
-            return {"reply_text": reply_text, "correlation_id": correlation_id}
-            
         except Exception as e:
+            ok = False
+            error_msg = str(e)
             log_event("error.occurred", "modal", "error",
                 correlation_id=correlation_id,
-                payload={"error": str(e), "traceback": traceback.format_exc()[:500]}
+                payload={"error": str(e), "traceback": traceback.format_exc()[:500], "used_fallback": True}
             )
-            # Still return a fallback so GHL can send something
-            return {
-                "reply_text": "Thanks for your message! We'll get back to you shortly. -Sarah",
-                "correlation_id": correlation_id
-            }
+        
+        # GUARANTEE: reply_text is never empty
+        if not reply_text or len(reply_text.strip()) < 5:
+            reply_text = SAFE_FALLBACK
+            ok = False
+            error_msg = error_msg or "Empty reply after all attempts"
+        
+        return {
+            "reply_text": reply_text,
+            "correlation_id": correlation_id,
+            "ok": ok,
+            "error": error_msg
+        }
     
     # ============================================================
     # P2: REPLY-SENT CALLBACK (GHL calls after sending SMS)
