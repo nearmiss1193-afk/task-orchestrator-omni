@@ -50,6 +50,28 @@ def get_secrets():
         "VAPI_ASSISTANT_ID": os.environ.get("VAPI_ASSISTANT_ID", "")
     }
 
+# ============================================================
+# BRAND CANON - Single source of truth for brand/offer data
+# ============================================================
+BRAND_CANON = {
+    "voice_number": "+18632132505",
+    "voice_number_display": "(863) 213-2505",
+    "sms_number": "+13527585336",
+    "sms_number_display": "(352) 758-5336",
+    "voice_provider": "vapi",
+    "sms_provider": "ghl",
+    "booking_link": "https://link.aiserviceco.com/discovery",
+    "business_name": "AI Service Co",
+    "hours": "Mon-Fri 8am-6pm EST",
+    "website": "https://www.aiserviceco.com",
+    "pricing": {
+        "starter": 297,
+        "growth": 497,
+        "dominance": 997
+    },
+    "owner_email": "nearmiss1193@gmail.com"
+}
+
 
 @app.function()
 @modal.asgi_app()
@@ -2072,6 +2094,100 @@ Be conversational, not salesy."""
             }
         except Exception as e:
             return {"status": "error", "error": str(e)}
+    
+    # ============================================================
+    # UNIFIED AUDITOR STATUS - Customer-facing health check
+    # Returns GREEN/YELLOW/RED based on all synthetic monitors
+    # ============================================================
+    
+    @api.get("/api/auditor/status")
+    def auditor_status():
+        """Unified customer-facing health status: GREEN/YELLOW/RED."""
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            now = datetime.now(timezone.utc)
+            cutoff_10m = (now - timedelta(minutes=10)).isoformat()
+            cutoff_1h = (now - timedelta(hours=1)).isoformat()
+            
+            checks = {}
+            has_yellow = False
+            has_red = False
+            
+            # 1) SMS Synthetic check (last 10 min)
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.sms.synthetic.*&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            if resp.status_code == 200 and resp.json():
+                event = resp.json()[0]
+                passed = event.get("type") == "sms.synthetic.pass"
+                checks["sms_synthetic"] = {"status": "pass" if passed else "fail", "last_test": event.get("ts")}
+                if not passed:
+                    has_yellow = True
+            else:
+                checks["sms_synthetic"] = {"status": "unknown", "last_test": None}
+                has_yellow = True
+            
+            # 2) Deadman check (no incidents in last hour)
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.incident.deadman&ts=gte.{cutoff_1h}&select=count",
+                headers=headers, timeout=5
+            )
+            deadman_count = len(resp.json()) if resp.status_code == 200 else 0
+            checks["deadman_healthy"] = {"status": "pass" if deadman_count == 0 else "fail", "incident_count": deadman_count}
+            if deadman_count > 0:
+                has_red = True
+            
+            # 3) Website monitor check (last 10 min)
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.website_monitor.*&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            if resp.status_code == 200 and resp.json():
+                event = resp.json()[0]
+                passed = event.get("type") == "website_monitor.pass"
+                checks["landing_numbers"] = {"status": "pass" if passed else "fail", "last_test": event.get("ts")}
+                if not passed:
+                    has_red = True
+            else:
+                checks["landing_numbers"] = {"status": "unknown", "last_test": None}
+            
+            # 4) Check for any incidents in last hour
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.incident.*&ts=gte.{cutoff_1h}&order=ts.desc&limit=5",
+                headers=headers, timeout=5
+            )
+            recent_incidents = resp.json() if resp.status_code == 200 else []
+            if recent_incidents:
+                has_red = True
+            
+            # Determine overall status
+            if has_red:
+                status = "RED"
+            elif has_yellow:
+                status = "YELLOW"
+            else:
+                status = "GREEN"
+            
+            # Log check
+            log_event("auditor.status.checked", "auditor", "info" if status == "GREEN" else "warn",
+                payload={"status": status, "checks": checks})
+            
+            return {
+                "status": status,
+                "timestamp": now.isoformat(),
+                "checks": checks,
+                "recent_incidents": [
+                    {"type": e.get("type"), "ts": e.get("ts")} for e in recent_incidents[:3]
+                ] if recent_incidents else None,
+                "brand_canon": {
+                    "voice_number": BRAND_CANON["voice_number"],
+                    "sms_number": BRAND_CANON["sms_number"],
+                    "booking_link": BRAND_CANON["booking_link"]
+                }
+            }
+        except Exception as e:
+            return {"status": "RED", "error": str(e), "timestamp": datetime.now(timezone.utc).isoformat()}
     
     # ============================================================
     # P3: CANONICAL ROUTING TRUTH ENDPOINT (enhanced)
