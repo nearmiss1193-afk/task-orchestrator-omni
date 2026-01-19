@@ -1768,4 +1768,253 @@ Keep response under 160 characters. Be conversational, not salesy."""
         except Exception as e:
             return {"status": "error", "error": str(e)}
     
+    # ============================================================
+    # P0: SMS DEBUG ENDPOINT
+    # ============================================================
+    
+    @api.get("/api/debug/sms")
+    def debug_sms():
+        """Diagnostic endpoint for SMS debugging."""
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            
+            # Last 10 sms.inbound events
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&order=ts.desc&limit=10",
+                headers=headers, timeout=5
+            )
+            inbound_events = resp.json() if resp.status_code == 200 else []
+            
+            # Last 10 sms.reply.* events
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.sms.reply.*&order=ts.desc&limit=10",
+                headers=headers, timeout=5
+            )
+            reply_events = resp.json() if resp.status_code == 200 else []
+            
+            # Last 10 errors with ghl source
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.error.occurred&source=eq.ghl&order=ts.desc&limit=10",
+                headers=headers, timeout=5
+            )
+            ghl_errors = resp.json() if resp.status_code == 200 else []
+            
+            # Determine last send method used
+            last_method = None
+            if reply_events:
+                last_payload = reply_events[0].get("payload", {})
+                if isinstance(last_payload, str):
+                    try:
+                        last_payload = json.loads(last_payload)
+                    except:
+                        last_payload = {}
+                last_method = last_payload.get("method", "unknown")
+            
+            return {
+                "status": "ok",
+                "ghl_location_id": GHL_LOCATION_ID[:8] + "..." if GHL_LOCATION_ID else None,
+                "canonical_sms_number": CANONICAL_NUMBER,
+                "last_send_method": last_method,
+                "sms_inbound_events": [
+                    {"ts": e.get("ts"), "phone": e.get("entity_id"), "correlation_id": e.get("correlation_id")}
+                    for e in inbound_events
+                ],
+                "sms_reply_events": [
+                    {"ts": e.get("ts"), "type": e.get("type"), "phone": e.get("entity_id"), "method": (e.get("payload") or {}).get("method")}
+                    for e in reply_events
+                ],
+                "ghl_errors": [
+                    {"ts": e.get("ts"), "error": (e.get("payload") or {}).get("error", "")[:100]}
+                    for e in ghl_errors
+                ]
+            }
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    # ============================================================
+    # P3: CANONICAL ROUTING TRUTH ENDPOINT (enhanced)
+    # ============================================================
+    
+    @api.get("/api/routing/truth")
+    def routing_truth():
+        """Canonical routing truth - single source for all number configs."""
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            
+            # Last call event
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=like.call.*&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            last_call_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            
+            # Last SMS inbound
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            last_sms_inbound_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            
+            # Last SMS reply
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&order=ts.desc&limit=1",
+                headers=headers, timeout=5
+            )
+            last_sms_reply_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+            
+            # Calculate staleness
+            now = datetime.now(timezone.utc)
+            sms_inbound_stale = False
+            sms_reply_stale = False
+            
+            if last_sms_inbound_ts and last_sms_reply_ts:
+                try:
+                    inbound_dt = datetime.fromisoformat(last_sms_inbound_ts.replace("Z", "+00:00"))
+                    reply_dt = datetime.fromisoformat(last_sms_reply_ts.replace("Z", "+00:00"))
+                    sms_reply_stale = (inbound_dt - reply_dt).total_seconds() > 60
+                except:
+                    pass
+            
+            return {
+                "status": "ok",
+                "canonical_voice_number": "+18632132505",  # Vapi number
+                "canonical_sms_number": CANONICAL_NUMBER,   # GHL number
+                "voice_provider": VOICE_PROVIDER,
+                "sms_provider": "ghl",
+                "last_call_event_ts": last_call_ts,
+                "last_sms_inbound_ts": last_sms_inbound_ts,
+                "last_sms_reply_ts": last_sms_reply_ts,
+                "sms_reply_stale": sms_reply_stale,
+                "timestamp": now.isoformat()
+            }
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
     return api
+
+
+# ============================================================
+# P2: SMS DEADMAN WATCHDOG (Scheduled every 2 minutes)
+# TEMPORARILY DISABLED - uncomment after API verified
+# ============================================================
+
+# @app.function(schedule=modal.Cron("*/2 * * * *"), secrets=[secrets])
+def scheduled_sms_deadman():
+    """
+    Every 2 minutes: check SMS health and alert if replies are stalled.
+    - If unreplied_count_60s > 0: emit incident.deadman + send alert
+    - If last_sms_inbound_ts > last_sms_reply_ts by >60s: stalled pipeline
+    """
+    import requests
+    from datetime import datetime, timedelta, timezone
+    
+    env_secrets = {
+        "SUPABASE_KEY": os.environ.get("SUPABASE_SERVICE_ROLE_KEY", os.environ.get("SUPABASE_KEY", "")),
+        "RESEND_API_KEY": os.environ.get("RESEND_API_KEY", "")
+    }
+    SUPABASE_KEY = env_secrets["SUPABASE_KEY"]
+    SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"
+    
+    def log_deadman_event(event_type, severity, payload):
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+            requests.post(
+                f"{SUPABASE_URL}/rest/v1/event_log_v2",
+                headers=headers,
+                json={"type": event_type, "source": "deadman", "severity": severity, "payload": payload},
+                timeout=5
+            )
+        except:
+            pass
+    
+    def send_deadman_alert(subject, body):
+        try:
+            RESEND_API_KEY = env_secrets.get("RESEND_API_KEY", "")
+            if not RESEND_API_KEY:
+                return
+            requests.post(
+                "https://api.resend.com/emails",
+                headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+                json={
+                    "from": "alerts@aiserviceco.com",
+                    "to": ["nearmiss1193@gmail.com"],
+                    "subject": subject,
+                    "text": body
+                },
+                timeout=10
+            )
+        except:
+            pass
+    
+    try:
+        headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        
+        # Get SMS health metrics
+        cutoff_60s = (datetime.now(timezone.utc) - timedelta(seconds=60)).isoformat()
+        
+        # Last SMS inbound
+        resp = requests.get(
+            f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&order=ts.desc&limit=1",
+            headers=headers, timeout=5
+        )
+        last_inbound_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+        
+        # Last SMS reply sent
+        resp = requests.get(
+            f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&order=ts.desc&limit=1",
+            headers=headers, timeout=5
+        )
+        last_reply_ts = resp.json()[0].get("ts") if resp.status_code == 200 and resp.json() else None
+        
+        # Count unreplied in last 60s
+        resp = requests.get(
+            f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.inbound&ts=gte.{cutoff_60s}&select=entity_id",
+            headers=headers, timeout=5
+        )
+        inbound_phones = set(e.get("entity_id") for e in resp.json() if e.get("entity_id")) if resp.status_code == 200 else set()
+        
+        resp = requests.get(
+            f"{SUPABASE_URL}/rest/v1/event_log_v2?type=eq.sms.reply.sent&ts=gte.{cutoff_60s}&select=entity_id",
+            headers=headers, timeout=5
+        )
+        replied_phones = set(e.get("entity_id") for e in resp.json() if e.get("entity_id")) if resp.status_code == 200 else set()
+        
+        unreplied_count = len(inbound_phones - replied_phones)
+        
+        # Check for stalled condition
+        is_stalled = False
+        if unreplied_count > 0:
+            is_stalled = True
+        elif last_inbound_ts and last_reply_ts:
+            try:
+                inbound_dt = datetime.fromisoformat(last_inbound_ts.replace("Z", "+00:00"))
+                reply_dt = datetime.fromisoformat(last_reply_ts.replace("Z", "+00:00"))
+                if (inbound_dt - reply_dt).total_seconds() > 60:
+                    is_stalled = True
+            except:
+                pass
+        
+        if is_stalled:
+            # Emit incident
+            log_deadman_event("incident.deadman", "error", {
+                "unreplied_count": unreplied_count,
+                "unreplied_phones": list(inbound_phones - replied_phones),
+                "last_inbound_ts": last_inbound_ts,
+                "last_reply_ts": last_reply_ts
+            })
+            
+            # Send alert
+            send_deadman_alert(
+                "🚨 SMS DEADMAN: replies stalled",
+                f"SMS pipeline stalled!\n\nUnreplied count: {unreplied_count}\nUnreplied phones: {list(inbound_phones - replied_phones)}\nLast inbound: {last_inbound_ts}\nLast reply: {last_reply_ts}\n\nCheck /api/debug/sms for details."
+            )
+        else:
+            # Heartbeat - all good
+            log_deadman_event("deadman.heartbeat", "info", {
+                "unreplied_count": 0,
+                "last_inbound_ts": last_inbound_ts,
+                "last_reply_ts": last_reply_ts,
+                "status": "healthy"
+            })
+    except Exception as e:
+        log_deadman_event("error.occurred", "error", {"source": "sms_deadman", "error": str(e)})
