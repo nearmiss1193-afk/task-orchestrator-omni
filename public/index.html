@@ -652,33 +652,53 @@
             document.head.appendChild(script);
         })();
     </script>
-    <!-- RUNTIME BRAND TRUTH INJECTION - Prevents number drift -->
+    <!-- RUNTIME BRAND TRUTH INJECTION v3 - Prevents number drift -->
     <script>
-        (function loadBrandTruth() {
-            fetch('/brand.json')
-                .then(r => r.json())
-                .then(brand => {
-                    const c = brand.canonical;
-                    // Update elements with data-brand="voice"
-                    document.querySelectorAll('[data-brand="voice"]').forEach(el => {
-                        el.href = 'tel:' + c.voice_number_e164;
-                        el.textContent = '+1 ' + c.voice_display;
+        (function () {
+            function injectBrand() {
+                fetch('/brand.json?ts=' + Date.now())
+                    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                    .then(brand => {
+                        const c = brand.canonical;
+                        // Update data-brand="voice" elements
+                        document.querySelectorAll('[data-brand="voice"]').forEach(el => {
+                            el.href = 'tel:' + c.voice_number_e164;
+                            const fmt = el.dataset.brandFormat;
+                            el.textContent = fmt === 'e164' ? c.voice_number_e164 : '+1 ' + c.voice_display;
+                        });
+                        // Update data-brand="sms" elements
+                        document.querySelectorAll('[data-brand="sms"]').forEach(el => {
+                            el.href = 'sms:' + c.sms_number_e164;
+                            const fmt = el.dataset.brandFormat;
+                            el.textContent = fmt === 'e164' ? c.sms_number_e164 : '+1 ' + c.sms_display;
+                        });
+                        // Fallback: update any remaining tel/sms links
+                        document.querySelectorAll('a[href^="tel:"]:not([data-brand])').forEach(el => {
+                            el.href = 'tel:' + c.voice_number_e164;
+                        });
+                        document.querySelectorAll('a[href^="sms:"]:not([data-brand])').forEach(el => {
+                            el.href = 'sms:' + c.sms_number_e164;
+                        });
+                        console.log('[Brand Truth v3] ✓ Injected:', c.voice_display, c.sms_display);
+                    })
+                    .catch(e => {
+                        console.error('[Brand Truth v3] ✗ FAILED:', e.message);
+                        // Emit to API if available (non-blocking)
+                        fetch('/api/event', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ event: 'brand.injection.failed', error: e.message, url: location.href })
+                        }).catch(() => { });
                     });
-                    // Update elements with data-brand="sms"
-                    document.querySelectorAll('[data-brand="sms"]').forEach(el => {
-                        el.href = 'sms:' + c.sms_number_e164;
-                        el.textContent = '+1 ' + c.sms_display;
-                    });
-                    // Fallback: update any remaining tel: and sms: links
-                    document.querySelectorAll('a[href^="tel:"]:not([data-brand])').forEach(el => {
-                        el.href = 'tel:' + c.voice_number_e164;
-                    });
-                    document.querySelectorAll('a[href^="sms:"]:not([data-brand])').forEach(el => {
-                        el.href = 'sms:' + c.sms_number_e164;
-                    });
-                    console.log('[Brand Truth] Injected:', c.voice_display, c.sms_display);
-                })
-                .catch(e => console.warn('[Brand Truth] Failed to load brand.json'));
+            }
+            // Run on DOMContentLoaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', injectBrand);
+            } else {
+                injectBrand();
+            }
+            // Run again after 1 second (catch dynamic content)
+            setTimeout(injectBrand, 1000);
         })();
     </script>
     <!-- GHL Chat Widget -->
