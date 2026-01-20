@@ -101,26 +101,33 @@
         }
     </script>
 
-    <!-- TRUTH STRIP - System Health Monitor -->
+    <!-- TRUTH STRIP v2 - System Health Monitor (Works even when Modal is down) -->
     <div id="truthStrip"
-        style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(15,23,42,0.95);border-bottom:1px solid rgba(255,255,255,0.1);padding:6px 16px;font-family:'Inter',monospace;font-size:11px;display:flex;align-items:center;gap:16px;backdrop-filter:blur(8px);">
+        style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(15,23,42,0.95);border-bottom:1px solid rgba(255,255,255,0.1);padding:6px 16px;font-family:'Inter',monospace;font-size:11px;display:flex;align-items:center;gap:16px;backdrop-filter:blur(8px);flex-wrap:wrap;">
         <span style="color:#94a3b8;">🔍</span>
         <span id="truthHost" style="color:#67e8f9;">--</span>
         <span style="color:#475569;">|</span>
+        <span>brand.json: <span id="truthBrandVersion" style="color:#86efac;">--</span></span>
+        <span style="color:#475569;">|</span>
         <span>API: <span id="truthApi" style="color:#a5f3fc;">--</span></span>
         <span style="color:#475569;">|</span>
-        <span>Build: <span id="truthBuild" style="color:#c4b5fd;">--</span></span>
+        <span>Voice: <span id="truthVoice" style="color:#c4b5fd;">--</span></span>
         <span style="color:#475569;">|</span>
-        <span>Last Event: <span id="truthLastEvent" style="color:#86efac;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span>Last KPI: <span id="truthLastKpi" style="color:#fde047;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span>Last Campaign: <span id="truthLastCampaign" style="color:#f9a8d4;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span>SSE: <span id="truthSse" style="color:#94a3b8;">--</span></span>
-        <button id="truthCopy" onclick="copyTruthStatus()"
-            style="margin-left:auto;background:#334155;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">📋
-            Copy</button>
+        <span>SMS: <span id="truthSms" style="color:#fde047;">--</span></span>
+        <span style="margin-left:auto;display:flex;gap:8px;">
+            <button onclick="copyTruthStatus()"
+                style="background:#334155;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">📋
+                Copy</button>
+            <button onclick="runVerifyProduction()"
+                style="background:#166534;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">✓
+                Verify</button>
+            <button onclick="runSmsAudit()"
+                style="background:#0369a1;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">📱
+                SMS Audit</button>
+            <button onclick="showDeployModal()"
+                style="background:#7c3aed;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">🚀
+                Deploy</button>
+        </span>
     </div>
     <style>
         body {
@@ -157,12 +164,13 @@
         }
     </style>
     <script>
-        // Truth Strip State
+        // Truth Strip State v2
         const truthState = {
-            lastPollTime: null,
-            lastSseMessage: null,
-            sseConnected: false,
-            data: null
+            brandVersion: null,
+            voiceNumber: null,
+            smsNumber: null,
+            apiUp: false,
+            lastPollTime: null
         };
 
         // Time ago helper
@@ -175,7 +183,7 @@
             const diffMin = Math.floor(diffSec / 60);
             const diffHr = Math.floor(diffMin / 60);
             const diffDay = Math.floor(diffHr / 24);
-            
+
             if (diffSec < 60) return `${diffSec}s ago`;
             if (diffMin < 60) return `${diffMin}m ago`;
             if (diffHr < 24) return `${diffHr}h ${diffMin % 60}m ago`;
@@ -186,7 +194,7 @@
         function checkStaleness() {
             const now = new Date();
             const data = truthState.data;
-            
+
             // Event stale: >15 minutes
             const evtEl = document.getElementById('truthLastEvent');
             if (data?.last_event_ts) {
@@ -194,7 +202,7 @@
                 if (evtAge > 15) evtEl.classList.add('truth-stale-red');
                 else evtEl.classList.remove('truth-stale-red');
             }
-            
+
             // KPI stale: >30 minutes
             const kpiEl = document.getElementById('truthLastKpi');
             if (data?.last_kpi_ts) {
@@ -202,7 +210,7 @@
                 if (kpiAge > 30) kpiEl.classList.add('truth-stale-orange');
                 else kpiEl.classList.remove('truth-stale-orange');
             }
-            
+
             // SSE stale: no message for >20 seconds
             const sseEl = document.getElementById('truthSse');
             if (truthState.lastSseMessage) {
@@ -218,88 +226,126 @@
         // Render truth strip
         function renderTruthStrip() {
             document.getElementById('truthHost').textContent = location.hostname || '--';
-            document.getElementById('truthApi').textContent = (window.API_BASE || 'MISSING').replace('https://','').split('.')[0];
+            document.getElementById('truthApi').textContent = (window.API_BASE || 'MISSING').replace('https://', '').split('.')[0];
             document.getElementById('truthBuild').textContent = window.BUILD_ID || 'NO_BUILD';
-            
+
             const data = truthState.data;
             if (data) {
                 document.getElementById('truthLastEvent').textContent = timeAgo(data.last_event_ts);
                 document.getElementById('truthLastKpi').textContent = timeAgo(data.last_kpi_ts);
                 document.getElementById('truthLastCampaign').textContent = timeAgo(data.last_campaign_ran_at);
             }
-            
+
             // SSE status
             const sseEl = document.getElementById('truthSse');
             if (truthState.sseConnected) {
                 sseEl.Content = truthStat        e.lastSseMessage.toISOString()) : '            sseEl.style.color = '#86efac';
             } else {
                 sseEl.textContent = 'Disconnected';
-    sseEl.style.color = '#f87171';
+                sseEl.style.color = '#f87171';
             }
-            
+
             checkStaleness();
         }
 
-        // Poll /api/truth
-        async function pollTruth() {
+        // Poll brand.json (works even when Modal is down)
+        async function pollBrandJson() {
             try {
-                const apiBase _BASE || '';
-                const resp = await fetch(`${apiBase}/api/truth`, { method: 'GET' });
+                const resp = await fetch('/brand.json?ts=' + Date.now());
                 if (resp.ok) {
-                    truthState.data = await resp.json();
-                    truthState.lastPollTime = new Date();
+                    const brand = await resp.json();
+                    truthState.brandVersion = brand.build?.version || brand.version || '?';
+                    truthState.voiceNumber = brand.canonical?.voice_display || brand.canonical?.voice_number || '?';
+                    truthState.smsNumber = brand.canonical?.sms_display || brand.canonical?.sms_number || '?';
+                    document.getElementById('truthBrandVersion').textContent = truthState.brandVersion;
+                    document.getElementById('truthBrandVersion').style.color = '#86efac';
+                    document.getElementById('truthVoice').textContent = truthState.voiceNumber;
+                    document.getElementById('truthSms').textContent = truthState.smsNumber;
                 }
             } catch (e) {
-                console.warn('[TruthStrip] Poll error:', e.message);
+                document.getElementById('truthBrandVersion').textContent = 'FAIL';
+                document.getElementById('truthBrandVersion').style.color = '#f87171';
             }
-            renderTruthStrip();
+        }
+
+        // Poll Modal API health
+        async function pollApiHealth() {
+            try {
+                const resp = await fetch(window.API_BASE + '/health', { method: 'GET' });
+                if (resp.ok) {
+                    truthState.apiUp = true;
+                    document.getElementById('truthApi').textContent = 'UP';
+                    document.getElementById('truthApi').style.color = '#86efac';
+                } else {
+                    throw new Error('not ok');
+                }
+            } catch (e) {
+                truthState.apiUp = false;
+                document.getElementById('truthApi').textContent = 'DOWN';
+                document.getElementById('truthApi').style.color = '#f87171';
+            }
+        }
+
+        // Render truth strip
+        function renderTruthStrip() {
+            document.getElementById('truthHost').textContent = location.hostname || '--';
         }
 
         // Copy status to clipboard
         function copyTruthStatus() {
-            const data = truthState.data || {};
-            const status = `HOST=${location.hostname} API=${(window.API_BASE||'').split('/').pop()} BUILD=${window.BUILD_ID||'?'} last_event=${data.last_event_ts||'NONE'} last_kpi=${data.last_kpi_ts||'NONE'} last_campaign=${data.last_campaign_ran_at||'NONE'} sse=${truthState.sseConnected?'connected':'disconnected'}`;
+            const status = `HOST=${location.hostname} brand.json=${truthState.brandVersion || '?'} voice=${truthState.voiceNumber || '?'} sms=${truthState.smsNumber || '?'} api=${truthState.apiUp ? 'UP' : 'DOWN'}`;
             navigator.clipboard.writeText(status).then(() => {
-                document.getElementById('truthCopy').textContent = '✓ Copied';
-                setTimeout(() => document.getElementById('truthCopy').textContent = '📋 Copy', 1500);
+                alert('✓ Copied: ' + status);
             });
+        }
+
+        // Runbook buttons
+        function runVerifyProduction() {
+            const cmd = 'cd C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified && python verify_production.py';
+            alert('Run in PowerShell:\n\n' + cmd);
+            navigator.clipboard.writeText(cmd);
+        }
+
+        function runSmsAudit() {
+            const url = window.API_BASE + '/api/debug/sms?run_audit=1';
+            window.open(url, '_blank');
+        }
+
+        function showDeployModal() {
+            alert('Deploy Commands:\n\n1. Modal:\npython -m modal deploy modal_orchestrator_v3.py\n\n2. Vercel:\nnpx vercel --prod --force\n\n3. Full Autofix:\n.\\scripts\\ops_autofix.ps1');
         }
 
         // Hook into SSE (existing EventSource in dashboard)
         function hookSseForTruth(eventSource) {
             if (!eventSource) return;
             truthState.sseConnected = eventSource.readyState === EventSource.OPEN;
-            
+
             const originalOnMessage = eventSource.onmessage;
-            eventSource.onmessage = function(e) {
+            eventSource.onmessage = function (e) {
                 truthState.lastSseMessage = new Date();
                 truthState.sseConnected = true;
                 renderTruthStrip();
                 if (originalOnMessage) originalOnMessage.call(this, e);
             };
-            
-            eventSource.onerror = function(e) {
+
+            eventSource.onerror = function (e) {
                 truthState.sseConnected = false;
                 renderTruthStrip();
             };
-            
-            eventSource.onopen = function() {
+
+            eventSource.onopen = function () {
                 truthState.sseConnected = true;
                 renderTruthStrip();
             };
         }
 
-        // Initialize Truth Strip
+        // Initialize Truth Strip v2
         document.addEventListener('DOMContentLoaded', () => {
             renderTruthStrip();
-            pollTruth(); // Initial poll
-            setInterval(pollTruth, 15000); // Poll every 15 seconds
-            setInterval(renderTruthStrip, 5000); // Re-render every 5 seconds for time ago
-            
-            // Try to hook SSE after a delay (SSE may be initialized later)
-            setTimeout(() => {
-                if (window.eventSource) hookSseForTruth(window.eventSource);
-            }, 3000);
+            pollBrandJson(); // Poll brand.json immediately
+            pollApiHealth(); // Check API health
+            setInterval(pollBrandJson, 30000); // Poll brand.json every 30 seconds
+            setInterval(pollApiHealth, 15000); // Poll API health every 15 seconds
         });
     </script>
     <!-- CONFIG -->
@@ -370,8 +416,8 @@
                     document.getElementById('statusUplink').innerText = "Status: Connecting...";
                     console.warn('[Dashboard] Vapi SDK still loading, will retry on click');
                 }
-              attempts++;
-        }, 500);
+                attempts++;
+            }, 500);
     </script>
 
     <div class="max-w-7xl mx-auto">
