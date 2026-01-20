@@ -441,8 +441,9 @@
             </div>
             <div class="style-fix-30" data-style-migrated="true">
                 <div style="margin-bottom: 8px;"><strong>📞 Call Sarah (Voice AI):</strong> <a href="tel:+18632132505"
-                        style="color: var(--primary);">+1 (863) 213-2505</a></div>
-                <div><strong>💬 Text Sarah:</strong> <a href="sms:+13527585336" style="color: var(--primary);">+1 (352)
+                        data-brand="voice" style="color: var(--primary);">+1 (863) 213-2505</a></div>
+                <div><strong>💬 Text Sarah:</strong> <a href="sms:+13527585336" data-brand="sms"
+                        style="color: var(--primary);">+1 (352)
                         758-5336</a></div>
             </div>
         </div>
@@ -657,24 +658,27 @@
             fetch('/brand.json')
                 .then(r => r.json())
                 .then(brand => {
-                    const canon = brand.canonical;
-                    // Update all voice links
-                    document.querySelectorAll('a[href^="tel:"]').forEach(el => {
-                        el.href = 'tel:' + canon.voice_number;
-                        if (el.textContent.match(/\d{3}.*\d{3}.*\d{4}/)) {
-                            el.textContent = el.textContent.replace(/[\d\(\)\-\s\.]+$/, canon.voice_display);
-                        }
+                    const c = brand.canonical;
+                    // Update elements with data-brand="voice"
+                    document.querySelectorAll('[data-brand="voice"]').forEach(el => {
+                        el.href = 'tel:' + c.voice_number_e164;
+                        el.textContent = '+1 ' + c.voice_display;
                     });
-                    // Update all SMS links
-                    document.querySelectorAll('a[href^="sms:"]').forEach(el => {
-                        el.href = 'sms:' + canon.sms_number;
-                        if (el.textContent.match(/\d{3}.*\d{3}.*\d{4}/)) {
-                            el.textContent = el.textContent.replace(/[\d\(\)\-\s\.]+$/, canon.sms_display);
-                        }
+                    // Update elements with data-brand="sms"
+                    document.querySelectorAll('[data-brand="sms"]').forEach(el => {
+                        el.href = 'sms:' + c.sms_number_e164;
+                        el.textContent = '+1 ' + c.sms_display;
                     });
-                    console.log('[Brand Truth] Loaded from brand.json:', canon.voice_display, canon.sms_display);
+                    // Fallback: update any remaining tel: and sms: links
+                    document.querySelectorAll('a[href^="tel:"]:not([data-brand])').forEach(el => {
+                        el.href = 'tel:' + c.voice_number_e164;
+                    });
+                    document.querySelectorAll('a[href^="sms:"]:not([data-brand])').forEach(el => {
+                        el.href = 'sms:' + c.sms_number_e164;
+                    });
+                    console.log('[Brand Truth] Injected:', c.voice_display, c.sms_display);
                 })
-                .catch(e => console.warn('[Brand Truth] Could not load brand.json, using hardcoded values'));
+                .catch(e => console.warn('[Brand Truth] Failed to load brand.json'));
         })();
     </script>
     <!-- GHL Chat Widget -->
