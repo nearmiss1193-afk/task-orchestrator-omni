@@ -23,9 +23,9 @@
         "695072132632677"
     ],
     "build": {
-        "sha": "c7da871",
-        "ts": "2026-01-19T22:56:00Z",
-        "version": "1.0.1"
+        "sha": "cfefc40",
+        "ts": "2026-01-19T23:30:00Z",
+        "version": "1.0.2"
     },
     "verification": {
         "must_match_voice": [
