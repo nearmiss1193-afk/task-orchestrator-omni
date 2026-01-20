@@ -1,91 +1,107 @@
-# Launch Readiness Verification Checklist
+# Verification Checklist - PowerShell + SQL
 
-Execute these commands to verify the system is GREEN.
+## PowerShell Verification Commands
 
-## 1. PowerShell Verification Commands
+### 1. Website Truth
 
 ```powershell
-$BaseUrl = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
+# Verify production website
+python verify_production.py
 
-# Test 1: Health
-Write-Host "[1] Testing /health..."
-Invoke-RestMethod "$BaseUrl/health" | ConvertTo-Json
+# Check brand.json
+curl.exe -s "https://www.aiserviceco.com/brand.json" | ConvertFrom-Json
 
-# Test 2: Routing Truth
-Write-Host "[2] Testing /api/routing/truth..."
-Invoke-RestMethod "$BaseUrl/api/routing/truth" | ConvertTo-Json
-
-# Test 3: SMS Reply Generation
-Write-Host "[3] Testing /api/sms/reply-text..."
-$body = '{"phone":"+15551234567","message":"I need help with AI automation"}'
-Invoke-RestMethod "$BaseUrl/api/sms/reply-text" -Method POST -Body $body -ContentType "application/json" | ConvertTo-Json
-
-# Test 4: SMS Health
-Write-Host "[4] Testing /api/sms/health..."
-Invoke-RestMethod "$BaseUrl/api/sms/health" | ConvertTo-Json
-
-# Test 5: Debug SMS with Audit
-Write-Host "[5] Running Synthetic Audit..."
-Invoke-RestMethod "$BaseUrl/api/debug/sms?run_audit=1" | ConvertTo-Json -Depth 4
+# Check cache headers
+curl.exe -sI "https://www.aiserviceco.com/" 2>&1 | Select-String "x-vercel|age"
 ```
 
-## 2. Supabase SQL Verification
+### 2. Modal API Health
+
+```powershell
+# Health check
+curl.exe -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/health"
+
+# Truth endpoint
+curl.exe -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/truth" | ConvertFrom-Json
+
+# SMS health
+curl.exe -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/api/sms/health"
+```
+
+### 3. Git Status
+
+```powershell
+git status
+git log --oneline -5
+```
+
+---
+
+## SQL Verification Queries (Supabase)
+
+### Recent Events
 
 ```sql
--- Recent SMS events
-SELECT type, severity, ts, entity_id, correlation_id
+SELECT event_type, created_at, payload->>'contact_id' as contact
 FROM event_log_v2
-WHERE type IN ('sms.inbound', 'sms.reply.generated', 'sms.reply.sent')
-ORDER BY ts DESC
-LIMIT 20;
-
--- Synthetic pass/fail events
-SELECT type, ts, payload
-FROM event_log_v2
-WHERE type LIKE 'sms.synthetic%'
-ORDER BY ts DESC
-LIMIT 10;
-
--- Deadman incidents
-SELECT type, ts, severity, payload
-FROM event_log_v2
-WHERE type = 'incident.deadman'
-ORDER BY ts DESC
-LIMIT 5;
-
--- All auditor events
-SELECT type, ts, severity, payload
-FROM event_log_v2
-WHERE source = 'auditor'
-ORDER BY ts DESC
+ORDER BY created_at DESC
 LIMIT 20;
 ```
 
-## 3. GREEN Condition Definition
+### SMS Pipeline Status
 
-| Metric | GREEN Threshold |
-|--------|-----------------|
-| `/api/sms/health` | `sms_pipeline_healthy: true` |
-| `unreplied_count_60s` | = 0 |
-| Last `sms.synthetic.pass` | Within 15 minutes |
-| Last `incident.deadman` | None in 1 hour |
-| Last `sms.reply.sent` | Within 30 minutes (if active) |
-| Website canonical numbers | Both present |
+```sql
+SELECT 
+  event_type,
+  COUNT(*) as count,
+  MAX(created_at) as last_seen
+FROM event_log_v2
+WHERE event_type LIKE 'sms.%'
+  AND created_at > NOW() - INTERVAL '24 hours'
+GROUP BY event_type
+ORDER BY last_seen DESC;
+```
 
-## 4. RED Actions
+### Deadman Check (unreplied SMS)
 
-| Condition | Action |
-|-----------|--------|
-| `sms.synthetic.fail` | Check Gemini API key, check Modal secrets |
-| `incident.deadman` | Check GHL workflow, verify "Save Response" enabled |
-| `sms_pipeline_healthy: false` | Check /api/debug/sms, review unreplied count |
-| Wrong number on website | Run `python verify_brand.py --dir public --fix` |
+```sql
+SELECT e1.created_at as inbound_time, e1.payload->>'from' as from_number
+FROM event_log_v2 e1
+WHERE e1.event_type = 'sms.inbound'
+  AND e1.created_at > NOW() - INTERVAL '1 hour'
+  AND NOT EXISTS (
+    SELECT 1 FROM event_log_v2 e2
+    WHERE e2.event_type = 'sms.reply.sent'
+    AND e2.payload->>'to' = e1.payload->>'from'
+    AND e2.created_at > e1.created_at
+    AND e2.created_at < e1.created_at + INTERVAL '60 seconds'
+  );
+```
 
-## 5. Brand Governor Check
+### Campaign Activity
+
+```sql
+SELECT event_type, COUNT(*) as count
+FROM event_log_v2
+WHERE created_at > NOW() - INTERVAL '24 hours'
+  AND event_type IN ('campaign.sms.sent', 'campaign.email.sent', 'campaign.call.started')
+GROUP BY event_type;
+```
+
+---
+
+## Quick Status Check
 
 ```powershell
-cd C:\Users\nearm\.gemini\antigravity\scratch\empire-unified
-python verify_brand.py --dir public --json
-```
+# All-in-one status check
+Write-Host "=== VERIFICATION ===" -ForegroundColor Cyan
 
-Expected: `"passed": true`
+Write-Host "`n1. Production Website:" -ForegroundColor Yellow
+python verify_production.py
+
+Write-Host "`n2. Modal Health:" -ForegroundColor Yellow
+curl.exe -s "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/health"
+
+Write-Host "`n3. brand.json:" -ForegroundColor Yellow
+(curl.exe -s "https://www.aiserviceco.com/brand.json" | ConvertFrom-Json).canonical | Format-Table
+```

@@ -651,6 +651,32 @@
             document.head.appendChild(script);
         })();
     </script>
+    <!-- RUNTIME BRAND TRUTH INJECTION - Prevents number drift -->
+    <script>
+        (function loadBrandTruth() {
+            fetch('/brand.json')
+                .then(r => r.json())
+                .then(brand => {
+                    const canon = brand.canonical;
+                    // Update all voice links
+                    document.querySelectorAll('a[href^="tel:"]').forEach(el => {
+                        el.href = 'tel:' + canon.voice_number;
+                        if (el.textContent.match(/\d{3}.*\d{3}.*\d{4}/)) {
+                            el.textContent = el.textContent.replace(/[\d\(\)\-\s\.]+$/, canon.voice_display);
+                        }
+                    });
+                    // Update all SMS links
+                    document.querySelectorAll('a[href^="sms:"]').forEach(el => {
+                        el.href = 'sms:' + canon.sms_number;
+                        if (el.textContent.match(/\d{3}.*\d{3}.*\d{4}/)) {
+                            el.textContent = el.textContent.replace(/[\d\(\)\-\s\.]+$/, canon.sms_display);
+                        }
+                    });
+                    console.log('[Brand Truth] Loaded from brand.json:', canon.voice_display, canon.sms_display);
+                })
+                .catch(e => console.warn('[Brand Truth] Could not load brand.json, using hardcoded values'));
+        })();
+    </script>
     <!-- GHL Chat Widget -->
     <script src="https://beta.leadconnectorhq.com/loader.js"
         data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js"
