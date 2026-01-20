@@ -101,33 +101,40 @@
         }
     </script>
 
-    <!-- TRUTH STRIP v2 - System Health Monitor (Works even when Modal is down) -->
     <div id="truthStrip"
-        style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(15,23,42,0.95);border-bottom:1px solid rgba(255,255,255,0.1);padding:6px 16px;font-family:'Inter',monospace;font-size:11px;display:flex;align-items:center;gap:16px;backdrop-filter:blur(8px);flex-wrap:wrap;">
-        <span style="color:#94a3b8;">🔍</span>
-        <span id="truthHost" style="color:#67e8f9;">--</span>
+        style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(15,23,42,0.98);border-bottom:1px solid rgba(255,255,255,0.1);padding:6px 16px;font-family:'Inter',monospace;font-size:11px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(8px);flex-wrap:nowrap;overflow-x:auto;">
+        <span style="color:#94a3b8;" title="System Health">🔍</span>
+        <span id="truthHost" style="color:#67e8f9;font-weight:bold;" title="Environment Host">--</span>
         <span style="color:#475569;">|</span>
-        <span>brand.json: <span id="truthBrandVersion" style="color:#86efac;">--</span></span>
+        <span title="Local Source of Truth">brand: <span id="truthBrandVersion" style="color:#86efac;">--</span></span>
         <span style="color:#475569;">|</span>
-        <span>API: <span id="truthApi" style="color:#a5f3fc;">--</span></span>
+        <span title="Voice Number">Voice: <span id="truthVoice" style="color:#a5f3fc;">--</span></span>
         <span style="color:#475569;">|</span>
-        <span>Voice: <span id="truthVoice" style="color:#c4b5fd;">--</span></span>
+        <span title="SMS Number">SMS: <span id="truthSms" style="color:#a5f3fc;">--</span></span>
         <span style="color:#475569;">|</span>
-        <span>SMS: <span id="truthSms" style="color:#fde047;">--</span></span>
-        <span style="margin-left:auto;display:flex;gap:8px;">
-            <button onclick="copyTruthStatus()"
-                style="background:#334155;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">📋
+        <span title="Modal /api/health status">API: <span id="truthApi" style="color:#a5f3fc;">--</span></span>
+        <span style="color:#475569;">|</span>
+        <span title="Build Identifier">Build: <span id="truthBuild" style="color:#c4b5fd;">--</span></span>
+        <span style="color:#475569;">|</span>
+        <span title="Last system-wide event">Event: <span id="truthLastEvent" style="color:#86efac;">--</span></span>
+        <span style="color:#475569;">|</span>
+        <span title="Last KPI update">KPI: <span id="truthLastKpi" style="color:#86efac;">--</span></span>
+        <span style="color:#475569;">|</span>
+        <span title="Last campaign activity">Cam: <span id="truthLastCampaign" style="color:#f9a8d4;">--</span></span>
+        <span style="color:#475569;">|</span>
+        <span title="Real-time Stream Status">SSE: <span id="truthSse" style="color:#94a3b8;">--</span></span>
+
+        <div style="margin-left:auto;display:flex;gap:8px;padding-left:12px;">
+            <button onclick="copyTruthStatus()" title="Copy Status to Clipboard"
+                style="background:#334155;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;white-space:nowrap;">📋
                 Copy</button>
-            <button onclick="runVerifyProduction()"
-                style="background:#166534;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">✓
+            <button onclick="runVerifyProduction()" title="Generate Recovery Commands"
+                style="background:#166534;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;white-space:nowrap;">✓
                 Verify</button>
-            <button onclick="runSmsAudit()"
-                style="background:#0369a1;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">📱
-                SMS Audit</button>
-            <button onclick="showDeployModal()"
-                style="background:#7c3aed;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;">🚀
+            <button onclick="showDeployModal()" title="View Deployment Runbook"
+                style="background:#7c3aed;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;white-space:nowrap;">🚀
                 Deploy</button>
-        </span>
+        </div>
     </div>
     <style>
         body {
@@ -165,194 +172,169 @@
     </style>
     <script>
         // ==========================================================
-        // API CONFIGURATION - CRITICAL: This was missing!
+        // TRUTH STRIP V3 - CORE LOGIC
         // ==========================================================
-        const API_BASE = 'https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run';
-        window.API_BASE = API_BASE; // Make globally available
+        const REMOTE_API = 'https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run';
+        // Use proximity proxy on Vercel, fallback to remote for local dev
+        const API_BASE = (location.hostname.includes('localhost') || location.hostname.includes('127.0.0.1'))
+            ? REMOTE_API
+            : '';
+        window.API_BASE = API_BASE;
 
-        // Truth Strip State v2
         const truthState = {
-            brandVersion: null,
-            voiceNumber: null,
-            smsNumber: null,
+            data: JSON.parse(localStorage.getItem('truth_cache') || 'null'),
+            brand: null,
             apiUp: false,
-            lastPollTime: null
+            sseConnected: false,
+            lastSseMessage: null
         };
 
-        // Time ago helper
         function timeAgo(isoString) {
-            if (!isoString) return 'NONE';
+            if (!isoString) return '--';
             const now = new Date();
             const then = new Date(isoString);
             const diffMs = now - then;
             const diffSec = Math.floor(diffMs / 1000);
             const diffMin = Math.floor(diffSec / 60);
             const diffHr = Math.floor(diffMin / 60);
-            const diffDay = Math.floor(diffHr / 24);
 
             if (diffSec < 60) return `${diffSec}s ago`;
             if (diffMin < 60) return `${diffMin}m ago`;
             if (diffHr < 24) return `${diffHr}h ${diffMin % 60}m ago`;
-            return `${diffDay}d ago`;
+            return then.toLocaleDateString();
         }
 
-        // Check staleness and apply classes
+        function updateEl(id, text, color = null) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.textContent = text;
+                if (color) el.style.color = color;
+            }
+        }
+
         function checkStaleness() {
             const now = new Date();
             const data = truthState.data;
+            if (!data) return;
 
-            // Event stale: >15 minutes
+            // Event stale > 15m
             const evtEl = document.getElementById('truthLastEvent');
-            if (data?.last_event_ts) {
-                const evtAge = (now - new Date(data.last_event_ts)) / 60000;
-                if (evtAge > 15) evtEl.classList.add('truth-stale-red');
-                else evtEl.classList.remove('truth-stale-red');
+            if (evtEl && data.last_event_ts) {
+                const age = (now - new Date(data.last_event_ts)) / 60000;
+                evtEl.classList.toggle('truth-stale-red', age > 15);
             }
 
-            // KPI stale: >30 minutes
+            // KPI stale > 30m
             const kpiEl = document.getElementById('truthLastKpi');
-            if (data?.last_kpi_ts) {
-                const kpiAge = (now - new Date(data.last_kpi_ts)) / 60000;
-                if (kpiAge > 30) kpiEl.classList.add('truth-stale-orange');
-                else kpiEl.classList.remove('truth-stale-orange');
+            if (kpiEl && data.last_kpi_ts) {
+                const age = (now - new Date(data.last_kpi_ts)) / 60000;
+                kpiEl.classList.toggle('truth-stale-orange', age > 30);
             }
 
-            // SSE stale: no message for >20 seconds
+            // SSE stale > 20s
             const sseEl = document.getElementById('truthSse');
-            if (truthState.lastSseMessage) {
-                const sseAge = (now - truthState.lastSseMessage) / 1000;
-                if (sseAge > 20 && truthState.sseConnected) {
-                    sseEl.classList.add('truth-stale-yellow');
-                } else {
-                    sseEl.classList.remove('truth-stale-yellow');
-                }
+            if (sseEl && truthState.lastSseMessage) {
+                const age = (now - truthState.lastSseMessage) / 1000;
+                sseEl.classList.toggle('truth-stale-yellow', age > 20 && truthState.sseConnected);
             }
         }
 
-        // Render truth strip
         function renderTruthStrip() {
-            document.getElementById('truthHost').textContent = location.hostname || '--';
-            document.getElementById('truthApi').textContent = (window.API_BASE || 'MISSING').replace('https://', '').split('.')[0];
-            document.getElementById('truthBuild').textContent = window.BUILD_ID || 'NO_BUILD';
+            updateEl('truthHost', location.hostname || '--');
+            updateEl('truthBuild', window.BUILD_ID || 'NO_BUILD');
+            updateEl('truthApi', truthState.apiUp ? 'UP' : 'DOWN', truthState.apiUp ? '#86efac' : '#f87171');
 
             const data = truthState.data;
             if (data) {
-                document.getElementById('truthLastEvent').textContent = timeAgo(data.last_event_ts);
-                document.getElementById('truthLastKpi').textContent = timeAgo(data.last_kpi_ts);
-                document.getElementById('truthLastCampaign').textContent = timeAgo(data.last_campaign_ran_at);
+                updateEl('truthLastEvent', timeAgo(data.last_event_ts));
+                updateEl('truthLastKpi', timeAgo(data.last_kpi_ts));
+                updateEl('truthLastCampaign', timeAgo(data.last_campaign_ran_at));
             }
 
-            // SSE status
             const sseEl = document.getElementById('truthSse');
-            if (truthState.sseConnected) {
-                sseEl.textContent = truthState.lastSseMessage ? timeAgo(truthState.lastSseMessage.toISOString()) : 'Connected';
-                sseEl.style.color = '#86efac';
-            } else {
-                sseEl.textContent = 'Disconnected';
-                sseEl.style.color = '#f87171';
+            if (sseEl) {
+                if (truthState.sseConnected) {
+                    sseEl.textContent = truthState.lastSseMessage ? timeAgo(truthState.lastSseMessage) : 'Connected';
+                    sseEl.style.color = '#86efac';
+                } else {
+                    sseEl.textContent = 'Disconnected';
+                    sseEl.style.color = '#f87171';
+                }
+            }
+
+            if (truthState.brand) {
+                updateEl('truthBrandVersion', truthState.brand.build?.version || '--');
+                updateEl('truthVoice', truthState.brand.canonical?.voice_display || '--');
+                updateEl('truthSms', truthState.brand.canonical?.sms_display || '--');
             }
 
             checkStaleness();
         }
 
-        // Poll brand.json (works even when Modal is down)
-        async function pollBrandJson() {
+        async function pollTruth() {
             try {
-                const resp = await fetch('/brand.json?ts=' + Date.now());
-                if (resp.ok) {
-                    const brand = await resp.json();
-                    truthState.brandVersion = brand.build?.version || brand.version || '?';
-                    truthState.voiceNumber = brand.canonical?.voice_display || brand.canonical?.voice_number || '?';
-                    truthState.smsNumber = brand.canonical?.sms_display || brand.canonical?.sms_number || '?';
-                    document.getElementById('truthBrandVersion').textContent = truthState.brandVersion;
-                    document.getElementById('truthBrandVersion').style.color = '#86efac';
-                    document.getElementById('truthVoice').textContent = truthState.voiceNumber;
-                    document.getElementById('truthSms').textContent = truthState.smsNumber;
-                }
-            } catch (e) {
-                document.getElementById('truthBrandVersion').textContent = 'FAIL';
-                document.getElementById('truthBrandVersion').style.color = '#f87171';
-            }
-        }
-
-        // Poll Modal API health
-        async function pollApiHealth() {
-            try {
-                const resp = await fetch(window.API_BASE + '/health', { method: 'GET' });
-                if (resp.ok) {
+                // Using Vercel Proxy
+                const res = await fetch('/api/truth?ts=' + Date.now());
+                if (res.ok) {
+                    const data = await res.json();
+                    truthState.data = data;
                     truthState.apiUp = true;
-                    document.getElementById('truthApi').textContent = 'UP';
-                    document.getElementById('truthApi').style.color = '#86efac';
+                    localStorage.setItem('truth_cache', JSON.stringify(data));
                 } else {
-                    throw new Error('not ok');
+                    truthState.apiUp = false;
                 }
             } catch (e) {
                 truthState.apiUp = false;
-                document.getElementById('truthApi').textContent = 'DOWN';
-                document.getElementById('truthApi').style.color = '#f87171';
+                console.warn('API Truth Poll Failed:', e);
             }
+            renderTruthStrip();
         }
 
-        // Render truth strip
-        function renderTruthStrip() {
-            document.getElementById('truthHost').textContent = location.hostname || '--';
+        async function pollBrand() {
+            try {
+                const res = await fetch('/brand.json?ts=' + Date.now());
+                if (res.ok) {
+                    truthState.brand = await res.json();
+                }
+            } catch (e) {
+                console.warn('Brand Poll Failed');
+            }
+            renderTruthStrip();
         }
 
-        // Copy status to clipboard
-        function copyTruthStatus() {
-            const status = `HOST=${location.hostname} brand.json=${truthState.brandVersion || '?'} voice=${truthState.voiceNumber || '?'} sms=${truthState.smsNumber || '?'} api=${truthState.apiUp ? 'UP' : 'DOWN'}`;
-            navigator.clipboard.writeText(status).then(() => {
-                alert('✓ Copied: ' + status);
-            });
-        }
-
-        // Runbook buttons
-        function runVerifyProduction() {
-            const cmd = 'cd C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified && python verify_production.py';
-            alert('Run in PowerShell:\n\n' + cmd);
-            navigator.clipboard.writeText(cmd);
-        }
-
-        function runSmsAudit() {
-            const url = window.API_BASE + '/api/debug/sms?run_audit=1';
-            window.open(url, '_blank');
-        }
-
-        function showDeployModal() {
-            alert('Deploy Commands:\n\n1. Modal:\npython -m modal deploy modal_orchestrator_v3.py\n\n2. Vercel:\nnpx vercel --prod --force\n\n3. Full Autofix:\n.\\scripts\\ops_autofix.ps1');
-        }
-
-        // Hook into SSE (existing EventSource in dashboard)
         function hookSseForTruth(eventSource) {
             if (!eventSource) return;
-            truthState.sseConnected = eventSource.readyState === EventSource.OPEN;
-
-            const originalOnMessage = eventSource.onmessage;
-            eventSource.onmessage = function (e) {
+            eventSource.onopen = () => { truthState.sseConnected = true; renderTruthStrip(); };
+            eventSource.onerror = () => { truthState.sseConnected = false; renderTruthStrip(); };
+            eventSource.onmessage = (e) => {
                 truthState.lastSseMessage = new Date();
                 truthState.sseConnected = true;
                 renderTruthStrip();
-                if (originalOnMessage) originalOnMessage.call(this, e);
-            };
-
-            eventSource.onerror = function (e) {
-                truthState.sseConnected = false;
-                renderTruthStrip();
-            };
-
-            eventSource.onopen = function () {
-                truthState.sseConnected = true;
-                renderTruthStrip();
             };
         }
 
-        // Initialize Truth Strip v2
+        function copyTruthStatus() {
+            const data = truthState.data || {};
+            const status = `HOST=${location.hostname} BUILD=${window.BUILD_ID} API=${truthState.apiUp ? 'UP' : 'DOWN'} SSE=${truthState.sseConnected ? 'ON' : 'OFF'} EVT=${data.last_event_ts || '--'}`;
+            navigator.clipboard.writeText(status).then(() => alert('Copied: ' + status));
+        }
+
+        function runVerifyProduction() {
+            const cmd = `cd ${location.pathname.includes('empire-unified') ? '...' : '.'} && python verify_production.py`;
+            alert('Run in Terminal:\n' + cmd);
+            navigator.clipboard.writeText(cmd);
+        }
+
+        function showDeployModal() {
+            alert('RECOVERY RUNBOOK:\n1. modal deploy modal_orchestrator_v3.py\n2. vercel --prod\n3. python watchdog.py');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            pollBrand();
+            pollTruth();
+            setInterval(pollBrand, 60000);
+            setInterval(pollTruth, 15000);
             renderTruthStrip();
-            pollBrandJson(); // Poll brand.json immediately
-            pollApiHealth(); // Check API health
-            setInterval(pollBrandJson, 30000); // Poll brand.json every 30 seconds
-            setInterval(pollApiHealth, 15000); // Poll API health every 15 seconds
         });
     </script>
     <!-- CONFIG -->
@@ -1754,7 +1736,7 @@
         async function refreshFreshness() {
             const badge = document.getElementById('freshnessBadge');
             try {
-                const res = await fetch(API_BASE + '/api/truth', { mode: 'cors' });
+                const res = await fetch('/api/truth', { mode: 'cors' });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
 
