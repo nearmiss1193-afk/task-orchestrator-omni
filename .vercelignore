@@ -1,22 +1,8 @@
-# Ignore these directories for Vercel deployment
-node_modules
-.git
-*.pyc
-__pycache__
-.pytest_cache
-.mypy_cache
-*.egg-info
-dist
-build
-.env
-.env.*
-*.log
-modules/
-knowledge_base/
-audits/
-runbooks/
-scripts/
-sql/
-*.md
+# Ignore everything except public folder and api folder
+*
+!public
 !public/**
-!
+!api
+!api/**
+!vercel.json
+!package.json
