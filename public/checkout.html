@@ -464,9 +464,30 @@
             }
         </script>
 
-    <!-- GHL Chat Widget --><script src="https://beta.leadconnectorhq.com/loader.js" data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="69507213261ca136120c2fe0"></script></body>
+        <!-- Vapi Voice Widget (Sarah AI) -->
+        <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+        <script>
+            var vapiInstance = null;
+            const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
+            const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
+            try {
+                vapiInstance = window.vapiSDK.run({
+                    apiKey: VAPI_PUBLIC_KEY,
+                    assistant: SARAH_ASSISTANT_ID,
+                    config: {
+                        position: "bottom-right",
+                        offset: "20px",
+                        width: "50px",
+                        height: "50px"
+                    }
+                });
+            } catch (e) { console.error("Vapi Init Failed:", e); }
+        </script>
+
+        <!-- GHL Chat Widget -->
+        <script src="https://beta.leadconnectorhq.com/loader.js"
+            data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js"
+            data-widget-id="69507213261ca136120c2fe0"></script>
+</body>
 
 </html>
-
-
-
