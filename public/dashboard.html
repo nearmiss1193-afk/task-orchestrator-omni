@@ -239,7 +239,8 @@
             // SSE status
             const sseEl = document.getElementById('truthSse');
             if (truthState.sseConnected) {
-                sseEl.Content = truthStat        e.lastSseMessage.toISOString()) : '            sseEl.style.color = '#86efac';
+                sseEl.textContent = truthState.lastSseMessage ? timeAgo(truthState.lastSseMessage.toISOString()) : 'Connected';
+                sseEl.style.color = '#86efac';
             } else {
                 sseEl.textContent = 'Disconnected';
                 sseEl.style.color = '#f87171';
