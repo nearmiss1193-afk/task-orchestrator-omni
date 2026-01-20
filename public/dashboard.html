@@ -164,6 +164,12 @@
         }
     </style>
     <script>
+        // ==========================================================
+        // API CONFIGURATION - CRITICAL: This was missing!
+        // ==========================================================
+        const API_BASE = 'https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run';
+        window.API_BASE = API_BASE; // Make globally available
+
         // Truth Strip State v2
         const truthState = {
             brandVersion: null,
