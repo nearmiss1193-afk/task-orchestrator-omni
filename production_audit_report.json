@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-20T00:30:44.182356",
+  "timestamp": "2026-01-20T00:43:57.984295",
   "site_url": "https://www.aiserviceco.com",
   "status": "YELLOW",
   "errors": [
@@ -8,7 +8,7 @@
     "/dashboard.html missing canonical numbers (voice=False, sms=False)"
   ],
   "warnings": [
-    "Stale cache: Age=14002s (>1hr)"
+    "Stale cache: Age=14796s (>1hr)"
   ],
   "pages_checked": 26,
   "pages_ok": 25,
