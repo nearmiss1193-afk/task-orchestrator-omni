@@ -470,6 +470,92 @@
             </div>
         </div>
 
+        <!-- FRESHNESS PANEL - Real-time system health from /api/truth -->
+        <div class="glass p-6 rounded-2xl mb-6">
+            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
+                <h3 class="font-bold flex items-center gap-2">
+                    <span>⏱️</span> System Freshness
+                    <span id="freshnessBadge"
+                        class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400">LIVE</span>
+                </h3>
+                <button onclick="refreshFreshness()" class="text-xs text-blue-400 hover:text-blue-300">↻
+                    Refresh</button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <div class="text-xs text-slate-400 mb-1">Server Time</div>
+                    <div id="freshServerTs" class="text-sm font-mono text-cyan-400">--</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <div class="text-xs text-slate-400 mb-1">Last Event</div>
+                    <div id="freshLastEvent" class="text-sm font-mono text-green-400">--</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <div class="text-xs text-slate-400 mb-1">Last Campaign</div>
+                    <div id="freshLastCampaign" class="text-sm font-mono text-purple-400">--</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <div class="text-xs text-slate-400 mb-1">SMS Sent (24h)</div>
+                    <div id="freshSmsSent" class="text-sm font-mono text-yellow-400">--</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <div class="text-xs text-slate-400 mb-1">SMS Failed</div>
+                    <div id="freshSmsFailed" class="text-sm font-mono text-red-400">--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CAMPAIGN CONTROL PANEL -->
+        <div class="glass p-6 rounded-2xl mb-6">
+            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
+                <h3 class="font-bold flex items-center gap-2">
+                    <span>🎯</span> Campaign Control
+                    <span id="campaignModeBadge"
+                        class="text-xs px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-400">IDLE</span>
+                </h3>
+                <div class="text-xs text-slate-400">Admin Token Required</div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <button onclick="campaignControl('start')"
+                    class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
+                    ▶ START
+                </button>
+                <button onclick="campaignControl('pause')"
+                    class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
+                    ⏸ PAUSE
+                </button>
+                <button onclick="campaignControl('stop')"
+                    class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
+                    ⏹ STOP
+                </button>
+                <button onclick="campaignControl('run-batch')"
+                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
+                    ⚡ RUN BATCH
+                </button>
+            </div>
+            <div class="text-xs text-slate-500">
+                <span>Mode: <span id="currentCampaignMode" class="text-cyan-400">--</span></span>
+                <span class="mx-2">|</span>
+                <span>Last Run: <span id="lastCampaignRun" class="text-purple-400">--</span></span>
+                <span class="mx-2">|</span>
+                <span>Queue: <span id="campaignQueueCount" class="text-yellow-400">--</span></span>
+            </div>
+        </div>
+
+        <!-- CAMPAIGN LEDGER - Last 25 campaign events -->
+        <div class="glass p-6 rounded-2xl mb-6">
+            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
+                <h3 class="font-bold flex items-center gap-2">
+                    <span>📋</span> Campaign Ledger (Live from Supabase)
+                </h3>
+                <button onclick="fetchCampaignLedger()" class="text-xs text-blue-400 hover:text-blue-300">↻
+                    Refresh</button>
+            </div>
+            <div id="campaignLedger" class="space-y-2 max-h-[300px] overflow-y-auto font-mono text-xs">
+                <div class="text-center text-slate-500 py-4">Loading campaign events...</div>
+            </div>
+        </div>
+
         <!-- Main Dashboard -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
@@ -1647,7 +1733,134 @@
             setInterval(fetchLeads, 60000);      // Every 60s as backup
             setInterval(fetchTranscripts, 120000); // Every 2 min
             setInterval(fetchActivity, 120000);    // Every 2 min
+
+            // Freshness + Campaign panel initialization
+            refreshFreshness();
+            fetchCampaignLedger();
+            setInterval(refreshFreshness, 15000);     // Every 15s
+            setInterval(fetchCampaignLedger, 30000);  // Every 30s
         });
+
+        // ==========================================================
+        // FRESHNESS PANEL - Polls /api/truth from Modal
+        // ==========================================================
+        async function refreshFreshness() {
+            const badge = document.getElementById('freshnessBadge');
+            try {
+                const res = await fetch(API_BASE + '/api/truth', { mode: 'cors' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+
+                // Update freshness panel
+                document.getElementById('freshServerTs').textContent =
+                    data.server_time ? new Date(data.server_time).toLocaleTimeString() : '--';
+                document.getElementById('freshLastEvent').textContent =
+                    data.last_event_ts ? timeAgo(data.last_event_ts) : 'NONE';
+                document.getElementById('freshLastCampaign').textContent =
+                    data.last_campaign_ran_at ? timeAgo(data.last_campaign_ran_at) : 'NONE';
+                document.getElementById('freshSmsSent').textContent =
+                    data.sms_sent_last_24h ?? '--';
+                document.getElementById('freshSmsFailed').textContent =
+                    data.sms_failed_last_24h ?? '--';
+
+                // Update badge
+                badge.textContent = 'LIVE';
+                badge.className = 'text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400';
+            } catch (e) {
+                console.warn('[Freshness] Error:', e.message);
+                badge.textContent = 'OFFLINE';
+                badge.className = 'text-xs px-2 py-0.5 rounded bg-red-500/20 text-red-400';
+            }
+        }
+
+        // ==========================================================
+        // CAMPAIGN CONTROL - Sends commands to Modal /api/control/*
+        // ==========================================================
+        async function campaignControl(action) {
+            const adminToken = prompt('Enter Admin Token:');
+            if (!adminToken) return;
+
+            const endpoints = {
+                'start': '/api/control/campaign/start',
+                'pause': '/api/control/campaign/pause',
+                'stop': '/api/control/campaign/stop',
+                'run-batch': '/api/control/campaign/run-batch'
+            };
+
+            const endpoint = endpoints[action];
+            if (!endpoint) {
+                alert('Unknown action: ' + action);
+                return;
+            }
+
+            try {
+                const res = await fetch(API_BASE + endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Admin-Token': adminToken
+                    },
+                    body: JSON.stringify({ action })
+                });
+
+                const data = await res.json();
+                if (data.success || data.status === 'ok') {
+                    alert('✅ ' + action.toUpperCase() + ' executed');
+                    refreshFreshness();
+                } else {
+                    alert('❌ Failed: ' + (data.error || data.message || 'Unknown error'));
+                }
+            } catch (e) {
+                alert('❌ Error: ' + e.message);
+            }
+        }
+
+        // ==========================================================
+        // CAMPAIGN LEDGER - Fetches last 25 campaign events from Supabase
+        // ==========================================================
+        async function fetchCampaignLedger() {
+            const container = document.getElementById('campaignLedger');
+            try {
+                // Fetch campaign-related events from event_log_v2
+                const { data, error } = await sbClient
+                    .from('event_log_v2')
+                    .select('type, ts, entity_id, payload')
+                    .or('type.ilike.%campaign%,type.ilike.%sms%,type.ilike.%outreach%')
+                    .order('ts', { ascending: false })
+                    .limit(25);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="text-center text-slate-500 py-4">No campaign events yet</div>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                data.forEach(evt => {
+                    const time = evt.ts ? new Date(evt.ts).toLocaleString() : '--';
+                    let icon = '📋';
+                    if (evt.type?.includes('sms')) icon = '📱';
+                    if (evt.type?.includes('campaign')) icon = '🎯';
+                    if (evt.type?.includes('outreach')) icon = '🚀';
+                    if (evt.type?.includes('email')) icon = '📧';
+
+                    const phone = evt.entity_id || evt.payload?.phone || '--';
+                    const div = document.createElement('div');
+                    div.className = 'bg-slate-800/30 rounded p-2 flex items-center gap-2';
+                    div.innerHTML = `
+                        <span>${icon}</span>
+                        <span class="text-cyan-400 w-32 truncate">${evt.type}</span>
+                        <span class="text-slate-400 flex-1 truncate">${phone}</span>
+                        <span class="text-slate-500">${time}</span>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (e) {
+                console.error('[CampaignLedger] Error:', e);
+                container.innerHTML = '<div class="text-center text-red-400 py-4">Error loading events</div>';
+            }
+        }
 
     </script>
     <!-- GHL Chat Widget -->

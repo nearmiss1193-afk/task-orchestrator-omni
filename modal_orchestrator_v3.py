@@ -817,6 +817,119 @@ def orchestration_api():
         except Exception as e:
             return {"status": "error", "error": str(e)}
     
+    # ========== CAMPAIGN CONTROL ENDPOINTS (P2) ==========
+    ADMIN_TOKEN = "sovereign2026"  # TODO: Move to secrets
+    
+    def verify_admin_token(request: Request) -> bool:
+        """Verify X-Admin-Token header"""
+        token = request.headers.get("X-Admin-Token", "")
+        return token == ADMIN_TOKEN
+    
+    @api.get("/api/control/state")
+    def get_system_state():
+        """Get current system state from Supabase system_state table"""
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            resp = requests.get(
+                f"{SUPABASE_URL}/rest/v1/system_state?select=key,value,updated_at",
+                headers=headers, timeout=10
+            )
+            if resp.status_code == 200:
+                states = resp.json()
+                return {"status": "ok", "states": {s["key"]: s["value"] for s in states}}
+            return {"status": "error", "message": f"HTTP {resp.status_code}"}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.post("/api/control/campaign/start")
+    async def campaign_start(request: Request):
+        """Start campaign mode"""
+        if not verify_admin_token(request):
+            return {"status": "error", "message": "Invalid admin token"}
+        
+        try:
+            # Update system_state
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates"}
+            resp = requests.post(
+                f"{SUPABASE_URL}/rest/v1/system_state",
+                headers=headers,
+                json={"key": "campaign_mode", "value": '"running"', "updated_by": "api"},
+                timeout=10
+            )
+            log_event("campaign.started", "api", "info", payload={"action": "start"})
+            return {"status": "ok", "mode": "running"}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.post("/api/control/campaign/pause")
+    async def campaign_pause(request: Request):
+        """Pause campaign mode"""
+        if not verify_admin_token(request):
+            return {"status": "error", "message": "Invalid admin token"}
+        
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates"}
+            resp = requests.post(
+                f"{SUPABASE_URL}/rest/v1/system_state",
+                headers=headers,
+                json={"key": "campaign_mode", "value": '"paused"', "updated_by": "api"},
+                timeout=10
+            )
+            log_event("campaign.paused", "api", "info", payload={"action": "pause"})
+            return {"status": "ok", "mode": "paused"}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.post("/api/control/campaign/stop")
+    async def campaign_stop(request: Request):
+        """Stop campaign mode"""
+        if not verify_admin_token(request):
+            return {"status": "error", "message": "Invalid admin token"}
+        
+        try:
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates"}
+            resp = requests.post(
+                f"{SUPABASE_URL}/rest/v1/system_state",
+                headers=headers,
+                json={"key": "campaign_mode", "value": '"idle"', "updated_by": "api"},
+                timeout=10
+            )
+            log_event("campaign.stopped", "api", "info", payload={"action": "stop"})
+            return {"status": "ok", "mode": "idle"}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
+    @api.post("/api/control/campaign/run-batch")
+    async def campaign_run_batch(request: Request):
+        """Trigger a micro-batch campaign run"""
+        if not verify_admin_token(request):
+            return {"status": "error", "message": "Invalid admin token"}
+        
+        import uuid
+        batch_id = f"batch_{uuid.uuid4().hex[:8]}"
+        
+        try:
+            # Log batch start
+            log_event("campaign.batch_started", "api", "info", correlation_id=batch_id, payload={"batch_id": batch_id})
+            
+            # Add to campaign_queue
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"}
+            resp = requests.post(
+                f"{SUPABASE_URL}/rest/v1/campaign_queue",
+                headers=headers,
+                json={
+                    "status": "queued",
+                    "campaign_type": "sms",
+                    "planned_for": datetime.now(timezone.utc).isoformat(),
+                    "payload": {"batch_id": batch_id, "source": "dashboard"}
+                },
+                timeout=10
+            )
+            
+            return {"status": "ok", "batch_id": batch_id, "queued": True}
+        except Exception as e:
+            return {"status": "error", "error": str(e)}
+    
     @api.post("/webhook/ghl/appointment")
     async def ghl_appointment_webhook(request: Request):
         """
