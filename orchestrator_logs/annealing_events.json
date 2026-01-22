@@ -47,5 +47,67 @@
     "script": "process_leads",
     "attempt": 1,
     "timestamp": "2026-01-22T08:09:32.308211"
+  },
+  {
+    "type": "error",
+    "script": "create_referral",
+    "attempt": 1,
+    "error_type": "APIError",
+    "error_message": "{'message': \"Could not find the 'source' column of 'alf_referrals' in the schema cache\", 'code': 'PGRST204', 'hint': None, 'details': None}",
+    "classification": {
+      "category": "unknown",
+      "safe_to_auto_fix": false,
+      "suggested_fix": "Unknown error type: APIError. Requires human review."
+    },
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\nearm\\.gemini\\antigravity\\playground\\empire-unified\\execution\\annealing_engine.py\", line 314, in anneal\n    result = func(*args, **kwargs)\n  File \"C:\\Users\\nearm\\.gemini\\antigravity\\playground\\empire-unified\\execution\\alf_matcher.py\", line 307, in create_referral\n    result = self.supabase.table(\"alf_referrals\").insert(referral).execute()\n  File \"C:\\Users\\nearm\\AppData\\Roaming\\Python\\Python313\\site-packages\\postgrest\\_sync\\request_builder.py\", line 53, in execute\n    raise APIError(dict(json_obj))\npostgrest.exceptions.APIError: {'message': \"Could not find the 'source' column of 'alf_referrals' in the schema cache\", 'code': 'PGRST204', 'hint': None, 'details': None}\n",
+    "timestamp": "2026-01-22T13:20:22.257846"
+  },
+  {
+    "type": "final_failure",
+    "script": "create_referral",
+    "total_attempts": 1,
+    "error_type": "APIError",
+    "error_message": "{'message': \"Could not find the 'source' column of 'alf_referrals' in the schema cache\", 'code': 'PGRST204', 'hint': None, 'details': None}",
+    "classification": {
+      "category": "unknown",
+      "safe_to_auto_fix": false,
+      "suggested_fix": "Unknown error type: APIError. Requires human review."
+    },
+    "requires_human": true,
+    "timestamp": "2026-01-22T13:20:22.262088"
+  },
+  {
+    "type": "error",
+    "script": "create_referral",
+    "attempt": 1,
+    "error_type": "APIError",
+    "error_message": "{'message': \"Could not find the 'source' column of 'alf_referrals' in the schema cache\", 'code': 'PGRST204', 'hint': None, 'details': None}",
+    "classification": {
+      "category": "unknown",
+      "safe_to_auto_fix": false,
+      "suggested_fix": "Unknown error type: APIError. Requires human review."
+    },
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\nearm\\.gemini\\antigravity\\playground\\empire-unified\\execution\\annealing_engine.py\", line 314, in anneal\n    result = func(*args, **kwargs)\n  File \"C:\\Users\\nearm\\.gemini\\antigravity\\playground\\empire-unified\\execution\\alf_matcher.py\", line 307, in create_referral\n    result = self.supabase.table(\"alf_referrals\").insert(referral).execute()\n  File \"C:\\Users\\nearm\\AppData\\Roaming\\Python\\Python313\\site-packages\\postgrest\\_sync\\request_builder.py\", line 53, in execute\n    raise APIError(dict(json_obj))\npostgrest.exceptions.APIError: {'message': \"Could not find the 'source' column of 'alf_referrals' in the schema cache\", 'code': 'PGRST204', 'hint': None, 'details': None}\n",
+    "timestamp": "2026-01-22T13:21:05.813105"
+  },
+  {
+    "type": "final_failure",
+    "script": "create_referral",
+    "total_attempts": 1,
+    "error_type": "APIError",
+    "error_message": "{'message': \"Could not find the 'source' column of 'alf_referrals' in the schema cache\", 'code': 'PGRST204', 'hint': None, 'details': None}",
+    "classification": {
+      "category": "unknown",
+      "safe_to_auto_fix": false,
+      "suggested_fix": "Unknown error type: APIError. Requires human review."
+    },
+    "requires_human": true,
+    "timestamp": "2026-01-22T13:21:05.816277"
+  },
+  {
+    "type": "success",
+    "script": "create_referral",
+    "attempt": 1,
+    "timestamp": "2026-01-22T13:21:42.373275"
   }
 ]

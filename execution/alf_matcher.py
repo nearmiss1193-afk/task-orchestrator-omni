@@ -35,9 +35,16 @@ except ImportError:
     def self_annealing(func):
         return func
 
+# Environment Loading
+try:
+    from dotenv import load_dotenv
+    load_dotenv('.env.local')
+except ImportError:
+    pass
+
 # Configuration
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
 
 @dataclass
@@ -246,7 +253,7 @@ class ALFMatcher:
             )
         ]
     
-    @self_annealing
+    # @self_annealing
     def create_referral(
         self,
         family_contact: str,
@@ -289,17 +296,24 @@ class ALFMatcher:
             "budget_min": budget_min,
             "budget_max": budget_max,
             "preferred_city": preferred_city,
-            "source": source,
+            "lead_source": source,
             "medicaid_recipient": medicaid,
             "status": "intake",
-            "created_at": datetime.now().isoformat(),
+            # "created_at": datetime.now().isoformat(), # Let DB handle timestamp
             **kwargs
         }
         
         if self.db_connected:
-            result = self.supabase.table("alf_referrals").insert(referral).execute()
-            referral = result.data[0] if result.data else referral
-            print(f"[ALF] ✅ Referral created: {senior_name}")
+            try:
+                result = self.supabase.table("alf_referrals").insert(referral).execute()
+                if result.data:
+                    referral = result.data[0]
+                    print(f"[ALF] ✅ Referral created: {senior_name}")
+                else:
+                    print(f"[ALF] ⚠️ Referral created but no data returned")
+            except Exception as e:
+                print(f"[ALF] ❌ DB Insert Failed: {e}")
+                return {"success": False, "error": str(e)}
         else:
             referral["id"] = f"local-{datetime.now().strftime('%Y%m%d%H%M%S')}"
             print(f"[ALF] Referral created locally (DB not connected)")
