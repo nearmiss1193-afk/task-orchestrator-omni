@@ -9,7 +9,7 @@ key = os.environ.get('SUPABASE_SERVICE_ROLE_KEY')
 
 supabase = create_client(url, key)
 
-components = ["Advanced Neural Prospecting", "Automated Reporting"]
+components = ["ALF Referral Agency"]
 
 print("Updating system state...")
 for comp in components:
