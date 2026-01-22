@@ -6,7 +6,7 @@ import sys
 # Define Image
 image = (
     modal.Image.debian_slim()
-    .pip_install("stripe", "supabase", "python-dotenv", "requests")
+    .pip_install("stripe", "supabase", "python-dotenv", "requests", "fastapi")
 )
 
 app = modal.App("v2-stripe-webhook")

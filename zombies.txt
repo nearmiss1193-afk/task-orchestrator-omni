@@ -1,0 +1,11 @@
+Total Apps Found: 43
+
+--- ACTIVE / DEPLOYED / EPHEMERAL APPS ---
+[deployed] ID: ap-33sEZ3Y51njw4rNR83N3ZR | Name: empire-api-v3 | Created: 2026-01-21 15:55:08-05:00
+[deployed] ID: ap-3hTEcsxHOD7hvMaJ6Hl1LI | Name: empire-overseer | Created: 2026-01-22 12:10:27-05:00
+[ephemeral] ID: ap-1gXOInzzCcNy4VnZM5fbxH | Name: v2-outreach-engine | Created: 2026-01-22 12:21:24-05:00
+[deployed] ID: ap-BBE3FPCHzjqi9pwy924Tm6 | Name: v2-sovereign-dashboard | Created: 2026-01-22 13:18:58-05:00
+[deployed] ID: ap-mhpMaPptiTpFRwFEbWpsPr | Name: ghl-omni-automation | Created: 2026-01-22 14:45:40-05:00
+[deployed] ID: ap-5kDrtlw73KvoUFxKqEuBSv | Name: v2-stripe-webhook | Created: 2026-01-22 15:19:25-05:00
+
+Total Active Count: 6

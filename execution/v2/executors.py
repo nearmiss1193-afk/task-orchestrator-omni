@@ -31,29 +31,110 @@ class EmpireExecutors:
             self.db_connected = False
 
     @self_annealing
+    def _ensure_ghl_contact(self, prospect_id: str, phone: str = None, email: str = None, name: str = None) -> str:
+        """Helper to sync contact to GHL and get ID"""
+        # 1. Check if prospect_id is already a GHL ID (simple heuristic: length 20, no dashes)
+        if len(prospect_id) == 20 and "-" not in prospect_id:
+             return prospect_id
+
+        # 2. If UUID or temp, we must create/lookup in GHL
+        # For simplicity in this v4.0 build, we will CREATE/UPDATE by Phone/Email
+        url = "https://services.leadconnectorhq.com/contacts/"
+        headers = {
+            'Authorization': f'Bearer {os.environ.get("GHL_API_TOKEN")}', 
+            'Version': '2021-07-28', 
+            'Content-Type': 'application/json'
+        }
+        
+        payload = {}
+        if phone: payload["phone"] = phone
+        if email: payload["email"] = email
+        if name: payload["name"] = name
+        
+        try:
+            # Try creation/upsert
+            r = requests.post(url, json=payload, headers=headers)
+            if r.status_code in [200, 201]:
+                data = r.json()
+                ghl_id = data.get('contact', {}).get('id')
+                print(f"🔗 [GHL] Synced Contact: {ghl_id}")
+                return ghl_id
+            else:
+                print(f"⚠️ [GHL] Sync Failed ({r.status_code}): {r.text}")
+                return None
+        except Exception as e:
+            print(f"❌ [GHL] API Error: {e}")
+            return None
+
+    @self_annealing
     def send_sms(self, to: str, message: str, prospect_id: Optional[str] = None) -> Dict[str, Any]:
         """
         EXECUTOR: send_sms
-        Location: Twilio / GHL
+        Location: GHL API (Real)
         """
-        print(f"📱 [SMS] Sending to {to}: {message[:50]}...")
-        if not self.ghl_key:
-            return {"success": False, "error": "GHL_API_KEY missing"}
-            
-        # Simplified GHL SMS implementation
+        print(f"📱 [SMS] Sending to {to}...")
+        
+        ghl_id = self._ensure_ghl_contact(prospect_id, phone=to)
+        if not ghl_id:
+            return {"success": False, "error": "Could not sync contact to GHL"}
+
+        url = "https://services.leadconnectorhq.com/conversations/messages"
+        headers = {
+            'Authorization': f'Bearer {os.environ.get("GHL_API_TOKEN")}', 
+            'Version': '2021-07-28', 
+            'Content-Type': 'application/json'
+        }
+        
+        payload = {
+            "type": "SMS",
+            "contactId": ghl_id,
+            "message": message
+        }
+        
         try:
-             # Real implementation would go here. For now, we mock success for the build to pass.
-             # In production, use requests.post(GHL_ENDPOINT...)
-             return {"success": True, "sid": f"SM-MOCK-{int(time.time())}"}
+            r = requests.post(url, json=payload, headers=headers)
+            if r.status_code in [200, 201]:
+                print(f"✅ [SMS] Sent! ID: {r.json().get('messageId')}")
+                return {"success": True, "sid": r.json().get('messageId')}
+            else:
+                print(f"❌ [SMS] Failed ({r.status_code}): {r.text}")
+                return {"success": False, "error": r.text}
         except Exception as e:
-            return {"success": False, "error": str(e)}
+             return {"success": False, "error": str(e)}
 
     @self_annealing
     def send_email(self, to: str, subject: str, body: str) -> Dict[str, Any]:
-        """EXECUTOR: send_email"""
-        print(f"📧 [EMAIL] To: {to} | Subj: {subject}")
-        # Mocking for speed, logic similar to facility_outreach.py
-        return {"success": True, "message_id": f"MSG-{int(time.time())}"}
+        """EXECUTOR: send_email (GHL Real)"""
+        print(f"📧 [EMAIL] Sending to {to}...")
+        
+        ghl_id = self._ensure_ghl_contact(to, email=to) # Use email as ID proxy if needed
+        if not ghl_id:
+             return {"success": False, "error": "Could not sync contact to GHL"}
+             
+        url = "https://services.leadconnectorhq.com/conversations/messages"
+        headers = {
+            'Authorization': f'Bearer {os.environ.get("GHL_API_TOKEN")}', 
+            'Version': '2021-07-28', 
+            'Content-Type': 'application/json'
+        }
+        
+        payload = {
+            "type": "Email",
+            "contactId": ghl_id,
+            "emailSubject": subject,
+            "html": body
+        }
+        
+        try:
+            r = requests.post(url, json=payload, headers=headers)
+            if r.status_code in [200, 201]:
+                print(f"✅ [EMAIL] Sent! ID: {r.json().get('messageId')}")
+                return {"success": True, "message_id": r.json().get('messageId')}
+            else:
+                print(f"❌ [EMAIL] Failed ({r.status_code}): {r.text}")
+                return {"success": False, "error": r.text}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
 
     @self_annealing
     def classify_intent(self, message: str) -> Dict[str, Any]:
