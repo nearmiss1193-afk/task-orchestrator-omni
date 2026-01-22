@@ -98,6 +98,28 @@ class Orchestrator:
         # Simple logging for now
         self.exec.log_action(self.agent_name, "health_check", "All systems nominal")
 
+import modal
+
+# Modal Definition
+app = modal.App("v2-master-orchestrator")
+image = modal.Image.debian_slim().pip_install("supabase", "requests", "python-dotenv")
+VAULT = modal.Secret.from_name("agency-vault")
+
+@app.function(
+    image=image, 
+    secrets=[VAULT], 
+    schedule=modal.Period(minutes=5),
+    timeout=300
+)
+def run_orchestrator_cron():
+    """
+    AUTONOMOUS CRON JOB
+    Runs every 5 minutes to continuously monitor and route.
+    """
+    orch = Orchestrator()
+    orch.sense_and_act()
+
 if __name__ == "__main__":
+    # Local Test
     orch = Orchestrator()
     orch.sense_and_act()
