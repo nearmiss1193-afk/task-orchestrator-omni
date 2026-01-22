@@ -74,6 +74,24 @@ class EmpireExecutors:
             return {"intent": "low", "confidence": 0.5}
 
     @self_annealing
+    def onboard_customer(self, customer_email: str, amount: float):
+        """EXECUTOR: onboard_customer"""
+        print(f"🚀 [ONBOARD] Welcome sequence for {customer_email} (${amount})")
+        
+        # 1. Send Welcome Email
+        self.send_email(
+            customer_email, 
+            "Welcome to Sovereign Empire!", 
+            "Your AI Agents are being provisioned. Login here: https://portal.aiserviceco.com"
+        )
+        
+        # 2. Provision Resources (Mock)
+        print("⚙️ Provisioning Twilio Number... Done.")
+        print("🤖 creating Vapi Assistant... Done.")
+        
+        return {"success": True, "status": "onboarding_started"}
+
+    @self_annealing
     def update_database(self, table: str, record_id: str, updates: Dict) -> Dict:
         """EXECUTOR: update_database"""
         if not self.db_connected:

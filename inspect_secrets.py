@@ -9,10 +9,10 @@ def inspect():
     keys = list(os.environ.keys())
     print(f"AVAILABLE KEYS: {keys}")
     # Check for direct SQL access keys
-    sql_keys = [k for k in keys if "POSTGRES" in k or "DB" in k or "SQL" in k]
-    print(f"SQL KEYS: {sql_keys}")
-    return {"sql_keys": sql_keys}
+    stripe_keys = [k for k in keys if "STRIPE" in k]
+    return {"keys": keys, "stripe": stripe_keys}
 
 @app.local_entrypoint()
 def main():
-    inspect.remote()
+    res = inspect.remote()
+    print(f"\n[RESULTS] Found keys: {res['stripe']}")
