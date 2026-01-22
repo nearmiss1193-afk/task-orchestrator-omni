@@ -1,0 +1,2002 @@
+[
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 14,
+        "monthly_loss": 14000,
+        "annual_loss": 168000,
+        "aeo_data": {
+            "monthly_visits": 1693,
+            "direct_traffic_pct": 44,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 3018,
+            "direct_traffic_pct": 51,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 253,
+            "direct_traffic_pct": 41,
+            "ai_search_traffic_pct": 1,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 1098,
+            "direct_traffic_pct": 55,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 2526,
+            "direct_traffic_pct": 45,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 3692,
+            "direct_traffic_pct": 58,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 137,
+            "direct_traffic_pct": 59,
+            "ai_search_traffic_pct": 10,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 4653,
+            "direct_traffic_pct": 63,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 878,
+            "direct_traffic_pct": 47,
+            "ai_search_traffic_pct": 5,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 1622,
+            "direct_traffic_pct": 68,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 11,
+        "monthly_loss": 11000,
+        "annual_loss": 132000,
+        "aeo_data": {
+            "monthly_visits": 966,
+            "direct_traffic_pct": 51,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 15,
+        "monthly_loss": 15000,
+        "annual_loss": 180000,
+        "aeo_data": {
+            "monthly_visits": 273,
+            "direct_traffic_pct": 53,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 10,
+        "monthly_loss": 10000,
+        "annual_loss": 120000,
+        "aeo_data": {
+            "monthly_visits": 520,
+            "direct_traffic_pct": 48,
+            "ai_search_traffic_pct": 7,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 2736,
+            "direct_traffic_pct": 53,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 14,
+        "monthly_loss": 14000,
+        "annual_loss": 168000,
+        "aeo_data": {
+            "monthly_visits": 2866,
+            "direct_traffic_pct": 51,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 2787,
+            "direct_traffic_pct": 45,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 2427,
+            "direct_traffic_pct": 48,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 12,
+        "monthly_loss": 12000,
+        "annual_loss": 144000,
+        "aeo_data": {
+            "monthly_visits": 3648,
+            "direct_traffic_pct": 45,
+            "ai_search_traffic_pct": 7,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 10,
+        "monthly_loss": 10000,
+        "annual_loss": 120000,
+        "aeo_data": {
+            "monthly_visits": 826,
+            "direct_traffic_pct": 42,
+            "ai_search_traffic_pct": 7,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 3439,
+            "direct_traffic_pct": 55,
+            "ai_search_traffic_pct": 7,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 2263,
+            "direct_traffic_pct": 49,
+            "ai_search_traffic_pct": 8,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 4929,
+            "direct_traffic_pct": 43,
+            "ai_search_traffic_pct": 7,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 3368,
+            "direct_traffic_pct": 69,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 4044,
+            "direct_traffic_pct": 50,
+            "ai_search_traffic_pct": 10,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 2191,
+            "direct_traffic_pct": 70,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 12,
+        "monthly_loss": 12000,
+        "annual_loss": 144000,
+        "aeo_data": {
+            "monthly_visits": 2830,
+            "direct_traffic_pct": 58,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 1063,
+            "direct_traffic_pct": 70,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 12,
+        "monthly_loss": 12000,
+        "annual_loss": 144000,
+        "aeo_data": {
+            "monthly_visits": 485,
+            "direct_traffic_pct": 57,
+            "ai_search_traffic_pct": 1,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 11,
+        "monthly_loss": 11000,
+        "annual_loss": 132000,
+        "aeo_data": {
+            "monthly_visits": 2226,
+            "direct_traffic_pct": 69,
+            "ai_search_traffic_pct": 5,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 1933,
+            "direct_traffic_pct": 43,
+            "ai_search_traffic_pct": 10,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 15,
+        "monthly_loss": 15000,
+        "annual_loss": 180000,
+        "aeo_data": {
+            "monthly_visits": 4712,
+            "direct_traffic_pct": 56,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 3210,
+            "direct_traffic_pct": 48,
+            "ai_search_traffic_pct": 8,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 1877,
+            "direct_traffic_pct": 51,
+            "ai_search_traffic_pct": 1,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 1177,
+            "direct_traffic_pct": 40,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 12,
+        "monthly_loss": 12000,
+        "annual_loss": 144000,
+        "aeo_data": {
+            "monthly_visits": 1841,
+            "direct_traffic_pct": 64,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 616,
+            "direct_traffic_pct": 52,
+            "ai_search_traffic_pct": 8,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 4668,
+            "direct_traffic_pct": 64,
+            "ai_search_traffic_pct": 7,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 14,
+        "monthly_loss": 14000,
+        "annual_loss": 168000,
+        "aeo_data": {
+            "monthly_visits": 210,
+            "direct_traffic_pct": 56,
+            "ai_search_traffic_pct": 5,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 2622,
+            "direct_traffic_pct": 50,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 2480,
+            "direct_traffic_pct": 51,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 1879,
+            "direct_traffic_pct": 47,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 4808,
+            "direct_traffic_pct": 54,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 4755,
+            "direct_traffic_pct": 62,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 11,
+        "monthly_loss": 11000,
+        "annual_loss": 132000,
+        "aeo_data": {
+            "monthly_visits": 550,
+            "direct_traffic_pct": 42,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 12,
+        "monthly_loss": 12000,
+        "annual_loss": 144000,
+        "aeo_data": {
+            "monthly_visits": 771,
+            "direct_traffic_pct": 70,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 10,
+        "monthly_loss": 10000,
+        "annual_loss": 120000,
+        "aeo_data": {
+            "monthly_visits": 1823,
+            "direct_traffic_pct": 55,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 4942,
+            "direct_traffic_pct": 42,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 13,
+        "monthly_loss": 13000,
+        "annual_loss": 156000,
+        "aeo_data": {
+            "monthly_visits": 4005,
+            "direct_traffic_pct": 65,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 15,
+        "monthly_loss": 15000,
+        "annual_loss": 180000,
+        "aeo_data": {
+            "monthly_visits": 1302,
+            "direct_traffic_pct": 47,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 767,
+            "direct_traffic_pct": 41,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 2936,
+            "direct_traffic_pct": 69,
+            "ai_search_traffic_pct": 10,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 13,
+        "monthly_loss": 13000,
+        "annual_loss": 156000,
+        "aeo_data": {
+            "monthly_visits": 4064,
+            "direct_traffic_pct": 53,
+            "ai_search_traffic_pct": 8,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 3061,
+            "direct_traffic_pct": 67,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 1283,
+            "direct_traffic_pct": 41,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 2549,
+            "direct_traffic_pct": 42,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 10,
+        "monthly_loss": 10000,
+        "annual_loss": 120000,
+        "aeo_data": {
+            "monthly_visits": 1475,
+            "direct_traffic_pct": 58,
+            "ai_search_traffic_pct": 10,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 14,
+        "monthly_loss": 14000,
+        "annual_loss": 168000,
+        "aeo_data": {
+            "monthly_visits": 1642,
+            "direct_traffic_pct": 43,
+            "ai_search_traffic_pct": 1,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 13,
+        "monthly_loss": 13000,
+        "annual_loss": 156000,
+        "aeo_data": {
+            "monthly_visits": 1026,
+            "direct_traffic_pct": 58,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 12,
+        "monthly_loss": 12000,
+        "annual_loss": 144000,
+        "aeo_data": {
+            "monthly_visits": 1141,
+            "direct_traffic_pct": 55,
+            "ai_search_traffic_pct": 7,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 2872,
+            "direct_traffic_pct": 46,
+            "ai_search_traffic_pct": 8,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 11,
+        "monthly_loss": 11000,
+        "annual_loss": 132000,
+        "aeo_data": {
+            "monthly_visits": 2606,
+            "direct_traffic_pct": 42,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 14,
+        "monthly_loss": 14000,
+        "annual_loss": 168000,
+        "aeo_data": {
+            "monthly_visits": 122,
+            "direct_traffic_pct": 44,
+            "ai_search_traffic_pct": 8,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 2080,
+            "direct_traffic_pct": 59,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 1825,
+            "direct_traffic_pct": 47,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 14,
+        "monthly_loss": 14000,
+        "annual_loss": 168000,
+        "aeo_data": {
+            "monthly_visits": 2403,
+            "direct_traffic_pct": 66,
+            "ai_search_traffic_pct": 1,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 1215,
+            "direct_traffic_pct": 70,
+            "ai_search_traffic_pct": 8,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 3672,
+            "direct_traffic_pct": 56,
+            "ai_search_traffic_pct": 5,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 3129,
+            "direct_traffic_pct": 55,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 13,
+        "monthly_loss": 13000,
+        "annual_loss": 156000,
+        "aeo_data": {
+            "monthly_visits": 1709,
+            "direct_traffic_pct": 42,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 15,
+        "monthly_loss": 15000,
+        "annual_loss": 180000,
+        "aeo_data": {
+            "monthly_visits": 990,
+            "direct_traffic_pct": 48,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 14,
+        "monthly_loss": 14000,
+        "annual_loss": 168000,
+        "aeo_data": {
+            "monthly_visits": 2679,
+            "direct_traffic_pct": 42,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 4735,
+            "direct_traffic_pct": 44,
+            "ai_search_traffic_pct": 5,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 2048,
+            "direct_traffic_pct": 68,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 2718,
+            "direct_traffic_pct": 58,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 15,
+        "monthly_loss": 15000,
+        "annual_loss": 180000,
+        "aeo_data": {
+            "monthly_visits": 2355,
+            "direct_traffic_pct": 41,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 13,
+        "monthly_loss": 13000,
+        "annual_loss": 156000,
+        "aeo_data": {
+            "monthly_visits": 3963,
+            "direct_traffic_pct": 61,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 13,
+        "monthly_loss": 13000,
+        "annual_loss": 156000,
+        "aeo_data": {
+            "monthly_visits": 2491,
+            "direct_traffic_pct": 45,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 564,
+            "direct_traffic_pct": 41,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 10,
+        "monthly_loss": 10000,
+        "annual_loss": 120000,
+        "aeo_data": {
+            "monthly_visits": 2139,
+            "direct_traffic_pct": 49,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 11,
+        "monthly_loss": 11000,
+        "annual_loss": 132000,
+        "aeo_data": {
+            "monthly_visits": 1486,
+            "direct_traffic_pct": 53,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 10,
+        "monthly_loss": 10000,
+        "annual_loss": 120000,
+        "aeo_data": {
+            "monthly_visits": 532,
+            "direct_traffic_pct": 63,
+            "ai_search_traffic_pct": 7,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 5,
+        "monthly_loss": 5000,
+        "annual_loss": 60000,
+        "aeo_data": {
+            "monthly_visits": 1710,
+            "direct_traffic_pct": 68,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 741,
+            "direct_traffic_pct": 69,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 15,
+        "monthly_loss": 15000,
+        "annual_loss": 180000,
+        "aeo_data": {
+            "monthly_visits": 2891,
+            "direct_traffic_pct": 62,
+            "ai_search_traffic_pct": 1,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 2838,
+            "direct_traffic_pct": 55,
+            "ai_search_traffic_pct": 5,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 9,
+        "monthly_loss": 9000,
+        "annual_loss": 108000,
+        "aeo_data": {
+            "monthly_visits": 2493,
+            "direct_traffic_pct": 52,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 10,
+        "monthly_loss": 10000,
+        "annual_loss": 120000,
+        "aeo_data": {
+            "monthly_visits": 900,
+            "direct_traffic_pct": 40,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 15,
+        "monthly_loss": 15000,
+        "annual_loss": 180000,
+        "aeo_data": {
+            "monthly_visits": 3584,
+            "direct_traffic_pct": 54,
+            "ai_search_traffic_pct": 10,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 11,
+        "monthly_loss": 11000,
+        "annual_loss": 132000,
+        "aeo_data": {
+            "monthly_visits": 4006,
+            "direct_traffic_pct": 53,
+            "ai_search_traffic_pct": 9,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 13,
+        "monthly_loss": 13000,
+        "annual_loss": 156000,
+        "aeo_data": {
+            "monthly_visits": 979,
+            "direct_traffic_pct": 62,
+            "ai_search_traffic_pct": 1,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 2935,
+            "direct_traffic_pct": 40,
+            "ai_search_traffic_pct": 3,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 13,
+        "monthly_loss": 13000,
+        "annual_loss": 156000,
+        "aeo_data": {
+            "monthly_visits": 4621,
+            "direct_traffic_pct": 49,
+            "ai_search_traffic_pct": 1,
+            "revenue_range": "Under $1M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 1171,
+            "direct_traffic_pct": 56,
+            "ai_search_traffic_pct": 4,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 8,
+        "monthly_loss": 8000,
+        "annual_loss": 96000,
+        "aeo_data": {
+            "monthly_visits": 2823,
+            "direct_traffic_pct": 57,
+            "ai_search_traffic_pct": 8,
+            "revenue_range": "Under $1M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 12,
+        "monthly_loss": 12000,
+        "annual_loss": 144000,
+        "aeo_data": {
+            "monthly_visits": 1269,
+            "direct_traffic_pct": 52,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "LA Injury Advocates",
+        "website": "lainjuryadvocates.com",
+        "rating": 4.9,
+        "missed_calls": 11,
+        "monthly_loss": 11000,
+        "annual_loss": 132000,
+        "aeo_data": {
+            "monthly_visits": 2646,
+            "direct_traffic_pct": 43,
+            "ai_search_traffic_pct": 10,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Pacific Legal Group",
+        "website": "pacificlegal.io",
+        "rating": 4.1,
+        "missed_calls": 11,
+        "monthly_loss": 11000,
+        "annual_loss": 132000,
+        "aeo_data": {
+            "monthly_visits": 2542,
+            "direct_traffic_pct": 53,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "$5M - $10M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Metro Accident Pros",
+        "website": "metroaccident-la.com",
+        "rating": 4.5,
+        "missed_calls": 14,
+        "monthly_loss": 14000,
+        "annual_loss": 168000,
+        "aeo_data": {
+            "monthly_visits": 3041,
+            "direct_traffic_pct": 67,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "West Coast Justice",
+        "website": "westcoastjustice.net",
+        "rating": 4.3,
+        "missed_calls": 6,
+        "monthly_loss": 6000,
+        "annual_loss": 72000,
+        "aeo_data": {
+            "monthly_visits": 3094,
+            "direct_traffic_pct": 51,
+            "ai_search_traffic_pct": 2,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Direct"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    },
+    {
+        "name": "Sunset Law Firm",
+        "website": "sunsetlawfirm.io",
+        "rating": 3.6,
+        "missed_calls": 7,
+        "monthly_loss": 7000,
+        "annual_loss": 84000,
+        "aeo_data": {
+            "monthly_visits": 4803,
+            "direct_traffic_pct": 43,
+            "ai_search_traffic_pct": 6,
+            "revenue_range": "$1M - $5M",
+            "primary_source": "Search"
+        },
+        "leaks": [
+            "No instant text-back",
+            "Slow site load",
+            "AI Invisibility (AEO Gap)"
+        ]
+    }
+]

@@ -19,6 +19,14 @@ Draft and send ultra-efficient, high-conversion replies to inbound messages.
 4. **Booking Offer**: Suggest 2 specific times (e.g., "thursday at 2 or friday at 10 works").
 5. **Send**: Post to GHL Conversations API.
 
+## AEO Expansion (AI Visibility)
+
+When the mission objective is AEO/Visibility:
+
+- **Angle**: "AI Invisibility"
+- **Hook**: Reference their lack of recommendations in ChatGPT/Gemini.
+- **Example**: "saw your competitor is getting all the chatgpt traffic for solar in hawaii. ran an audit for you. thursday at 2 works to walk thru it?"
+
 ## Example
 
 Input: "Hey, interested in your services."

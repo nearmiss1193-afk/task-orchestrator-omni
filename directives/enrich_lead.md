@@ -24,3 +24,15 @@ Automatically enrich new leads with deep-research data to facilitate high-contex
 
 - Use Google News search for company names rather than individuals for better "biz detail" extraction.
 - UX leaks identified: No SSL, no CTAs above the fold, missing pixel tracking.
+
+## Edge Cases
+
+- **Missing input file**: Falls back to smaller batch files, then creates sample data
+- **JSON decode error**: Retry with validation, skip malformed records
+- **API rate limit**: Exponential backoff (1s, 5s, 15s)
+
+## Self-Annealing Log
+
+| Date | Error | Fix Applied | Outcome |
+|------|-------|-------------|---------|
+| (auto-populated by annealing_engine) | - | - | Pending |

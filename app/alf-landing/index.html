@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Senior Living in Florida | Free Personalized Help</title>
+    <meta name="description" content="Free senior living placement assistance in Florida. Get matched with the right assisted living or memory care facility for your loved one. No cost, no obligation.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --accent: #059669;
+            --accent-light: #d1fae5;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .header-cta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .phone-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--white);
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            padding: 4rem 2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quiz-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .quiz-progress {
+            height: 6px;
+            background: var(--border);
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .quiz-step {
+            padding: 2.5rem;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .quiz-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-step h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .quiz-step p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .quiz-option input {
+            display: none;
+        }
+
+        .quiz-option-icon {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option.selected .quiz-option-icon {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .quiz-option.selected .quiz-option-icon::after {
+            content: '✓';
+            color: var(--white);
+            font-size: 14px;
+        }
+
+        .quiz-option-text {
+            font-weight: 500;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-back {
+            background: transparent;
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Results Section */
+        .results-section {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .results-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        .results-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .results-section p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .results-summary {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .results-summary h3 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .results-summary ul {
+            list-style: none;
+        }
+
+        .results-summary li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .results-summary li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Warning for Medicaid */
+        .medicaid-warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .medicaid-warning strong {
+            color: #92400e;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            background: var(--white);
+        }
+
+        .features-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 4rem 2rem;
+            background: var(--bg);
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer a {
+            color: var(--primary-light);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .hero {
+                padding: 3rem 1.5rem;
+            }
+
+            .quiz-step {
+                padding: 1.5rem;
+            }
+
+            .trust-badges {
+                gap: 1rem;
+            }
+
+            .trust-badge {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Sovereign<span>Senior</span></div>
+            <div class="header-cta">
+                <a href="tel:+13529368152" class="phone-link">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                    </svg>
+                    (352) 936-8152
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>Find the Right Senior Living<br>for Someone You Love</h1>
+            <p>Free, personalized help finding assisted living & memory care in Florida. No cost, no pressure, just expert guidance.</p>
+            <a href="#quiz" class="hero-cta" onclick="startQuiz(); return false;">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd"/>
+                </svg>
+                Take Our Free Care Quiz
+            </a>
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <span>✓</span> 100% Free Service
+                </div>
+                <div class="trust-badge">
+                    <span>✓</span> Local Florida Experts
+                </div>
+                <div class="trust-badge">
+                    <span>✓</span> No Obligation
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section class="quiz-section" id="quiz">
+        <div class="quiz-container">
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" id="progressBar"></div>
+            </div>
+
+            <!-- Step 1: Who needs care -->
+            <div class="quiz-step active" data-step="1">
+                <h2>Who are you looking for care for?</h2>
+                <p>This helps us understand your situation better.</p>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="who" value="parent">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">My parent</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="who" value="spouse">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">My spouse</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="who" value="grandparent">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">My grandparent</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="who" value="other">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Another loved one</span>
+                    </label>
+                </div>
+                <div class="quiz-nav">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Care Level -->
+            <div class="quiz-step" data-step="2">
+                <h2>What level of care is needed?</h2>
+                <p>Select the option that best describes their current needs.</p>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="care_level" value="independent">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Independent Living (minimal help needed)</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="care_level" value="assisted">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Assisted Living (help with daily activities)</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="care_level" value="memory">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Memory Care (dementia or Alzheimer's)</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="care_level" value="skilled">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Skilled Nursing (24-hour medical care)</span>
+                    </label>
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn btn-back" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Timeline -->
+            <div class="quiz-step" data-step="3">
+                <h2>When do you need placement?</h2>
+                <p>This helps us prioritize urgent needs.</p>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="timeline" value="immediate">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Immediately (within 1 week)</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="timeline" value="soon">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Soon (2-4 weeks)</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="timeline" value="planning">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Planning ahead (1-3 months)</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="timeline" value="exploring">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Just exploring options</span>
+                    </label>
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn btn-back" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Location -->
+            <div class="quiz-step" data-step="4">
+                <h2>What area of Florida?</h2>
+                <p>We'll find communities near your preferred location.</p>
+                <div class="form-group">
+                    <label for="city">Preferred City or Area</label>
+                    <input type="text" id="city" name="city" placeholder="e.g., Orlando, Tampa, Jacksonville">
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn btn-back" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Payment (CRITICAL) -->
+            <div class="quiz-step" data-step="5">
+                <h2>How will care be funded?</h2>
+                <p>This helps us find communities within budget.</p>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="payment" value="private">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Private Pay (savings, family funds)</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="payment" value="ltc_insurance">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Long-Term Care Insurance</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="payment" value="va">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">VA Benefits (veteran or spouse)</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="payment" value="selling_home">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Selling Home to Fund Care</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="payment" value="medicaid">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Medicaid / Medicaid Pending</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="payment" value="unsure">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Not sure / Need guidance</span>
+                    </label>
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn btn-back" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 6: Budget -->
+            <div class="quiz-step" data-step="6">
+                <h2>What's the monthly budget range?</h2>
+                <p>Florida assisted living averages $4,750/month.</p>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="radio" name="budget" value="under_3k">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Under $3,000/month</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="budget" value="3k_5k">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">$3,000 - $5,000/month</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="budget" value="5k_7k">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">$5,000 - $7,000/month</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="budget" value="7k_plus">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">$7,000+/month</span>
+                    </label>
+                    <label class="quiz-option">
+                        <input type="radio" name="budget" value="unsure">
+                        <span class="quiz-option-icon"></span>
+                        <span class="quiz-option-text">Not sure yet</span>
+                    </label>
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn btn-back" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 7: Contact Info -->
+            <div class="quiz-step" data-step="7">
+                <h2>Almost done! How can we reach you?</h2>
+                <p>A local advisor will contact you within 24 hours.</p>
+                <div class="form-group">
+                    <label for="name">Your Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="senior_name">Senior's First Name</label>
+                    <input type="text" id="senior_name" name="senior_name" placeholder="Optional">
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn btn-back" onclick="prevStep()">← Back</button>
+                    <button class="btn btn-primary btn-full" onclick="submitQuiz()">Get My Free Results →</button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="quiz-step" data-step="results">
+                <div class="results-section">
+                    <div class="results-icon">🎉</div>
+                    <h2>Great news! We can help.</h2>
+                    <p>Based on your answers, we've identified several communities that may be a good fit.</p>
+                    
+                    <div class="results-summary">
+                        <h3>Your Summary</h3>
+                        <ul id="resultsSummary">
+                            <!-- Filled by JS -->
+                        </ul>
+                    </div>
+
+                    <div id="medicaidNote" class="medicaid-warning hidden">
+                        <strong>Note about Medicaid:</strong> We can still help you explore options. Some facilities have Medicaid beds, though availability varies. We'll discuss all your options on our call.
+                    </div>
+
+                    <p style="margin-top: 2rem;"><strong>What happens next?</strong><br>A local senior living advisor will call you within 24 hours to discuss your options and answer any questions.</p>
+
+                    <a href="tel:+13529368152" class="btn btn-primary" style="margin-top: 1rem;">
+                        Or Call Now: (352) 936-8152
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🆓</div>
+                <h3>100% Free Service</h3>
+                <p>Our guidance costs you nothing. We're paid by the communities when you find the right fit.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Local Florida Experts</h3>
+                <p>We know Florida communities personally and can recommend the best options for your needs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">❤️</div>
+                <h3>Compassionate Support</h3>
+                <p>We understand this is a difficult decision. We're here to support you every step of the way.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2>What Families Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"They made finding care for my mom so much easier. Within a week, we had toured three great facilities and found the perfect fit."</p>
+                <p class="testimonial-author">— Sarah M., Orlando</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"I was overwhelmed trying to figure out options for my dad. Their team walked me through everything and helped us find affordable memory care."</p>
+                <p class="testimonial-author">— Michael R., Tampa</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Free, helpful, and no pressure. They genuinely cared about finding what was best for our family."</p>
+                <p class="testimonial-author">— Jennifer L., Jacksonville</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>Sovereign Senior Placement</strong></p>
+        <p>Free Senior Living Placement Services in Florida</p>
+        <p><a href="tel:+13529368152">(352) 936-8152</a></p>
+        <p style="margin-top: 1rem; font-size: 0.875rem; opacity: 0.7;">© 2026 Sovereign Senior Placement. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 7;
+        const quizData = {};
+
+        // Option selection
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.closest('.quiz-options');
+                parent.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input').checked = true;
+            });
+        });
+
+        function startQuiz() {
+            document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateProgress() {
+            const progress = ((currentStep - 1) / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+            updateProgress();
+        }
+
+        function collectData() {
+            // Collect radio buttons
+            document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                quizData[input.name] = input.value;
+            });
+            // Collect text inputs
+            ['city', 'name', 'phone', 'email', 'senior_name'].forEach(field => {
+                const input = document.getElementById(field);
+                if (input && input.value) {
+                    quizData[field] = input.value;
+                }
+            });
+        }
+
+        function nextStep() {
+            collectData();
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+                document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        function submitQuiz() {
+            collectData();
+
+            // Validate required fields
+            if (!quizData.name || !quizData.phone || !quizData.email) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Build results summary
+            const summaryList = document.getElementById('resultsSummary');
+            summaryList.innerHTML = '';
+
+            const labels = {
+                who: { parent: 'Parent', spouse: 'Spouse', grandparent: 'Grandparent', other: 'Loved one' },
+                care_level: { independent: 'Independent Living', assisted: 'Assisted Living', memory: 'Memory Care', skilled: 'Skilled Nursing' },
+                timeline: { immediate: 'Immediate (within 1 week)', soon: '2-4 weeks', planning: '1-3 months', exploring: 'Exploring options' },
+                payment: { private: 'Private Pay', ltc_insurance: 'Long-Term Care Insurance', va: 'VA Benefits', selling_home: 'Selling Home', medicaid: 'Medicaid', unsure: 'Need guidance' },
+                budget: { under_3k: 'Under $3,000/mo', '3k_5k': '$3,000-$5,000/mo', '5k_7k': '$5,000-$7,000/mo', '7k_plus': '$7,000+/mo', unsure: 'TBD' }
+            };
+
+            if (quizData.care_level) {
+                summaryList.innerHTML += `<li>Care Type: ${labels.care_level[quizData.care_level] || quizData.care_level}</li>`;
+            }
+            if (quizData.city) {
+                summaryList.innerHTML += `<li>Location: ${quizData.city}, Florida</li>`;
+            }
+            if (quizData.timeline) {
+                summaryList.innerHTML += `<li>Timeline: ${labels.timeline[quizData.timeline] || quizData.timeline}</li>`;
+            }
+            if (quizData.budget) {
+                summaryList.innerHTML += `<li>Budget: ${labels.budget[quizData.budget] || quizData.budget}</li>`;
+            }
+
+            // Show Medicaid warning if selected
+            if (quizData.payment === 'medicaid') {
+                document.getElementById('medicaidNote').classList.remove('hidden');
+            }
+
+            // Show results
+            showStep('results');
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+
+            // Send data to webhook (configure your endpoint)
+            sendToWebhook(quizData);
+        }
+
+        function sendToWebhook(data) {
+            // Replace with your GHL webhook URL
+            const webhookUrl = 'YOUR_GHL_WEBHOOK_URL';
+            
+            // Add timestamp
+            data.submitted_at = new Date().toISOString();
+            data.source = 'quiz_funnel';
+
+            // Send to webhook (uncomment when ready)
+            /*
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).catch(err => console.log('Webhook error:', err));
+            */
+
+            console.log('Quiz submitted:', data);
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+[
+  {
+    "type": "error",
+    "script": "process_leads",
+    "attempt": 1,
+    "error_type": "UnicodeEncodeError",
+    "error_message": "'charmap' codec can't encode characters in position 0-1: character maps to <undefined>",
+    "classification": {
+      "category": "unknown",
+      "safe_to_auto_fix": false,
+      "suggested_fix": "Unknown error type: UnicodeEncodeError. Requires human review."
+    },
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\nearm\\.gemini\\antigravity\\playground\\empire-unified\\execution\\annealing_engine.py\", line 304, in anneal\n    result = func(*args, **kwargs)\n  File \"C:\\Users\\nearm\\.gemini\\antigravity\\playground\\empire-unified\\execution\\enrich_leads.py\", line 165, in process_leads\n    print(\"\u26a0\ufe0f No prospect files found. Creating sample data for testing...\")\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python313\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>\n",
+    "timestamp": "2026-01-17T19:14:57.228771"
+  },
+  {
+    "type": "final_failure",
+    "script": "process_leads",
+    "total_attempts": 1,
+    "error_type": "UnicodeEncodeError",
+    "error_message": "'charmap' codec can't encode characters in position 0-1: character maps to <undefined>",
+    "classification": {
+      "category": "unknown",
+      "safe_to_auto_fix": false,
+      "suggested_fix": "Unknown error type: UnicodeEncodeError. Requires human review."
+    },
+    "requires_human": true,
+    "timestamp": "2026-01-17T19:14:57.234383"
+  },
+  {
+    "type": "success",
+    "script": "C:\\Users\\nearm\\.gemini\\antigravity\\playground\\empire-unified\\execution\\enrich_leads.py",
+    "attempt": 1,
+    "timestamp": "2026-01-17T19:14:57.261564"
+  },
+  {
+    "type": "success",
+    "script": "enrich_leads.py",
+    "function": "enrich_mass_batch",
+    "input": "execution/mass_prospects_100.json",
+    "output_count": 100,
+    "attempt": 1,
+    "timestamp": "2026-01-22T08:09:32.297227"
+  },
+  {
+    "type": "success",
+    "script": "process_leads",
+    "attempt": 1,
+    "timestamp": "2026-01-22T08:09:32.308211"
+  }
+]

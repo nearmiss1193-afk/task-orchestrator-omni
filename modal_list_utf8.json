@@ -1,0 +1,18 @@
+﻿[
+  {
+    "App ID": "ap-R9xXKmcp6Ed24ghmAzMHOh",
+    "Description": "sovereign-intelligence",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2026-01-20 20:09:03-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-33sEZ3Y51njw4rNR83N3ZR",
+    "Description": "empire-api-v3",
+    "State": "deployed",
+    "Tasks": "3",
+    "Created at": "2026-01-21 15:55:08-05:00",
+    "Stopped at": null
+  }
+]

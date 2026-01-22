@@ -35,3 +35,19 @@ If I (Antigravity) cannot find a specific button or element after 2 attempts:
 | Date | Task | Result | Key Learning |
 | :--- | :--- | :--- | :--- |
 | 2025-12-24 | Mission 4 Injection | Interrupted | Use Funnel Settings instead of Page Builder UI for HTML injection. |
+| 2026-01-22 | v2.0 Governance | Active | Mandatory 24/7 Cloud Operation & Pulsed Inter-Agent Communication Logs. |
+
+---
+
+## 🟢 SOVEREIGN ARCHITECT PROTOCOLS
+
+### 1. THE 24/7 CLOUD MANDATE
+
+- Never run production loops or outreach logic on a local machine.
+- Deploy all mission-critical code to Modal (Compute) and Vercel (Front-end).
+- Goal: System must operate with 100% autonomy and zero human intervention.
+
+### 2. PULSED COMMUNICATION PROTOCOL
+
+- Every 10-15 minutes of work, the active agent MUST update `SOVEREIGN_MANIFEST.md`.
+- This ensures alternate agents are synced and prevents state collision.

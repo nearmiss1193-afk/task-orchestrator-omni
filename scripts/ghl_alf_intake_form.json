@@ -1,0 +1,385 @@
+{
+    "name": "ALF Referral Intake Form",
+    "description": "Comprehensive intake for assisted living placement",
+    "settings": {
+        "notificationEmail": "{{your_email}}",
+        "redirectUrl": "thank-you",
+        "submitButtonText": "Submit Inquiry"
+    },
+    "sections": [
+        {
+            "title": "Your Contact Information",
+            "fields": [
+                {
+                    "id": "family_contact_name",
+                    "type": "text",
+                    "label": "Your Full Name",
+                    "required": true
+                },
+                {
+                    "id": "family_relationship",
+                    "type": "select",
+                    "label": "Relationship to Senior",
+                    "required": true,
+                    "options": [
+                        "Son/Daughter",
+                        "Spouse",
+                        "Sibling",
+                        "Grandchild",
+                        "Friend",
+                        "Professional (social worker, etc.)",
+                        "Other"
+                    ]
+                },
+                {
+                    "id": "family_phone",
+                    "type": "phone",
+                    "label": "Phone Number",
+                    "required": true
+                },
+                {
+                    "id": "family_email",
+                    "type": "email",
+                    "label": "Email Address",
+                    "required": true
+                },
+                {
+                    "id": "best_contact_time",
+                    "type": "select",
+                    "label": "Best Time to Call",
+                    "options": [
+                        "Morning (8am-12pm)",
+                        "Afternoon (12pm-5pm)",
+                        "Evening (5pm-8pm)"
+                    ]
+                },
+                {
+                    "id": "lead_source",
+                    "type": "select",
+                    "label": "How Did You Hear About Us?",
+                    "options": [
+                        "Family/Friend Referral",
+                        "Hospital/Rehab Discharge",
+                        "Google Search",
+                        "Facebook",
+                        "Professional Referral",
+                        "Other"
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Senior's Information",
+            "fields": [
+                {
+                    "id": "senior_name",
+                    "type": "text",
+                    "label": "Senior's Full Name",
+                    "required": true
+                },
+                {
+                    "id": "senior_dob",
+                    "type": "date",
+                    "label": "Date of Birth",
+                    "required": true
+                },
+                {
+                    "id": "senior_gender",
+                    "type": "select",
+                    "label": "Gender",
+                    "options": [
+                        "Male",
+                        "Female"
+                    ]
+                },
+                {
+                    "id": "current_situation",
+                    "type": "select",
+                    "label": "Current Living Situation",
+                    "required": true,
+                    "options": [
+                        "Living Alone at Home",
+                        "Living with Spouse",
+                        "Living with Family",
+                        "Hospital",
+                        "Rehab/Skilled Nursing Facility",
+                        "Another Assisted Living",
+                        "Memory Care",
+                        "Other"
+                    ]
+                },
+                {
+                    "id": "current_city",
+                    "type": "text",
+                    "label": "Current City/Location"
+                }
+            ]
+        },
+        {
+            "title": "Care Needs Assessment",
+            "fields": [
+                {
+                    "id": "placement_reason",
+                    "type": "select",
+                    "label": "Primary Reason for Seeking Placement",
+                    "required": true,
+                    "options": [
+                        "Safety Concerns at Home",
+                        "Caregiver Burnout",
+                        "Increased Care Needs",
+                        "Hospital/Rehab Discharge",
+                        "Memory Issues/Wandering",
+                        "Falls",
+                        "Cannot Live Alone Anymore",
+                        "Other"
+                    ]
+                },
+                {
+                    "id": "care_level",
+                    "type": "select",
+                    "label": "Level of Care Needed",
+                    "required": true,
+                    "options": [
+                        "Independent Living (Minimal Assistance)",
+                        "Assisted Living (Help with Daily Activities)",
+                        "Memory Care (Dementia/Alzheimer's)",
+                        "Skilled Nursing (24-Hour Medical Care)"
+                    ]
+                },
+                {
+                    "id": "adl_needs",
+                    "type": "checkbox",
+                    "label": "Help Needed With (Check All That Apply)",
+                    "options": [
+                        "Bathing",
+                        "Dressing",
+                        "Eating",
+                        "Toileting",
+                        "Walking/Mobility",
+                        "Transferring (Bed to Chair)",
+                        "Medication Management"
+                    ]
+                },
+                {
+                    "id": "mobility_status",
+                    "type": "select",
+                    "label": "Mobility Status",
+                    "required": true,
+                    "options": [
+                        "Walks Independently",
+                        "Uses Walker",
+                        "Uses Wheelchair",
+                        "Bedridden"
+                    ]
+                },
+                {
+                    "id": "memory_status",
+                    "type": "select",
+                    "label": "Memory/Cognitive Status",
+                    "required": true,
+                    "options": [
+                        "No Issues",
+                        "Mild Forgetfulness",
+                        "Moderate Confusion",
+                        "Diagnosed Dementia/Alzheimer's",
+                        "Wanders or Gets Lost"
+                    ]
+                },
+                {
+                    "id": "medical_conditions",
+                    "type": "checkbox",
+                    "label": "Medical Conditions (Check All That Apply)",
+                    "options": [
+                        "Diabetes",
+                        "Heart Disease",
+                        "Stroke History",
+                        "Parkinson's",
+                        "COPD/Respiratory",
+                        "Cancer",
+                        "Arthritis",
+                        "Kidney Disease",
+                        "None of the Above"
+                    ]
+                },
+                {
+                    "id": "special_care_needs",
+                    "type": "checkbox",
+                    "label": "Special Care Needs (Check All That Apply)",
+                    "options": [
+                        "Insulin Injections",
+                        "Oxygen Therapy",
+                        "Catheter Care",
+                        "Wound Care",
+                        "Physical Therapy",
+                        "Dialysis",
+                        "Hospice Care",
+                        "None of the Above"
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Budget & Payment",
+            "description": "This information helps us find facilities within your budget.",
+            "fields": [
+                {
+                    "id": "budget_range",
+                    "type": "select",
+                    "label": "Monthly Budget Range",
+                    "required": true,
+                    "options": [
+                        "Under $3,000",
+                        "$3,000 - $4,000",
+                        "$4,000 - $5,000",
+                        "$5,000 - $6,000",
+                        "$6,000 - $8,000",
+                        "$8,000+",
+                        "Unsure - Need Guidance"
+                    ]
+                },
+                {
+                    "id": "payment_source",
+                    "type": "select",
+                    "label": "Primary Payment Source",
+                    "required": true,
+                    "helpText": "Important: Payment source affects placement options.",
+                    "options": [
+                        "Private Pay (Savings/Family Funds)",
+                        "Long-Term Care Insurance",
+                        "VA Benefits",
+                        "Medicaid / Medicaid Pending",
+                        "Selling Home to Fund Care",
+                        "Combination of Sources",
+                        "Unsure"
+                    ]
+                },
+                {
+                    "id": "has_ltc_insurance",
+                    "type": "select",
+                    "label": "Does Senior Have Long-Term Care Insurance?",
+                    "options": [
+                        "Yes",
+                        "No",
+                        "Unsure"
+                    ]
+                },
+                {
+                    "id": "is_veteran",
+                    "type": "select",
+                    "label": "Is Senior a Veteran or Spouse of Veteran?",
+                    "options": [
+                        "Yes - Veteran",
+                        "Yes - Spouse of Veteran",
+                        "No",
+                        "Unsure"
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Location & Timeline",
+            "fields": [
+                {
+                    "id": "preferred_city",
+                    "type": "text",
+                    "label": "Preferred City or Area",
+                    "required": true,
+                    "placeholder": "e.g., Orlando, Tampa, Jacksonville"
+                },
+                {
+                    "id": "max_distance",
+                    "type": "select",
+                    "label": "Maximum Distance from Family (Miles)",
+                    "options": [
+                        "10 miles",
+                        "25 miles",
+                        "50 miles",
+                        "Any distance is fine"
+                    ]
+                },
+                {
+                    "id": "placement_timeline",
+                    "type": "select",
+                    "label": "When Do You Need Placement?",
+                    "required": true,
+                    "options": [
+                        "Immediate (Within 1 Week)",
+                        "Soon (2-4 Weeks)",
+                        "Planning Ahead (1-3 Months)",
+                        "Just Exploring Options"
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Preferences",
+            "fields": [
+                {
+                    "id": "room_preference",
+                    "type": "select",
+                    "label": "Room Preference",
+                    "options": [
+                        "Private Room",
+                        "Semi-Private (Shared)",
+                        "Either is Fine"
+                    ]
+                },
+                {
+                    "id": "amenity_preferences",
+                    "type": "checkbox",
+                    "label": "Important Amenities (Check All That Apply)",
+                    "options": [
+                        "Pet-Friendly",
+                        "Outdoor Spaces/Gardens",
+                        "Religious Services",
+                        "Social Activities",
+                        "Therapy On-Site",
+                        "Near Family",
+                        "Transportation Services"
+                    ]
+                },
+                {
+                    "id": "additional_notes",
+                    "type": "textarea",
+                    "label": "Any Other Preferences or Concerns?",
+                    "placeholder": "Tell us anything else that would help us find the perfect fit..."
+                }
+            ]
+        }
+    ],
+    "automations": {
+        "onSubmit": [
+            {
+                "action": "createContact",
+                "fields": {
+                    "firstName": "{{family_contact_name}}",
+                    "phone": "{{family_phone}}",
+                    "email": "{{family_email}}",
+                    "tags": [
+                        "ALF Referral",
+                        "New Inquiry"
+                    ]
+                }
+            },
+            {
+                "action": "addToPipeline",
+                "pipeline": "ALF Referrals",
+                "stage": "Intake"
+            },
+            {
+                "action": "sendSms",
+                "template": "alf_intake_confirmation"
+            },
+            {
+                "action": "createTask",
+                "title": "Follow-up call with {{family_contact_name}}",
+                "dueIn": "2 hours",
+                "priority": "high"
+            },
+            {
+                "action": "internalNotification",
+                "message": "New ALF Referral: {{senior_name}} - {{placement_timeline}}"
+            }
+        ]
+    }
+}

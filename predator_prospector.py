@@ -78,7 +78,5 @@ async def main():
     print(f"\n🏆 SCALE MISSION COMPLETE: {len(all_leads)} prospects captured.")
     print(f"File saved to: {output_file}")
 
-# Update scrape function to accept niche
-async def scrape_plumbers(city, niche):
-    print(f"🕵️ Recon: {niche} in {city}...")
-    # ... logic stays same, just using dynamic niche in URL ...
+if __name__ == "__main__":
+    asyncio.run(main())

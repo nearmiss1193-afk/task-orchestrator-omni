@@ -1,0 +1,25 @@
+{
+  "errors": [
+    {
+      "timestamp": "2026-01-17T19:14:57.242437",
+      "script": "process_leads",
+      "error_type": "UnicodeEncodeError",
+      "message": "'charmap' codec can't encode characters in position 0-1: character maps to <undefined>",
+      "fix_applied": "Unknown error type: UnicodeEncodeError. Requires human review.",
+      "fix_success": false
+    }
+  ],
+  "patterns": {
+    "process_leads:UnicodeEncodeError": {
+      "occurrences": 1,
+      "fixes_attempted": 1,
+      "fixes_successful": 0,
+      "last_fix": "Unknown error type: UnicodeEncodeError. Requires human review.",
+      "fix_success_rate": 0.0
+    }
+  },
+  "total_fixes": 0,
+  "total_failures": 1,
+  "initialized": "2026-01-17T15:00:00Z",
+  "version": "1.0"
+}

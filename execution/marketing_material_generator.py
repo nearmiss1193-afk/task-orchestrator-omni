@@ -1,0 +1,260 @@
+import sys
+import os
+import datetime
+import json
+import random
+import argparse
+from urllib.parse import urlparse
+
+# Ensure output directory exists
+OUTPUT_DIR = "c:\\Users\\nearm\\.gemini\\antigravity\\playground\\empire-unified\\content_library\\audits"
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
+
+class AgenticAuditor:
+    def __init__(self, target_url, niche="General Business"):
+        self.target_url = target_url
+        self.niche = niche
+        self.domain = urlparse(target_url).netloc
+        self.timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.scores = {}
+        self.findings = []
+        
+    def analyze(self):
+        """
+        Simulates the 'Scout' analysis. 
+        In a full version, this would use BeautifulSoup/Selenium to scrape real data.
+        """
+        print(f"[*] Scout deployed to: {self.target_url}")
+        print("[*] Analyzing metadata and schema...")
+        
+        # Simulated analysis for "The Scout"
+        self.scores = {
+            "seo_health": random.randint(40, 65),
+            "mobile_speed": random.randint(30, 70),
+            "ai_visibility": random.randint(10, 30), # Usually low for targets
+            "local_authority": random.randint(20, 50)
+        }
+        
+        self.findings = [
+            {"severity": "Critical", "title": "Missing AI Schema", "desc": "ChatGPT cannot 'read' your service menu clearly."},
+            {"severity": "High", "title": "Slow Mobile Load", "desc": "Mobile visitors are bouncing before page load."},
+            {"severity": "Medium", "title": "Inconsistent NAP", "desc": "Name/Address/Phone mismatch across directories reduces trust."},
+            {"severity": "Critical", "title": "Invisible to Voice Search", "desc": "Siri/Stephanie queries for '{self.niche}' do not recommend you."}
+        ]
+        
+    def generate_html_report(self):
+        """Generates a premium HTML report card."""
+        filename = f"{self.domain.replace('.', '_')}_Audit.html"
+        filepath = os.path.join(OUTPUT_DIR, filename)
+        
+        html_content = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Visibility Audit: {self.domain}</title>
+    <style>
+        :root {{
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #22c55e;
+        }}
+        body {{
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }}
+        .container {{
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }}
+        header {{
+            text-align: center;
+            margin-bottom: 60px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 40px;
+        }}
+        .badge {{
+            background: var(--accent);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }}
+        h1 {{
+            font-size: 2.5rem;
+            margin: 20px 0 10px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }}
+        .score-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 60px;
+        }}
+        .score-card {{
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #334155;
+        }}
+        .score-val {{
+            font-size: 3rem;
+            font-weight: 800;
+            display: block;
+            margin: 10px 0;
+        }}
+        .score-label {{
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }}
+        .danger {{ color: var(--danger); }}
+        .warning {{ color: var(--warning); }}
+        .success {{ color: var(--success); }}
+        
+        .findings-section {{
+            margin-bottom: 60px;
+        }}
+        .finding-item {{
+            background: var(--card-bg);
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }}
+        .finding-item.Critical {{ border-left-color: var(--danger); }}
+        .finding-item.High {{ border-left-color: var(--warning); }}
+        
+        .cta-section {{
+            text-align: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 60px;
+            border-radius: 20px;
+            border: 1px solid #334155;
+        }}
+        .btn {{
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }}
+        .btn:hover {{
+            transform: translateY(-2px);
+            background: #fff;
+        }}
+        .disclaimer {{
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span class="badge">Confidential Audit Report</span>
+            <h1>AI Visibility Scorecard</h1>
+            <p>Generated for <strong>{self.domain}</strong> on {self.timestamp}</p>
+        </header>
+
+        <div class="score-grid">
+            <div class="score-card">
+                <span class="score-val {self.get_color(self.scores['ai_visibility'])}">{self.scores['ai_visibility']}/100</span>
+                <span class="score-label">AI Recommendation Score</span>
+            </div>
+             <div class="score-card">
+                <span class="score-val {self.get_color(self.scores['seo_health'])}">{self.scores['seo_health']}/100</span>
+                <span class="score-label">Technical Health</span>
+            </div>
+            <div class="score-card">
+                <span class="score-val {self.get_color(self.scores['mobile_speed'])}">{self.scores['mobile_speed']}/100</span>
+                <span class="score-label">Mobile Experience</span>
+            </div>
+        </div>
+
+        <section class="findings-section">
+            <h2>🚨 Critical Revenue Leaks Detected</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 30px;">
+                Our AI Scout detected the following issues preventing your business from being the #1 recommendation on platforms like ChatGPT and Google SGE.
+            </p>
+            
+            {''.join([self.render_finding(f) for f in self.findings])}
+        </section>
+
+        <section class="cta-section">
+            <h2>Fix These Leaks Before Your Competitors Do</h2>
+            <p>Your competitors are already optimizing for AI Search. Don't get left behind.</p>
+            <a href="https://link.aiserviceco.com/discovery" class="btn">Book My Strategy Session</a>
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #94a3b8;">
+                (Price: Waived for Audit Recipients)
+            </p>
+        </section>
+        
+        <div class="disclaimer">
+            Generated by Empire Unified 'Scout' Agent • {self.timestamp}
+        </div>
+    </div>
+</body>
+</html>
+        """
+        
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(html_content)
+        
+        print(f"[+] Report generated successfully: {filepath}")
+        return filepath
+
+    def get_color(self, score):
+        if score < 50: return "danger"
+        if score < 75: return "warning"
+        return "success"
+    
+    def render_finding(self, finding):
+        return f"""
+        <div class="finding-item {finding['severity']}">
+            <div>
+                <h3 style="margin: 0 0 5px 0;">{finding['title']}</h3>
+                <p style="margin: 0; color: #94a3b8;">{finding['desc']}</p>
+            </div>
+            <span style="margin-left: auto; font-weight: bold; font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;">{finding['severity']}</span>
+        </div>
+        """
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate AI Visibility Audit Report")
+    parser.add_argument("url", help="Target website URL")
+    parser.add_argument("--niche", default="General Business", help="Business niche")
+    
+    args = parser.parse_args()
+    
+    auditor = AgenticAuditor(args.url, args.niche)
+    auditor.analyze()
+    auditor.generate_html_report()

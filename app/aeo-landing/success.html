@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your AI Visibility Audit is Ready | AI Service Co</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .success-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .success-header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .success-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .success-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .audit-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .audit-meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-invisible {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-low {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .audit-content {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+        }
+
+        .audit-content h1 {
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-primary);
+        }
+
+        .audit-content h2 {
+            font-size: 1.3rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--accent-secondary);
+        }
+
+        .audit-content h3 {
+            font-size: 1.1rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .audit-content p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        .audit-content strong {
+            color: var(--text-primary);
+        }
+
+        .audit-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .audit-content th,
+        .audit-content td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .audit-content th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+        }
+
+        .audit-content ul {
+            margin: 15px 0;
+            padding-left: 24px;
+        }
+
+        .audit-content li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .audit-content hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 30px 0;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+        }
+
+        .cta-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .download-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            padding: 12px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card);
+        }
+
+        .no-audit {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .no-audit h2 {
+            margin-bottom: 16px;
+        }
+
+        .no-audit a {
+            color: var(--accent-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="success-container">
+        <!-- Success Header -->
+        <header class="success-header">
+            <div class="success-icon">✅</div>
+            <h1>Your Audit is Ready!</h1>
+            <p id="customer-greeting">Thank you for your purchase. Your AI Visibility Audit is below.</p>
+        </header>
+
+        <!-- Audit Display -->
+        <div id="audit-display">
+            <div class="audit-card">
+                <div class="audit-meta" id="audit-meta">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="audit-content" id="audit-content">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="download-actions">
+                <button class="btn-secondary" onclick="copyAudit()">📋 Copy to Clipboard</button>
+                <button class="btn-secondary" onclick="printAudit()">🖨️ Print Audit</button>
+            </div>
+        </div>
+
+        <!-- No Audit Fallback -->
+        <div id="no-audit" class="no-audit" style="display: none;">
+            <h2>No Audit Found</h2>
+            <p>It looks like you haven't completed an audit yet.</p>
+            <p><a href="index.html">← Back to Audit Page</a></p>
+        </div>
+
+        <!-- CTA Section -->
+        <section class="cta-section" id="cta-section">
+            <h2>Ready to Fix Your AI Visibility?</h2>
+            <p>Book a free 15-minute call to walk through your audit and get your custom roadmap.</p>
+            <a href="https://link.aiserviceco.com/discovery" class="btn-cta">Book Your Strategy Call</a>
+        </section>
+
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 40px 0; color: var(--text-muted);">
+            <p>&copy; 2026 AI Service Co. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get audit result from localStorage
+            const auditData = localStorage.getItem('aeo_audit_result');
+
+            if (!auditData) {
+                document.getElementById('audit-display').style.display = 'none';
+                document.getElementById('cta-section').style.display = 'none';
+                document.getElementById('no-audit').style.display = 'block';
+                return;
+            }
+
+            const result = JSON.parse(auditData);
+
+            // Update greeting
+            if (result.customer && result.customer.name) {
+                document.getElementById('customer-greeting').textContent =
+                    `Thank you, ${result.customer.name}! Your AI Visibility Audit for ${result.customer.website} is ready.`;
+            }
+
+            // Build meta section
+            const metaHtml = `
+                <div class="meta-item">
+                    <span class="meta-label">Status</span>
+                    <span class="status-badge ${result.status === 'INVISIBLE' ? 'status-invisible' : 'status-low'}">${result.status}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">AI Search Traffic</span>
+                    <span class="meta-value">${result.metrics?.ai_search_pct || 'N/A'}%</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Direct Traffic</span>
+                    <span class="meta-value">${result.metrics?.direct_pct || 'N/A'}%</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Est. Revenue</span>
+                    <span class="meta-value">${result.metrics?.est_revenue || 'N/A'}</span>
+                </div>
+            `;
+            document.getElementById('audit-meta').innerHTML = metaHtml;
+
+            // Render markdown report
+            if (result.report) {
+                document.getElementById('audit-content').innerHTML = marked.parse(result.report);
+            }
+        });
+
+        function copyAudit() {
+            const auditData = localStorage.getItem('aeo_audit_result');
+            if (auditData) {
+                const result = JSON.parse(auditData);
+                navigator.clipboard.writeText(result.report).then(() => {
+                    alert('Audit copied to clipboard!');
+                });
+            }
+        }
+
+        function printAudit() {
+            window.print();
+        }
+    </script>
+</body>
+
+</html>
