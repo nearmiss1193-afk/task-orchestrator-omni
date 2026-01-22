@@ -4,8 +4,8 @@ import time
 import os
 from datetime import datetime
 
-# V2 Master Fusion Endpoint
-WEBHOOK_URL = "https://nearmiss1193-afk--v2-empire-fusion-orchestrate.modal.run"
+# V2 Master Fusion Endpoint (Master Version)
+WEBHOOK_URL = "https://nearmiss1193-afk--v2-empire-fusion-master-orchestrate.modal.run"
 
 def launch_campaign():
     input_file = "execution/mass_prospects_100.json"

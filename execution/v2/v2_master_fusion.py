@@ -165,6 +165,13 @@ async def vitals(request: Request):
     
     revenue = (res_paid.count or 0) * 197
     
+    # Fetch recent activity
+    res_recent = supabase.table("contacts_master") \
+        .select("full_name, company_name, status") \
+        .order("created_at", desc=True) \
+        .limit(5) \
+        .execute()
+    
     return {
         "vitals": {
             "system_status": "ONLINE",
@@ -173,7 +180,7 @@ async def vitals(request: Request):
             "leads_pending": res_new.count or 0,
             "agents_active": 3
         },
-        "recent_activity": []
+        "recent_activity": res_recent.data or []
     }
 
 @app.function(image=image, secrets=[VAULT_V1], timeout=600)
