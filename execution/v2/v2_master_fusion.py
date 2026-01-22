@@ -134,21 +134,35 @@ async def orchestrate(request: Request):
 async def close_call(request: Request):
     """Triggered by Vapi Webhook at end of call."""
     payload = await request.json()
-    print("[FUSION] 📞 Call Report Received.")
+    print("[FUSION] 📞 Call Report Received (Sarah 2.0).")
     
-    # Extract data
-    prospect_phone = payload.get("customer", {}).get("number")
-    prospect_name = payload.get("customer", {}).get("name", "there")
+    # 1. Extract Data
+    customer = payload.get("customer", {})
+    phone = customer.get("number")
+    name = customer.get("name", "there")
+    transcript = payload.get("transcript", "No transcript available.")
     outcome = payload.get("analysis", {}).get("structuredData", {})
     selected_package = outcome.get("package", "silver").lower()
     
-    # Generate Stripe link (mocked)
+    # 2. Persist to Supabase
+    try:
+        supabase = get_supabase()
+        supabase.table("contacts_master").update({
+            "call_transcript": transcript,
+            "status": "call_completed",
+            "ai_strategy": f"Selected Package: {selected_package.upper()}"
+        }).eq("phone", phone).execute()
+        print(f"[FUSION] ✅ Transcript persisted for {name}.")
+    except Exception as e:
+        print(f"[ERR] Persistence Failed: {str(e)}")
+    
+    # 3. Generate Link & Reply (Mocked)
     amount = 197 if selected_package == "silver" else 397
     stripe_link = f"https://buy.stripe.com/mock_{selected_package}_{amount}"
     
     # Send SMS with link
-    message = f"Hey {prospect_name}, here is your secure link to lock in your spot: {stripe_link} -Sarah"
-    await ghl.send_sms(prospect_phone, message)
+    message = f"Hey {name}, here is your secure link to lock in your spot: {stripe_link} -Sarah"
+    await ghl.send_sms(phone, message)
     
     return {"status": "closing_processed", "link_sent": stripe_link}
 
@@ -158,30 +172,35 @@ async def vitals(request: Request):
     """Triggered by SCC Dashboard to get system stats."""
     print("[FUSION] 🔭 Vitals Request Received.")
     
-    supabase = get_supabase()
-    res_contacted = supabase.table("contacts_master").select("id", count="exact").eq("status", "contacted").execute()
-    res_new = supabase.table("contacts_master").select("id", count="exact").eq("status", "new").execute()
-    res_paid = supabase.table("contacts_master").select("id", count="exact").eq("status", "deposited").execute()
-    
-    revenue = (res_paid.count or 0) * 197
-    
-    # Fetch recent activity
-    res_recent = supabase.table("contacts_master") \
-        .select("full_name, company_name, status") \
-        .order("created_at", desc=True) \
-        .limit(5) \
-        .execute()
-    
-    return {
-        "vitals": {
-            "system_status": "ONLINE",
-            "revenue_total": f"${revenue}",
-            "leads_contacted": res_contacted.count or 0,
-            "leads_pending": res_new.count or 0,
-            "agents_active": 3
-        },
-        "recent_activity": res_recent.data or []
-    }
+    try:
+        supabase = get_supabase()
+        # 1. Core Metrics
+        res_contacted = supabase.table("contacts_master").select("id", count="exact").eq("status", "contacted").execute()
+        res_new = supabase.table("contacts_master").select("id", count="exact").eq("status", "new").execute()
+        res_paid = supabase.table("contacts_master").select("id", count="exact").eq("status", "deposited").execute()
+        
+        revenue = (res_paid.count or 0) * 197
+        
+        # 2. Detailed Lead Activity (Dossiers & Transcripts)
+        res_recent = supabase.table("contacts_master") \
+            .select("full_name, company_name, status, ai_strategy, call_transcript, audit_report_url, created_at") \
+            .order("created_at", desc=True) \
+            .limit(10) \
+            .execute()
+        
+        return {
+            "vitals": {
+                "system_status": "ONLINE",
+                "revenue_total": f"${revenue}",
+                "leads_contacted": res_contacted.count or 0,
+                "leads_pending": res_new.count or 0,
+                "agents_active": 3
+            },
+            "recent_activity": res_recent.data or []
+        }
+    except Exception as e:
+        print(f"[ERR] Vitals Failed: {str(e)}")
+        return {"vitals": {"system_status": "ERROR"}, "recent_activity": []}
 
 @app.function(image=image, secrets=[VAULT_V1], timeout=600)
 @modal.fastapi_endpoint(method="POST")
@@ -199,4 +218,5 @@ async def stripe_webhook(request: Request):
     return {"status": "onboarding_triggered", "customer": customer_name}
 
 if __name__ == "__main__":
-    print("Sovereign Fusion App initialized. Deploy with 'modal deploy'.")
+    print("🚀 Deploying Sovereign Master Fusion to Modal...")
+    modal.runner.deploy_app(app, name="v2-empire-fusion")

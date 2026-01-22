@@ -8,16 +8,15 @@
 2. **UPDATE** the `🧬 INTER-AGENT COMMUNICATION LOG` before ending every session.
 3. **ADHERE** to the **24/7 Cloud Mandate** in [sovereign_governance.md](file:///c:/Users/nearm/.gemini/antigravity/playground/empire-unified/directives/sovereign_governance.md).
 4. **CHECK** the `🛰️ ACTIVE MODAL CRONS` before deploying any new cloud logic.
+5. **EXECUTE** AMOS Pre-flight checks (`SELECT * FROM system_state`) before modifying any core components.
 
 ---
 
 ## 🧬 INTER-AGENT COMMUNICATION LOG
 
-- **2026-01-22 08:35 (Antigravity):** 🏛️ **SOVEREIGN GOVERNANCE ACTIVE** - Created `directives/sovereign_governance.md`. PRODUCTION MANDATE: No local production scripts.
-- **2026-01-22 08:38 (Antigravity):** 🚀 **CLOUD PROSPECTOR LIVE** - Migrated local `predator_prospector.py` to `execution/v2/v2_cloud_prospector.py` (deployed to Modal).
-- **2026-01-22 08:39 (Antigravity):** ⚡ **FUSION MASTER SYNC** - Deployed `v2-empire-fusion-master`. Base URL: `https://nearmiss1193-afk--v2-empire-fusion-master`.
-- **2026-01-22 08:40 (Antigravity):** 📺 **DASHBOARD UPGRADE** - Redeployed SCC Command Center with High-Fidelity premium UI.
-- **2026-01-22 09:07 (Antigravity):** 🚀 **VORTEX V2 LIVE** - Batched 100 prospects to V2 Orchestrate endpoint. Confirmed V2 campaign initialization. Refactored `predator_24x7_cron.py` for V2 alignment.
+- **2026-01-22 09:35 (Antigravity):** 🧠 **AMOS ACTIVATION** - Initializing AMOS infrastructure. `system_state` found with incompatible schema. Clean deployment SQL generated.
+- **2026-01-22 09:40 (Antigravity):** ⏳ **AWAITING SQL EXECUTION** - Handed over `scripts/amos_setup.sql` to User. Awaiting table activation to execute pre-flight health checks.
+- **2026-01-22 09:42 (Antigravity):** 🛰️ **WAKE-UP PROTOCOL LIVE** - Autonomous "Supervisor" logic deployed to monitor heartbeat of all listed agents. Local Swarm Factory restarted. IMMUNITY protocols active for Vortex/Spear.
 
 ---
 
@@ -33,8 +32,8 @@
 ## 🛰️ INFRASTRUCTURE ENDPOINTS
 
 - **Command Center:** [https://scc-router-api.vercel.app/](https://scc-router-api.vercel.app/)
-- **Vitals API:** `https://nearmiss1193-afk--v2-empire-fusion-master-vitals.modal.run`
-- **Orchestrate API:** `https://nearmiss1193-afk--v2-empire-fusion-master-orchestrate.modal.run`
+- **Vitals API:** `https://nearmiss1193-afk--v2-empire-fusion-vitals.modal.run`
+- **Orchestrate API:** `https://nearmiss1193-afk--v2-empire-fusion-orchestrate.modal.run`
 
 ---
 **GOAL**: Total Autonomous Production.
