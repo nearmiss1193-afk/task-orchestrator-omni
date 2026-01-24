@@ -28,7 +28,7 @@ def check_supabase_rest():
         print(f"❌ Supabase REST: Error. {str(e)}")
 
 def check_gemini_models():
-    api_key = os.environ.get("GOOGLE_API_KEY")
+    api_key = os.environ.get("GEMINI_API_KEY")
     url = f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}"
     try:
         res = requests.get(url)
@@ -36,7 +36,8 @@ def check_gemini_models():
             models = [m['name'] for m in res.json().get('models', [])]
             print(f"✅ Gemini Models Found: {', '.join(models[:3])}...")
         else:
-            print(f"❌ Gemini Models List: Failed ({res.status_code}). {res.text}")
+            print(f"❌ Gemini Models List: Failed ({res.status_code}).")
+            print(f"Response: {res.text}")
     except Exception as e:
         print(f"❌ Gemini Models List: Error. {str(e)}")
 

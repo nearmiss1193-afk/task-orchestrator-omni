@@ -16,6 +16,9 @@ import json
 import datetime
 from typing import Optional
 import google.generativeai as genai
+from dotenv import load_dotenv
+
+load_dotenv(".env.local")
 
 # For Modal deployment
 try:
@@ -284,9 +287,49 @@ def run_test():
     
     print("\n✅ All scores in valid 0-100 range")
 
+# ============ TURBO EXECUTION ============
+def run_turbo_mode():
+    """Run scoring on real database leads (CLI Mode)"""
+    print("🚀 TURBO SCORING INITIATED")
+    if not MODAL_AVAILABLE:
+        print("❌ Dependencies missing (Supabase/Modal)")
+        return
+
+    supabase = get_supabase()
+    
+    # Get leads that need scoring
+    print("🔍 Fetching unscored leads...")
+    leads = supabase.table("contacts_master").select("*").or_(
+        "lead_score.eq.0,lead_score.is.null"
+    ).limit(100).execute()
+    
+    if not leads.data:
+        print("✅ No leads need scoring.")
+        return
+        
+    print(f"📊 Found {len(leads.data)} leads to score.")
+    
+    scored_count = 0
+    for lead in leads.data:
+        try:
+            score_data = calculate_lead_score(lead)
+            
+            supabase.table("contacts_master").update({
+                "lead_score": score_data["total_score"]
+            }).eq("ghl_contact_id", lead["ghl_contact_id"]).execute()
+            
+            print(f"   ✅ Scored {lead.get('full_name', 'Unknown')}: {score_data['total_score']}")
+            scored_count += 1
+        except Exception as e:
+            print(f"   ❌ Failed to score {lead.get('ghl_contact_id')}: {e}")
+            
+    print(f"🏁 Turbo Scoring Complete. Scored {scored_count} leads.")
+
 if __name__ == "__main__":
     import sys
     if "--test" in sys.argv:
         run_test()
+    elif "--turbo" in sys.argv:
+        run_turbo_mode()
     else:
-        print("Usage: python lead_scorer.py --test")
+        print("Usage: python lead_scorer.py --test | --turbo")

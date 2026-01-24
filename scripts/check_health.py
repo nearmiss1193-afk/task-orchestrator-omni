@@ -40,9 +40,9 @@ def check_ghl():
         return False
 
 def check_gemini():
-    api_key = os.environ.get("GOOGLE_API_KEY")
+    api_key = os.environ.get("GEMINI_API_KEY")
     try:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
         res = requests.post(url, json={"contents": [{"parts": [{"text": "health check"}]}]})
         if res.status_code == 200:
             print("✅ Gemini AI: Online.")

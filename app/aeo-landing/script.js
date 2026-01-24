@@ -131,9 +131,31 @@ document.addEventListener('DOMContentLoaded', function () {
         await generateAudit(formData);
     });
 
-    // ===== Simulated Payment =====
+    // ===== Real Payment via Modal/Stripe =====
     async function simulatePayment() {
-        return new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+            const response = await fetch('https://nearmiss1193-afk--ghl-omni-automation-create-checkout-session.modal.run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            });
+            const data = await response.json();
+            if (data.url) {
+                window.location.href = data.url; // Redirect to Stripe
+                // We return a promise that never resolves so we don't continue execution here
+                // while the browser redirects
+                return new Promise(() => { });
+            } else {
+                throw new Error(data.error || 'No checkout URL returned');
+            }
+        } catch (e) {
+            console.error("Checkout Failed:", e);
+            document.getElementById('pay-btn').disabled = false;
+            document.getElementById('pay-btn').querySelector('.btn-text').style.display = 'inline';
+            document.getElementById('pay-btn').querySelector('.btn-loader').style.display = 'none';
+            alert("Payment Error: " + e.message);
+            throw e; // Stop execution
+        }
     }
 
     // ===== Generate Audit =====

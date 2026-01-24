@@ -11,13 +11,18 @@ import requests
 import datetime
 import google.generativeai as genai
 from supabase import create_client, Client
+import stripe
+from fastapi import Request, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
+# ... existing imports ...
 
 app = modal.App("ghl-omni-automation")
 
 # Image with dependencies
 image = (
     modal.Image.debian_slim()
-    .pip_install("supabase", "requests", "google-generativeai", "playwright", "fastapi")
+    .pip_install("supabase", "requests", "google-generativeai", "google-genai", "playwright", "fastapi", "stripe")
     .run_commands("playwright install chromium")
     .add_local_dir(".", remote_path="/root/project", ignore=[".git", "node_modules", ".next", "__pycache__", ".ghl_browser_data", ".tmp", ".vscode", ".ghl_temp_profile_*"])
 )
@@ -35,7 +40,7 @@ def get_supabase() -> Client:
 def get_gemini_model():
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     genai.configure(api_key=api_key)
-    return genai.GenerativeModel('gemini-1.5-flash')
+    return genai.GenerativeModel("gemini-2.0-flash")
 
 def brain_log(message: str):
     timestamp = datetime.datetime.now().isoformat()
@@ -87,17 +92,145 @@ async def ghl_webhook(payload: dict):
 
         elif type == 'InboundMessage':
             brain_log(f"Inbound Message detected for {contact_id}")
+            # ... spartan logic ...
             contact_obj = payload.get('contact', {}) or {}
             tags = contact_obj.get('tags', [])
             if 'candidate' in [t.lower() for t in tags] or 'hiring' in [t.lower() for t in tags]:
                 return await _hiring_spartan_logic(payload)
             return await _spartan_responder_logic(payload)
 
+        elif type == 'CallStatus':
+            status = payload.get('status', '').lower()
+            brain_log(f"Call Status Update: {contact_id} -> {status}")
+            if status in ['no-answer', 'busy', 'voicemail', 'failed']:
+                brain_log(f"🛑 Missed Call Detected for {contact_id}. Triggering Spartan Text-Back.")
+                # Construct a mock payload for spartan to react to
+                mock_payload = {
+                    "contact_id": contact_id,
+                    "message": {
+                        "body": "[SYSTEM ALERT: PROSPECT MISSED A CALL. SEND TEXT BACK IMMEDIATELY]",
+                        "provider": "sms"
+                    }
+                }
+                # Use spawn to fire and forget (or await if we want speed)
+                spartan_responder.spawn(mock_payload)
+                return {"status": "missed_call_handled"}
+
         return {"status": "ignored", "type": type}
     except Exception as e:
         error_msg = f"ERR: {str(e)}\n{traceback.format_exc()}"
         brain_log(error_msg)
         return {"status": "error", "message": error_msg}
+
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="POST")
+async def stripe_webhook(request: Request):
+    """
+    WEBHOOK: STRIPE PAYMENTS
+    Updates lead status to 'customer' upon payment success.
+    """
+    importstripe_library = __import__("stripe") # Use local var to avoid shadowing if needed, or just import stripe
+    stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+    webhook_secret = os.environ.get("STRIPE_WEBHOOK_SECRET")
+    
+    payload = await request.body()
+    sig_header = request.headers.get('stripe-signature')
+    event = None
+
+    try:
+        if webhook_secret and sig_header:
+            event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+        else:
+            # Dev/Test Fallback
+            import json
+            event = stripe.Event.construct_from(json.loads(payload), stripe.api_key)
+    except Exception as e:
+        return {"status": "error", "message": f"Webhook Error: {str(e)}"}
+
+    # Handle Events
+    email = None
+    amount = 0.0
+
+    if event['type'] == 'payment_intent.succeeded':
+        intent = event['data']['object']
+        amount = intent['amount'] / 100.0
+        email = intent.get('receipt_email') 
+
+    elif event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        email = session.get('customer_details', {}).get('email')
+        amount = (session.get('amount_total') or 0) / 100.0
+
+    if email:
+        print(f"💰 Payment: ${amount} from {email}")
+        supabase = get_supabase()
+        
+        # 1. Check if contact exists
+        res = supabase.table("contacts_master").select("*").eq("email", email).execute()
+        contact = res.data[0] if res.data else None
+        
+        if contact:
+            # 2. Update to Customer
+            supabase.table("contacts_master").update({
+                "status": "customer",
+                "last_order_value": amount,
+                "notes": f"{contact.get('notes', '')}\n[System] Active Customer ${amount}"
+            }).eq("id", contact['id']).execute()
+            
+            # 3. Log
+            brain_log(f"🎉 NEW CUSTOMER: {email} (${amount})")
+        else:
+            # Optional: Create Walk-in customer
+            brain_log(f"💰 Walk-in Payment: {email} (${amount}) - Not in DB")
+
+    return {"status": "success"}
+
+
+
+def run_predator_vision(url: str):
+    """
+    PREDATOR VISION: Headless Browser Analysis
+    Checks for: broken phone links, missing forms, mobile responsiveness (implied by layout).
+    """
+    from playwright.sync_api import sync_playwright
+    
+    if not url.startswith("http"):
+        url = "https://" + url
+        
+    findings = {
+        "clickable_phone": False,
+        "contact_form": False,
+        "is_alive": False,
+        "meta_text": ""
+    }
+    
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            # Set timeout to 15s to be fast
+            page.goto(url, timeout=15000)
+            findings["is_alive"] = True
+            
+            # 1. Check Phone
+            phones = page.query_selector_all('a[href^="tel:"]')
+            if len(phones) > 0:
+                findings["clickable_phone"] = True
+                
+            # 2. Check Form
+            forms = page.query_selector_all('form')
+            inputs = page.query_selector_all('input[type="text"], input[type="email"]')
+            if len(forms) > 0 or len(inputs) > 2:
+                findings["contact_form"] = True
+                
+            # 3. Get snapshot text
+            findings["meta_text"] = page.title() + " - " + (page.locator("body").inner_text()[:500].replace('\n', ' ') or "")
+            
+            browser.close()
+    except Exception as e:
+        findings["error"] = str(e)
+        
+    return findings
 
 @app.function(image=image, secrets=[VAULT])
 async def research_lead_logic(contact_id: str):
@@ -118,19 +251,40 @@ async def research_lead_logic(contact_id: str):
 
     brain_log(f"Mission: Predator Enrichment for {url}")
 
-    # Scrape website (Simplified for now - using AI to 'predict' based on URL/Meta)
-    # In real world, use playwright to get text
-    
+    # 1. RUN PREDATOR VISION (Playwright)
+    vision_data = run_predator_vision(url)
+    brain_log(f"Predator Vision Results: {json.dumps(vision_data)}")
+
+    # 2. AI ANALYSIS
     model = get_gemini_model()
+    
+    # Construct context based on Vision
+    vision_context = ""
+    if not vision_data.get("is_alive"):
+        vision_context = "Website is DOWN or slow to load."
+    else:
+        vision_context = f"""
+        Site is LIVE.
+        Clickable Phone Number: {'YES' if vision_data.get('clickable_phone') else 'NO (Critical Flaw for Mobile)'}.
+        Contact Form Detected: {'YES' if vision_data.get('contact_form') else 'NO (Leak)'}.
+        Page Text Snapshot: {vision_data.get('meta_text')}
+        """
+
     prompt = f"""
     Analyze this service business website: {url}
     
+    PREDATOR VISION REPORT:
+    {vision_context}
+    
     MISSION: PREDATOR DISCOVERY
-    1. Identify 3 specific 'Operational Inefficiencies' (e.g. no automated booking, zero-touch lead gen missing, or manual hiring processes mentioned in careers page).
+    1. Identify 3 specific 'Operational Inefficiencies' based on the Vision Report.
+       - If Clickable Phone is NO -> Highlight lost mobile leads.
+       - If Form is NO -> Highlight zero-touch lead loss.
     2. Write a 1-sentence 'Spartan' outreach hook. 
        Tone: lower case, zero fluff, aggressive value, short. 
-       Example: 'saw you're hiring for sales. i can automate 80% of the screening so you only talk to killers.'
-    3. Rate the 'Automation Potential' (0-100) based on how much of their workflow can be offloaded to AI.
+       MUST reference a specific flaw found in the Vision Report if any.
+       Example: 'saw your site. phone number isn't clickable on mobile so you're losing 50% of calls.'
+    3. Rate the 'Automation Potential' (0-100).
     
     Format as JSON: {{"inefficiencies": [], "hook": "", "automation_score": 0}}
     """
@@ -140,8 +294,6 @@ async def research_lead_logic(contact_id: str):
     for attempt in range(max_retries):
         try:
             response = model.generate_content(prompt)
-            # Log raw text for debugging if needed
-            # brain_log(f"Raw Response: {response.text}")
             analysis = json.loads(response.text.replace('```json', '').replace('```', ''))
             break
         except Exception as e:
@@ -156,12 +308,13 @@ async def research_lead_logic(contact_id: str):
         "inefficiencies": analysis.get("inefficiencies"),
         "hook": analysis.get("hook"),
         "automation_score": analysis.get("automation_score"),
-        "aeo_gap": True, # Always true for outreach hook
+        "aeo_gap": True, 
         "est_revenue": random.choice(["$1M - $5M", "$5M - $10M", "Under $1M"]),
         "traffic_stats": {
             "direct_pct": random.randint(45, 65),
             "ai_search_pct": random.randint(1, 8)
-        }
+        },
+        "predator_data": vision_data
     }
 
     supabase.table("contacts_master").update({
@@ -183,7 +336,7 @@ async def generate_aeo_audit_report(contact_id: str):
     if not contact.data: return "contact not found"
     
     lead = contact.data
-    research = lead.get("raw_research", {})
+    research = lead.get("raw_research") or {}
     url = lead.get("website_url", "your website")
     niche = lead.get("niche", "Business")
     
@@ -305,14 +458,14 @@ async def _spartan_responder_logic(payload: dict):
     Context: {lead_context}
 
     MISSION:
-    1. Acknowledge their message briefly.
-    2. Build massive value about the {product_name}.
-    3. STEER the conversation toward a discovery call.
+    1. ANALYZE sentiment first. Did they say "STOP", "Unsubscribe", "Remove me", "Not interested", "Wrong number"?
+    2. If STOP/NEGATIVE: Confirm removal politely (e.g., "Understood, removing you from the list.").
+    3. If POSITIVE/INTERESTED: Build value and push for the call.
+    4. If NEUTRAL/QUESTION: Answer and pivot to the booking link.
     
     GUIDELINES:
     - Keep it under 160 characters if possible (it's SMS).
     - If they show ANY interest, provide this booking link: {calendar_link}
-    - Do not be pushy, but be extremely helpful and fast.
     - {business_name} specializes in {product_name} (automated AI missed call text-back).
 
     Inbound Message: {msg}
@@ -321,7 +474,8 @@ async def _spartan_responder_logic(payload: dict):
     {{
         "reply": "your text here",
         "confidence": 0.0 to 1.0,
-        "intent": "greeting, question, interest, objection, or booking"
+        "intent": "greeting, question, interest, objection, booking, or stop",
+        "sentiment": "positive, neutral, negative, or stop"
     }}
     """
     
@@ -332,10 +486,12 @@ async def _spartan_responder_logic(payload: dict):
         res_data = json.loads(raw_text)
         ai_reply = res_data.get('reply', '').strip().lower()
         confidence = res_data.get('confidence', 0.5)
+        sentiment = res_data.get('sentiment', 'neutral').lower()
     except Exception as e:
         brain_log(f"Gemini/JSON Error: {str(e)}. Raw: {response.text if 'response' in locals() else 'N/A'}")
         ai_reply = "on it. saw your message about the missed call tech. let's chat tomorrow?"
         confidence = 0.5
+        sentiment = "neutral"
 
     # Always notify owner of inbound + draft
     try:
@@ -370,6 +526,15 @@ async def _spartan_responder_logic(payload: dict):
     }
     supabase.table("staged_replies").insert(staged).execute()
 
+    # SENTIMENT GUARD: STOP Protocol
+    if sentiment == 'stop' or "stop" in ai_reply or "remove" in ai_reply:
+        try:
+            supabase.table("contacts_master").update({"status": "stopped"}).eq("ghl_contact_id", contact_id).execute()
+            brain_log(f"🛑 [Sentiment] STOP detected for {contact_id}. Marked as 'stopped'.")
+            # Optional: Don't alert if it's just a stop, but good to know
+        except Exception as stop_err:
+             brain_log(f"Error marking stopped: {stop_err}")
+
     return {"status": status, "reply": ai_reply}
 
 @app.function(image=image, secrets=[VAULT]) # schedule=modal.Period(minutes=60)
@@ -385,42 +550,91 @@ def lead_research_loop():
         # Trigger actual logic
         research_lead_logic.remote(lead['ghl_contact_id'])
 
-@app.function(image=image, secrets=[VAULT])
-def outreach_scaling_loop():
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/15 * * * *"))
+async def outreach_loop():
     """
-    MISSION: EMPIRE OUTREACH SCALING
-    Processes the 100-target batch through A/B testing via GHL API.
+    CRON: OUTREACH WAVE (Every 15m)
+    Sends real GHL messages to research_done leads.
     """
     import requests
     supabase = get_supabase()
-    # Find leads tagged 'empire-scaling' that haven't been nurtured yet
-    leads = supabase.table("contacts_master").select("*").contains("tags", ["empire-scaling"]).eq("status", "research_done").limit(5).execute()
+    # Fetch ready leads
+    leads = supabase.table("contacts_master").select("*").eq("status", "research_done").limit(5).execute()
     
     ghl_token = os.environ.get("GHL_API_TOKEN") or os.environ.get("GHL_PRIVATE_KEY")
     ghl_headers = {'Authorization': f'Bearer {ghl_token}', 'Version': '2021-04-15', 'Content-Type': 'application/json'}
 
+    if not leads.data:
+        brain_log("[Outreach] No research_done leads to process.")
+        return
+
     for lead in leads.data:
-        contact_id = lead['ghl_contact_id']
-        research = lead.get('raw_research', {}) or {}
-        segment = research.get('campaign_segment', 'A') # Default to ROI focus
+        cid = lead.get('ghl_contact_id')
+        name = lead.get('full_name', "Founder")
+        phone = lead.get('phone') 
         
-        subject = "You're leaking $2,400/mo in missed calls (Verified)" if segment == 'A' else "Stop checking your phone during family dinner."
-        body = f"Hi {lead.get('full_name', 'there')},\n\nI audited your site and found you're missing calls. Our AI saves you $2k/week. [Link]"
+        if not cid:
+            brain_log(f"⚠️ [Outreach] Skipping lead with no ID: {lead}")
+            continue
+            
+        # CRITICAL FIX: Fetch contact from GHL to get phone/email if missing in DB
+        ghl_contact_url = f"https://services.leadconnectorhq.com/contacts/{cid}"
+        try:
+            ghl_response = requests.get(ghl_contact_url, headers=ghl_headers).json()
+            ghl_contact = ghl_response.get('contact') or {}
+            raw_phone = ghl_contact.get('phone')
+            # Check for email too since we need it for dispatch
+            email = lead.get('email') or ghl_contact.get('email')
+            
+            if not email and not raw_phone:
+               brain_log(f"🛑 [Outreach] SKIP {cid}: No Email AND No Phone. Impossible to contact.")
+               # Mark as skipped to unblock queue
+               supabase.table("contacts_master").update({"status": "skipped_no_contact"}).eq("ghl_contact_id", cid).execute()
+               continue
+               
+        except Exception as e:
+             brain_log(f"⚠️ [Outreach] GHL Fetch Error {cid}: {e}")
+             raw_phone = None
+             
+        hook = lead.get("ai_strategy", "noticed your missed call automation could be improved.")
         
-        email_payload = {
-            "type": "Email",
-            "contactId": contact_id,
-            "subject": subject,
-            "body": body
-        }
+        # 1. Generate Audit Report
+        audit_text = await generate_aeo_audit_report.local(cid) 
+        
+        # 2. EMAIL (Audit Delivery)
+        subject = f"Audit for {name.split()[0] if name else 'you'}: {hook}"
+        body = f"Hi {name.split()[0] if name else 'there'},\n\n{hook}\n\nI ran a quick AI visibility audit for your site:\n\n{audit_text}\n\nView Full Report: https://aiserviceco.com/audit\n\n- Spartan"
+        email_payload = {"type": "Email", "contactId": cid, "subject": subject, "html": f"<div style='white-space: pre-wrap;'>{body}</div>"}
+        
+        # 3. SMS (Direct Hook)
+        sms_body = f"Hey {name.split()[0]}, I sent an audit to your email. {hook} Link: https://aiserviceco.com/audit - Spartan"
+        sms_payload = {"type": "SMS", "contactId": cid, "message": sms_body}
         
         try:
-            # Dispatch via GHL
-            requests.post("https://services.leadconnectorhq.com/conversations/messages", json=email_payload, headers=ghl_headers)
-            supabase.table("contacts_master").update({"status": "nurtured"}).eq("ghl_contact_id", contact_id).execute()
-            brain_log(f"Cloud Outreach Sent to {contact_id} (Segment {segment})")
+            # Send Email
+            r_email = requests.post("https://services.leadconnectorhq.com/conversations/messages", json=email_payload, headers=ghl_headers)
+            
+            # Send SMS
+            r_sms = requests.post("https://services.leadconnectorhq.com/conversations/messages", json=sms_payload, headers=ghl_headers)
+            
+            # Trigger Vapi Call (Fetch phone first if possible, or just try if we stored it? We didn't store it.)
+            # CRITICAL FIX: Fetch contact from GHL to get phone for Vapi
+            ghl_contact_url = f"https://services.leadconnectorhq.com/contacts/{cid}"
+            ghl_response = requests.get(ghl_contact_url, headers=ghl_headers).json()
+            ghl_contact = ghl_response.get('contact') or {}
+            raw_phone = ghl_contact.get('phone')
+            
+            call_status = False
+            if raw_phone:
+               call_status = make_call.local(cid, raw_phone, name)
+
+            if r_email.status_code in [200, 201]:
+                supabase.table("contacts_master").update({"status": "outreach_sent", "last_outreach_at": datetime.datetime.now().isoformat()}).eq("ghl_contact_id", cid).execute()
+                brain_log(f"✅ Total War Outreach: Email={r_email.status_code}, SMS={r_sms.status_code}, Call={call_status} for {cid}")
+            else:
+                brain_log(f"⚠️ GHL Error {cid}: {r_email.text}")
         except Exception as e:
-            brain_log(f"Cloud Outreach Failed for {contact_id}: {str(e)}")
+            brain_log(f"❌ Error dispatching {cid}: {str(e)}")
 
 @app.function(image=image, secrets=[VAULT])
 def system_guardian():
@@ -434,7 +648,9 @@ def system_guardian():
         res = requests.get("https://services.leadconnectorhq.com/locations/v2/me", headers={'Authorization': f'Bearer {ghl_token}', 'Version': '2021-04-15'})
         brain_log(f"[Guardian] GHL V2 Status: {res.status_code}")
     except Exception as e:
-        brain_log(f"[Guardian] GHL Check FAILED: {str(e)}")
+        msg = f"[Guardian] GHL Check FAILED: {str(e)}"
+        brain_log(msg)
+        send_live_alert("SYSTEM ALERT: GHL DOWN", msg, type="SMS")
 
     # Check Supabase
     try:
@@ -442,7 +658,50 @@ def system_guardian():
         res = supabase.table("brain_logs").select("id").limit(1).execute()
         brain_log(f"[Guardian] Supabase Status: ACTIVE")
     except Exception as e:
-        brain_log(f"[Guardian] Supabase Check FAILED: {str(e)}")
+        msg = f"[Guardian] Supabase Check FAILED: {str(e)}"
+        brain_log(msg)
+        send_live_alert("SYSTEM ALERT: DB DOWN", msg, type="SMS")
+
+@app.function(image=image, secrets=[VAULT])
+def make_call(contact_id: str, phone: str, name: str):
+    """
+    MISSION: OUTBOUND CALLER (Sarah)
+    Triggers Vapi.ai to call the prospect.
+    """
+    import requests
+    vapi_key = os.environ.get("VAPI_PRIVATE_KEY")
+    assistant_id = os.environ.get("VAPI_ASSISTANT_ID")
+    
+    if not vapi_key or not assistant_id:
+        brain_log(f"⚠️ Vapi Config Missing. Key: {bool(vapi_key)}, Asst: {bool(assistant_id)}")
+        return False
+
+    url = "https://api.vapi.ai/call"
+    headers = {
+        "Authorization": f"Bearer {vapi_key}",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "assistantId": assistant_id,
+        "customer": {
+            "number": phone,
+            "name": name
+        },
+        "phoneNumberId": os.environ.get("VAPI_PHONE_ID") # Optional if assistant has one bound
+    }
+    
+    try:
+        res = requests.post(url, json=payload, headers=headers)
+        if res.status_code == 201:
+            brain_log(f"☎️ Calling {name} ({phone})...")
+            return True
+        else:
+            brain_log(f"❌ Vapi Call Failed: {res.text}")
+            return False
+    except Exception as e:
+         brain_log(f"❌ Vapi Error: {str(e)}")
+         return False
 
 @app.function(image=image, secrets=[VAULT])
 def database_sync_guardian():
@@ -458,6 +717,58 @@ def database_sync_guardian():
 def heartbeat_ping():
     """For external overseer to verify main system is alive"""
     return {"status": "alive", "timestamp": datetime.datetime.now().isoformat(), "app": "ghl-omni-automation"}
+
+def generate_payment_link(amount: int, name: str) -> str:
+    """Generates a Stripe Payment Link for the specified amount (in cents)."""
+    stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+    try:
+        # Check if product exists or create one (Simplified: Price ad-hoc)
+        # Actually, best practice for ad-hoc is a price object.
+        # Create a price for a 'Service Activation'
+        price = stripe.Price.create(
+            currency="usd",
+            unit_amount=amount, # e.g. 9700 for $97.00
+            product_data={"name": f"Activation: {name}"},
+        )
+        link = stripe.PaymentLink.create(
+            line_items=[{"price": price.id, "quantity": 1}],
+            after_completion={"type": "redirect", "redirect": {"url": "https://aiserviceco.com/success"}}
+        )
+        return link.url
+    except Exception as e:
+        brain_log(f"Stripe Error: {e}")
+        return "https://aiserviceco.com/pay-manual"
+
+@app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="POST")
+async def create_checkout_session(request: Request):
+    """
+    ENDPOINT: Create Stripe Checkout Session ($99)
+    """
+    try:
+        body = await request.json()
+        price_id = "price_1QjXXXX" # Placeholder, we will create ad-hoc
+        
+        # Create ad-hoc session
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {
+                        'name': 'AI Service Co - Basic Plan',
+                    },
+                    'unit_amount': 9900,
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url='https://aiserviceco.com/success?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='https://aiserviceco.com/cancel',
+        )
+        return {"url": session.url}
+    except Exception as e:
+        return {"error": str(e)}
 
 @app.function(image=image, secrets=[VAULT])
 async def hiring_spartan_system(payload: dict):
@@ -505,7 +816,7 @@ async def _hiring_spartan_logic(payload: dict):
     }}
     """
     
-    ai_reply = model.generate_content(prompt).text.strip().lower()
+    ai_reply = model.models.generate_content(model="gemini-2.0-flash", contents=prompt).text.strip().lower()
     
     supabase = get_supabase()
     supabase.table("hiring_pipeline").upsert({
@@ -549,38 +860,37 @@ NURTURE_TEMPLATES = {
     }
 }
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Period(minutes=30))
-def outreach_loop():
+
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Period(hours=4))
+def bump_loop():
     """
-    CRON: OUTREACH WAVE (Every 30m)
-    Sends real GHL messages to research_done leads.
+    CRON: BUMP LOOP (Every 4h)
+    Aggressively bumps leads who haven't replied in 24 hours.
     """
     supabase = get_supabase()
     ghl_token = os.environ.get("GHL_API_TOKEN")
-    owner_id = "2uuVuOP0772z7hay16og"
     
-    leads = supabase.table("contacts_master").select("*").or_("ghl_contact_id.ilike.millen_%,ghl_contact_id.ilike.fl_blit_%,ghl_contact_id.ilike.blitz_%,ghl_contact_id.ilike.mission_fs_%,ghl_contact_id.ilike.smb_tampa_%").eq("status", "research_done").limit(10).execute()
+    # Logic: Status = 'outreach_sent' AND last_outreach_at < 24h ago? No, > 24h ago.
+    # We need to filter by time. Supabase select with filter.
+    yesterday = (datetime.datetime.now() - datetime.timedelta(hours=24)).isoformat()
+    
+    leads = supabase.table("contacts_master").select("*").eq("status", "outreach_sent").lt("last_outreach_at", yesterday).limit(10).execute()
     
     for lead in leads.data:
         cid = lead['ghl_contact_id']
-        name = lead.get('full_name', 'Founder')
-        hook = lead.get('ai_strategy', "saw your site. good hustle but you're leaking leads.")
-        email = lead.get('email')
+        name = lead.get('full_name', 'there').split()[0]
         
-        # 1. SEND REAL PROSPECT EMAIL
-        p_payload = {
-            "type": "Email", "contactId": cid, "emailFrom": "system@aiserviceco.com",
-            "emailSubject": f"Quick thought for {name}",
-            "html": f"<p>hey {name.split()[0].lower()}, {hook}</p><p>demo: https://ghl-vortex.demo/special-invite</p>"
-        }
-        requests.post("https://services.leadconnectorhq.com/conversations/messages", json=p_payload, headers={'Authorization': f'Bearer {ghl_token}', 'Version': '2021-07-28', 'Content-Type': 'application/json'})
+        # BUMP EMAIL
+        bump_body = f"Hey {name}, just bubbling this up. Did you see the missed call audit I sent yesterday? https://aiserviceco.com/audit - Spartan"
+        payload = {"type": "Email", "contactId": cid, "emailFrom": "system@aiserviceco.com", "emailSubject": "Bubbling this up...", "html": f"<p>{bump_body}</p>"}
         
-        # 2. SEND OWNER CC
-        cc_body = f"<h1>Spartan Outreach CC</h1><p><b>To:</b> {email}</p><p><b>Hook:</b> {hook}</p>"
-        send_live_alert(f"Outreach CC: {name}", cc_body, type="Email")
-        
-        supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("ghl_contact_id", cid).execute()
-        brain_log(f"[Cloud Outreach] Sent to {name}")
+        try:
+             requests.post("https://services.leadconnectorhq.com/conversations/messages", json=payload, headers={'Authorization': f'Bearer {ghl_token}', 'Version': '2021-07-28', 'Content-Type': 'application/json'})
+             supabase.table("contacts_master").update({"status": "bump_sent", "last_outreach_at": datetime.datetime.now().isoformat()}).eq("ghl_contact_id", cid).execute()
+             brain_log(f"👊 [Bump] Sent 24h bump to {name}")
+        except Exception as e:
+             brain_log(f"Error bumping {cid}: {e}")
 
 @app.function(image=image, secrets=[VAULT], schedule=modal.Period(hours=24))
 def nurture_loop():
@@ -690,7 +1000,7 @@ def turbo_dispatch_all():
         except Exception as e:
             brain_log(f"❌ Error dispatching {cid}: {str(e)}")
 
-@app.function(image=image, secrets=[VAULT])
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 13 * * *"))
 def generate_master_dossier():
     """
     MISSION: MASTER DOSSIER GENERATION
@@ -713,5 +1023,139 @@ def generate_master_dossier():
     send_live_alert("Master Campaign Dossier", report_html, type="Email")
     brain_log("✅ Master Dossier Dispatched to Owner.")
 
+@app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="GET")
+def api_list_files(path: str = "."):
+    """
+    API for Grok: List files in the project directory.
+    Usage: /api_list_files?path=execution
+    """
+    root = "/root/project"
+    # Handle relative paths safely
+    if path.startswith("/"): path = path[1:]
+    target = os.path.join(root, path)
+    
+    if not os.path.exists(target):
+        return {"error": "Path not found", "path": target}
+        
+    try:
+        items = []
+        for entry in os.scandir(target):
+            items.append({
+                "name": entry.name,
+                "type": "dir" if entry.is_dir() else "file",
+                "path": os.path.join(path, entry.name).replace("\\", "/")
+            })
+        return {"items": items, "cwd": target}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Period(minutes=5))
+def orchestrator_cron():
+    """
+    CRON: ORCHESTRATOR (Every 5m)
+    Unified logic to process new leads and either spawn research or nurture.
+    """
+    brain_log("[Orchestrator] Waking up to process leads...")
+    supabase = get_supabase()
+    
+    # 1. Fetch NEW leads (Limit 20 to prevent timeouts)
+    res = supabase.table("contacts_master").select("*").eq("status", "new").limit(20).execute()
+    leads = res.data or []
+    
+    if not leads:
+        brain_log("[Orchestrator] No new leads found.")
+        return
+
+    brain_log(f"[Orchestrator] Processing {len(leads)} new leads...")
+
+    for lead in leads:
+        cid = lead.get('ghl_contact_id')
+        score = lead.get('lead_score', 0)
+        
+        # TOTAL WAR PROTOCOL:
+        # Ignore Score -> Process EVERYONE.
+        
+        brain_log(f"[Orchestrator] ⚔️ Total War: Processing {lead.get('full_name')} (Score {score}). Spawning Research...")
+        research_lead_logic.spawn(cid)
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Period(minutes=5))
+def keep_warm_prevention():
+    """
+    CRON: KEEP WARM (Every 5m)
+    Prevents cold starts by keeping the container active.
+    """
+    # Simple ping to Supabase to keep connection alive
+    try:
+        supabase = get_supabase()
+        supabase.table("brain_logs").select("id").limit(1).execute()
+        # print("🔥 [Keep-Warm] System holds heat.") 
+    except Exception as e:
+        print(f"⚠️ [Keep-Warm] Failed: {e}")
+
+@app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="GET")
+def api_read_file(path: str):
+    """
+    API for Grok: Read file content.
+    Usage: /api_read_file?path=deploy.py
+    """
+    root = "/root/project"
+    # Handle relative paths safely
+    if path.startswith("/"): path = path[1:]
+    target = os.path.join(root, path)
+    
+    # Security check: Prevent escaping /root/project
+    # Note: In Modal sandbox, /root/project is isolated anyway, but good practice
+    if ".." in path:
+         return {"error": "Access denied: No traversal allowed"}
+
+    if not os.path.exists(target) or not os.path.isfile(target):
+        return {"error": "File not found or is a directory", "path": target}
+        
+    try:
+        with open(target, "r", encoding="utf-8") as f:
+            content = f.read()
+        return {"content": content, "path": path}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="GET")
+def api_dashboard_stats():
+    """
+    API for War Room Dashboard: Live System Stats
+    """
+    supabase = get_supabase()
+    
+    # 1. Pipeline Stats
+    pipeline = {}
+    try:
+        # Get raw counts (doing it in python for simplicity if strict grouping isn't easy via py-supabase without raw sql)
+        # Fetching only status column for lightweight counting
+        res = supabase.table("contacts_master").select("status").execute()
+        for row in res.data:
+            s = row.get('status', 'unknown') or 'unknown'
+            pipeline[s] = pipeline.get(s, 0) + 1
+    except Exception as e:
+        pipeline["error"] = str(e)
+
+    # 2. Recent Logs
+    logs = []
+    try:
+        res = supabase.table("brain_logs").select("*").order("timestamp", desc=True).limit(10).execute()
+        logs = res.data
+    except Exception as e:
+        logs = [{"message": f"Error fetching logs: {e}", "timestamp": datetime.datetime.now().isoformat()}]
+
+    return {
+        "timestamp": datetime.datetime.now().isoformat(),
+        "pipeline": pipeline,
+        "recent_logs": logs,
+        "status": "active"
+    }
+
 if __name__ == "__main__":
     app.run()
+
+

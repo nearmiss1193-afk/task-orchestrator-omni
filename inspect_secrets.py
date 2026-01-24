@@ -2,7 +2,7 @@ import modal
 import os
 
 app = modal.App("inspect-secrets")
-SECRETS = [modal.Secret.from_name("aiserviceco-secrets"), modal.Secret.from_name("agency-vault")]
+SECRETS = [modal.Secret.from_name("agency-vault")]
 
 @app.function(secrets=SECRETS)
 def inspect():
@@ -15,4 +15,8 @@ def inspect():
 @app.local_entrypoint()
 def main():
     res = inspect.remote()
-    print(f"\n[RESULTS] Found keys: {res['stripe']}")
+    print(f"\n[RESULTS] Found keys count: {len(res['keys'])}")
+    with open("cloud_secrets_dump.txt", "w") as f:
+        for k in res['keys']:
+            f.write(f"{k}\n")
+    print("Dumped keys to cloud_secrets_dump.txt")
