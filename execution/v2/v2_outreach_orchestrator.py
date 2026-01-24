@@ -17,7 +17,7 @@ class V2OutreachOrchestrator:
     def _get_supabase(self) -> Client:
         url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
         key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
-        print(f"[DEBUG] URL: {url}, Key len: {len(str(key))}")
+        # print(f"[DEBUG] URL: {url}, Key len: {len(str(key))}")
         return create_client(supabase_url=url, supabase_key=key)
 
     async def run_sequence(self):
