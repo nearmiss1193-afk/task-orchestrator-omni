@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===== Real Payment via Modal/Stripe =====
     async function simulatePayment() {
         try {
-            const response = await fetch('https://nearmiss1193-afk--ghl-omni-automation-create-checkout-session.modal.run', {
+            const response = await fetch('https://nearmiss1193-afk--checkout-api-fix-api.modal.run/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({})

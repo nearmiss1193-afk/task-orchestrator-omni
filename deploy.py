@@ -739,17 +739,28 @@ def generate_payment_link(amount: int, name: str) -> str:
         brain_log(f"Stripe Error: {e}")
         return "https://aiserviceco.com/pay-manual"
 
-@app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="POST")
-async def create_checkout_session(request: Request):
+# ============ WEB API (CORS ENABLED) ============
+web_app = FastAPI()
+
+web_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@web_app.post("/create-checkout-session")
+async def create_btn_checkout(request: Request):
     """
     ENDPOINT: Create Stripe Checkout Session ($99)
     """
     try:
         body = await request.json()
-        price_id = "price_1QjXXXX" # Placeholder, we will create ad-hoc
+        price_id = "price_1QjXXXX" # Placeholder
         
         # Create ad-hoc session
+        stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
@@ -768,7 +779,13 @@ async def create_checkout_session(request: Request):
         )
         return {"url": session.url}
     except Exception as e:
+        print(f"Stripe Error: {e}")
         return {"error": str(e)}
+
+@app.function(image=image, secrets=[VAULT])
+@modal.asgi_app()
+def api():
+    return web_app
 
 @app.function(image=image, secrets=[VAULT])
 async def hiring_spartan_system(payload: dict):
