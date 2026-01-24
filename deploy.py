@@ -1176,3 +1176,16 @@ if __name__ == "__main__":
     app.run()
 
 
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="GET", label="empire-dashboard")
+def empire_dashboard():
+    from fastapi.responses import HTMLResponse
+    # Try absolute path first (Modal), then relative (Local)
+    paths = ["/root/project/app/dashboard/index.html", "app/dashboard/index.html"]
+    for p in paths:
+        try:
+            with open(p, "r") as f:
+                return HTMLResponse(f.read())
+        except FileNotFoundError:
+            continue
+    return HTMLResponse("<h1>Error: Dashboard file not found</h1>", status_code=500)

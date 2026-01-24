@@ -52,8 +52,8 @@ class V2OutreachOrchestrator:
         """Fetch leads tagged as 'new' with score > 70."""
         res = self.supabase.table("contacts_master") \
             .select("*") \
-            .eq("status", "new") \
-            .gt("lead_score", 70) \
+            .in_("status", ["new", "research_done"]) \
+            .gt("lead_score", 0) \
             .limit(10) \
             .execute()
         return res.data

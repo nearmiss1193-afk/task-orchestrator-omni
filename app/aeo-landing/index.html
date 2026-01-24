@@ -88,7 +88,7 @@
 
                     <button type="submit" class="btn-primary" id="submit-btn">
                         <span class="btn-text">Get My AI Visibility Audit</span>
-                        <span class="btn-loader" style="display: none;">Processing...</span>
+                        <span class="btn-loader">Processing...</span>
                     </button>
 
                     <p class="guarantee">100% Money-Back Guarantee if we can't find at least 3 AI visibility gaps.</p>
@@ -143,45 +143,20 @@
     </div>
 
     <!-- Payment Modal (Simulated) -->
-    <div id="payment-modal" class="modal" style="display: none;">
+    <div id="payment-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Complete Your Order</h3>
                 <button class="modal-close" id="modal-close">&times;</button>
             </div>
-            <div class="order-summary">
-                <div class="order-item">
-                    <span>AI Visibility Audit</span>
-                    <span>$297.00</span>
-                </div>
-                <hr>
-                <div class="order-total">
-                    <strong>Total:</strong>
-                    <strong>$297.00</strong>
-                </div>
-            </div>
-            <div class="payment-form">
-                <div class="form-group">
-                    <label>Card Number</label>
-                    <input type="text" id="card-number" placeholder="4242 4242 4242 4242" maxlength="19">
-                </div>
-                <div class="form-row">
-                    <div class="form-group half">
-                        <label>Expiry</label>
-                        <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
-                    </div>
-                    <div class="form-group half">
-                        <label>CVC</label>
-                        <input type="text" id="card-cvc" placeholder="123" maxlength="3">
-                    </div>
-                </div>
-                <button type="button" class="btn-primary" id="pay-btn">
-                    <span class="btn-text">Pay $297.00</span>
-                    <span class="btn-loader" style="display: none;">Processing...</span>
-                </button>
-                <p class="secure-note">🔒 Secure 256-bit SSL encryption</p>
-            </div>
+            <!-- ... -->
+            <button type="button" class="btn-primary" id="pay-btn">
+                <span class="btn-text">Pay $297.00</span>
+                <span class="btn-loader">Processing...</span>
+            </button>
+            <p class="secure-note">🔒 Secure 256-bit SSL encryption</p>
         </div>
+    </div>
     </div>
 
     <script src="script.js"></script>
