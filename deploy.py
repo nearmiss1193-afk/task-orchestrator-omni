@@ -4,16 +4,20 @@
 # Tone: Spartan (concise, lowercase, संस्थापक-स्तर)
 # Log: brain_dump.log
 
+import datetime
+import uuid
+import asyncio
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 import modal
 import os
 import json
 import requests
-import datetime
 import google.generativeai as genai
 from supabase import create_client, Client
 import stripe
-from fastapi import Request, FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 
 # ... existing imports ...
 
@@ -750,6 +754,66 @@ web_app.add_middleware(
     allow_headers=["*"],
 )
 
+@web_app.get("/api/dashboard_stats")
+async def api_dashboard_stats_route():
+    supabase = get_supabase()
+    pipeline = {}
+    try:
+        res = supabase.table("contacts_master").select("status").execute()
+        for row in res.data:
+            s = row.get('status', 'unknown') or 'unknown'
+            pipeline[s] = pipeline.get(s, 0) + 1
+    except Exception as e: pipeline["error"] = str(e)
+
+    logs = []
+    try:
+        res = supabase.table("brain_logs").select("*").order("timestamp", desc=True).limit(10).execute()
+        logs = res.data
+    except: logs = []
+
+    return {"timestamp": datetime.datetime.now().isoformat(), "pipeline": pipeline, "recent_logs": logs, "status": "active"}
+
+# --- LANDING PAGES (Merged) ---
+def resolve_path(relative_path):
+    roots = ["/root/project", "."]
+    for r in roots:
+        p = os.path.join(r, relative_path)
+        if os.path.exists(p):
+            return p
+    if os.path.exists(relative_path): return relative_path
+    return relative_path
+
+@web_app.get("/")
+async def root():
+    p = resolve_path("public/index.html")
+    if not os.path.exists(p): return HTMLResponse("<h1>Empire AI: Maintenance Mode</h1><p>Index not found.</p>", status_code=503)
+    return FileResponse(p)
+
+@web_app.get("/alf-landing")
+async def alf_landing():
+    paths = ["public/alf-landing.html", "app/alf-landing/index.html"]
+    for path in paths:
+        p = resolve_path(path)
+        if os.path.exists(p): return FileResponse(p)
+    return HTMLResponse("<h1>ALF Landing Page Not Found</h1>", status_code=404)
+
+@web_app.get("/hvac")
+async def hvac():
+    p = resolve_path("public/hvac.html")
+    if os.path.exists(p): return FileResponse(p)
+    return HTMLResponse("<h1>HVAC Page Not Found</h1>", status_code=404)
+
+@web_app.get("/plumber")
+async def plumber():
+    p = resolve_path("public/plumber.html")
+    if os.path.exists(p): return FileResponse(p)
+    return HTMLResponse("<h1>Plumber Page Not Found</h1>", status_code=404)
+
+static_path = resolve_path("public/static")
+if os.path.exists(static_path):
+    web_app.mount("/static", StaticFiles(directory=static_path), name="static")
+# ------------------------------
+
 @web_app.post("/create-checkout-session")
 async def create_btn_checkout(request: Request):
     """
@@ -1110,67 +1174,42 @@ def keep_warm_prevention():
     except Exception as e:
         print(f"⚠️ [Keep-Warm] Failed: {e}")
 
-@app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="GET")
-def api_read_file(path: str):
-    """
-    API for Grok: Read file content.
-    Usage: /api_read_file?path=deploy.py
-    """
-    root = "/root/project"
-    # Handle relative paths safely
-    if path.startswith("/"): path = path[1:]
-    target = os.path.join(root, path)
-    
-    # Security check: Prevent escaping /root/project
-    # Note: In Modal sandbox, /root/project is isolated anyway, but good practice
-    if ".." in path:
-         return {"error": "Access denied: No traversal allowed"}
 
-    if not os.path.exists(target) or not os.path.isfile(target):
-        return {"error": "File not found or is a directory", "path": target}
-        
-    try:
-        with open(target, "r", encoding="utf-8") as f:
-            content = f.read()
-        return {"content": content, "path": path}
-    except Exception as e:
-        return {"error": str(e)}
 
-@app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="GET")
-def api_dashboard_stats():
+
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+def auto_campaign_processor():
     """
-    API for War Room Dashboard: Live System Stats
+    CRITICAL: 5-MIN CAMPAIGN PROCESSOR
+    Ensures outreach never stops. Checks campaign_mode and drives outreach.
     """
     supabase = get_supabase()
     
-    # 1. Pipeline Stats
-    pipeline = {}
+    # 1. Check Campaign Mode
     try:
-        # Get raw counts (doing it in python for simplicity if strict grouping isn't easy via py-supabase without raw sql)
-        # Fetching only status column for lightweight counting
-        res = supabase.table("contacts_master").select("status").execute()
-        for row in res.data:
-            s = row.get('status', 'unknown') or 'unknown'
-            pipeline[s] = pipeline.get(s, 0) + 1
+        # Check if table exists/has row. If not, assume running for safety or insert default
+        state = supabase.table("system_state").select("campaign_mode").limit(1).execute()
+        if state.data:
+            mode = state.data[0].get("campaign_mode")
+            if mode != "running":
+                brain_log(f"[Campaign] Paused. Mode: {mode}")
+                return
+        else:
+            # Auto-init state
+            supabase.table("system_state").insert({"campaign_mode": "running"}).execute()
+            brain_log("[Campaign] Initialized state to RUNNING.")
+            
+        # 2. Execute Outreach
+        # Triggers the outreach logic immediately
+        brain_log("[Campaign] Processor triggering Outreach Loop...")
+        outreach_loop.remote()
+        
     except Exception as e:
-        pipeline["error"] = str(e)
-
-    # 2. Recent Logs
-    logs = []
-    try:
-        res = supabase.table("brain_logs").select("*").order("timestamp", desc=True).limit(10).execute()
-        logs = res.data
-    except Exception as e:
-        logs = [{"message": f"Error fetching logs: {e}", "timestamp": datetime.datetime.now().isoformat()}]
-
-    return {
-        "timestamp": datetime.datetime.now().isoformat(),
-        "pipeline": pipeline,
-        "recent_logs": logs,
-        "status": "active"
-    }
+        # Schema error likely (missing column), default to RUNNING per directive "Keep running unless stop"
+        brain_log(f"⚠️ [Campaign] State Check Failed ({e}). Defaulting to RUNNING.")
+        # Fail-open: Trigger outreach
+        outreach_loop.remote()
 
 if __name__ == "__main__":
     app.run()
