@@ -46,32 +46,43 @@ VAULT = modal.Secret.from_dict({
     "GHL_EMAIL_WEBHOOK_URL": str(os.environ.get("GHL_EMAIL_WEBHOOK_URL") or "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"),
 })
 
+@app.function(image=image, secrets=[VAULT])
+def test_db_logic():
+    from modules.database.supabase_client import get_supabase
+    try:
+        sb = get_supabase()
+        res = sb.table("contacts_master").select("id").limit(1).execute()
+        print(f"✅ DB TEST SUCCESS: Found {len(res.data)} leads.")
+        return True
+    except Exception as e:
+        print(f"❌ DB TEST FAIL: {e}")
+        return False
+
 # --- WORKER DEFINITIONS ---
 
 @app.function(image=image, secrets=[VAULT], timeout=300)
 async def research_lead_logic(contact_id: str):
     """MISSION: INTEL PREDATOR"""
-    import sys
-    # print(f"DEBUG: sys.path = {sys.path}")
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError as e:
-        print(f"❌ Playwright import FAILED: {e}")
-        # Fallback to lite mode...
-    
-    import time
+    print(f"🕵️ RESEARCH START: {contact_id}")
     from modules.database.supabase_client import get_supabase
+    import requests
     
     supabase = get_supabase()
     contact = supabase.table("contacts_master").select("*").eq("ghl_contact_id", contact_id).single().execute()
-    if not contact.data: return {"error": "not found"}
+    if not contact.data: 
+        print(f"❌ CONTACT NOT FOUND: {contact_id}")
+        return {"error": "not found"}
     
     lead = contact.data
     url = lead.get("website_url")
-    if not url: return {"error": "no url"}
+    if not url: 
+        print(f"⚠️ NO URL for {contact_id}")
+        return {"error": "no url"}
     
     scraped_content = {}
+    print(f"🌐 SCRAPING: {url}")
     try:
+        from playwright.async_api import async_playwright
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True, args=["--no-sandbox"])
             page = await browser.new_page()
@@ -79,29 +90,41 @@ async def research_lead_logic(contact_id: str):
             await page.goto(url, timeout=30000, wait_until="domcontentloaded")
             scraped_content["homepage"] = await page.inner_text()
             await browser.close()
+            print("✅ PLAYWRIGHT SUCCESS")
     except Exception as e:
-        print(f"Predator Scrape Error: {e}")
-        # Lite Mode fallback
-        try: scraped_content["homepage"] = requests.get(url, timeout=10).text[:10000]
-        except: scraped_content["homepage"] = "failed"
+        print(f"⚠️ Playwright Fallback: {e}")
+        try: 
+            scraped_content["homepage"] = requests.get(url, timeout=10).text[:10000]
+            print("✅ REQUESTS FALLBACK SUCCESS")
+        except: 
+            scraped_content["homepage"] = "failed"
+            print("❌ SCRAPE COMPLETE FAILED")
 
     # Gemini Analysis...
+    print("🧠 GEMINI START")
     from modules.ai.routing import get_gemini_model
-    model = get_gemini_model("pro")
-    prompt = f"Analyze this business for operational inefficiencies and write a casual outreach hook based on: {scraped_content['homepage'][:5000]}"
     try:
+        model = get_gemini_model("pro")
+        prompt = f"Analyze this business for operational inefficiencies and write a casual outreach hook based on: {scraped_content['homepage'][:5000]}"
         res = model.generate_content(prompt)
-        hook = res.text.strip() # Simplified for now
-    except:
+        hook = res.text.strip()
+        print(f"✅ GEMINI SUCCESS: {hook[:50]}")
+    except Exception as e:
+        print(f"⚠️ Gemini Error: {e}")
         hook = "saw your site, looks good."
 
-    supabase.table("contacts_master").update({
+    print("💾 UPDATING DB...")
+    res = supabase.table("contacts_master").update({
         "status": "research_done",
         "ai_strategy": hook
     }).eq("ghl_contact_id", contact_id).execute()
+    print(f"✅ DB UPDATED: {res.data[0].get('status') if res.data else 'FAIL'}")
     
     # Auto-dispatch email
+    print("📧 DISPATCHING...")
+    lead['ai_strategy'] = hook # Ensure hook is passed
     dispatch_email_logic.local(lead)
+    print("🏁 RESEARCH COMPLETE")
     return {"status": "ok"}
 
 @app.function(image=image, secrets=[VAULT])
@@ -120,6 +143,7 @@ def dispatch_email_logic(lead):
 @app.function(schedule=modal.Cron("*/1 * * * *"), image=image, secrets=[VAULT])
 def master_pulse():
     from modules.database.supabase_client import get_supabase
+    import datetime
     sb = get_supabase()
     # 1. Heartbeat
     if datetime.datetime.now().minute % 5 == 0:
@@ -140,31 +164,74 @@ def email_pulse_24_7():
         list(dispatch_email_logic.map(ready.data))
         print(f"📧 EMAIL PULSE: Dispatched {len(ready.data)} emails.")
 
+@app.function(image=image, secrets=[VAULT])
+def dispatch_sms_logic(lead, message: str = None):
+    """MISSION: HARDENED SMS DISPATCH"""
+    import os
+    import requests
+    from modules.database.supabase_client import get_supabase
+    from datetime import datetime
+    
+    sb = get_supabase()
+    contact_id = lead['ghl_contact_id']
+    hook_url = os.environ.get("GHL_SMS_WEBHOOK_URL")
+    if not hook_url: return False
+    
+    msg = message or "hey, saw your site. had a quick question about your missed call handling. you around to chat?"
+    phone = lead.get('phone', '')
+    if phone and not phone.startswith('+'):
+        phone = f"+1{phone.replace('-', '').replace('(', '').replace(')', '').replace(' ', '')}"
+    
+    payload = {
+        "phone": phone, "contact_id": contact_id, "message": msg,
+        "first_name": lead.get('full_name', 'there').split()[0]
+    }
+    
+    res = requests.post(hook_url, json=payload)
+    if res.status_code in [200, 201, 204]:
+        sb.table("contacts_master").update({"status": "outreach_sent"}).eq("ghl_contact_id", contact_id).execute()
+        sb.table("outbound_touches").insert({
+            "phone": phone, "channel": 'sms', "company": lead.get('company_name', 'Unknown'),
+            "status": "sent", "payload": payload
+        }).execute()
+        return True
+    return False
+
 @app.function(schedule=modal.Cron("*/3 * * * *"), image=image, secrets=[VAULT])
 def sarah_call_pulse():
+    print("📞 CALL PULSE START")
     from modules.database.supabase_client import get_supabase
+    import datetime
     import pytz
     
     def is_local_business_hours(phone):
         est = pytz.timezone('US/Eastern')
         now_est = datetime.datetime.now(est)
+        print(f"⏰ Time Check: {now_est.hour}:{now_est.minute} EST (Weekday: {now_est.weekday()})")
         if now_est.weekday() >= 6: return False
         return 8 <= now_est.hour < 18
 
     supabase = get_supabase()
     # MISSION: AGGRESSIVE CALLING
-    targets = supabase.table("contacts_master").select("*")\
-        .in_("status", ["research_done", "outreach_sent"])\
-        .is_("phone", "not.null")\
-        .order("last_called", nulls_first=True).limit(1).execute()
+    targets = supabase.table("contacts_master").select("*").in_("status", ["research_done", "outreach_sent"]).not_.is_("phone", "null").order("last_contacted_at").limit(1).execute()
         
+    print(f"🎯 Target count: {len(targets.data)}")
     if targets.data:
         lead = targets.data[0]
+        print(f"🚀 Targeting: {lead.get('company_name')} ({lead.get('phone')})")
         if is_local_business_hours(lead.get('phone')):
             from modules.outbound_dialer import dial_prospect
-            dial_prospect(phone_number=lead['phone'], company_name=lead.get('company_name', ''))
-            supabase.table("contacts_master").update({"status": "calling_initiated"}).eq("id", lead['id']).execute()
-            print(f"📞 CALL PULSE: Sarah dialing {lead.get('company_name')}.")
+            print("📣 DIALING...")
+            res = dial_prospect(phone_number=lead['phone'], company_name=lead.get('company_name', ''))
+            print(f"☎️ Dialer Res: {res.get('success')}")
+            
+            supabase.table("contacts_master").update({
+                "status": "calling_initiated",
+                "last_contacted_at": datetime.datetime.now().isoformat()
+            }).eq("id", lead['id']).execute()
+            print("✅ DB STATUS UPDATED")
+        else:
+            print("⏰ SKIP: Outside business hours.")
 
 @app.function(schedule=modal.Cron("*/15 * * * *"), image=image, secrets=[VAULT])
 def timezone_aware_sms_pulse():
@@ -588,175 +655,7 @@ def orchestration_api():
 
 
 
-@app.function(image=image, secrets=[VAULT], timeout=300)
-async def research_lead_logic(contact_id: str):
-    """
-    SYSTEM MANIFEST: INTEL PREDATOR
-    Role: Enrichment
-    Input: Contact ID
-    Output: Raw Research (JSON)
-    Recovery: Heuristic Fallback
-    Priority: HIGH
-    """
-    import sys
-    print(f"DEBUG: sys.path = {sys.path}")
-    try:
-        from playwright.async_api import async_playwright
-        print("✅ DEBUG: Playwright import successful.")
-    except ImportError as e:
-        print(f"❌ DEBUG: Playwright import FAILED: {e}")
-        # Not raising, let it try req/scrape fallback
-    
-    import time
-    import asyncio
-    
-    from modules.database.supabase_client import get_supabase
-    supabase = get_supabase()
-    contact = supabase.table("contacts_master").select("*").eq("ghl_contact_id", contact_id).single().execute()
-    if not contact.data:
-        return {"error": "contact not found"}
-    
-    lead = contact.data
-    url = lead.get("website_url")
-    
-    if not url:
-        return {"error": "no website url"}
-
-    # Internal helper for worker reliability
-    def _brain_log(msg):
-        from datetime import datetime
-        print(f"[{datetime.now().isoformat()}] {msg}")
-
-    _brain_log(f"Mission: Predator Enrichment (Deep Crawl) for {url}")
-
-    # --- PREDATOR CRAWL LOGIC ---
-    scraped_content = {}
-    
-    try:
-        async with async_playwright() as p:
-            # OPTIMIZATION: Turbo Mode for Playwright
-            browser = await p.chromium.launch(
-                headless=True,
-                args=["--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage"]
-            )
-            context = await browser.new_context(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-            )
-            page = await context.new_page()
-
-            # OPTIMIZATION: Block heavy assets to 10x speed
-            excluded_resources = ["image", "media", "font", "stylesheet"]
-            async def route_handler(route):
-                if route.request.resource_type in excluded_resources:
-                    await route.abort()
-                else:
-                    await route.continue_()
-
-            await page.route("**/*", route_handler)
-            
-            # 1. Visit Homepage
-            try:
-                await page.goto(url, timeout=30000, wait_until="domcontentloaded")
-                scraped_content["homepage"] = await page.inner_text()
-                
-                # 2. Find Deep Links (About, Careers, etc.)
-                links = await page.query_selector_all("a")
-                deep_urls = []
-                for link in links:
-                    href = await link.get_attribute("href")
-                    if href and any(x in href.lower() for x in ['about', 'team', 'career', 'job', 'press']):
-                        # Normalize URL
-                        if href.startswith('/'):
-                            href = url.rstrip('/') + href
-                        elif not href.startswith('http'):
-                            continue # Skip weird JS links
-                            
-                        if url in href and href not in deep_urls:
-                             deep_urls.append(href)
-                
-                # Limit to top 3 unique relevant pages
-                deep_urls = list(set(deep_urls))[:3]
-                _brain_log(f"Predator found deep links: {deep_urls}")
-                
-                # 3. Deep Visit
-                for d_url in deep_urls:
-                    try:
-                        await page.goto(d_url, timeout=15000, wait_until="domcontentloaded")
-                        key = d_url.split('/')[-1] or "subpage"
-                        scraped_content[key] = await page.inner_text()
-                    except Exception as e:
-                        _brain_log(f"Failed to scrape {d_url}: {str(e)}")
-                        
-            except Exception as e:
-                _brain_log(f"Predator Scrape Error (Homepage): {str(e)}")
-                scraped_content["homepage"] = "Scrape Failed - Analyzing URL only."
-
-            await browser.close()
-            
-    except Exception as e:
-         _brain_log(f"Predator Browser Launch Error: {str(e)}")
-         _brain_log("⚠️ Activating Predator Lite Mode (Static Fetch)...")
-         try:
-             # Lite Mode: Static Request
-             import requests
-             res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-             scraped_content["homepage"] = res.text[:20000] # Limit size
-             _brain_log("✅ Lite Mode Scrape Successful.")
-         except Exception as req_err:
-             _brain_log(f"Lite Mode Failed: {str(req_err)}")
-             scraped_content["error"] = str(e)
-
-    # --- GEMINI ANALYSIS ---
-    from modules.ai.routing import get_gemini_model
-    model = get_gemini_model("pro")
-    
-    import json
-    context_text = json.dumps(scraped_content)[:20000]
-    
-    prompt = f"""
-    Analyze this service business based on their digital footprint.
-    
-    URL: {url}
-    SCRAPED CONTENT: {context_text}
-    
-    MISSION: PREDATOR DISCOVERY
-    1. Identify 3 specific 'Operational Inefficiencies' based on the text.
-    2. Write a 1-sentence 'Spartan' outreach hook. 
-       Tone: Casual, Lowercase, 'Peer-to-Peer', Insightful.
-       Bad: "I can save you money."
-       Good: "noticed your contact form doesn't auto-reply, you're likely losing 30% of traffic there."
-    3. Rate the 'Automation Potential' (0-100).
-    
-    Format as JSON: {{"inefficiencies": [], "hook": "", "automation_score": 0}}
-    """
-    
-    analysis = {}
-    max_retries = 3
-    for attempt in range(max_retries):
-        try:
-            response = model.generate_content(prompt)
-            raw = response.text.replace('```json', '').replace('```', '').strip()
-            analysis = json.loads(raw)
-            break
-        except Exception as e:
-            if attempt == max_retries - 1:
-                _brain_log(f"Gemini Analysis Failed: {str(e)}")
-                analysis = {"inefficiencies": ["detection failed"], "hook": "saw your site, let's streamline your flow.", "automation_score": 0}
-            time.sleep(2)
-
-    supabase.table("contacts_master").update({
-        "raw_research": analysis,
-        "lead_score": analysis.get("automation_score"),
-        "status": "research_done",
-        "ai_strategy": analysis.get("hook")
-    }).eq("ghl_contact_id", contact_id).execute()
-    
-    # TURBO MODE: Instant Dispatch
-    updated_lead = lead.copy()
-    updated_lead['raw_research'] = analysis
-    dispatch_email_logic(updated_lead)
-
-    return analysis
+# LEGACY CODE PURGED
 
 def normalize_phone(phone: str) -> str:
     """Normalize phone to E.164 format"""
@@ -794,139 +693,7 @@ def record_outbound_touch(phone: str, channel: str, variant_id: str = None,
         return False
 
 @app.function(image=image, secrets=[VAULT])
-def dispatch_email_logic(lead):
-    """
-    MISSION: GHL DISPATCH (WEBHOOK METHOD)
-    Sends Email via anonymous Webhook Trigger.
-    """
-    import os
-    import requests
-    from modules.database.supabase_client import get_supabase
-    
-    # Internal helpers for worker reliability
-    def _brain_log(msg):
-        from datetime import datetime
-        print(f"[{datetime.now().isoformat()}] {msg}")
-
-    def _record_touch(lead_data, pld):
-        from modules.database.supabase_client import get_supabase
-        sb = get_supabase()
-        sb.table("outbound_touches").insert({
-            "phone": lead_data.get('phone', ''),
-            "channel": 'email',
-            "company": lead_data.get('company_name', 'Unknown'),
-            "payload": pld,
-            "status": "sent"
-        }).execute()
-
-    contact_id = lead['ghl_contact_id']
-    research = lead.get('raw_research', {}) or {}
-    hook_url = os.environ.get("GHL_EMAIL_WEBHOOK_URL")
-    
-    if not hook_url:
-        _brain_log(f"❌ Dispatch Error: missing GHL_EMAIL_WEBHOOK_URL")
-        return False
-
-    # Check for Emoji errors
-    hook = research.get('hook', 'saw your site and noticed a quick fix for your lead form.')
-    try:
-        hook.encode('latin-1') 
-    except:
-        hook = "saw your site and noticed a quick fix." 
-    
-    subject = f"question re: {lead.get('full_name', 'your site')}"
-    body = f"hey {lead.get('full_name', 'there').split()[0].lower()},\n\n{hook}\n\nmind if i send over a 30s video showing exactly how to fix it?"
-    
-    # Payload for GHL Webhook
-    payload = {
-        "contact_id": contact_id,
-        "email": lead.get('email'),
-        "first_name": lead.get('full_name', 'there').split()[0],
-        "subject": subject,
-        "body": body
-    }
-    
-    try:
-        if lead.get('status') == 'nurtured':
-            return False
-
-        res = requests.post(hook_url, json=payload)
-        if res.status_code in [200, 201, 204]:
-            _brain_log(f"✅ GHL Hook Sent: Email to {contact_id}")
-            supabase = get_supabase()
-            supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("ghl_contact_id", contact_id).execute()
-            _record_touch(lead, payload)
-            return True
-        else:
-            _brain_log(f"❌ GHL Hook Error {res.status_code}: {res.text}")
-            return False
-            
-    except Exception as e:
-        _brain_log(f"Dispatch Exception: {str(e)}")
-        return False
-
-@app.function(image=image, secrets=[VAULT])
-def dispatch_sms_logic(lead, message: str = None):
-    """
-    MISSION: GHL DISPATCH (WEBHOOK METHOD)
-    Sends SMS via anonymous Webhook Trigger.
-    """
-    import os
-    import requests
-    from modules.database.supabase_client import get_supabase
-    
-    # Internal helpers for worker reliability
-    def _brain_log(msg):
-        from datetime import datetime
-        print(f"[{datetime.now().isoformat()}] {msg}")
-
-    def _record_touch(lead_data, pld):
-        from modules.database.supabase_client import get_supabase
-        sb = get_supabase()
-        sb.table("outbound_touches").insert({
-            "phone": lead_data.get('phone', ''),
-            "channel": 'sms',
-            "company": lead_data.get('company_name', 'Unknown'),
-            "payload": pld,
-            "status": "sent"
-        }).execute()
-
-    contact_id = lead['ghl_contact_id']
-    hook_url = os.environ.get("GHL_SMS_WEBHOOK_URL")
-    
-    if not hook_url:
-        _brain_log(f"❌ Dispatch Error: missing GHL_SMS_WEBHOOK_URL")
-        return False
-
-    msg = message or "hey, saw your site. had a quick question about your missed call handling. you around to chat?"
-    
-    # Normalize phone to E.164 if possible
-    phone = lead.get('phone', '')
-    if phone and not phone.startswith('+'):
-        phone = f"+1{phone.replace('-', '').replace('(', '').replace(')', '').replace(' ', '')}"
-    
-    payload = {
-        "phone": phone,
-        "contact_id": contact_id,
-        "first_name": lead.get('full_name', 'there').split()[0],
-        "last_name": " ".join(lead.get('full_name', '').split()[1:]) if len(lead.get('full_name', '').split()) > 1 else "",
-        "email": lead.get('email', ''),
-        "full_name": lead.get('full_name', ''),
-        "message": msg
-    }
-    
-    try:
-        res = requests.post(hook_url, json=payload)
-        if res.status_code in [200, 201, 204]:
-            _brain_log(f"✅ GHL Hook Sent: SMS to {contact_id}")
-            supabase = get_supabase()
-            supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("ghl_contact_id", contact_id).execute()
-            _record_touch(lead, payload)
-            return True
-        return False
-    except Exception as e:
-        _brain_log(f"SMS Dispatch Error: {e}")
-        return False
+# LOGIC PURGED
 
 
 
