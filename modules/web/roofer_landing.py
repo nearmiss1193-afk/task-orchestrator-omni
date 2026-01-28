@@ -5,8 +5,8 @@ def get_roofer_landing_html(calendly_url="#", stripe_url="#"):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Roofer Estimator | Inspect & Quote 24/7</title>
-    <meta name="description" content="Hail storm? Don't let 500 leads go to voicemail. Estimator Eric answers every call, qualifies insurance claims, and books inspections instantly.">
+    <title>AI Service Co | Roofers: Capture Every Storm Lead Instantly.</title>
+    <meta name="description" content="When the storm hits, your phone rings off the hook. Don't let 50% of them go to voicemail. Your AI Dispatcher books inspections 24/7.">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,18 +22,18 @@ def get_roofer_landing_html(calendly_url="#", stripe_url="#"):
       var vapiInstance = null;
       try {
           vapiInstance = window.vapiSDK.run({
-            apiKey: "3b065ff0-a721-4b66-8255-30b6b8d6daab", // Public Key
-            assistant: "c23c884d-0008-4b14-ad5d-530e98d0c9da", // Reusing ID logic
+            apiKey: "3b065ff0-a721-4b66-8255-30b6b8d6daab", 
+            assistant: "c23c884d-0008-4b14-ad5d-530e98d0c9da", 
             config: {
                 position: "bottom-right",
                 offset: "40px",
                 width: "50px",
                 height: "50px",
                 idle: {
-                    color: "rgb(234, 88, 12)", // Orange 600 (Construction)
+                    color: "rgb(234, 88, 12)", /* ORANGE for Roofing */
                     type: "pill",
-                    title: "Get Roof Quote",
-                    subtitle: "AI Estimator",
+                    title: "Book Inspection",
+                    subtitle: "24/7 Live AI",
                     icon: "https://unpkg.com/lucide-static@0.321.0/icons/home.svg"
                 }
             }
@@ -44,586 +44,139 @@ def get_roofer_landing_html(calendly_url="#", stripe_url="#"):
     </script>
     
     <style>
-        /* ========== CSS RESET & VARIABLES ========== */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         :root {
-            --black: #0c0a09; /* Stone 950 */
-            --black-soft: #1c1917; /* Stone 900 */
-            --dark: #0c0a09;
-            --dark-card: #292524;
-            --gray-dark: #44403c;
-            --gray-mid: #57534e;
-            --gray: #78716c;
-            --gray-light: #a8a29e;
+            --black: #000000;
+            --black-soft: #0a0a0a;
+            --dark: #111111;
+            --dark-card: #161616;
+            --gray-dark: #222222;
+            --gray-mid: #333333;
+            --gray: #666666;
+            --gray-light: #999999;
+            --gray-lighter: #cccccc;
             --white: #ffffff;
-            --orange: #ea580c; /* Orange 600 */
-            --orange-hover: #c2410c;
-            --orange-glow: rgba(234, 88, 12, 0.3);
-            --orange-subtle: rgba(234, 88, 12, 0.1);
+            --red: #ea580c; /* ORANGE for Roofing */
+            --red-hover: #c2410c;
+            --red-light: #fb923c;
+            --red-glow: rgba(234, 88, 12, 0.3);
+            --red-subtle: rgba(234, 88, 12, 0.1);
         }
         
-        html {
-            scroll-behavior: smooth;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); margin: 0; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: var(--white);
-            background: var(--dark);
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        /* ========== HEADER ========== */
-        header {
-            background: rgba(12, 10, 9, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 16px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--gray-dark);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--white);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--orange);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .logo span {
-            color: var(--orange);
-        }
-        
-        .header-nav {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-        
-        .header-nav a {
-            color: var(--gray-light);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .header-nav a:hover {
-            color: var(--white);
-        }
-        
-        .header-cta-group {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .header-phone {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 16px;
-            border: 1px solid var(--gray-dark);
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        
-        .header-phone:hover {
-            border-color: var(--orange);
-            color: var(--orange);
-        }
-        
-        .header-cta {
-            background: var(--orange);
-            color: var(--white);
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s;
-            border: 2px solid var(--orange);
-        }
-        
-        .header-cta:hover {
-            background: var(--orange-hover);
-            border-color: var(--orange-hover);
-            transform: translateY(-1px);
-        }
-        
-        /* ========== HERO SECTION ========== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 140px 0 100px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 30%, var(--orange-subtle) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.02) 0%, transparent 50%);
-            animation: heroGlow 15s ease-in-out infinite alternate;
-        }
-        
-        @keyframes heroGlow {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-5%, -5%) rotate(5deg); }
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-        
-        .hero-text {
-            max-width: 600px;
-        }
-        
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--black-soft);
-            border: 1px solid var(--gray-dark);
-            color: var(--gray-light);
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 24px;
-        }
-        
-        .hero-badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--orange);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-        
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -0.02em;
-        }
-        
-        .hero h1 .highlight {
-            color: var(--orange);
-            position: relative;
-        }
-        
-        .hero-subtitle {
-            font-size: 20px;
-            color: var(--gray-light);
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-        
-        .hero-proof {
-            font-size: 15px;
-            color: var(--gray);
-            margin-bottom: 32px;
-            padding-left: 16px;
-            border-left: 2px solid var(--orange);
-        }
-        
-        .hero-cta-group {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        
-        .btn-primary {
-            background: var(--orange);
-            color: var(--white);
-            padding: 16px 32px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.3s;
-            border: 2px solid var(--orange);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary:hover {
-            background: var(--orange-hover);
-            border-color: var(--orange-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px var(--orange-glow);
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            padding: 16px 32px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: 2px solid var(--gray-dark);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-secondary:hover {
-            border-color: var(--white);
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .hero-trust {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-        
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: var(--gray-light);
-        }
-        
-        .trust-item svg {
-            width: 18px;
-            height: 18px;
-            color: var(--orange);
-        }
-        
-        .hero-stats-card {
-            background: var(--black-soft);
-            border: 1px solid var(--gray-dark);
-            border-radius: 16px;
-            padding: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-stats-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--orange), transparent);
-        }
-        
-        .stats-card-title {
-            font-size: 14px;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 24px;
-        }
-        
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-dark);
-        }
-        
-        .stat-row:last-child {
-            border-bottom: none;
-        }
-        
-        .stat-label {
-            color: var(--gray-light);
-            font-size: 15px;
-        }
-        
-        .stat-value {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--white);
-        }
-        
-        .stat-value.negative {
-            color: #ef4444; /* Red */
-        }
-        
-        .stat-value.positive {
-            color: #22c55e;
-        }
-        
-        /* ========== SOLUTION SECTION ========== */
-        .solution-section {
-            padding: 100px 0;
-            background: var(--black-soft);
-        }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        
-        .section-label {
-            display: inline-block;
-            background: var(--orange-subtle);
-            color: var(--orange);
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-        }
-        
-        .section-title {
-            font-size: 40px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
-        
-        .section-subtitle {
-            font-size: 18px;
-            color: var(--gray-light);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .solution-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 48px;
-        }
-        
-        .solution-card {
-            background: var(--dark);
-            border: 1px solid var(--gray-dark);
-            border-radius: 16px;
-            padding: 32px 24px;
-            text-align: center;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .solution-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--white);
-        }
-        
-        .solution-card p {
-            color: var(--gray-light);
-            font-size: 15px;
-        }
+        /* HEADER */
+        header { position: fixed; width: 100%; top: 0; z-index: 1000; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--gray-dark); padding: 16px 0; backdrop-filter: blur(10px); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 22px; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo span { color: var(--red); }
+        .btn-primary { background: var(--red); color: var(--white); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: all 0.3s; }
+        .btn-primary:hover { background: var(--red-hover); transform: translateY(-2px); box-shadow: 0 10px 20px var(--red-glow); }
 
-        .solution-icon {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
+        /* HERO */
+        .hero { padding: 180px 0 100px; text-align: center; position: relative; overflow: hidden; }
+        .hero h1 { font-size: 64px; font-weight: 900; line-height: 1.1; margin-bottom: 24px; }
+        .hero h1 span { color: var(--red); }
+        .hero p { font-size: 20px; color: var(--gray-light); max-width: 700px; margin: 0 auto 40px; }
         
+        /* SECTIONS */
+        section { padding: 100px 0; border-bottom: 1px solid var(--gray-dark); }
+        h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+        .card { background: var(--dark-card); border: 1px solid var(--gray-dark); padding: 32px; border-radius: 16px; transition: 0.3s; }
+        .card:hover { border-color: var(--red); transform: translateY(-5px); }
+        .icon { font-size: 32px; margin-bottom: 20px; color: var(--red); }
+        
+        /* FOOTER */
+        footer { padding: 60px 0; text-align: center; color: var(--gray); font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
     <header>
         <div class="container header-content">
-            <a href="#" class="logo">
-                <div class="logo-icon">🏠</div>
-                AI Service Co | <span>Roofer</span>
-            </a>
-            <nav class="header-nav">
-                <a href="#how-it-works">AI Estimator</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#demo">Live Demo</a>
-            </nav>
-            <div class="header-cta-group">
-                <a href="tel:+15550000000" class="header-phone">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                    (555) 000-0000
-                </a>
-                <a href="{calendly_url}" class="header-cta">Book Demo</a>
+            <a href="#" class="logo"><span>AI</span> Service Co.</a>
+            <div style="display:flex; gap:20px; align-items:center;">
+                <a href="#features" style="color:var(--gray-light); text-decoration:none;">Features</a>
+                <a href="#roi" style="color:var(--gray-light); text-decoration:none;">ROI</a>
+                <a href="{calendly_url}" class="btn-primary">Book Demo</a>
             </div>
         </div>
     </header>
 
-    <!-- HERO -->
     <section class="hero">
-        <div class="container hero-content">
-            <div class="hero-text">
-                <div class="hero-badge">
-                    <div class="hero-badge-dot"></div>
-                    <span>Storm Response AI • 24/7/365</span>
-                </div>
-                <h1>Storm Hit? <span class="highlight">Capture Every Lead</span> Instantly.</h1>
-                <p class="hero-subtitle">
-                    When hail hits, your phone explodes. Estimator Eric answers 500 calls/hour, qualifies insurance claims, and books inspections automatically.
-                </p>
-                <div class="hero-proof">
-                    "We booked 40 inspections in 2 hours during the last storm. I was asleep." - <strong>Apex Roofing (Dallas)</strong>
-                </div>
-                <div class="hero-cta-group">
-                    <a href="{stripe_url}" class="btn-primary">Get Started ($497/mo)</a>
-                    <a href="#demo" class="btn-secondary">Test the AI</a>
-                </div>
-                <div class="hero-trust">
-                    <div class="trust-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        Insurance Qualified
-                    </div>
-                    <div class="trust-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        AccuLynx Integrated
-                    </div>
-                </div>
+        <div class="container">
+            <div style="display:inline-block; padding:8px 16px; background:var(--gray-dark); border-radius:50px; font-size:13px; font-weight:600; margin-bottom:24px; color:var(--red-light);">
+                🟠 Optimized for Roofing Sales
             </div>
-            
-            <div class="hero-visual">
-                <div class="hero-stats-card">
-                    <div class="stats-card-title">Storm Mode Metrics</div>
-                    
-                    <div class="stat-row">
-                        <span class="stat-label">Call Capacity (Hourly)</span>
-                        <div class="stat-value">500+ <span style="font-size: 14px; font-weight: 500; color: #78716c;">(Unlimited)</span></div>
-                    </div>
-                    
-                    <div class="stat-row">
-                        <span class="stat-label">Insurance Qualified</span>
-                        <div class="stat-value positive">82% <span style="font-size: 14px; font-weight: 500; color: #78716c;">(Auto-Filter)</span></div>
-                    </div>
-                    
-                    <div class="stat-row">
-                        <span class="stat-label">Inspections/Day</span>
-                        <div class="stat-value">12 <span style="font-size: 14px; font-weight: 500; color: #22c55e;">(+$24k Pipeline)</span></div>
-                    </div>
-                    
-                    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--gray-dark); font-size: 13px; color: var(--gray);">
-                        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
-                            <div style="width: 8px; height: 8px; background: #ea580c; border-radius: 50%;"></div>
-                            Estimator Eric just qualified a State Farm Claim (Hail)
-                        </div>
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></div>
-                            Estimator Eric booked an Inspection in Dallas, TX
-                        </div>
-                    </div>
+            <h1>
+                Capture Every<br>
+                <span>Storm Lead Instantly.</span>
+            </h1>
+            <p>
+                When a storm hits, you get 100 calls. You answer 20. We answer the other 80, qualify the insurance claim, and book the inspection on your calendar.
+            </p>
+            <div style="display:flex; justify-content:center; gap:16px;">
+                <a href="{calendly_url}" class="btn-primary" style="font-size:18px; padding:16px 40px;">Get Your Storm AI</a>
+                <a href="#" class="btn-primary" style="background:transparent; border:1px solid var(--gray-dark);">Hear a Sample Call ▶</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="features">
+        <div class="container">
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">🌪️</div>
+                    <h3>Storm Surge Capacity</h3>
+                    <p>Handle 1,000+ simultaneous calls. Whether it's hailed or just windy, you never miss a lead.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📋</div>
+                    <h3>Insurance Qualification</h3>
+                    <p>"Do you have State Farm? When did the damage happen?" The AI asks the right questions before you drive out.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📍</div>
+                    <h3>Geo-Tagging</h3>
+                    <p>The AI checks if the lead is in your service area. If they're 2 hours away, it politely declines.</p>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- FEATURES -->
-    <section class="solution-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Automated Estimator</span>
-                <h2 class="section-title">Scale Your Sales Team</h2>
-                <p class="section-subtitle">Don't hire more SDRs. Hire Eric. He works weekends.</p>
-            </div>
+
+    <section id="roi">
+        <div class="container" style="text-align:center;">
+            <h2>The Math is Simple.</h2>
+            <p style="color:var(--gray-light);">One saved roof replacement pays for the software for 5 years.</p>
             
-            <div class="solution-grid">
-                <div class="solution-card">
-                    <div class="solution-icon">🌩️</div>
-                    <h3>Storm Surge Handling</h3>
-                    <p>Handle 100 simultaneous calls during a storm without missing a single lead. 100% capture rate.</p>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">1</div>
+                    <h3>Average Roof Profit</h3>
+                    <h2>$3,500</h2>
+                    <p>Net profit on a standard shingle replacement.</p>
                 </div>
-                <div class="solution-card">
-                    <div class="solution-icon">📋</div>
-                    <h3>Insurance Pre-Qual</h3>
-                    <p>"Have you filed a claim? Who is your carrier?" Eric filters out tire-kickers before they reach your calendar.</p>
+                <div class="card">
+                    <div class="icon">2</div>
+                    <h3>Missed Calls / Month</h3>
+                    <h2>15+</h2>
+                    <p>Conservative estimate for a busy season.</p>
                 </div>
-                <div class="solution-card">
-                    <div class="solution-icon">📅</div>
-                    <h3>Instant Scheduling</h3>
-                    <p>Routes qualified inspections directly to your sales reps' calendars. Syncs with Google/Outlook.</p>
-                </div>
-            </div>
-        </div>
-    <!-- DEMO SECTION -->
-    <section id="demo" class="video-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">See It In Action</span>
-                <h2 class="section-title">Listen To Eric Book An Inspection</h2>
-                <p class="section-subtitle">Real call recording. 45 seconds. Zero human intervention.</p>
-            </div>
-            
-            <div class="video-wrapper" id="video">
-                <!-- Placeholder for Demo Video -->
-                <div class="video-placeholder" onclick="this.innerHTML='<iframe width=\'100%\' height=\'500\' src=\'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1\' title=\'YouTube video player\' frameborder=\'0\' allow=\'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\' allowfullscreen></iframe>'">
-                    <div class="video-play-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                    </div>
-                    <p style="font-weight: 600; font-size: 18px; color: white;">Watch Live Demo</p>
+                <div class="card">
+                    <div class="icon">3</div>
+                    <h3>Lost Revenue</h3>
+                    <h2>$52,500</h2>
+                    <p>Money you are literally letting go down the drain.</p>
                 </div>
             </div>
         </div>
     </section>
+
+    <footer class="container">
+        <p>&copy; 2026 AI Service Co. • Built for High-Performance Roofing Companies.</p>
+    </footer>
 
 </body>
 </html>

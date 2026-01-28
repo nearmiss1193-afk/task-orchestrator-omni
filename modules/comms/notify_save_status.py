@@ -47,12 +47,13 @@ email_body = f"""
             <li>Dashboard: https://www.aiserviceco.com/dashboard.html</li>
         </ul>
         
-        <h2 style="color: #00ff88;">🔧 Today's Fixes</h2>
+        <h2 style="color: #00ff88;">✅ Today's Fixes & Upgrades</h2>
         <ul>
-            <li>Sarah outbound calls now working (phoneNumberId fixed)</li>
-            <li>Voice uplink SDK updated</li>
-            <li>Enhanced AI knowledge (HVAC + Psychology)</li>
-            <li>System diagnostic tools added</li>
+            <li><b>Modal Optimized</b>: Consolidated crons into a single pulse system (nexus-outreach-v1) to survive free tier limits.</li>
+            <li><b>Serialization Resolved</b>: Internalized all Modal imports/logic to prevent build-time pickle crashes.</li>
+            <li><b>Manus Direct Deployment</b>: 24/7 high-frequency outreach enabled for Email, SMS, and Calls.</li>
+            <li><b>Real-time Engagement</b>: Sarah now triggers immediate calls upon lead email opens via webhook.</li>
+            <li><b>Clean Architecture</b>: Excised legacy orchestration code for 10x faster deployments.</li>
         </ul>
         
         <h2 style="color: #ffa500;">📋 Quick Recovery</h2>

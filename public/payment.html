@@ -238,16 +238,16 @@
             gap: 8px;
         }
     </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8080RNWHVV">
-</script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8080RNWHVV">
+    </script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'G-8080RNWHVV');
-</script>
+        gtag('config', 'G-8080RNWHVV');
+    </script>
 </head>
 
 <body>
@@ -257,83 +257,44 @@
     <h1>Choose Your Growth Plan</h1>
     <div class="subtitle">Scale your business with AI. Cancel anytime.</div>
 
-    <div class="pricing-grid">
+    <!-- PRICING REDIRECT -->
+    <div class="plan-card highlight" style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <div class="popular-tag">Plans & Pricing</div>
+        <div class="plan-name">View Our Packages</div>
+        <p style="color: #d4d4d8; margin-bottom: 24px;">Click below to view our full feature breakdown and pricing
+            options on our main site.</p>
+        <a href="index.html#pricing" class="cta-button primary">View Plans & Pricing</a>
+    </div>
 
-        <!-- STARTER ($97) -->
-        <div class="plan-card">
-            <div class="plan-name">HVAC Starter</div>
-            <div class="price-container">
-                <span class="old-price">$497</span>
-                <span class="current-price">$97</span><span class="period">/mo</span>
-            </div>
-            <ul class="features">
-                <li><span class="check">✓</span> Missed Call Text-Back</li>
-                <li><span class="check">✓</span> Google Chat Integration</li>
-            </ul>
-            <a href="checkout.html?plan=starter" class="cta-button">Select Starter</a>
+    <!-- DOMINANCE ($497) -->
+    <div class="plan-card">
+        <div class="plan-name">HVAC Dominance</div>
+        <div class="price-container">
+            <span class="old-price">$997</span>
+            <span class="current-price">$497</span><span class="period">/mo</span>
         </div>
+        <ul class="features">
+            <li><span class="check">✓</span> <b>Everything in Growth</b></li>
+            <li><span class="check">✓</span> Custom Model Training</li>
+            <li><span class="check">✓</span> Dedicated Success Mgr</li>
+        </ul>
+        <a href="checkout.html?plan=dominance" class="cta-button">Select Dominance</a>
+    </div>
 
-        <!-- LITE ($199) -->
-        <div class="plan-card">
-            <div class="plan-name">HVAC Lite</div>
-            <div class="price-container">
-                <span class="old-price">$399</span>
-                <span class="current-price">$497</span><span class="period">/mo</span>
-            </div>
-            <ul class="features">
-                <li><span class="check">✓</span> <b>Everything in Starter</b></li>
-                <li><span class="check">✓</span> Reactivation Campaigns</li>
-                <li><span class="check">✓</span> Review Management</li>
-            </ul>
-            <a href="checkout.html?plan=lite" class="cta-button">Select Lite</a>
+    <!-- CUSTOM / BOOKING -->
+    <div class="plan-card">
+        <div class="plan-name">Custom Price</div>
+        <div class="price-container">
+            <span class="current-price">Custom</span>
         </div>
-
-        <!-- GROWTH ($297) -->
-        <div class="plan-card highlight">
-            <div class="popular-tag">Best Value</div>
-            <div class="plan-name">HVAC Growth</div>
-            <div class="price-container">
-                <span class="old-price">$597</span>
-                <span class="current-price">$297</span><span class="period">/mo</span>
-                <div class="waived-fee">✓ Setup Fee Waived</div>
-            </div>
-            <ul class="features">
-                <li><span class="check">✓</span> <b>AI Receptionist (Rachel)</b></li>
-                <li><span class="check">✓</span> <b>Veo Ads Included</b></li>
-                <li><span class="check">✓</span> Autonomous Nurture</li>
-            </ul>
-            <a href="checkout.html?plan=growth" class="cta-button primary">Start Free Trial</a>
-        </div>
-
-        <!-- DOMINANCE ($497) -->
-        <div class="plan-card">
-            <div class="plan-name">HVAC Dominance</div>
-            <div class="price-container">
-                <span class="old-price">$997</span>
-                <span class="current-price">$497</span><span class="period">/mo</span>
-            </div>
-            <ul class="features">
-                <li><span class="check">✓</span> <b>Everything in Growth</b></li>
-                <li><span class="check">✓</span> Custom Model Training</li>
-                <li><span class="check">✓</span> Dedicated Success Mgr</li>
-            </ul>
-            <a href="checkout.html?plan=dominance" class="cta-button">Select Dominance</a>
-        </div>
-
-        <!-- CUSTOM / BOOKING -->
-        <div class="plan-card">
-            <div class="plan-name">Custom Price</div>
-            <div class="price-container">
-                <span class="current-price">Custom</span>
-            </div>
-            <ul class="features">
-                <li><span class="check">✓</span> Multi-Location Setup</li>
-                <li><span class="check">✓</span> Custom Model Training</li>
-                <li><span class="check">✓</span> Whitelabel Options</li>
-                <li><span class="check">✓</span> Dedicated Success Manager</li>
-            </ul>
-            <a href="booking.html" class="cta-button outline">Book Demo Session</a>
-        </div>
+        <ul class="features">
+            <li><span class="check">✓</span> Multi-Location Setup</li>
+            <li><span class="check">✓</span> Custom Model Training</li>
+            <li><span class="check">✓</span> Whitelabel Options</li>
+            <li><span class="check">✓</span> Dedicated Success Manager</li>
+        </ul>
+        <a href="booking.html" class="cta-button outline">Book Demo Session</a>
+    </div>
 
     </div>
 
@@ -346,9 +307,9 @@
         Secure 256-bit SSL Encrypted Payment
     </div>
 
-    <!-- GHL Chat Widget --><script src="https://beta.leadconnectorhq.com/loader.js" data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="69507213261ca136120c2fe0"></script></body>
+    <!-- Sarah AI Voice Widget -->
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi.min.js"></script>
+    <script src="/assets/sarah-widget.js"></script>
+</body>
 
 </html>
-
-
-

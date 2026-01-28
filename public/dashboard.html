@@ -4,1863 +4,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sovereign Command Center</title>
-
-    <!-- Cache Control - Prevent stale versions -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <title>SOVEREIGN COMMAND v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Vapi SDK - Local first (to avoid CDN blocking), CDN fallback -->
-    <script>
-        // Load Vapi SDK: local first, CDN fallback
-        function loadVapiSDK(src, isLocal) {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = src;
-                script.onload = () => {
-                    console.log(`✅ Vapi SDK loaded from ${isLocal ? 'LOCAL' : 'CDN'}: ${src}`);
-                    resolve(true);
-                };
-                script.onerror = () => {
-                    console.warn(`❌ Failed to load Vapi SDK from ${isLocal ? 'LOCAL' : 'CDN'}: ${src}`);
-                    reject(new Error('Failed to load'));
-                };
-                document.head.appendChild(script);
-            });
-        }
-
-        // Try local first, then CDN
-        loadVapiSDK('/assets/vapi.min.js', true)
-            .catch(() => loadVapiSDK('https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi.min.js', false))
-            .then(() => console.log('Vapi SDK loaded: true'))
-            .catch(() => console.error('Vapi SDK loaded: false - ALL SOURCES FAILED'));
-    </script>
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #020617;
-            color: #f8fafc;
-            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        .glass {
-            background: rgba(30, 41, 59, 0.7);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .panel {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel h2 {
+            color: #666;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .live-dot {
+            height: 8px;
+            width: 8px;
+            background-color: #00ff41;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            box-shadow: 0 0 10px #00ff41;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto 1fr;
+            gap: 1rem;
+            height: 100vh;
+            padding: 1rem;
+        }
+
+        /* Mobile: Stack everything */
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                height: auto;
+            }
+        }
+
+        .c-green {
+            color: #00ff41;
+        }
+
+        .c-blue {
+            color: #3b82f6;
+        }
+
+        .c-yellow {
+            color: #eab308;
+        }
+
+        .c-red {
+            color: #ef4444;
+        }
+
+        tr.row-item {
+            border-bottom: 1px solid #111;
+        }
+
+        tr.row-item:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
         }
     </style>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8080RNWHVV">
-    </script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-8080RNWHVV');
-    </script>
-    <link rel="stylesheet" href="css/autofix.css">
 </head>
 
-<body class="p-8 overflow-x-hidden">
-    <!-- PASSWORD GATE -->
-    <div id="authGate"
-        style="position:fixed;top:0;left:0;right:0;bottom:0;background:#020617;z-index:10000;display:flex;align-items:center;justify-content:center;">
-        <div
-            style="background:rgba(30,41,59,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:40px;text-align:center;max-width:400px;backdrop-filter:blur(10px);">
-            <div style="font-size:48px;margin-bottom:16px;">🏰</div>
-            <h1 style="color:white;font-size:24px;font-weight:bold;margin-bottom:8px;">Sovereign Vault</h1>
-            <p style="color:#94a3b8;font-size:14px;margin-bottom:24px;">Enter Authorization Code</p>
-            <input type="password" id="authPassword" placeholder="Enter Code..."
-                style="width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:white;text-align:center;font-family:monospace;letter-spacing:4px;margin-bottom:16px;outline:none;"
-                onkeypress="if(event.key==='Enter')checkAuth()">
-            <button onclick="checkAuth()"
-                style="width:100%;padding:12px;background:#2563eb;border:none;border-radius:8px;color:white;font-weight:bold;cursor:pointer;">UNSEAL
-                ACCESS</button>
-        </div>
-    </div>
-    <script>
-        function checkAuth() {
-            const pw = document.getElementById('authPassword').value;
-            if (pw === 'empire' || pw === 'sovereign') {
-                document.getElementById('authGate').style.display = 'none';
-                localStorage.setItem('sovereign_auth', 'true');
-            } else {
-                alert('Access Denied');
-            }
-        }
-        // Auto-unlock if previously authenticated
-        if (localStorage.getItem('sovereign_auth') === 'true') {
-            document.getElementById('authGate').style.display = 'none';
-        }
-    </script>
+<body>
 
-    <div id="truthStrip"
-        style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(15,23,42,0.98);border-bottom:1px solid rgba(255,255,255,0.1);padding:6px 16px;font-family:'Inter',monospace;font-size:11px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(8px);flex-wrap:nowrap;overflow-x:auto;">
-        <span style="color:#94a3b8;" title="System Health">🔍</span>
-        <span id="truthHost" style="color:#67e8f9;font-weight:bold;" title="Environment Host">--</span>
-        <span style="color:#475569;">|</span>
-        <span title="Local Source of Truth">brand: <span id="truthBrandVersion" style="color:#86efac;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span title="Voice Number">Voice: <span id="truthVoice" style="color:#a5f3fc;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span title="SMS Number">SMS: <span id="truthSms" style="color:#a5f3fc;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span title="Modal /api/health status">API: <span id="truthApi" style="color:#a5f3fc;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span title="Build Identifier">Build: <span id="truthBuild" style="color:#c4b5fd;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span title="Last system-wide event">Event: <span id="truthLastEvent" style="color:#86efac;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span title="Last KPI update">KPI: <span id="truthLastKpi" style="color:#86efac;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span title="Last campaign activity">Cam: <span id="truthLastCampaign" style="color:#f9a8d4;">--</span></span>
-        <span style="color:#475569;">|</span>
-        <span title="Real-time Stream Status">SSE: <span id="truthSse" style="color:#94a3b8;">--</span></span>
-
-        <div style="margin-left:auto;display:flex;gap:8px;padding-left:12px;">
-            <button onclick="copyTruthStatus()" title="Copy Status to Clipboard"
-                style="background:#334155;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;white-space:nowrap;">📋
-                Copy</button>
-            <button onclick="runVerifyProduction()" title="Generate Recovery Commands"
-                style="background:#166534;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;white-space:nowrap;">✓
-                Verify</button>
-            <button onclick="showDeployModal()" title="View Deployment Runbook"
-                style="background:#7c3aed;border:none;color:#e2e8f0;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:10px;white-space:nowrap;">🚀
-                Deploy</button>
-        </div>
-    </div>
-    <style>
-        body {
-            padding-top: 36px !important;
-        }
-
-        #truthStrip span {
-            white-space: nowrap;
-        }
-
-        .truth-stale-red {
-            color: #f87171 !important;
-            animation: pulse 1s infinite;
-        }
-
-        .truth-stale-orange {
-            color: #fb923c !important;
-        }
-
-        .truth-stale-yellow {
-            color: #facc15 !important;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.5;
-            }
-        }
-    </style>
-    <script>
-        // ==========================================================
-        // TRUTH STRIP V3 - CORE LOGIC
-        // ==========================================================
-        const REMOTE_API = 'https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run';
-        // Use proximity proxy on Vercel, fallback to remote for local dev
-        const API_BASE = (location.hostname.includes('localhost') || location.hostname.includes('127.0.0.1'))
-            ? REMOTE_API
-            : '';
-        window.API_BASE = API_BASE;
-
-        const truthState = {
-            data: JSON.parse(localStorage.getItem('truth_cache') || 'null'),
-            brand: null,
-            apiUp: false,
-            sseConnected: false,
-            lastSseMessage: null
-        };
-
-        function timeAgo(isoString) {
-            if (!isoString) return '--';
-            const now = new Date();
-            const then = new Date(isoString);
-            const diffMs = now - then;
-            const diffSec = Math.floor(diffMs / 1000);
-            const diffMin = Math.floor(diffSec / 60);
-            const diffHr = Math.floor(diffMin / 60);
-
-            if (diffSec < 60) return `${diffSec}s ago`;
-            if (diffMin < 60) return `${diffMin}m ago`;
-            if (diffHr < 24) return `${diffHr}h ${diffMin % 60}m ago`;
-            return then.toLocaleDateString();
-        }
-
-        function updateEl(id, text, color = null) {
-            const el = document.getElementById(id);
-            if (el) {
-                el.textContent = text;
-                if (color) el.style.color = color;
-            }
-        }
-
-        function checkStaleness() {
-            const now = new Date();
-            const data = truthState.data;
-            if (!data) return;
-
-            // Event stale > 15m
-            const evtEl = document.getElementById('truthLastEvent');
-            if (evtEl && data.last_event_ts) {
-                const age = (now - new Date(data.last_event_ts)) / 60000;
-                evtEl.classList.toggle('truth-stale-red', age > 15);
-            }
-
-            // KPI stale > 30m
-            const kpiEl = document.getElementById('truthLastKpi');
-            if (kpiEl && data.last_kpi_ts) {
-                const age = (now - new Date(data.last_kpi_ts)) / 60000;
-                kpiEl.classList.toggle('truth-stale-orange', age > 30);
-            }
-
-            // SSE stale > 20s
-            const sseEl = document.getElementById('truthSse');
-            if (sseEl && truthState.lastSseMessage) {
-                const age = (now - truthState.lastSseMessage) / 1000;
-                sseEl.classList.toggle('truth-stale-yellow', age > 20 && truthState.sseConnected);
-            }
-        }
-
-        function renderTruthStrip() {
-            updateEl('truthHost', location.hostname || '--');
-            updateEl('truthBuild', window.BUILD_ID || 'NO_BUILD');
-            updateEl('truthApi', truthState.apiUp ? 'UP' : 'DOWN', truthState.apiUp ? '#86efac' : '#f87171');
-
-            const data = truthState.data;
-            if (data) {
-                updateEl('truthLastEvent', timeAgo(data.last_event_ts));
-                updateEl('truthLastKpi', timeAgo(data.last_kpi_ts));
-                updateEl('truthLastCampaign', timeAgo(data.last_campaign_ran_at));
-            }
-
-            const sseEl = document.getElementById('truthSse');
-            if (sseEl) {
-                if (truthState.sseConnected) {
-                    sseEl.textContent = truthState.lastSseMessage ? timeAgo(truthState.lastSseMessage) : 'Connected';
-                    sseEl.style.color = '#86efac';
-                } else {
-                    sseEl.textContent = 'Disconnected';
-                    sseEl.style.color = '#f87171';
-                }
-            }
-
-            if (truthState.brand) {
-                updateEl('truthBrandVersion', truthState.brand.build?.version || '--');
-                updateEl('truthVoice', truthState.brand.canonical?.voice_display || '--');
-                updateEl('truthSms', truthState.brand.canonical?.sms_display || '--');
-            }
-
-            checkStaleness();
-        }
-
-        async function pollTruth() {
-            try {
-                // Using Vercel Proxy
-                const res = await fetch('/api/truth?ts=' + Date.now());
-                if (res.ok) {
-                    const data = await res.json();
-                    truthState.data = data;
-                    truthState.apiUp = true;
-                    localStorage.setItem('truth_cache', JSON.stringify(data));
-                } else {
-                    truthState.apiUp = false;
-                }
-            } catch (e) {
-                truthState.apiUp = false;
-                console.warn('API Truth Poll Failed:', e);
-            }
-            renderTruthStrip();
-        }
-
-        async function pollBrand() {
-            try {
-                const res = await fetch('/brand.json?ts=' + Date.now());
-                if (res.ok) {
-                    truthState.brand = await res.json();
-                }
-            } catch (e) {
-                console.warn('Brand Poll Failed');
-            }
-            renderTruthStrip();
-        }
-
-        function hookSseForTruth(eventSource) {
-            if (!eventSource) return;
-            eventSource.onopen = () => { truthState.sseConnected = true; renderTruthStrip(); };
-            eventSource.onerror = () => { truthState.sseConnected = false; renderTruthStrip(); };
-            eventSource.onmessage = (e) => {
-                truthState.lastSseMessage = new Date();
-                truthState.sseConnected = true;
-                renderTruthStrip();
-            };
-        }
-
-        function copyTruthStatus() {
-            const data = truthState.data || {};
-            const status = `HOST=${location.hostname} BUILD=${window.BUILD_ID} API=${truthState.apiUp ? 'UP' : 'DOWN'} SSE=${truthState.sseConnected ? 'ON' : 'OFF'} EVT=${data.last_event_ts || '--'}`;
-            navigator.clipboard.writeText(status).then(() => alert('Copied: ' + status));
-        }
-
-        function runVerifyProduction() {
-            const cmd = `cd ${location.pathname.includes('empire-unified') ? '...' : '.'} && python verify_production.py`;
-            alert('Run in Terminal:\n' + cmd);
-            navigator.clipboard.writeText(cmd);
-        }
-
-        function showDeployModal() {
-            alert('RECOVERY RUNBOOK:\n1. modal deploy modal_orchestrator_v3.py\n2. vercel --prod\n3. python watchdog.py');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            pollBrand();
-            pollTruth();
-            setInterval(pollBrand, 60000);
-            setInterval(pollTruth, 15000);
-            renderTruthStrip();
-        });
-    </script>
-    <!-- CONFIG -->
-    <script>
-        // SOVEREIGN CREDENTIALS (Client-Side Safe for Dashboard)
-        const SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co";
-        // Verified Anon Key (2026-01-09 - FRESH from Supabase dashboard)
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTA0MjQsImV4cCI6MjA4MjE2NjQyNH0.dluuiK-jr-3Z_oksYHS4saSthpkppLHQGnl6YtploPU";
-
-        // VAPI
-        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
-        // "John" as the Orchestrator
-        const ORCHESTRATOR_ID = "78b4c14a-4db3-4416-9289-d1bfd2409606";
-
-        // MODAL BACKEND API - Global for debugging (not in closure)
-        window.API_BASE = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run";
-        // BUILD_ID is injected at deploy time via sed replacement
-        window.BUILD_ID = "20260120-FIXED";
-
-        // Self-identification on load
-        console.log("DASHBOARD_BUILD", window.BUILD_ID, window.API_BASE);
-
-        const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // Vapi initialization with Retry Logic
-        let vapi = null;
-        let isConnected = false;
-
-        function initVapi() {
-            try {
-                if (window.Vapi) {
-                    vapi = new window.Vapi(VAPI_PUBLIC_KEY);
-                    console.log("✅ Vapi SDK Initialized");
-                    document.getElementById('statusUplink').innerText = "Status: Ready";
-
-                    // Attach event listeners NOW that SDK is ready
-                    vapi.on('call-start', () => {
-                        console.log('Call started');
-                        isConnected = true;
-                        document.getElementById('statusUplink').innerText = "Status: 🟢 ONLINE (Secure Channel)";
-                        document.getElementById('statusUplink').className = "mt-3 text-xs text-green-400 font-bold font-mono animate-pulse";
-                        document.getElementById('btnUplink').innerText = "DISCONNECT";
-                        document.getElementById('btnUplink').className = "px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-lg font-bold w-full transition shadow-lg shadow-red-500/20";
-                    });
-
-                    vapi.on('call-end', () => {
-                        console.log('Call ended');
-                        resetUplinkUI();
-                    });
-
-                    return true;
-                } else {
-                    console.log("⏳ Waiting for Vapi SDK...");
-                    return false;
-                }
-            } catch (e) {
-                console.warn('[Dashboard] Vapi init error:', e.message);
-                return false;
-            }
-        }
-
-        // Try initializing every 500ms for 15 seconds (30 attempts)
-        let attempts = 0;
-        const vapiInterval = setInterval(() => {
-            if (initVapi() || attempts > 30) {
-                clearInterval(vapiInterval);
-                if (!vapi) {
-                    document.getElementById('statusUplink').innerText = "Status: Connecting...";
-                    console.warn('[Dashboard] Vapi SDK still loading, will retry on click');
-                }
-                attempts++;
-            }, 500);
-    </script>
-
-    <div class="max-w-7xl mx-auto">
-
+    <div class="grid-container">
         <!-- Header -->
-        <nav class="glass rounded-2xl p-4 mb-6 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-xl">⚡</div>
-                <div>
-                    <h1 class="font-bold text-xl">Sovereign Command</h1>
-                    <div id="systemStatus" class="text-xs text-green-400">● Systems Online</div>
-                    <div id="lastUpdate" class="text-[10px] text-slate-500">Last update: --</div>
-                    <div id="modalApiStatus" class="text-[10px] text-yellow-400">Modal API: checking...</div>
-                    <div id="hostBadge"
-                        class="text-[9px] font-mono px-2 py-0.5 mt-1 rounded bg-slate-800 text-cyan-400 inline-block">
-                    </div>
-                </div>
+        <div class="col-span-4 flex justify-between items-center mb-2">
+            <div>
+                <h1 class="text-xl font-bold tracking-tighter text-white">SOVEREIGN <span class="c-green">COMMAND</span>
+                </h1>
+                <p class="text-xs text-gray-600">UNIT: EMPIRE-UNIFIED // <span id="clock">00:00:00</span> // <span
+                        class="c-green">● ONLINE</span></p>
             </div>
-            <script>
-                // Populate host badge immediately
-                document.getElementById('hostBadge').innerText = location.hostname + ' | ' + (window.BUILD_ID || 'NO_BUILD');
-            </script>
-            <div class="flex gap-2">
-                <button onclick="window.open('https://app.gohighlevel.com')"
-                    class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition text-sm">Targeting
-                    (GHL)</button>
-                <button onclick="window.open('https://dashboard.vapi.ai')"
-                    class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition text-sm">Voice Grid
-                    (Vapi)</button>
-            </div>
-        </nav>
-
-        <!-- Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-slate-400 text-xs font-semibold uppercase">Total Leads</h3>
-                <div class="text-3xl font-bold mt-2" id="statLeads">--</div>
-            </div>
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-slate-400 text-xs font-semibold uppercase">Pipeline Value</h3>
-                <div class="text-3xl font-bold mt-2 text-green-400" id="statPipeline">--</div>
-            </div>
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-slate-400 text-xs font-semibold uppercase">Calls Made</h3>
-                <div class="text-3xl font-bold mt-2 text-blue-400" id="statCalls">--</div>
-            </div>
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-slate-400 text-xs font-semibold uppercase">Appointments</h3>
-                <div class="text-3xl font-bold mt-2 text-purple-400" id="statAppts">--</div>
+            <div class="text-right">
+                <button onclick="refreshData()"
+                    class="text-xs border border-gray-800 px-3 py-1 hover:bg-gray-900 transition">REFRESH INTEL</button>
             </div>
         </div>
 
-        <!-- FRESHNESS PANEL - Real-time system health from /api/truth -->
-        <div class="glass p-6 rounded-2xl mb-6">
-            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                <h3 class="font-bold flex items-center gap-2">
-                    <span>⏱️</span> System Freshness
-                    <span id="freshnessBadge"
-                        class="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400">LIVE</span>
-                </h3>
-                <button onclick="refreshFreshness()" class="text-xs text-blue-400 hover:text-blue-300">↻
-                    Refresh</button>
+        <!-- 1. TRUTH (Top Stats) -->
+        <div class="panel">
+            <h2>System Health</h2>
+            <div class="stat-value c-green" id="h-score">--%</div>
+            <p class="text-xs text-gray-500 mt-1">Brain Efficiency</p>
+        </div>
+        <div class="panel">
+            <h2>Total Leads</h2>
+            <div class="stat-value text-white" id="h-leads">--</div>
+            <p class="text-xs text-gray-500 mt-1">Sovereign Database</p>
+        </div>
+        <div class="panel">
+            <h2>Est. Revenue</h2>
+            <div class="stat-value c-blue" id="h-rev">$--</div>
+            <p class="text-xs text-gray-500 mt-1">Pipeline Value</p>
+        </div>
+        <div class="panel">
+            <h2>Active Status</h2>
+            <div class="stat-value text-gray-400 text-sm" id="h-active">...</div>
+            <p class="text-xs text-gray-500 mt-1">Last Deployment</p>
+        </div>
+
+        <!-- 2. CAMPAIGNS (Mid-Left) -->
+        <div class="panel col-span-2 row-span-2 flex flex-col">
+            <div class="flex justify-between">
+                <h2>Active Campaigns</h2>
+                <span class="text-xs text-green-500">REAL-TIME</span>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
-                <div class="bg-slate-800/50 p-3 rounded-lg">
-                    <div class="text-xs text-slate-400 mb-1">Server Time</div>
-                    <div id="freshServerTs" class="text-sm font-mono text-cyan-400">--</div>
-                </div>
-                <div class="bg-slate-800/50 p-3 rounded-lg">
-                    <div class="text-xs text-slate-400 mb-1">Last Event</div>
-                    <div id="freshLastEvent" class="text-sm font-mono text-green-400">--</div>
-                </div>
-                <div class="bg-slate-800/50 p-3 rounded-lg">
-                    <div class="text-xs text-slate-400 mb-1">Last Campaign</div>
-                    <div id="freshLastCampaign" class="text-sm font-mono text-purple-400">--</div>
-                </div>
-                <div class="bg-slate-800/50 p-3 rounded-lg">
-                    <div class="text-xs text-slate-400 mb-1">SMS Sent (24h)</div>
-                    <div id="freshSmsSent" class="text-sm font-mono text-yellow-400">--</div>
-                </div>
-                <div class="bg-slate-800/50 p-3 rounded-lg">
-                    <div class="text-xs text-slate-400 mb-1">SMS Failed</div>
-                    <div id="freshSmsFailed" class="text-sm font-mono text-red-400">--</div>
-                </div>
+            <div class="flex-1 overflow-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-gray-600 text-xs">
+                            <th>CAMPAIGN</th>
+                            <th>SENT</th>
+                            <th>REPLIES</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaigns-list">
+                        <!-- JS Injected -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- CAMPAIGN CONTROL PANEL -->
-        <div class="glass p-6 rounded-2xl mb-6">
-            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                <h3 class="font-bold flex items-center gap-2">
-                    <span>🎯</span> Campaign Control
-                    <span id="campaignModeBadge"
-                        class="text-xs px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-400">IDLE</span>
-                </h3>
-                <div class="text-xs text-slate-400">Admin Token Required</div>
+        <!-- 3. COMMS HUB (Mid-Right) -->
+        <div class="panel col-span-2 row-span-2 flex flex-col">
+            <div class="flex justify-between">
+                <h2>Recent Comms (SMS/Inbound)</h2>
+                <span class="text-xs text-blue-500">LIVE FEED</span>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                <button onclick="campaignControl('start')"
-                    class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
-                    ▶ START
-                </button>
-                <button onclick="campaignControl('pause')"
-                    class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
-                    ⏸ PAUSE
-                </button>
-                <button onclick="campaignControl('stop')"
-                    class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
-                    ⏹ STOP
-                </button>
-                <button onclick="campaignControl('run-batch')"
-                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
-                    ⚡ RUN BATCH
-                </button>
-            </div>
-            <div class="text-xs text-slate-500">
-                <span>Mode: <span id="currentCampaignMode" class="text-cyan-400">--</span></span>
-                <span class="mx-2">|</span>
-                <span>Last Run: <span id="lastCampaignRun" class="text-purple-400">--</span></span>
-                <span class="mx-2">|</span>
-                <span>Queue: <span id="campaignQueueCount" class="text-yellow-400">--</span></span>
+            <div class="flex-1 overflow-auto" id="comms-feed">
+                <!-- JS Injected -->
+                <div class="text-gray-600 text-sm p-2 text-center">Waiting for uplink...</div>
             </div>
         </div>
 
-        <!-- CAMPAIGN LEDGER - Last 25 campaign events -->
-        <div class="glass p-6 rounded-2xl mb-6">
-            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                <h3 class="font-bold flex items-center gap-2">
-                    <span>📋</span> Campaign Ledger (Live from Supabase)
-                </h3>
-                <button onclick="fetchCampaignLedger()" class="text-xs text-blue-400 hover:text-blue-300">↻
-                    Refresh</button>
-            </div>
-            <div id="campaignLedger" class="space-y-2 max-h-[300px] overflow-y-auto font-mono text-xs">
-                <div class="text-center text-slate-500 py-4">Loading campaign events...</div>
+        <!-- 4. ANALYTICS (Bottom) -->
+        <div class="panel col-span-2 h-64">
+            <h2>Funnel Conversion</h2>
+            <canvas id="funnelChart"></canvas>
+        </div>
+        <div class="panel col-span-2 h-64">
+            <h2>Traffic Sources</h2>
+            <div class="flex items-center justify-center h-full text-gray-600 text-xs">
+                (Waiting for web_events data)
             </div>
         </div>
-
-        <!-- Main Dashboard -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-
-            <!-- ORCHESTRATOR UPLINK -->
-            <div
-                class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center relative overflow-hidden">
-                <div
-                    class="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mb-4 border border-blue-400/30">
-                    <span class="text-4xl">🎙️</span>
-                </div>
-                <h2 class="text-xl font-bold mb-1">Direct Uplink</h2>
-                <p class="text-slate-400 text-xs mb-6">Talk to Antigravity (Orchestrator)</p>
-
-                <button id="btnUplink" onclick="toggleUplink()"
-                    class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold w-full transition shadow-lg shadow-blue-500/20">
-                    INITIATE LINK
-                </button>
-                <div id="statusUplink" class="mt-3 text-xs text-slate-500 font-mono">Status: Standby</div>
-                <div id="voiceDiagnostics" class="mt-2 text-[10px] text-slate-600 font-mono"></div>
-
-                <!-- Text Uplink Fallback -->
-                <div class="mt-4 w-full border-t border-white/10 pt-4">
-                    <div class="text-xs text-slate-400 mb-2">📝 Text Fallback</div>
-                    <div class="flex gap-2">
-                        <input type="text" id="textUplinkInput" placeholder="Type message..."
-                            class="flex-1 bg-slate-900 text-xs px-3 py-2 rounded border border-slate-700 outline-none focus:border-blue-500">
-                        <button onclick="sendTextUplink()"
-                            class="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded text-xs">Send</button>
-                    </div>
-                    <div id="textUplinkResponse" class="mt-2 text-xs text-slate-400 max-h-24 overflow-y-auto"></div>
-                </div>
-            </div>
-
-            <!-- ACTIVE CAMPAIGN FEED -->
-            <div class="glass p-6 rounded-2xl col-span-2 flex flex-col h-[400px]">
-                <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                    <h3 class="font-bold flex items-center gap-2">
-                        <span>📡</span> Live Campaign Feed
-                    </h3>
-                    <div class="flex gap-2">
-                        <select id="campaignFilter" aria-label="Campaign Filter" onchange="fetchLeads()"
-                            class="bg-slate-900 border border-slate-700 text-xs rounded px-2 py-1 outline-none text-slate-300">
-                            <option value="ALL">All Campaigns</option>
-                            <option value="roofing">Roofing (Foofer)</option>
-                            <option value="hvac">HVAC</option>
-                        </select>
-                        <button onclick="fetchLeads()" class="text-xs text-blue-400 hover:text-blue-300">↻
-                            Refresh</button>
-                    </div>
-                </div>
-
-                <!-- Table Header -->
-                <div class="grid grid-cols-12 gap-2 text-xs text-slate-500 uppercase font-semibold mb-2 px-2">
-                    <div class="col-span-4">Company / Name</div>
-                    <div class="col-span-3">Status</div>
-                    <div class="col-span-3">Details</div>
-                    <div class="col-span-2 text-right">Action</div>
-                </div>
-
-                <!-- Scrollable Body -->
-                <div class="flex-1 overflow-y-auto space-y-2 pr-2" id="leadsContainer">
-                    <!-- Rows injected here -->
-                    <div class="text-center text-slate-500 py-10">Connecting to Neural Net...</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- OUTREACH ACTIVITY (Emails, SMS, Calls) -->
-        <div class="glass p-6 rounded-2xl mb-6">
-            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                <h3 class="font-bold flex items-center gap-2">
-                    <span>📊</span> Outreach Activity Feed
-                </h3>
-                <button onclick="fetchActivity()" class="text-xs text-blue-400 hover:text-blue-300">↻ Refresh</button>
-            </div>
-            <div class="grid grid-cols-3 gap-4 mb-4">
-                <div class="bg-blue-500/10 p-3 rounded-lg text-center">
-                    <div id="emailCount" class="text-2xl font-bold text-blue-400">-</div>
-                    <div class="text-xs text-slate-400">Emails Sent</div>
-                </div>
-                <div class="bg-green-500/10 p-3 rounded-lg text-center">
-                    <div id="smsCount" class="text-2xl font-bold text-green-400">-</div>
-                    <div class="text-xs text-slate-400">SMS Sent</div>
-                </div>
-                <div class="bg-purple-500/10 p-3 rounded-lg text-center">
-                    <div id="callCount" class="text-2xl font-bold text-purple-400">-</div>
-                    <div class="text-xs text-slate-400">Calls Made</div>
-                </div>
-            </div>
-            <div id="activityContainer" class="space-y-2 max-h-[300px] overflow-y-auto">
-                <div class="text-center text-slate-500 py-4">Loading activity...</div>
-            </div>
-        </div>
-
-        <!-- CALL TRANSCRIPTS (Brain Training Data) -->
-        <div class="glass p-6 rounded-2xl mb-6">
-            <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                <h3 class="font-bold flex items-center gap-2">
-                    <span>📞</span> Call Transcripts & AI Learnings
-                </h3>
-                <div class="flex gap-2">
-                    <button onclick="forceSyncCalls()"
-                        class="text-xs px-2 py-1 bg-green-600 hover:bg-green-500 rounded">⚡ Force Sync</button>
-                    <button onclick="fetchTranscripts()" class="text-xs text-blue-400 hover:text-blue-300">↻
-                        Refresh</button>
-                </div>
-            </div>
-            <div id="transcriptsContainer" class="space-y-3 max-h-[400px] overflow-y-auto">
-                <div class="text-center text-slate-500 py-6">Loading transcripts...</div>
-            </div>
-        </div>
-
-        <!-- ASSET INBOX (Feed the Brain) -->
-        <div class="glass p-6 rounded-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold">📥 Asset Inbox (Feed The Brain)</h3>
-                <span class="text-xs text-slate-500">Drag & Drop or Paste URL</span>
-            </div>
-            <div id="dropZone"
-                class="border-2 border-dashed border-white/10 rounded-xl p-8 flex flex-col items-center justify-center text-center hover:border-blue-500/50 hover:bg-blue-500/5 transition cursor-pointer">
-                <span class="text-2xl mb-2">🧠</span>
-                <p class="text-sm text-slate-300 mb-2">"Here, learn this."</p>
-                <input type="text" id="assetInput" placeholder="Paste URL..."
-                    class="bg-slate-900 text-xs px-3 py-2 rounded border border-slate-700 w-64 text-center focus:border-blue-500 outline-none">
-                <button onclick="saveAsset()"
-                    class="mt-3 px-4 py-1 bg-green-600 hover:bg-green-500 rounded text-xs font-bold">SAVE TO
-                    BRAIN</button>
-                <div id="assetStatus" class="mt-2 text-[10px] text-slate-500"></div>
-            </div>
-        </div>
-
-        <!-- DEBUG PANEL (Collapsible) -->
-        <details class="glass p-4 rounded-2xl mt-6">
-            <summary class="font-bold cursor-pointer flex items-center gap-2">
-                🔧 Debug Panel
-                <span id="debugStatus" class="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">Connected</span>
-            </summary>
-            <div class="mt-4 space-y-4">
-                <!-- Connection Status -->
-                <div class="grid grid-cols-3 gap-4 text-xs">
-                    <div class="bg-slate-800/50 p-3 rounded">
-                        <div class="text-slate-400">SSE State</div>
-                        <div id="debugSseState" class="font-mono text-green-400">CONNECTING</div>
-                    </div>
-                    <div class="bg-slate-800/50 p-3 rounded">
-                        <div class="text-slate-400">Retry Count</div>
-                        <div id="debugRetryCount" class="font-mono">0</div>
-                    </div>
-                    <div class="bg-slate-800/50 p-3 rounded">
-                        <div class="text-slate-400">Events Received</div>
-                        <div id="debugEventCount" class="font-mono">0</div>
-                    </div>
-                </div>
-
-                <!-- Event Log -->
-                <div>
-                    <div class="text-xs text-slate-400 mb-2">Last 20 Events:</div>
-                    <div id="debugEventLog"
-                        class="bg-slate-900 rounded p-2 max-h-48 overflow-y-auto font-mono text-[10px] space-y-1">
-                        <div class="text-slate-500">Waiting for events...</div>
-                    </div>
-                </div>
-
-                <!-- Failure Mode Checklist -->
-                <details class="text-xs">
-                    <summary class="text-slate-400 cursor-pointer">⚠️ Troubleshooting Checklist</summary>
-                    <div class="mt-2 space-y-1 text-slate-500 pl-4">
-                        <div>☐ <strong>CORS</strong>: Check if Access-Control-Allow-Origin header is present</div>
-                        <div>☐ <strong>Auth Expiry</strong>: Verify ?auth=sovereign is in URL</div>
-                        <div>☐ <strong>Proxy Buffering</strong>: nginx/cloudflare may buffer SSE (X-Accel-Buffering: no)
-                        </div>
-                        <div>☐ <strong>Server Timeout</strong>: Modal may timeout after 5 min idle</div>
-                        <div>☐ <strong>Network</strong>: Check browser DevTools Network tab for EventSource</div>
-                        <div>☐ <strong>Console Errors</strong>: Look for [SSE] prefixed messages</div>
-                    </div>
-                </details>
-            </div>
-        </details>
-
     </div>
 
-    <!-- LOGIC -->
     <script>
-        // ==========================================================
-        // CANONICAL STATE MODEL - Single Source of Truth
-        // ==========================================================
-        const dashboardState = {
-            // KPI Stats
-            stats: {
-                leads: 0,
-                contacted: 0,
-                calls: 0,
-                appointments: 0,
-                pipelineValue: 0
-            },
-            // System Health
-            system: {
-                status: 'unknown',      // 'healthy', 'connecting', 'reconnecting', 'error'
-                lastUpdate: null,       // ISO timestamp
-                sseConnected: false,
-                version: 0              // Monotonic version for idempotency
-            },
-            // Leads List
-            leads: [],                  // Array of lead objects
-            // Activity Feed
-            activity: {
-                emails: 0,
-                sms: 0,
-                calls: 0,
-                items: []               // Recent activity items
-            },
-            // Transcripts
-            transcripts: [],            // Array of call transcripts
+        const API_BASE = "https://nearmiss1193-afk--ghl-omni-automation-universal-web-app.modal.run";
 
-            // ==========================================================
-            // TASKS - Lifecycle: queued -> running -> success|failed|canceled
-            // ==========================================================
-            tasks: {},                  // Map of task_id -> task object
-            taskVersions: {}            // Map of task_id -> last seen version (for idempotency)
-        };
+        // --- CLOCK ---
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
+        }, 1000);
 
-        // Task status constants
-        const TASK_STATUS = {
-            QUEUED: 'queued',
-            RUNNING: 'running',
-            SUCCESS: 'success',
-            FAILED: 'failed',
-            CANCELED: 'canceled'
-        };
+        // --- FETCH DATA ---
+        async function refreshData() {
+            console.log("Refreshing Intelligence...");
+            const statusIndicator = document.getElementById('clock').nextElementSibling;
 
-        // ==========================================================
-        // PAYLOAD CONTRACTS (Event Schemas)
-        // ==========================================================
-        /*
-        task.created: {
-            id: string,             // Unique event ID
-            type: 'task.created',
-            ts: string,             // ISO timestamp
-            payload: {
-                task_id: string,    // Unique task identifier
-                version: number,    // Monotonically increasing version
-                status: 'queued',   // Initial status
-                action: string,     // e.g., 'prospecting', 'campaign', 'optimize'
-                created_at: string, // ISO timestamp
-                metadata: object    // Optional additional data
-            }
-        }
+            try {
+                // 1. TRUTH
+                const truthRes = await fetch(`${API_BASE}/api/truth`);
+                if (!truthRes.ok) throw new Error("API Connection Failed");
 
-        task.updated: {
-            id: string,
-            type: 'task.updated',
-            ts: string,
-            payload: {
-                task_id: string,
-                version: number,        // Must be > previous version to apply
-                status: 'queued'|'running'|'success'|'failed'|'canceled',
-                progress: number,       // 0-100 percentage (optional)
-                result: object,         // Result data (optional)
-                error: string,          // Error message if failed (optional)
-                updated_at: string
-            }
-        }
+                const truth = await truthRes.json();
+                document.getElementById('h-score').innerText = truth.health + "%";
+                document.getElementById('h-leads').innerText = truth.leads;
+                document.getElementById('h-rev').innerText = "$" + (truth.revenue || 0).toLocaleString();
+                document.getElementById('h-active').innerText = new Date(truth.last_active).toLocaleTimeString();
 
-        task.log: {
-            id: string,
-            type: 'task.log',
-            ts: string,
-            payload: {
-                task_id: string,
-                version: number,
-                level: 'info'|'warn'|'error',
-                message: string,
-                timestamp: string
-            }
-        }
+                // Status: ONLINE
+                if (statusIndicator) statusIndicator.innerHTML = '<span class="c-green">● ONLINE</span>';
 
-        health.changed: {
-            id: string,
-            type: 'health.changed',
-            ts: string,
-            payload: {
-                status: 'healthy'|'degraded'|'error'|'unknown',
-                previous: string,
-                version: number,        // For idempotency
-                components: {           // Optional component health
-                    modal: 'ok'|'error',
-                    supabase: 'ok'|'error',
-                    cloudflare: 'ok'|'error'
+                // 2. LEADS / FUNNEL
+                const leadsRes = await fetch(`${API_BASE}/api/leads`);
+                if (leadsRes.ok) renderFunnel((await leadsRes.json()).funnel);
+
+                // 3. COMMS
+                const commsRes = await fetch(`${API_BASE}/api/comms`);
+                if (commsRes.ok) renderComms((await commsRes.json()).interactions);
+
+                // 4. CAMPAIGNS
+                const campRes = await fetch(`${API_BASE}/api/campaigns`);
+                if (campRes.ok) renderCampaigns((await campRes.json()).campaigns);
+
+            } catch (e) {
+                console.error("DATA FETCH ERROR:", e);
+                // Status: OFFLINE / WAKING
+                if (statusIndicator) statusIndicator.innerHTML = '<span class="c-red">● CONNECTING...</span>';
+
+                // Show offline values if empty
+                if (document.getElementById('h-leads').innerText === '--') {
+                    document.getElementById('h-leads').innerText = "(Syncing)";
                 }
             }
         }
-        */
 
-        // ==========================================================
-        // IDEMPOTENCY - Check if event is stale
-        // ==========================================================
-        function isStaleEvent(state, event) {
-            const { type, payload } = event;
-
-            // Task events: check version
-            if (type.startsWith('task.') && payload?.task_id && payload?.version !== undefined) {
-                const lastVersion = state.taskVersions[payload.task_id] || 0;
-                if (payload.version <= lastVersion) {
-                    console.log(`[Idempotency] Stale task event ignored: ${payload.task_id} v${payload.version} <= v${lastVersion}`);
-                    return true;
-                }
-            }
-
-            // Health events: check version
-            if (type === 'health.changed' && payload?.version !== undefined) {
-                if (payload.version <= state.system.version) {
-                    console.log(`[Idempotency] Stale health event ignored: v${payload.version} <= v${state.system.version}`);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        // ==========================================================
-        // APPLY EVENT - Reducer-like state updates
-        // ==========================================================
-        function applyEvent(state, event) {
-            const { type, payload, ts } = event;
-
-            switch (type) {
-                // --- Stats Events ---
-                case 'stats.hydrate':
-                    // Full stats hydration from REST
-                    state.stats = { ...state.stats, ...payload };
-                    state.stats.pipelineValue = (payload.contacted || 0) * 1000;
-                    break;
-
-                case 'lead.updated':
-                    // Incremental lead count update
-                    if (payload.total_leads !== undefined) {
-                        state.stats.leads = payload.total_leads;
-                        state.stats.pipelineValue = payload.total_leads * 1000;
-                    }
-                    if (payload.delta) {
-                        console.log(`[State] Lead delta: +${payload.delta}`);
-                    }
-                    break;
-
-                case 'call.logged':
-                    // Increment call count
-                    state.stats.calls += 1;
-                    state.activity.calls += 1;
-
-                    // Prepend to transcripts list with stable keys
-                    if (payload && payload.call_id) {
-                        const callRecord = {
-                            call_id: payload.call_id,
-                            from_number: payload.from_number || null,
-                            to_number: payload.to_number || null,
-                            timestamp: payload.timestamp || ts || new Date().toISOString(),
-                            disposition: payload.disposition || 'completed',
-                            summary: payload.summary || null,
-                            transcript: payload.transcript || null,
-                            duration_seconds: payload.duration_seconds || 0
-                        };
-                        // Dedupe by call_id
-                        const exists = state.transcripts.some(t => t.call_id === callRecord.call_id);
-                        if (!exists) {
-                            state.transcripts = [callRecord, ...state.transcripts].slice(0, 50);
-                        }
-                    }
-                    break;
-
-                case 'task.updated':
-                case 'task.created':
-                    // Log task events (could add to activity feed)
-                    console.log('[State] Task event:', payload);
-                    break;
-
-                // --- Health Events ---
-                case 'health.changed':
-                    state.system.status = payload.status || 'unknown';
-                    break;
-
-                case 'system.connected':
-                    state.system.sseConnected = true;
-                    state.system.status = 'healthy';
-                    break;
-
-                case 'system.disconnected':
-                    state.system.sseConnected = false;
-                    state.system.status = 'reconnecting';
-                    break;
-
-                case 'system.update':
-                    state.system.lastUpdate = ts || new Date().toISOString();
-                    break;
-
-                // --- Leads List Events ---
-                case 'leads.hydrate':
-                    state.leads = payload.leads || [];
-                    break;
-
-                case 'leads.prepend':
-                    // Add new lead to top of list
-                    state.leads = [payload, ...state.leads].slice(0, 50);
-                    break;
-
-                // --- Activity Events ---
-                case 'activity.hydrate':
-                    state.activity = { ...state.activity, ...payload };
-                    break;
-
-                // --- Transcripts Events ---
-                case 'transcripts.hydrate':
-                    state.transcripts = payload.transcripts || [];
-                    break;
-
-                // --- Dashboard Update (SSE batch) ---
-                case 'dashboard.update':
-                    // Handle SSE dashboard.update payload
-                    if (payload.stats) {
-                        if (payload.stats.leads !== undefined) {
-                            state.stats.leads = payload.stats.leads;
-                            state.stats.pipelineValue = payload.stats.leads * 1000;
-                        }
-                        if (payload.stats.health) {
-                            state.system.status = payload.stats.health;
-                        }
-                    }
-                    // Process nested events
-                    if (payload.events && Array.isArray(payload.events)) {
-                        payload.events.forEach(evt => applyEvent(state, evt));
-                    }
-                    state.system.lastUpdate = ts || new Date().toISOString();
-                    break;
-
-                default:
-                    console.log('[State] Unknown event type:', type);
-            }
-
-            return state;
-        }
-
-        // ==========================================================
-        // RENDER FROM STATE - UI updates from state
-        // ==========================================================
-        function renderFromState(state) {
-            // KPI Tiles
-            document.getElementById('statLeads').innerText = state.stats.leads || 0;
-            document.getElementById('statPipeline').innerText = '$' + (state.stats.pipelineValue || 0).toLocaleString();
-            document.getElementById('statCalls').innerText = state.stats.calls || 0;
-            document.getElementById('statAppts').innerText = state.stats.appointments || 0;
-
-            // System Status
-            const statusEl = document.getElementById('systemStatus');
-            if (state.system.status === 'healthy' || state.system.status === 'ok') {
-                statusEl.innerHTML = '● Systems Online';
-                statusEl.className = 'text-xs text-green-400';
-            } else if (state.system.status === 'connecting') {
-                statusEl.innerHTML = '◐ Connecting...';
-                statusEl.className = 'text-xs text-yellow-400 animate-pulse';
-            } else {
-                statusEl.innerHTML = '○ Reconnecting...';
-                statusEl.className = 'text-xs text-orange-400';
-            }
-
-            // Last Update
-            if (state.system.lastUpdate) {
-                const time = new Date(state.system.lastUpdate).toLocaleTimeString();
-                document.getElementById('lastUpdate').innerText = `Last update: ${time}`;
-            }
-        }
-
-        // Helper: Apply event and re-render
-        function dispatch(event) {
-            applyEvent(dashboardState, event);
-            renderFromState(dashboardState);
-        }
-
-        // ==========================================================
-        // 1. DATA FETCHING (Hydrates State)
-        // ==========================================================
-        async function fetchStats() {
-            // Simple counts
-            const { count: total } = await sbClient.from('leads').select('*', { count: 'exact', head: true });
-            const { count: contacted } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'contacted');
-
-            // Count calls from leads that have been called (have last_called set)
-            const { count: callsFromLeads } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).not('last_called', 'is', null);
-
-            // Also try system_logs for CALL entries
-            const { count: callsFromLogs } = await sbClient.from('system_logs').select('*', { count: 'exact', head: true }).ilike('message', '%CALL%');
-
-            // Use whichever is higher
-            const calls = Math.max(callsFromLeads || 0, callsFromLogs || 0, contacted || 0);
-
-            // "Appointments" approximated
-            const { count: appts } = await sbClient.from('leads').select('*', { count: 'exact', head: true }).in('status', ['converted', 'appointment_set']);
-
-            // Dispatch hydration event
-            dispatch({
-                type: 'stats.hydrate',
-                payload: { leads: total || 0, contacted: contacted || 0, calls: calls || 0, appointments: appts || 0 },
-                ts: new Date().toISOString()
+        function renderComms(items) {
+            const feed = document.getElementById('comms-feed');
+            feed.innerHTML = "";
+            items.forEach(i => {
+                const time = new Date(i.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const color = i.status.includes('sent') ? 'text-green-500' : 'text-blue-400';
+                const icon = i.status.includes('sent') ? '→' : '←';
+                const html = `
+                <div class="flex justify-between items-center py-2 border-b border-gray-900 hover:bg-white/5 px-2">
+                    <div>
+                        <span class="${color} font-bold mr-2">${icon}</span>
+                        <span class="text-sm font-bold text-gray-300">${i.full_name || 'Unknown'}</span>
+                        <div class="text-xs text-gray-500 ml-5">${i.ai_strategy || i.status}</div>
+                    </div>
+                    <div class="text-xs text-gray-600 font-mono">${time}</div>
+                </div>
+            `;
+                feed.innerHTML += html;
             });
         }
 
-        async function fetchLeads() {
-            const filter = document.getElementById('campaignFilter').value;
-            let query = sbClient.from('leads').select('*').order('created_at', { ascending: false }).limit(50);
-
-            // Note: 'industry' is inside 'agent_research' JSONB usually, so perfect filtering might require raw SQL or standardized columns.
-            // For now, we fetch recent 50 and filter client side if needed, or rely on implicit order.
-
-            const { data, error } = await query;
-            if (error) { console.error(error); return; }
-
-            const container = document.getElementById('leadsContainer');
-            container.innerHTML = '';
-
-            data.forEach(lead => {
-                // Parse JSONB
-                const meta = typeof lead.agent_research === 'string' ? JSON.parse(lead.agent_research) : lead.agent_research || {};
-                const industry = meta.industry || 'General';
-                const phone = meta.phone || lead.phone || 'Unknown';
-
-                // Color Code
-                let badgeClass = "bg-slate-700 text-slate-300";
-                if (lead.status === 'processing_email') badgeClass = "bg-orange-500/20 text-orange-400";
-                if (lead.status === 'contacted') badgeClass = "bg-blue-500/20 text-blue-400";
-                if (lead.status === 'system_crash') badgeClass = "bg-red-500/20 text-red-400 animate-pulse";
-                if (lead.status === 'warming_up') badgeClass = "bg-yellow-500/20 text-yellow-400";
-
-                const div = document.createElement('div');
-                div.className = "grid grid-cols-12 gap-2 bg-white/5 p-3 rounded-lg items-center hover:bg-white/10 transition";
-                div.innerHTML = `
-                    <div class="col-span-4">
-                        <div class="font-bold text-sm text-white truncate">${lead.company_name || 'Prospect'}</div>
-                        <div class="text-[10px] text-slate-400">${industry}</div>
-                    </div>
-                    <div class="col-span-3">
-                        <span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${badgeClass}">${lead.status}</span>
-                    </div>
-                    <div class="col-span-3 text-[10px] font-mono text-slate-500">
-                        ${phone}<br>
-                        <span title="Created At">${new Date(lead.created_at).toLocaleString()}</span>
-                    </div>
-                    <div class="col-span-2 text-right">
-                         <button onclick="viewDossier('${lead.id}')" class="text-blue-400 hover:text-white text-xs underline">VIEW</button>
-                    </div>
-                `;
-                container.appendChild(div);
+        function renderCampaigns(items) {
+            const list = document.getElementById('campaigns-list');
+            list.innerHTML = "";
+            items.forEach(c => {
+                const html = `
+                <tr class="row-item text-gray-400 hover:text-white transition">
+                    <td class="font-bold">${c.name}</td>
+                    <td>${c.sent}</td>
+                    <td>${c.replied}</td>
+                    <td><span class="bg-green-900 text-green-300 px-1 text-[10px] rounded">ACTIVE</span></td>
+                </tr>
+            `;
+                list.innerHTML += html;
             });
         }
 
-        async function viewDossier(id) {
-            // Fetch lead details
-            const { data, error } = await sbClient.from('leads').select('*').eq('id', id).single();
-
-            if (error || !data) {
-                alert('Could not load lead details');
-                return;
-            }
-
-            // Parse research data
-            let research = data.agent_research || {};
-            if (typeof research === 'string') {
-                try { research = JSON.parse(research); } catch (e) { research = {}; }
-            }
-
-            // Build dossier content
-            const phone = research.phone || data.phone || 'N/A';
-            const email = research.email || data.email || 'N/A';
-            const website = research.website || 'N/A';
-            const owner = research.owner_name || research.owner || 'Unknown';
-            const city = data.city || research.city || 'N/A';
-            const industry = data.industry || 'N/A';
-
-            const content = `
-<div class="style-fix-8" data-style-migrated="true">
-    <h2 class="style-fix-9" data-style-migrated="true">📋 ${data.company_name || 'Prospect'}</h2>
-    <div class="style-fix-10" data-style-migrated="true">
-        <div><strong class="style-fix-11" data-style-migrated="true">Status:</strong> ${data.status}</div>
-        <div><strong class="style-fix-11" data-style-migrated="true">Industry:</strong> ${industry}</div>
-        <div><strong class="style-fix-11" data-style-migrated="true">City:</strong> ${city}</div>
-        <hr class="style-fix-12" data-style-migrated="true">
-        <div><strong class="style-fix-11" data-style-migrated="true">📞 Phone:</strong> ${phone}</div>
-        <div><strong class="style-fix-11" data-style-migrated="true">📧 Email:</strong> ${email}</div>
-        <div><strong class="style-fix-11" data-style-migrated="true">🌐 Website:</strong> ${website}</div>
-        <div><strong class="style-fix-11" data-style-migrated="true">👤 Owner:</strong> ${owner}</div>
-        <hr class="style-fix-12" data-style-migrated="true">
-        <div><strong class="style-fix-11" data-style-migrated="true">Created:</strong> ${new Date(data.created_at).toLocaleString()}</div>
-        <div><strong class="style-fix-11" data-style-migrated="true">Last Called:</strong> ${data.last_called ? new Date(data.last_called).toLocaleString() : 'Never'}</div>
-    </div>
-    <button onclick="this.parentElement.parentElement.remove()" class="style-fix-13" data-style-migrated="true">Close</button>
-</div>`;
-
-            // Show modal
-            const modal = document.createElement('div');
-            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;';
-            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-            modal.innerHTML = content;
-            document.body.appendChild(modal);
-        }
-
-        // --- ACTIVITY FETCHING ---
-        async function fetchActivity() {
-            const container = document.getElementById('activityContainer');
-            container.innerHTML = '<div class="text-center text-slate-500 py-4">Loading...</div>';
-
-            try {
-                // Get recent system logs for activity
-                const { data, error } = await sbClient
-                    .from('system_logs')
-                    .select('*')
-                    .in('event_type', ['CLOUD_OUTREACH_COMPLETE', 'CLOUD_DRIP_COMPLETE', 'MULTI_TOUCH_SEQUENCE', 'EMAIL_SENT', 'SMS_SENT', 'CALL_MADE'])
-                    .order('created_at', { ascending: false })
-                    .limit(50);
-
-                if (error) throw error;
-
-                // Count totals
-                let emails = 0, sms = 0, calls = 0;
-                if (data) {
-                    data.forEach(log => {
-                        const meta = log.metadata || {};
-                        if (meta.email) emails += meta.email;
-                        if (meta.sent) emails += meta.sent;
-                        if (meta.sms) sms += meta.sms;
-                        if (meta.call) calls += meta.call;
-                        if (log.event_type === 'EMAIL_SENT') emails++;
-                        if (log.event_type === 'SMS_SENT') sms++;
-                        if (log.event_type === 'CALL_MADE') calls++;
-                    });
-                }
-
-                document.getElementById('emailCount').textContent = emails;
-                document.getElementById('smsCount').textContent = sms;
-                document.getElementById('callCount').textContent = calls;
-
-                // Display activity feed
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<div class="text-center text-slate-500 py-4">No recent activity</div>';
-                    return;
-                }
-
-                container.innerHTML = '';
-                data.slice(0, 15).forEach(log => {
-                    const time = new Date(log.created_at).toLocaleTimeString();
-                    const date = new Date(log.created_at).toLocaleDateString();
-                    let icon = '📧';
-                    if (log.event_type.includes('SMS')) icon = '📱';
-                    if (log.event_type.includes('CALL')) icon = '📞';
-                    if (log.event_type.includes('DRIP')) icon = '💧';
-                    if (log.event_type.includes('OUTREACH')) icon = '🚀';
-
-                    const div = document.createElement('div');
-                    div.className = 'bg-slate-800/30 rounded p-2 text-xs flex items-center gap-2';
-                    div.innerHTML = `
-                        <span>${icon}</span>
-                        <span class="flex-1 text-slate-300">${log.message || log.event_type}</span>
-                        <span class="text-slate-500">${date} ${time}</span>
-                    `;
-                    container.appendChild(div);
-                });
-            } catch (err) {
-                console.error('Activity fetch error:', err);
-                container.innerHTML = '<div class="text-center text-red-400 py-4">Error loading activity</div>';
-            }
-        }
-
-        // --- TRANSCRIPTS FETCHING (Uses call_logs table) ---
-        async function fetchTranscripts() {
-            const container = document.getElementById('transcriptsContainer');
-            container.innerHTML = '<div class="text-center text-slate-500 py-4">Loading call logs...</div>';
-
-            try {
-                // First try call_logs table
-                const { data: callData, error: callError } = await sbClient
-                    .from('call_logs')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(30);
-
-                if (!callError && callData && callData.length > 0) {
-                    renderCallLogs(callData);
-                    return;
-                }
-
-                // Fallback to system_logs
-                const { data, error } = await sbClient
-                    .from('system_logs')
-                    .select('*')
-                    .or('event_type.ilike.%CALL%,level.eq.call_transcript')
-                    .order('created_at', { ascending: false })
-                    .limit(30);
-
-                if (error) throw error;
-
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<div class="text-center text-slate-500 py-6">No calls recorded yet. System is making calls!</div>';
-                    return;
-                }
-
-                renderSystemLogs(data);
-            } catch (err) {
-                console.error('Transcripts error:', err);
-                loadBackupTranscripts();
-            }
-        }
-
-        function renderCallLogs(data) {
-            const container = document.getElementById('transcriptsContainer');
-            container.innerHTML = '';
-
-            data.forEach(call => {
-                const date = new Date(call.created_at).toLocaleString();
-                const statusClass = call.status === 'completed' ? 'text-green-400 bg-green-500/20' :
-                    call.status === 'failed' ? 'text-red-400 bg-red-500/20' : 'text-blue-400 bg-blue-500/20';
-
-                const div = document.createElement('div');
-                div.className = 'bg-slate-800/50 rounded-lg p-4 border border-white/5 mb-2';
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div>
-                            <span class="font-bold text-white">📞 ${call.customer_name || 'Unknown'}</span>
-                            <span class="text-xs text-slate-500 ml-2">${call.phone_number || ''}</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <span class="text-xs px-2 py-1 rounded ${statusClass}">${call.status || 'pending'}</span>
-                            <span class="text-xs text-slate-400">${call.duration || 0}s</span>
-                        </div>
-                    </div>
-                    <div class="text-xs text-slate-500 mb-2">${date}</div>
-                    ${call.summary ? `<p class="text-sm text-slate-300 mb-2">${call.summary}</p>` : ''}
-                    ${call.transcript ? `
-                    <details class="mt-2">
-                        <summary class="text-xs text-blue-400 cursor-pointer">📜 View Transcript</summary>
-                        <pre class="mt-2 p-3 bg-slate-900 rounded text-xs text-slate-400 whitespace-pre-wrap max-h-48 overflow-y-auto">${call.transcript}</pre>
-                    </details>` : ''}
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function renderSystemLogs(data) {
-            const container = document.getElementById('transcriptsContainer');
-            container.innerHTML = '';
-
-            data.forEach(log => {
-                const date = new Date(log.created_at).toLocaleString();
-                const meta = log.metadata || {};
-
-                const div = document.createElement('div');
-                div.className = 'bg-slate-800/50 rounded-lg p-4 border border-white/5 mb-2';
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-bold text-white">📞 ${log.event_type}</span>
-                        <span class="text-xs text-slate-400">${date}</span>
-                    </div>
-                    <p class="text-sm text-slate-300">${log.message || JSON.stringify(meta).substring(0, 200)}</p>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        async function loadBackupTranscripts() {
-            const container = document.getElementById('transcriptsContainer');
-            try {
-                const res = await fetch('/todays_transcripts.json');
-                const data = await res.json();
-
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<div class="text-center text-slate-500 py-6">No transcripts available yet</div>';
-                    return;
-                }
-
-                container.innerHTML = '';
-                data.forEach(t => {
-                    const div = document.createElement('div');
-                    div.className = 'bg-slate-800/50 rounded-lg p-4 border border-white/5 mb-2';
-                    div.innerHTML = `
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="font-bold text-white">📞 ${t.customer_name || 'Unknown'}</span>
-                            <span class="text-xs px-2 py-1 rounded bg-blue-500/20 text-blue-400">${t.ended_reason || 'ended'}</span>
-                        </div>
-                        <div class="text-xs text-slate-500 mb-2">${t.customer_phone} • ${new Date(t.created_at).toLocaleString()}</div>
-                        <p class="text-sm text-slate-300">${t.summary || 'No summary'}</p>
-                        ${t.transcript ? `<details class="mt-2"><summary class="text-xs text-blue-400 cursor-pointer">📜 Transcript</summary><pre class="mt-2 p-2 bg-slate-900 rounded text-xs text-slate-400 whitespace-pre-wrap">${t.transcript}</pre></details>` : ''}
-                    `;
-                    container.appendChild(div);
-                });
-            } catch (e) {
-                container.innerHTML = '<div class="text-center text-red-400 py-4">Unable to load transcripts</div>';
-            }
-        }
-
-        // --- 2. VAPI UPLINK ---
-        function resetUplinkUI() {
-            isConnected = false;
-            document.getElementById('statusUplink').innerText = "Status: Ready";
-            document.getElementById('statusUplink').className = "mt-3 text-xs text-slate-500 font-mono";
-            document.getElementById('btnUplink').innerText = "INITIATE LINK";
-            document.getElementById('btnUplink').className = "px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold w-full transition shadow-lg shadow-blue-500/20";
-        }
-
-        function toggleUplink() {
-            // Try to init if not ready
-            if (!vapi && window.Vapi) {
-                vapi = new window.Vapi(VAPI_PUBLIC_KEY);
-            }
-
-            if (!vapi) {
-                document.getElementById('statusUplink').innerText = "Status: Loading SDK...";
-                setTimeout(toggleUplink, 1000); // Retry in 1 second
-                return;
-            }
-
-            if (isConnected) {
-                vapi.stop();
-                isConnected = false;
-            } else {
-                document.getElementById('statusUplink').innerText = "Status: Connecting...";
-                vapi.start(ORCHESTRATOR_ID);
-                isConnected = true;
-            }
-        }
-
-        // --- 2b. VOICE PREFLIGHT CHECK ---
-        async function voicePreflightCheck() {
-            const diagnostics = document.getElementById('voiceDiagnostics');
-            const results = [];
-
-            // Check 1: SDK script loaded
-            if (window.Vapi) {
-                results.push("✅ SDK loaded");
-            } else {
-                results.push("❌ SDK not loaded (check CDN/CSP)");
-            }
-
-            // Check 2: Public token present
-            if (VAPI_PUBLIC_KEY && VAPI_PUBLIC_KEY.length > 10) {
-                results.push("✅ Token present");
-            } else {
-                results.push("❌ Missing VAPI_PUBLIC_KEY");
-            }
-
-            // Check 3: Mic permissions
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                stream.getTracks().forEach(t => t.stop());
-                results.push("✅ Mic available");
-            } catch (e) {
-                results.push("❌ Mic: " + e.message);
-            }
-
-            // Check 4: Backend reachable
-            try {
-                const res = await fetch(API_BASE + '/health', { method: 'GET' });
-                if (res.ok) {
-                    results.push("✅ Backend OK");
-                } else {
-                    results.push("⚠️ Backend: " + res.status);
-                }
-            } catch (e) {
-                results.push("❌ Backend unreachable");
-            }
-
-            diagnostics.innerHTML = results.join(' | ');
-            console.log('[Voice Preflight]', results);
-        }
-
-        // --- 2c. FORCE SYNC CALLS ---
-        async function forceSyncCalls() {
-            const container = document.getElementById('transcriptsContainer');
-            container.innerHTML = '<div class="text-center text-blue-400 py-4">⚡ Syncing calls...</div>';
-
-            try {
-                const res = await fetch(API_BASE + '/api/calls?limit=20');
-                const data = await res.json();
-
-                if (data.calls && data.calls.length > 0) {
-                    // Emit synthetic call.logged events for each call
-                    data.calls.forEach(call => {
-                        dispatch({
-                            type: 'call.logged',
-                            ts: call.timestamp || new Date().toISOString(),
-                            payload: call
-                        });
-                    });
-                    console.log(`[Force Sync] Synced ${data.calls.length} calls`);
-                } else {
-                    container.innerHTML = '<div class="text-center text-slate-500 py-6">No calls found</div>';
-                }
-            } catch (e) {
-                console.error('[Force Sync] Error:', e);
-                container.innerHTML = '<div class="text-center text-red-400 py-4">Sync failed: ' + e.message + '</div>';
-            }
-        }
-
-        // --- 2d. TEXT UPLINK FALLBACK ---
-        async function sendTextUplink() {
-            const input = document.getElementById('textUplinkInput');
-            const responseEl = document.getElementById('textUplinkResponse');
-            const message = input.value.trim();
-
-            if (!message) return;
-
-            responseEl.innerHTML = '<span class="text-yellow-400">Sending...</span>';
-            input.value = '';
-
-            try {
-                const res = await fetch(API_BASE + '/api/orchestrator/message', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, source: 'dashboard_text_uplink' })
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    responseEl.innerHTML = '<span class="text-green-400">' + (data.response || data.message || 'Sent!') + '</span>';
-                } else {
-                    responseEl.innerHTML = '<span class="text-red-400">Error: ' + res.status + '</span>';
-                }
-            } catch (e) {
-                responseEl.innerHTML = '<span class="text-red-400">Failed: ' + e.message + '</span>';
-            }
-        }
-
-        // --- 3. ASSET INBOX ---
-        async function saveAsset() {
-            const url = document.getElementById('assetInput').value;
-            const status = document.getElementById('assetStatus');
-
-            if (!url) return;
-            status.innerText = "Ingesting...";
-            status.className = "mt-2 text-[10px] text-blue-400";
-
-            // Push to Supabase 'asset_inbox' or just 'system_logs' for now if table missing
-            // We'll trust 'leads' table for loose storage if needed, but better to log it.
-            const { error } = await sbClient.from('system_logs').insert({
-                level: 'INFO',
-                event_type: 'ASSET_UPLOAD',
-                message: 'Asset Uploaded from Dashboard: ' + url,
-                metadata: { url: url, source: 'dashboard' }
-            });
-
-            if (!error) {
-                status.innerText = "✅ Saved to Brain";
-                status.className = "mt-2 text-[10px] text-green-400";
-                document.getElementById('assetInput').value = "";
-                setTimeout(() => status.innerText = "", 3000);
-            } else {
-                status.innerText = "❌ Error";
-                status.className = "mt-2 text-[10px] text-red-500";
-            }
-        }
-
-        // --- 4. SSE REALTIME UPDATES ---
-        const SSE_URL = API_BASE + '/api/events';
-        let eventSource = null;
-        let sseRetryCount = 0;
-        const MAX_RETRY_DELAY = 60000; // Max 60 seconds
-
-        // Debug panel state
-        const debugState = {
-            eventLog: [],       // Last 20 events
-            eventCount: 0,
-            sseState: 'INIT'    // INIT, CONNECTING, CONNECTED, RECONNECTING, OFFLINE
-        };
-
-        function updateDebugPanel() {
-            // Update SSE state display
-            const stateEl = document.getElementById('debugSseState');
-            const stateColors = {
-                'INIT': 'text-slate-400',
-                'CONNECTING': 'text-yellow-400',
-                'CONNECTED': 'text-green-400',
-                'RECONNECTING': 'text-orange-400',
-                'OFFLINE': 'text-red-400'
-            };
-            stateEl.innerText = debugState.sseState;
-            stateEl.className = `font-mono ${stateColors[debugState.sseState] || 'text-slate-400'}`;
-
-            // Update debug status badge
-            const statusEl = document.getElementById('debugStatus');
-            if (debugState.sseState === 'CONNECTED') {
-                statusEl.innerText = 'Connected';
-                statusEl.className = 'text-xs px-2 py-1 rounded bg-green-500/20 text-green-400';
-            } else if (debugState.sseState === 'CONNECTING' || debugState.sseState === 'RECONNECTING') {
-                statusEl.innerText = debugState.sseState;
-                statusEl.className = 'text-xs px-2 py-1 rounded bg-yellow-500/20 text-yellow-400';
-            } else {
-                statusEl.innerText = 'Offline';
-                statusEl.className = 'text-xs px-2 py-1 rounded bg-red-500/20 text-red-400';
-            }
-
-            // Update retry count
-            document.getElementById('debugRetryCount').innerText = sseRetryCount;
-
-            // Update event count
-            document.getElementById('debugEventCount').innerText = debugState.eventCount;
-
-            // Update event log
-            const logEl = document.getElementById('debugEventLog');
-            if (debugState.eventLog.length === 0) {
-                logEl.innerHTML = '<div class="text-slate-500">Waiting for events...</div>';
-            } else {
-                logEl.innerHTML = debugState.eventLog.map(evt => {
-                    const time = new Date(evt.ts).toLocaleTimeString();
-                    const typeColor = evt.type.includes('error') ? 'text-red-400' :
-                        evt.type.includes('health') ? 'text-blue-400' :
-                            evt.type.includes('lead') ? 'text-green-400' : 'text-slate-400';
-                    return `<div class="${typeColor}">[${time}] ${evt.type}: ${JSON.stringify(evt.payload || {}).substring(0, 80)}</div>`;
-                }).join('');
-            }
-        }
-
-        function logDebugEvent(event) {
-            debugState.eventCount++;
-            debugState.eventLog.unshift(event);
-            if (debugState.eventLog.length > 20) {
-                debugState.eventLog.pop();
-            }
-            updateDebugPanel();
-        }
-
-        function updateLastUpdate() {
-            const now = new Date().toLocaleTimeString();
-            document.getElementById('lastUpdate').innerText = `Last update: ${now}`;
-        }
-
-        function updateSystemStatus(status) {
-            const el = document.getElementById('systemStatus');
-            if (status === 'healthy' || status === 'ok') {
-                el.innerHTML = '● Systems Online';
-                lassName = ' text-green-400';
-            } else if (status === 'connecting') {
-                el.innerHTML = '◐ Connecting...';
-                el.className = 'text-xs text-yellow-400 animate-pulse';
-            } else {
-                el.innerHTML = '○ Reconnecting...';
-                el.className = 'text-xs text-orange-400';
-            }
-        }
-
-        function handleSSEMessage(event) {
-            try {
-                const data = JSON.parse(event.data);
-                sseRetryCount = 0; // Reset retry on success
-                updateLastUpdate();
-
-                // Log to debug panel
-                logDebugEvent({ type: data.type || 'update', ts: data.ts || new Date().toISOString(), payload: data.payload?.stats });
-
-                // Update stats from SSE payload
-                if (data.payload && data.payload.stats) {
-                    const stats = data.payload.stats;
-                    if (stats.leads !== undefined) {
-                        document.getElementById('statLeads').innerText = stats.leads;
-                        document.getElementById('statPipeline').innerText = '$' + (stats.leads * 1000).toLocaleString();
-                    }
-                    if (stats.health) {
-                        updateSystemStatus(stats.health);
+        let funnelChartRef = null;
+        function renderFunnel(funnel) {
+            const ctx = document.getElementById('funnelChart').getContext('2d');
+            if (funnelChartRef) funnelChartRef.destroy();
+
+            const labels = Object.keys(funnel);
+            const data = Object.values(funnel);
+
+            funnelChartRef = new Chart(ctx, {
+                type: 'bar', // Visualizing as a bar chart for now
+                data: {
+                    labels: labels.map(l => l.toUpperCase()),
+                    datasets: [{
+                        label: 'Leads',
+                        data: data,
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#eab308', '#22c55e', '#ef4444'],
+                        barThickness: 20
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#222' }, ticks: { color: '#666' } },
+                        x: { grid: { display: false }, ticks: { color: '#888' } }
                     }
                 }
-
-                // Process individual events
-                if (data.payload && data.payload.events) {
-                    data.payload.events.forEach(evt => {
-                        // Log each sub-event
-                        logDebugEvent(evt);
-
-                        if (evt.type === 'lead.updated') {
-                            console.log('[SSE] Lead updated:', evt.payload);
-                            // Trigger leads refresh for new data
-                            fetchLeads();
-                        }
-                        if (evt.type === 'call.logged') {
-                            console.log('[SSE] Call logged:', evt.payload);
-                            // Update call count
-                            const callEl = document.getElementById('statCalls');
-                            const current = parseInt(callEl.innerText) || 0;
-                            callEl.innerText = current + 1;
-                        }
-                        if (evt.type === 'health.changed') {
-                            updateSystemStatus(evt.payload.status);
-                        }
-                    });
-                }
-            } catch (e) {
-                console.warn('[SSE] Parse error:', e);
-                logDebugEvent({ type: 'error', ts: new Date().toISOString(), payload: { error: e.message } });
-            }
-        }
-
-        function connectSSE() {
-            // Get auth from localStorage or default
-            const auth = localStorage.getItem('sovereign_auth') === 'true' ? 'sovereign' : 'empire';
-
-            if (eventSource) {
-                eventSource.close();
-            }
-
-            debugState.sseState = 'CONNECTING';
-            updateDebugPanel();
-            updateSystemStatus('connecting');
-            eventSource = new EventSource(`${SSE_URL}?auth=${auth}`);
-
-            eventSource.addEventListener('update', handleSSEMessage);
-            eventSource.addEventListener('ping', () => {
-                console.log('[SSE] Keepalive ping received');
-                updateLastUpdate();
-                logDebugEvent({ type: 'ping', ts: new Date().toISOString(), payload: {} });
             });
-
-            eventSource.onopen = () => {
-                console.log('[SSE] Connected');
-                sseRetryCount = 0;
-                debugState.sseState = 'CONNECTED';
-                updateDebugPanel();
-                updateSystemStatus('healthy');
-            };
-
-            eventSource.onerror = (e) => {
-                console.warn('[SSE] Connection error, will retry...');
-                eventSource.close();
-                debugState.sseState = 'RECONNECTING';
-                updateDebugPanel();
-
-                // Exponential backoff: 1s, 2s, 4s, 8s, 16s, 32s, max 60s
-                sseRetryCount++;
-                const delay = Math.min(1000 * Math.pow(2, sseRetryCount - 1), MAX_RETRY_DELAY);
-                updateSystemStatus('reconnecting');
-                console.log(`[SSE] Retry ${sseRetryCount} in ${delay}ms`);
-                logDebugEvent({ type: 'connection.error', ts: new Date().toISOString(), payload: { retry: sseRetryCount, delay } });
-                setTimeout(connectSSE, delay);
-            };
         }
 
-        // --- 5. INIT ---
-        window.addEventListener('load', () => {
-            // Initial fetch (immediate data)
-            fetchStats();
-            fetchLeads();
-            fetchTranscripts();
-            fetchActivity();
-
-            // Connect SSE for realtime updates
-            connectSSE();
-
-            // Run voice preflight diagnostics
-            voicePreflightCheck();
-
-            // MODAL HEALTH PING - Proves frontend is hitting Modal
-            (async function pingModalHealth() {
-                const statusEl = document.getElementById('modalApiStatus');
-                try {
-                    const res = await fetch(API_BASE + "/health", { mode: "cors" });
-                    if (res.ok) {
-                        console.log("MODAL_HEALTH_OK");
-                        statusEl.innerText = "Modal API: OK";
-                        statusEl.className = "text-[10px] text-green-400";
-                    } else {
-                        console.error("MODAL_HEALTH_FAIL: status " + res.status);
-                        statusEl.innerText = "Modal API: FAIL (" + res.status + ")";
-                        statusEl.className = "text-[10px] text-red-400";
-                    }
-                } catch (e) {
-                    console.error("MODAL_HEALTH_ERROR:", e.message);
-                    statusEl.innerText = "Modal API: ERROR";
-                    statusEl.className = "text-[10px] text-red-400";
-                }
-            })();
-
-            // Fallback polling (reduced frequency since SSE handles most updates)
-            setInterval(fetchStats, 60000);      // Every 60s as backup
-            setInterval(fetchLeads, 60000);      // Every 60s as backup
-            setInterval(fetchTranscripts, 120000); // Every 2 min
-            setInterval(fetchActivity, 120000);    // Every 2 min
-
-            // Freshness + Campaign panel initialization
-            refreshFreshness();
-            fetchCampaignLedger();
-            setInterval(refreshFreshness, 15000);     // Every 15s
-            setInterval(fetchCampaignLedger, 30000);  // Every 30s
-        });
-
-        // ==========================================================
-        // FRESHNESS PANEL - Polls /api/truth from Modal
-        // ==========================================================
-        async function refreshFreshness() {
-            const badge = document.getElementById('freshnessBadge');
-            try {
-                const res = await fetch('/api/truth', { mode: 'cors' });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-
-                // Update freshness panel
-                document.getElementById('freshServerTs').textContent =
-                    data.server_time ? new Date(data.server_time).toLocaleTimeString() : '--';
-                document.getElementById('freshLastEvent').textContent =
-                    data.last_event_ts ? timeAgo(data.last_event_ts) : 'NONE';
-                document.getElementById('freshLastCampaign').textContent =
-                    data.last_campaign_ran_at ? timeAgo(data.last_campaign_ran_at) : 'NONE';
-                document.getElementById('freshSmsSent').textContent =
-                    data.sms_sent_last_24h ?? '--';
-                document.getElementById('freshSmsFailed').textContent =
-                    data.sms_failed_last_24h ?? '--';
-
-                // Update badge
-                badge.textContent = 'LIVE';
-                badge.className = 'text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400';
-            } catch (e) {
-                console.warn('[Freshness] Error:', e.message);
-                badge.textContent = 'OFFLINE';
-                badge.className = 'text-xs px-2 py-0.5 rounded bg-red-500/20 text-red-400';
-            }
-        }
-
-        // ==========================================================
-        // CAMPAIGN CONTROL - Sends commands to Modal /api/control/*
-        // ==========================================================
-        async function campaignControl(action) {
-            const adminToken = prompt('Enter Admin Token:');
-            if (!adminToken) return;
-
-            const endpoints = {
-                'start': '/api/control/campaign/start',
-                'pause': '/api/control/campaign/pause',
-                'stop': '/api/control/campaign/stop',
-                'run-batch': '/api/control/campaign/run-batch'
-            };
-
-            const endpoint = endpoints[action];
-            if (!endpoint) {
-                alert('Unknown action: ' + action);
-                return;
-            }
-
-            try {
-                const res = await fetch(API_BASE + endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Admin-Token': adminToken
-                    },
-                    body: JSON.stringify({ action })
-                });
-
-                const data = await res.json();
-                if (data.success || data.status === 'ok') {
-                    alert('✅ ' + action.toUpperCase() + ' executed');
-                    refreshFreshness();
-                } else {
-                    alert('❌ Failed: ' + (data.error || data.message || 'Unknown error'));
-                }
-            } catch (e) {
-                alert('❌ Error: ' + e.message);
-            }
-        }
-
-        // ==========================================================
-        // CAMPAIGN LEDGER - Fetches last 25 campaign events from Supabase
-        // ==========================================================
-        async function fetchCampaignLedger() {
-            const container = document.getElementById('campaignLedger');
-            try {
-                // Fetch campaign-related events from event_log_v2
-                const { data, error } = await sbClient
-                    .from('event_log_v2')
-                    .select('type, ts, entity_id, payload')
-                    .or('type.ilike.%campaign%,type.ilike.%sms%,type.ilike.%outreach%')
-                    .order('ts', { ascending: false })
-                    .limit(25);
-
-                if (error) throw error;
-
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<div class="text-center text-slate-500 py-4">No campaign events yet</div>';
-                    return;
-                }
-
-                container.innerHTML = '';
-                data.forEach(evt => {
-                    const time = evt.ts ? new Date(evt.ts).toLocaleString() : '--';
-                    let icon = '📋';
-                    if (evt.type?.includes('sms')) icon = '📱';
-                    if (evt.type?.includes('campaign')) icon = '🎯';
-                    if (evt.type?.includes('outreach')) icon = '🚀';
-                    if (evt.type?.includes('email')) icon = '📧';
-
-                    const phone = evt.entity_id || evt.payload?.phone || '--';
-                    const div = document.createElement('div');
-                    div.className = 'bg-slate-800/30 rounded p-2 flex items-center gap-2';
-                    div.innerHTML = `
-                        <span>${icon}</span>
-                        <span class="text-cyan-400 w-32 truncate">${evt.type}</span>
-                        <span class="text-slate-400 flex-1 truncate">${phone}</span>
-                        <span class="text-slate-500">${time}</span>
-                    `;
-                    container.appendChild(div);
-                });
-            } catch (e) {
-                console.error('[CampaignLedger] Error:', e);
-                container.innerHTML = '<div class="text-center text-red-400 py-4">Error loading events</div>';
-            }
-        }
-
+        // Init
+        refreshData();
+        setInterval(refreshData, 30000); // Poll every 30s
     </script>
-    <!-- GHL Chat Widget -->
-    <script src="https://beta.leadconnectorhq.com/loader.js"
-        data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js"
-        data-widget-id="69507213261ca136120c2fe0"></script>
-
-    <!-- BUILD VERSION - Update on each deploy -->
-    <div id="buildId" class="fixed bottom-1 right-2 text-[9px] text-slate-600 font-mono opacity-50">
-        Build: 20260120-1030-389
-    </div>
 </body>
 
 </html>

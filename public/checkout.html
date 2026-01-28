@@ -386,14 +386,19 @@
 
             planInput.value = plan;
 
-            if (plan === 'scale') {
-                planNameEl.textContent = 'AI Scale';
+            if (plan === 'scale' || plan === 'dominance') {
+                planNameEl.textContent = 'AI Dominance';
                 planPriceEl.textContent = '$997/mo';
                 totalPriceEl.textContent = '$997';
             } else if (plan === 'growth') {
                 planNameEl.textContent = 'AI Growth';
                 planPriceEl.textContent = '$497/mo';
                 totalPriceEl.textContent = '$497';
+            } else if (plan === 'secretary') {
+                planNameEl.textContent = 'AI Secretary Only';
+                planPriceEl.textContent = '$99/mo';
+                totalPriceEl.textContent = '$99';
+                document.getElementById('trialPrice').textContent = '$99/mo';
             } else {
                 // Default to Starter ($297) - Golden Standard
                 planNameEl.textContent = 'AI Starter';
@@ -484,10 +489,11 @@
             } catch (e) { console.error("Vapi Init Failed:", e); }
         </script>
 
-        <!-- GHL Chat Widget -->
-        <script src="https://beta.leadconnectorhq.com/loader.js"
-            data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js"
-            data-widget-id="69507213261ca136120c2fe0"></script>
+
+
+        <!-- Sarah AI Voice Widget -->
+        <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi.min.js"></script>
+
 </body>
 
 </html>

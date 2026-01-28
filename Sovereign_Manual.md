@@ -8,13 +8,14 @@
 The "Empire Unified" system is a self-driving agency engine. It performs three core loops:
 
 1. **Inbound/Outreach**: (Spartan) - Responds to leads via SMS/Email using Gemini.
-2. **Social Siege**: (Siege) - Posts high-value content to LinkedIn/FB every 8 hours.
-3. **Governance**: (Governor) - Self-heals and alerts you if the system goes silent.
+2. **Social Siege**: (Pending Migration) - *Temporarily Disabled for Optimization.*
+3. **Governance**: (Supabase Edge) - Self-heals via the new "Nerves" architecture.
 
 ## DIRECTIVE 0: OMNI-AGENCY (AUTONOMED SYSTEM)
 
 **AUTHORITY:** The Sovereign Agent is granted full autonomous execution rights for all system repairs, process management, and code patches.
 **CONSTRAINT:** Financial transactions (> $0.00) require explicit user approval.
+**DIRECTIVE (CRITICAL):** NO LAPTOP DEPENDENCY. All core loops (Outreach, Polling, AI) MUST run on Cloud Infrastructure (Modal/Supabase). Local machine is for Command & Control ONLY.
 **EXECUTION:** Identify -> Fix -> Verify -> Report. Do not ask for permission to repair.
 
 ## THE SOP (MANDATORY)
@@ -44,15 +45,25 @@ Type these into the dashboard chat for instant intel:
 
 ---
 
-## 3. CORE MAINTENANCE (The "One Command")
+## 3. CORE MAINTENANCE (The Hybrid Protocol)
 
-All logic lives in `deploy.py`. To update, restart, or patch the *entire* business:
+All logic is split between Modal (Brain) and Supabase (Nerves).
+
+### A. UPDATE THE BRAIN (Python/AI)
 
 ```bash
 modal deploy deploy.py
 ```
 
-*This command pushes your local code to the Modal cloud. It updates all active loops/cron jobs instantly.*
+*Updates: Spartan, Prospector, Scrapers.*
+
+### B. UPDATE THE NERVES (TypeScript/Monitor)
+
+```powershell
+./DEPLOY_HYBRID.ps1
+```
+
+*Updates: Email Poller, Heartbeat, Auto-Responder.*
 
 ---
 

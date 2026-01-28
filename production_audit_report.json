@@ -1,24 +1,22 @@
 {
-  "timestamp": "2026-01-20T00:43:57.984295",
+  "timestamp": "2026-01-23T12:48:09.573848",
   "site_url": "https://www.aiserviceco.com",
   "status": "YELLOW",
   "errors": [
-    "brand.json: voice mismatch: local=+18632132505, remote=None",
-    "brand.json: sms mismatch: local=+13527585336, remote=None",
     "/dashboard.html missing canonical numbers (voice=False, sms=False)"
   ],
   "warnings": [
-    "Stale cache: Age=14796s (>1hr)"
+    "/alf_landing.html not deployed (404)",
+    "/hvac_landing.html not deployed (404)",
+    "/roofing_page.html not deployed (404)",
+    "Stale cache: Age=58896s (>1hr)"
   ],
-  "pages_checked": 26,
+  "pages_checked": 29,
   "pages_ok": 25,
   "brand_json": {
-    "status": "mismatch",
-    "errors": [
-      "voice mismatch: local=+18632132505, remote=None",
-      "sms mismatch: local=+13527585336, remote=None"
-    ],
-    "build_sha": "unknown"
+    "status": "ok",
+    "errors": [],
+    "build_sha": "486791b"
   },
   "page_results": [
     {
@@ -36,6 +34,14 @@
       "sms_found": false,
       "forbidden": [],
       "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/alf_landing.html",
+      "status": "not_deployed",
+      "voice_found": false,
+      "sms_found": false,
+      "forbidden": [],
+      "http_status": 404
     },
     {
       "url": "https://www.aiserviceco.com/audit.html",
@@ -100,6 +106,14 @@
       "sms_found": true,
       "forbidden": [],
       "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/hvac_landing.html",
+      "status": "not_deployed",
+      "voice_found": false,
+      "sms_found": false,
+      "forbidden": [],
+      "http_status": 404
     },
     {
       "url": "https://www.aiserviceco.com/index.html",
@@ -196,6 +210,14 @@
       "sms_found": true,
       "forbidden": [],
       "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/roofing_page.html",
+      "status": "not_deployed",
+      "voice_found": false,
+      "sms_found": false,
+      "forbidden": [],
+      "http_status": 404
     },
     {
       "url": "https://www.aiserviceco.com/solar.html",

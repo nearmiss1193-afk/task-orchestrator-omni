@@ -1,0 +1,182 @@
+/* Main CSS for AI Service Co. Portal */
+
+.primary-text {
+    color: var(--primary) !important;
+}
+
+.primary-font-weight {
+    font-weight: 600;
+}
+
+.btn-login-small {
+    padding: 10px 24px !important;
+    font-size: 14px !important;
+}
+
+.margin-top-20 {
+    margin-top: 20px;
+}
+
+.font-size-14 {
+    font-size: 14px;
+}
+
+.text-muted-color {
+    color: var(--text-muted);
+}
+
+.separator {
+    margin: 0 15px;
+    opacity: 0.3;
+}
+
+.section-padding-100 {
+    padding: 100px 0;
+}
+
+.bg-card-color {
+    background: var(--bg-card);
+}
+
+.status-badge {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.max-width-600 {
+    max-width: 600px;
+}
+
+.margin-auto {
+    margin: 0 auto;
+}
+
+.demo-grid-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.demo-header {
+    margin-bottom: 16px;
+    font-size: 20px;
+}
+
+.video-container-16-9 {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
+}
+
+.video-container-9-16 {
+    position: relative;
+    padding-bottom: 177.77%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
+}
+
+.iframe-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.flex-center-gap-40 {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.team-card {
+    text-align: center;
+    max-width: 300px;
+}
+
+.avatar-wrapper {
+    width: 120px;
+    height: 120px;
+    background: #334155;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    overflow: hidden;
+}
+
+.avatar-primary {
+    border: 2px solid var(--primary);
+}
+
+.avatar-accent {
+    border: 2px solid var(--accent);
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+}
+
+.role-text-primary {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.role-text-accent {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.bio-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.social-link {
+    color: white;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.status-online {
+    color: var(--text-muted);
+    font-size: 12px;
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.footer-copy {
+    text-align: center;
+    margin-top: 60px;
+    color: var(--border);
+}

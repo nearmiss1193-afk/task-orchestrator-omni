@@ -21,6 +21,18 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        .system-status-container {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.9);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .status-dot {
             width: 8px;
             height: 8px;
@@ -43,7 +55,7 @@
     <canvas id="neuralCanvas" class="fixed inset-0 z-0 pointer-events-none opacity-40"></canvas>
 
     <!-- SOVEREIGN ACCESS GATE -->
-    <div id="accessGate" class="fixed inset-0 bg-slate-950/90 backdrop-blur-xl z-50 flex items-center justify-center">
+    <div id="accessGate" class="system-status-container">
         <div class="bg-slate-900 border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
             <div class="mb-6 text-4xl">🛡️</div>
             <h2 class="text-xl font-bold mb-2">Restricted Access</h2>

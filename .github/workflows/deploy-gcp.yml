@@ -62,5 +62,5 @@ jobs:
 
       - name: Update Failover Controller Config
         run: |
-          echo "GCP_HEALTH_URL=${{ env.SERVICE_URL }}/health" >> .env.gcp
-          echo "✅ Update failover_controller.py with this URL: ${{ env.SERVICE_URL }}/health"
+          echo "GCP_HEALTH_URL=$SERVICE_URL/health" >> .env.gcp
+          echo "✅ Update failover_controller.py with this URL: $SERVICE_URL/health"

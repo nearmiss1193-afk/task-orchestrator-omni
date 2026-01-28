@@ -31,6 +31,18 @@ check system +everything is working. next brecomendations# Deployment Instructio
 
 ## 🚀 MANUAL DEPLOYMENT STEPS
 
+### 🅰️ FRONTEND (Static/HTML) - Vercel
+
+**Target:** `aiserviceco.com` (Served from `public/`)
+
+```bash
+vercel deploy --prod
+```
+
+### 🅱️ BACKEND (Python/Agents) - Modal
+
+**Target:** `empire-api-v3` (Orchestrator)
+
 ### Step 1: Install Modal CLI (if needed)
 
 ```bash

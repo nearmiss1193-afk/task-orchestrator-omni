@@ -59,7 +59,10 @@ export default function LiveLogs() {
             <div className="flex items-center gap-2 mb-3 text-green-500 border-b border-green-900 pb-2">
                 <Terminal size={14} />
                 <span className="font-bold tracking-widest uppercase">Live Intelligence Feed</span>
-                <div className="ml-auto w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <div className="ml-auto flex items-center gap-2">
+                    <span className="text-[10px] text-green-700 font-bold uppercase tracking-tighter">Realtime Link</span>
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
+                </div>
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-1 scrollbar-hide">

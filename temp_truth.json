@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "api_base": "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run",
+  "server_time": "2026-01-21T15:16:01.104610+00:00",
+  "last_event_ts": "2026-01-21T15:15:24.732126+00:00",
+  "last_kpi_ts": "2026-01-21T15:02:26.212825+00:00",
+  "last_campaign_ran_at": "2026-01-18T00:32:46.876699+00:00",
+  "notes": {},
+  "sms_sent_last_24h": 0,
+  "sms_failed_last_24h": 0
+}

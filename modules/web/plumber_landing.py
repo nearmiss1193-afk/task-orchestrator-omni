@@ -5,8 +5,8 @@ def get_plumber_landing_html(calendly_url="#", stripe_url="#"):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Plumber Dispatch | Stop Losing Emergency Jobs</title>
-    <meta name="description" content="Plumbers lose $500 emergency jobs to voicemail every night. Our AI Dispatcher answers 24/7, quotes prices, and books jobs instantly.">
+    <title>AI Service Co | Plumbers: Stop Losing Emergency Jobs to Voicemail.</title>
+    <meta name="description" content="80% of plumbing leads go to the first business that answers. Your AI dispatcher answers calls 24/7, quotes leaks instantly, and books jobs while you sleep.">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,15 +22,15 @@ def get_plumber_landing_html(calendly_url="#", stripe_url="#"):
       var vapiInstance = null;
       try {
           vapiInstance = window.vapiSDK.run({
-            apiKey: "3b065ff0-a721-4b66-8255-30b6b8d6daab", // Public Key
-            assistant: "c23c884d-0008-4b14-ad5d-530e98d0c9da", // Assistant ID (Reusing Office Manager for now)
+            apiKey: "3b065ff0-a721-4b66-8255-30b6b8d6daab", 
+            assistant: "c23c884d-0008-4b14-ad5d-530e98d0c9da", 
             config: {
                 position: "bottom-right",
                 offset: "40px",
                 width: "50px",
                 height: "50px",
                 idle: {
-                    color: "rgb(37, 99, 235)", // Plumber Blue
+                    color: "rgb(220, 38, 38)", 
                     type: "pill",
                     title: "Emergency Dispatch",
                     subtitle: "24/7 Live AI",
@@ -44,587 +44,137 @@ def get_plumber_landing_html(calendly_url="#", stripe_url="#"):
     </script>
     
     <style>
-        /* ========== CSS RESET & VARIABLES ========== */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        /* [Copying exact CSS from HVAC Landing to ensure visual consistency] */
         :root {
-            --black: #0f172a; /* Slate 900 */
-            --black-soft: #1e293b; /* Slate 800 */
-            --dark: #020617; /* Slate 950 */
-            --dark-card: #1e293b;
-            --gray-dark: #334155;
-            --gray-mid: #475569;
-            --gray: #64748b;
-            --gray-light: #94a3b8;
-            --gray-lighter: #cbd5e1;
+            --black: #000000;
+            --black-soft: #0a0a0a;
+            --dark: #111111;
+            --dark-card: #161616;
+            --gray-dark: #222222;
+            --gray-mid: #333333;
+            --gray: #666666;
+            --gray-light: #999999;
+            --gray-lighter: #cccccc;
             --white: #ffffff;
-            --off-white: #f1f5f9;
-            --blue: #2563eb; /* Blue 600 */
-            --blue-hover: #1d4ed8;
-            --blue-light: #3b82f6;
-            --blue-glow: rgba(37, 99, 235, 0.3);
-            --blue-subtle: rgba(37, 99, 235, 0.1);
+            --red: #0ea5e9; /* SKY BLUE for Plumbing */
+            --red-hover: #0284c7;
+            --red-light: #38bdf8;
+            --red-glow: rgba(14, 165, 233, 0.3);
+            --red-subtle: rgba(14, 165, 233, 0.1);
         }
         
-        html {
-            scroll-behavior: smooth;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); margin: 0; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: var(--white);
-            background: var(--dark);
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        /* ========== HEADER ========== */
-        header {
-            background: rgba(2, 6, 23, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 16px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--gray-dark);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--white);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .logo span {
-            color: var(--blue);
-        }
-        
-        .header-nav {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-        
-        .header-nav a {
-            color: var(--gray-light);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .header-nav a:hover {
-            color: var(--white);
-        }
-        
-        .header-cta-group {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .header-phone {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 16px;
-            border: 1px solid var(--gray-dark);
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        
-        .header-phone:hover {
-            border-color: var(--blue);
-            color: var(--blue);
-        }
-        
-        .header-cta {
-            background: var(--blue);
-            color: var(--white);
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s;
-            border: 2px solid var(--blue);
-        }
-        
-        .header-cta:hover {
-            background: var(--blue-hover);
-            border-color: var(--blue-hover);
-            transform: translateY(-1px);
-        }
-        
-        /* ========== HERO SECTION ========== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 140px 0 100px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 30%, var(--blue-subtle) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.02) 0%, transparent 50%);
-            animation: heroGlow 15s ease-in-out infinite alternate;
-        }
-        
-        @keyframes heroGlow {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-5%, -5%) rotate(5deg); }
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-        
-        .hero-text {
-            max-width: 600px;
-        }
-        
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--black-soft);
-            border: 1px solid var(--gray-dark);
-            color: var(--gray-light);
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 24px;
-        }
-        
-        .hero-badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--blue);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-        
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -0.02em;
-        }
-        
-        .hero h1 .highlight {
-            color: var(--blue);
-            position: relative;
-        }
-        
-        .hero-subtitle {
-            font-size: 20px;
-            color: var(--gray-light);
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-        
-        .hero-proof {
-            font-size: 15px;
-            color: var(--gray);
-            margin-bottom: 32px;
-            padding-left: 16px;
-            border-left: 2px solid var(--blue);
-        }
-        
-        .hero-cta-group {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        
-        .btn-primary {
-            background: var(--blue);
-            color: var(--white);
-            padding: 16px 32px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.3s;
-            border: 2px solid var(--blue);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary:hover {
-            background: var(--blue-hover);
-            border-color: var(--blue-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px var(--blue-glow);
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            padding: 16px 32px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: 2px solid var(--gray-dark);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-secondary:hover {
-            border-color: var(--white);
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .hero-trust {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-        
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: var(--gray-light);
-        }
-        
-        .trust-item svg {
-            width: 18px;
-            height: 18px;
-            color: var(--blue);
-        }
-        
-        .hero-stats-card {
-            background: var(--black-soft);
-            border: 1px solid var(--gray-dark);
-            border-radius: 16px;
-            padding: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-stats-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--blue), transparent);
-        }
-        
-        .stats-card-title {
-            font-size: 14px;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 24px;
-        }
-        
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-dark);
-        }
-        
-        .stat-row:last-child {
-            border-bottom: none;
-        }
-        
-        .stat-label {
-            color: var(--gray-light);
-            font-size: 15px;
-        }
-        
-        .stat-value {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--white);
-        }
-        
-        .stat-value.negative {
-            color: #ef4444; /* Red */
-        }
-        
-        .stat-value.positive {
-            color: #22c55e;
-        }
-        
-        /* ========== SOLUTION SECTION ========== */
-        .solution-section {
-            padding: 100px 0;
-            background: var(--black-soft);
-        }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        
-        .section-label {
-            display: inline-block;
-            background: var(--blue-subtle);
-            color: var(--blue);
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-        }
-        
-        .section-title {
-            font-size: 40px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
-        
-        .section-subtitle {
-            font-size: 18px;
-            color: var(--gray-light);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .solution-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 48px;
-        }
-        
-        .solution-card {
-            background: var(--dark);
-            border: 1px solid var(--gray-dark);
-            border-radius: 16px;
-            padding: 32px 24px;
-            text-align: center;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .solution-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--white);
-        }
-        
-        .solution-card p {
-            color: var(--gray-light);
-            font-size: 15px;
-        }
+        /* HEADER */
+        header { position: fixed; width: 100%; top: 0; z-index: 1000; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--gray-dark); padding: 16px 0; backdrop-filter: blur(10px); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 22px; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo span { color: var(--red); }
+        .btn-primary { background: var(--red); color: var(--white); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: all 0.3s; }
+        .btn-primary:hover { background: var(--red-hover); transform: translateY(-2px); box-shadow: 0 10px 20px var(--red-glow); }
 
-        .solution-icon {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
+        /* HERO */
+        .hero { padding: 180px 0 100px; text-align: center; position: relative; overflow: hidden; }
+        .hero h1 { font-size: 64px; font-weight: 900; line-height: 1.1; margin-bottom: 24px; }
+        .hero h1 span { color: var(--red); }
+        .hero p { font-size: 20px; color: var(--gray-light); max-width: 700px; margin: 0 auto 40px; }
         
+        /* SECTIONS */
+        section { padding: 100px 0; border-bottom: 1px solid var(--gray-dark); }
+        h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+        .card { background: var(--dark-card); border: 1px solid var(--gray-dark); padding: 32px; border-radius: 16px; transition: 0.3s; }
+        .card:hover { border-color: var(--red); transform: translateY(-5px); }
+        .icon { font-size: 32px; margin-bottom: 20px; color: var(--red); }
+        
+        /* FOOTER */
+        footer { padding: 60px 0; text-align: center; color: var(--gray); font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
     <header>
         <div class="container header-content">
-            <a href="#" class="logo">
-                <div class="logo-icon">🔧</div>
-                AI Service Co | <span>Plumber</span>
-            </a>
-            <nav class="header-nav">
-                <a href="#how-it-works">Dispatcher AI</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#demo">Live Demo</a>
-            </nav>
-            <div class="header-cta-group">
-                <a href="tel:+15550000000" class="header-phone">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                    (555) 000-0000
-                </a>
-                <a href="{calendly_url}" class="header-cta">Book Demo</a>
+            <a href="#" class="logo"><span>AI</span> Service Co.</a>
+            <div style="display:flex; gap:20px; align-items:center;">
+                <a href="#how" style="color:var(--gray-light); text-decoration:none;">How it Works</a>
+                <a href="#pricing" style="color:var(--gray-light); text-decoration:none;">Pricing</a>
+                <a href="{calendly_url}" class="btn-primary">Book Demo</a>
             </div>
         </div>
     </header>
 
-    <!-- HERO -->
     <section class="hero">
-        <div class="container hero-content">
-            <div class="hero-text">
-                <div class="hero-badge">
-                    <div class="hero-badge-dot"></div>
-                    <span>AI Dispatcher Active • 24/7/365</span>
-                </div>
-                <h1>Stop Losing <span class="highlight">$500</span> Emergency Appointments to Voicemail.</h1>
-                <p class="hero-subtitle">
-                    Your current process misses 30% of calls. Dispatch Dan answers instantly, quotes leak repairs, and books appointments directly into ServiceTitan.
-                </p>
-                <div class="hero-proof">
-                    "We saved 12 jobs last weekend alone. That's $6k in pure profit." - <strong>Mike's Plumbing (Tampa)</strong>
-                </div>
-                <div class="hero-cta-group">
-                    <a href="{stripe_url}" class="btn-primary">Get Started ($497/mo)</a>
-                    <a href="#demo" class="btn-secondary">Test the AI</a>
-                </div>
-                <div class="hero-trust">
-                    <div class="trust-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        Simulates ServiceTitan
-                    </div>
-                    <div class="trust-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        Instant SMS Follow-up
-                    </div>
-                </div>
+        <div class="container">
+            <div style="display:inline-block; padding:8px 16px; background:var(--gray-dark); border-radius:50px; font-size:13px; font-weight:600; margin-bottom:24px; color:var(--red-light);">
+                🟢 AI Dispatcher Active • 24/7 Availability
             </div>
-            
-            <div class="hero-visual">
-                <div class="hero-stats-card">
-                    <div class="stats-card-title">Live Dispatch Metrics</div>
-                    
-                    <div class="stat-row">
-                        <span class="stat-label">Missed Call Rate</span>
-                        <div class="stat-value negative">28% <span style="font-size: 14px; font-weight: 500; color: #64748b;">(Human)</span></div>
-                    </div>
-                    
-                    <div class="stat-row">
-                        <span class="stat-label">AI Pickup Rate</span>
-                        <div class="stat-value positive">100% <span style="font-size: 14px; font-weight: 500; color: #64748b;">(Instant)</span></div>
-                    </div>
-                    
-                    <div class="stat-row">
-                        <span class="stat-label">Appointments Rescued (Wk)</span>
-                        <div class="stat-value">14 <span style="font-size: 14px; font-weight: 500; color: #64748b; color: #22c55e;">(+$7,400)</span></div>
-                    </div>
-                    
-                    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--gray-dark); font-size: 13px; color: var(--gray);">
-                        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
-                            <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></div>
-                            Dispatch Dan just booked a Water Heater in Austin, TX
-                        </div>
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></div>
-                            Dispatch Dan just quoted a Leak Detection in Miami, FL
-                        </div>
-                    </div>
+            <h1>
+                Stop Losing Emergency<br>
+                <span>Jobs to Voicemail.</span>
+            </h1>
+            <p>
+                Your new AI Dispatcher answers every call instantly, quotes standard leaks, helps schedule water heater swaps, and texts you the qualified job details.
+            </p>
+            <div style="display:flex; justify-content:center; gap:16px;">
+                <a href="{calendly_url}" class="btn-primary" style="font-size:18px; padding:16px 40px;">Get Your AI Dispatcher</a>
+                <a href="#" class="btn-primary" style="background:transparent; border:1px solid var(--gray-dark);">Hear a Sample Call ▶</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="problem">
+        <div class="container">
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">💸</div>
+                    <h3>Missed Calls = Lost Cash</h3>
+                    <p>If a pipe bursts at 2 AM, they call until someone answers. If that's not you, you just lost a $2,000 job.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🥱</div>
+                    <h3>Dispatcher Burnout</h3>
+                    <p>Paying a human to sit by the phone 24/7 costs $60k/year. Your AI costs less than a single toilet install.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📉</div>
+                    <h3>The "Price Shopper" Trap</h3>
+                    <p>Stop wasting time explaining your service fee. Your AI qualifies them before you ever pick up the phone.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- VIDEO DEMO -->
-    <section id="video" style="padding: 80px 0; background: var(--dark);">
-        <div class="container" style="text-align: center;">
-            <div class="section-label">See It In Action</div>
-            <h2 class="section-title">Watch Sarah Handle a Live Call</h2>
-            <p class="section-subtitle" style="margin-bottom: 40px;">See how our AI negotiates prices, books appointments, and filters spam in real-time.</p>
+    <section id="how">
+        <div class="container" style="text-align:center;">
+            <h2>How It Works</h2>
+            <p style="color:var(--gray-light);">Setup takes 24 hours. No technical skills required.</p>
             
-            <div style="max-width: 800px; margin: 0 auto; aspect-ratio: 16/9; background: var(--black-soft); border: 1px solid var(--gray-dark); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
-                <!-- Placeholder for actual video embed -->
-                <div style="text-align: center;">
-                    <div style="font-size: 64px; margin-bottom: 16px;">▶️</div>
-                    <p style="color: var(--gray);">Demo Video Placeholder</p>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">1</div>
+                    <h3>We Clone Your Voice</h3>
+                    <p>Or choose from our professional dispatchers. We train the AI on your prices and service area.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">2</div>
+                    <h3>Forward Your Lines</h3>
+                    <p>Set your phone to forward to the AI after 3 rings, or for all after-hours calls.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">3</div>
+                    <h3>Wake Up to Jobs</h3>
+                    <p>The AI texts you: "Booked John Doe for Water Heater estimate tomorrow at 8 AM."</p>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- FEATURES -->
-    <section class="solution-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Automated Dispatch</span>
-                <h2 class="section-title">Your New Best Employee</h2>
-                <p class="section-subtitle">Dispatch Dan handles the phones so your techs can turn wrenches.</p>
-            </div>
-            
-            <div class="solution-grid">
-                <div class="solution-card">
-                    <div class="solution-icon">🚑</div>
-                    <h3>Emergency Triage</h3>
-                    <p>Dan identifies emergencies vs routine calls. "Is water actively flooding?" -> Routes to On-Call Tech immediately.</p>
-                </div>
-                <div class="solution-card">
-                    <div class="solution-icon">📅</div>
-                    <h3>Smart Scheduling</h3>
-                    <p>Books appointments directly into your calendar based on technician availability and job type.</p>
-                </div>
-                <div class="solution-card">
-                    <div class="solution-icon">💰</div>
-                    <h3>Price Estimates</h3>
-                    <p>Gives ballpark ranges for common items (Water Heaters, Toilets) to filter out price shoppers automatically.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+
+    <footer class="container">
+        <p>&copy; 2026 AI Service Co. • Built for High-Performance Plumbing Businesses.</p>
+    </footer>
 
 </body>
 </html>

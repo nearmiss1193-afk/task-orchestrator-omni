@@ -24,7 +24,7 @@ VAPI_PRIVATE_KEY = os.getenv("VAPI_PRIVATE_KEY")
 VAPI_PHONE_NUMBER_ID = os.getenv("VAPI_PHONE_NUMBER_ID")
 
 # Your Vapi assistant IDs
-SARAH_ASSISTANT_ID = "1a797f12-e516-4fe8-a3a6-72f0cbf4a48d"  # Sarah Sales Agent
+SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"  # Sarah 3.0 (Official)
 JOHN_ASSISTANT_ID = "ce4d14a2-2c7e-4eb5-b2d8-ca84ad5e2c3b"   # John Office Manager
 
 VAPI_API_URL = "https://api.vapi.ai/call"

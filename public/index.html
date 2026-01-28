@@ -426,7 +426,7 @@
                 <a href="#industries">Industries</a>
                 <a href="dashboard.html">Platform</a>
             </nav>
-            <a href="checkout.html" class="btn-primary" class="style-fix-29" data-style-migrated="true">Get Started</a>
+            <a href="#pricing" class="btn-primary style-fix-29" data-style-migrated="true">Get Started</a>
         </div>
     </header>
 
@@ -584,6 +584,180 @@
         </div>
     </section>
 
+    <!-- PRICING -->
+    <section id="pricing" style="padding: 100px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose Your Intelligence Level</h2>
+                <p>From simple call answering to a full autonomous workforce.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- NEW: Secretary Only -->
+                <div class="pricing-card">
+                    <div class="badge-limited">LIMITED TIME</div>
+                    <h3>AI Secretary</h3>
+                    <div class="price">$99<span>/mo</span></div>
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Perfect for solo operators who just
+                        need calls answered.</p>
+                    <a href="checkout.html?plan=secretary" class="btn-secondary"
+                        style="width: 100%; text-align: center; display: block;">Start Trial</a>
+                    <ul class="plan-features">
+                        <li><span>✅</span> 24/7 Call Answering</li>
+                        <li><span>✅</span> Basic Appointment Booking</li>
+                        <li><span>✅</span> SMS Follow-up</li>
+                        <li><span>❌</span> No Outbound Sales</li>
+                        <li><span>❌</span> No Research Agents</li>
+                    </ul>
+                </div>
+
+                <!-- Starter -->
+                <div class="pricing-card featured">
+                    <div class="badge-popular">MOST POPULAR</div>
+                    <h3>AI Starter</h3>
+                    <div class="price">$297<span>/mo</span></div>
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">The standard for growing service
+                        businesses.</p>
+                    <a href="checkout.html?plan=starter" class="btn-primary"
+                        style="width: 100%; text-align: center; display: block;">Get Started</a>
+                    <ul class="plan-features">
+                        <li><span>✅</span> Everything in Secretary</li>
+                        <li><span>✅</span> <strong>Full Outbound Sales</strong></li>
+                        <li><span>✅</span> Database Reactivation</li>
+                        <li><span>✅</span> CRM Integration (2-way)</li>
+                        <li><span>✅</span> 500 AI Minutes/mo</li>
+                    </ul>
+                </div>
+
+                <!-- Growth -->
+                <div class="pricing-card">
+                    <h3>AI Growth</h3>
+                    <div class="price">$497<span>/mo</span></div>
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">For aggressive scaling and high
+                        volume.</p>
+                    <a href="checkout.html?plan=growth" class="btn-secondary"
+                        style="width: 100%; text-align: center; display: block;">Scale Up</a>
+                    <ul class="plan-features">
+                        <li><span>✅</span> Everything in Starter</li>
+                        <li><span>✅</span> <strong>Unlimited</strong> AI Minutes</li>
+                        <li><span>✅</span> Priority Support</li>
+                        <li><span>✅</span> Advanced Custom Workflows</li>
+                    </ul>
+                </div>
+
+                <!-- Dominance -->
+                <div class="pricing-card">
+                    <h3>AI Dominance</h3>
+                    <div class="price">$997<span>/mo</span></div>
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Complete market capture suite.</p>
+                    <a href="checkout.html?plan=dominance" class="btn-secondary"
+                        style="width: 100%; text-align: center; display: block;">Dominate</a>
+                    <ul class="plan-features">
+                        <li><span>✅</span> Everything in Growth</li>
+                        <li><span>✅</span> Dedicated Account Manager</li>
+                        <li><span>✅</span> Custom Model Training</li>
+                        <li><span>✅</span> White Label Options</li>
+                    </ul>
+                </div>
+            </div>
+
+            <style>
+                .pricing-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                    margin-top: 60px;
+                }
+
+                .pricing-card {
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid var(--border);
+                    border-radius: 24px;
+                    padding: 30px;
+                    position: relative;
+                    transition: 0.3s;
+                }
+
+                .pricing-card:hover {
+                    border-color: var(--primary);
+                    transform: translateY(-5px);
+                    background: rgba(255, 255, 255, 0.05);
+                }
+
+                .pricing-card.featured {
+                    border-color: var(--primary);
+                    background: rgba(245, 158, 11, 0.05);
+                    box-shadow: 0 0 30px -10px rgba(245, 158, 11, 0.2);
+                }
+
+                .price {
+                    font-size: 32px;
+                    font-weight: 700;
+                    color: white;
+                    margin: 10px 0;
+                    font-family: 'Outfit', sans-serif;
+                }
+
+                .price span {
+                    font-size: 14px;
+                    color: var(--text-muted);
+                    font-weight: 400;
+                }
+
+                .plan-features {
+                    list-style: none;
+                    padding: 0;
+                    margin-top: 24px;
+                }
+
+                .plan-features li {
+                    margin-bottom: 12px;
+                    font-size: 14px;
+                    color: var(--text-muted);
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .badge-popular {
+                    position: absolute;
+                    top: 12px;
+                    right: 12px;
+                    background: var(--primary);
+                    color: black;
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 4px 8px;
+                    border-radius: 100px;
+                }
+
+                .badge-limited {
+                    position: absolute;
+                    top: 12px;
+                    right: 12px;
+                    background: #ef4444;
+                    color: white;
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 4px 8px;
+                    border-radius: 100px;
+                }
+
+                @media (max-width: 1024px) {
+                    .pricing-grid {
+                        grid-template-columns: 1fr 1fr;
+                    }
+                }
+
+                @media (max-width: 600px) {
+                    .pricing-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+        </div>
+    </section>
+
     <footer>
         <div class="container footer-grid">
             <div class="footer-brand">
@@ -643,7 +817,7 @@
                         offset: "40px",
                         width: "50px",
                         height: "50px",
-                        idle: { color: "#f59e0b", type: "pill", title: "Call Sarah (AI)", subtitle: "Voice: (863) 213-2505 | Text: (352) 758-5336", icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg" },
+                        idle: { color: "#f59e0b", type: "pill", title: "Talk to Sarah AI", subtitle: "Voice: (863) 213-2505 | Text: (352) 758-5336", icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg" },
                         loading: { color: "#94a3b8", type: "pill", title: "Connecting...", subtitle: "Please wait", icon: "https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg" },
                         active: { color: "#ef4444", type: "pill", title: "Live Call", subtitle: "Listening...", icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg" }
                     }
@@ -701,11 +875,11 @@
             setTimeout(injectBrand, 1000);
         })();
     </script>
-    <!-- GHL Chat Widget -->
-    <script src="https://beta.leadconnectorhq.com/loader.js"
-        data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js"
-        data-widget-id="69507213261ca136120c2fe0">
-        </script>
+
+
+    <!-- Sarah AI Voice Widget -->
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi.min.js"></script>
+
 </body>
 
 </html>

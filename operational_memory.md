@@ -236,3 +236,38 @@ python turbo_contact.py
 | Pricing | $297 / $497 / $997 |
 | Owner Email | <nearmiss1193@gmail.com> |
 | Business Email | <owner@aiserviceco.com> |
+
+---
+
+### Jan 23 - Analytics & Tracking System
+
+**Completed:**
+
+- ✅ Backend: Created `/api/track` endpoint in `deploy.py` (FastAPI) to capture pageviews and clicks.
+- ✅ Database: Events stored in `web_events` Supabase table.
+- ✅ Frontend: Created `tracker.js` with session logic and click listeners.
+- ✅ UX: `tracker.js` shows **Green Border** on success / **Red Border** on failure for easy debugging.
+- ✅ Accessibility: Fixed `alf_landing.html` lint errors.
+
+**Key Learnings:**
+
+- **Modal Static Files:** Must explicitly `mount` the `/public` directory in `deploy.py` to serve relative assets like `tracker.js`.
+- **FastAPI Imports:** `func.wsgi_app()` inside Modal can lose top-level imports; re-import `FastAPI`, `StaticFiles`, etc. inside the function.
+- **Supabase Env Vars:** `NEXT_PUBLIC_SUPABASE_URL` is the correct key in this environment, not just `SUPABASE_URL`.
+
+---
+
+### Jan 27 - Modal App Alignment & SMS Relay Fix
+
+**Completed:**
+
+- ✅ **Modal App Name Re-alignment**: Switched app name from `ghl-omni-automation` back to legacy `empire-api-v3` to match GHL's hardcoded webhooks.
+- ✅ **SMS Inbound Relay**: Restored `/api/sms/reply-text` and `/api/sms/reply-sent` endpoints in `deploy.py` to handle GHL's "Inbound SMS Webhook Relay".
+- ✅ **Sarah AI SMS Integration**: Added Gemini-powered responder logic to the legacy SMS relay endpoint.
+- ✅ **Internal Import Stabilization**: Fixed serialization errors in Modal by moving `get_supabase` imports inside all worker functions.
+
+**Key Learnings:**
+
+- **Legacy Dependencies**: External systems (GHL) often have hardcoded webhook URLs. Restoring the old Modal URL (`empire-api-v3`) is faster than updating dozens of GHL automation steps.
+- **Modal Serialization**: `@app.function` workers MUST have `from modules... import ...` INSIDE the function body if the module is mounted/added via `add_local_dir`.
+- **Campaign Mode**: The system uses `system_state` key `campaign_mode` set to `working` (active) or `broken` (manual kill switch).
