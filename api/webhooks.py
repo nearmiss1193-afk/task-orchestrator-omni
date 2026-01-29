@@ -156,6 +156,27 @@ def dashboard_stats():
     except Exception:
         pass
 
+    # 7. HORIZON INSIGHTS (Phase 7)
+    horizon_insights = []
+    try:
+        # Fetch latest Phase 7 insights
+        h_res = sb.table("system_wisdom")\
+            .select("topic, insight, examples")\
+            .eq("category", "horizon_rd")\
+            .order("created_at", desc=True)\
+            .limit(3)\
+            .execute()
+        if h_res.data:
+            for h in h_res.data:
+                # Map to a flat structure for the dashboard UI
+                horizon_insights.append({
+                    "topic": h['topic'],
+                    "insight": h['insight'],
+                    "strategy": h.get('examples', {}).get('opportunity') or "Evolutionary Path"
+                })
+    except Exception:
+        pass
+
     return {
         "health": sentinel_score if mode == "working" else 20,
         "mode": mode,
@@ -165,5 +186,6 @@ def dashboard_stats():
         "wisdom_score": wisdom_count,
         "pipeline_value": pipeline_value,
         "outreach_burn": round(outreach_burn, 2),
-        "sentinel_score": sentinel_score
+        "sentinel_score": sentinel_score,
+        "horizon_insights": horizon_insights
     }

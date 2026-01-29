@@ -95,6 +95,8 @@ def master_pulse():
     # PRIORITY 2: EMAIL (Throttled: 5 leads / 10 min)
     if minute % 10 == 0:
         from workers.outreach import dispatch_email_logic
+        from workers.sandbox_worker import is_sandbox_lead, execute_sandbox_pulse
+        
         email_ready_res = supabase.table("contacts_master")\
             .select("id")\
             .eq("status", "research_done")\
@@ -103,11 +105,16 @@ def master_pulse():
         check_supabase_error(email_ready_res, "Fetch Email Ready")
         
         if email_ready_res.data:
-            ids = [lead['id'] for lead in email_ready_res.data]
-            list(dispatch_email_logic.map(ids))
-            print(f"📧 EMAIL: Dispatched {len(ids)} emails (Throttled)")
+            for lead in email_ready_res.data:
+                if is_sandbox_lead(lead['id']):
+                    print(f"🧪 [SANDBOX] Routing lead {lead['id']} to experimental path.")
+                    execute_sandbox_pulse(lead['id']) # Local spawn or .spawn() if Modal
+                else:
+                    dispatch_email_logic.spawn(lead['id'])
+            print(f"📧 EMAIL: Dispatched {len(email_ready_res.data)} outreach tasks (Throttled)")
     
     # PRIORITY 3: CALLS (Throttled: 1 lead / 3 min, Max 20/day)
+    # [Call logic remains mainly standard due to high-friction, but could be sandboxed later]
     if minute % 3 == 0:
         from workers.outreach import dispatch_call_logic
         import pytz
@@ -151,6 +158,7 @@ def master_pulse():
     # PRIORITY 4: SMS (Throttled: 5 leads / 15 min)
     if minute % 15 == 0:
         from workers.outreach import dispatch_sms_logic
+        from workers.sandbox_worker import is_sandbox_lead, execute_sandbox_pulse
         import pytz
         
         # Simple timezone check
@@ -168,12 +176,14 @@ def master_pulse():
             check_supabase_error(sms_ready_res, "Fetch SMS Ready")
             
             if sms_ready_res.data:
-                ids = [lead['id'] for lead in sms_ready_res.data]
-                list(dispatch_sms_logic.map(ids))
-                print(f"📱 SMS: Dispatched {len(ids)} messages (Throttled)")
+                for lead in sms_ready_res.data:
+                    if is_sandbox_lead(lead['id']):
+                        print(f"🧪 [SANDBOX] Routing lead {lead['id']} to experimental path.")
+                        execute_sandbox_pulse(lead['id'])
+                    else:
+                        dispatch_sms_logic.spawn(lead['id'])
+                print(f"📱 SMS: Dispatched {len(sms_ready_res.data)} outreach tasks (Throttled)")
         else:
             print("⏰ SMS: Outside business hours")
-
     
     print("✅ PULSE COMPLETE")
-

@@ -15,6 +15,18 @@ from workers.research import research_lead_logic
 from workers.outreach import dispatch_email_logic, dispatch_sms_logic, dispatch_call_logic
 from workers.pulse_scheduler import master_pulse
 from workers.wisdom_engine import daily_wisdom_cron, synthesize_wisdom
+from workers.horizon_watcher import run_evolutionary_loop
+from workers.sandbox_worker import execute_sandbox_pulse
+
+@app.function(schedule=modal.Cron("0 1 * * *"), image=image, secrets=[VAULT])
+def daily_horizon_scan():
+    """Daily autonomous market and capability scan"""
+    run_evolutionary_loop()
+
+@app.function(image=image, secrets=[VAULT])
+def sandbox_outreach(lead_id: str):
+    """Worker for 1% experimental routing"""
+    execute_sandbox_pulse(lead_id)
 
 @app.function(image=image, secrets=[VAULT])
 def check_readiness():

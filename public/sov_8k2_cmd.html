@@ -187,10 +187,13 @@
             <h2>Funnel Conversion</h2>
             <canvas id="funnelChart"></canvas>
         </div>
-        <div class="panel col-span-2 h-64">
-            <h2>Traffic Sources</h2>
-            <div class="flex items-center justify-center h-full text-gray-600 text-xs">
-                (Waiting for web_events data)
+        <div class="panel col-span-2 h-64 overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center mb-2">
+                <h2>Horizon Watcher (R&D)</h2>
+                <span class="text-[10px] text-cyan-500 animate-pulse tracking-widest">SCANNING MARKET...</span>
+            </div>
+            <div id="horizon-feed" class="flex-1 overflow-auto text-xs space-y-3 pr-2">
+                <div class="text-gray-600 italic">Waiting for R&D uplink...</div>
             </div>
         </div>
     </div>
