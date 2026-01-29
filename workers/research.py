@@ -9,7 +9,8 @@ if "/root" not in sys.path:
     sys.path.append("/root")
 
 import modal
-from core.image_config import image, VAULT, app
+from core.image_config import image, VAULT
+from core.apps import engine_app as app
 
 @app.function(image=image, secrets=[VAULT], timeout=300)
 async def research_lead_logic(lead_id: str):

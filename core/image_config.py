@@ -8,31 +8,35 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = modal.App("nexus-outreach-v1")
+# app = modal.App("nexus-outreach-v1") # Removed to allow multi-app separation
 
-image = (
-    modal.Image.debian_slim(python_version="3.11")
-    .apt_install("git")
-    .pip_install(
-        "playwright",
-        "python-dotenv",
-        "requests",
-        "supabase",
-        "fastapi",
-        "stripe",
-        "google-generativeai>=0.5.0",
-        "dnspython",
-        "pytz"
+def get_base_image():
+    return (
+        modal.Image.debian_slim(python_version="3.11")
+        .apt_install("git")
+        .pip_install(
+            "playwright",
+            "python-dotenv",
+            "requests",
+            "supabase",
+            "fastapi",
+            "stripe",
+            "google-generativeai>=0.5.0",
+            "dnspython",
+            "pytz"
+        )
+        .run_commands("playwright install --with-deps chromium")
+        .add_local_file("sovereign_config.json", remote_path="/root/sovereign_config.json")
+        .add_local_dir("modules", remote_path="/root/modules")
+        .add_local_dir("utils", remote_path="/root/utils")
+        .add_local_dir("workers", remote_path="/root/workers")
+        .add_local_dir("core", remote_path="/root/core")
+        .add_local_dir("api", remote_path="/root/api")
     )
-    .run_commands("playwright install --with-deps chromium")
-    .add_local_file("sovereign_config.json", remote_path="/root/sovereign_config.json")
-    .add_local_dir("modules", remote_path="/root/modules")
-   .add_local_dir("public", remote_path="/root/public")
-    .add_local_dir("utils", remote_path="/root/utils")
-    .add_local_dir("workers", remote_path="/root/workers")
-    .add_local_dir("core", remote_path="/root/core")
-    .add_local_dir("api", remote_path="/root/api")
-)
+
+image = get_base_image()
+# Portal image will add 'public' mount
+portal_image = get_base_image().add_local_dir("public", remote_path="/root/public")
 
 # Consolidated secret vault (removed duplicates per Grok audit)
 VAULT = modal.Secret.from_dict({

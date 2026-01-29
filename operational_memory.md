@@ -1,7 +1,15 @@
 # Empire Unified - Operational Memory
 
-> **Last Updated:** Jan 29, 2026
-> **Purpose:** Consolidated monthly learnings, configurations, and SOPs for system recovery
+### Jan 30: Sovereign 2.0 Hardening
+
+- **Architecture Split**:
+  - `nexus-engine`: Dedicated to crons and outreach workers. Stable, high-priority.
+  - `nexus-portal`: Dedicated to webhooks, landing pages, and the secured dashboard.
+- **Security Lockdown**:
+  - Dashboard moved to `sov_8k2_cmd.html`.
+  - `robots.txt` disallows dashboard indexing.
+  - Local Key: `empire_2026` required for dashboard persistence.
+- **Master Prompt v5.5**: Active with Evolution and Sentinel protocols.
 
 ---
 

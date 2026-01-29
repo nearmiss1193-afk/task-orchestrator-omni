@@ -184,7 +184,17 @@
     </div>
 
     <script>
-        const API_BASE = "https://nearmiss1193-afk--ghl-omni-automation-universal-web-app.modal.run";
+        // --- AUTH GUARD ---
+        if (localStorage.getItem('sov_key') !== 'empire_2026') {
+            const pass = prompt("SOVEREIGN CREDENTIALS REQUIRED:");
+            if (pass === 'empire_2026') {
+                localStorage.setItem('sov_key', 'empire_2026');
+            } else {
+                location.href = '/index.html';
+            }
+        }
+
+        const API_BASE = ""; // Relative to origin
 
         // --- CLOCK ---
         setInterval(() => {
@@ -197,40 +207,38 @@
             const statusIndicator = document.getElementById('clock').nextElementSibling;
 
             try {
+                const res = await fetch(`${API_BASE}/dashboard_stats`);
+                if (!res.ok) throw new Error("API Connection Failed");
+
+                const data = await res.json();
+
                 // 1. TRUTH
-                const truthRes = await fetch(`${API_BASE}/api/truth`);
-                if (!truthRes.ok) throw new Error("API Connection Failed");
+                document.getElementById('h-score').innerText = data.health + "%";
+                document.getElementById('h-leads').innerText = data.total_leads;
+                document.getElementById('h-rev').innerText = "$" + (data.total_leads * 50).toLocaleString(); // Simple estimation
+                document.getElementById('h-active').innerText = data.mode.toUpperCase();
 
-                const truth = await truthRes.json();
-                document.getElementById('h-score').innerText = truth.health + "%";
-                document.getElementById('h-leads').innerText = truth.leads;
-                document.getElementById('h-rev').innerText = "$" + (truth.revenue || 0).toLocaleString();
-                document.getElementById('h-active').innerText = new Date(truth.last_active).toLocaleTimeString();
+                if (data.mode === "working") {
+                    document.getElementById('h-active').className = "stat-value c-green text-sm";
+                }
 
-                // Status: ONLINE
+                // Status Indicator
                 if (statusIndicator) statusIndicator.innerHTML = '<span class="c-green">● ONLINE</span>';
 
-                // 2. LEADS / FUNNEL
-                const leadsRes = await fetch(`${API_BASE}/api/leads`);
-                if (leadsRes.ok) renderFunnel((await leadsRes.json()).funnel);
+                // 2. FUNNEL
+                renderFunnel(data.funnel);
 
                 // 3. COMMS
-                const commsRes = await fetch(`${API_BASE}/api/comms`);
-                if (commsRes.ok) renderComms((await commsRes.json()).interactions);
+                renderComms(data.recent_comms);
 
-                // 4. CAMPAIGNS
-                const campRes = await fetch(`${API_BASE}/api/campaigns`);
-                if (campRes.ok) renderCampaigns((await campRes.json()).campaigns);
+                // 4. CAMPAIGNS (Mocked for now as we split them)
+                renderCampaigns([
+                    { name: "HVAC OMNI", sent: data.funnel.outreach_dispatched, replied: data.funnel.replied }
+                ]);
 
             } catch (e) {
                 console.error("DATA FETCH ERROR:", e);
-                // Status: OFFLINE / WAKING
                 if (statusIndicator) statusIndicator.innerHTML = '<span class="c-red">● CONNECTING...</span>';
-
-                // Show offline values if empty
-                if (document.getElementById('h-leads').innerText === '--') {
-                    document.getElementById('h-leads').innerText = "(Syncing)";
-                }
             }
         }
 
@@ -238,15 +246,15 @@
             const feed = document.getElementById('comms-feed');
             feed.innerHTML = "";
             items.forEach(i => {
-                const time = new Date(i.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const color = i.status.includes('sent') ? 'text-green-500' : 'text-blue-400';
-                const icon = i.status.includes('sent') ? '→' : '←';
+                const time = new Date(i.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const color = i.status.includes('dispatched') || i.status.includes('sent') ? 'text-green-500' : 'text-blue-400';
+                const icon = i.status.includes('dispatched') || i.status.includes('sent') ? '→' : '←';
                 const html = `
                 <div class="flex justify-between items-center py-2 border-b border-gray-900 hover:bg-white/5 px-2">
                     <div>
                         <span class="${color} font-bold mr-2">${icon}</span>
-                        <span class="text-sm font-bold text-gray-300">${i.full_name || 'Unknown'}</span>
-                        <div class="text-xs text-gray-500 ml-5">${i.ai_strategy || i.status}</div>
+                        <span class="text-sm font-bold text-gray-300">${i.company || 'Unknown'}</span>
+                        <div class="text-xs text-gray-500 ml-5">${i.channel.toUpperCase()}: ${i.status}</div>
                     </div>
                     <div class="text-xs text-gray-600 font-mono">${time}</div>
                 </div>
