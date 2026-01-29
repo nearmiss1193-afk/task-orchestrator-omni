@@ -14,6 +14,7 @@ from core.apps import engine_app as app
 from workers.research import research_lead_logic
 from workers.outreach import dispatch_email_logic, dispatch_sms_logic, dispatch_call_logic
 from workers.pulse_scheduler import master_pulse
+from workers.wisdom_engine import daily_wisdom_cron, synthesize_wisdom
 
 @app.function(image=image, secrets=[VAULT])
 def test_engine_connectivity():

@@ -65,12 +65,36 @@ async def research_lead_logic(lead_id: str):
             print(f"❌ SCRAPE FAILED: {e2}")
             scraped_content["homepage"] = "Content unavailable"
     
+    # 5. FETCH WISDOM & HISTORY
+    print("📚 FETCHING WISDOM & HISTORY...")
+    wisdom_context = "No industry wisdom yet."
+    try:
+        wisdom_res = supabase.table("system_wisdom").select("insight").order("created_at", desc=True).limit(3).execute()
+        if wisdom_res.data:
+            wisdom_context = "\n".join([w['insight'] for w in wisdom_res.data])
+    except Exception:
+        pass # Table might not exist yet
+        
+    history_res = supabase.table("outbound_touches").select("status, ts").eq("phone", lead.get("phone")).order("ts", desc=True).limit(5).execute()
+    history_context = "\n".join([f"{h['ts']}: {h['status']}" for h in history_res.data]) if history_res.data else "No previous history."
+
     # GEMINI ANALYSIS
     print("🧠 GEMINI START")
     from modules.ai.routing import get_gemini_model
     try:
         model = get_gemini_model("pro")
-        prompt = f"Analyze this business for inefficiencies and write a casual outreach hook: {scraped_content['homepage'][:5000]}"
+        prompt = f"""
+        Analyze this business for inefficiencies: {scraped_content['homepage'][:3000]}
+        
+        SYSTEM WISDOM (WHAT WORKS):
+        {wisdom_context}
+        
+        LEAD HISTORY (PAST CONTACT):
+        {history_context}
+        
+        Task: Write a casual, one-sentence outreach hook. 
+        If history exists, acknowledge it subtly. If wisdom exists, use the pattern.
+        """
         res = model.generate_content(prompt)
         hook = res.text.strip()
         print(f"✅ GEMINI SUCCESS: {hook[:50]}...")

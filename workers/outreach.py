@@ -35,6 +35,20 @@ def dispatch_email_logic(lead_id: str):
     lead_res = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute()
     check_supabase_error(lead_res, "Fetch Lead for Email")
     lead = lead_res.data
+
+    # FREQUENCY CAP (Anti-Spam)
+    print("🛡️ CHECKING FREQUENCY CAP...")
+    try:
+        last_touch = supabase.table("outbound_touches").select("ts").eq("phone", lead.get("phone")).order("ts", desc=True).limit(1).execute()
+        if last_touch.data:
+            from dateutil.parser import parse
+            import datetime
+            last_ts = parse(last_touch.data[0]['ts'])
+            if (datetime.datetime.now(datetime.timezone.utc) - last_ts).total_seconds() < 3600: # 1 hour cap
+                print(f"⏸️ SKIP: Recent touch for {lead_id} (last sent at {last_ts})")
+                return False
+    except Exception as e:
+        print(f"⚠️ Cap Check Error (continuing): {e}")
     
     # SEND EMAIL
     hook_url = os.environ.get("GHL_EMAIL_WEBHOOK_URL")

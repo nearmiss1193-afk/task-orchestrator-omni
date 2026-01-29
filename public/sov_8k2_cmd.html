@@ -125,9 +125,9 @@
             <p class="text-xs text-gray-500 mt-1">Sovereign Database</p>
         </div>
         <div class="panel">
-            <h2>Est. Revenue</h2>
-            <div class="stat-value c-blue" id="h-rev">$--</div>
-            <p class="text-xs text-gray-500 mt-1">Pipeline Value</p>
+            <h2>System Wisdom</h2>
+            <div class="stat-value c-blue" id="h-wisdom">--</div>
+            <p class="text-xs text-gray-500 mt-1">Synthesized Insights</p>
         </div>
         <div class="panel">
             <h2>Active Status</h2>
@@ -215,7 +215,7 @@
                 // 1. TRUTH
                 document.getElementById('h-score').innerText = data.health + "%";
                 document.getElementById('h-leads').innerText = data.total_leads;
-                document.getElementById('h-rev').innerText = "$" + (data.total_leads * 50).toLocaleString(); // Simple estimation
+                document.getElementById('h-wisdom').innerText = data.wisdom_score;
                 document.getElementById('h-active').innerText = data.mode.toUpperCase();
 
                 if (data.mode === "working") {

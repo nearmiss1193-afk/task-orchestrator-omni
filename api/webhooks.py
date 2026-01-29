@@ -81,10 +81,19 @@ def dashboard_stats():
     state = sb.table("system_state").select("status").eq("key", "campaign_mode").execute()
     mode = state.data[0]['status'] if state.data else "unknown"
     
+    # 4. WISDOM CACHE
+    wisdom_count = 0
+    try:
+        wisdom_res = sb.table("system_wisdom").select("id", count="exact").execute()
+        wisdom_count = wisdom_res.count or 0
+    except Exception:
+        pass
+
     return {
         "health": 95 if mode == "working" else 20,
         "mode": mode,
         "funnel": status_counts,
         "recent_comms": comms.data,
-        "total_leads": sum(status_counts.values())
+        "total_leads": sum(status_counts.values()),
+        "wisdom_score": wisdom_count
     }

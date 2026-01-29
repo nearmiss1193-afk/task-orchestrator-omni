@@ -26,12 +26,16 @@ def get_base_image():
             "pytz"
         )
         .run_commands("playwright install --with-deps chromium")
-        .add_local_file("sovereign_config.json", remote_path="/root/sovereign_config.json")
-        .add_local_dir("modules", remote_path="/root/modules")
         .add_local_dir("utils", remote_path="/root/utils")
         .add_local_dir("workers", remote_path="/root/workers")
         .add_local_dir("core", remote_path="/root/core")
         .add_local_dir("api", remote_path="/root/api")
+        # Selective module mounting to avoid 70k+ legacy files
+        .add_local_file("modules/__init__.py", remote_path="/root/modules/__init__.py")
+        .add_local_dir("modules/database", remote_path="/root/modules/database")
+        .add_local_dir("modules/ai", remote_path="/root/modules/ai")
+        .add_local_dir("modules/analytics", remote_path="/root/modules/analytics")
+        .add_local_file("modules/outbound_dialer.py", remote_path="/root/modules/outbound_dialer.py")
     )
 
 image = get_base_image()
