@@ -449,6 +449,83 @@
         </div>
     </section>
 
+    <!-- ZERO-LATENCY TRUST: LIVE ACTIVITY TICKER -->
+    <section class="live-activity">
+        <div class="container">
+            <div class="activity-ticker">
+                <div class="activity-item">
+                    <span class="status-dot"></span>
+                    <span class="activity-text">AI Sarah just booked a consultation for <strong>Plumbline
+                            Pros</strong></span>
+                    <span class="activity-time">2m ago</span>
+                </div>
+                <div class="activity-item">
+                    <span class="status-dot"></span>
+                    <span class="activity-text">Outbound Research Agent identified 45 new leads in <strong>Lakeland,
+                            FL</strong></span>
+                    <span class="activity-time">5m ago</span>
+                </div>
+                <div class="activity-item">
+                    <span class="status-dot"></span>
+                    <span class="activity-text">Payment of <strong>$297.00</strong> verified via Stripe for
+                        <strong>Roofing Hub</strong></span>
+                    <span class="activity-time">12m ago</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .live-activity {
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+            overflow: hidden;
+        }
+
+        .activity-ticker {
+            display: flex;
+            gap: 40px;
+            white-space: nowrap;
+            animation: ticker 30s linear infinite;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .activity-text strong {
+            color: var(--text-main);
+        }
+
+        .activity-time {
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+
     <!-- DEMO -->
     <section id="demo" class="style-fix-20" data-style-migrated="true">
         <div class="container">

@@ -1,24 +1,47 @@
-"""
-NEXUS OUTREACH V1 - REFACTORED ARCHITECTURE
-Entry point for Modal deployment (< 200 lines per Grok audit)
-
-STRUCTURE:
-- core/image_config.py: Infrastructure
-- utils/error_handling.py: Validation utilities
-- workers/research.py: Lead research
-- workers/outreach.py: Email/SMS/Call dispatch
-- workers/pulse_scheduler.py: Unified orchestrator
-"""
 import sys
-if "/root" not in sys.path:
-    sys.path.append("/root")
+import os
+import modal
 
-# Import core infrastructure
-from core.image_config import app, image, VAULT
+# NEXUS APP DEFINITION
+app = modal.App("ghl-omni-automation")
 
-# Import workers (this registers them with  the app)
+# IMAGE CONFIGURATION (Inlined to avoid ImportErrors during deployment)
+def get_base_image():
+    return (
+        modal.Image.debian_slim(python_version="3.11")
+        .apt_install("git")
+        .pip_install(
+            "playwright",
+            "python-dotenv",
+            "requests",
+            "supabase",
+            "fastapi",
+            "stripe",
+            "google-generativeai>=0.5.0",
+            "dnspython",
+            "pytz",
+            "python-dateutil"
+        )
+        .run_commands("playwright install --with-deps chromium")
+        .add_local_dir("utils", remote_path="/root/utils")
+        .add_local_dir("workers", remote_path="/root/workers")
+        .add_local_file("workers/instant_response.py", remote_path="/root/workers/instant_response.py")
+        .add_local_dir("core", remote_path="/root/core")
+        .add_local_dir("api", remote_path="/root/api")
+        .add_local_file("modules/__init__.py", remote_path="/root/modules/__init__.py")
+        .add_local_dir("modules/database", remote_path="/root/modules/database")
+        .add_local_dir("modules/ai", remote_path="/root/modules/ai")
+        .add_local_dir("modules/analytics", remote_path="/root/modules/analytics")
+        .add_local_file("modules/outbound_dialer.py", remote_path="/root/modules/outbound_dialer.py")
+    )
+
+image = get_base_image()
+VAULT = modal.Secret.from_name("sovereign-vault")
+
+# Import workers (registers them with the app)
 from workers.research import research_lead_logic
-from workers.outreach import dispatch_email_logic, dispatch_sms_logic, dispatch_call_logic
+from workers.outreach import dispatch_email_logic, dispatch_sms_logic, dispatch_call_logic, sync_ghl_contacts
+from workers.instant_response import tag_triggered_ai_response
 from workers.pulse_scheduler import master_pulse
 
 # Import API endpoints
@@ -31,7 +54,7 @@ def verify_outreach_worker():
     from workers.outreach import dispatch_sms_logic
     print("🚀 Triggering live worker verification...")
     # REAL LEAD ID FOR VERIFICATION
-    test_lead_id = "c086f2ce-72f5-4f9f-b414-e04432908c6bc"
+    test_lead_id = "c086f2ce-72f5-4f9f-b414-e04432908c6b"
     try:
         # Use .local() to call the logic function directly within the same app
         res = dispatch_sms_logic.local(lead_id=test_lead_id, message="Sarah Hardening Live Verification")

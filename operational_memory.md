@@ -130,7 +130,7 @@
 **Cross-Reference Table:**
 
 | Aspect | Source 1 (Vapi Docs) | Source 2 (Community) | Match? |
-|--------|---------------------|----------------------|--------|
+| :--- | :--- | :--- | :--- |
 | Error Meaning | Free Vapi# can't call international | Free Vapi numbers are US-only | ✅ |
 | Target Number | +1 (250) = British Columbia, Canada | Canadian numbers are international | ✅ |
 | Fix | Import Twilio# OR filter international | Use Twilio-imported number | ✅ |
@@ -236,12 +236,12 @@ ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a" // Sarah 3.0
 
 ### Sarah AI Channels
 
-| Channel      | Inbound             | Outbound            |
-| ------------ | ------------------- | ------------------- |
-| Voice Calls  | ✅ Vapi auto-answers | ✅ turbo_contact.py |
-| SMS          | ⏳ Needs GHL publish | ✅ GHL webhook      |
-| Chat Widget  | ✅ GHL widget       | N/A                 |
-| Voice Widget | ✅ All pages        | N/A                 |
+| Channel | Inbound | Outbound |
+| :--- | :--- | :--- |
+| Voice Calls | ✅ Vapi auto-answers | ✅ turbo_contact.py |
+| SMS | ⏳ Needs GHL publish | ✅ GHL webhook |
+| Chat Widget | ✅ GHL widget | N/A |
+| Voice Widget | ✅ All pages | N/A |
 
 ### Outreach Capabilities
 

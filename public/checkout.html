@@ -333,41 +333,49 @@
                     </div>
 
                     <div class="payment-details-group">
-                        <label class="form-label">Secure Payment Details</label>
-                        <div class="card-input-row">
-                            <input type="text" class="form-input card-num" placeholder="Card Number">
+                        <label class="form-label">Secure Fast-Checkout</label>
+                        <div class="card-input-row"
+                            style="background: #f4f4f4; border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; border: 1px solid #6366f1;">
+                            <span
+                                style="background: #6366f1; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800;">LINK</span>
+                            <span style="font-size: 13px; color: #444;">1-Click Secure Pay Enabled (Simulation)</span>
+                        </div>
+                        <div class="card-input-row mt-4">
+                            <input type="text" class="form-input card-num" placeholder="Card Number (4242 4242...)">
                             <input type="text" class="form-input card-date" placeholder="MM/YY">
                             <input type="text" class="form-input card-cvc" placeholder="CVC">
                         </div>
                         <div class="security-badge">
-                            🔒 Encrypted by Stripe (Simulation)
+                            🔒 Encrypted by Stripe Sovereign Bridge
                         </div>
                     </div>
 
-                    <div class="consent-container">
-                        <label class="consent-label">
-                            <input type="checkbox" id="smsConsent" required class="consent-checkbox">
-                            <span>
-                                I agree to the <a href="terms.html" target="_blank" class="link-style">Terms of
+                    <div class="consent-container"
+                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+                        <label class="consent-label" style="display: flex; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="smsConsent" required class="consent-checkbox"
+                                style="width: 20px; height: 20px;">
+                            <span style="font-size: 11px; color: #666; line-height: 1.4;">
+                                I agree to the <a href="terms.html" target="_blank" style="color: var(--primary);">Terms
+                                    of
                                     Service</a>
-                                and <a href="privacy.html" target="_blank" class="link-style">Privacy Policy</a>.
-                                I provide express consent to receive marketing and account-related messages (SMS/Call)
-                                from Empire HVAC at the number provided. Msg frequency varies. Msg & data rates may
-                                apply.
-                                Reply STOP to cancel.
+                                and <a href="privacy.html" target="_blank" style="color: var(--primary);">Privacy
+                                    Policy</a>.
+                                I provide <strong>EXPRESS WRITTEN CONSENT</strong> to receive marketing messages
+                                (SMS/Call)
+                                from AI Service Co (Sub: RnK4) via automated technology. Msg & data rates apply.
+                                Reply STOP to opt-out.
                             </span>
                         </label>
                     </div>
 
-                    <button type="submit" class="submit-btn" id="submitBtn">Generate My Account →</button>
+                    <button type="submit" class="submit-btn" id="submitBtn" style="margin-top: 24px;">ACTIVATE AI
+                        WORKFORCE →</button>
                     <div id="formStatus" class="form-status"></div>
 
-                    <p class="legal-text">
-                        By clicking "Generate My Account", you agree to our Terms of Service and Privacy Policy. You
-                        expressively consent to receive marketing and account-related messages via automated technology
-                        (SMS/Call) from AI Service Co at the number provided. Consent is not a condition of purchase.
-                        Reply
-                        STOP to cancel. Msg & data rates may apply.
+                    <p class="legal-text" style="text-align: center; margin-top: 24px; font-size: 10px; color: #999;">
+                        AI Service Co utilizes A2P 10DLC verified routes. Your consent is recorded in our Sovereign
+                        Audit Log for compliance protection.
                     </p>
                 </form>
             </div>

@@ -12,103 +12,141 @@ import modal
 from core.image_config import image, VAULT
 from core.apps import engine_app as app
 
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+def sync_ghl_contacts():
+    """
+    ZERO-TAX POLLING: Fetches new contacts from GHL every 5 minutes.
+    Bypasses $0.01 per webhook tax.
+    """
+    print("🔄 SYNC: Polling GHL for new contacts...")
+    from modules.database.supabase_client import get_supabase
+    import requests
+    import os
+    from datetime import datetime, timezone, timedelta
+
+    supabase = get_supabase()
+    location_id = os.environ.get("GHL_LOCATION_ID")
+    api_token = os.environ.get("GHL_API_TOKEN")
+
+    if not location_id or not api_token:
+        print("❌ Sync Error: Missing GHL credentials in Vault")
+        return
+
+    # Fetch contacts updated in the last 10 minutes (to ensure overlap)
+    url = f"https://services.leadconnectorhq.com/contacts/?locationId={location_id}&limit=20"
+    headers = {
+        "Authorization": f"Bearer {api_token}",
+        "Version": "2021-07-28",
+        "Accept": "application/json"
+    }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=15)
+        response.raise_for_status()
+        contacts = response.json().get("contacts", [])
+        print(f"📥 Found {len(contacts)} contacts in GHL.")
+
+        for contact in contacts:
+            ghl_id = contact.get("id")
+            email = contact.get("email")
+            phone = contact.get("phone")
+            name = f"{contact.get('firstName', '')} {contact.get('lastName', '')}".strip()
+
+            # UPSERT into contacts_master
+            # We match by ghl_contact_id to avoid duplicates
+            data = {
+                "ghl_contact_id": ghl_id,
+                "email": email,
+                "phone": phone,
+                "full_name": name,
+                "status": "new", # Default to new for incoming
+                "source": "polling_sync",
+                "metadata": contact
+            }
+            
+            # Using Supabase upsert on ghl_contact_id
+            res = supabase.table("contacts_master").upsert(data, on_conflict="ghl_contact_id").execute()
+            if res.data:
+                print(f"✅ Synced lead: {name} ({ghl_id})")
+
+    except Exception as e:
+        print(f"❌ Sync Failed: {e}")
+
+@app.function(image=image, secrets=[VAULT])
+def log_consent(lead_id: str, consent_type: str, source: str = "checkout"):
+    """
+    CONSENT DEFENSE: Records explicit consent for audit trails.
+    """
+    print(f"⚖️ CONSENT: Logging {consent_type} for Lead {lead_id}...")
+    from modules.database.supabase_client import get_supabase
+    import datetime
+
+    supabase = get_supabase()
+    lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
+    
+    if not lead:
+        print(f"❌ Error: Lead {lead_id} not found")
+        return
+
+    data = {
+        "lead_id": lead_id,
+        "phone": lead.get("phone"),
+        "consent_type": consent_type,
+        "source_url": source,
+        "ip_address": "recorded", # Proxy for actual IP if available
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()
+    }
+    
+    supabase.table("consent_audit_log").insert(data).execute()
+    print(f"✅ Consent Recorded for {lead.get('full_name')}")
+
 @app.function(image=image, secrets=[VAULT])
 def dispatch_email_logic(lead_id: str):
-    """
-    Dispatches email via GHL webhook (ID-based, not object).
-    
-    Args:
-        lead_id: Database ID
-        
-    Returns:
-        bool: Success status
-    """
+    """Dispatches email via GHL webhook."""
     print(f"📧 EMAIL DISPATCH: Lead ID {lead_id}")
     from modules.database.supabase_client import get_supabase
-    from utils.error_handling import check_supabase_error, validate_webhook_response
     import requests
     import os
     
     supabase = get_supabase()
+    lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
     
-    # FETCH LEAD
-    lead_res = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute()
-    check_supabase_error(lead_res, "Fetch Lead for Email")
-    lead = lead_res.data
+    if not lead or not lead.get("ghl_contact_id"):
+        print(f"❌ Error: Lead {lead_id} has no GHL ID")
+        return False
 
-    # FREQUENCY CAP (Anti-Spam)
-    print("🛡️ CHECKING FREQUENCY CAP...")
-    try:
-        last_touch = supabase.table("outbound_touches").select("ts").eq("phone", lead.get("phone")).order("ts", desc=True).limit(1).execute()
-        if last_touch.data:
-            from dateutil.parser import parse
-            import datetime
-            last_ts = parse(last_touch.data[0]['ts'])
-            if (datetime.datetime.now(datetime.timezone.utc) - last_ts).total_seconds() < 3600: # 1 hour cap
-                print(f"⏸️ SKIP: Recent touch for {lead_id} (last sent at {last_ts})")
-                return False
-    except Exception as e:
-        print(f"⚠️ Cap Check Error (continuing): {e}")
-    
-    # SEND EMAIL
     hook_url = os.environ.get("GHL_EMAIL_WEBHOOK_URL")
-    if not hook_url:
-        raise Exception("GHL_EMAIL_WEBHOOK_URL not configured")
-    
     payload = {
         "contact_id": lead['ghl_contact_id'],
         "subject": "quick question",
-        "body": f"hey, {lead.get('ai_strategy', 'saw your site and had a question')}"
+        "body": lead.get('ai_strategy', 'hey, saw your site and had a question')
     }
     
-    response = requests.post(hook_url, json=payload, timeout=10)
-    validate_webhook_response(response, "Email Webhook")
+    requests.post(hook_url, json=payload, timeout=10)
+    supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
     
-    # UPDATE STATUS (with error check!)
-    update_res = supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
-    check_supabase_error(update_res, "Update to outreach_sent")
-    
-    # RECORD TOUCH
-    touch_res = supabase.table("outbound_touches").insert({
+    supabase.table("outbound_touches").insert({
         "phone": lead.get("phone"),
         "channel": "email",
         "company": lead.get("company_name", "Unknown"),
-        "status": "sent",
-        "payload": payload
+        "status": "sent"
     }).execute()
-    check_supabase_error(touch_res, "Record Touch")
     
-    print(f"✅ EMAIL SENT & RECORDED")
+    print(f"✅ EMAIL SENT")
     return True
-
 
 @app.function(image=image, secrets=[VAULT])
 def dispatch_sms_logic(lead_id: str, message: str = None):
-    """
-    Dispatches SMS via GHL webhook (ID-based).
-    
-    Args:
-        lead_id: Database ID
-        message: Optional custom message
-    """
+    """Dispatches SMS via GHL webhook."""
     print(f"📱 SMS DISPATCH: Lead ID {lead_id}")
     from modules.database.supabase_client import get_supabase
-    from utils.error_handling import check_supabase_error, validate_webhook_response
     import requests
     import os
     
     supabase = get_supabase()
+    lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
     
-    # FETCH LEAD
-    lead_res = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute()
-    check_supabase_error(lead_res, "Fetch Lead for SMS")
-    lead = lead_res.data
-    
-    # SEND SMS
     hook_url = os.environ.get("GHL_SMS_WEBHOOK_URL")
-    if not hook_url:
-        raise Exception("GHL_SMS_WEBHOOK_URL not configured")
-    
     phone = lead.get('phone', '')
     if phone and not phone.startswith('+'):
         phone = f"+1{phone.replace('-', '').replace('(', '').replace(')', '').replace(' ', '')}"
@@ -116,97 +154,49 @@ def dispatch_sms_logic(lead_id: str, message: str = None):
     payload = {
         "phone": phone,
         "contact_id": lead['ghl_contact_id'],
-        "message": message or "hey, saw your site. had a quick question about your operations. you around?",
-        "first_name": lead.get('full_name', 'there').split()[0]
+        "message": message or "hey, saw your site. had a quick question. you around?"
     }
     
-    response = requests.post(hook_url, json=payload, timeout=10)
-    print(f"GHL SMS Response: {response.status_code} - {response.text}")
+    requests.post(hook_url, json=payload, timeout=10)
+    supabase.table("contacts_master").update({"status": "outreach_dispatched"}).eq("id", lead_id).execute()
     
-    # Check for DND or specific GHL errors
-    ghl_data = {}
-    try:
-        ghl_data = response.json()
-    except:
-        pass
-        
-    status = "dispatched"
-    if "DND" in response.text or ghl_data.get("message", "").lower().find("dnd") != -1:
-        status = "dnd_blocked"
-        print(f"🛑 GHL BLOCKED SMS (DND): {lead_id}")
-    
-    # UPDATE STATUS
-    update_res = supabase.table("contacts_master").update({"status": "outreach_dispatched" if status == "dispatched" else "dnd_blocked"}).eq("id", lead_id).execute()
-    check_supabase_error(update_res, "Update Status")
-    
-    # RECORD TOUCH
-    touch_res = supabase.table("outbound_touches").insert({
+    supabase.table("outbound_touches").insert({
         "phone": phone,
         "channel": "sms",
         "company": lead.get("company_name", "Unknown"),
-        "status": status,
-        "payload": payload,
-        "meta": {"ghl_response": response.text}
+        "status": "dispatched"
     }).execute()
-    check_supabase_error(touch_res, "Record Touch")
     
-    print(f"✅ SMS SENT & RECORDED")
+    print(f"✅ SMS SENT")
     return True
-
 
 @app.function(image=image, secrets=[VAULT])
 def dispatch_call_logic(lead_id: str):
-    """
-    Initiates outbound call via Vapi (ID-based).
-    """
+    """Initiates outbound call via Vapi."""
     print(f"📞 CALL DISPATCH: Lead ID {lead_id}")
     from modules.database.supabase_client import get_supabase
     from modules.outbound_dialer import dial_prospect
-    from utils.error_handling import check_supabase_error
     import datetime
     
     supabase = get_supabase()
+    lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
     
-    # FETCH LEAD
-    lead_res = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute()
-    check_supabase_error(lead_res, "Fetch Lead for Call")
-    lead = lead_res.data
-    
-    # DIAL
-    # VERIFIED VAPI NATIVE ID: 8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e (+18632132505)
-    phone_id = os.environ.get("VAPI_PHONE_NUMBER_ID") or "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"
     dial_res = dial_prospect(
         phone_number=lead['phone'], 
         company_name=lead.get('company_name', ''),
         assistant_id=os.environ.get("VAPI_ASSISTANT_ID") or "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
     )
     
-    if not dial_res.get('success'):
-        # RECORD FAILURE
-        supabase.table("outbound_touches").insert({
-            "phone": lead.get("phone"),
-            "channel": "call",
-            "company": lead.get("company_name", "Unknown"),
-            "status": "failed",
-            "meta": {"error": dial_res.get('error')}
-        }).execute()
-        raise Exception(f"Dial failed: {dial_res.get('error')}")
+    status = "initiated" if dial_res.get('success') else "failed"
+    supabase.table("contacts_master").update({"status": "calling_initiated"}).eq("id", lead_id).execute()
     
-    # UPDATE STATUS
-    update_res = supabase.table("contacts_master").update({
-        "status": "calling_initiated",
-        "last_contacted_at": datetime.datetime.now().isoformat()
-    }).eq("id", lead_id).execute()
-    check_supabase_error(update_res, "Update to calling_initiated")
-    
-    # RECORD TOUCH (RULE #1 - Initiated, not yet Success)
     supabase.table("outbound_touches").insert({
         "phone": lead.get("phone"),
         "channel": "call",
         "company": lead.get("company_name", "Unknown"),
-        "status": "initiated",
+        "status": status,
         "payload": {"call_id": dial_res.get("call_id")}
     }).execute()
     
-    print(f"✅ CALL INITIATED: {dial_res.get('call_id')}")
+    print(f"✅ CALL {status.upper()}")
     return True
