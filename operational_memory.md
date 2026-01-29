@@ -308,3 +308,18 @@ python turbo_contact.py
 | Pricing | $297 / $497 / $997 |
 | Owner Email | <nearmiss1193@gmail.com> |
 | Business Email | <owner@aiserviceco.com> |
+
+### [Jan 29, 2026] Redundant Interpolation Method
+
+**Problem**: GHL sent literal `(reply_text)` because the webhook payload key `replyText` did not match the expected `message` or `reply_text` in certain workflows.
+**Solution**: Standardized `railway/app.py` to send a triple-redundant payload:
+
+```json
+{
+  "message": reply_text,
+  "reply_text": reply_text,
+  "replyText": reply_text
+}
+```
+
+**Status**: Permanent memory archived. Rule #1 of GHL Dispatches defined.

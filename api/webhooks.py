@@ -46,9 +46,39 @@ async def vapi_webhook(data: dict):
 async def ghl_webhook(data: dict):
     """
     Handle incoming GHL webhooks.
+    Includes EMPIRE: Command Relay for remote SMS authority.
     """
+    from modules.database.supabase_client import get_supabase
+    from utils.error_handling import brain_log
+    import os
+
     try:
-        print(f"📥 GHL WEBHOOK: {data.get('type')}")
+        msg_body = data.get('message', {}).get('body', '')
+        msg_type = data.get('type')
+        contact_id = data.get('contact_id')
+        
+        print(f"📥 GHL WEBHOOK: {msg_type} from {contact_id}")
+
+        # SOVEREIGN COMMAND BRIDGE: Listen for EMPIRE: prefix (DORMANT - BOARD REQUEST)
+        # if msg_body.upper().startswith("EMPIRE:"):
+        #     print(f"⚠️ COMMAND DETECTED: {msg_body}")
+        #     parts = msg_body.split()
+        #     # Format: EMPIRE: [PASSCODE] [COMMAND] [ARGS...]
+        #     if len(parts) >= 3 and parts[1] == "1117":
+        #         command = parts[2].upper()
+        #         args = parts[3:]
+        #         sb = get_supabase()
+        #         brain_log(sb, f"SOVEREIGN COMMAND: {command} with args {args}", "WARNING")
+        #         if command == "STRIKE":
+        #             from workers.outreach import sync_ghl_contacts
+        #             limit = int(args[0]) if args else 10
+        #             print(f"🚀 COMMAND: Executing STRIKE batch of {limit}")
+        #             sync_ghl_contacts.spawn()
+        #         return {"status": "command_executed", "command": command}
+        #     else:
+        #         print("❌ COMMAND FAILED: Invalid passcode or format")
+        #         return {"status": "command_failed", "reason": "auth_failure"}
+
         return {"status": "received"}
     except Exception as e:
         print(f"❌ GHL WEBHOOK ERROR: {e}")

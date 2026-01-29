@@ -55,17 +55,17 @@ def sync_ghl_contacts():
             # UPSERT into contacts_master
             # We match by ghl_contact_id to avoid duplicates
             data = {
-                "ghl_contact_id": ghl_id,
+                "ghl_id": ghl_id,
                 "email": email,
                 "phone": phone,
                 "full_name": name,
                 "status": "new", # Default to new for incoming
                 "source": "polling_sync",
-                "metadata": contact
+                "meta": contact
             }
             
-            # Using Supabase upsert on ghl_contact_id
-            res = supabase.table("contacts_master").upsert(data, on_conflict="ghl_contact_id").execute()
+            # Using Supabase upsert on ghl_id
+            res = supabase.table("contacts_master").upsert(data, on_conflict="ghl_id").execute()
             if res.data:
                 print(f"✅ Synced lead: {name} ({ghl_id})")
 
@@ -147,28 +147,36 @@ def dispatch_sms_logic(lead_id: str, message: str = None):
     lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
     
     hook_url = os.environ.get("GHL_SMS_WEBHOOK_URL")
+    ghl_id = lead.get('ghl_id') or lead.get('ghl_contact_id')
     phone = lead.get('phone', '')
     if phone and not phone.startswith('+'):
         phone = f"+1{phone.replace('-', '').replace('(', '').replace(')', '').replace(' ', '')}"
     
     payload = {
         "phone": phone,
-        "contact_id": lead['ghl_contact_id'],
+        "contact_id": ghl_id,
         "message": message or "hey, saw your site. had a quick question. you around?"
     }
     
-    requests.post(hook_url, json=payload, timeout=10)
-    supabase.table("contacts_master").update({"status": "outreach_dispatched"}).eq("id", lead_id).execute()
+    try:
+        response = requests.post(hook_url, json=payload, timeout=10)
+        status = "dispatched" if response.status_code == 200 else f"failed_{response.status_code}"
+        print(f"📡 GHL SMS STATUS: {status}")
+    except Exception as e:
+        status = f"error: {str(e)}"
+        print(f"❌ SMS POST ERROR: {status}")
+
+    supabase.table("contacts_master").update({"status": "outreach_dispatched" if "dispatched" in status else "failed"}).eq("id", lead_id).execute()
     
     supabase.table("outbound_touches").insert({
         "phone": phone,
         "channel": "sms",
         "company": lead.get("company_name", "Unknown"),
-        "status": "dispatched"
+        "status": status
     }).execute()
     
-    print(f"✅ SMS SENT")
-    return True
+    print(f"✅ SMS {status.upper()}")
+    return "dispatched" in status
 
 @app.function(image=image, secrets=[VAULT])
 def dispatch_call_logic(lead_id: str):
