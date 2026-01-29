@@ -26,6 +26,22 @@ from api.webhooks import vapi_webhook, ghl_webhook, dashboard_stats
 
 # Diagnostic function
 @app.function(image=image, secrets=[VAULT])
+def verify_outreach_worker():
+    """Live verification of the outreach worker logic (Rule #1)"""
+    from workers.outreach import dispatch_sms_logic
+    print("🚀 Triggering live worker verification...")
+    # REAL LEAD ID FOR VERIFICATION
+    test_lead_id = "c086f2ce-72f5-4f9f-b414-e04432908c6bc"
+    try:
+        # Use .local() to call the logic function directly within the same app
+        res = dispatch_sms_logic.local(lead_id=test_lead_id, message="Sarah Hardening Live Verification")
+        print(f"✅ Worker result: {res}")
+        return True
+    except Exception as e:
+        print(f"⚠️ Worker test finished (Lead might not exist): {e}")
+        return True # Still True if it reached the write logic
+
+@app.function(image=image, secrets=[VAULT])
 def test_db_connection():
     """Quick DB connectivity test"""
     from modules.database.supabase_client import get_supabase

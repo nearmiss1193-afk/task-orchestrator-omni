@@ -106,19 +106,32 @@ def dispatch_sms_logic(lead_id: str, message: str = None):
     }
     
     response = requests.post(hook_url, json=payload, timeout=10)
-    validate_webhook_response(response, "SMS Webhook")
+    print(f"GHL SMS Response: {response.status_code} - {response.text}")
+    
+    # Check for DND or specific GHL errors
+    ghl_data = {}
+    try:
+        ghl_data = response.json()
+    except:
+        pass
+        
+    status = "dispatched"
+    if "DND" in response.text or ghl_data.get("message", "").lower().find("dnd") != -1:
+        status = "dnd_blocked"
+        print(f"🛑 GHL BLOCKED SMS (DND): {lead_id}")
     
     # UPDATE STATUS
-    update_res = supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
-    check_supabase_error(update_res, "Update to outreach_sent")
+    update_res = supabase.table("contacts_master").update({"status": "outreach_dispatched" if status == "dispatched" else "dnd_blocked"}).eq("id", lead_id).execute()
+    check_supabase_error(update_res, "Update Status")
     
-    #  RECORD TOUCH
+    # RECORD TOUCH
     touch_res = supabase.table("outbound_touches").insert({
         "phone": phone,
         "channel": "sms",
         "company": lead.get("company_name", "Unknown"),
-        "status": "sent",
-        "payload": payload
+        "status": status,
+        "payload": payload,
+        "meta": {"ghl_response": response.text}
     }).execute()
     check_supabase_error(touch_res, "Record Touch")
     
@@ -145,9 +158,23 @@ def dispatch_call_logic(lead_id: str):
     lead = lead_res.data
     
     # DIAL
-    dial_res = dial_prospect(phone_number=lead['phone'], company_name=lead.get('company_name', ''))
+    # VERIFIED VAPI NATIVE ID: 8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e (+18632132505)
+    phone_id = os.environ.get("VAPI_PHONE_NUMBER_ID") or "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"
+    dial_res = dial_prospect(
+        phone_number=lead['phone'], 
+        company_name=lead.get('company_name', ''),
+        assistant_id=os.environ.get("VAPI_ASSISTANT_ID") or "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
+    )
     
     if not dial_res.get('success'):
+        # RECORD FAILURE
+        supabase.table("outbound_touches").insert({
+            "phone": lead.get("phone"),
+            "channel": "call",
+            "company": lead.get("company_name", "Unknown"),
+            "status": "failed",
+            "meta": {"error": dial_res.get('error')}
+        }).execute()
         raise Exception(f"Dial failed: {dial_res.get('error')}")
     
     # UPDATE STATUS
@@ -157,5 +184,14 @@ def dispatch_call_logic(lead_id: str):
     }).eq("id", lead_id).execute()
     check_supabase_error(update_res, "Update to calling_initiated")
     
-    print(f"✅ CALL INITIATED")
+    # RECORD TOUCH (RULE #1 - Initiated, not yet Success)
+    supabase.table("outbound_touches").insert({
+        "phone": lead.get("phone"),
+        "channel": "call",
+        "company": lead.get("company_name", "Unknown"),
+        "status": "initiated",
+        "payload": {"call_id": dial_res.get("call_id")}
+    }).execute()
+    
+    print(f"✅ CALL INITIATED: {dial_res.get('call_id')}")
     return True

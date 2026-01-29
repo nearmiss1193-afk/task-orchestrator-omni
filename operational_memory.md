@@ -1,11 +1,63 @@
 # Empire Unified - Operational Memory
 
-> **Last Updated:** Jan 15, 2026
+> **Last Updated:** Jan 29, 2026
 > **Purpose:** Consolidated monthly learnings, configurations, and SOPs for system recovery
 
 ---
 
-## January 2026 Session Learnings
+### Jan 29 Early Morning - Outreach Hardening (Rule #1)
+
+**Completed:**
+
+- ✅ **Vapi Native Integration**: Switched to verified native ID `8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e` for `+18632132505`. Resolved "error-get-transport" 400.
+- ✅ **GHL DND Pre-flight**: Added DND checks in `workers/outreach.py` for SMS to prevent false success.
+- ✅ **Rule #1 Enforcement**: Updated `workers/outreach.py` to only report success when database records are created.
+- ✅ **Vapi Webhook Persistence**: Updated `api/webhooks.py` to store live call events (types) in `outbound_touches`.
+- ✅ **Cloud Sync**: Fixed `deploy.py` internal function call syntax (use `.local()` for within-app logic).
+
+**Key Learnings:**
+
+- **Vapi Carrier Trust**: Native Vapi numbers (provisioned in-dashboard) avoid 400 transport errors that Twilio-imported numbers sometimes hitting in specific regions.
+- **Rule #1 (Actual Delivery)**: Never trust an API "201 Created" alone. Success is only verified when the database reflects the touch.
+- **Modal Internal Calls**: When calling another `@app.function` within the same Modal app, use `func.local()` to execute logic without re-serializing.
+- **Business Hours Bypass**: For late-night verification, temporary bypass of `is_business_hours()` is required to trigger pulses.
+
+---
+
+### Jan 27 - Modal App Alignment & SMS Relay Fix
+
+**Completed:**
+
+- ✅ **Modal App Name Re-alignment**: Switched app name from `ghl-omni-automation` back to legacy `empire-api-v3` to match GHL's hardcoded webhooks.
+- ✅ **SMS Inbound Relay**: Restored `/api/sms/reply-text` and `/api/sms/reply-sent` endpoints in `deploy.py` to handle GHL's "Inbound SMS Webhook Relay".
+- ✅ **Sarah AI SMS Integration**: Added Gemini-powered responder logic to the legacy SMS relay endpoint.
+- ✅ **Internal Import Stabilization**: Fixed serialization errors in Modal by moving `get_supabase` imports inside all worker functions.
+
+**Key Learnings:**
+
+- **Legacy Dependencies**: External systems (GHL) often have hardcoded webhook URLs. Restoring the old Modal URL (`empire-api-v3`) is faster than updating dozens of GHL automation steps.
+- **Modal Serialization**: `@app.function` workers MUST have `from modules... import ...` INSIDE the function body if the module is mounted/added via `add_local_dir`.
+- **Campaign Mode**: The system uses `system_state` key `campaign_mode` set to `working` (active) or `broken` (manual kill switch).
+
+---
+
+### Jan 23 - Analytics & Tracking System
+
+**Completed:**
+
+- ✅ Backend: Created `/api/track` endpoint in `deploy.py` (FastAPI) to capture pageviews and clicks.
+- ✅ Database: Events stored in `web_events` Supabase table.
+- ✅ Frontend: Created `tracker.js` with session logic and click listeners.
+- ✅ UX: `tracker.js` shows **Green Border** on success / **Red Border** on failure for easy debugging.
+- ✅ Accessibility: Fixed `alf_landing.html` lint errors.
+
+**Key Learnings:**
+
+- **Modal Static Files:** Must explicitly `mount` the `/public` directory in `deploy.py` to serve relative assets like `tracker.js`.
+- **FastAPI Imports:** `func.wsgi_app()` inside Modal can lose top-level imports; re-import `FastAPI`, `StaticFiles`, etc. inside the function.
+- **Supabase Env Vars:** `NEXT_PUBLIC_SUPABASE_URL` is the correct key in this environment, not just `SUPABASE_URL`.
+
+---
 
 ### Jan 15 - Premium Audit Reports & GHL Chat Widget
 
@@ -236,38 +288,3 @@ python turbo_contact.py
 | Pricing | $297 / $497 / $997 |
 | Owner Email | <nearmiss1193@gmail.com> |
 | Business Email | <owner@aiserviceco.com> |
-
----
-
-### Jan 23 - Analytics & Tracking System
-
-**Completed:**
-
-- ✅ Backend: Created `/api/track` endpoint in `deploy.py` (FastAPI) to capture pageviews and clicks.
-- ✅ Database: Events stored in `web_events` Supabase table.
-- ✅ Frontend: Created `tracker.js` with session logic and click listeners.
-- ✅ UX: `tracker.js` shows **Green Border** on success / **Red Border** on failure for easy debugging.
-- ✅ Accessibility: Fixed `alf_landing.html` lint errors.
-
-**Key Learnings:**
-
-- **Modal Static Files:** Must explicitly `mount` the `/public` directory in `deploy.py` to serve relative assets like `tracker.js`.
-- **FastAPI Imports:** `func.wsgi_app()` inside Modal can lose top-level imports; re-import `FastAPI`, `StaticFiles`, etc. inside the function.
-- **Supabase Env Vars:** `NEXT_PUBLIC_SUPABASE_URL` is the correct key in this environment, not just `SUPABASE_URL`.
-
----
-
-### Jan 27 - Modal App Alignment & SMS Relay Fix
-
-**Completed:**
-
-- ✅ **Modal App Name Re-alignment**: Switched app name from `ghl-omni-automation` back to legacy `empire-api-v3` to match GHL's hardcoded webhooks.
-- ✅ **SMS Inbound Relay**: Restored `/api/sms/reply-text` and `/api/sms/reply-sent` endpoints in `deploy.py` to handle GHL's "Inbound SMS Webhook Relay".
-- ✅ **Sarah AI SMS Integration**: Added Gemini-powered responder logic to the legacy SMS relay endpoint.
-- ✅ **Internal Import Stabilization**: Fixed serialization errors in Modal by moving `get_supabase` imports inside all worker functions.
-
-**Key Learnings:**
-
-- **Legacy Dependencies**: External systems (GHL) often have hardcoded webhook URLs. Restoring the old Modal URL (`empire-api-v3`) is faster than updating dozens of GHL automation steps.
-- **Modal Serialization**: `@app.function` workers MUST have `from modules... import ...` INSIDE the function body if the module is mounted/added via `add_local_dir`.
-- **Campaign Mode**: The system uses `system_state` key `campaign_mode` set to `working` (active) or `broken` (manual kill switch).

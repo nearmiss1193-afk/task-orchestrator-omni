@@ -21,7 +21,7 @@ load_dotenv()
 
 # Vapi configuration
 VAPI_PRIVATE_KEY = os.getenv("VAPI_PRIVATE_KEY")
-VAPI_PHONE_NUMBER_ID = os.getenv("VAPI_PHONE_NUMBER_ID")
+VAPI_PHONE_NUMBER_ID = os.getenv("VAPI_PHONE_NUMBER_ID") or "86f73243-8916-4897-b840-b20c8afdd7a8339f"
 
 # Your Vapi assistant IDs
 SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"  # Sarah 3.0 (Official)

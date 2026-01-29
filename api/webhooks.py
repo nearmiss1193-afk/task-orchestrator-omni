@@ -28,10 +28,18 @@ async def vapi_webhook(request: Request):
             
         print(f"📞 VAPI WEBHOOK: {data.get('message', {}).get('type')} for {call_id}")
         
-        # Log to DB (simplified for MVP)
+        # Log to DB (Rule #1 - Database Results)
         supabase = get_supabase()
-        # In a real scenario, we'd parse the transcript and update the lead
-        # For now, just acknowledged
+        touch_res = supabase.table("outbound_touches").insert({
+            "phone": data.get('message', {}).get('call', {}).get('customer', {}).get('number'),
+            "channel": "call",
+            "company": "Live Call Info",
+            "status": data.get('message', {}).get('type'),
+            "payload": data.get('message', {}),
+            "meta": {"call_id": call_id}
+        }).execute()
+        check_supabase_error(touch_res, "Vapi Webhook Log")
+        
         return {"status": "ok"}
         
     except Exception as e:
