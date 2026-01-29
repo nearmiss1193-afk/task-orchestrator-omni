@@ -45,15 +45,24 @@ async def vapi_webhook(data: dict):
 
 async def ghl_webhook(data: dict):
     """
-    Handle incoming GHL webhooks (e.g. form submissions, tag updates).
+    Handle incoming GHL webhooks.
     """
     try:
-        data = await request.json()
         print(f"📥 GHL WEBHOOK: {data.get('type')}")
-        # Logic to be implemented or ported from legacy if needed
         return {"status": "received"}
     except Exception as e:
         print(f"❌ GHL WEBHOOK ERROR: {e}")
+        return {"status": "error"}
+
+async def vercel_webhook(data: dict):
+    """
+    Handle Vercel deployment notifications.
+    """
+    try:
+        print(f"🚀 VERCEL WEBHOOK: {data.get('type')} - {data.get('payload', {}).get('deployment', {}).get('url')}")
+        return {"status": "ok"}
+    except Exception as e:
+        print(f"❌ VERCEL WEBHOOK ERROR: {e}")
         return {"status": "error"}
 
 def dashboard_stats():
@@ -89,11 +98,31 @@ def dashboard_stats():
     except Exception:
         pass
 
+    # 5. ROI & FINANCIALS (Phase 4)
+    pipeline_value = 0
+    outreach_burn = 0
+    try:
+        # Sum potential revenue (ignoring skipped/dnd)
+        rev_res = sb.table("contacts_master").select("deal_value").not_.in_("status", ["skipped_no_url", "dnd_blocked"]).execute()
+        if rev_res.data:
+            pipeline_value = sum([float(r.get('deal_value') or 497) for r in rev_res.data])
+        
+        # Estimate Burn (Rule of thumb: 0.15 per call, 0.01 per email/sms)
+        touches = sb.table("outbound_touches").select("channel").execute()
+        if touches.data:
+            for t in touches.data:
+                if t['channel'] == 'call': outreach_burn += 0.15
+                else: outreach_burn += 0.01
+    except Exception as e:
+        print(f"⚠️ ROI Calc Error: {e}")
+
     return {
         "health": 95 if mode == "working" else 20,
         "mode": mode,
         "funnel": status_counts,
         "recent_comms": comms.data,
         "total_leads": sum(status_counts.values()),
-        "wisdom_score": wisdom_count
+        "wisdom_score": wisdom_count,
+        "pipeline_value": pipeline_value,
+        "outreach_burn": round(outreach_burn, 2)
     }

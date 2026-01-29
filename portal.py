@@ -14,7 +14,7 @@ from core.image_config import portal_image, VAULT
 from core.apps import portal_app as app
 
 # Import handlers
-from api.webhooks import vapi_webhook, ghl_webhook, dashboard_stats
+from api.webhooks import vapi_webhook, ghl_webhook, dashboard_stats, vercel_webhook
 
 web_app = FastAPI()
 
@@ -25,6 +25,10 @@ async def vapi_route(data: dict):
 @web_app.post("/ghl_webhook")
 async def ghl_route(data: dict):
     return await ghl_webhook(data)
+
+@web_app.post("/vercel_webhook")
+async def vercel_route(data: dict):
+    return await vercel_webhook(data)
 
 @web_app.get("/dashboard_stats")
 async def stats_route():

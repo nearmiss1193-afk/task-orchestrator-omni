@@ -9,6 +9,18 @@
   - Dashboard moved to `sov_8k2_cmd.html`.
   - `robots.txt` disallows dashboard indexing.
   - Local Key: `empire_2026` required for dashboard persistence.
+- **Phase 3: Persistent Wisdom (Context Loop)**:
+  - `system_wisdom`: New schema to store cross-lead insights and patterns.
+  - `wisdom_engine.py`: Daily background worker synthesizes successful interactions into high-level wisdom.
+  - Research Injection: `research_lead_logic` now fetches lead history and system wisdom to draft context-aware hooks.
+- **Micro-App Image Optimization**:
+  - Replaced monolithic module mounting with selective `add_local` calls in `core/image_config.py`.
+  - Purged 70,000+ legacy files from the Modal build environment, reducing image size by ~1.3GB.
+- **Phase 4: Mission Alignment (ROI Metrics)**:
+  - Financial Layer: Added `deal_value` support to `contacts_master` (default $497).
+  - Business Attribution: Implemented auto-calculation of **Pipeline Value** and **Outreach Burn** in `api/webhooks.py`.
+  - Burn Estimation: $0.15/min for calls, $0.01 for SMS/Emails.
+  - Command UI: ROI Stats panel replaced legacy "Traffic Sources".
 - **Master Prompt v5.5**: Active with Evolution and Sentinel protocols.
 
 ---
