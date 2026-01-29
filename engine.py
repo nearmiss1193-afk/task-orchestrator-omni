@@ -24,6 +24,25 @@ def daily_horizon_scan():
     run_evolutionary_loop()
 
 @app.function(image=image, secrets=[VAULT])
+def trigger_vercel_redeploy():
+    """Manually trigger a Vercel rebuild via Deploy Hook"""
+    import requests
+    import os
+    hook_url = os.environ.get("VERCEL_DEPLOY_HOOK_URL")
+    if not hook_url:
+        print("⚠️ VERCEL_DEPLOY_HOOK_URL not set. Skipping redeploy.")
+        return False
+        
+    print(f"🔄 Triggering Vercel Redeploy...")
+    res = requests.post(hook_url)
+    if res.status_code == 201:
+        print("✅ Vercel Redeploy Triggered Successfully.")
+        return True
+    else:
+        print(f"❌ Vercel Redeploy Failed: {res.status_code} - {res.text}")
+        return False
+
+@app.function(image=image, secrets=[VAULT])
 def sandbox_outreach(lead_id: str):
     """Worker for 1% experimental routing"""
     execute_sandbox_pulse(lead_id)

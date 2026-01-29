@@ -58,12 +58,26 @@ async def vercel_webhook(data: dict):
     """
     Handle Vercel deployment notifications.
     """
+    from modules.database.supabase_client import get_supabase
+    from utils.error_handling import brain_log
+    
     try:
-        print(f"🚀 VERCEL WEBHOOK: {data.get('type')} - {data.get('payload', {}).get('deployment', {}).get('url')}")
+        type = data.get('type')
+        payload = data.get('payload', {})
+        deployment = payload.get('deployment', {})
+        url = deployment.get('url') or "N/A"
+        project = payload.get('project', {}).get('name') or "Empire-Unified"
+        
+        print(f"🚀 VERCEL DEPLOY: {type} | {project} | {url}")
+        
+        # Log to operational memory (brain_logs)
+        sb = get_supabase()
+        brain_log(sb, f"VERCEL DEPLOYMENT: {type} for {project}. Live at: {url}", "INFO")
+        
         return {"status": "ok"}
     except Exception as e:
         print(f"❌ VERCEL WEBHOOK ERROR: {e}")
-        return {"status": "error"}
+        return {"status": "error", "message": str(e)}
 
 async def vanguard_signup(data: dict):
     """
