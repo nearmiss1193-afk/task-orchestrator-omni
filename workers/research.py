@@ -78,6 +78,30 @@ async def research_lead_logic(lead_id: str):
     history_res = supabase.table("outbound_touches").select("status, ts").eq("phone", lead.get("phone")).order("ts", desc=True).limit(5).execute()
     history_context = "\n".join([f"{h['ts']}: {h['status']}" for h in history_res.data]) if history_res.data else "No previous history."
 
+    # 6. STRATEGY SELECTION (33/33/33 Split)
+    import hashlib
+    hash_obj = hashlib.md5(lead_id.encode())
+    hash_val = int(hash_obj.hexdigest(), 16)
+    strategy_index = hash_val % 3 # 0, 1, or 2
+    
+    strategies = [
+        {
+            "name": "Casual Manus",
+            "prompt": "Write a casual, one-sentence outreach hook to start a relationship. Something low-friction like 'hey, saw your site and had a quick question'."
+        },
+        {
+            "name": "Authority Audit",
+            "prompt": "Focus on a technical AI Visibility/SEO gap found on their site. Suggest something specific they are missing to handle AI search traffic."
+        },
+        {
+            "name": "Vanguard Waitlist",
+            "prompt": "Focus on the upcoming SearchGPT Ads beta. Position us as the early access partner. Ask if they want to be in the first wave of conversational search ads."
+        }
+    ]
+    
+    selected_strategy = strategies[strategy_index]
+    print(f"🎯 SELECTED STRATEGY: {selected_strategy['name']}")
+
     # GEMINI ANALYSIS
     print("🧠 GEMINI START")
     from modules.ai.routing import get_gemini_model
@@ -92,11 +116,18 @@ async def research_lead_logic(lead_id: str):
         LEAD HISTORY (PAST CONTACT):
         {history_context}
         
-        Task: Write a casual, one-sentence outreach hook. 
-        If history exists, acknowledge it subtly. If wisdom exists, use the pattern.
+        Task: {selected_strategy['prompt']}
+        
+        Requirements:
+        1. Maximum one sentence.
+        2. Casual, helpful tone.
+        3. If history exists, acknowledge it.
+        4. If wisdom exists, use it.
         """
         res = model.generate_content(prompt)
         hook = res.text.strip()
+        
+        # Prepend identifying tag if needed? No, keep it clean.
         print(f"✅ GEMINI SUCCESS: {hook[:50]}...")
     except Exception as e:
         print(f"⚠️ Gemini Error: {e}")

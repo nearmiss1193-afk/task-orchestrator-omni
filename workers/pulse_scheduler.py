@@ -41,6 +41,41 @@ def master_pulse():
         check_supabase_error(hb_res, "Heartbeat")
         print("💓 HEARTBEAT LOGGED")
     
+    # --- SENTINEL CHECK (Phase 6 Anomaly Guard) ---
+    state_res = supabase.table("system_state").select("status").eq("key", "campaign_mode").execute()
+    check_supabase_error(state_res, "Check Campaign Mode")
+    campaign_mode = state_res.data[0]['status'] if state_res.data else "broken"
+    
+    if campaign_mode == "broken":
+        print("🛑 SENTINEL HALT: Campaign mode is 'broken'. Pulse aborted.")
+        return {"status": "halted", "reason": "campaign_mode_broken"}
+
+    def sentinel_guard(supabase):
+        """Checks for anomalies and triggers kill-switch if needed"""
+        from utils.error_handling import brain_log
+        
+        # 1. Check last 10 RELEVANT touches for failure rate (ignore live call info)
+        touches = supabase.table("outbound_touches")\
+            .select("status")\
+            .neq("company", "Live Call Info")\
+            .order("ts", desc=True)\
+            .limit(10)\
+            .execute()
+        
+        if touches.data:
+            failures = [t for t in touches.data if t['status'] in ['failed', 'error']]
+            if len(failures) >= 5: # 50% failure rate
+                print(f"🚨 SENTINEL TRIGGERED: {len(failures)}/10 failures detected!")
+                supabase.table("system_state").update({"status": "broken"}).eq("key", "campaign_mode").execute()
+                brain_log(supabase, f"SENTINEL TRIGGERED: {len(failures)}/10 failures detected.", "CRITICAL")
+                return True
+        return False
+
+    if sentinel_guard(supabase):
+        return {"status": "halted", "reason": "sentinel_triggered"}
+    
+    # ---------------------------------------------
+
     # PRIORITY 1: RESEARCH (Throttled: 10 leads/min to save Supabase writes)
     from workers.research import research_lead_logic
     new_leads_res = supabase.table("contacts_master")\

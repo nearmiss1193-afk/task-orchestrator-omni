@@ -115,9 +115,9 @@
 
         <!-- 1. TRUTH (Top Stats) -->
         <div class="panel">
-            <h2>System Health</h2>
-            <div class="stat-value c-green" id="h-score">--%</div>
-            <p class="text-xs text-gray-500 mt-1">Brain Efficiency</p>
+            <h2>Sentinel Shield</h2>
+            <div class="stat-value c-green" id="h-sentinel">100%</div>
+            <p class="text-xs text-gray-500 mt-1" id="h-sentinel-label">Anomaly Protection: ACTIVE</p>
         </div>
         <div class="panel">
             <h2>Pipeline Value</h2>
@@ -139,6 +139,11 @@
         <div class="panel col-span-2 row-span-2 flex flex-col">
             <div class="flex justify-between">
                 <h2>Active Campaigns</h2>
+                <div id="sentinel-alert" class="hidden">
+                    <span
+                        class="bg-red-900/50 text-red-500 text-[10px] px-2 py-0.5 rounded border border-red-500 animate-pulse">SHIELD
+                        TRIGGERED</span>
+                </div>
                 <span class="text-xs text-green-500">REAL-TIME</span>
             </div>
             <div class="flex-1 overflow-auto">
@@ -220,7 +225,21 @@
                 const data = await res.json();
 
                 // 1. TRUTH
-                document.getElementById('h-score').innerText = data.health + "%";
+                const sentinelEl = document.getElementById('h-sentinel');
+                const sentinelLabel = document.getElementById('h-sentinel-label');
+                const sentinelAlert = document.getElementById('sentinel-alert');
+
+                sentinelEl.innerText = data.sentinel_score + "%";
+                if (data.sentinel_score < 50 || data.mode === "broken") {
+                    sentinelEl.className = "stat-value c-red";
+                    sentinelLabel.innerText = "SHIELD: TRIGGERED";
+                    sentinelAlert.classList.remove('hidden');
+                } else {
+                    sentinelEl.className = "stat-value c-green";
+                    sentinelLabel.innerText = "Anomaly Protection: ACTIVE";
+                    sentinelAlert.classList.add('hidden');
+                }
+
                 document.getElementById('h-pipeline').innerText = "$" + data.pipeline_value.toLocaleString();
                 document.getElementById('h-burn').innerText = "$" + data.outreach_burn.toFixed(2);
                 document.getElementById('h-wisdom').innerText = data.wisdom_score;

@@ -30,6 +30,11 @@ async def ghl_route(data: dict):
 async def vercel_route(data: dict):
     return await vercel_webhook(data)
 
+@web_app.post("/vanguard_signup")
+async def vanguard_route(data: dict):
+    from api.webhooks import vanguard_signup
+    return await vanguard_signup(data)
+
 @web_app.get("/dashboard_stats")
 async def stats_route():
     return dashboard_stats()

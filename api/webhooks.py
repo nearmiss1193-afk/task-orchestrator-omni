@@ -65,6 +65,37 @@ async def vercel_webhook(data: dict):
         print(f"❌ VERCEL WEBHOOK ERROR: {e}")
         return {"status": "error"}
 
+async def vanguard_signup(data: dict):
+    """
+    Handle Vanguard Waitlist signups.
+    """
+    from modules.database.supabase_client import get_supabase
+    from utils.error_handling import check_supabase_error
+    
+    try:
+        email = data.get('email')
+        company = data.get('company', 'Unknown')
+        
+        print(f"🎖️ VANGUARD SIGNUP: {email} from {company}")
+        
+        supabase = get_supabase()
+        
+        # Insert or update
+        res = supabase.table("contacts_master").upsert({
+            "email": email,
+            "full_name": f"Vanguard Lead: {company}",
+            "ghl_contact_id": f"VANGUARD_{email.split('@')[0]}",
+            "status": "interested",
+            "lead_source": "vanguard-waitlist",
+            "company_name": company
+        }, on_conflict="email").execute()
+        check_supabase_error(res, "Vanguard Signup")
+        
+        return {"status": "ok"}
+    except Exception as e:
+        print(f"❌ VANGUARD SIGNUP ERROR: {e}")
+        return {"status": "error", "message": str(e)}
+
 def dashboard_stats():
     """
     Consolidated dashboard stats for the Sovereign Command.
@@ -116,13 +147,23 @@ def dashboard_stats():
     except Exception as e:
         print(f"⚠️ ROI Calc Error: {e}")
 
+    # 6. SENTINEL METRICS (Phase 6)
+    sentinel_score = 100
+    try:
+        if comms.data:
+            failures = [t for t in comms.data if t['status'] == 'failed']
+            sentinel_score = 100 - (len(failures) * 10)
+    except Exception:
+        pass
+
     return {
-        "health": 95 if mode == "working" else 20,
+        "health": sentinel_score if mode == "working" else 20,
         "mode": mode,
         "funnel": status_counts,
         "recent_comms": comms.data,
         "total_leads": sum(status_counts.values()),
         "wisdom_score": wisdom_count,
         "pipeline_value": pipeline_value,
-        "outreach_burn": round(outreach_burn, 2)
+        "outreach_burn": round(outreach_burn, 2),
+        "sentinel_score": sentinel_score
     }

@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /sov_8k2_cmd.html
 Disallow: /audits/
 Disallow: /media/
+Allow: /vanguard_waitlist.html
+Disallow: /

@@ -1,24 +1,7 @@
-"""
-NEXUS ENGINE - SOVEREIGN OUTREACH CORE
-Dedicated entry point for background workers and crons.
-"""
-import sys
-if "/root" not in sys.path:
-    sys.path.append("/root")
+from dotenv import load_dotenv
+load_dotenv()
 
-# Import core infrastructure
-from core.image_config import image, VAULT
-from core.apps import engine_app as app
-
-# Import workers (this registers them with the app)
-from workers.research import research_lead_logic
-from workers.outreach import dispatch_email_logic, dispatch_sms_logic, dispatch_call_logic
-from workers.pulse_scheduler import master_pulse
-from workers.wisdom_engine import daily_wisdom_cron, synthesize_wisdom
-
-@app.function(image=image, secrets=[VAULT])
 def check_readiness():
-    """Verify system state and queue preparedness"""
     from modules.database.supabase_client import get_supabase
     sb = get_supabase()
     
@@ -39,7 +22,6 @@ def check_readiness():
     hb = sb.table("system_health_log").select("checked_at").order("checked_at", desc=True).limit(1).execute()
     last_hb = hb.data[0]['checked_at'] if hb.data else "NEVER"
     print(f"💓 Last Heartbeat: {last_hb}")
-    return True
 
 if __name__ == "__main__":
-    print("Nexus Engine - Starting Deployment...")
+    check_readiness()

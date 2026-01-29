@@ -1,6 +1,6 @@
 # Empire Unified - Operational Memory
 
-### Jan 30: Sovereign 2.0 Hardening
+## Jan 30: Sovereign 2.0 Hardening
 
 - **Architecture Split**:
   - `nexus-engine`: Dedicated to crons and outreach workers. Stable, high-priority.
