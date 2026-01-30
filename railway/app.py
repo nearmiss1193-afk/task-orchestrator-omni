@@ -79,6 +79,18 @@ stats = {
     "version": "v5.0-pillar-phase1-fixed"
 }
 
+@app.route("/audit/app")
+def audit_app():
+    return jsonify({
+        "status": "operational",
+        "version": stats.get("version"),
+        "time": time.time()
+    })
+
+@app.route("/stats")
+def get_stats():
+    return jsonify(stats)
+
 @app.route("/ghl/oauth/callback")
 def ghl_oauth_callback():
     code = request.args.get("code")
