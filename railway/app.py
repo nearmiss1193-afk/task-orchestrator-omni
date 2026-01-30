@@ -77,6 +77,15 @@ stats = {
     "last_heartbeat": time.time()
 }
 
+@app.route("/audit/env")
+def audit_env():
+    keys = ["GEMINI_API_KEY", "SUPABASE_URL", "SUPABASE_KEY", "GHL_API_TOKEN", "GHL_REPLY_WEBHOOK"]
+    results = {}
+    for k in keys:
+        val = os.environ.get(k)
+        results[k] = "EXISTS" if val else "MISSING"
+    return jsonify(results)
+
 # ==== SUPABASE ====
 def supabase_request(method, table, data=None, params=None):
     headers = {
