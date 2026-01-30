@@ -407,8 +407,13 @@ def send_reply_via_workflow_b(phone: str, reply_text: str, source_message_id: st
     payload = {
         "phone": phone,
         "message": reply_text,
-        "replyText": reply_text,
         "reply_text": reply_text,
+        "replyText": reply_text,
+        "text": reply_text,
+        "body": reply_text,
+        "sms_body": reply_text,
+        "content": reply_text,
+        "sarah_message": reply_text,
         "sourceMessageId": source_message_id or f"auto-{int(time.time())}"
     }
     
