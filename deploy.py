@@ -80,7 +80,7 @@ def verify_outreach_worker():
     # DEFINITIVE CLOUD LEAD ID
     test_lead_id = "c086f2ce-72f5-4f9f-b414-e0432908c6bc"
     try:
-        res = dispatch_sms_logic.local(lead_id=test_lead_id, message="Antigravity Phase A: Bridge Operational.")
+        res = dispatch_sms_logic.local(lead_id=test_lead_id, message="Ghost Exorcism: 1-Time Verification. Please reply to this message to trigger Sarah.")
         print(f"✅ Worker result: {res}")
         return True
     except Exception as e:
@@ -107,6 +107,9 @@ def test_db_psycopg2():
         conn.close()
     except Exception as e:
         print(f"❌ RAW PSQL FAIL: {e}")
+
+# OUTREACH & SYNC WORKERS (Imported from workers/outreach.py)
+from workers.outreach import sync_ghl_contacts, auto_outreach_loop, dispatch_sms_logic, dispatch_email_logic, dispatch_call_logic
 
 if __name__ == "__main__":
     print("Nexus Outreach V1 - Clean Architecture")

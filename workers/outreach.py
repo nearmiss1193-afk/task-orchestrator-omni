@@ -208,3 +208,69 @@ def dispatch_call_logic(lead_id: str):
     
     print(f"✅ CALL {status.upper()}")
     return True
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+def auto_outreach_loop():
+    """
+    AUTONOMOUS OUTREACH ENGINE:
+    - Processes 'new' or 'research_done' leads in batches of 10.
+    - Routes to SMS/Email based on business hours and contact info.
+    """
+    import os
+    import requests
+    from datetime import datetime, timezone, timedelta
+    from modules.database.supabase_client import get_supabase
+    
+    print("🚀 ENGINE: Starting autonomous outreach cycle...")
+    supabase = get_supabase()
+    
+    # 1. Fetch contactable leads
+    try:
+        res = supabase.table("contacts_master") \
+            .select("*") \
+            .in_("status", ["new", "research_done"]) \
+            .limit(10) \
+            .execute()
+        leads = res.data
+    except Exception as e:
+        print(f"❌ ENGINE: lead fetch error: {e}")
+        return
+    
+    if not leads:
+        print("😴 ENGINE: No leads ready for outreach.")
+        return
+
+    print(f"📈 ENGINE: Processing {len(leads)} leads...")
+    
+    for lead in leads:
+        lead_id = lead['id']
+        email = lead.get('email')
+        phone = lead.get('phone')
+        
+        # Priority 1: SMS (if business hours)
+        # EST Business Hours: 8 AM - 6 PM
+        est = timezone(timedelta(hours=-5))
+        now_est = datetime.now(est)
+        is_sms_hours = 8 <= now_est.hour < 18 and now_est.weekday() < 6
+        
+        if phone and is_sms_hours:
+            print(f"📱 Route -> SMS: {phone}")
+            try:
+                # Use direct function call to avoid spawn overhead during scaling
+                dispatch_sms_logic.local(lead_id)
+            except Exception as e:
+                print(f"❌ SMS Failed for {lead_id}: {e}")
+            continue
+            
+        # Priority 2: Email (24/7)
+        if email:
+            print(f"📧 Route -> Email: {email}")
+            try:
+                dispatch_email_logic.local(lead_id)
+            except Exception as e:
+                print(f"❌ Email Failed for {lead_id}: {e}")
+            continue
+            
+        print(f"⚠️ Skipping Lead {lead_id}: No contact path.")
+        supabase.table("contacts_master").update({"status": "no_contact_info"}).eq("id", lead_id).execute()
+
+    print("✅ ENGINE: Outreach cycle complete.")
