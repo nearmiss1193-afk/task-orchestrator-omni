@@ -79,14 +79,18 @@ stats = {
     "version": "a777a27-final-fallback"
 }
 
-@app.route("/audit/env")
-def audit_env():
-    keys = ["GEMINI_API_KEY", "SUPABASE_URL", "SUPABASE_KEY", "GHL_API_TOKEN", "GHL_REPLY_WEBHOOK"]
-    results = {}
-    for k in keys:
-        val = os.environ.get(k)
-        results[k] = "EXISTS" if val else "MISSING"
-    return jsonify(results)
+@app.route("/ghl/oauth/callback")
+def ghl_oauth_callback():
+    code = request.args.get("code")
+    if not code:
+        return "❌ Missing authorization code", 400
+    
+    from railway.ghl_oauth import exchange_code
+    tokens = exchange_code(code)
+    if tokens:
+        return "✅ GHL Authorized Successfully! Tokens saved to Supabase.", 200
+    else:
+        return "❌ Failed to exchange code for tokens. Check logs.", 500
 
 # ==== SUPABASE ====
 def supabase_request(method, table, data=None, params=None):
