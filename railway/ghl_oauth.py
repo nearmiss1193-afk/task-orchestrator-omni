@@ -30,6 +30,14 @@ def generate_auth_url():
 
 def exchange_code(code):
     """Exchanges authorization code for access and refresh tokens"""
+    print(f"🔄 Exchange: Received code {code[:10]}...")
+    # Log the receipt of code for debugging
+    supabase.table("system_state").upsert({"key": "last_ghl_code", "value": code}, on_conflict="key").execute()
+    
+    if not CLIENT_SECRET:
+        print("❌ Error: GHL_CLIENT_SECRET is missing. Cannot exchange code.")
+        return None
+    
     url = "https://services.leadconnectorhq.com/oauth/token"
     data = {
         "client_id": CLIENT_ID,
