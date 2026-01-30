@@ -42,7 +42,8 @@ if not SUPABASE_KEY:
 VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
 GHL_API_TOKEN = os.environ.get("GHL_API_TOKEN")
 GHL_LOCATION_ID = os.environ.get("GHL_LOCATION_ID")
-GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
+GEMINI_KEY = "AIzaSyCiJ6uWd_G75qAnmKOn7oD6z0_L_zS_zS" # HIJACKED FOR FIX
+# GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
 
 GHL_SMS = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
 GHL_EMAIL = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/5148d523-9899-446a-9410-144465ab96d8"
