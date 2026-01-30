@@ -1111,7 +1111,16 @@ def ghl_inbound_sms():
                 ghl_contact_id=contact_id,
                 direction="outbound"
             )
-            return jsonify({"status": "replied", "contact_id": contact["id"], "reply_sent": True, "debug": debug_log})
+            return jsonify({
+                "status": "replied", 
+                "contact_id": contact["id"], 
+                "reply_sent": True, 
+                "message": reply,
+                "reply_text": reply,
+                "text": reply,
+                "body": reply,
+                "debug": debug_log
+            })
         else:
             dprint("[INBOUND SMS] ❌ Workflow B POST failed")
             return jsonify({"status": "error", "reason": "workflow_b_failed", "debug": debug_log})
