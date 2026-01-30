@@ -513,7 +513,9 @@ REPLY:"""
     except Exception as e:
         log(f"[SARAH] ❌ Exception: {e}")
     
-    return None
+    # FINAL SAFETY FALLBACK: Never return None
+    log("[SARAH] 🛡️ Returning Safety Fallback")
+    return "Hi, it's Sarah. I'm just getting some more info for you. One moment! - Sarah"
 
 def run_outreach():
     """Contact new leads - EMAILS RUN 24/7, SMS only during business hours"""
