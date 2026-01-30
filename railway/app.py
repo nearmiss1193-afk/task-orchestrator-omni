@@ -75,7 +75,8 @@ stats = {
     "opens": 0,
     "clicks": 0,
     "restarts": 0, 
-    "last_heartbeat": time.time()
+    "last_heartbeat": time.time(),
+    "version": "a777a27-final-fallback"
 }
 
 @app.route("/audit/env")
