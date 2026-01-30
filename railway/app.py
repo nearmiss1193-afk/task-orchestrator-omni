@@ -454,7 +454,7 @@ def generate_sarah_reply(contact_id, inbound_message, ghl_contact_id=None, logge
             
     if not GEMINI_KEY:
         log("[SARAH] ❌ No Gemini key configured")
-        return None
+        return "Hi, it's Sarah. I'm just getting some more info for you. One moment! - Sarah"
     
     # Get memory context
     try:
