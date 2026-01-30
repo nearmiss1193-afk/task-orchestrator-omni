@@ -76,7 +76,7 @@ stats = {
     "clicks": 0,
     "restarts": 0, 
     "last_heartbeat": time.time(),
-    "version": "a777a27-final-fallback"
+    "version": "v5.0-pillar-phase1-fixed"
 }
 
 @app.route("/ghl/oauth/callback")
@@ -85,7 +85,7 @@ def ghl_oauth_callback():
     if not code:
         return "❌ Missing authorization code", 400
     
-    from railway.ghl_oauth import exchange_code
+    from ghl_oauth import exchange_code
     tokens = exchange_code(code)
     if tokens:
         return "✅ GHL Authorized Successfully! Tokens saved to Supabase.", 200
