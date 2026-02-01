@@ -858,14 +858,19 @@ def trigger_prospector_manual():
 @app.route("/audits/<path:filename>")
 def serve_audit(filename):
     """Serve generated audit reports from public/audits"""
-    from flask import send_from_directory
-    return send_from_directory("public/audits", filename)
+        return send_from_directory("public/audits", filename)
 
 @app.route("/public/<path:filename>")
 def serve_public(filename):
     """Fallback for other public assets"""
     from flask import send_from_directory
     return send_from_directory("public", filename)
+
+@app.route("/", defaults={"path": "index.html"})
+@app.route("/<path:path>")
+def serve_static(path):
+    from flask import send_from_directory
+    return send_from_directory("public", path)
 
 @app.route("/stats")
 def get_stats():
