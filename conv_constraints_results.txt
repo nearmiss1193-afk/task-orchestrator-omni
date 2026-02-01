@@ -1,0 +1,13 @@
+Using Contact ID: 5a37e56e-49f6-4073-8746-f88f46b9d533
+
+Testing: {'channel': 'sms', 'status': 'open'}
+Result: 201
+SUCCESS (or duplicate)
+
+Testing: {'channel': 'SMS', 'status': 'open'}
+Result: 201
+SUCCESS (or duplicate)
+
+Testing: {'channel': 'sms', 'status': 'OPEN'}
+Result: 201
+SUCCESS (or duplicate)

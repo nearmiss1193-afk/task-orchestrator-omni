@@ -1,35 +1,30 @@
 
-import os
 import requests
-from dotenv import load_dotenv
+import json
+import time
 
-load_dotenv()
+ENDPOINT = "https://empire-unified-backup-production.up.railway.app/ghl/inbound-sms"
+TEST_PHONE = "+13529368152"
 
-GROK_KEY = os.environ.get("GROK_API_KEY")
-print(f"Grok Key Present: {bool(GROK_KEY)}")
+payload = {
+    "contactId": "c086f2ce-72f5-4f9f-b414-e0432908c6bc",
+    "phone": TEST_PHONE,
+    "body": f"Debug Test {int(time.time())}",
+    "direction": "inbound",
+    "messageId": f"debug_{int(time.time())}",
+    "type": "SMS"
+}
 
-files_to_read = [
-    "deploy_v2.py",
-    "core/image_config.py",
-    "workers/research.py",
-    "workers/outreach.py",
-    "workers/pulse_scheduler.py",
-    "utils/error_handling.py",
-    "api/webhooks.py"
-]
+import time
+payload["body"] = f"Debug Test {int(time.time())}"
+payload["messageId"] = f"debug_{int(time.time())}"
 
-CODE = ""
-for fname in files_to_read:
-    with open(fname, "r") as f: CODE += f.read()
-
-url = "https://api.x.ai/v1/chat/completions"
-headers = {"Authorization": f"Bearer {GROK_KEY}", "Content-Type": "application/json"}
-data = {"model": "grok-beta", "messages": [{"role": "user", "content": f"AUDIT THIS:\n{CODE[:1000]}"}]}
-
-print("Testing Grok...")
-try:
-    res = requests.post(url, headers=headers, json=data)
-    print(res.status_code)
-    print(res.text[:500])
-except Exception as e:
-    print(e)
+r = requests.post(ENDPOINT, json=payload, timeout=20)
+if r.ok:
+    data = r.json()
+    print("--- DEBUG LOG ---")
+    for line in data.get("debug", []):
+        print(line)
+else:
+    print(f"Error: {r.status_code}")
+    print(r.text)

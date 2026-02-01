@@ -1,0 +1,24 @@
+STDOUT:
+[DEBUG] Testing individual operations...
+
+[TEST 1A] Testing INSERT (Phone Only)...
+INSERT Phone Status: 400
+INSERT Phone Error: {"code":"23502","details":"Failing row contains (fd59a928-ceb1-4390-8597-c34a8e99894f, null, +18888888888, null, null, null, null, 2026-01-15 04:27:03.057017+00).","hint":null,"message":"null value in column \"ghl_contact_id\" of relation \"contact_profiles\" violates not-null constraint"}
+
+[TEST 1B] Testing INSERT (Phone + GHL ID)...
+INSERT GHL Status: 409
+INSERT GHL Error: {"code":"23505","details":"Key (ghl_contact_id)=(debug_col_test_1) already exists.","hint":null,"message":"duplicate key value violates unique constraint \"contact_profiles_ghl_contact_id_key\""}
+
+[TEST 1C] Testing INSERT (Phone + Company)...
+INSERT Company Status: 400
+INSERT Company Error: {"code":"PGRST204","details":null,"hint":null,"message":"Could not find the 'company_name' column of 'contact_profiles' in the schema cache"}
+
+[TEST 1D] Testing INSERT (Empty Object)...
+INSERT Empty Status: 400
+INSERT Empty Error: {"code":"23502","details":"Failing row contains (627586a0-f2c1-4185-9542-d5a7f2ef7417, null, null, null, null, null, null, 2026-01-15 04:27:04.47574+00).","hint":null,"message":"null value in column \"ghl_contact_id\" of relation \"contact_profiles\" violates not-null constraint"}
+
+[TEST 2] Testing GET by ghl_contact_id...
+GET Status: 200
+GET Success: []
+
+STDERR:
