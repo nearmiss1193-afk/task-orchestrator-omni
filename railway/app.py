@@ -1,3 +1,4 @@
+# CACHE BUST: v6.5-final-shield-v2
 """
 RAILWAY CLOUD WORKER
 ====================
@@ -42,11 +43,16 @@ if not SUPABASE_KEY:
 VAPI_KEY = os.environ.get("VAPI_PRIVATE_KEY")
 GHL_API_TOKEN = os.environ.get("GHL_API_TOKEN")
 GHL_LOCATION_ID = os.environ.get("GHL_LOCATION_ID")
-# GEMINI_KEY = "AIzaSyCiJ6uWd_G75qAnmKOn7oD6z0_L_zS_zS" # HIJACKED FOR FIX
-GEMINI_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
 
-GHL_SMS = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
-GHL_EMAIL = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/5148d523-9899-446a-9410-144465ab96d8"
+def send_sms(phone, message):
+    """Fallback SMS via GHL Webhook Relay (Legacy)"""
+    # GHOST SHIELD
+    if not message or "reply_text" in str(message).lower():
+        print(f"[SEND SMS] 🛡️ BLOCKING placeholder: {message}")
+        return False
+        
+    GHL_SMS_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/71b29a24-958b-4b2a-89a3-5c5e884e8979"
 
 # === 2-WORKFLOW BOUNCE: AI Reply Webhook ===
 # Workflow B: "AI Reply → Send SMS" - Inbound Webhook Trigger URL
@@ -75,34 +81,8 @@ stats = {
     "opens": 0,
     "clicks": 0,
     "restarts": 0, 
-    "last_heartbeat": time.time(),
-    "version": "v5.0-pillar-phase1-fixed"
+    "last_heartbeat": time.time()
 }
-
-@app.route("/audit/app")
-def audit_app():
-    return jsonify({
-        "status": "operational",
-        "version": stats.get("version"),
-        "time": time.time()
-    })
-
-@app.route("/stats")
-def get_stats():
-    return jsonify(stats)
-
-@app.route("/ghl/oauth/callback")
-def ghl_oauth_callback():
-    code = request.args.get("code")
-    if not code:
-        return "❌ Missing authorization code", 400
-    
-    from ghl_oauth import exchange_code
-    tokens = exchange_code(code)
-    if tokens:
-        return "✅ GHL Authorized Successfully! Tokens saved to Supabase.", 200
-    else:
-        return "❌ Failed to exchange code for tokens. Check logs.", 500
 
 # ==== SUPABASE ====
 def supabase_request(method, table, data=None, params=None):
@@ -373,6 +353,11 @@ def send_ghl_message(ghl_contact_id, message_text, conversation_id=None, to_numb
         print("[GHL] No API token configured")
         return None
     
+    # PHANTOM SHIELD: Never send placeholder string
+    if not message_text or "reply_text" in str(message_text).lower():
+        print(f"[GHL API] 🛡️ ABORTING: Attempted to send placeholder string: {message_text}")
+        return None
+
     payload = {
         "type": "SMS",
         "contactId": ghl_contact_id,
@@ -431,16 +416,19 @@ def send_reply_via_workflow_b(phone: str, reply_text: str, source_message_id: st
         print("[WORKFLOW B] ❌ GHL_REPLY_WEBHOOK not configured! Set in Railway env vars.")
         return False
     
+    # GHOST SHIELD: Prevent sending placeholder string to GHL
+    if not reply_text or "reply_text" in str(reply_text).lower():
+        print(f"[WORKFLOW B] 🛡️ ABORTING: Attempted to send placeholder string: {reply_text}")
+        return False
+
+    # PAYLOAD BOMB: Snake_case + Camel_case + Body + Message for total redundancy
     payload = {
         "phone": phone,
-        "message": reply_text,
         "reply_text": reply_text,
         "replyText": reply_text,
-        "text": reply_text,
         "body": reply_text,
-        "sms_body": reply_text,
-        "content": reply_text,
-        "sarah_message": reply_text,
+        "message": reply_text,
+        "source_message_id": source_message_id or f"auto-{int(time.time())}",
         "sourceMessageId": source_message_id or f"auto-{int(time.time())}"
     }
     
@@ -471,7 +459,7 @@ def generate_sarah_reply(contact_id, inbound_message, ghl_contact_id=None, logge
             
     if not GEMINI_KEY:
         log("[SARAH] ❌ No Gemini key configured")
-        return "Hi, it's Sarah. I'm just getting some more info for you. One moment! - Sarah"
+        return None
     
     # Get memory context
     try:
@@ -515,7 +503,15 @@ REPLY:"""
                 if parts:
                     reply = parts[0].get("text", "")
                     if reply:
-                        log(f"[SARAH] ✅ Success")
+                        # FINAL SAFETY FALLBACK: Never return None or a placeholder
+                        final_reply = "Hi, it's Sarah. I'm just getting some more info for you. One moment! - Sarah"
+                        
+                        # GHOST SHIELD: Ensure we never return a placeholder string
+                        if not reply or "reply_text" in str(reply).lower():
+                             log(f"[SARAH] 🛡️ Ghost detected in reply or reply is empty. Using safety fallback.")
+                             return final_reply
+                             
+                        log(f"[SARAH] 🛡️ Returning AI reply: {reply[:50]}...")
                         return reply.strip()
             
             # If we reach here, we had candidates but no text, or no candidates
@@ -529,10 +525,8 @@ REPLY:"""
             log(f"[SARAH] ❌ API Error {r.status_code}: {r.text[:200]}")
     except Exception as e:
         log(f"[SARAH] ❌ Exception: {e}")
-    
-    # FINAL SAFETY FALLBACK: Never return None
-    log("[SARAH] 🛡️ Returning Safety Fallback")
-    return "Hi, it's Sarah. I'm just getting some more info for you. One moment! - Sarah"
+    # Final global safety fallback
+    return "Hi, it's Sarah from AI Service Co. I'm just looking into that for you. One moment! - Sarah"
 
 def run_outreach():
     """Contact new leads - EMAILS RUN 24/7, SMS only during business hours"""
@@ -558,6 +552,7 @@ def run_outreach():
             # Determine Niche Link for higher conversion
             niche_url = "https://aiserviceco.com"
             comp_lower = company.lower()
+            lead_name = lead.get("first_name") or lead.get("name") or "there"
             
             if any(k in comp_lower for k in ["hvac", "air", "cool", "heat"]):
                 niche_url += "/hvac.html"
@@ -577,7 +572,7 @@ def run_outreach():
                 niche_url += "/cleaning.html"
             
             html_body = f"""
-            <p>Hi {name or 'there'},</p>
+            <p>Hi {lead_name},</p>
             <p>Quick question about <b>{company}</b> - are you still fielding after-hours calls yourself?</p>
             <p>We built an AI phone agent that answers 24/7, books jobs, and never misses a call. 
             <b>14-Day Free Trial</b>, no credit card needed.</p>
@@ -847,7 +842,30 @@ def health():
             stats["last_heartbeat"] = time.time()
             return jsonify({"status": "recovered", "restarts": stats["restarts"]})
         return jsonify({"status": "unhealthy", "reason": "thread_dead", "age_seconds": heartbeat_age}), 500
-    return jsonify({"status": "healthy", "heartbeat_age": heartbeat_age})
+    return jsonify({"status": "healthy", "heartbeat_age": heartbeat_age, "version": "v6.5-final-shield"})
+
+@app.route("/trigger/prospector/v6", methods=["POST"])
+def trigger_prospector_manual():
+    """Manual trigger for prospecting batch - SCALED TO 50"""
+    try:
+        print("[TRIGGER] Manual prospecting batch requested (50 leads)")
+        thread = Thread(target=run_prospector, daemon=True)
+        thread.start()
+        return jsonify({"status": "prospector_triggered", "batch_size": 50})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/audits/<path:filename>")
+def serve_audit(filename):
+    """Serve generated audit reports from public/audits"""
+    from flask import send_from_directory
+    return send_from_directory("public/audits", filename)
+
+@app.route("/public/<path:filename>")
+def serve_public(filename):
+    """Fallback for other public assets"""
+    from flask import send_from_directory
+    return send_from_directory("public", filename)
 
 @app.route("/stats")
 def get_stats():
@@ -1140,16 +1158,7 @@ def ghl_inbound_sms():
                 ghl_contact_id=contact_id,
                 direction="outbound"
             )
-            return jsonify({
-                "status": "replied", 
-                "contact_id": contact["id"], 
-                "reply_sent": True, 
-                "message": reply,
-                "reply_text": reply,
-                "text": reply,
-                "body": reply,
-                "debug": debug_log
-            })
+            return jsonify({"status": "replied", "contact_id": contact["id"], "reply_sent": True, "debug": debug_log})
         else:
             dprint("[INBOUND SMS] ❌ Workflow B POST failed")
             return jsonify({"status": "error", "reason": "workflow_b_failed", "debug": debug_log})
@@ -1168,6 +1177,78 @@ def api_prospect():
 def api_outreach():
     run_outreach()
     return jsonify({"status": "triggered"})
+
+
+@app.route("/dashboard_stats", methods=["GET"])
+def get_dashboard_stats():
+    """Aggregated stats for the Sovereign Command Dashboard"""
+    try:
+        # 1. Lead Funnel from Supabase
+        # We fetch all leads to count statuses (or we could do multiple select count queries)
+        # For small-ish DB, this is fine.
+        leads = supabase_request("GET", "leads", params={"select": "status"})
+        funnel = {
+            "prospects_discovered": 0,
+            "outreach_dispatched": 0,
+            "replied": 0,
+            "interested": 0,
+            "booked": 0
+        }
+        
+        if leads:
+            funnel["prospects_discovered"] = len([l for l in leads if l.get('status') == 'new'])
+            funnel["outreach_dispatched"] = len([l for l in leads if l.get('status') == 'contacted'])
+            funnel["interested"] = len([l for l in leads if l.get('status') == 'interested'])
+            funnel["booked"] = len([l for l in leads if l.get('status') == 'booked'])
+            # Replies are anyone who replied or showed interest
+            funnel["replied"] = len([l for l in leads if l.get('status') in ['interested', 'booked', 'replied']])
+
+        # 2. Recent Comms from Events table (if it exists, otherwise fallback to stats)
+        try:
+            events = supabase_request("GET", "events", params={"order": "ts.desc", "limit": "15"})
+            recent_comms = []
+            if events:
+                for e in events:
+                    recent_comms.append({
+                        "ts": e.get("ts") or datetime.now().isoformat(),
+                        "company": e.get("payload", {}).get("company_name", f"Lead #{e.get('contact_id')}"),
+                        "channel": e.get("event_type", "event").split("_")[0], # sms_in -> sms
+                        "status": e.get("event_type", "unknown")
+                    })
+            else:
+                 # Fallback if no events
+                 recent_comms = [{"ts": datetime.now().isoformat(), "company": "System", "channel": "sys", "status": "No active comms"}]
+        except:
+            recent_comms = [{"ts": datetime.now().isoformat(), "company": "System", "channel": "sys", "status": "Comms Offline"}]
+
+        # 3. Mode (Active vs Broken)
+        # Default to working if heartbeat is recent
+        mode = "working"
+        last_hb = stats.get("last_heartbeat", 0)
+        if time.time() - last_hb > 600: # 10 minutes
+            mode = "broken"
+
+        # 4. ROI & Burn
+        # $0.005/email, $0.02/sms
+        emails = stats.get("emails", 0)
+        sms = stats.get("sms", 0)
+        outreach_burn = (emails * 0.005) + (sms * 0.02)
+        
+        # Pipeline: $297 per interested lead
+        pipeline_value = funnel["interested"] * 297
+
+        return jsonify({
+            "sentinel_score": 100 if mode == "working" else 42,
+            "mode": mode,
+            "pipeline_value": pipeline_value,
+            "outreach_burn": outreach_burn,
+            "wisdom_score": "High" if funnel["interested"] > 0 else "Base",
+            "funnel": funnel,
+            "recent_comms": recent_comms
+        })
+    except Exception as e:
+        print(f"[DASHBOARD] Error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/vapi/webhook", methods=["POST"])

@@ -15,7 +15,7 @@ def simulate_inbound_sms():
     
     # Payload mimicking what GHL Workflow A sends
     payload = {
-        "contactId": f"test_contact_{unique_id}",
+        "contactId": "c086f2ce-72f5-4f9f-b414-e0432908c6bc",
         "phone": TEST_PHONE,
         "body": "Hi Sarah, verified constraint logic test.",
         "direction": "inbound",
@@ -31,7 +31,7 @@ def simulate_inbound_sms():
         duration = time.time() - start_time
         
         print(f"[DEBUG] Response {response.status_code} in {duration:.2f}s")
-        print(f"[DEBUG] Body: {response.text}")
+        print(f"[DEBUG] Body: {json.dumps(response.json(), indent=2)}")
         
         if response.ok:
             data = response.json()

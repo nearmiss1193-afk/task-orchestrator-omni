@@ -1,0 +1,62 @@
+2026/01/29-03:57:20.040 6814 Reusing MANIFEST C:\Users\nearm\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb/MANIFEST-000001
+2026/01/29-03:57:20.051 6814 Recovering log #2912
+2026/01/29-03:57:20.057 6814 Reusing old log C:\Users\nearm\AppData\Local\Google\Chrome\User Data\Default\Local Storage\leveldb/002912.log 
+2026/01/29-03:58:20.083 8008 Level-0 table #2917: started
+2026/01/29-03:58:20.087 8008 Level-0 table #2917: 35716 bytes OK
+2026/01/29-03:58:20.090 8008 Delete type=0 #2912
+2026/01/29-04:05:32.450 62f8 Level-0 table #2919: started
+2026/01/29-04:05:32.458 62f8 Level-0 table #2919: 41792 bytes OK
+2026/01/29-04:05:32.463 62f8 Delete type=0 #2916
+2026/01/29-04:46:22.403 62f8 Level-0 table #2921: started
+2026/01/29-04:46:22.424 62f8 Level-0 table #2921: 24825 bytes OK
+2026/01/29-04:46:22.436 62f8 Delete type=0 #2918
+2026/01/29-04:48:32.457 62f8 Level-0 table #2923: started
+2026/01/29-04:48:32.463 62f8 Level-0 table #2923: 34092 bytes OK
+2026/01/29-04:48:32.465 62f8 Delete type=0 #2920
+2026/01/29-04:48:32.469 62f8 Compacting 4@0 + 3@1 files
+2026/01/29-04:48:32.500 62f8 Generated table #2924@0: 2609 keys, 2128165 bytes
+2026/01/29-04:48:32.530 62f8 Generated table #2925@0: 394 keys, 2099067 bytes
+2026/01/29-04:48:32.549 62f8 Generated table #2926@0: 2082 keys, 624408 bytes
+2026/01/29-04:48:32.549 62f8 Compacted 4@0 + 3@1 files => 4851640 bytes
+2026/01/29-04:48:32.551 62f8 compacted to: files[ 0 3 1 0 0 0 0 ]
+2026/01/29-04:48:32.552 62f8 Delete type=2 #2777
+2026/01/29-04:48:32.553 62f8 Delete type=2 #2815
+2026/01/29-04:48:32.554 62f8 Delete type=2 #2914
+2026/01/29-04:48:32.554 62f8 Delete type=2 #2917
+2026/01/29-04:48:32.557 62f8 Delete type=2 #2919
+2026/01/29-04:48:32.557 62f8 Delete type=2 #2921
+2026/01/29-04:48:32.557 62f8 Delete type=2 #2923
+2026/01/29-05:08:32.485 8008 Level-0 table #2928: started
+2026/01/29-05:08:32.500 8008 Level-0 table #2928: 23508 bytes OK
+2026/01/29-05:08:32.506 8008 Delete type=0 #2922
+2026/01/29-07:45:32.460 62f8 Level-0 table #2930: started
+2026/01/29-07:45:32.472 62f8 Level-0 table #2930: 6437 bytes OK
+2026/01/29-07:45:32.477 62f8 Delete type=0 #2927
+2026/01/29-10:34:32.468 8008 Level-0 table #2932: started
+2026/01/29-10:34:32.486 8008 Level-0 table #2932: 6732 bytes OK
+2026/01/29-10:34:32.498 8008 Delete type=0 #2929
+2026/01/29-13:24:32.468 62f8 Level-0 table #2934: started
+2026/01/29-13:24:32.480 62f8 Level-0 table #2934: 6747 bytes OK
+2026/01/29-13:24:32.484 62f8 Delete type=0 #2931
+2026/01/29-13:24:32.485 62f8 Compacting 4@0 + 3@1 files
+2026/01/29-13:24:32.515 62f8 Generated table #2935@0: 2613 keys, 2128323 bytes
+2026/01/29-13:24:32.542 62f8 Generated table #2936@0: 395 keys, 2099142 bytes
+2026/01/29-13:24:32.557 62f8 Generated table #2937@0: 2093 keys, 624661 bytes
+2026/01/29-13:24:32.558 62f8 Compacted 4@0 + 3@1 files => 4852126 bytes
+2026/01/29-13:24:32.559 62f8 compacted to: files[ 0 3 1 0 0 0 0 ]
+2026/01/29-13:24:32.559 62f8 Delete type=2 #2924
+2026/01/29-13:24:32.560 62f8 Delete type=2 #2925
+2026/01/29-13:24:32.561 62f8 Delete type=2 #2926
+2026/01/29-13:24:32.561 62f8 Delete type=2 #2928
+2026/01/29-13:24:32.561 62f8 Delete type=2 #2930
+2026/01/29-13:24:32.562 62f8 Delete type=2 #2932
+2026/01/29-13:24:32.562 62f8 Delete type=2 #2934
+2026/01/29-15:42:08.972 8008 Level-0 table #2939: started
+2026/01/29-15:42:08.984 8008 Level-0 table #2939: 10043 bytes OK
+2026/01/29-15:42:08.989 8008 Delete type=0 #2933
+2026/01/29-17:38:32.471 8008 Level-0 table #2941: started
+2026/01/29-17:38:32.481 8008 Level-0 table #2941: 10862 bytes OK
+2026/01/29-17:38:32.487 8008 Delete type=0 #2938
+2026/01/29-20:06:32.464 8008 Level-0 table #2943: started
+2026/01/29-20:06:32.478 8008 Level-0 table #2943: 8386 bytes OK
+2026/01/29-20:06:32.489 8008 Delete type=0 #2940

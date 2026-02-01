@@ -433,3 +433,74 @@ FileNotFoundError: [Errno 2] No such file or directory:
 'C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\modal_social.
 py'
 [Thu 01/29/2026 20:00:14.69] Social post executed 
+^C+--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\nearm\AppData\Roaming\Python\Python313\site-packages\modal\cli\imp |
+| ort_refs.py:98 in import_file_or_module                                     |
+|                                                                             |
+|    97             assert spec.loader                                        |
+| >  98             spec.loader.exec_module(module)                           |
+|    99         except Exception as exc:                                      |
+| <frozen importlib._bootstrap_external>:1022 in exec_module                  |
+|                                                                             |
+| <frozen importlib._bootstrap_external>:1159 in get_code                     |
+|                                                                             |
+| <frozen importlib._bootstrap_external>:1217 in get_data                     |
+|                                                                             |
++-----------------------------------------------------------------------------+
+FileNotFoundError: [Errno 2] No such file or directory: 
+'C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\modal_social.
+py'
+[Fri 01/30/2026  8:20:20.18] Social post executed 
++--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\nearm\AppData\Roaming\Python\Python313\site-packages\modal\cli\imp |
+| ort_refs.py:98 in import_file_or_module                                     |
+|                                                                             |
+|    97             assert spec.loader                                        |
+| >  98             spec.loader.exec_module(module)                           |
+|    99         except Exception as exc:                                      |
+| <frozen importlib._bootstrap_external>:1022 in exec_module                  |
+|                                                                             |
+| <frozen importlib._bootstrap_external>:1159 in get_code                     |
+|                                                                             |
+| <frozen importlib._bootstrap_external>:1217 in get_data                     |
+|                                                                             |
++-----------------------------------------------------------------------------+
+FileNotFoundError: [Errno 2] No such file or directory: 
+'C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\modal_social.
+py'
+[Fri 01/30/2026 14:32:07.43] Social post executed 
++--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\nearm\AppData\Roaming\Python\Python313\site-packages\modal\cli\imp |
+| ort_refs.py:98 in import_file_or_module                                     |
+|                                                                             |
+|    97             assert spec.loader                                        |
+| >  98             spec.loader.exec_module(module)                           |
+|    99         except Exception as exc:                                      |
+| <frozen importlib._bootstrap_external>:1022 in exec_module                  |
+|                                                                             |
+| <frozen importlib._bootstrap_external>:1159 in get_code                     |
+|                                                                             |
+| <frozen importlib._bootstrap_external>:1217 in get_data                     |
+|                                                                             |
++-----------------------------------------------------------------------------+
+FileNotFoundError: [Errno 2] No such file or directory: 
+'C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\modal_social.
+py'
++--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\nearm\AppData\Roaming\Python\Python313\site-packages\modal\cli\imp |
+| ort_refs.py:98 in import_file_or_module                                     |
+|                                                                             |
+|    97             assert spec.loader                                        |
+| >  98             spec.loader.exec_module(module)                           |
+|    99         except Exception as exc:                                      |
+| <frozen importlib._bootstrap_external>:1022 in exec_module                  |
+|                                                                             |
+| <frozen importlib._bootstrap_external>:1159 in get_code                     |
+|                                                                             |
+| <frozen importlib._bootstrap_external>:1217 in get_data                     |
+|                                                                             |
++-----------------------------------------------------------------------------+
+FileNotFoundError: [Errno 2] No such file or directory: 
+'C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\modal_social.
+py'
+[Sat 01/31/2026 20:00:06.90] Social post executed 

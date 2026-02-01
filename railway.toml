@@ -1,8 +1,0 @@
-[build]
-builder = "dockerfile"
-
-[deploy]
-startCommand = "gunicorn --chdir railway app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4"
-healthcheckPath = "/"
-healthcheckTimeout = 120
-restartPolicyType = "ON_FAILURE"
