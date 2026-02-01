@@ -866,11 +866,6 @@ def serve_public(filename):
     from flask import send_from_directory
     return send_from_directory("public", filename)
 
-@app.route("/", defaults={"path": "index.html"})
-@app.route("/<path:path>")
-def serve_static(path):
-    from flask import send_from_directory
-    return send_from_directory("public", path)
 
 @app.route("/stats")
 def get_stats():
@@ -1356,6 +1351,12 @@ def vapi_webhook():
                 send_sms(BACKUP_PHONE, f"MISSED: {customer} - {ended}")
     
     return jsonify({"status": "received"})
+
+@app.route("/", defaults={"path": "index.html"})
+@app.route("/<path:path>")
+def serve_static(path):
+    from flask import send_from_directory
+    return send_from_directory("public", path)
 
 if __name__ == "__main__":
     print("="*50)
