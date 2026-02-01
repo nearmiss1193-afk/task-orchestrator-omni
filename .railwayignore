@@ -22,7 +22,6 @@ campaign_logs/
 supervisor_logs/
 .wrangler/
 .vercel/
-public/audits/
 execution/
 output/
 Sovereign_Agent/
