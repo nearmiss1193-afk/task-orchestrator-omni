@@ -1,0 +1,120 @@
+{
+  "id": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+  "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+  "name": "Sarah 3.0 (Grok)",
+  "voice": {
+    "voiceId": "21m00Tcm4TlvDq8ikWAM",
+    "provider": "11labs",
+    "stability": 0.5,
+    "similarityBoost": 0.8
+  },
+  "createdAt": "2026-01-05T23:28:28.488Z",
+  "updatedAt": "2026-01-27T21:15:00.000Z",
+  "model": {
+    "model": "gpt-4o",
+    "provider": "openai",
+    "temperature": 0.8,
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "trigger_immediate_demo",
+          "parameters": {
+            "type": "object",
+            "required": [
+              "customerName",
+              "phone"
+            ],
+            "properties": {
+              "phone": {
+                "type": "string"
+              },
+              "customerName": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Alerts the supervisor for an immediate demo."
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "lead_audit_lookup",
+          "parameters": {
+            "type": "object",
+            "required": [
+              "company_name"
+            ],
+            "properties": {
+              "company_name": {
+                "type": "string",
+                "description": "The name of the company to look up audit data for."
+              }
+            }
+          },
+          "description": "Looks up the personalized audit details (hooks, research) for a specific company."
+        }
+      }
+    ],
+    "systemPrompt": "You are Sarah Leed, a brilliant sales consultant with a Grok-style edge. You're witty, sharp, and have zero tolerance for corporate fluff. You sound like a real person who just found a leak in someone's boat and is calling to tell them how to plug it.\n\n## MISSION: MANUS DIRECT\nYour goal is to follow up on the 'Personalized Audit' emails sent to business owners. You aren't just cold calling; you are following up on a specific 'quick fix' you found on their website.\n\n## PERSONALITY TRAITS\n- **Direct & Peer-to-Peer**: No 'I'm calling' or 'Thank you for your time'. Just jump in.\n- **Helpful Rebel**: You're calling because you hate seeing businesses lose money to simple tech mistakes.\n- **Witty**: Use smart humor (e.g., 'I saw your lead form and honestly, it's doing more for your competitors than it is for you.')\n\n## CONVERSATIONAL FLOW\n1. **The 'High Intent' Trigger (If notified of an email open)**: \"Hey [Name], Sarah here. Look, I saw you were checking out that quick audit I sent over about your [Industry] site... am I catching you at a chaotic time or just a moderately busy one?\"\n2. **The 'Standard Follow-up'**: \"Hey [Name]? Sarah. sanity check—did you catch that email I sent with the fix for your [Industry] lead form? I noticed half your traffic is probably bouncing before they even finish typing.\"\n3. **The Solution**: \"We build systems that treat every lead like a winning lottery ticket. Answers in seconds, books the job, while you're actually out there working.\"\n\n## VOICE HEURISTICS\n- Use 'um', 'well', 'look'.\n- Max 2 sentences per turn. Punchy and high energy.\n"
+  },
+  "firstMessage": "Hey [Name]? Sarah here. Quick sanity check—did you catch that audit I sent over about your [Industry] site?",
+  "endCallMessage": "Talk soon! plugging leaks, one lead at a time.",
+  "transcriber": {
+    "model": "nova-2",
+    "language": "multi",
+    "provider": "deepgram"
+  },
+  "silenceTimeoutSeconds": 10,
+  "serverUrl": "https://empire-v3-turbo.modal.run/vapi-webhook",
+  "maxDurationSeconds": 600,
+  "backchannelingEnabled": true,
+  "analysisPlan": {
+    "summaryPrompt": "Summarize this call in 2-3 sentences. Include: customer name if mentioned, their business type, main pain points, objections raised, and outcome (booked demo, sent info, follow up, not interested).",
+    "structuredDataPrompt": "Extract structured data from this call including: customer_name, business_name, phone, email if mentioned, industry, current_software, number_of_trucks, objections_list, next_steps, interest_level (hot/warm/cold), follow_up_date if mentioned.",
+    "structuredDataSchema": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string"
+        },
+        "next_steps": {
+          "type": "string"
+        },
+        "objections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pain_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "business_name": {
+          "type": "string"
+        },
+        "customer_name": {
+          "type": "string"
+        },
+        "interest_level": {
+          "type": "string",
+          "enum": [
+            "hot",
+            "warm",
+            "cold"
+          ]
+        },
+        "follow_up_needed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "successEvaluationPrompt": "Rate this call's success: Did Sarah build rapport, qualify properly, handle objections well, and get a clear next step? Rate 1-10 and explain briefly.",
+    "successEvaluationRubric": "NumericScale"
+  },
+  "isServerUrlSecretSet": false
+}

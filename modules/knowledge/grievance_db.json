@@ -1,0 +1,27 @@
+{
+    "Tardiness": {
+        "hook": "I saw your 1-star review about 'late techs'. Fix it today?",
+        "angle": "Our AI Dispatcher texts customers instantly when techs are late, saving the relationship.",
+        "visual_concept": "Split screen: Frazzled human dispatcher vs Calm AI Dashboard managing routes"
+    },
+    "Hidden Fees": {
+        "hook": "Are price complaints hurting your Google Rating?",
+        "angle": "Our 'Transparent Quote' bot sends approved PDF estimates before the truck rolls.",
+        "visual_concept": "Close up of a 5-Star Review that says 'Honest pricing!'"
+    },
+    "Ghosting": {
+        "hook": "How many leads did you miss after 5pm yesterday?",
+        "angle": "Our AI Voice Agent answers 24/7. Never miss a $10k install again.",
+        "visual_concept": "Office lights turning off at 5pm, but the phone keeps ringing and AI answers it"
+    },
+    "Rude Staff": {
+        "hook": "Bad angry receptionist reviews?",
+        "angle": "Our AI is polite, professional, and never has a bad day.",
+        "visual_concept": "A customer smiling while talking on the phone, visual overlay of 'Polite AI' badge"
+    },
+    "No Show": {
+        "hook": " losing revenue from no-show quotes?",
+        "angle": "Our AI confirms appointments via SMS 1 hour before.",
+        "visual_concept": "Phone screen showing 'Appointment Confirmed' SMS notification"
+    }
+}

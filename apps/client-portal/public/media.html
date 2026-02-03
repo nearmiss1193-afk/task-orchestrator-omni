@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Center | AI Service Co</title>
+    <meta name="description"
+        content="See the future of service marketing. AI-generated video ads, viral clips, and brand storytelling.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-dark: #020617;
+            --bg-card: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(2, 6, 23, 0.8);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.15), transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* VIDEO GRID */
+        .section {
+            padding: 80px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .video-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .video-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .video-frame {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 */
+            background: black;
+        }
+
+        .video-frame.vertical {
+            padding-bottom: 177.77%;
+            /* 9:16 */
+        }
+
+        .video-frame iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 24px;
+        }
+
+        .video-info h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .video-info p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .badge.brand {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .badge.viral {
+            background: rgba(234, 179, 8, 0.1);
+            color: #eab308;
+        }
+
+        .badge.demo {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        @media (max-width: 900px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">⚡ AI Service <span>Co</span></a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="hvac.html">HVAC</a>
+                <a href="plumber.html">Plumber</a>
+                <a href="roofing.html">Roofing</a>
+                <a href="#" style="color: white; border-bottom: 2px solid var(--primary);">Media Center</a>
+                <a href="dashboard.html"
+                    class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-500">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>The Veo Visionary App</h1>
+            <p>We don't just answer phones. We build your brand. <br>See our automated video production in action.</p>
+        </div>
+    </section>
+
+    <!-- BRAND VISION -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">✨ Brand Vision <span
+                    style="font-size: 16px; color: var(--text-muted); font-weight: 400;">(High-End Production)</span>
+            </h2>
+            <div class="video-grid">
+                <!-- Tech 1 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <iframe src="https://www.youtube.com/embed/_en3haH4y24" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="badge brand">Brand</span>
+                        <h3>The Connected Technician</h3>
+                        <p>Showcasing the seamless integration of digital tools and field service.</p>
+                    </div>
+                </div>
+                <!-- Tech 2 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <iframe src="https://www.youtube.com/embed/4ABcnkTsxIc" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="badge brand">Brand</span>
+                        <h3>Service with a Smile</h3>
+                        <p>Building trust with professional, friendly technician imagery.</p>
+                    </div>
+                </div>
+                <!-- Tech 3 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <iframe src="https://www.youtube.com/embed/CWVfQkh564U" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="badge brand">Brand</span>
+                        <h3>Digital Integration</h3>
+                        <p>How modern contractors use technology to win more jobs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MEET SARAH -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">🤖 Meet Sarah <span
+                    style="font-size: 16px; color: var(--text-muted); font-weight: 400;">(AI Demonstrations)</span></h2>
+            <div class="video-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <!-- Sarah 1 -->
+                <div class="video-card">
+                    <div class="video-frame vertical">
+                        <iframe src="https://www.youtube.com/embed/C4GRQ8xaFn0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="badge demo">AI Demo</span>
+                        <h3>24/7 Lead Guard</h3>
+                        <p>Sarah never sleeps. Lead capture 24/7/365.</p>
+                    </div>
+                </div>
+                <!-- Sarah 2 -->
+                <div class="video-card">
+                    <div class="video-frame vertical">
+                        <iframe src="https://www.youtube.com/embed/mPlJmaJ3Y2k" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="badge demo">AI Demo</span>
+                        <h3>Mobile Excellence</h3>
+                        <p>Seamless booking experience on any device.</p>
+                    </div>
+                </div>
+                <!-- Placeholder for layout balance if needed, or expand grid -->
+            </div>
+        </div>
+    </section>
+
+    <!-- VIRAL LAB -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">🧪 Viral Lab <span
+                    style="font-size: 16px; color: var(--text-muted); font-weight: 400;">(Marketing Hooks)</span></h2>
+            <div class="video-grid">
+                <!-- Pipe 1 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <iframe src="https://www.youtube.com/embed/1WvQR446JwQ" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="badge viral">Viral</span>
+                        <h3>"Pipe Down!"</h3>
+                        <p>Humor-based marketing to stop the scroll.</p>
+                    </div>
+                </div>
+                <!-- Pipe 2 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <iframe src="https://www.youtube.com/embed/1aqCserJr5M" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="badge viral">Viral</span>
+                        <h3>Disaster Prevention</h3>
+                        <p>High-stakes imagery that drives immediate action.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 60px 0; text-align: center; color: var(--text-muted); border-top: 1px solid var(--border);">
+        <p>© 2026 AI Service Co. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

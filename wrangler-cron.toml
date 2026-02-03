@@ -1,0 +1,17 @@
+name = "empire-cron-scheduler"
+main = "cron_worker.js"
+compatibility_date = "2026-01-01"
+
+# Multiple cron triggers for 24/7 autonomous operations
+# Times are in UTC - 8 AM CT = 14:00 UTC
+[triggers]
+crons = [
+    "*/10 * * * *",   # Health/KPI/Reliability every 10 minutes
+    "0 */4 * * *",    # Prospecting every 4 hours
+    "0 14 * * 1-5",   # 8 AM CT campaign (weekdays only)
+    "0 */2 * * *",    # Optimizer every 2 hours
+    "0 */1 * * *"     # Policy optimizer every hour
+]
+
+[vars]
+MODAL_API_URL = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"

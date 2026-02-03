@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "states": {
+    "outreach_enabled": true,
+    "sms_enabled": true,
+    "email_enabled": true,
+    "voice_enabled": true,
+    "last_health_check": {
+      "status": "pending"
+    },
+    "goal_tracking": "{\"current_state\": {\"customers\": 0, \"mrr\": 0, \"total_leads\": 1519, \"conversion_rate\": 0.0}, \"goal\": {\"target_mrr\": 10000, \"customers_needed\": 33}, \"gap\": {\"customers\": 33, \"mrr\": 10000, \"leads_needed\": 1650, \"days_at_current_pace\": 33}, \"recommendations\": [{\"priority\": \"high\", \"action\": \"improve_conversion\", \"message\": \"Conversion rate 0.0% is below 2% minimum. Focus on lead quality and follow-up.\"}, {\"priority\": \"critical\", \"action\": \"close_first_customer\", \"message\": \"No customers yet. Priority: Close first sale to validate system.\"}]}",
+    "campaign_mode": "\"running\""
+  }
+}

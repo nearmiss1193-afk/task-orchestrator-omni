@@ -1,0 +1,50 @@
+﻿python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python 
+check_transcripts.py 2>&1 | 
+Out-File -FilePath 
+transcript_stat ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    + CategoryInfo          
+    : NotSpecified: (Trace  
+  back (most recent call    
+ last)::String) [], Remo    
+teException
+    + FullyQualifiedErrorId 
+    : NativeCommandError
+ 
+  File "C:\Users\nearm\.gemi
+ni\antigravity\scratch\empir
+e-unified\check_transcripts.
+py", line 38, in <module>
+    check_transcripts()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\nearm\.gemi
+ni\antigravity\scratch\empir
+e-unified\check_transcripts.
+py", line 18, in 
+check_transcripts
+    print("\U0001f9e0 
+Checking 'call_transcripts' 
+table for recent learning 
+data...")
+    ~~~~~^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\enc
+odings\cp1252.py", line 19, 
+in encode
+    return codecs.charmap_en
+code(input,self.errors,encod
+ing_table)[0]
+           ~~~~~~~~~~~~~~~~~
+~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^
+UnicodeEncodeError: 
+'charmap' codec can't 
+encode character 
+'\U0001f9e0' in position 0: 
+character maps to 
+<undefined>

@@ -1,0 +1,39 @@
+name: Brand Verification Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify-brand:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests
+      
+      - name: Run Brand Verification
+        run: |
+          python verify_brand.py --dir public --report
+        continue-on-error: false
+      
+      - name: Check for violations
+        run: |
+          RESULT=$(python verify_brand.py --dir public --json 2>/dev/null || true)
+          VIOLATIONS=$(echo "$RESULT" | python -c "import sys, json; d=json.load(sys.stdin); print(d.get('violations', 0))" 2>/dev/null || echo "0")
+          if [ "$VIOLATIONS" != "0" ]; then
+            echo "❌ Brand verification FAILED: $VIOLATIONS violations found"
+            python verify_brand.py --dir public --report
+            exit 1
+          fi
+          echo "✅ Brand verification PASSED"

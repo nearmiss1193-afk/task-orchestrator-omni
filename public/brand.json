@@ -1,0 +1,42 @@
+{
+    "canonical": {
+        "voice_number_e164": "+18632132505",
+        "voice_display": "(863) 213-2505",
+        "voice_label": "Call Sarah",
+        "sms_number_e164": "+13527585336",
+        "sms_display": "(352) 758-5336",
+        "sms_label": "Text Sarah",
+        "booking_link": "https://link.aiserviceco.com/discovery",
+        "business_name": "AI Service Co",
+        "website": "https://www.aiserviceco.com"
+    },
+    "forbidden_patterns": [
+        "(904)",
+        "(561)",
+        "(727)",
+        "(321)",
+        "(954)",
+        "(305)",
+        "(786)",
+        "(407)",
+        "(813)",
+        "695072132632677"
+    ],
+    "build": {
+        "sha": "486791b",
+        "ts": "2026-01-19T23:45:00Z",
+        "version": "1.0.3"
+    },
+    "verification": {
+        "must_match_voice": [
+            "+18632132505",
+            "(863) 213-2505",
+            "863-213-2505"
+        ],
+        "must_match_sms": [
+            "+13527585336",
+            "(352) 758-5336",
+            "352-758-5336"
+        ]
+    }
+}

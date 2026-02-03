@@ -1,0 +1,10 @@
+{
+    "role": "Big Boss",
+    "email": "owner@aiserviceco.com",
+    "phone": "+1(352) 758-5336",
+    "permissions": "ROOT",
+    "notification_preferences": [
+        "CRITICAL_FAILURES",
+        "CAMPAIGN_APPROVAL_REQUESTS"
+    ]
+}

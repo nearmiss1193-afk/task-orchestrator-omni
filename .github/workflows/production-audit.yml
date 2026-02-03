@@ -1,0 +1,87 @@
+name: Post-Deploy Production Audit
+
+on:
+  workflow_run:
+    workflows: ["Brand Verification Gate"]
+    types: [completed]
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  audit-production:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install requests
+      
+      - name: Run Production Audit
+        id: audit
+        run: python verify_production.py
+        continue-on-error: true
+      
+      - name: Upload Audit Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-audit-report
+          path: production_audit_report.json
+          retention-days: 30
+      
+      - name: Create Issue on Failure
+        if: steps.audit.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = {};
+            try {
+              report = JSON.parse(fs.readFileSync('production_audit_report.json', 'utf8'));
+            } catch (e) {
+              report = {errors: ['Could not read report'], timestamp: new Date().toISOString()};
+            }
+            
+            const title = '🚨 Production Brand Drift Detected - ' + new Date().toISOString().split('T')[0];
+            const body = '## Production Audit Failed\n\n' +
+              '**Timestamp:** ' + report.timestamp + '\n' +
+              '**Status:** ' + report.status + '\n\n' +
+              '### Errors\n' +
+              (report.errors ? report.errors.map(e => '- ' + e).join('\n') : 'No errors captured') + '\n\n' +
+              '### Action Required\n' +
+              '1. Run `python verify_production.py` locally\n' +
+              '2. Fix any brand number drift\n' +
+              '3. Redeploy with `npx vercel --prod --force`';
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['bug', 'production', 'urgent']
+            });
+      
+      - name: Send Alert Email
+        if: steps.audit.outcome == 'failure'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          if [ -n "$RESEND_API_KEY" ]; then
+            curl -X POST 'https://api.resend.com/emails' \
+              -H "Authorization: Bearer $RESEND_API_KEY" \
+              -H 'Content-Type: application/json' \
+              -d '{"from": "alerts@aiserviceco.com", "to": "nearmiss1193@gmail.com", "subject": "🚨 Production Brand Drift Detected", "text": "Production audit failed. Check GitHub Actions for details."}'
+          else
+            echo "⚠️ RESEND_API_KEY not set, skipping email alert"
+          fi
+      
+      - name: Fail if audit failed
+        if: steps.audit.outcome == 'failure'
+        run: exit 1

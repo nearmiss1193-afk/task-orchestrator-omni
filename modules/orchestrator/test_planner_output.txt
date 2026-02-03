@@ -1,0 +1,2 @@
+﻿[dotenv@17.2.3] injecting env (8) from .env.local -- tip: ≡ƒæÑ sync secrets across teammates & machines: https://dotenvx.com/ops
+Testing Planner with: "Email hello@example.com with a welcome message and search for leads in Florida."

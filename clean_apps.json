@@ -1,0 +1,138 @@
+[
+  {
+    "App ID": "ap-ZJxSATfldm8POnPkwQZZ5e",
+    "Description": "ghl-omni-automation",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-24 17:19:00-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-oqbh3Kkw7A66FkHZXKfM05",
+    "Description": "ghl-omni-automation-dashboard-minimal",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-26 14:46:00-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-nNQyR5kh3vBqhzV7GBQNWd",
+    "Description": "ghl-omni-automation-dashboard-cloud",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-26 14:51:40-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-WFzj8pm0rybuo7KrWIr8vp",
+    "Description": "empire-dash",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-26 14:56:40-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-TeXy1X3XuVIeqMBPsytYth",
+    "Description": "min-dash",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-26 15:03:33-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-zajBMPco6qGb3clbF4MAHh",
+    "Description": "ghl-architect",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-28 14:56:42-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-u4BZFqIhLXRSf1tHmDQo9L",
+    "Description": "landing-page-host",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-28 20:59:58-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-NSLZ1WmiDHXfms2yicpNkA",
+    "Description": "landing-page-v2",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2025-12-28 21:09:06-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-DyLKqlPJe7q7vHObe81v4Y",
+    "Description": "landing-page-production",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 12:15:32-05:00",
+    "Stopped at": "2025-12-29 12:15:34-05:00"
+  },
+  {
+    "App ID": "ap-BaxHJC3cQCYtXhtmoq9s21",
+    "Description": "landing-page-production",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 12:10:48-05:00",
+    "Stopped at": "2025-12-29 12:10:50-05:00"
+  },
+  {
+    "App ID": "ap-9A1TGHPxxqwqEzbgBKh1KP",
+    "Description": "debug-landing",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 11:49:03-05:00",
+    "Stopped at": "2025-12-29 11:49:05-05:00"
+  },
+  {
+    "App ID": "ap-79qx9kLKV5XWvGaH07lmjE",
+    "Description": "landing-page-red",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 11:14:36-05:00",
+    "Stopped at": "2025-12-29 11:14:38-05:00"
+  },
+  {
+    "App ID": "ap-C9CqfvDc0JcsgtK8Ia3IoR",
+    "Description": "hvac-vsl-final",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 11:08:36-05:00",
+    "Stopped at": "2025-12-29 11:08:38-05:00"
+  },
+  {
+    "App ID": "ap-cUDTFBO0lvhKMfFNeg2BN9",
+    "Description": "hvac-vsl-final",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 11:03:00-05:00",
+    "Stopped at": "2025-12-29 11:03:01-05:00"
+  },
+  {
+    "App ID": "ap-O0xX770on9TIC4m0fy06mw",
+    "Description": "hvac-vsl-final",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 10:52:02-05:00",
+    "Stopped at": "2025-12-29 10:52:04-05:00"
+  },
+  {
+    "App ID": "ap-XwLzxvR9iqVhBmjzfUsMg4",
+    "Description": "hvac-vsl-final",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 10:48:21-05:00",
+    "Stopped at": "2025-12-29 10:48:22-05:00"
+  },
+  {
+    "App ID": "ap-y8fULfgTPdt8IH6oWteUSY",
+    "Description": "hvac-vsl-simple",
+    "State": "stopped",
+    "Tasks": "0",
+    "Created at": "2025-12-29 10:47:11-05:00",
+    "Stopped at": "2025-12-29 10:47:21-05:00"
+  }
+]

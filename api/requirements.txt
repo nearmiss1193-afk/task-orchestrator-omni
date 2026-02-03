@@ -1,0 +1,13 @@
+fastapi==0.95.2
+uvicorn==0.22.0
+pydantic==1.10.8
+requests
+resend
+stripe
+pg8000
+sentry-sdk
+supabase
+python-dotenv
+schedule
+flask-cors
+httpx

@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+}
+
+body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(to bottom,
+            transparent,
+            rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+    font-family: 'Inter', sans-serif;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #111;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.bg-grid-tech {
+    background-image: linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* Auth0 Styles */
+.button {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.button.login {
+    background-color: #63b3ed;
+    color: #1a1e27;
+}
+
+.button.login:hover {
+    background-color: #4299e1;
+    transform: translateY(-2px);
+}
+
+.button.logout {
+    background-color: #fc8181;
+    color: #1a1e27;
+}
+
+.button.logout:hover {
+    background-color: #e53e3e;
+    transform: translateY(-2px);
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(45, 49, 60, 0.4);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px border rgba(255, 255, 255, 0.1);
+}
+
+.profile-picture {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #f7fafc;
+}
+
+.profile-email {
+    font-size: 0.7rem;
+    color: #cbd5e0;
+}

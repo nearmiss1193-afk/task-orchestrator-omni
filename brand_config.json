@@ -1,0 +1,78 @@
+{
+    "version": "2.0.0",
+    "last_updated": "2026-01-19T19:00:00Z",
+    "canonical_numbers": {
+        "voice": {
+            "e164": "+18632132505",
+            "display": "(863) 213-2505",
+            "display_variants": [
+                "863-213-2505",
+                "863.213.2505",
+                "8632132505"
+            ],
+            "provider": "vapi",
+            "labels": [
+                "call",
+                "voice",
+                "phone",
+                "dial"
+            ]
+        },
+        "sms": {
+            "e164": "+13527585336",
+            "display": "(352) 758-5336",
+            "display_variants": [
+                "352-758-5336",
+                "352.758.5336",
+                "3527585336"
+            ],
+            "provider": "ghl",
+            "labels": [
+                "text",
+                "sms",
+                "message"
+            ]
+        }
+    },
+    "business": {
+        "name": "AI Service Co",
+        "website": "https://www.aiserviceco.com",
+        "booking_link": "https://link.aiserviceco.com/discovery",
+        "owner_email": "nearmiss1193@gmail.com",
+        "hours": "Mon-Fri 8am-6pm EST"
+    },
+    "pricing": {
+        "starter": 297,
+        "growth": 497,
+        "dominance": 997,
+        "currency": "USD"
+    },
+    "forbidden_patterns": [
+        "863-337-3705",
+        "8633373705",
+        "(863) 337-3705",
+        "000-000-0000",
+        "XXX-XXX-XXXX",
+        "123-456-7890"
+    ],
+    "allowed_numbers_e164": [
+        "+18632132505",
+        "+13527585336",
+        "+13529368152"
+    ],
+    "label_enforcement": {
+        "voice_keywords": [
+            "call",
+            "voice",
+            "phone",
+            "dial",
+            "ring"
+        ],
+        "sms_keywords": [
+            "text",
+            "sms",
+            "message",
+            "msg"
+        ]
+    }
+}

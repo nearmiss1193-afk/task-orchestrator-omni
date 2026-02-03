@@ -1,0 +1,80 @@
+[
+  {
+    "id": "c2afdc74-8d2a-4ebf-8736-7eecc1992204",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "number": "+18636928474",
+    "createdAt": "2026-01-10T12:34:48.620Z",
+    "updatedAt": "2026-01-10T12:36:48.749Z",
+    "provider": "vapi",
+    "status": "active",
+    "providerResourceId": "d45d9008-1896-4d2d-bee3-d36da44c06e4"
+  },
+  {
+    "id": "0b6c4f0b-6f33-4068-b1fa-69987a38169a",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "number": "+18633373601",
+    "createdAt": "2026-01-10T12:34:36.559Z",
+    "updatedAt": "2026-01-10T12:36:36.747Z",
+    "provider": "vapi",
+    "status": "active",
+    "providerResourceId": "d49df2ce-5c6b-440e-887a-c0550fb288e8"
+  },
+  {
+    "id": "e6babb7e-ee38-44d1-8c8b-c96778ea4c18",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "number": "+18633373705",
+    "createdAt": "2026-01-10T12:34:02.298Z",
+    "updatedAt": "2026-01-10T12:36:02.586Z",
+    "provider": "vapi",
+    "status": "active",
+    "providerResourceId": "f27f1d54-53b8-4efb-9d6c-0bbb52d57168"
+  },
+  {
+    "id": "4e38087a-0937-4997-bc1c-4ddf77c5cf70",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "number": "+19045129565",
+    "createdAt": "2026-01-10T12:33:28.312Z",
+    "updatedAt": "2026-01-10T12:35:28.661Z",
+    "provider": "vapi",
+    "status": "active",
+    "providerResourceId": "bdb62c53-8f32-45a3-84dd-b5d2e79d7b43"
+  },
+  {
+    "id": "40379c46-4b27-45de-8294-4908b694dfc6",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "assistantId": "78b4c14a-b44a-4096-82f5-a10106d1bfd2",
+    "number": "+18636928548",
+    "createdAt": "2026-01-08T18:10:14.901Z",
+    "updatedAt": "2026-01-09T14:29:41.221Z",
+    "name": "John Roofing Line",
+    "serverUrl": "https://nearmiss1193-afk--vapi-live.modal.run",
+    "provider": "vapi",
+    "status": "active",
+    "providerResourceId": "db93f8c7-bf74-41e0-a97c-977fce1b7ca7"
+  },
+  {
+    "id": "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "assistantId": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+    "number": "+18632132505",
+    "createdAt": "2026-01-01T20:35:11.335Z",
+    "updatedAt": "2026-01-07T18:10:03.288Z",
+    "name": "AI Service Co",
+    "provider": "vapi",
+    "fallbackDestination": {
+      "type": "number",
+      "number": "+13529368152"
+    },
+    "status": "active",
+    "providerResourceId": "627d1ab1-794d-49b2-af01-05618d9367dd"
+  },
+  {
+    "id": "6bb589da-04b4-4740-b20c-8afdd7a8339f",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "assistantId": "033ec1d3-e17d-4611-a497-b47cab1fdb4e",
+    "createdAt": "2026-01-01T20:32:00.462Z",
+    "updatedAt": "2026-01-01T20:33:13.730Z",
+    "provider": "vapi",
+    "status": "active"
+  }
+]

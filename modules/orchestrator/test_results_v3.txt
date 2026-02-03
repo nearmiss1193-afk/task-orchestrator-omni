@@ -1,0 +1,10 @@
+﻿Starting Loop Test for Contact: test_candidate_1766676636
+-> Sending simulated webhook to: https://nearmiss1193--spartan-hiring-test-ghl-webhook.modal.run
+-> Webhook Response Status: 404
+-> Webhook Body: modal-http: invalid function call
+
+-> Waiting 10 seconds for DB upsert...
+-> Verifying Supabase 'hiring_pipeline' table...
+FAILURE: Candidate NOT found in database.
+-> Checking brain_logs for clues...
+FAILED: DB Check Failed: {'message': "Could not find the table 'public.brain_logs' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}

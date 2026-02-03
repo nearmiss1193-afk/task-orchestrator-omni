@@ -1,0 +1,3 @@
+[SHOpper_VERIFY] FAIL: Page.wait_for_selector: Timeout 25000ms exceeded.
+Call log:
+  - waiting for locator("#funnelStepPayment.active iframe") to be visible

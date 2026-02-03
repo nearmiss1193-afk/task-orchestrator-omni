@@ -1,0 +1,50 @@
+{
+    "vertical": "hvac",
+    "target_audience": "HVAC Business Owner / General Manager",
+    "winning_offer": "We Clone Your Best Dispatcher (AI Answers Funnel)",
+    "pain_points": [
+        "Losing 40% of leads to 'Missed Calls'",
+        "Angi/Thumbtack leads are low quality",
+        "Receptionists calling in sick",
+        "Technicians sitting idle due to dispatch lag"
+    ],
+    "compliance": [
+        "TCPA Compliance for Automated SMS",
+        "A2P 10DLC Registration for Business Messaging"
+    ],
+    "pricing": {
+        "setup_fee": 2500,
+        "monthly_retainer": 997,
+        "performance_fee": "10% of closed jobs"
+    },
+    "objection_handlers": {
+        "price_shock": "A single missed AC install costs you $6k. This system saves 10 of those a month.",
+        "robot_fear": "Our AI uses 'Ultra Low Latency' and pauses like a human. Listen to this demo."
+    },
+    "drip_sequence": [
+        {
+            "day": 0,
+            "type": "EMAIL_SMS",
+            "subject": "Fixing the 'Tardiness' reviews for {company_name}",
+            "body": "Saw the 1-star review. My AI can text clients instantly when techs are late. Want a demo?"
+        },
+        {
+            "day": 1,
+            "type": "EMAIL",
+            "subject": "Did you see this dispatch log?",
+            "body": "Here is a video of our AI dispatching a driver in 30 seconds. Your current process takes 10 mins. [Link]"
+        },
+        {
+            "day": 2,
+            "type": "SMS",
+            "subject": null,
+            "body": "Hey Mike, just saved a client $4k in lost leads this morning. You strictly opposed to growth?"
+        },
+        {
+            "day": 4,
+            "type": "EMAIL",
+            "subject": "Closing your file (Iceberg HVAC)",
+            "body": "Assuming you're good with the current lead loss rate. I'll focus on other HVAC ops in [City]. Last chance."
+        }
+    ]
+}

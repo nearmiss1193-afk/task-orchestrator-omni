@@ -1,0 +1,43 @@
+# Prometheus Configuration for Empire Unified Monitoring
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files:
+  - "alerts.yml"
+
+scrape_configs:
+  # Primary Orchestrator (Modal)
+  - job_name: 'orchestrator'
+    static_configs:
+      - targets: ['nearmiss1193-afk--sovereign-orchestrator-health.modal.run']
+    metrics_path: /health
+    scheme: https
+
+  # Fallback Runner (Railway)
+  - job_name: 'fallback_runner'
+    static_configs:
+      - targets: ['empire-fallback-runner.up.railway.app']
+    metrics_path: /health
+    scheme: https
+
+  # Webhook Server (Modal)
+  - job_name: 'webhook_server'
+    static_configs:
+      - targets: ['nearmiss1193-afk--webhook-server-health.modal.run']
+    metrics_path: /health
+    scheme: https
+
+  # Campaign Monitor (Modal)
+  - job_name: 'campaign_monitor'
+    static_configs:
+      - targets: ['nearmiss1193-afk--orchestrator-monitor-health.modal.run']
+    metrics_path: /health
+    scheme: https
+
+  # Cloudflare Worker (no direct scrape, use logs)

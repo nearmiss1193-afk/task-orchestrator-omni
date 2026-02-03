@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOVEREIGN EXECUTIVE | SYSTEM STATUS BOARD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --deep-black: #0a0a0c;
+            --glass-white: rgba(255, 255, 255, 0.05);
+            --border-glow: rgba(0, 242, 255, 0.2);
+        }
+
+        body {
+            background: var(--deep-black);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+
+        .voice-hub {
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 50px;
+            opacity: 0.8;
+        }
+
+        .pulse-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .pulse-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: pulse 2s infinite;
+        }
+
+        .pulse-circle:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .pulse-circle:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .core-orb {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 50px var(--neon-blue);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .core-orb i {
+            color: #000;
+            font-size: 30px;
+        }
+
+        .status-text {
+            margin-top: 60px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: var(--neon-blue);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .back-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #444;
+            text-decoration: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--neon-blue);
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="back-link">← Return to Command</a>
+
+    <div class="voice-hub">
+        <h1>Sovereign Voice Interface</h1>
+        <div
+            style="font-size: 10px; opacity: 0.5; margin-top: -40px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px;">
+            (a division of world unities)</div>
+
+        <div class="pulse-container" id="start-voice">
+            <div class="pulse-circle"></div>
+            <div class="pulse-circle"></div>
+            <div class="pulse-circle"></div>
+            <div class="core-orb">
+                <span id="orb-icon" style="font-size: 24px; color: #000;">🎙️</span>
+            </div>
+        </div>
+
+        <div class="status-text" id="voice-status">READY FOR MISSION COMMAND</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+    <script>
+        const assistantId = "a3e439a2-4560-4625-99c8-222678bf130d"; // Antigravity Orchestrator
+        const apiKey = "3b065ff0-a721-4b66-8255-30b6b8d6daab"; // VERIFIED PUBLIC KEY
+        let vapiInstance = null;
+        let isActive = false;
+
+        window.addEventListener('load', () => {
+            // Initialize with Public Key for Web SDK
+            vapiInstance = window.vapiSDK.run({
+                apiKey: apiKey,
+                assistant: assistantId,
+                config: {
+                    serverUrl: "https://api.vapi.ai",
+                    widget: false
+                }
+            });
+
+            const btn = document.getElementById('start-voice');
+            const status = document.getElementById('voice-status');
+            const orb = document.querySelector('.core-orb');
+
+            // Handle Vapi events for visual feedback
+            vapiInstance.on('call-start', () => {
+                status.innerText = "MISSION ACTIVE / LISTENING";
+                status.style.color = "#ff3e3e";
+                orb.style.background = "#ff3e3e";
+                isActive = true;
+            });
+
+            vapiInstance.on('call-end', () => {
+                status.innerText = "READY FOR MISSION COMMAND";
+                status.style.color = "var(--neon-blue)";
+                orb.style.background = "#fff";
+                isActive = false;
+            });
+
+            vapiInstance.on('error', (e) => {
+                console.error('Vapi Error:', e);
+                status.innerText = "EXECUTIVE OFFLINE - CHECKING UPLINK";
+                status.style.color = "#f44336";
+            });
+
+            btn.onclick = () => {
+                if (!isActive) {
+                    vapiInstance.start();
+                } else {
+                    vapiInstance.stop();
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+    "name": "empire-unified",
+    "version": "1.0.0",
+    "scripts": {
+        "verify:dropdown": "playwright test tests/verify_dashboard_dropdown.spec.js"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.45.0",
+        "wrangler": "^4.59.2"
+    },
+    "dependencies": {
+        "@cloudflare/kv-asset-handler": "^0.4.2"
+    }
+}

@@ -1,0 +1,458 @@
+{
+  "brain_logs": [
+    {
+      "id": 13411,
+      "created_at": "2026-01-26T19:05:07.421592+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T19:05:07.313599",
+      "level": "INFO"
+    },
+    {
+      "id": 13409,
+      "created_at": "2026-01-26T19:00:06.068002+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T19:00:05.994399",
+      "level": "INFO"
+    },
+    {
+      "id": 13410,
+      "created_at": "2026-01-26T19:00:06.432033+00:00",
+      "message": "\ud83d\udc15 WATCHDOG: Scanning System at 2026-01-26 14:00:05.799965-05:00...",
+      "timestamp": "2026-01-26T19:00:05.799979",
+      "level": "INFO"
+    },
+    {
+      "id": 13408,
+      "created_at": "2026-01-26T18:55:06.612068+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:55:06.104763",
+      "level": "INFO"
+    },
+    {
+      "id": 13407,
+      "created_at": "2026-01-26T18:50:07.570655+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:50:07.446415",
+      "level": "INFO"
+    },
+    {
+      "id": 13406,
+      "created_at": "2026-01-26T18:45:08.388836+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:45:07.837938",
+      "level": "INFO"
+    },
+    {
+      "id": 13405,
+      "created_at": "2026-01-26T18:40:06.865947+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:40:06.561690",
+      "level": "INFO"
+    },
+    {
+      "id": 13404,
+      "created_at": "2026-01-26T18:35:05.876381+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:35:05.608351",
+      "level": "INFO"
+    },
+    {
+      "id": 13403,
+      "created_at": "2026-01-26T18:30:06.998362+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:30:06.682400",
+      "level": "INFO"
+    },
+    {
+      "id": 13402,
+      "created_at": "2026-01-26T18:30:06.134151+00:00",
+      "message": "\ud83d\udc15 WATCHDOG: Scanning System at 2026-01-26 13:30:05.603772-05:00...",
+      "timestamp": "2026-01-26T18:30:05.603784",
+      "level": "INFO"
+    },
+    {
+      "id": 13401,
+      "created_at": "2026-01-26T18:25:10.82227+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:25:10.521522",
+      "level": "INFO"
+    },
+    {
+      "id": 13400,
+      "created_at": "2026-01-26T18:20:06.5245+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:20:06.423113",
+      "level": "INFO"
+    },
+    {
+      "id": 13399,
+      "created_at": "2026-01-26T18:15:05.271231+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:15:04.985700",
+      "level": "INFO"
+    },
+    {
+      "id": 13398,
+      "created_at": "2026-01-26T18:10:07.137249+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:10:06.969982",
+      "level": "INFO"
+    },
+    {
+      "id": 13397,
+      "created_at": "2026-01-26T18:05:05.678158+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:05:05.315723",
+      "level": "INFO"
+    },
+    {
+      "id": 13396,
+      "created_at": "2026-01-26T18:00:07.645616+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T18:00:07.159161",
+      "level": "INFO"
+    },
+    {
+      "id": 13395,
+      "created_at": "2026-01-26T18:00:06.304884+00:00",
+      "message": "\ud83d\udc15 WATCHDOG: Scanning System at 2026-01-26 13:00:05.730173-05:00...",
+      "timestamp": "2026-01-26T18:00:05.730191",
+      "level": "INFO"
+    },
+    {
+      "id": 13394,
+      "created_at": "2026-01-26T17:55:11.513072+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T17:55:11.037258",
+      "level": "INFO"
+    },
+    {
+      "id": 13393,
+      "created_at": "2026-01-26T17:50:07.120555+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T17:50:06.835595",
+      "level": "INFO"
+    },
+    {
+      "id": 13392,
+      "created_at": "2026-01-26T17:45:06.581859+00:00",
+      "message": "\u26a0\ufe0f [Campaign] State Check Failed ({'message': 'column system_state.campaign_mode does not exist', 'code': '42703', 'hint': None, 'details': None}). Defaulting to RUNNING.",
+      "timestamp": "2026-01-26T17:45:06.490278",
+      "level": "INFO"
+    }
+  ],
+  "error_logs": [
+    {
+      "id": "2d442f3c-8862-47d3-8cdb-d268a7fc1a61",
+      "created_at": "2026-01-13T02:59:14.358893+00:00",
+      "source": "verification_test",
+      "error_type": "ValueError",
+      "error_message": "Test error for verification",
+      "stack_trace": "Traceback (most recent call last):\n  File \"C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\verify_self_healing.py\", line 36, in main\n    raise ValueError(\"Test error for verification\")\nValueError: Test error for verification\n",
+      "file_path": "C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\verify_self_healing.py",
+      "line_number": 36,
+      "function_name": "main",
+      "context": {
+        "test": true
+      },
+      "fix_suggested": null,
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "ee017936-655f-4890-86f2-b70e0b385f5b",
+      "created_at": "2026-01-13T01:25:07.650718+00:00",
+      "source": "email_sender",
+      "error_type": "ConnectionError",
+      "error_message": "Resend API connection timeout",
+      "stack_trace": "requests.exceptions.ConnectionError: Connection timed out",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 410,
+      "function_name": "send_email",
+      "context": {
+        "cause": "Network timeout to Resend API"
+      },
+      "fix_suggested": "{\"root_cause\": \"The error occurs because the HTTP request to the Resend API is timing out. This could be due to network connectivity issues, Resend API being slow to respond, or the default timeout being too short for the current network conditions. The requests library has a default timeout that may not be appropriate for external API calls.\", \"fix_suggestion\": \"Add explicit timeout handling and retry logic to the email sending function:\\n\\n```python\\nimport time\\nfrom requests.exceptions import ConnectionError, Timeout\\n\\ndef send_email(self, **kwargs):\\n    max_retries = 3\\n    timeout_seconds = 30\\n    \\n    for attempt in range(max_retries):\\n        try:\\n            response = requests.post(\\n                'https://api.resend.com/emails',\\n                headers={'Authorization': f'Bearer {self.api_key}'},\\n                json=email_data,\\n                timeout=timeout_seconds  # Add explicit timeout\\n            )\\n            response.raise_for_status()\\n            return response.json()\\n            \\n        except (ConnectionError, Timeout) as e:\\n            if attempt == max_retries - 1:\\n                raise ConnectionError(f\\\"Failed to send email after {max_retries} attempts: {str(e)}\\\")\\n            \\n            wait_time = 2 ** attempt  # Exponential backoff\\n            time.sleep(wait_time)\\n            continue\\n```\", \"confidence\": 0.9, \"prevention_tip\": \"Always set explicit timeouts for external API calls, implement retry logic with exponential backoff, add proper logging to track API performance, and consider using circuit breaker patterns for critical email functionality. Monitor Resend API status and have fallback email providers configured.\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "5f11cfbb-021f-4f71-a3e9-5273943f4da2",
+      "created_at": "2026-01-13T01:25:07.511559+00:00",
+      "source": "vapi_caller",
+      "error_type": "ValueError",
+      "error_message": "Invalid phone number format",
+      "stack_trace": "ValueError: Invalid phone number format",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 320,
+      "function_name": "make_vapi_call",
+      "context": {
+        "cause": "Phone number had invalid format (less than 10 digits)"
+      },
+      "fix_suggested": "{\"root_cause\": \"The error occurs because the phone number validation in the make_vapi_call function is rejecting phone numbers with less than 10 digits. This could be due to missing country codes, incorrect formatting (e.g., including dashes, spaces, or parentheses), or genuinely incomplete phone numbers being passed to the function.\", \"fix_suggestion\": \"```python\\nimport re\\n\\ndef make_vapi_call(phone_number, *args, **kwargs):\\n    # Clean and validate phone number\\n    def clean_phone_number(phone):\\n        if not phone:\\n            raise ValueError(\\\"Phone number cannot be empty\\\")\\n        \\n        # Remove all non-digit characters\\n        cleaned = re.sub(r'\\\\D', '', str(phone))\\n        \\n        # Handle different formats\\n        if len(cleaned) == 10:\\n            # Assume US number, add country code\\n            cleaned = '1' + cleaned\\n        elif len(cleaned) == 11 and cleaned.startswith('1'):\\n            # Already has US country code\\n            pass\\n        elif len(cleaned) < 10:\\n            raise ValueError(f\\\"Invalid phone number format: too short ({len(cleaned)} digits). Minimum 10 digits required.\\\")\\n        elif len(cleaned) > 15:\\n            raise ValueError(f\\\"Invalid phone number format: too long ({len(cleaned)} digits). Maximum 15 digits allowed.\\\")\\n        \\n        return cleaned\\n    \\n    try:\\n        validated_phone = clean_phone_number(phone_number)\\n        # Continue with the rest of the function using validated_phone\\n        # ... rest of make_vapi_call implementation\\n    except ValueError as e:\\n        print(f\\\"Phone validation error: {e}\\\")\\n        raise\\n```\", \"confidence\": 0.88, \"prevention_tip\": \"Implement robust phone number validation that handles multiple formats, provides clear error messages indicating what format is expected, and includes input sanitization to remove common formatting characters. Consider using a dedicated phone number validation library like 'phonenumbers' for more comprehensive international number support.\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "5e804ec0-63e5-461d-8c27-c047fe0b4aa7",
+      "created_at": "2026-01-13T01:25:07.374012+00:00",
+      "source": "cloud_drip_campaign",
+      "error_type": "KeyError",
+      "error_message": "'company_name'",
+      "stack_trace": "KeyError: 'company_name'",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 580,
+      "function_name": "cloud_drip_campaign",
+      "context": {
+        "cause": "Lead dict missing 'company_name' key"
+      },
+      "fix_suggested": "{\"root_cause\": \"The error occurs because the code is trying to access a 'company_name' key from a lead dictionary that doesn't contain this key. This is a common issue when working with data from external sources or APIs where the expected field structure may vary or be incomplete.\", \"fix_suggestion\": \"Replace the direct key access with a safe method:\\n\\n# Instead of:\\ncompany_name = lead['company_name']\\n\\n# Use one of these approaches:\\n# Option 1: Using .get() with default value\\ncompany_name = lead.get('company_name', 'Unknown Company')\\n\\n# Option 2: Using .get() with None check\\ncompany_name = lead.get('company_name')\\nif company_name is None:\\n    # Handle missing company name case\\n    continue  # or log warning, use default, etc.\\n\\n# Option 3: Check if key exists first\\nif 'company_name' in lead:\\n    company_name = lead['company_name']\\nelse:\\n    # Handle missing key case\\n    company_name = 'Unknown Company'\", \"confidence\": 0.9, \"prevention_tip\": \"Always validate the structure of dictionaries from external sources. Use .get() method instead of direct key access for optional fields, implement data validation schemas (like Pydantic or cerberus), and add logging to track when expected fields are missing to identify data quality issues.\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "b5cf10a1-5e98-4869-9e93-f24374115391",
+      "created_at": "2026-01-13T01:25:07.225378+00:00",
+      "source": "cloud_prospector",
+      "error_type": "HTTPError",
+      "error_message": "422 Unprocessable Entity - Apollo rate limit exceeded",
+      "stack_trace": "requests.exceptions.HTTPError: 422 Client Error: Unprocessable Entity",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 445,
+      "function_name": "cloud_prospector",
+      "context": {
+        "api": "apollo.io",
+        "cause": "Apollo API rate limit (422 error)"
+      },
+      "fix_suggested": "{\"root_cause\": \"The application is hitting Apollo.io's API rate limits. The 422 Unprocessable Entity error with 'rate limit exceeded' message indicates the API requests are being made too frequently, exceeding Apollo's allowed requests per time window (typically requests per minute/hour).\", \"fix_suggestion\": \"import time\\nimport requests\\nfrom functools import wraps\\n\\ndef rate_limit_handler(max_retries=3, base_delay=60):\\n    def decorator(func):\\n        @wraps(func)\\n        def wrapper(*args, **kwargs):\\n            for attempt in range(max_retries):\\n                try:\\n                    return func(*args, **kwargs)\\n                except requests.exceptions.HTTPError as e:\\n                    if e.response.status_code == 422 and 'rate limit' in str(e).lower():\\n                        if attempt < max_retries - 1:\\n                            delay = base_delay * (2 ** attempt)  # Exponential backoff\\n                            print(f\\\"Rate limit hit, retrying in {delay} seconds...\\\")\\n                            time.sleep(delay)\\n                            continue\\n                    raise e\\n            return None\\n        return wrapper\\n    return decorator\\n\\n@rate_limit_handler()\\ndef cloud_prospector():\\n    # Add delay between API calls\\n    time.sleep(1)  # 1 second between requests\\n    # Your existing Apollo API call code here\\n    response = requests.get(apollo_url, headers=headers)\\n    response.raise_for_status()\\n    return response\", \"confidence\": 0.9, \"prevention_tip\": \"Implement request throttling with delays between API calls, use exponential backoff for retries, monitor your API usage against Apollo's rate limits, and consider caching responses to reduce API calls. Also, check Apollo.io documentation for specific rate limit details and consider upgrading to a higher tier if needed.\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "037468b6-1035-431a-8619-ceca2928c432",
+      "created_at": "2026-01-13T01:25:07.055787+00:00",
+      "source": "cloud_multi_touch",
+      "error_type": "AttributeError",
+      "error_message": "'NoneType' object has no attribute 'get'",
+      "stack_trace": "Traceback (most recent call last):\n  File \"/pkg/modal/_runtime/container_io_manager.py\", line 947, in handle_input_exception\n    yield\n  File \"/pkg/modal/_container_entrypoint.py\", line 171, in run_input_sync\n    values = io_context.call_function_sync()\n  File \"/pkg/modal/_runtime/container_io_manager.py\", line 225, in call_function_sync\n    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)\n  File \"/root/modal_deploy.py\", line 673, in cloud_multi_touch\n    email = meta.get(\"email\") or lead.get(\"email\")\nAttributeError: 'NoneType' object has no attribute 'get'",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 673,
+      "function_name": "cloud_multi_touch",
+      "context": {
+        "cause": "meta variable was None when trying to call meta.get('email')",
+        "lead_count": 5
+      },
+      "fix_suggested": "{\"root_cause\": \"The variable 'meta' is None when the code tries to call the .get() method on it. This occurs because 'meta' was either not initialized, assigned None explicitly, or returned None from a function call that was expected to return a dictionary-like object.\", \"fix_suggestion\": \"email = (meta.get(\\\"email\\\") if meta else None) or (lead.get(\\\"email\\\") if lead else None)\", \"confidence\": 0.9, \"prevention_tip\": \"Always validate that variables are not None before calling methods on them, or use defensive programming by checking the type/existence of objects before method calls. Consider initializing variables with default values like empty dictionaries when appropriate.\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "eb0851b7-707d-40aa-be58-b9d83aacb134",
+      "created_at": "2026-01-13T01:23:54.268871+00:00",
+      "source": "email_sender",
+      "error_type": "ConnectionError",
+      "error_message": "Resend API connection timeout",
+      "stack_trace": "requests.exceptions.ConnectionError: Connection timed out",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 410,
+      "function_name": "send_email",
+      "context": {
+        "cause": "Network timeout to Resend API"
+      },
+      "fix_suggested": "{\"root_cause\": \"The error occurs because the HTTP request to the Resend API is timing out, likely due to network latency, server overload, or insufficient timeout configuration. The default timeout for requests may be too short for the current network conditions or API response times.\", \"fix_suggestion\": \"Add proper timeout handling and retry logic to the send_email function:\\n\\n```python\\nimport requests\\nimport time\\nfrom requests.adapters import HTTPAdapter\\nfrom urllib3.util.retry import Retry\\n\\ndef send_email(...):\\n    # Configure retry strategy\\n    retry_strategy = Retry(\\n        total=3,\\n        backoff_factor=1,\\n        status_forcelist=[429, 500, 502, 503, 504],\\n    )\\n    \\n    # Create session with retry adapter\\n    session = requests.Session()\\n    adapter = HTTPAdapter(max_retries=retry_strategy)\\n    session.mount('http://', adapter)\\n    session.mount('https://', adapter)\\n    \\n    try:\\n        # Make request with explicit timeout (connect, read)\\n        response = session.post(\\n            resend_api_url,\\n            headers=headers,\\n            json=email_data,\\n            timeout=(10, 30)  # 10s connect, 30s read timeout\\n        )\\n        response.raise_for_status()\\n        return response.json()\\n        \\n    except requests.exceptions.Timeout:\\n        raise ConnectionError(\\\"Email service timeout - please try again later\\\")\\n    except requests.exceptions.ConnectionError as e:\\n        raise ConnectionError(f\\\"Failed to connect to email service: {str(e)}\\\")\\n```\", \"confidence\": 0.9, \"prevention_tip\": \"Always set explicit timeouts for external API calls, implement exponential backoff retry logic, monitor API response times, and consider using circuit breaker patterns for critical services. Also, ensure your deployment environment has stable network connectivity to external services.\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "6e0c1e1d-da6c-45bc-964b-33be92b76215",
+      "created_at": "2026-01-13T01:23:54.11558+00:00",
+      "source": "vapi_caller",
+      "error_type": "ValueError",
+      "error_message": "Invalid phone number format",
+      "stack_trace": "ValueError: Invalid phone number format",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 320,
+      "function_name": "make_vapi_call",
+      "context": {
+        "cause": "Phone number had invalid format (less than 10 digits)"
+      },
+      "fix_suggested": "{\"root_cause\": \"Phone number validation failed due to incorrect format\", \"fix_suggestion\": \"\\ndef validate_phone(phone_str):\\n    if not phone_str:\\n        return False, None, \\\"No phone\\\"\\n    cleaned = re.sub(r'\\\\D', '', str(phone_str))\\n    if len(cleaned) < 10:\\n        return False, None, \\\"Too short\\\"\\n    if cleaned[-7:-4] == \\\"555\\\":\\n        return False, None, \\\"Fake 555 number\\\"\\n    return True, f\\\"+1{cleaned[-10:]}\\\", None\\n\", \"prevention_tip\": \"Always validate and clean phone numbers before calling APIs\", \"confidence\": 0.95, \"source\": \"knowledge_base\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "4be7af3b-8cbb-473f-8f28-0b47fee8f4ef",
+      "created_at": "2026-01-13T01:23:53.971759+00:00",
+      "source": "cloud_drip_campaign",
+      "error_type": "KeyError",
+      "error_message": "'company_name'",
+      "stack_trace": "KeyError: 'company_name'",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 580,
+      "function_name": "cloud_drip_campaign",
+      "context": {
+        "cause": "Lead dict missing 'company_name' key"
+      },
+      "fix_suggested": "{\"root_cause\": \"The code is trying to access the 'company_name' key from a lead dictionary, but this key doesn't exist in the dictionary. This typically happens when the data structure changes, the key is named differently, or the lead data is incomplete/malformed.\", \"fix_suggestion\": \"Replace the direct dictionary access with a safe get() method or add validation:\\n\\n# Option 1: Use get() with default value\\ncompany_name = lead.get('company_name', 'Unknown Company')\\n\\n# Option 2: Use get() with None check\\ncompany_name = lead.get('company_name')\\nif company_name is None:\\n    # Handle missing company name appropriately\\n    continue  # or skip this lead, or use default\\n\\n# Option 3: Add validation before access\\nif 'company_name' not in lead:\\n    print(f\\\"Warning: Lead missing company_name: {lead}\\\")\\n    continue\\ncompany_name = lead['company_name']\", \"confidence\": 0.9, \"prevention_tip\": \"Always use defensive programming when accessing dictionary keys: use dict.get() method with default values, validate required keys exist before processing, and implement proper error handling for malformed data. Consider adding data validation/schema checks when receiving lead data from external sources.\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "ff89e977-5676-4dee-9fdb-cb041b025658",
+      "created_at": "2026-01-13T01:23:53.828226+00:00",
+      "source": "cloud_prospector",
+      "error_type": "HTTPError",
+      "error_message": "422 Unprocessable Entity - Apollo rate limit exceeded",
+      "stack_trace": "requests.exceptions.HTTPError: 422 Client Error: Unprocessable Entity",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 445,
+      "function_name": "cloud_prospector",
+      "context": {
+        "api": "apollo.io",
+        "cause": "Apollo API rate limit (422 error)"
+      },
+      "fix_suggested": "{\"root_cause\": \"Apollo.io API rate limit exceeded (~2000 requests/day on free tier)\", \"fix_suggestion\": \"\\n# Add rate limiting and retry logic\\nimport time\\ndef apollo_request_with_retry(url, data, max_retries=3):\\n    for attempt in range(max_retries):\\n        resp = requests.post(url, json=data)\\n        if resp.status_code == 422:\\n            wait = 60 * (attempt + 1)  # Exponential backoff\\n            print(f\\\"Rate limited, waiting {wait}s...\\\")\\n            time.sleep(wait)\\n        else:\\n            return resp\\n    return None\\n\", \"prevention_tip\": \"Implement request pacing (max 1 request/second) and fallback data sources\", \"confidence\": 0.9, \"source\": \"knowledge_base\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "b9edffee-6cf1-483c-94bc-f599fa155e37",
+      "created_at": "2026-01-13T01:23:53.679253+00:00",
+      "source": "cloud_multi_touch",
+      "error_type": "AttributeError",
+      "error_message": "'NoneType' object has no attribute 'get'",
+      "stack_trace": "Traceback (most recent call last):\n  File \"/pkg/modal/_runtime/container_io_manager.py\", line 947, in handle_input_exception\n    yield\n  File \"/pkg/modal/_container_entrypoint.py\", line 171, in run_input_sync\n    values = io_context.call_function_sync()\n  File \"/pkg/modal/_runtime/container_io_manager.py\", line 225, in call_function_sync\n    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)\n  File \"/root/modal_deploy.py\", line 673, in cloud_multi_touch\n    email = meta.get(\"email\") or lead.get(\"email\")\nAttributeError: 'NoneType' object has no attribute 'get'",
+      "file_path": "/root/modal_deploy.py",
+      "line_number": 673,
+      "function_name": "cloud_multi_touch",
+      "context": {
+        "cause": "meta variable was None when trying to call meta.get('email')",
+        "lead_count": 5
+      },
+      "fix_suggested": "{\"root_cause\": \"Variable was None instead of dict when trying to access .get() method\", \"fix_suggestion\": \"\\n# Always ensure variable is a dict before calling .get()\\nif not meta or not isinstance(meta, dict):\\n    meta = {}\\n# Then safely access\\nvalue = meta.get(\\\"key\\\", \\\"default\\\")\\n\", \"prevention_tip\": \"Add null checks before any .get() calls on potentially None variables\", \"confidence\": 0.95, \"source\": \"knowledge_base\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    },
+    {
+      "id": "d1b1fddd-b769-447c-90b2-07cf058d31b9",
+      "created_at": "2026-01-13T01:22:08.706096+00:00",
+      "source": "test_source",
+      "error_type": "ValueError",
+      "error_message": "Test error for self-healer",
+      "stack_trace": "Traceback (most recent call last):\n  File \"C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\modules\\self_healer.py\", line 466, in <module>\n    raise ValueError(\"Test error for self-healer\")\nValueError: Test error for self-healer\n",
+      "file_path": "C:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\modules\\self_healer.py",
+      "line_number": 466,
+      "function_name": "<module>",
+      "context": {
+        "test": "context"
+      },
+      "fix_suggested": "{\"root_cause\": \"This is an intentionally raised ValueError at line 466 in the self_healer.py module. The error message 'Test error for self-healer' indicates this is a deliberate test error, likely used for testing the self-healing functionality of the system. The error is raised at the module level (in <module>), meaning it occurs during module import or execution.\", \"fix_suggestion\": \"Remove or comment out the test error line:\\n\\n# Line 466 in self_healer.py - remove this line:\\n# raise ValueError(\\\"Test error for self-healer\\\")\\n\\nOr wrap it in a conditional check:\\n\\nif __name__ == '__main__' and os.getenv('ENABLE_TEST_ERROR', 'false').lower() == 'true':\\n    raise ValueError(\\\"Test error for self-healer\\\")\", \"confidence\": 0.95, \"prevention_tip\": \"Use environment variables or command-line flags to control test errors instead of hardcoding them. Implement proper test isolation by keeping test errors in separate test files or behind feature flags. Consider using logging with different levels instead of raising exceptions for testing purposes.\"}",
+      "fix_applied": false,
+      "fix_applied_at": null
+    }
+  ],
+  "outbound_touches": [
+    {
+      "id": "5425e168-c68a-42fe-9938-755df717fde5",
+      "ts": "2026-01-18T23:12:30.040772+00:00",
+      "phone": "+13529368152",
+      "channel": "sms",
+      "variant_id": "variant_url_fix",
+      "variant_name": "URL Fix Test",
+      "run_id": "e2e_url_fix",
+      "status": "sent",
+      "payload": {
+        "phone": "+13529368152",
+        "run_id": "e2e_url_fix",
+        "channel": "sms",
+        "company": "TestHVAC",
+        "vertical": "hvac",
+        "variant_id": "variant_url_fix",
+        "variant_name": "URL Fix Test"
+      },
+      "vertical": "hvac",
+      "company": "TestHVAC",
+      "correlation_id": "test_touch_66af3196"
+    },
+    {
+      "id": "3b4cea6f-41d4-4040-9dd6-c4f277593b31",
+      "ts": "2026-01-18T23:08:51.337621+00:00",
+      "phone": "+13529368152",
+      "channel": "sms",
+      "variant_id": "variant_final",
+      "variant_name": "URL Encode Test",
+      "run_id": "e2e_final2",
+      "status": "sent",
+      "payload": {
+        "phone": "+13529368152",
+        "run_id": "e2e_final2",
+        "channel": "sms",
+        "company": "TestHVAC",
+        "vertical": "hvac",
+        "variant_id": "variant_final",
+        "variant_name": "URL Encode Test"
+      },
+      "vertical": "hvac",
+      "company": "TestHVAC",
+      "correlation_id": "test_touch_618853b6"
+    },
+    {
+      "id": "a76f8d75-4269-4d94-9a6d-30676fd5e937",
+      "ts": "2026-01-18T23:05:37.966775+00:00",
+      "phone": "+13529368152",
+      "channel": "sms",
+      "variant_id": "variant_b",
+      "variant_name": "Final Test",
+      "run_id": "e2e_v2",
+      "status": "sent",
+      "payload": {
+        "phone": "+13529368152",
+        "run_id": "e2e_v2",
+        "channel": "sms",
+        "company": "TestHVAC",
+        "vertical": "hvac",
+        "variant_id": "variant_b",
+        "variant_name": "Final Test"
+      },
+      "vertical": "hvac",
+      "company": "TestHVAC",
+      "correlation_id": "test_touch_40b94015"
+    },
+    {
+      "id": "2aca90da-d8cd-48ca-91fd-33286d40ea1f",
+      "ts": "2026-01-18T22:34:57.334709+00:00",
+      "phone": "+13529368152",
+      "channel": "sms",
+      "variant_id": "variant_a",
+      "variant_name": "Direct CTA",
+      "run_id": "e2e_final",
+      "status": "sent",
+      "payload": {
+        "phone": "+13529368152",
+        "run_id": "e2e_final",
+        "channel": "sms",
+        "company": "TestHVAC",
+        "vertical": "hvac",
+        "variant_id": "variant_a",
+        "variant_name": "Direct CTA"
+      },
+      "vertical": "hvac",
+      "company": "TestHVAC",
+      "correlation_id": "test_touch_d2bb1b97"
+    },
+    {
+      "id": "9f3f7379-ddbc-424c-8a1b-7566849c6abe",
+      "ts": "2026-01-18T18:21:47.667584+00:00",
+      "phone": "+13529368152",
+      "channel": "sms",
+      "variant_id": "variant_a",
+      "variant_name": "Direct CTA",
+      "run_id": "test_jan18",
+      "status": "sent",
+      "payload": {},
+      "vertical": "hvac",
+      "company": null,
+      "correlation_id": null
+    }
+  ]
+}

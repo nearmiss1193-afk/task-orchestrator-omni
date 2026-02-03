@@ -1,0 +1,40 @@
+{
+    "id": "019ba303-edb6-7007-9c40-72fed1f2525a",
+    "assistantId": "78b4c14a-b44a-4096-82f5-a10106d1bfd2",
+    "phoneNumberId": "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e",
+    "type": "outboundPhoneCall",
+    "createdAt": "2026-01-09T13:48:22.326Z",
+    "updatedAt": "2026-01-09T13:48:36.218Z",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "cost": 0,
+    "customer": {
+        "number": "+1(352) 758-5336",
+        "name": "Boss"
+    },
+    "status": "ended",
+    "endedReason": "customer-busy",
+    "phoneCallProvider": "vapi",
+    "phoneCallProviderId": "3b5b0e20-6d6f-4f52-a4f1-2ef390449780",
+    "phoneCallTransport": "pstn",
+    "phoneCallProviderDetails": {
+        "sbcCallId": "b76ad571-6804-123f-1b84-06404bde4cef",
+        "sipReason": "Busy Here",
+        "sipStatus": 486
+    },
+    "assistantOverrides": {
+        "variableValues": {
+            "company_name": "Test Roofing Co",
+            "customer_name": "Boss"
+        }
+    },
+    "monitor": {
+        "listenUrl": "wss://phone-call-websocket.aws-us-west-2-backend-production1.vapi.ai/019ba303-edb6-7007-9c40-72fed1f2525a/listen",
+        "controlUrl": "https://phone-call-websocket.aws-us-west-2-backend-production1.vapi.ai/019ba303-edb6-7007-9c40-72fed1f2525a/control"
+    },
+    "transport": {
+        "callSid": "3b5b0e20-6d6f-4f52-a4f1-2ef390449780",
+        "provider": "vapi.sip",
+        "sbcCallSid": "b76ad571-6804-123f-1b84-06404bde4cef",
+        "conversationType": "voice"
+    }
+}

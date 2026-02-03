@@ -1,0 +1,14 @@
+[DEBUG] Simulating GHL Inbound SMS to: https://empire-unified-backup-production.up.railway.app/ghl/inbound-sms
+[DEBUG] Sending Payload: {
+  "contactId": "test_contact_1768495427",
+  "phone": "+13529368152",
+  "body": "Hi Sarah, verified constraint logic test.",
+  "direction": "inbound",
+  "messageId": "debug_msg_1768495427",
+  "type": "SMS"
+}
+[DEBUG] Response 200 in 2.07s
+[DEBUG] Body: {"contact_id":"03099524-15eb-4ed0-a5a3-6f1fc032acfb","debug":["[INBOUND SMS] Received message from +13529368152","[INBOUND SMS] DB Write Success for 03099524-15eb-4ed0-a5a3-6f1fc032acfb","[INBOUND SMS] \u274c AI Generation returned None"],"reply_sent":false,"status":"received"}
+
+[DEBUG] WARNING: RECEIVED but NO REPLY sent.
+[DEBUG] Reason: None

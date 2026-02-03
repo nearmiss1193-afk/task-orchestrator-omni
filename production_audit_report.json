@@ -1,0 +1,255 @@
+{
+  "timestamp": "2026-01-23T12:48:09.573848",
+  "site_url": "https://www.aiserviceco.com",
+  "status": "YELLOW",
+  "errors": [
+    "/dashboard.html missing canonical numbers (voice=False, sms=False)"
+  ],
+  "warnings": [
+    "/alf_landing.html not deployed (404)",
+    "/hvac_landing.html not deployed (404)",
+    "/roofing_page.html not deployed (404)",
+    "Stale cache: Age=58896s (>1hr)"
+  ],
+  "pages_checked": 29,
+  "pages_ok": 25,
+  "brand_json": {
+    "status": "ok",
+    "errors": [],
+    "build_sha": "486791b"
+  },
+  "page_results": [
+    {
+      "url": "https://www.aiserviceco.com/",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/dashboard.html",
+      "status": "missing_canonical",
+      "voice_found": false,
+      "sms_found": false,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/alf_landing.html",
+      "status": "not_deployed",
+      "voice_found": false,
+      "sms_found": false,
+      "forbidden": [],
+      "http_status": 404
+    },
+    {
+      "url": "https://www.aiserviceco.com/audit.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/autodetail.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/booking.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/checkout.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/cleaning.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/electrician.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/features.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/hvac.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/hvac_landing.html",
+      "status": "not_deployed",
+      "voice_found": false,
+      "sms_found": false,
+      "forbidden": [],
+      "http_status": 404
+    },
+    {
+      "url": "https://www.aiserviceco.com/index.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/intake.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/landscaping.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/media.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/payment.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/pest.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/plumber.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/plumbing.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/privacy.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/restoration.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/roofer.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/roofing.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/roofing_page.html",
+      "status": "not_deployed",
+      "voice_found": false,
+      "sms_found": false,
+      "forbidden": [],
+      "http_status": 404
+    },
+    {
+      "url": "https://www.aiserviceco.com/solar.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/terms.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/test_drive.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    },
+    {
+      "url": "https://www.aiserviceco.com/thank-you.html",
+      "status": "ok",
+      "voice_found": true,
+      "sms_found": true,
+      "forbidden": [],
+      "http_status": 200
+    }
+  ]
+}

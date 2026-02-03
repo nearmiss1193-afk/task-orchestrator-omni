@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout - Empire HVAC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        :root {
+            --primary: #ff3e3e;
+            /* Neon Red */
+            --black: #0f172a;
+            /* Slate 900 */
+            --dark: #1e293b;
+            /* Slate 800 */
+            --light: #f8fafc;
+            /* Slate 50 */
+            --gray: #94a3b8;
+            /* Slate 400 */
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--light);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 40px;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: var(--dark);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            height: fit-content;
+        }
+
+        .summary-header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .summary-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .summary-header p {
+            color: var(--gray);
+            margin: 5px 0 0 0;
+            font-size: 14px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .item-price {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .discount-badge {
+            background: rgba(255, 62, 62, 0.2);
+            color: #ff3e3e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .total-row {
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .waived-setup {
+            color: #ff3e3e;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .guarantee {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        /* Sovereign Form */
+        .payment-form-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 24px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #e63535;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .strikethrough {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .free-text {
+            color: var(--primary);
+        }
+
+        /* Refactored Styles */
+        .reservation-note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .form-title {
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        .payment-details-group {
+            margin-top: 24px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .card-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-num {
+            flex: 2;
+        }
+
+        .card-date {
+            flex: 1;
+        }
+
+        .card-cvc {
+            flex: 1;
+        }
+
+        .security-badge {
+            font-size: 11px;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-status {
+            margin-top: 16px;
+            text-align: center;
+            display: none;
+        }
+
+        .legal-text {
+            font-size: 11px;
+            color: #666;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8080RNWHVV">
+    </script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-8080RNWHVV');
+    </script>
+</head>
+
+<body>
+
+    <div class="checkout-container">
+
+        <!-- Left: Summary -->
+        <div class="order-summary">
+            <div class="summary-header">
+                <h2>Order Summary</h2>
+                <p>Complete your registration to unlock AI automation.</p>
+            </div>
+
+            <div class="order-item">
+                <div class="plan-header-row">
+                    <span id="planName">Loading...</span>
+                    <span class="discount-badge">50% OFF</span>
+                </div>
+                <span class="item-price" id="planPrice">...</span>
+            </div>
+
+            <div class="order-item setup-fee-row">
+                <span>Setup Fee</span>
+                <span><span class="strikethrough">$2,500</span> <span class="free-text">$0</span></span>
+            </div>
+            <div class="order-item">
+                <span>Monthly (After Trial)</span>
+                <span id="trialPrice">...</span>
+            </div>
+
+            <div class="waived-setup">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="progress-23"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                New Year Special Applied
+            </div>
+
+            <div class="total-row">
+                <span>Total Due Today:</span>
+                <span class="total-price-text" id="totalPrice">...</span>
+            </div>
+
+            <div class="guarantee">
+                <div class="guarantee-text">
+                    <h4>14-Day Money-Back Guarantee</h4>
+                    <p>Try it risk-free. Pay only after results.</p>
+                </div>
+            </div>
+
+            <div class="reservation-note">
+                * You are reserving your spot. No payment is charged today.
+            </div>
+
+        </div>
+
+        <!-- Right: Sovereign Form -->
+        <div class="payment-form-container">
+            <!-- Right: Sovereign Form -->
+            <div class="payment-form-container">
+                <h3 class="form-title">Reserve Your Spot</h3>
+                <form id="sovereignForm" onsubmit="handleSubmit(event)">
+                    <input type="hidden" id="planInput" name="plan">
+
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-input" id="name" required placeholder="John Doe">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" id="email" required placeholder="john@hvac.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input" id="phone" required placeholder="(555) 123-4567">
+                    </div>
+
+                    <div class="payment-details-group">
+                        <label class="form-label">Secure Fast-Checkout</label>
+                        <div class="card-input-row"
+                            style="background: #f4f4f4; border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; border: 1px solid #6366f1;">
+                            <span
+                                style="background: #6366f1; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800;">LINK</span>
+                            <span style="font-size: 13px; color: #444;">1-Click Secure Pay Enabled (Simulation)</span>
+                        </div>
+                        <div class="card-input-row mt-4">
+                            <input type="text" class="form-input card-num" placeholder="Card Number (4242 4242...)">
+                            <input type="text" class="form-input card-date" placeholder="MM/YY">
+                            <input type="text" class="form-input card-cvc" placeholder="CVC">
+                        </div>
+                        <div class="security-badge">
+                            🔒 Encrypted by Stripe Sovereign Bridge
+                        </div>
+                    </div>
+
+                    <div class="consent-container"
+                        style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+                        <label class="consent-label" style="display: flex; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="smsConsent" required class="consent-checkbox"
+                                style="width: 20px; height: 20px;">
+                            <span style="font-size: 11px; color: #666; line-height: 1.4;">
+                                I agree to the <a href="terms.html" target="_blank" style="color: var(--primary);">Terms
+                                    of
+                                    Service</a>
+                                and <a href="privacy.html" target="_blank" style="color: var(--primary);">Privacy
+                                    Policy</a>.
+                                I provide <strong>EXPRESS WRITTEN CONSENT</strong> to receive marketing messages
+                                (SMS/Call)
+                                from AI Service Co (Sub: RnK4) via automated technology. Msg & data rates apply.
+                                Reply STOP to opt-out.
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn" style="margin-top: 24px;">ACTIVATE AI
+                        WORKFORCE →</button>
+                    <div id="formStatus" class="form-status"></div>
+
+                    <p class="legal-text" style="text-align: center; margin-top: 24px; font-size: 10px; color: #999;">
+                        AI Service Co utilizes A2P 10DLC verified routes. Your consent is recorded in our Sovereign
+                        Audit Log for compliance protection.
+                    </p>
+                </form>
+            </div>
+
+        </div>
+
+        <script>
+            // Use URL Params to set the plan details
+            const params = new URLSearchParams(window.location.search);
+            const plan = (params.get('plan') || 'starter').toLowerCase();
+
+            const planNameEl = document.getElementById('planName');
+            const planPriceEl = document.getElementById('planPrice');
+            const totalPriceEl = document.getElementById('totalPrice');
+            const planInput = document.getElementById('planInput');
+
+            planInput.value = plan;
+
+            if (plan === 'scale' || plan === 'dominance') {
+                planNameEl.textContent = 'AI Dominance';
+                planPriceEl.textContent = '$997/mo';
+                totalPriceEl.textContent = '$997';
+            } else if (plan === 'growth') {
+                planNameEl.textContent = 'AI Growth';
+                planPriceEl.textContent = '$497/mo';
+                totalPriceEl.textContent = '$497';
+            } else if (plan === 'secretary') {
+                planNameEl.textContent = 'AI Secretary Only';
+                planPriceEl.textContent = '$99/mo';
+                totalPriceEl.textContent = '$99';
+                document.getElementById('trialPrice').textContent = '$99/mo';
+            } else {
+                // Default to Starter ($297) - Golden Standard
+                planNameEl.textContent = 'AI Starter';
+                planPriceEl.textContent = '$297/mo';
+                totalPriceEl.textContent = '$297';
+            }
+
+            async function handleSubmit(e) {
+                e.preventDefault();
+                const btn = document.getElementById('submitBtn');
+                const status = document.getElementById('formStatus');
+
+                btn.innerHTML = 'Activating AI...';
+                btn.disabled = true;
+                status.style.display = 'none';
+
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    plan: planInput.value
+                };
+
+                try {
+                    // API Base - use Vercel production endpoint
+                    const API_BASE = 'https://empire-sovereign-cloud.vercel.app';
+
+                    // 1. Reserve in DB (Lead Capture)
+                    const reserveRes = await fetch(`${API_BASE}/api/reserve`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+
+                    // 2. Redirect to Stripe
+                    btn.innerHTML = 'Securing Session...';
+
+                    const stripeRes = await fetch(`${API_BASE}/api/create-checkout-session`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const stripeResult = await stripeRes.json();
+
+                    if (stripeResult.status === 'success' && stripeResult.url) {
+                        window.location.href = stripeResult.url;
+                    } else {
+                        throw new Error("Payment Gateway Error: " + (stripeResult.message || "Unknown"));
+                    }
+
+                } catch (err) {
+                    console.error(err);
+                    btn.innerHTML = 'Try Again';
+                    btn.disabled = false;
+                    status.innerHTML = '⚠️ Payment Error: ' + err.message;
+                    status.style.display = 'block';
+
+                    // Fallback for Demo if no Keys
+                    if (err.message.includes("Stripe not configured")) {
+                        status.innerHTML += "<br><b>Note:</b> Stripe Keys missing in Vercel. Account Reserved in Database Only.";
+                        status.style.color = "orange";
+                        setTimeout(() => {
+                            window.location.href = "index.html?payment=simulated";
+                        }, 4000);
+                    }
+                }
+            }
+        </script>
+
+        <!-- Vapi Voice Widget (Sarah AI) -->
+        <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+        <script>
+            var vapiInstance = null;
+            const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
+            const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
+            try {
+                vapiInstance = window.vapiSDK.run({
+                    apiKey: VAPI_PUBLIC_KEY,
+                    assistant: SARAH_ASSISTANT_ID,
+                    config: {
+                        position: "bottom-right",
+                        offset: "20px",
+                        width: "50px",
+                        height: "50px"
+                    }
+                });
+            } catch (e) { console.error("Vapi Init Failed:", e); }
+        </script>
+
+
+
+        <!-- Sarah AI Voice Widget -->
+        <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi.min.js"></script>
+
+</body>
+
+</html>

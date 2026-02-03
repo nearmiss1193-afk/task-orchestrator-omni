@@ -1,0 +1,28 @@
+name = "sovereign-console-20260117"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# Static Assets - Serve dashboard and assets from public folder
+[site]
+bucket = "./public"
+
+# Routes for the Worker (if using custom domain)
+# Uncomment and set your zone_id if using routes
+# [routes]
+# zone_id = "YOUR_ZONE_ID"
+# pattern = "aiserviceco.com/*"
+
+# Multiple cron triggers for different operations
+# Times are in UTC - 8 AM CT = 14:00 UTC
+[triggers]
+crons = [
+    "*/10 * * * *",   # Health check every 10 minutes
+    "0 */4 * * *",    # Prospecting every 4 hours
+    "0 14 * * *",     # 8 AM CT campaign (14:00 UTC)
+    "0 */2 * * *"     # Optimizer every 2 hours
+]
+
+[vars]
+PRIMARY_URL = "https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run"
+FALLBACK_URL = "https://empire-fallback-runner.up.railway.app/webhook"
+# BUILD_ID is injected at deploy time via sed replacement in workflow

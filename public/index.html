@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empire Sovereign | Total Automation & Revenue Velocity</title>
+    <meta name="description"
+        content="Empire Sovereign: Your Autonomous AI Workforce. Deploy high-velocity automation, sovereign intelligence, and revenue-driven operations across your entire business history.">
+    <meta name="keywords"
+        content="AI Service, AI Workforce, Logistics AI, HVAC AI, Roofing AI, Lakeland AI, AI Dispatching, AI Payroll">
+    <meta name="version" content="SOV-V3.1-REBRAND-2026-02-03">
+    <meta property="og:title" content="AI Service Co | Powered by AI, Driven by Human Passion">
+    <meta property="og:description"
+        content="Accomplishing the unimaginable for your growth. The complete AI office staff for high-performance service businesses.">
+    <meta property="og:url" content="https://www.aiserviceco.com">
+    <meta name="robots" content="index, follow">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <style>
+        :root {
+            /* Brand Colors: Neon Red & Deep Slate */
+            --primary: #ff3e3e;
+            /* Neon Red */
+            --primary-hover: #e63535;
+            --primary-glow: rgba(255, 62, 62, 0.4);
+            --primary-dim: rgba(255, 62, 62, 0.1);
+
+            --accent: #3b82f6;
+            /* Blue 500 */
+
+            /* Dark Palette */
+            --bg-dark: #0f172a;
+            /* Slate 900 */
+            --bg-card: #1e293b;
+            /* Slate 800 */
+            --bg-glass: rgba(30, 41, 59, 0.7);
+
+            --text-main: #f8fafc;
+            /* Slate 50 */
+            --text-muted: #94a3b8;
+            /* Slate 400 */
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 62, 62, 0.5);
+
+            --gradient-hero: radial-gradient(circle at 50% 0%, rgba(255, 62, 62, 0.15), transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .btn {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.9);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #b45309);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 200px 0 100px;
+            background: var(--gradient-hero);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, #fcd34d 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 22px;
+            color: var(--text-muted);
+            max-width: 660px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 80px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: black;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 0 20px -5px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px -10px var(--primary-glow);
+            background: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .btn-secondary:hover {
+            border-color: white;
+        }
+
+        /* INDUSTRIES */
+        .industries {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 40px;
+            font-weight: 700;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .industry-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+
+        }
+
+        .industry-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -20px black;
+        }
+
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .industry-card:hover .icon-box {
+            background: var(--primary);
+            color: black;
+            border-color: var(--primary);
+        }
+
+        .industry-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .industry-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .card-link {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-link span {
+            transition: 0.3s;
+        }
+
+        .industry-card:hover .card-link span {
+            transform: translateX(4px);
+        }
+
+        /* FEATURES */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 100px;
+        }
+
+        .feature-img {
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 0 100px -30px rgba(59, 130, 246, 0.2);
+        }
+
+        .feature-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+            loading: lazy;
+        }
+
+        .feature-content h2 {
+            font-size: 36px;
+            margin-bottom: 24px;
+        }
+
+        .feature-content p {
+            color: var(--text-muted);
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        .feature-list li {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .check {
+            color: var(--primary);
+            background: rgba(245, 158, 11, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 80px 0;
+            margin-top: 120px;
+            background: #020617;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            margin-top: 16px;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
+            color: var(--text-muted);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--primary);
+        }
+
+        /* TESTIMONIALS (WALL OF LOVE) */
+        .testimonials {
+            padding: 100px 0;
+            background: radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.05), transparent 70%);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .testimonial-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -20px black;
+        }
+
+        .quote-icon {
+            font-size: 40px;
+            color: var(--primary);
+            opacity: 0.4;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+        }
+
+        .testimonial-content {
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--text-main);
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+
+        .author-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .author-info p {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+    </style>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(i); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "fplqf0e3zk");
+    </script>
+
+    <!-- Google Analytics (GA4) with Custom Event Tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8W75D6LNDP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-8W75D6LNDP');
+
+        // Track Lead Intent Events
+        function trackLeadIntent(type) {
+            gtag('event', 'lead_intent_' + type, {
+                'event_category': 'conversion',
+                'event_label': type,
+                'device_type': /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+            });
+        }
+    </script>
+    <link rel="stylesheet" href="css/autofix.css?v=17.5">
+</head>
+
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🏛️</div>
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <span
+                        style="font-size: 10px; opacity: 0.7; font-weight: 500; letter-spacing: 1px; color: var(--sov-red); text-transform: uppercase;">a
+                        division of world unities</span>
+                    <div style="margin-top: -4px;">Empire <span style="font-weight: 500;">Sovereign</span></div>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="features.html">Features</a>
+                <a href="media.html">Media</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <a href="#contact" class="btn-primary" onclick="trackLeadIntent('get_started')">Activate Audit ⚡</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Sovereign Intelligence. <span>Exponential Revenue.</span></h1>
+            <h2>Total Business Autonomy: Deployed in <span id="deployment-counter">24</span> Hours. <br><span>Legacy
+                    Systems. Autonomous Future.</span></h2>
+
+            <div class="style-fix-30" data-style-migrated="true"
+                style="margin-top: 20px; padding: 15px; background: rgba(212, 175, 55, 0.1); border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3);">
+                <div style="margin-bottom: 8px;"><strong>👨‍💼 Talk to Dan (Human/Owner):</strong> <a
+                        href="tel:+13529368152" style="color: #d4af37; font-weight: bold; text-decoration: none;">+1
+                        (352) 936-8152</a></div>
+            </div>
+
+            <p>The integrated AI workforce for logistics, service, and high-growth businesses. Answering calls, managing
+                payroll, and driving your mission with unrelenting desire.</p>
+            <div class="hero-btns">
+                <a href="#contact" class="btn-primary" onclick="trackLeadIntent('get_started')">Activate Audit ⚡</a>
+                <a href="#demo" class="btn-secondary">Watch Demo</a>
+            </div>
+            <div class="style-fix-30" data-style-migrated="true">
+                <div style="margin-bottom: 8px;"><strong>📞 Talk to Sarah (Voice AI):</strong> <a
+                        href="javascript:void(0)" onclick="startSarahCall()"
+                        style="color: var(--primary); font-weight: bold;">Start Voice
+                        Session</a></div>
+                <div style="margin-bottom: 8px;"><strong>💬 Text Sarah:</strong> <a href="sms:+13527585336"
+                        data-brand="sms" style="color: var(--primary);">+1 (352) 758-5336</a></div>
+                <div><strong>👨‍💼 Talk to Dan (Human):</strong> <a href="tel:+13529368152"
+                        style="color: var(--primary);">+1 (352) 936-8152</a></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ZERO-LATENCY TRUST: LIVE ACTIVITY TICKER -->
+    <section class="live-activity">
+        <div class="container">
+            <div class="activity-ticker">
+                <div class="activity-item">
+                    <span class="status-dot"></span>
+                    <span class="activity-text">AI Sarah just booked a consultation for <strong>Plumbline
+                            Pros</strong></span>
+                    <span class="activity-time">2m ago</span>
+                </div>
+                <div class="activity-item">
+                    <span class="status-dot"></span>
+                    <span class="activity-text">Outbound Research Agent identified 45 new leads in <strong>Lakeland,
+                            FL</strong></span>
+                    <span class="activity-time">5m ago</span>
+                </div>
+                <div class="activity-item">
+                    <span class="status-dot"></span>
+                    <span class="activity-text">Payment of <strong>$297.00</strong> verified via Stripe for
+                        <strong>Roofing Hub</strong></span>
+                    <span class="activity-time">12m ago</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .live-activity {
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+            overflow: hidden;
+        }
+
+        .activity-ticker {
+            display: flex;
+            gap: 40px;
+            white-space: nowrap;
+            animation: ticker 30s linear infinite;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .activity-text strong {
+            color: var(--text-main);
+        }
+
+        .activity-time {
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+
+    <!-- DEMO -->
+    <section id="demo" class="style-fix-20" data-style-migrated="true">
+        <div class="container">
+            <div class="section-header">
+                <h2>Experience the Future</h2>
+                <p class="style-fix-31" data-style-migrated="true">See how our
+                    autonomous AI workforce handles complex service interactions in real-time.</p>
+            </div>
+            <div class="style-fix-17" data-style-migrated="true">
+                <span class="style-fix-18" data-style-migrated="true">Voice AI:</span> +1 (863) 213-2505
+                <span class="style-fix-19" data-style-migrated="true">|</span>
+                <span class="style-fix-18" data-style-migrated="true">Text AI:</span> +1 (352) 758-5336
+                <span class="style-fix-19" data-style-migrated="true">|</span>
+                <span class="style-fix-18" data-style-migrated="true">Human:</span> +1 (352) 936-8152
+            </div>
+            <div class="demo-presentation-grid">
+                <!-- Main Demo (16:9) -->
+                <div class="demo-slide">
+                    <h3 class="style-fix-22">Full Platform Exploration</h3>
+                    <div class="video-presentation">
+                        <iframe src="https://www.youtube.com/embed/CeLRdL4WAJQ"
+                            title="AI Service Co Platform Exploration" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Short Demo (9:16) -->
+                <div class="demo-slide">
+                    <h3 class="style-fix-22">Mobile Experience</h3>
+                    <div class="video-presentation mobile-scale">
+                        <iframe src="https://www.youtube.com/embed/mPlJmaJ3Y2k" title="AI Service Co Mobile Demo"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                .demo-presentation-grid {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 80px;
+                    align-items: center;
+                    margin-top: 60px;
+                }
+
+                .demo-slide {
+                    width: 100%;
+                    max-width: 1200px;
+                    text-align: center;
+                }
+
+                .video-presentation {
+                    position: relative;
+                    padding-bottom: 56.25%;
+                    /* 16:9 */
+                    height: 0;
+                    margin-top: 24px;
+                    border-radius: 24px;
+                    overflow: hidden;
+                    border: 1px solid var(--primary);
+                    box-shadow: 0 0 50px -10px var(--primary-glow);
+                }
+
+                .video-presentation iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .mobile-scale {
+                    max-width: 400px;
+                    padding-bottom: 177.77%;
+                    /* 9:16 approx */
+                    margin: 24px auto 0;
+                }
+            </style>
+
+            <style>
+                @media (max-width: 900px) {
+                    .demo-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            </style>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS (WALL OF LOVE) -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>The Wall of Proof</h2>
+                <p>Real impact. Real results. The AI Service Co Difference.</p>
+            </div>
+
+            <div class="testimonial-grid">
+                <!-- Plumbline Pros -->
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-content">"Since Sarah took over our phones, we haven't missed a single
+                        after-hours leak call. We recovered $12k in revenue in the first month alone. The logistics are
+                        finally invisible."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">PP</div>
+                        <div class="author-info">
+                            <h4>Plumbline Pros</h4>
+                            <p>Emergency Services</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RoofHub -->
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-content">"The 'Integrated Workforce' model is exactly what we needed. Riley
+                        handles the dispatch while we focus on the roofs. Our coordination is now 24/7."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RH</div>
+                        <div class="author-info">
+                            <h4>RoofHub Logistics</h4>
+                            <p>Roofing & Exteriors</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solar -->
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-content">"Dan's team didn't just give us a tool; they gave us a heart. The AI
+                        sounds more passionate than our last human hire. Our Lakeland growth is accelerating daily."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">LS</div>
+                        <div class="author-info">
+                            <h4>Lakeland Solar Group</h4>
+                            <p>Energy Solutions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOVEREIGN AUDIT & INTAKE -->
+    <section id="contact"
+        style="padding: 120px 0; background: radial-gradient(circle at 50% 100%, rgba(255, 62, 62, 0.1), transparent 70%); scroll-margin-top: 100px;">
+        <div class="container">
+            <div class="section-header">
+                <h2 style="font-size: 52px;">Initiate Sovereign Audit</h2>
+                <p>Deploy your autonomous workforce. Start with a real-time system evaluation.</p>
+            </div>
+
+            <div class="sov-card" style="max-width: 700px; margin: 0 auto; text-align: center;">
+                <h3 style="margin-bottom: 2rem; color: var(--sov-red);">System Intake Protocol</h3>
+
+                <form id="sovAuditForm" class="sov-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="sov-form-group">
+                            <label>Leader Name</label>
+                            <input type="text" id="leader_name" class="sov-input" placeholder="e.g. John Doe" required>
+                        </div>
+                        <div class="sov-form-group">
+                            <label>Business Identity</label>
+                            <input type="text" id="biz_name" class="sov-input" placeholder="e.g. Plumbline Pros"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="sov-form-group">
+                        <label>Direct Contact (Phone)</label>
+                        <input type="tel" id="leader_phone" class="sov-input" placeholder="+1 (555) 000-0000" required>
+                    </div>
+
+                    <div class="sov-form-group">
+                        <label>Mission Focus</label>
+                        <select id="mission_focus" class="sov-input" style="background: #000;">
+                            <option value="Voice/Sarah">Sarah AI (Inbound/Outbound Calls)</option>
+                            <option value="LeadGen/Riley">Riley AI (Prospecting/SMS)</option>
+                            <option value="Total/Scale">Total Business Autonomy</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="sov-btn-glow" style="width: 100%; margin-top: 1rem;">Deploy Audit
+                        Request ⚡</button>
+                </form>
+
+                <div id="formSuccess"
+                    style="display: none; margin-top: 2rem; padding: 20px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 12px; color: #10b981;">
+                    <strong>MISSION ACCEPTED.</strong> The Bridge is processing your request. Sarah AI will be in touch
+                    shortly.
+                </div>
+
+                <div class="style-fix-30"
+                    style="margin-top: 40px; border-top: 1px solid var(--sov-border); padding-top: 30px;">
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Or interact immediately through the
+                        Sovereign Cloud:</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <a href="javascript:void(0)" onclick="startSarahCall()" class="btn-primary pulse-target">📞 Talk
+                            to Sarah AI</a>
+                        <a href="tel:+13529368152" class="btn-secondary">👨‍💼 Speak with Dan</a>
+                        <a href="sms:+13527585336" class="btn-secondary">💬 Text Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('sovAuditForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "CONNECTING TO BRIDGE...";
+            btn.disabled = true;
+
+            const payload = {
+                task: `New Audit Request from ${document.getElementById('leader_name').value} (${document.getElementById('biz_name').value}). Phone: ${document.getElementById('leader_phone').value}. Focus: ${document.getElementById('mission_focus').value}`,
+                source: "Website-Heros-Form"
+            };
+
+            try {
+                // Using the verified Bridge endpoint
+                const res = await fetch('/bridge/task', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-Sovereign-Token': 'sov-audit-2026-ghost' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    document.getElementById('sovAuditForm').style.display = 'none';
+                    document.getElementById('formSuccess').style.display = 'block';
+                } else {
+                    alert("Bridge Handshake Failed. Please call +1 (352) 936-8152.");
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Sovereign Network Timeout. Please speak with Dan.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+
+    <style>
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 60px;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: rgba(245, 158, 11, 0.05);
+            box-shadow: 0 0 30px -10px rgba(245, 158, 11, 0.2);
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin: 10px 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .price span {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-top: 24px;
+        }
+
+        .plan-features li {
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-popular {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--primary);
+            color: black;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 100px;
+        }
+
+        .badge-limited {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 100px;
+        }
+
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    </div>
+    </section>
+
+    <footer style="padding: 60px 0; border-top: 1px solid var(--border); background: rgba(0,0,0,0.4);">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🔧</div>AI Service <span style="font-weight: 500;">Co.</span>
+                </a>
+                <p>The first sovereign AI operating system tailored for the modern service economy.</p>
+                <div style="margin-top: 25px;">
+                    <a href="javascript:void(0)" onclick="startSarahCall()" class="cta-btn"
+                        style="background: var(--primary); color: black; padding: 12px 25px; border-radius: 100px; font-weight: 700; text-decoration: none; display: inline-block; box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);">📞
+                        Call Sarah Now</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="media.html">Media Center</a></li>
+                    <li><a href="features.html">Feature Library</a></li>
+                    <li><a href="#testimonials">Wall of Proof</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Mission Status</h4>
+                <div
+                    style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span
+                            style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981;"></span>
+                        <span style="font-size: 14px; font-weight: 600;">System Online</span>
+                    </div>
+                    <p style="font-size: 12px; color: var(--text-muted);">Integrated Workforce active. Sarah (AI) &
+                        Riley (AI) are monitoring Lakeland prospects 24/7.</p>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="javascript:void(0)" onclick="startSarahCall()">📞 Talk to Sarah AI</a></li>
+                    <li><a href="sms:+13527585336">💬 Text Sarah: +1 (352) 758-5336</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container" class="style-fix-33" data-style-migrated="true">
+            <p>© 2026 Empire Sovereign. All rights reserved. <br>
+                <span style="font-size: 11px; opacity: 0.6;">(a division of world unities)</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Vapi Voice Widget (Sarah AI) -->
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+    <script>
+        var vapiInstance = null;
+        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
+        const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
+
+        try {
+            vapiInstance = window.vapiSDK.run({
+                apiKey: VAPI_PUBLIC_KEY,
+                assistant: SARAH_ASSISTANT_ID,
+                config: {
+                    position: "bottom-right",
+                    offset: "20px",
+                    width: "50px",
+                    height: "50px"
+                }
+            });
+            console.log('[Sovereign Voice] SDK v3.1 Loaded');
+        } catch (e) {
+            console.error('[Sovereign Voice] SDK v3.1 Init Failed:', e);
+        }
+
+        function startSarahCall() {
+            console.log('[Sovereign Voice] Manually triggering Sarah session...');
+            if (vapiInstance) {
+                vapiInstance.start();
+            } else {
+                const b = document.querySelector('.vapi-btn') || document.querySelector('[class*="vapi"]');
+                if (b) {
+                    b.click();
+                } else {
+                    alert("Sovereign Voice Link is still initializing (approx 2s). Please try again.");
+                }
+            }
+        }
+    </script>
+    <!-- RUNTIME BRAND TRUTH INJECTION v3 - Prevents number drift -->
+    <script>
+        (function () {
+            function injectBrand() {
+                fetch('/brand.json?ts=' + Date.now())
+                    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                    .then(brand => {
+                        const c = brand.canonical;
+                        // Update data-brand="voice" elements
+                        document.querySelectorAll('[data-brand="voice"]').forEach(el => {
+                            el.href = 'tel:' + c.voice_number_e164;
+                            const fmt = el.dataset.brandFormat;
+                            el.textContent = fmt === 'e164' ? c.voice_number_e164 : '+1 ' + c.voice_display;
+                        });
+                        // Update data-brand="sms" elements
+                        document.querySelectorAll('[data-brand="sms"]').forEach(el => {
+                            el.href = 'sms:' + c.sms_number_e164;
+                            const fmt = el.dataset.brandFormat;
+                            el.textContent = fmt === 'e164' ? c.sms_number_e164 : '+1 ' + c.sms_display;
+                        });
+                        // Fallback: update any remaining tel/sms links
+                        document.querySelectorAll('a[href^="tel:"]:not([data-brand])').forEach(el => {
+                            el.href = 'tel:' + c.voice_number_e164;
+                        });
+                        document.querySelectorAll('a[href^="sms:"]:not([data-brand])').forEach(el => {
+                            el.href = 'sms:' + c.sms_number_e164;
+                        });
+                        console.log('[Brand Truth v3] ✓ Injected:', c.voice_display, c.sms_display);
+                    })
+                    .catch(e => {
+                        console.error('[Brand Truth v3] ✗ FAILED:', e.message);
+                        // Emit to API if available (non-blocking)
+                        fetch('/api/event', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ event: 'brand.injection.failed', error: e.message, url: location.href })
+                        }).catch(() => { });
+                    });
+            }
+            // Run on DOMContentLoaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', injectBrand);
+            } else {
+                injectBrand();
+            }
+            // Run again after 1 second (catch dynamic content)
+            setTimeout(injectBrand, 1000);
+        })();
+    </script>
+
+
+    <!-- Runtime Guard for Widget Positioning -->
+    <style>
+        iframe[src*="vapi.ai"],
+        .vapi-btn,
+        [class*="vapi-"] {
+            position: fixed !important;
+            z-index: 999999 !important;
+        }
+    </style>
+</body>
+
+</html>

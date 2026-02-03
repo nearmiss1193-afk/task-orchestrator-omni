@@ -1,0 +1,3606 @@
+{
+  "timestamp": "2026-01-20T05:43:25.644558Z",
+  "directory": "public",
+  "files_scanned": 377,
+  "violations": 0,
+  "unknowns": 448,
+  "errors": 0,
+  "fixed": 0,
+  "passed": true,
+  "issues": [
+    {
+      "file": "public\\audit.html",
+      "line": 89,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\autodetail.html",
+      "line": 81,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\brand.json",
+      "line": 23,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"695072132632677\""
+    },
+    {
+      "file": "public\\checkout.html",
+      "line": 332,
+      "found": "(555) 123-4567",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<input type=\"tel\" class=\"form-input\" id=\"phone\" required placeholder=\"(555) 123-"
+    },
+    {
+      "file": "public\\checkout.html",
+      "line": 467,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\cleaning.html",
+      "line": 81,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\dashboard.html",
+      "line": 320,
+      "found": "260117-1227",
+      "type": "unknown",
+      "replacement": null,
+      "context": "window.BUILD_ID = \"20260117-1227-f854b4e\";"
+    },
+    {
+      "file": "public\\dashboard.html",
+      "line": 1610,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\"></script>"
+    },
+    {
+      "file": "public\\dashboard.html",
+      "line": 1614,
+      "found": "260117-1227",
+      "type": "unknown",
+      "replacement": null,
+      "context": "Build: 20260117-1227-f854b4e"
+    },
+    {
+      "file": "public\\electrician.html",
+      "line": 81,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\features.html",
+      "line": 752,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\hvac.html",
+      "line": 775,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\index.html",
+      "line": 707,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\intake.html",
+      "line": 192,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\landscaping.html",
+      "line": 81,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\media.html",
+      "line": 381,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\payment.html",
+      "line": 349,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\pest.html",
+      "line": 81,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\plumber.html",
+      "line": 804,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\plumbing.html",
+      "line": 775,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\privacy.html",
+      "line": 88,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\restoration.html",
+      "line": 81,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\roofer.html",
+      "line": 540,
+      "found": "+15550000000",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<a href=\"tel:+15550000000\" class=\"header-phone\">"
+    },
+    {
+      "file": "public\\roofer.html",
+      "line": 547,
+      "found": " (555) 000-0000",
+      "type": "unknown",
+      "replacement": null,
+      "context": "(555) 000-0000"
+    },
+    {
+      "file": "public\\roofer.html",
+      "line": 665,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\roofing.html",
+      "line": 775,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\solar.html",
+      "line": 81,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\terms.html",
+      "line": 65,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\test_drive.html",
+      "line": 105,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\thank-you.html",
+      "line": 279,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "<!-- GHL Chat Widget --><script src=\"https://beta.leadconnectorhq.com/loader.js\""
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 5,
+      "found": "+18085555012",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555012\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 17,
+      "found": "+18085555011",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555011\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 29,
+      "found": "+18085555010",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555010\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 41,
+      "found": "+18085555009",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555009\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 53,
+      "found": "+18085555008",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555008\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 65,
+      "found": "+18085555007",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555007\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 77,
+      "found": "+18085555006",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555006\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 89,
+      "found": "+18085555005",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555005\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 101,
+      "found": "+18085555004",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555004\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 113,
+      "found": "+18085555003",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555003\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 125,
+      "found": "+18085555002",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555002\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 137,
+      "found": "+18085555001",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18085555001\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 149,
+      "found": "+18082421144",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18082421144\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 161,
+      "found": "+18087272777",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18087272777\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 166,
+      "found": "-1768107760",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab6e-f506-7110-81bd-b090abed599b-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 173,
+      "found": "+18082137533",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18082137533\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 178,
+      "found": "-1768107692",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab6d-1472-7770-8990-d5bc5eca3add-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 185,
+      "found": "+18084270030",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18084270030\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 190,
+      "found": "-1768107513",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab6b-0943-7003-9de1-9987c419f4e4-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 197,
+      "found": "+18088341085",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18088341085\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 202,
+      "found": "119-1768107",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab69-290b-7003-9de1-4e7bf5ea7119-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 209,
+      "found": "+18088415655",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18088415655\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 214,
+      "found": "-1768107275",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab67-4a08-7993-912f-0125bd81ec54-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 221,
+      "found": "+18088474814",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18088474814\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 226,
+      "found": "338-1768107",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab65-6533-733a-b0fb-92d83275c338-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 233,
+      "found": "+18083020644",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+18083020644\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 238,
+      "found": "635-1768107",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab63-851e-7993-912e-6ed3dbdf4635-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 245,
+      "found": "+12095554013",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+12095554013\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 257,
+      "found": "+12095554012",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+12095554012\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 269,
+      "found": "+12095554011",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+12095554011\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 281,
+      "found": "+12095554010",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+12095554010\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 293,
+      "found": "+12095554009",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+12095554009\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 305,
+      "found": "+15595554008",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15595554008\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 317,
+      "found": "+15595554007",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15595554007\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 329,
+      "found": "+16615554006",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+16615554006\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 341,
+      "found": "+12095554005",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+12095554005\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 353,
+      "found": "+15592279569",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15592279569\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 365,
+      "found": "+12095554004",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+12095554004\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 377,
+      "found": "+19165554003",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19165554003\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 389,
+      "found": "+19165554002",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19165554002\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 401,
+      "found": "+19165554001",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19165554001\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 413,
+      "found": "+15592756200",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15592756200\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 418,
+      "found": "-1768105284",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab49-37ef-755e-ad0b-f276e34a6b02-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 425,
+      "found": "+15599080992",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15599080992\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 430,
+      "found": "1-1768105159",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab47-4f8b-7cc9-960f-21f7f9ad4aa1-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 437,
+      "found": "+12097561713",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+12097561713\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 442,
+      "found": "908-1768105",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab45-6ddc-755e-ad0b-6042dbf4b908-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 449,
+      "found": "+15592241729",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15592241729\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 454,
+      "found": "-1768104913",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab43-8d87-755c-aa0b-1170fc513bed-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 461,
+      "found": "+19166826208",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19166826208\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 466,
+      "found": "302-1768104",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab41-aca9-7bb7-88ea-e1884374b302-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 473,
+      "found": "+19166058583",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19166058583\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 478,
+      "found": "477-1768104",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab3f-cc70-7770-8f91-3e4baf74d477-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 485,
+      "found": "+19164522477",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19164522477\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 490,
+      "found": "-1768104545",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab3d-eb74-7000-9a12-271c52ef8a8e-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 490,
+      "found": "705-9701432",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab3d-eb74-7000-9a12-271c52ef8a8e-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 497,
+      "found": "+19255553013",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19255553013\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 509,
+      "found": "+19255553012",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19255553012\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 521,
+      "found": "+19255553011",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19255553011\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 533,
+      "found": "+19255553010",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+19255553010\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 545,
+      "found": "+15105553009",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15105553009\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 557,
+      "found": "+16505553008",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+16505553008\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 569,
+      "found": "+16505553007",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+16505553007\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 581,
+      "found": "+16505553006",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+16505553006\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 593,
+      "found": "+14085553005",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+14085553005\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 605,
+      "found": "+14085553004",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+14085553004\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 617,
+      "found": "+15105553003",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15105553003\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 629,
+      "found": "+15105553002",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15105553002\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 641,
+      "found": "+15105553001",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+15105553001\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 653,
+      "found": "+14086621533",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+14086621533\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 658,
+      "found": "376-1768102",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab23-b476-733d-b42e-b184b264a376-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 665,
+      "found": "+14085211259",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+14085211259\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 670,
+      "found": "-1768102721",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab21-d17d-7554-9d0e-e76584f994fa-1"
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 677,
+      "found": "+16692079691",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"customer_phone\": \"+16692079691\","
+    },
+    {
+      "file": "public\\todays_transcripts.json",
+      "line": 682,
+      "found": "-1768102589",
+      "type": "unknown",
+      "replacement": null,
+      "context": "\"recording_url\": \"https://storage.vapi.ai/019bab1f-f257-788f-a748-661ab4863f75-1"
+    },
+    {
+      "file": "public\\audits\\a-c-contractors-be97d2dd.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\a1-hvac-llc-2b7e3467.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\abacus-plumbing--air-condition-c089be40.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\abc-home---commercial-services-cef78438.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\acr-air-conditioning---refrige-b9399205.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\acree-plumbing--air---electric-ab38bc39.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\action-air-conditioning--heati-980a77c8.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\action-air-conditioning-tampa-eb4dd366.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\aim-service-group-llc-049bc5eb.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\american-ac---heating-e3817eee.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\and-services-tampa-67c841b7.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\arch-hvac-solutions-bef0a8f6.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlanta-air-experts-8a0aa9a8.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-0e310805.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-1fc4c703.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-27f320c2.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-3e9f6ed0.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-523507bf.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-6b2ed69f.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-6cdab0bb.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-aa42d388.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-b828c5bb.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-c422cab2.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-da481ac6.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-f2cd57da.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-f6530019.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\atlantic-partners-corporation-f6a0be99.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\b-c--building-services--inc--348ed840.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\bacon-plumbing--heating--air---b12485f6.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\bay-area-hvac-experts-2983de65.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\bayfront-hvac-solutions-ed6cfbd6.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\big-bend-cooling-services-00ae84dc.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\big-tex-hvac-17710614.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\black-lion-heating--air-condit-96dd0558.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\bleuwave-commercial-hvac-42f7c382.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\bob-heinmiller-ac-orlando-dc80ba48.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\btac-37105bf8.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\cactus-climate-control-eb449758.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\central-air-conditioning-servi-8c47d7ac.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\central-aire-heating---air-con-1e773ded.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\champion-home-services-cae81a28.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\charlotte-climate-care-e2a6ae43.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\chicago-comfort-hvac-a2ab148b.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\christian-brothers-mechanical--c07a4cb6.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\circle-city-hvac-services-ef2f35e4.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\clearwater-comfort-hvac-b1b3f1c7.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\columbus-comfort-heating---coo-e39f5d23.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\comfort-air-solutions-76606016.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\comfort-air-solutions-95e91320.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\comfort-air-tampa-b7d783e6.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\comfort-zone-hvac-11d30d3f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\comfort-zone-hvac-8e5707c6.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\copper-state-hvac-51ff53e8.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\cornerstone-pros-87ea6097.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\dallas-heating---cooling-6f1dd1d7.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\daytona-beach-air-pros-f368afce.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\desert-breeze-ac-8fb315fe.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\detroit-comfort-heating---cool-883c0f0e.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\dr--air---heat-services--llc-1dd3aef9.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\efficient-ac--electric---plumb-0a7a11e5.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\evergreen-state-heat---ac-072b4f50.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\extreme-ac-and-heating-cb8a9c99.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\facemyer-air-conditioning---he-71a3ceb9.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\ferran-services-adf0e54c.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\florida-comfort-hvac-b6951d95.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\florida-gulf-cooling-services-7077c05e.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\florida-heat-and-cool-services-d8328741.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\florida-heat-solutions-7d94eb78.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\florida-heatwave-hvac-services-67a5154a.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\fort-lauderdale-hvac-pros-5f3b382a.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\fox-service-company-afb34b66.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\frank-gay-services-c528a055.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\franklin-county-hvac-experts-a56bc870.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\fresh-air-hvac-da9dc8ab.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\greens-energy-services-orlando-0a1a4c31.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\greenwood-heating-and-home-ser-1133554d.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\guin-service--llc-de4ea7e7.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\guin-service-11f5b9ed.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\gulf-coast-comfort-solutions-8a7f9f53.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\gulf-coast-comfort-solutions-902ee5cc.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\gulf-coast-hvac-services-a4f24a37.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\home-comfort-alliance-a12fce17.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\honest-abe-comfort-solutions-74308fa6.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\houston-hvac-masters-a719a947.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\houston-hvac-masters-c9011d1d.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\houston-hvac-masters-d1ec4439.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\hvac---appliance-repair-guys-2b86e023.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\hyland-services-4ca1ceac.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\ideal-air-services-496a51dc.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\illinois-hvac-experts-0417b6a3.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\inland-empire-ac-67f3785a.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\inland-mechanical-services--in-a7344077.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\jacksonville-cool-air-solution-e0560d5f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\jacksonville-cooling-co-5f41994c.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\jacksonville-cooling-co-b9400760.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\jacksonville-cooling-co-f55409b1.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\jacksonville-roof-masters-3215d487.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\jacobs-heating---air-condition-3a1493a1.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\kenny-s-air-conditioning---hea-5c903581.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lakeland-comfort-solutions-562cb15f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-0b586611.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-1839bdd6.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-297574f4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-2cace2ed.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-367387ee.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-41c82c2f.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-56ab6e07.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-79b98489.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-815d72d5.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-b32c3a1b.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-b82521cf.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-c299ed77.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-d2171269.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lateam-partners-f8438a86.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-00b050da.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-00f1dd54.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-0eee20f4.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-1442404f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-1c5ca1a1.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-1fb1dff4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-2047be91.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-2145bd92.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-21d478ab.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-2756c8f5.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-27fb9878.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-299f2b31.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-30353870.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-324bce34.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-3cb4668f.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-43842b00.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-4398e728.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-43c90484.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-4665a699.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-49a6b303.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-4ea6031f.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-5273fe26.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-532259f4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-560630cc.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-585eb410.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-5901dfbf.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-5921e132.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-61f5ed9a.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-6d7817f2.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-6e234345.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-7399cbe4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-776c35b3.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-7d514df4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-7dc06c13.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-8392e697.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-87ae67e1.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-87e2e635.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-94451c52.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-94f45119.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-974416a1.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-98c9c755.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-9d733bb5.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-b105d017.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-c565ab06.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-cb69c0b4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-d9757a11.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-db666239.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-e0867448.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-e1ea529e.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-e7c89076.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-ea4fc94a.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\leeds-professional-resources-f2f1a193.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\local-roots-ac-and-plumbing-ll-9df6a720.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lone-star-ac---heat-c1946b64.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lone-star-heating-and-air-b454dc4f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lone-star-roofing-4a4373f0.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\lynx-hvac-repair-0a8dde5e.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\mechanical-one-orlando-77740199.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\miami-comfort-systems-79843e95.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\miami-comfort-systems-db406516.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\miami-heat-hvac-services-58ab7812.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\midwest-climate-control-073c1bca.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\midwest-climate-control-4813fdb0.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\midwest-comfort-experts-0fadaf86.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\minneapolis-comfort-solutions-7fc18b7f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\motor-city-hvac-services-886e22c4.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nashville-comfort-systems-4efa2e5b.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-00405ad5.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-0ba432be.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-1209d55e.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-194df674.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-2a2ec000.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-3e473eff.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-42e2e94a.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-54fc584c.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-6597d2a9.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-86488d60.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-8b2e58dd.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-8f43fe6c.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-a7dbb45a.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\nextpath-career-partners-be8259fb.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\ohio-valley-hvac-services-016ad820.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\olson-energy-service-1dba13a3.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\one-hour-air-conditioning---he-353be9c7.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\one-hour-air-conditioning---he-96978db1.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\one-team-heating---cooling-4bfbcc76.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\oneway-heating---air-condition-aa0d8164.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\orange-county-hvac-2c6a2f93.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\orlando-hvac-pros-790d4e3c.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\orlando-hvac-pros-a22d6a0d.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\pacific-comfort-systems-8b4bbf10.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\palm-beach-roofing-6f427ffd.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\pensacola-coastal-hvac-a0a98d3f.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\perfect-service-heating---air-6ba6351c.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\phoenix-climate-control-e88ac6c2.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\phoenix-home-comfort-58423bfc.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\pinellas-climate-control-servi-a515690f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\precision-comfort-hvac-service-a23fa143.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\premier-service-company--inc--d3c9f4ee.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\premier-service-company-32a48c32.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\prime-hvac-c2236cc4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\rainaldi-home-services-78348cbb.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\san-antonio-air-services-1620a0c8.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\san-antonio-air-services-d527fae4.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sarasota-breeze-hvac-9fd1fb83.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sarasota-breeze-hvac-aecbe9c6.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-095fb041.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-13dcd193.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-17ef2415.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-393df5dd.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-5717edd6.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-68f9a24e.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-83cc4a83.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-98bd4c5b.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-9c7cc729.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-be4bf9f6.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-e8a48a5a.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-ea59f129.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-f52c0d6d.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\siira-f83b5dce.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\silver-state-refrigeration--hv-8e7a8feb.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sky-heating--ac--plumbing---el-fa997d11.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sonoran-ac---heat-8c75bf23.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\st--louis-comfort-systems-4ccca98a.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\stanley-hvac-fc8bdc5c.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\strand-brothers-service-expert-8f163c96.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sun-air-services-86b16c33.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\suncoast-hvac-experts-a483c4ef.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\suncoast-hvac-solutions-234ff8f8.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sunshine-air-conditioning-serv-81ca4fa9.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sunshine-hvac-services-8cf6d0aa.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sunshine-hvac-solutions-8752223e.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\sunshine-hvac-solutions-937956d3.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-0763b66f.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-0abd9047.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-1a8ab373.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-383db5cf.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-4ac1d6fe.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-4b3458be.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-52b2c58c.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-60957970.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-695dc2ed.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-7c474951.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-9b81a211.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-a16da593.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-acd290b4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\talentify-io-d98117f0.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\tallahassee-hvac-pros-ee5ca2c2.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\tampa-bay-hvac-experts-645161ef.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\texas-ace-hvac-6b150407.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-coolest-service-llc-98cef935.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-00abadc8.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-051a1a55.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-07fbd360.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-09e24677.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-0fb20af7.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-101dc8fd.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-140f028a.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-150b6399.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-20e97abb.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-2815f0b4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-2844c92c.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-2a95975f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-2a9a925a.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-2b2f4aab.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-2dc4a984.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-2f709897.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-3090246f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-32babfc7.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-3363c13a.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-3d11e24b.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-424f89e0.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-449a5e37.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-4768a3f2.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-4df40a54.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-5278ed89.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-5e504304.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-5eb4d02c.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-5fa23b26.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-6353f44f.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-66d66496.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-691fd90b.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-6b313c4e.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-72a71713.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-7383dc5d.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-7470f8b3.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-747a1c09.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-7927b7cf.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-7fbc4a0e.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-85ade0f5.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-8750fbbb.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-895c8b2e.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-998ee6b4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-9a905b37.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-a8e308d2.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-ad68e69e.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-b22b3661.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-b7fc9cc4.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-bc0d9430.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-c37bb883.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-c6ad4345.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-ca540a55.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-cb242b04.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-cf5aae5e.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-da5cf8be.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-e1a70a13.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-ebd73fdf.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-f258f0cf.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\the-immigrant-academy-fb373f81.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\tobin-hvac-48db693c.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\tropical-breeze-hvac-b0aa3603.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\twin-cities-hvac-specialists-5979da35.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\volunteer-state-hvac-2347f22e.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\we-do-hvac-fd5878a8.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-0906a361.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-0eb2d283.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-178f157e.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-2991b584.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-31d9d332.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-36e09867.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-39eea121.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-5e61a3e2.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-70df44c5.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-be0e4b29.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-c7cea8bb.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-d4e890b2.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-d55fbae9.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\world-brand-design-society-e2c63021.html",
+      "line": 511,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    },
+    {
+      "file": "public\\audits\\yps-facility-services-lp-203c8b29.html",
+      "line": 740,
+      "found": "6950721326",
+      "type": "unknown",
+      "replacement": null,
+      "context": "data-widget-id=\"69507213261ca136120c2fe0\">"
+    }
+  ],
+  "canonical": {
+    "voice": {
+      "display": "(863) 213-2505",
+      "e164": "+18632132505"
+    },
+    "sms": {
+      "display": "(352) 758-5336",
+      "e164": "+13527585336"
+    }
+  }
+}

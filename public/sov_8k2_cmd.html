@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOVEREIGN COMMAND v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .panel {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel h2 {
+            color: #666;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .live-dot {
+            height: 8px;
+            width: 8px;
+            background-color: #00ff41;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            box-shadow: 0 0 10px #00ff41;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto 1fr;
+            gap: 1rem;
+            height: 100vh;
+            padding: 1rem;
+        }
+
+        /* Mobile: Stack everything */
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                height: auto;
+            }
+        }
+
+        .c-green {
+            color: #00ff41;
+        }
+
+        .c-blue {
+            color: #3b82f6;
+        }
+
+        .c-yellow {
+            color: #eab308;
+        }
+
+        .c-red {
+            color: #ef4444;
+        }
+
+        tr.row-item {
+            border-bottom: 1px solid #111;
+        }
+
+        tr.row-item:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="grid-container">
+        <!-- Header -->
+        <div class="col-span-4 flex justify-between items-center mb-2">
+            <div>
+                <h1 class="text-xl font-bold tracking-tighter text-white">SOVEREIGN <span class="c-green">COMMAND</span>
+                </h1>
+                <p class="text-xs text-gray-600">UNIT: EMPIRE-UNIFIED // <span id="clock">00:00:00</span> // <span
+                        class="c-green">● ONLINE</span></p>
+            </div>
+            <div class="text-right">
+                <button onclick="refreshData()"
+                    class="text-xs border border-gray-800 px-3 py-1 hover:bg-gray-900 transition">REFRESH INTEL</button>
+            </div>
+        </div>
+
+        <!-- 1. TRUTH (Top Stats) -->
+        <div class="panel">
+            <h2>Sentinel Shield</h2>
+            <div class="stat-value c-green" id="h-sentinel">100%</div>
+            <p class="text-xs text-gray-500 mt-1" id="h-sentinel-label">Anomaly Protection: ACTIVE</p>
+        </div>
+        <div class="panel">
+            <h2>Pipeline Value</h2>
+            <div class="stat-value text-white" id="h-pipeline">$0</div>
+            <p class="text-xs text-gray-500 mt-1">Potential Mission ROI</p>
+        </div>
+        <div class="panel">
+            <h2>Outreach Burn</h2>
+            <div class="stat-value c-red" id="h-burn">$0.00</div>
+            <p class="text-xs text-gray-500 mt-1">Estimated Cloud Cost</p>
+        </div>
+        <div class="panel">
+            <h2>System Wisdom</h2>
+            <div class="stat-value c-blue" id="h-wisdom">--</div>
+            <p class="text-xs text-gray-500 mt-1">Synthesized Insights</p>
+        </div>
+
+        <!-- 2. CAMPAIGNS (Mid-Left) -->
+        <div class="panel col-span-2 row-span-2 flex flex-col">
+            <div class="flex justify-between">
+                <h2>Active Campaigns</h2>
+                <div id="sentinel-alert" class="hidden">
+                    <span
+                        class="bg-red-900/50 text-red-500 text-[10px] px-2 py-0.5 rounded border border-red-500 animate-pulse">SHIELD
+                        TRIGGERED</span>
+                </div>
+                <span class="text-xs text-green-500">REAL-TIME</span>
+            </div>
+            <div class="flex-1 overflow-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-gray-600 text-xs">
+                            <th>CAMPAIGN</th>
+                            <th>SENT</th>
+                            <th>REPLIES</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaigns-list">
+                        <!-- JS Injected -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-900">
+                <h2>Engine Status</h2>
+                <div class="flex items-center">
+                    <div class="live-dot" id="mode-dot"></div>
+                    <span class="text-xs tracking-widest uppercase" id="h-active">...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. COMMS HUB (Mid-Right) -->
+        <div class="panel col-span-2 row-span-2 flex flex-col">
+            <div class="flex justify-between">
+                <h2>Recent Comms (SMS/Inbound)</h2>
+                <span class="text-xs text-blue-500">LIVE FEED</span>
+            </div>
+            <div class="flex-1 overflow-auto" id="comms-feed">
+                <!-- JS Injected -->
+                <div class="text-gray-600 text-sm p-2 text-center">Waiting for uplink...</div>
+            </div>
+        </div>
+
+        <!-- 4. ANALYTICS (Bottom) -->
+        <div class="panel col-span-2 h-64">
+            <h2>Funnel Conversion</h2>
+            <canvas id="funnelChart"></canvas>
+        </div>
+        <div class="panel col-span-2 h-64 overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center mb-2">
+                <h2>Horizon Watcher (R&D)</h2>
+                <span class="text-[10px] text-cyan-500 animate-pulse tracking-widest">SCANNING MARKET...</span>
+            </div>
+            <div id="horizon-feed" class="flex-1 overflow-auto text-xs space-y-3 pr-2">
+                <div class="text-gray-600 italic">Waiting for R&D uplink...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- AUTH GUARD ---
+        if (localStorage.getItem('sov_key') !== 'empire_2026') {
+            const pass = prompt("SOVEREIGN CREDENTIALS REQUIRED:");
+            if (pass === 'empire_2026') {
+                localStorage.setItem('sov_key', 'empire_2026');
+            } else {
+                location.href = '/index.html';
+            }
+        }
+
+        const API_BASE = ""; // Relative to origin
+
+        // --- CLOCK ---
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
+        }, 1000);
+
+        // --- FETCH DATA ---
+        async function refreshData() {
+            console.log("Refreshing Intelligence...");
+            const statusIndicator = document.getElementById('clock').nextElementSibling;
+
+            try {
+                const res = await fetch(`${API_BASE}/dashboard_stats?v=${Date.now()}`);
+                if (!res.ok) throw new Error("API Connection Failed");
+
+                const data = await res.json();
+
+                // 1. TRUTH
+                const sentinelEl = document.getElementById('h-sentinel');
+                const sentinelLabel = document.getElementById('h-sentinel-label');
+                const sentinelAlert = document.getElementById('sentinel-alert');
+
+                sentinelEl.innerText = data.sentinel_score + "%";
+                if (data.sentinel_score < 50 || data.mode === "broken") {
+                    sentinelEl.className = "stat-value c-red";
+                    sentinelLabel.innerText = "SHIELD: TRIGGERED";
+                    sentinelAlert.classList.remove('hidden');
+                } else {
+                    sentinelEl.className = "stat-value c-green";
+                    sentinelLabel.innerText = "Anomaly Protection: ACTIVE";
+                    sentinelAlert.classList.add('hidden');
+                }
+
+                document.getElementById('h-pipeline').innerText = "$" + data.pipeline_value.toLocaleString();
+                document.getElementById('h-burn').innerText = "$" + data.outreach_burn.toFixed(2);
+                document.getElementById('h-wisdom').innerText = data.wisdom_score;
+                document.getElementById('h-active').innerText = data.mode.toUpperCase();
+
+                if (data.mode === "working") {
+                    document.getElementById('h-active').className = "text-xs tracking-widest uppercase c-green";
+                    document.getElementById('mode-dot').style.backgroundColor = "#00ff41";
+                    document.getElementById('mode-dot').style.boxShadow = "0 0 10px #00ff41";
+                } else {
+                    document.getElementById('h-active').className = "text-xs tracking-widest uppercase c-red";
+                    document.getElementById('mode-dot').style.backgroundColor = "#ef4444";
+                    document.getElementById('mode-dot').style.boxShadow = "0 0 10px #ef4444";
+                }
+
+                // Status Indicator
+                if (statusIndicator) statusIndicator.innerHTML = '<span class="c-green">● ONLINE</span>';
+
+                // 2. FUNNEL
+                renderFunnel(data.funnel);
+
+                // 3. COMMS
+                renderComms(data.recent_comms);
+
+                // 4. CAMPAIGNS (Mocked for now as we split them)
+                renderCampaigns([
+                    { name: "HVAC OMNI", sent: data.funnel.outreach_dispatched, replied: data.funnel.replied }
+                ]);
+
+            } catch (e) {
+                console.error("DATA FETCH ERROR:", e);
+                if (statusIndicator) statusIndicator.innerHTML = '<span class="c-red">● CONNECTING...</span>';
+            }
+        }
+
+        function renderComms(items) {
+            const feed = document.getElementById('comms-feed');
+            feed.innerHTML = "";
+            items.forEach(i => {
+                const time = new Date(i.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const color = i.status.includes('dispatched') || i.status.includes('sent') ? 'text-green-500' : 'text-blue-400';
+                const icon = i.status.includes('dispatched') || i.status.includes('sent') ? '→' : '←';
+                const html = `
+                <div class="flex justify-between items-center py-2 border-b border-gray-900 hover:bg-white/5 px-2">
+                    <div>
+                        <span class="${color} font-bold mr-2">${icon}</span>
+                        <span class="text-sm font-bold text-gray-300">${i.company || 'Unknown'}</span>
+                        <div class="text-xs text-gray-500 ml-5">${i.channel.toUpperCase()}: ${i.status}</div>
+                    </div>
+                    <div class="text-xs text-gray-600 font-mono">${time}</div>
+                </div>
+            `;
+                feed.innerHTML += html;
+            });
+        }
+
+        function renderCampaigns(items) {
+            const list = document.getElementById('campaigns-list');
+            list.innerHTML = "";
+            items.forEach(c => {
+                const html = `
+                <tr class="row-item text-gray-400 hover:text-white transition">
+                    <td class="font-bold">${c.name}</td>
+                    <td>${c.sent}</td>
+                    <td>${c.replied}</td>
+                    <td><span class="bg-green-900 text-green-300 px-1 text-[10px] rounded">ACTIVE</span></td>
+                </tr>
+            `;
+                list.innerHTML += html;
+            });
+        }
+
+        let funnelChartRef = null;
+        function renderFunnel(funnel) {
+            const ctx = document.getElementById('funnelChart').getContext('2d');
+            if (funnelChartRef) funnelChartRef.destroy();
+
+            const labels = Object.keys(funnel);
+            const data = Object.values(funnel);
+
+            funnelChartRef = new Chart(ctx, {
+                type: 'bar', // Visualizing as a bar chart for now
+                data: {
+                    labels: labels.map(l => l.toUpperCase()),
+                    datasets: [{
+                        label: 'Leads',
+                        data: data,
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#eab308', '#22c55e', '#ef4444'],
+                        barThickness: 20
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#222' }, ticks: { color: '#666' } },
+                        x: { grid: { display: false }, ticks: { color: '#888' } }
+                    }
+                }
+            });
+        }
+
+        // Init
+        refreshData();
+        setInterval(refreshData, 30000); // Poll every 30s
+    </script>
+</body>
+
+</html>

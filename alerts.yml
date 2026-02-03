@@ -1,0 +1,39 @@
+# Prometheus Alert Rules for Empire Unified
+groups:
+  - name: empire_alerts
+    rules:
+      - alert: OrchestratorDown
+        expr: up{job="orchestrator"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Primary Orchestrator is down"
+          description: "The main orchestrator has been unreachable for more than 2 minutes."
+
+      - alert: FallbackRunnerDown
+        expr: up{job="fallback_runner"} == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Fallback Runner is down"
+          description: "The Railway fallback runner is unreachable."
+
+      - alert: WebhookServerDown
+        expr: up{job="webhook_server"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Webhook Server is down"
+          description: "Inbound webhooks cannot be processed."
+
+      - alert: CampaignMonitorDown
+        expr: up{job="campaign_monitor"} == 0
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Campaign Monitor stalled"
+          description: "Campaign scheduler has not run in 30 minutes."

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Service Co | The Operating System for Service Businesses</title>
+    <meta name="description"
+        content="The all-in-one AI workforce for contractors. Automated booking, dispatch, and customer service for HVAC, Plumbing, Roofing, and more.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        :root {
+            /* Brand Colors: Sovereign Gold & Deep Slate */
+            --primary: #f59e0b;
+            /* Amber 500 */
+            --primary-hover: #d97706;
+            --primary-glow: rgba(245, 158, 11, 0.4);
+            --primary-dim: rgba(245, 158, 11, 0.1);
+
+            --accent: #3b82f6;
+            /* Blue 500 */
+
+            /* Dark Palette */
+            --bg-dark: #0f172a;
+            /* Slate 900 */
+            --bg-card: #1e293b;
+            /* Slate 800 */
+            --bg-glass: rgba(30, 41, 59, 0.7);
+
+            --text-main: #f8fafc;
+            /* Slate 50 */
+            --text-muted: #94a3b8;
+            /* Slate 400 */
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(245, 158, 11, 0.5);
+
+            --gradient-hero: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15), transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .btn {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.9);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #b45309);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* HERO */
+        .hero {
+            padding: 200px 0 100px;
+            background: var(--gradient-hero);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, #fcd34d 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 22px;
+            color: var(--text-muted);
+            max-width: 660px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 80px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: black;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 0 20px -5px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px -10px var(--primary-glow);
+            background: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .btn-secondary:hover {
+            border-color: white;
+        }
+
+        /* INDUSTRIES */
+        .industries {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 40px;
+            font-weight: 700;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .industry-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            group: card;
+        }
+
+        .industry-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -20px black;
+        }
+
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .industry-card:hover .icon-box {
+            background: var(--primary);
+            color: black;
+            border-color: var(--primary);
+        }
+
+        .industry-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .industry-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .card-link {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-link span {
+            transition: 0.3s;
+        }
+
+        .industry-card:hover .card-link span {
+            transform: translateX(4px);
+        }
+
+        /* FEATURES */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 100px;
+        }
+
+        .feature-img {
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 0 100px -30px rgba(59, 130, 246, 0.2);
+        }
+
+        .feature-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .feature-content h2 {
+            font-size: 36px;
+            margin-bottom: 24px;
+        }
+
+        .feature-content p {
+            color: var(--text-muted);
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        .feature-list li {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .check {
+            color: var(--primary);
+            background: rgba(245, 158, 11, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 80px 0;
+            margin-top: 120px;
+            background: #020617;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            margin-top: 16px;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
+            color: var(--text-muted);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">⚡</div>AI Service <span>Co.</span>
+            </a>
+            <nav class="nav-links">
+                <a href="media.html" class="primary-text">Media</a>
+                <a href="#industries">Solutions</a>
+                <a href="dashboard.html">Platform</a>
+                <a href="#pricing">Enterprise</a>
+            </nav>
+            <a href="dashboard.html" class="btn-primary btn-login-small">Login</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>The Operating System for <br><span>Service Businesses</span></h1>
+            <p>Deploy a fully autonomous AI workforce. From instant dispatch to automated billing, we scale your
+                operations while you sleep.</p>
+            <div class="hero-btns">
+                <a href="#industries" class="btn-primary">Find Your Industry</a>
+                <a href="dashboard.html" class="btn-secondary">View Live Demo</a>
+            </div>
+            <div class="margin-top-20 font-size-14 text-muted-color">
+                <span class="primary-text primary-font-weight">Call Sarah:</span> +1 (352) 758-5336
+                <span class="separator">|</span>
+                <span class="primary-text primary-font-weight">Text Only:</span> +1 (352) 758-5336
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO -->
+    <section id="demo" class="section-padding-100 bg-card-color">
+        <div class="container">
+            <div class="section-header">
+                <div class="status-badge">
+                    CURRENT STAGE: FULLY OPERATIONAL (BETA)
+                </div>
+                <h2>Experience the Platform</h2>
+                <p class="text-muted-color margin-auto" style="font-size: 18px; max-width: 600px;">See how our
+                    autonomous AI workforce handles complex service interactions in real-time.</p>
+            </div>
+            <div class="demo-grid-wrapper demo-grid">
+                <!-- Main Demo (16:9) -->
+                <div>
+                    <h3 class="demo-header">Full Platform Demo</h3>
+                    <div class="video-container-16-9">
+                        <iframe src="https://www.youtube.com/embed/CeLRdL4WAJQ" class="iframe-video"
+                            title="AI Service Co Demo" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Short Demo (9:16) -->
+                <div>
+                    <h3 class="demo-header">Mobile Experience</h3>
+                    <div class="video-container-9-16">
+                        <iframe src="https://www.youtube.com/embed/mPlJmaJ3Y2k" class="iframe-video"
+                            title="AI Mobile Demo" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                @media (max-width: 900px) {
+                    .demo-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            </style>
+        </div>
+    </section>
+
+    <section class="industries" id="industries">
+        <div class="container">
+            <div class="section-header">
+                <h2>Tailored for Your Trade</h2>
+                <p>Specialized AI models trained on millions of real service calls.</p>
+            </div>
+
+            <div class="grid-container">
+                <!-- HVAC -->
+                <a href="hvac.html" class="industry-card">
+                    <div class="icon-box">❄️</div>
+                    <h3>HVAC & Climate</h3>
+                    <p>Automated seasonality handling, emergency dispatch, and maintenance agreements.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Plumber -->
+                <a href="plumber.html" class="industry-card">
+                    <div class="icon-box">💧</div>
+                    <h3>Plumbing & Piping</h3>
+                    <p>Leak detection intake, emergency prioritization, and water heater sales.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Roofer -->
+                <a href="roofer.html" class="industry-card">
+                    <div class="icon-box">🏠</div>
+                    <h3>Roofing & Storm</h3>
+                    <p>Hail storm reactivation, aerial measurement integration, and insurance claim handling.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Electrician -->
+                <a href="electrician.html" class="industry-card">
+                    <div class="icon-box">⚡</div>
+                    <h3>Electrical</h3>
+                    <p>Panel upgrade campaigns, EV charger quoting, and emergency power dispatch.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Solar -->
+                <a href="solar.html" class="industry-card">
+                    <div class="icon-box">☀️</div>
+                    <h3>Solar & Energy</h3>
+                    <p>Proposal generation, utility bill analysis, and tax credit qualification.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Landscaping -->
+                <a href="landscaping.html" class="industry-card">
+                    <div class="icon-box">🌿</div>
+                    <h3>Landscaping</h3>
+                    <p>Seasonal recurring service booking, hardscape quoting, and route optimization.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Pest Control -->
+                <a href="pest.html" class="industry-card">
+                    <div class="icon-box">🐜</div>
+                    <h3>Pest Control</h3>
+                    <p>Quarterly subscription renewals, infestation triage, and tech routing.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Restoration -->
+                <a href="restoration.html" class="industry-card">
+                    <div class="icon-box">🌊</div>
+                    <h3>Damage Restoration</h3>
+                    <p>24/7 emergency response, insurance coordination, and mold remediation intake.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Auto Detail -->
+                <a href="autodetail.html" class="industry-card">
+                    <div class="icon-box">🚗</div>
+                    <h3>Auto Detailing</h3>
+                    <p>Mobile unit scheduling, ceramic coating upsells, and fleet management.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+
+                <!-- Cleaning -->
+                <a href="cleaning.html" class="industry-card">
+                    <div class="icon-box">✨</div>
+                    <h3>Cleaning Services</h3>
+                    <p>Deep clean booking, maid service recurring schedules, and Airbnb turnovers.</p>
+                    <div class="card-link">View Solution <span>→</span></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT / TEAM -->
+    <section id="about" class="section-padding-100 bg-dark-style">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built by Service Pros, For Service Pros</h2>
+                <p>We understand the chaos of dispatch and phone tag. That's why we built the Empire System.</p>
+            </div>
+
+            <div class="flex-center-gap-40">
+                <!-- Team Member 1 -->
+                <div class="team-card">
+                    <div class="avatar-wrapper avatar-primary">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Daniel" alt="Daniel"
+                            class="avatar-img">
+                    </div>
+                    <h3 class="demo-header" style="margin-bottom: 4px;">Daniel</h3>
+                    <p class="role-text-primary">Founder &
+                        CEO</p>
+                    <p class="bio-text">
+                        Serial entrepreneur with 15+ years in home services and automation. Previously scaled field
+                        operations for major service providers.
+                    </p>
+                    <a href="#" class="social-link">
+                        <span>LINKEDIN</span> ↗
+                    </a>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="team-card">
+                    <div class="avatar-wrapper avatar-accent">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Sarah" alt="Sarah AI" class="avatar-img">
+                    </div>
+                    <h3 class="demo-header" style="margin-bottom: 4px;">Sarah</h3>
+                    <p class="role-text-accent">Head of
+                        Operations (AI)</p>
+                    <p class="bio-text">
+                        Autonomous voice agent powered by Vapi LLMs. Capable of handling 500+ concurrent dispatch calls
+                        24/7.
+                    </p>
+                    <div class="status-online">
+                        STATUS: ONLINE
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 60px;">
+                <p class="margin-auto text-muted-color" style="max-width: 600px;">
+                    Headquartered in Ocala, FL. We are on a mission to automate 1 million service businesses by 2030.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">⚡</div>AI Service <span>Co.</span>
+                </a>
+                <p>The first sovereign AI operating system tailored for the modern service economy.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">Intelligence</a></li>
+                    <li><a href="#">Dispatch</a></li>
+                    <li><a href="#">Payments</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="tel:+1(352) 758-5336" class="primary-text">Call: +1 (352) 758-5336</a></li>
+                    <li><span class="text-muted-color" style="font-size: 12px;">Text: +1 (352) 758-5336</span></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-copy">
+            <p>© 2026 AI Service Co. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- VAPI Integration -->
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+    <script>
+        var vapiInstance = null;
+        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
+        const ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"; // Updated to Sarah 3.0 (Grok)
+        (function () {
+            var script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            script.defer = true;
+            script.async = true;
+            script.onload = function () {
+                vapiInstance = window.vapiSDK.run({
+                    apiKey: VAPI_PUBLIC_KEY,
+                    assistant: ASSISTANT_ID,
+                    config: {
+                        position: "bottom-right",
+                        offset: "40px",
+                        width: "50px",
+                        height: "50px",
+                        idle: { color: "#f59e0b", type: "pill", title: "Talk to Sales", subtitle: "Ask anything", icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg" },
+                        loading: { color: "#94a3b8", type: "pill", title: "Connecting...", subtitle: "Please wait", icon: "https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg" },
+                        active: { color: "#ef4444", type: "pill", title: "Live Call", subtitle: "Listening...", icon: "https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg" }
+                    }
+                });
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
+</body>
+
+</html>

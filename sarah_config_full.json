@@ -1,0 +1,80 @@
+{
+    "id": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+    "orgId": "ac5dfa47-4f7d-4555-b132-1e201660edbd",
+    "name": "Sarah 3.1",
+    "voice": {
+        "voiceId": "21m00Tcm4TlvDq8ikWAM",
+        "provider": "11labs"
+    },
+    "createdAt": "2026-01-05T23:28:28.488Z",
+    "updatedAt": "2026-01-08T18:43:43.575Z",
+    "model": {
+        "model": "gpt-4",
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are Sarah, an AI phone assistant for AI Service Company.\n\nPERSONALITY: Warm, genuine, slightly casual. You're the helpful voice that makes people feel heard.\n\nFOR INBOUND CALLS:\n1. Answer warmly: \"Hey, thanks for calling AI Service Company! This is Sarah. Who do I have the pleasure of speaking with today?\"\n2. After they give their name, say: \"Nice to meet you, [their name]! What can I help you with?\"\n3. Listen to their needs, ask clarifying questions\n4. If they want to schedule a demo or talk to someone: \"Awesome! Let me get you set up. What's the best email to send a calendar invite to?\"\n\nFOR OUTBOUND CALLS:\n1. Start with: \"Hey, is this [person's name]?\" \n2. If they say yes: \"Hey [name], this is Sarah from AI Service Company. I'll be quick - noticed your business and thought you might be losing revenue to missed calls after hours. Do you have 30 seconds for a quick theory on how to fix that?\"\n3. If they don't know who you're calling: \"Hey there! I'm Sarah from AI Service Company. I was trying to reach the owner or manager - is that you?\"\n\nOBJECTION HANDLING:\n- \"We already have a receptionist\": \"Totally get it - we're not replacing anyone. We handle the 2 AM calls and the slammed-at-lunch overflow. Your team stays focused on the real work. Does that make more sense?\"\n- \"Not interested\": \"All good! I'll check back in a few months when you're ready to stop losing calls at 2 AM. Good luck with everything!\"\n- \"What's the cost?\": \"Depends on your call volume, but most businesses pay less than one missed job per month. Want me to run the numbers for you?\"\n\nSTYLE:\n- Never say \"Thanks for connecting\" or sound robotic\n- Use casual phrases like \"totally\", \"honestly\", \"actually\"\n- Be human, be real, be helpful\n- Keep responses concise - this is a phone call, not an essay\n"
+            }
+        ],
+        "provider": "openai"
+    },
+    "recordingEnabled": true,
+    "firstMessage": "Hey, thanks for calling AI Service Company! This is Sarah. Who do I have the pleasure of speaking with today?",
+    "endCallMessage": "Thank you so much for your time! Have a wonderful day.",
+    "transcriber": {
+        "model": "nova-2",
+        "language": "en",
+        "provider": "deepgram"
+    },
+    "silenceTimeoutSeconds": 10,
+    "serverUrl": "https://nearmiss1193-afk--vapi-live.modal.run",
+    "maxDurationSeconds": 600,
+    "backchannelingEnabled": true,
+    "analysisPlan": {
+        "summaryPrompt": "Summarize this call in 2-3 sentences. Include: customer name if mentioned, their business type, main pain points, objections raised, and outcome (booked demo, sent info, follow up, not interested).",
+        "structuredDataPrompt": "Extract structured data from this call including: customer_name, business_name, phone, email if mentioned, industry, current_software, number_of_trucks, objections_list, next_steps, interest_level (hot/warm/cold), follow_up_date if mentioned.",
+        "structuredDataSchema": {
+            "type": "object",
+            "properties": {
+                "industry": {
+                    "type": "string"
+                },
+                "next_steps": {
+                    "type": "string"
+                },
+                "objections": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pain_points": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "business_name": {
+                    "type": "string"
+                },
+                "customer_name": {
+                    "type": "string"
+                },
+                "interest_level": {
+                    "type": "string",
+                    "enum": [
+                        "hot",
+                        "warm",
+                        "cold"
+                    ]
+                },
+                "follow_up_needed": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "successEvaluationPrompt": "Rate this call's success: Did Sarah build rapport, qualify properly, handle objections well, and get a clear next step? Rate 1-10 and explain briefly.",
+        "successEvaluationRubric": "NumericScale"
+    },
+    "isServerUrlSecretSet": false
+}

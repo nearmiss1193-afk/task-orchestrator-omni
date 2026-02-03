@@ -1,0 +1,8 @@
+# Ignore everything except public folder and api folder
+*
+!public
+!public/**
+!api
+!api/**
+!vercel.json
+!package.json

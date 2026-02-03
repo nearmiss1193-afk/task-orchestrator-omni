@@ -1,0 +1,143 @@
+[
+  {
+    "company_name": "Service Champions",
+    "domain": "servicechampions.net",
+    "city": "San Jose",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "Bell Brothers",
+    "domain": "bellbrothers.com",
+    "city": "Sacramento",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "Bonney Plumbing",
+    "domain": "bonney.com",
+    "city": "Sacramento",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "Cabrillo Plumbing",
+    "domain": "cabrilloplumbing.com",
+    "city": "San Francisco",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "ABCO Mechanical",
+    "domain": "abcomechanical.com",
+    "city": "San Francisco",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "Nexgen HVAC",
+    "domain": "nexgenhvac.com",
+    "city": "Anaheim",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "Gideon Brothers HVAC",
+    "domain": "gideonbrothers.com",
+    "city": "Los Angeles",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "Gorgis AC Heating",
+    "domain": "gorgisac.com",
+    "city": "San Diego",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "San Diego Air Conditioning",
+    "domain": "sdairconditioning.com",
+    "city": "San Diego",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "Ambient Heating AC",
+    "domain": "ambientheatingac.com",
+    "city": "San Diego",
+    "state": "CA",
+    "enriched": false
+  },
+  {
+    "company_name": "George Brazil",
+    "domain": "georgebrazil.com",
+    "city": "Phoenix",
+    "state": "AZ",
+    "enriched": false
+  },
+  {
+    "company_name": "Goettl Air Conditioning",
+    "domain": "goettl.com",
+    "city": "Phoenix",
+    "state": "AZ",
+    "enriched": true,
+    "owner_name": "Janette Purdy",
+    "owner_email": "janette.purdy@goettl.com",
+    "owner_phone": null,
+    "owner_title": "Director of Safety",
+    "enrichment_source": "hunter.io"
+  },
+  {
+    "company_name": "American Home Water & Air",
+    "domain": "americanhomewater.com",
+    "city": "Phoenix",
+    "state": "AZ",
+    "enriched": false
+  },
+  {
+    "company_name": "Parker & Sons",
+    "domain": "parkerandsons.com",
+    "city": "Phoenix",
+    "state": "AZ",
+    "enriched": true,
+    "owner_name": "Bob Cannon",
+    "owner_email": "bcannon@parkerandsons.com",
+    "owner_phone": null,
+    "owner_title": "Senior Vice President of Sales",
+    "enrichment_source": "hunter.io"
+  },
+  {
+    "company_name": "Chas Roberts",
+    "domain": "chasroberts.com",
+    "city": "Phoenix",
+    "state": "AZ",
+    "enriched": true,
+    "owner_name": "Jaime Alvarez",
+    "owner_email": "jaime.alvarez@chasroberts.com",
+    "owner_phone": null,
+    "owner_title": "Director of Safety",
+    "enrichment_source": "hunter.io"
+  },
+  {
+    "company_name": "Precision Air & Plumbing",
+    "domain": "precisionairlv.com",
+    "city": "Las Vegas",
+    "state": "NV",
+    "enriched": false
+  },
+  {
+    "company_name": "HVAC Investigators",
+    "domain": "hvacinvestigators.com",
+    "city": "Las Vegas",
+    "state": "NV",
+    "enriched": false
+  },
+  {
+    "company_name": "Air Conditioning Specialists",
+    "domain": "air-conditioning-specialists.com",
+    "city": "Las Vegas",
+    "state": "NV",
+    "enriched": false
+  }
+]

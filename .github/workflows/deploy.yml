@@ -1,0 +1,85 @@
+name: Deploy Empire Unified
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+
+jobs:
+  modal-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install modal
+        run: pip install modal
+
+      - name: Modal Deploy
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+        run: |
+          python -m modal deploy modal_orchestrator.py --name empire-api-v1 --stream-logs
+
+  smoke-tests:
+    needs: modal-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      
+      - name: Install dependencies
+        run: pip install requests
+      
+      - name: Run smoke tests
+        run: python tests/smoke_test.py
+      
+      - name: Rollback if smoke fails
+        if: failure()
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+        run: |
+          pip install modal
+          chmod +x ./rollback.sh
+          ./rollback.sh
+
+  railway-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Railway Deploy
+        uses: railwayapp/railway@v1
+        with:
+          railwayToken: ${{ secrets.RAILWAY_TOKEN }}
+          serviceId: ${{ secrets.RAILWAY_SERVICE_ID }}
+
+  cloudflare-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Inject BUILD_ID into dashboard
+        run: |
+          BUILD_ID="$(date +%Y%m%d-%H%M)-$(git rev-parse --short HEAD)"
+          echo "BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
+          sed -i "s/__BUILD_ID__/$BUILD_ID/g" public/dashboard.html
+          # Also update footer
+          sed -i "s/Build: __BUILD_ID__/Build: $BUILD_ID/g" public/dashboard.html
+          echo "Injected BUILD_ID: $BUILD_ID"
+      
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: .

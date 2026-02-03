@@ -1,0 +1,27 @@
+2026-01-11 14:09:44,421 - INFO - ENRICHED CAMPAIGN STARTED - 5 leads
+2026-01-11 14:09:44,422 - INFO - ENRICH START: JW Plumbing Heating Air
+2026-01-11 14:09:46,198 - INFO - ENRICH FAILED: JW Plumbing Heating Air - using main line
+2026-01-11 14:09:46,774 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:09:46,778 - INFO - SAVED: JW Plumbing Heating Air
+2026-01-11 14:09:47,834 - INFO - CALL: JW Plumbing Heating Air - 019bae76
+2026-01-11 14:10:17,839 - INFO - ENRICH START: Brody Pennell Heating AC
+2026-01-11 14:10:19,989 - INFO - ENRICH FAILED: Brody Pennell Heating AC - using main line
+2026-01-11 14:10:20,397 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:10:20,397 - INFO - SAVED: Brody Pennell Heating AC
+2026-01-11 14:10:21,444 - INFO - CALL: Brody Pennell Heating AC - 019bae77
+2026-01-11 14:10:51,449 - INFO - ENRICH START: Gorgis AC Heating
+2026-01-11 14:10:53,327 - INFO - ENRICH FAILED: Gorgis AC Heating - using main line
+2026-01-11 14:10:53,601 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:10:53,602 - INFO - SAVED: Gorgis AC Heating
+2026-01-11 14:10:54,904 - INFO - CALL: Gorgis AC Heating - 019bae77
+2026-01-11 14:11:24,907 - INFO - ENRICH START: San Diego Air Conditioning
+2026-01-11 14:11:26,375 - INFO - ENRICH FAILED: San Diego Air Conditioning - using main line
+2026-01-11 14:11:26,648 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:11:26,649 - INFO - SAVED: San Diego Air Conditioning
+2026-01-11 14:11:27,389 - INFO - CALL: San Diego Air Conditioning - 019bae78
+2026-01-11 14:11:57,406 - INFO - ENRICH START: Cabrillo Plumbing AC
+2026-01-11 14:11:59,226 - INFO - ENRICH FAILED: Cabrillo Plumbing AC - using main line
+2026-01-11 14:11:59,518 - INFO - HTTP Request: POST https://rzcpfwkygdvoshtwxncs.supabase.co/rest/v1/leads "HTTP/2 201 Created"
+2026-01-11 14:11:59,519 - INFO - SAVED: Cabrillo Plumbing AC
+2026-01-11 14:12:00,216 - INFO - CALL: Cabrillo Plumbing AC - 019bae78
+2026-01-11 14:12:00,218 - INFO - ENRICHED CAMPAIGN COMPLETE

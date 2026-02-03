@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign Capabilities | Empire Sovereign - Your Autonomous AI Workforce</title>
+    <meta name="description"
+        content="20+ AI capabilities: AI receptionist, cold email engine, deep intel research, and more. See how Empire Sovereign outperforms any legacy human office staff.">
+    <meta name="keywords"
+        content="AI cold outreach HVAC, AI lead generation roofing, AI phone answering contractors, AI dispatch scheduling, AI business intelligence home services">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ff3e3e;
+            --primary-hover: #e63535;
+            --primary-glow: rgba(255, 62, 62, 0.4);
+            --accent: #3b82f6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .btn {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #8b0000);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: black;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 160px 0 80px;
+            text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 62, 62, 0.15), transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), #fcd34d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* CAPABILITY CATEGORIES */
+        .category-section {
+            padding: 100px 0;
+        }
+
+        .category-section:nth-child(even) {
+            background: var(--bg-card);
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .category-header h2 {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .category-header p {
+            color: var(--text-muted);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .capability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .capability-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: 0.3s;
+        }
+
+        .category-section:nth-child(even) .capability-card {
+            background: #0f172a;
+        }
+
+        .capability-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .cap-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .capability-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .capability-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .cap-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .cap-tag {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ROI SECTION */
+        .roi-section {
+            padding: 100px 0;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-dark), #020617);
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .roi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .roi-card h3 {
+            color: var(--primary);
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .roi-card p {
+            color: var(--text-muted);
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 40px;
+            margin-bottom: 24px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: black;
+            padding: 20px 48px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 24px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -10px var(--primary-glow);
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .capability-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .roi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/autofix.css">
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🔧</div>AI Service <span style="font-weight: 500;">Co.</span> <span
+                    style="font-size: 11px; font-weight: 400; opacity: 0.7; margin-left: 5px;">(a division of world
+                    unities)</span>
+            </a>
+            <nav class="nav-links">
+                <a href="features.html" class="active">Features</a>
+                <a href="index.html#industries">Industries</a>
+                <a href="index.html#contact">Contact</a>
+            </nav>
+            <a href="index.html#contact" class="btn-primary">Get Started</a>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1>Your Complete <span>AI Office Staff</span></h1>
+            <p>Not just a phone answering service. We're your AI receptionist, sales rep, researcher, dispatcher, and
+                marketing team - all in one platform that learns and improves every day.</p>
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">20+</div>
+                    <div class="stat-label">AI Capabilities</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Always Working</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">10x</div>
+                    <div class="stat-label">Faster Response</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$0</div>
+                    <div class="stat-label">Missed Calls</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI BRAIN -->
+    <section class="category-section">
+        <div class="container">
+            <div class="category-header">
+                <h2>🧠 AI Brain That Learns</h2>
+                <p>Unlike static software, our AI gets smarter with every interaction. It learns your business, your
+                    customers, and your preferences.</p>
+            </div>
+
+            <div class="capability-grid">
+                <div class="capability-card">
+                    <div class="cap-icon">📞</div>
+                    <h3>Call Learning</h3>
+                    <p>Every call teaches Sarah something new. She extracts insights, objections, and successful
+                        techniques to improve future calls.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Auto-Training</span>
+                        <span class="cap-tag">Insight Extraction</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">🎯</div>
+                    <h3>Industry Knowledge</h3>
+                    <p>Pre-trained on HVAC, Roofing, Plumbing, and more. Knows seasonal patterns, common objections, and
+                        upsell opportunities.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">HVAC</span>
+                        <span class="cap-tag">Roofing</span>
+                        <span class="cap-tag">Plumbing</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">💾</div>
+                    <h3>Customer Memory</h3>
+                    <p>Remembers every customer interaction, equipment details, service history, and preferences. Never
+                        asks the same question twice.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">CRM Sync</span>
+                        <span class="cap-tag">History Recall</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHONE & VOICE -->
+    <section class="category-section">
+        <div class="container">
+            <div class="category-header">
+                <h2>📞 AI Phone & Voice</h2>
+                <p>Never miss a call again. Your AI receptionist handles everything from emergency dispatch to
+                    appointment booking.</p>
+            </div>
+
+            <div class="capability-grid">
+                <div class="capability-card">
+                    <div class="cap-icon">🌙</div>
+                    <h3>24/7 Call Answering</h3>
+                    <p>Every call answered instantly - nights, weekends, holidays. No voicemail means no lost leads.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">After Hours</span>
+                        <span class="cap-tag">No Voicemail</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">🚨</div>
+                    <h3>Emergency Triage</h3>
+                    <p>Identifies true emergencies vs routine calls. Routes urgent issues to on-call techs while booking
+                        others for next-day.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Priority Routing</span>
+                        <span class="cap-tag">Smart Dispatch</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">📅</div>
+                    <h3>Instant Booking</h3>
+                    <p>Books appointments directly into your calendar. Confirms times, sends reminders, and handles
+                        rescheduling.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Calendar Sync</span>
+                        <span class="cap-tag">Auto-Confirm</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">✅</div>
+                    <h3>Lead Qualification</h3>
+                    <p>Asks the right questions to qualify leads before they hit your calendar. Filters out tire-kickers
+                        automatically.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Budget Check</span>
+                        <span class="cap-tag">Intent Scoring</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COLD OUTREACH -->
+    <section class="category-section">
+        <div class="container">
+            <div class="category-header">
+                <h2>📧 Cold Outreach Engine</h2>
+                <p>The SAW: Stop waiting for leads to find you. Our AI-powered outreach fills your pipeline with
+                    qualified prospects.</p>
+            </div>
+
+            <div class="capability-grid">
+                <div class="capability-card">
+                    <div class="cap-icon">✍️</div>
+                    <h3>AI Email Writing</h3>
+                    <p>Grok-powered emails that sound human. Personalized based on company research, not generic
+                        templates.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Hyper-Personalized</span>
+                        <span class="cap-tag">High Open Rates</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">🔄</div>
+                    <h3>Multi-Step Sequences</h3>
+                    <p>Automated Day 1, Day 3, Day 7 follow-ups. Persistent but never annoying. Stops when they reply.
+                    </p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Auto Follow-Up</span>
+                        <span class="cap-tag">Reply Detection</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">📞</div>
+                    <h3>Email + Call Combo</h3>
+                    <p>Sarah calls after emails with full context: "Hi, I sent you an email about..." Doubles response
+                        rates.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Multi-Channel</span>
+                        <span class="cap-tag">Context Aware</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">💬</div>
+                    <h3>SMS Campaigns</h3>
+                    <p>Text message sequences for faster response. Great for appointment reminders and quote follow-ups.
+                    </p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">GHL Integration</span>
+                        <span class="cap-tag">Bulk SMS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEEP INTEL -->
+    <section class="category-section">
+        <div class="container">
+            <div class="category-header">
+                <h2>🔍 Deep Intel Research</h2>
+                <p>Know more about your prospects than they know about themselves. AI-powered business intelligence.</p>
+            </div>
+
+            <div class="capability-grid">
+                <div class="capability-card">
+                    <div class="cap-icon">🏢</div>
+                    <h3>Company Research</h3>
+                    <p>Automatic scraping of company info, services offered, team size, and market positioning.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Web Scraping</span>
+                        <span class="cap-tag">Auto-Dossier</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">👤</div>
+                    <h3>Decision-Maker ID</h3>
+                    <p>Finds owners, managers, and key contacts. Infers email patterns when direct info isn't available.
+                    </p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Owner Discovery</span>
+                        <span class="cap-tag">Email Finding</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">⭐</div>
+                    <h3>Review Monitoring</h3>
+                    <p>Tracks Google and Yelp reviews. Alerts you to negative reviews and competitor changes.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Google Reviews</span>
+                        <span class="cap-tag">Yelp Tracking</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">📊</div>
+                    <h3>Marketing Audit</h3>
+                    <p>Analyzes prospect's website, SEO, and online presence. Identifies gaps to pitch your services.
+                    </p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">SEO Analysis</span>
+                        <span class="cap-tag">Gap Finder</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DISPATCH & OPS -->
+    <section class="category-section">
+        <div class="container">
+            <div class="category-header">
+                <h2>🚚 Dispatch & Operations</h2>
+                <p>AI-powered scheduling and routing to maximize technician productivity and minimize windshield time.
+                </p>
+            </div>
+
+            <div class="capability-grid">
+                <div class="capability-card">
+                    <div class="cap-icon">📍</div>
+                    <h3>Smart Scheduling</h3>
+                    <p>Optimizes job scheduling based on location, skill, and availability. Reduces drive time by 20%+.
+                    </p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Route Optimization</span>
+                        <span class="cap-tag">Skill Matching</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">🔔</div>
+                    <h3>Customer Notifications</h3>
+                    <p>Auto-sends "tech on the way" texts, appointment reminders, and completion confirmations.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Auto-Text</span>
+                        <span class="cap-tag">ETA Updates</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">📋</div>
+                    <h3>Service Agreement Management</h3>
+                    <p>Tracks maintenance contracts, auto-schedules seasonal visits, and sends renewal reminders.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Contract Tracking</span>
+                        <span class="cap-tag">Auto-Renew</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section class="category-section">
+        <div class="container">
+            <div class="category-header">
+                <h2>📊 Analytics Dashboard</h2>
+                <p>Real-time visibility into every call, lead, and campaign. Make data-driven decisions.</p>
+            </div>
+
+            <div class="capability-grid">
+                <div class="capability-card">
+                    <div class="cap-icon">📈</div>
+                    <h3>Lead Pipeline</h3>
+                    <p>Track every lead from first contact to closed deal. See where leads drop off and fix the gaps.
+                    </p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Funnel View</span>
+                        <span class="cap-tag">Conversion Tracking</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">📝</div>
+                    <h3>Call Transcripts</h3>
+                    <p>Every call recorded and transcribed. Searchable database of customer conversations.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Full Transcripts</span>
+                        <span class="cap-tag">Sentiment Analysis</span>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="cap-icon">💰</div>
+                    <h3>ROI Reporting</h3>
+                    <p>See exactly how much revenue AI generated vs cost. Clear attribution on every booked job.</p>
+                    <div class="cap-tags">
+                        <span class="cap-tag">Revenue Attribution</span>
+                        <span class="cap-tag">Cost per Lead</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI SECTION -->
+    <section class="roi-section">
+        <div class="container">
+            <h2>The Numbers Don't Lie</h2>
+            <p class="style-fix-15" data-style-migrated="true">Real results from real contractors</p>
+
+            <div class="roi-grid">
+                <div class="roi-card">
+                    <h3>$50K+</h3>
+                    <p>Annual savings vs. full-time receptionist</p>
+                </div>
+                <div class="roi-card">
+                    <h3>40%</h3>
+                    <p>Fewer missed calls and lost leads</p>
+                </div>
+                <div class="roi-card">
+                    <h3>2x</h3>
+                    <p>More bookings from cold outreach</p>
+                </div>
+                <div class="roi-card">
+                    <h3>24/7</h3>
+                    <p>Coverage without overtime pay</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Deploy Your AI Workforce?</h2>
+            <p class="style-fix-15" data-style-migrated="true">Try Sarah free. If she doesn't book 5 qualified
+                appointments in 14 days, pay nothing.</p>
+            <a href="index.html#contact" class="cta-btn">Start Free Trial →</a>
+            <p class="style-fix-16" data-style-migrated="true">
+                <a href="javascript:void(0)" onclick="startSarahCall()" class="btn-primary"
+                    style="display: inline-block; padding: 8px 16px; margin-top: 10px;">📞 Talk to Sarah AI Now</a>
+            </p>
+        </div>
+    </section>
+
+    <footer
+        style="padding: 60px 0; border-top: 1px solid var(--border); text-align: center; background: rgba(0,0,0,0.3);">
+        <div class="container">
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: white; margin-bottom: 15px;">Experience the Sarah AI Advantage</h3>
+                <a href="javascript:void(0)" onclick="startSarahCall()" class="cta-btn"
+                    style="background: var(--primary); color: black; padding: 12px 30px; border-radius: 100px; font-weight: 700; text-decoration: none; display: inline-block;">📞
+                    Call Sarah Now</a>
+            </div>
+            <p style="color: var(--text-muted);">© 2026 AI Service Co. All rights reserved. <br>
+                <span style="font-size: 11px; opacity: 0.5;">(a division of world unities)</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Vapi Voice Widget (Sarah AI) -->
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+    <script>
+        var vapiInstance = null;
+        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
+        const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
+
+        try {
+            vapiInstance = window.vapiSDK.run({
+                apiKey: VAPI_PUBLIC_KEY,
+                assistant: SARAH_ASSISTANT_ID,
+                config: {
+                    position: "bottom-right",
+                    offset: "20px",
+                    width: "50px",
+                    height: "50px"
+                }
+            });
+            console.log('[Sovereign Voice] SDK v3.1 Loaded (Features)');
+        } catch (e) {
+            console.error('[Sovereign Voice] SDK v3.1 Init Failed:', e);
+        }
+
+        function startSarahCall() {
+            console.log('[Sovereign Voice] Manually triggering Sarah session...');
+            if (vapiInstance) {
+                vapiInstance.start();
+            } else {
+                const b = document.querySelector('.vapi-btn') || document.querySelector('[class*="vapi"]');
+                if (b) b.click();
+                else alert("Sarah AI is still initializing...");
+            }
+        }
+    </script>
+
+
+    <!-- Sarah AI Voice Widget -->
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi.min.js"></script>
+    <script src="/assets/sarah-widget.js"></script>
+</body>
+
+</html>

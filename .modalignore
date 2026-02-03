@@ -1,0 +1,13 @@
+modules/orchestrator/**
+modules/architect/**
+**/deploy.py
+**/deploy_v2.py
+**/*.db
+**/*.log
+dist/
+node_modules/
+.git/
+backups/
+archive/
+temp/
+ghl_temp_profile_*

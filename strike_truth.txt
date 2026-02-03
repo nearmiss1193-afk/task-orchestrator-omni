@@ -1,0 +1,75 @@
+[INFO] GHL Token Loaded: YES (pit-...)
+[INFO] GHL Location Loaded: YES (RnK4OjX0oDcqtWw0VyLr)
+[INFO] GHL Token Loaded: YES (pit-...)
+[INFO] GHL Location Loaded: YES (RnK4OjX0oDcqtWw0VyLr)
+ANTIGRAVITY v5.1 - EXECUTIVE STRIKE PROTOCOL ACTIVE
+
+--- STEP 1: Executive Handshake ---
+Calling https://empire-unified-backup-production-6d15.up.railway.app/bridge/performance...
+Status: 200
+Handshake Success!
+Funnel: Total Leads: 615, Active: 2, Positive: 1
+
+--- STEP 2: Physical Email Strike (GoHighLevel) ---
+Sending Physical GHL Email to nearmiss1193@gmail.com...
+[DEBUG] GHL GET -> https://services.leadconnectorhq.com/contacts/
+      Code: 401
+      ERR: {"statusCode":401,"message":"The token is not authorized for this scope."}
+[INFO] Contact not found. Creating: Sovereign User
+[DEBUG] GHL POST -> https://services.leadconnectorhq.com/contacts/
+      Code: 401
+      ERR: {"statusCode":401,"message":"The token is not authorized for this scope."}
+[ERR] GHL Email Failed: Could not resolve Contact ID.
+GHL Email Dispatch Failed.
+
+--- STEP 3: Upgraded Grok Integration Test ---
+Checking Available Grok Models...
+Using Model: grok-2-vision-1212
+Sending Upgraded Prompt to grok-2-vision-1212...
+Grok Response: Hey Daniel! Here are three quick leads for Lakeland businesses that could use an ROI rescue:
+
+1. **Lakeland's Local Bakery** - Imagine this: A cozy bakery in downtown Lakeland that's been around for years but is struggling with rising costs. We can pitch them on how Sarah AI can help them manage inventory better, reduce waste, and target their marketing to bring in more customers during off-peak hours. It's like rescuing their profits from the oven!
+
+2. **Sunshine Fitness Center** - This gym has seen better days with memberships dropping. We can tell them how Sarah AI can analyze member data to tailor fitness programs, predict peak times for better staff scheduling, and even suggest personalized promotions to boost sign-ups. It's like giving their business a workout to get back in shape!
+
+3. **Green Thumb Garden Supplies** - A local garden shop that's feeling the pinch from big online competitors. Sarah AI can help them by optimizing their online presence, suggesting seasonal promotions, and even predicting what plants or supplies will be popular next season. It's like planting the seeds for a financial bloom!
+
+For each of these, we'll use simple, friendly language to explain how Sarah AI can be their hero in rescuing their ROI. Let's get started on making these pitches!
+Grok Integration Verified.
+
+MISSION INCOMPLETE: Some segments failed.
+
+--- STEP 1: Executive Handshake ---
+Calling https://empire-unified-backup-production-6d15.up.railway.app/bridge/performance...
+Status: 200
+Handshake Success!
+Funnel: Total Leads: 615, Active: 2, Positive: 1
+
+--- STEP 2: Physical Email Strike (GoHighLevel) ---
+Sending Physical GHL Email to nearmiss1193@gmail.com...
+[DEBUG] GHL GET -> https://services.leadconnectorhq.com/contacts/
+      Code: 401
+      ERR: {"statusCode":401,"message":"The token is not authorized for this scope."}
+[INFO] Contact not found. Creating: Sovereign User
+[DEBUG] GHL POST -> https://services.leadconnectorhq.com/contacts/
+      Code: 401
+      ERR: {"statusCode":401,"message":"The token is not authorized for this scope."}
+[ERR] GHL Email Failed: Could not resolve Contact ID.
+GHL Email Dispatch Failed.
+
+--- STEP 3: Upgraded Grok Integration Test ---
+Checking Available Grok Models...
+Using Model: grok-2-vision-1212
+Sending Upgraded Prompt to grok-2-vision-1212...
+Grok Response: Here are three simple leads for Daniel to help rescue ROI for businesses in Lakeland:
+
+1. **Lakeland Local Bakery** - Hi there! I'm Sarah AI, and I'm here to help Daniel rescue your ROI. Your bakery is loved by many, but let's make sure you're making the most money from your delicious treats. We can look at your pricing, your costs, and how you're selling to make sure every cupcake counts towards your profit. Let's bake some success together!
+
+2. **Lakeland Family Fitness Center** - Hello! I'm Sarah AI, working with Daniel to boost your business's ROI. Your fitness center is a community hub, but let's ensure you're not just keeping people fit but also your finances. We can review your membership plans, your operational costs, and marketing to make sure you're getting the best return on every dollar spent. Let's get your business in shape!
+
+3. **Lakeland Pet Grooming Service** - Hey there! Sarah AI here, teaming up with Daniel to rescue your ROI. Your pet grooming service is pawsitively popular, but let's make sure you're grooming your profits too. We can look at your service pricing, your supply costs, and how you reach pet owners to ensure you're not just making pets look good, but your business too. Let's make your business the top dog in ROI!
+
+These pitches are simple, friendly, and focus on the idea of 'rescue' to engage the business owners in a positive way.
+Grok Integration Verified.
+
+⚠️ MISSION INCOMPLETE: Some segments failed. Check logs above.

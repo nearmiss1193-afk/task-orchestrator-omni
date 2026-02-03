@@ -1,0 +1,42 @@
+# LOCKED CONSTANTS - Source of Truth
+# These values CANNOT be changed by AI agents without human approval
+# Last updated: 2026-01-16
+
+LOCKED_CONSTANTS:
+  company_name: "AI Service Co"
+  primary_persona: "Sarah"
+  
+  pricing:
+    starter_usd_per_month: 297
+    lite_usd_per_month: 497
+    growth_usd_per_month: 997
+    enterprise: "custom"
+    trial_days: 14
+    contract_terms: "No contracts. Cancel anytime."
+  
+  booking:
+    appointment_name: "Sovereign Strategy Session"
+    appointment_duration_minutes: 15
+    booking_link: "https://link.aiserviceco.com/discovery"
+    suggest_within_hours: 48
+    lead_time_buffer_hours: 24
+    calendar_name: "Empire Unified Master Calendar"
+  
+  escalation:
+    owner_sms_phone_e164: "+13529368152"
+    ghl_task_priority: "High"
+    escalation_template: "🔥 [Vortex Intent] Lead: [Name] / Msg: [Message] / AI Draft: [Draft] / Link: [URL]."
+  
+  compliance:
+    never_collect_payment_info: true
+    emergency_instruction: "If you suspect a life-threatening emergency (gas leak, fire, CO alarm, etc.), hang up and dial 911 immediately."
+    no_legal_or_insurance_advice: true
+    opt_out_keyword: "STOP"
+    opt_out_action: "Tag as Unsubscribed and cease messaging."
+  
+  messaging_rules:
+    sms_style: "1-2 short sentences; include booking link early when appropriate."
+    call_style: "Professional dispatcher; calm, concise; confirm details then book."
+
+# WARNING: AI agents must NOT modify these values
+# Any changes require explicit human approval via PR or direct edit

@@ -1,0 +1,55 @@
+name: Empire Cron Jobs
+
+on:
+  schedule:
+    # Email Poller - Every 15 minutes
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  email-poller:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests python-dotenv supabase google-auth google-auth-oauthlib google-api-python-client
+      
+      - name: Run Email Poller
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GMAIL_API_KEY: ${{ secrets.GMAIL_API_KEY }}
+        run: |
+          echo "📬 Running Email Poller..."
+          python email_poller.py || echo "Email poller encountered an issue"
+
+  cloud-inspector:
+    runs-on: ubuntu-latest
+    # Only run on the hour
+    if: github.event.schedule == '0 * * * *' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests python-dotenv supabase
+      
+      - name: Run Cloud Inspector
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          echo "🔍 Running Cloud Inspector..."
+          python cloud_inspector.py
