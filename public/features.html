@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sovereign Capabilities | Empire Sovereign - Your Autonomous AI Workforce</title>
     <meta name="description"
-        content="20+ AI capabilities: AI receptionist, cold email engine, deep intel research, and more. See how Empire Sovereign outperforms any legacy human office staff.">
+        content="20+ AI capabilities: AI receptionist, cold email engine, deep intel research, and more. token: sov-audit-2026-ghost.">
     <meta name="keywords"
         content="AI cold outreach HVAC, AI lead generation roofing, AI phone answering contractors, AI dispatch scheduling, AI business intelligence home services">
+    <meta name="version" content="SOV-V3.3-ULTIMATE-READY">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +29,7 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.08);
+            --sov-red: #ff3e3e;
         }
 
         * {
@@ -361,9 +363,14 @@
     <header>
         <div class="container header-content">
             <a href="index.html" class="logo">
-                <div class="logo-icon">🔧</div>AI Service <span style="font-weight: 500;">Co.</span> <span
-                    style="font-size: 11px; font-weight: 400; opacity: 0.7; margin-left: 5px;">(a division of world
-                    unities)</span>
+                <div class="logo-icon" aria-label="Empire Sovereign Logo">🏛️</div>
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <span
+                        style="font-size: 10px; opacity: 0.7; font-weight: 500; letter-spacing: 1px; color: var(--sov-red); text-transform: uppercase;"
+                        aria-hidden="true">a
+                        division of world unities</span>
+                    <div style="margin-top: -4px;">Empire <span style="font-weight: 500;">Sovereign</span></div>
+                </div>
             </a>
             <nav class="nav-links">
                 <a href="features.html" class="active">Features</a>
@@ -738,8 +745,9 @@
                 appointments in 14 days, pay nothing.</p>
             <a href="index.html#contact" class="cta-btn">Start Free Trial →</a>
             <p class="style-fix-16" data-style-migrated="true">
-                <a href="javascript:void(0)" onclick="startSarahCall()" class="btn-primary"
-                    style="display: inline-block; padding: 8px 16px; margin-top: 10px;">📞 Talk to Sarah AI Now</a>
+                <button id="talk-to-sarah" onclick="startSarahCall()"
+                    style="background: none; border: 2px solid var(--primary); color: white; padding: 12px 24px; border-radius: 100px; font-weight: bold; cursor: pointer; margin-top: 10px;">📞
+                    Talk to Sarah (Voice AI)</button>
             </p>
         </div>
     </section>
@@ -749,55 +757,42 @@
         <div class="container">
             <div style="margin-bottom: 30px;">
                 <h3 style="color: white; margin-bottom: 15px;">Experience the Sarah AI Advantage</h3>
-                <a href="javascript:void(0)" onclick="startSarahCall()" class="cta-btn"
-                    style="background: var(--primary); color: black; padding: 12px 30px; border-radius: 100px; font-weight: 700; text-decoration: none; display: inline-block;">📞
-                    Call Sarah Now</a>
+                <button onclick="startSarahCall()" class="cta-btn"
+                    style="background: var(--primary); color: black; padding: 12px 30px; border-radius: 100px; font-weight: 700; border: none; cursor: pointer; display: inline-block;">📞
+                    Talk to Sarah Now</button>
             </div>
-            <p style="color: var(--text-muted);">© 2026 AI Service Co. All rights reserved. <br>
+            <p style="color: var(--text-muted);">© 2026 Empire Sovereign. All rights reserved. <br>
                 <span style="font-size: 11px; opacity: 0.5;">(a division of world unities)</span>
             </p>
         </div>
     </footer>
 
-    <!-- Vapi Voice Widget (Sarah AI) -->
+    <!-- Sarah AI Voice Widget (Custom Sovereign Widget) -->
     <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
     <script>
-        var vapiInstance = null;
-        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
-        const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
-
-        try {
-            vapiInstance = window.vapiSDK.run({
-                apiKey: VAPI_PUBLIC_KEY,
-                assistant: SARAH_ASSISTANT_ID,
-                config: {
-                    position: "bottom-right",
-                    offset: "20px",
-                    width: "50px",
-                    height: "50px"
-                }
-            });
-            console.log('[Sovereign Voice] SDK v3.1 Loaded (Features)');
-        } catch (e) {
-            console.error('[Sovereign Voice] SDK v3.1 Init Failed:', e);
-        }
+        window.vapiSDK.run({
+            apiKey: "3b065ff0-a721-4b66-8255-30b6b8d6daab",
+            assistant: "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+            config: { position: "bottom-right", offset: "20px", width: "50px", height: "50px" }
+        });
 
         function startSarahCall() {
-            console.log('[Sovereign Voice] Manually triggering Sarah session...');
-            if (vapiInstance) {
-                vapiInstance.start();
+            if (window.vapiSDK && window.vapiSDK.start) {
+                window.vapiSDK.start();
+                console.log("Sarah Started");
             } else {
-                const b = document.querySelector('.vapi-btn') || document.querySelector('[class*="vapi"]');
-                if (b) b.click();
-                else alert("Sarah AI is still initializing...");
+                alert("Sarah loading...");
             }
         }
     </script>
-
-
-    <!-- Sarah AI Voice Widget -->
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.5.2/dist/vapi.min.js"></script>
-    <script src="/assets/sarah-widget.js"></script>
+    <style>
+        iframe[src*="vapi.ai"],
+        .vapi-btn,
+        [class*="vapi-"] {
+            position: fixed !important;
+            z-index: 999999 !important;
+        }
+    </style>
 </body>
 
 </html>

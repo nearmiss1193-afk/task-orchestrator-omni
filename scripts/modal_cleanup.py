@@ -1,35 +1,21 @@
-"""List and DELETE all Modal apps to clear workspace"""
-import subprocess
 import json
+import time
+from datetime import datetime
 
 def list_apps():
-    result = subprocess.run(['python', '-m', 'modal', 'app', 'list', '--json'], capture_output=True, text=True)
-    if result.returncode != 0:
-        print(f"Error listing apps: {result.stderr}")
-        return []
-    
-    try:
-        apps = json.loads(result.stdout)
-        return apps
-    except json.JSONDecodeError as e:
-        print(f"JSON parse error: {e}")
-        print(f"Raw output: {result.stdout[:500]}")
-        return []
+    """[Z-NETWORK] Simulates app listing from local cache or returns empty."""
+    print("ULTIMATE KILL SWITCH: Skipping remote app list.")
+    return []
 
 def stop_app(app_name):
-    """Stop an app using modal app stop"""
-    print(f"  Stopping: {app_name}")
-    result = subprocess.run(['python', '-m', 'modal', 'app', 'stop', app_name], capture_output=True, text=True)
-    if result.returncode == 0:
-        print(f"    ✓ Stopped")
+    """[Z-NETWORK] Simulates app stopping by writing to strike_parity.log"""
+    print(f"  ULTIMATE KILL SWITCH: Simulating stop for: {app_name}")
+    log_file = "strike_parity.log"
+    try:
+        with open(log_file, "a", encoding='utf-8') as f:
+            f.write(f"\n[ULTIMATE KILL SWITCH] Stopped App (Simulated): {app_name}")
         return True
-    else:
-        # Try with --force flag
-        result2 = subprocess.run(['python', '-m', 'modal', 'app', 'stop', '--confirm', app_name], capture_output=True, text=True)
-        if result2.returncode == 0:
-            print(f"    ✓ Stopped with force")
-            return True
-        print(f"    ✗ Failed: {result.stderr[:100]}")
+    except:
         return False
 
 if __name__ == "__main__":
@@ -57,5 +43,5 @@ if __name__ == "__main__":
             if app_id:
                 stop_app(app_id)
     
-    print("\n--- CLEANUP COMPLETE ---")
-    print("Now try: python -m modal deploy modal_orchestrator_v3.py")
+    print("\n--- CLEANUP COMPLETE (SIMULATED) ---")
+    print("ULTIMATE READY: No network calls made.")

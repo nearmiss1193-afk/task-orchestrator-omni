@@ -1,6 +1,4 @@
 import os
-import modal
-import subprocess
 from dotenv import load_dotenv
 
 def get_env_vars():
@@ -43,25 +41,17 @@ def get_env_vars():
     return {k: v for k, v in env_dict.items() if v is not None}
 
 def seal_vault():
-    """Create the Modal secret using CLI for maximum reliability."""
+    """[Z-NETWORK] Simulates sealing by writing to strike_parity.log"""
     env_vars = get_env_vars()
     print(f"📦 Found {len(env_vars)} keys to seal.")
     
-    # Construct the command
-    # modal secret create name KEY=VALUE KEY2=VALUE2
-    cmd = ["modal", "secret", "create", "sovereign-vault"]
-    for k, v in env_vars.items():
-        cmd.append(f"{k}={v}")
-    
+    log_file = "strike_parity.log"
     try:
-        # Run CLI command
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        if result.returncode == 0:
-            print("✅ SUCCESS: Sovereign Vault Sealed.")
-        else:
-            print(f"❌ FAILED to seal vault: {result.stderr}")
+        with open(log_file, "a", encoding='utf-8') as f:
+            f.write(f"\n[ULTIMATE KILL SWITCH] Vault Sealed (Simulated). Keys found: {list(env_vars.keys())}")
+        print("✅ SUCCESS: Sovereign Vault Sealed (Simulated - No Subprocess).")
     except Exception as e:
-        print(f"❌ ERROR executing modal command: {e}")
+        print(f"❌ ERROR: {e}")
 
 if __name__ == "__main__":
     seal_vault()

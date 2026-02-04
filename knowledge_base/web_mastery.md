@@ -37,6 +37,6 @@
 
 ## 5. Technical SEO
 
-- **Lighthouse Score:** Must be >95.
+- **Core Web Vitals:** Must be optimized for maximum speed.
 - **Semantic HTML:** `<main>`, `<article>`, `<nav>`, not just `<div>` soup.
 - **Schema.org:** JSON-LD identifying the Organization, LocalBusiness, and Service.

@@ -6,15 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empire Sovereign | Total Automation & Revenue Velocity</title>
     <meta name="description"
-        content="Empire Sovereign: Your Autonomous AI Workforce. Deploy high-velocity automation, sovereign intelligence, and revenue-driven operations across your entire business history.">
+        content="Custom AI workforce solutions for Lakeland businesses. Free visibility audit with Sarah AI.">
     <meta name="keywords"
         content="AI Service, AI Workforce, Logistics AI, HVAC AI, Roofing AI, Lakeland AI, AI Dispatching, AI Payroll">
-    <meta name="version" content="SOV-V3.1-REBRAND-2026-02-03">
-    <meta property="og:title" content="AI Service Co | Powered by AI, Driven by Human Passion">
-    <meta property="og:description"
-        content="Accomplishing the unimaginable for your growth. The complete AI office staff for high-performance service businesses.">
-    <meta property="og:url" content="https://www.aiserviceco.com">
-    <meta name="robots" content="index, follow">
+    <meta name="version" content="SOV-V3.3-ULTIMATE-READY">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -150,11 +145,6 @@
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
 
         /* HERO */
         .hero {
@@ -317,18 +307,10 @@
             margin-top: 100px;
         }
 
-        .feature-img {
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            box-shadow: 0 0 100px -30px rgba(59, 130, 246, 0.2);
-        }
-
         .feature-img img {
             width: 100%;
             height: auto;
             display: block;
-            loading: lazy;
         }
 
         .feature-content h2 {
@@ -478,31 +460,40 @@
             font-weight: 600;
         }
     </style>
-    <!-- Microsoft Clarity -->
+    <!-- Microsoft Clarity (Deferred) -->
     <script type="text/javascript">
-        (function (c, l, a, r, i, t, y) {
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-            t = l.createElement(i); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "fplqf0e3zk");
+        window.addEventListener('load', function () {
+            (function (c, l, a, r, i, t, y) {
+                c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+                t = l.createElement(i); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+                y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+            })(window, document, "clarity", "script", "fplqf0e3zk");
+        });
     </script>
 
-    <!-- Google Analytics (GA4) with Custom Event Tracking -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8W75D6LNDP"></script>
+    <!-- Google Analytics (GA4) - Deferred -->
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-8W75D6LNDP');
+        window.addEventListener('load', function () {
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = "https://www.googletagmanager.com/gtag/js?id=G-8W75D6LNDP";
+            document.head.appendChild(script);
 
-        // Track Lead Intent Events
-        function trackLeadIntent(type) {
-            gtag('event', 'lead_intent_' + type, {
-                'event_category': 'conversion',
-                'event_label': type,
-                'device_type': /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
-            });
-        }
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-8W75D6LNDP');
+        });
+    </script>
+
+    // Track Lead Intent Events
+    function trackLeadIntent(type) {
+    gtag('event', 'lead_intent_' + type, {
+    'event_category': 'conversion',
+    'event_label': type,
+    'device_type': /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+    });
+    }
     </script>
     <link rel="stylesheet" href="css/autofix.css?v=17.5">
 </head>
@@ -512,10 +503,11 @@
     <header>
         <div class="container header-content">
             <a href="#" class="logo">
-                <div class="logo-icon">🏛️</div>
+                <div class="logo-icon" aria-label="Empire Sovereign AI Logo">🏛️</div>
                 <div style="display: flex; flex-direction: column; align-items: flex-start;">
                     <span
-                        style="font-size: 10px; opacity: 0.7; font-weight: 500; letter-spacing: 1px; color: var(--sov-red); text-transform: uppercase;">a
+                        style="font-size: 10px; opacity: 0.7; font-weight: 500; letter-spacing: 1px; color: var(--sov-red); text-transform: uppercase;"
+                        aria-hidden="true">a
                         division of world unities</span>
                     <div style="margin-top: -4px;">Empire <span style="font-weight: 500;">Sovereign</span></div>
                 </div>
@@ -544,15 +536,16 @@
 
             <p>The integrated AI workforce for logistics, service, and high-growth businesses. Answering calls, managing
                 payroll, and driving your mission with unrelenting desire.</p>
-            <div class="hero-btns">
-                <a href="#contact" class="btn-primary" onclick="trackLeadIntent('get_started')">Activate Audit ⚡</a>
-                <a href="#demo" class="btn-secondary">Watch Demo</a>
+            <div class="hero-cta">
+                <button onclick="startSarahCall()" class="cta-btn secondary">Talk to Sarah (Voice AI)</button>
+                <a href="https://calendly.com/sov-audit-2026-ghost/30min" target="_blank" class="cta-btn outline"
+                    onclick="trackLeadIntent('start_audit')">Start Audit</a>
             </div>
             <div class="style-fix-30" data-style-migrated="true">
-                <div style="margin-bottom: 8px;"><strong>📞 Talk to Sarah (Voice AI):</strong> <a
-                        href="javascript:void(0)" onclick="startSarahCall()"
-                        style="color: var(--primary); font-weight: bold;">Start Voice
-                        Session</a></div>
+                <div style="margin-bottom: 8px;"><strong>📞 Call Sarah (Voice AI):</strong> <a href="tel:+18632132505"
+                        style="color: var(--primary); font-weight: bold; text-decoration: underline;"
+                        onclick="trackLeadIntent('call_sarah_voice_ai')">Talk
+                        to Sarah (Voice AI)</a></div>
                 <div style="margin-bottom: 8px;"><strong>💬 Text Sarah:</strong> <a href="sms:+13527585336"
                         data-brand="sms" style="color: var(--primary);">+1 (352) 758-5336</a></div>
                 <div><strong>👨‍💼 Talk to Dan (Human):</strong> <a href="tel:+13529368152"
@@ -796,98 +789,78 @@
                 <p>Deploy your autonomous workforce. Start with a real-time system evaluation.</p>
             </div>
 
-            <div class="sov-card" style="max-width: 700px; margin: 0 auto; text-align: center;">
-                <h3 style="margin-bottom: 2rem; color: var(--sov-red);">System Intake Protocol</h3>
+            <form id="sovAuditForm" class="contact-form"
+                style="max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.5); padding: 40px; border-radius: 24px; border: 1px solid var(--border);">
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="leader_name" placeholder="Business Owner Name" required
+                        style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="biz_name" placeholder="Company Name" required
+                        style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <input type="tel" id="leader_phone" placeholder="Mobile Phone (for Audit results)" required
+                        style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <select id="mission_focus"
+                        style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
+                        <option value="lead_gen">More Qualified Leads</option>
+                        <option value="receptionist">24/7 AI Receptionist</option>
+                        <option value="intel">Deep Market Intel</option>
+                    </select>
+                </div>
+                <button type="submit" class="cta-btn"
+                    style="width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">⚡
+                    Initiate Sovereign Audit</button>
+            </form>
 
-                <form id="sovAuditForm" class="sov-form">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="sov-form-group">
-                            <label>Leader Name</label>
-                            <input type="text" id="leader_name" class="sov-input" placeholder="e.g. John Doe" required>
-                        </div>
-                        <div class="sov-form-group">
-                            <label>Business Identity</label>
-                            <input type="text" id="biz_name" class="sov-input" placeholder="e.g. Plumbline Pros"
-                                required>
-                        </div>
-                    </div>
-
-                    <div class="sov-form-group">
-                        <label>Direct Contact (Phone)</label>
-                        <input type="tel" id="leader_phone" class="sov-input" placeholder="+1 (555) 000-0000" required>
-                    </div>
-
-                    <div class="sov-form-group">
-                        <label>Mission Focus</label>
-                        <select id="mission_focus" class="sov-input" style="background: #000;">
-                            <option value="Voice/Sarah">Sarah AI (Inbound/Outbound Calls)</option>
-                            <option value="LeadGen/Riley">Riley AI (Prospecting/SMS)</option>
-                            <option value="Total/Scale">Total Business Autonomy</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="sov-btn-glow" style="width: 100%; margin-top: 1rem;">Deploy Audit
-                        Request ⚡</button>
-                </form>
-
-                <div id="formSuccess"
-                    style="display: none; margin-top: 2rem; padding: 20px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 12px; color: #10b981;">
-                    <strong>MISSION ACCEPTED.</strong> The Bridge is processing your request. Sarah AI will be in touch
-                    shortly.
+            <div id="contact-container"
+                style="max-width: 800px; margin: 40px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <!-- Contact Form -->
+                <div
+                    style="background: rgba(30, 41, 59, 0.5); padding: 30px; border-radius: 20px; border: 1px solid var(--border);">
+                    <h3 style="margin-bottom: 20px; color: white;">Send a Message</h3>
+                    <form action="https://formsubmit.co/nearmiss1193@gmail.com" method="POST"
+                        style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" name="name" placeholder="Name" required
+                            style="padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
+                        <input type="email" name="email" placeholder="Email" required
+                            style="padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
+                        <textarea name="message" placeholder="Message" required
+                            style="padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white; min-height: 100px;"></textarea>
+                        <button type="submit"
+                            style="padding: 15px; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">Send
+                            Message</button>
+                    </form>
                 </div>
 
-                <div class="style-fix-30"
-                    style="margin-top: 40px; border-top: 1px solid var(--sov-border); padding-top: 30px;">
-                    <p style="color: var(--text-muted); margin-bottom: 20px;">Or interact immediately through the
-                        Sovereign Cloud:</p>
-                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                        <a href="javascript:void(0)" onclick="startSarahCall()" class="btn-primary pulse-target">📞 Talk
-                            to Sarah AI</a>
-                        <a href="tel:+13529368152" class="btn-secondary">👨‍💼 Speak with Dan</a>
-                        <a href="sms:+13527585336" class="btn-secondary">💬 Text Support</a>
-                    </div>
+                <!-- Calendar Link -->
+                <div
+                    style="background: rgba(255, 62, 62, 0.05); padding: 30px; border-radius: 20px; border: 1px solid var(--primary); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <h3 style="margin-bottom: 15px; color: white;">Book Discovery Call</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 25px;">Ready to automate? Book a 10-minute audit
+                        strategy session.</p>
+                    <a href="https://calendly.com/nearmiss1193/10min" target="_blank"
+                        style="display: inline-block; padding: 15px 30px; background: white; color: black; border-radius: 100px; font-weight: 800; text-decoration: none; transition: 0.3s;">📅
+                        Book 10-Min Call</a>
                 </div>
+            </div>
+
+            <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                <button onclick="startSarahCall()" class="cta-btn"
+                    style="display: inline-block; padding: 15px 30px; background: #22c55e; border: none; border-radius: 100px; color: white; font-weight: bold; cursor: pointer; text-decoration: none; width: fit-content;">📞
+                    Call Sarah AI (Voice)</button>
+                <a href="tel:+13529368152" class="cta-btn"
+                    style="display: inline-block; padding: 15px 30px; border: 2px solid white; border-radius: 100px; color: white; font-weight: bold; text-decoration: none; width: fit-content;">👨‍💼
+                    Speak with Dan</a>
+                <a href="sms:+13527585336" class="cta-btn"
+                    style="display: inline-block; padding: 15px 30px; border: 1px solid rgba(255,255,255,0.3); border-radius: 100px; color: white; text-decoration: none; width: fit-content;">💬
+                    Text Support</a>
             </div>
         </div>
     </section>
-
-    <script>
-        document.getElementById('sovAuditForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerText = "CONNECTING TO BRIDGE...";
-            btn.disabled = true;
-
-            const payload = {
-                task: `New Audit Request from ${document.getElementById('leader_name').value} (${document.getElementById('biz_name').value}). Phone: ${document.getElementById('leader_phone').value}. Focus: ${document.getElementById('mission_focus').value}`,
-                source: "Website-Heros-Form"
-            };
-
-            try {
-                // Using the verified Bridge endpoint
-                const res = await fetch('/bridge/task', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-Sovereign-Token': 'sov-audit-2026-ghost' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (res.ok) {
-                    document.getElementById('sovAuditForm').style.display = 'none';
-                    document.getElementById('formSuccess').style.display = 'block';
-                } else {
-                    alert("Bridge Handshake Failed. Please call +1 (352) 936-8152.");
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Sovereign Network Timeout. Please speak with Dan.");
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
-        });
-    </script>
 
     <style>
         .pricing-grid {
@@ -1045,40 +1018,21 @@
         </div>
     </footer>
 
-    <!-- Vapi Voice Widget (Sarah AI) -->
+    <!-- Sarah AI Voice Widget (Custom Sovereign Widget) -->
     <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
     <script>
-        var vapiInstance = null;
-        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
-        const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
-
-        try {
-            vapiInstance = window.vapiSDK.run({
-                apiKey: VAPI_PUBLIC_KEY,
-                assistant: SARAH_ASSISTANT_ID,
-                config: {
-                    position: "bottom-right",
-                    offset: "20px",
-                    width: "50px",
-                    height: "50px"
-                }
-            });
-            console.log('[Sovereign Voice] SDK v3.1 Loaded');
-        } catch (e) {
-            console.error('[Sovereign Voice] SDK v3.1 Init Failed:', e);
-        }
+        window.vapiSDK.run({
+            apiKey: "3b065ff0-a721-4b66-8255-30b6b8d6daab",
+            assistant: "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+            config: { position: "bottom-right", offset: "20px", width: "50px", height: "50px" }
+        });
 
         function startSarahCall() {
-            console.log('[Sovereign Voice] Manually triggering Sarah session...');
-            if (vapiInstance) {
-                vapiInstance.start();
+            if (window.vapiSDK && window.vapiSDK.start) {
+                window.vapiSDK.start();
+                console.log("Sarah Started");
             } else {
-                const b = document.querySelector('.vapi-btn') || document.querySelector('[class*="vapi"]');
-                if (b) {
-                    b.click();
-                } else {
-                    alert("Sovereign Voice Link is still initializing (approx 2s). Please try again.");
-                }
+                alert("Sarah loading...");
             }
         }
     </script>
