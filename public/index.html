@@ -1007,21 +1007,50 @@
         </div>
     </footer>
 
-    <!-- Sarah AI Voice Widget (Custom Sovereign Widget) -->
-    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
+    <!-- Sarah AI Voice Widget (Sovereign v5 - Fixed SDK Load) -->
     <script>
-        window.vapiSDK.run({
-            apiKey: "3b065ff0-a721-4b66-8255-30b6b8d6daab",
-            assistant: "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
-            config: { position: "bottom-right", offset: "20px", width: "50px", height: "50px" }
-        });
+        // Load Vapi SDK properly with async handling
+        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
+        const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
+
+        (function () {
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            script.async = true;
+            script.onload = function () {
+                if (window.vapiSDK) {
+                    window.vapiSDK.run({
+                        apiKey: VAPI_PUBLIC_KEY,
+                        assistant: SARAH_ASSISTANT_ID,
+                        config: { position: "bottom-right", offset: "20px", width: "50px", height: "50px" }
+                    });
+                    console.log('[Sovereign Voice v5] Sarah SDK Loaded & Ready');
+                }
+            };
+            document.head.appendChild(script);
+        })();
 
         function startSarahCall() {
-            if (window.vapiSDK && window.vapiSDK.start) {
-                window.vapiSDK.start();
-                console.log("Sarah Started");
+            if (window.vapiSDK && typeof window.vapiSDK.start === 'function') {
+                window.vapiSDK.start(SARAH_ASSISTANT_ID);
+                console.log("[Sovereign Voice v5] Sarah Call Started");
             } else {
-                alert("Sarah loading...");
+                console.error("[Sovereign Voice v5] SDK not ready, reloading...");
+                // Retry loading SDK
+                const script = document.createElement('script');
+                script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+                script.onload = function () {
+                    if (window.vapiSDK) {
+                        window.vapiSDK.run({
+                            apiKey: VAPI_PUBLIC_KEY,
+                            assistant: SARAH_ASSISTANT_ID,
+                            config: { position: "bottom-right", offset: "20px", width: "50px", height: "50px" }
+                        });
+                        setTimeout(() => window.vapiSDK.start(SARAH_ASSISTANT_ID), 500);
+                    }
+                };
+                document.head.appendChild(script);
+                alert("Connecting to Sarah... please wait.");
             }
         }
     </script>
