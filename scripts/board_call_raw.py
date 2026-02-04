@@ -6,42 +6,57 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''TWO QUESTIONS FOR THE BOARD:
+PROMPT = '''STRATEGIC BOARD QUERY: Operational Excellence & PageSpeed 90+
 
-## Question 1: Branding Change Investigation
+## CURRENT STATE (Feb 4, 2026)
+- Performance: Mobile 77, Desktop 81
+- Accessibility: 92 ✅
+- Best Practices: 73 (STUCK despite error suppression)
+- SEO: 92
 
-Our website aiserviceco.com is now showing "Empire Sovereign - A Division of World Unities" instead of "AI Service Co". 
+## QUESTIONS FOR THE BOARD:
 
-**Why might this have happened?**
-- Did a recent deployment overwrite the branding?
-- Is there a config file that might have been changed?
-- Could this be intentional or accidental?
+### 1. SUPABASE SYNC FOR OPERATIONAL MEMORY
+Currently we have `operational_memory.md` in git. Should we sync this to Supabase so Modal webhooks can read the latest memory?
 
-**What should we do about it?**
-- Restore to "AI Service Co" if it was accidental
-- Or keep "Empire Sovereign" if this was intentional rebranding
+Options:
+A) Create `sovereign_memory` table in Supabase
+B) Use Supabase Edge Functions to read from git
+C) Keep as file-only (current)
+D) Other approach?
 
-## Question 2: Capabilities List for Commercial
+**What gives us the BEST:**
+- Operational awareness
+- Operational capabilities
+- Operational competency
+- Operational memory for daily tasks and customer handling
 
-We need to make a commercial with Veo Visionary (AI video generator) for the website.
+### 2. WHAT TO DO ABOUT payment.html?
+We have a payment.html file but user says we don't have a payment page anymore. Options:
+A) Delete it
+B) Keep for future use
+C) Redirect to checkout
+D) Archive it
 
-**What are our ACTUAL capabilities that should be featured?**
+### 3. BEST PRACTICES 73 → 90+
+Error suppression was added but BP is still 73. What else?
+- Should we go nuclear (remove Clarity/GA4/Vapi)?
+- Any other fixes we're missing?
 
-List the capabilities in a format suitable for a cinematic commercial:
-1. Capability name
-2. One-line description
-3. Visual suggestion for the commercial
+### 4. SEO 92 → 100
+What specific fixes would push SEO from 92 to 100?
+- Missing meta tags?
+- Structured data improvements?
+- Performance impact on SEO?
 
-Context - our system does:
-- Voice AI (Rachel/Sarah via Vapi)
-- AI-powered outreach (email/SMS/calls)
-- Lead prospecting (Apollo integration)
-- CRM automation (GHL)
-- AI appointment booking
-- 24/7 autonomous operation
-- Multi-channel automation
+### 5. PERFORMANCE 77-81 → 90+
+Key blockers for performance?
+- YouTube embeds (lazy loaded already)
+- Third-party scripts
+- Image optimization
+- Code splitting
 
-Make the capabilities list DRAMATIC and suitable for a high-production commercial.'''
+PROVIDE SPECIFIC, ACTIONABLE RECOMMENDATIONS WITH CODE EXAMPLES WHERE APPLICABLE.'''
 
 def query_claude():
     api_key = os.getenv("ANTHROPIC_API_KEY")
@@ -57,7 +72,7 @@ def query_claude():
             },
             json={
                 "model": "claude-sonnet-4-20250514",
-                "max_tokens": 2000,
+                "max_tokens": 2500,
                 "messages": [{"role": "user", "content": PROMPT}],
             },
             timeout=120,
@@ -68,9 +83,9 @@ def query_claude():
         return {"ai": "Claude", "raw": f"ERROR: {e}"}
 
 def query_grok():
-    api_key = os.getenv("XAI_API_KEY")
+    api_key = os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY")
     if not api_key:
-        return {"ai": "Grok", "raw": "ERROR: No XAI_API_KEY"}
+        return {"ai": "Grok", "raw": "ERROR: No GROK_API_KEY or XAI_API_KEY"}
     try:
         response = requests.post(
             "https://api.x.ai/v1/chat/completions",
@@ -117,7 +132,7 @@ def query_chatgpt():
 
 if __name__ == "__main__":
     from concurrent.futures import ThreadPoolExecutor
-    print("Querying Board: Branding + Capabilities...")
+    print("Querying Board: Operational Excellence...")
     
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [
@@ -133,6 +148,6 @@ if __name__ == "__main__":
     
     for r in results:
         print(f"=== {r['ai']} ===")
-        print(r['raw'][:1500] + "..." if len(r['raw']) > 1500 else r['raw'])
+        print(r['raw'][:2000] + "..." if len(r['raw']) > 2000 else r['raw'])
     
     print("\n=== DONE ===")

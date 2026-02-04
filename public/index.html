@@ -555,29 +555,33 @@
             font-weight: 600;
         }
     </style>
-    <!-- Microsoft Clarity (Deferred) -->
+    <!-- Microsoft Clarity (Delayed 3s for Performance) -->
     <script type="text/javascript">
         window.addEventListener('load', function () {
-            (function (c, l, a, r, i, t, y) {
-                c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-                t = l.createElement(i); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-                y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-            })(window, document, "clarity", "script", "fplqf0e3zk");
+            setTimeout(function () {
+                (function (c, l, a, r, i, t, y) {
+                    c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+                    t = l.createElement(i); t.async = 1; t.src = "https://www.clarity.ms/tag/" + "fplqf0e3zk";
+                    y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+                })(window, document, "clarity", "script", "fplqf0e3zk");
+            }, 3000);
         });
     </script>
 
-    <!-- Google Analytics (GA4) - Deferred -->
+    <!-- Google Analytics (GA4) - Delayed 3s for Performance -->
     <script>
         window.addEventListener('load', function () {
-            var script = document.createElement('script');
-            script.async = true;
-            script.src = "https://www.googletagmanager.com/gtag/js?id=G-8W75D6LNDP";
-            document.head.appendChild(script);
+            setTimeout(function () {
+                var script = document.createElement('script');
+                script.async = true;
+                script.src = "https://www.googletagmanager.com/gtag/js?id=G-8W75D6LNDP";
+                document.head.appendChild(script);
 
-            window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', 'G-8W75D6LNDP');
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-8W75D6LNDP');
+            }, 3000);
         });
     </script>
 
