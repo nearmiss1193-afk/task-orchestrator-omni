@@ -193,6 +193,40 @@ cd public && vercel --prod --yes
 
 ---
 
+## 🧠 SESSION LEARNINGS - Feb 4, 2026
+
+### ✅ Board Query System Fixed
+
+- Grok API key was misnamed (`GROK_API_KEY` vs `XAI_API_KEY`) - fixed in `board_call_raw.py`
+- Board unanimous 3/3: Supabase Option A, payment redirect Option C, systematic BP fixes
+
+### ✅ Supabase sovereign_memory Table Created
+
+- Table: `sovereign_memory`
+- Schema: `id, section, key, value, last_updated, source`
+- Sync script: `scripts/sync_sovereign_memory.py`
+- 12 sections synced from operational_memory.md
+
+### ✅ PageSpeed Optimizations
+
+- payment.html → redirect to checkout.html
+- Clarity/GA4 delayed 3 seconds per Grok recommendation
+
+### ⚠️ Capabilities Audit Results
+
+**WORKING (9):** Voice AI, Outreach, CRM, Booking, Lead Prospecting
+**NOT BUILT (2):** Payroll (needs Gusto API), Dispatch (needs ServiceTitan)
+**ADDING (4):** Veo Visionary, Website Optimization, SEO services
+
+### 🔑 Critical Environment Variables
+
+- `GROK_API_KEY` (not XAI_API_KEY)
+- `NEXT_PUBLIC_SUPABASE_URL` (not SUPABASE_URL)
+- `SUPABASE_SERVICE_ROLE_KEY` for backend access
+- `DATABASE_URL` for direct psycopg2 connections
+
+---
+
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
