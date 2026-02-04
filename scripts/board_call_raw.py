@@ -3,14 +3,18 @@ import os, json, requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''Website issue report:
-- Contact section uses Calendly/formsubmit.co, NOT GHL
-- Sarah button loads alert, no call starts
-- Floating icon only, no full widget
+PROMPT = '''BOARD QUESTION: Should we use different AI tools?
 
-System state: working, sarah_status=minimalist_icon_v4, embed_source=supabase_locked
+Context: We've spent multiple days trying to fix GHL embeds on a Netlify site. Despite 5+ deploy attempts, the board's recommendations (CSP, cache clear, etc.) have not worked. The site still shows blank iframes.
 
-In 50 words or less: What is the root cause?'''
+Questions for the board:
+1. Are there better AI tools than our current setup (Claude, Grok, Gemini, ChatGPT) for web dev and deployment tasks?
+2. Should we add Manus AI, Llama, Devin, or other agents to our board?
+3. What AI tools do successful developers use to handle GHL/web embedding issues?
+4. Is our agentic approach fundamentally flawed, or is this a tooling problem?
+5. What would you recommend to solve this specific issue TODAY?
+
+Be honest. Give your individual assessment in 100 words or less.'''
 
 results = []
 

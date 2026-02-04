@@ -1,18 +1,18 @@
 [
   {
     "ai": "Claude",
-    "raw": "**Root cause:** The website is using external contact tools (Calendly/formsubmit.co) instead of the integrated GHL system. Sarah's call functionality is broken (alert instead of actual calls), and the AI assistant is stuck in minimal icon mode rather than full widget deployment."
+    "raw": "**Individual Assessment:**\n\nThe issue isn't your AI tools\u2014it's the debugging approach. You're treating this like a code generation problem when it's a detective problem. \n\n**What's missing:** Direct browser inspection of the failing iframes, network tab analysis, and systematic isolation testing. GHL embed issues are typically authentication, CORS, or domain whitelist problems that require live debugging, not more AI opinions.\n\n**Recommendation:** Stop deploying blind fixes. Use browser dev tools to inspect the actual iframe responses. Check GHL's domain whitelist settings. Test embeds on a simple HTML page first.\n\nMore AI won't solve what human debugging can fix in 30 minutes."
   },
   {
     "ai": "Grok",
-    "raw": "The root cause is likely the system configuration set to \"minimalist_icon_v4\" with \"supabase_locked\" embed source, limiting functionality to a floating icon without full widget features. This setup prevents GHL integration in the Contact section and disables call functionality for the Sarah button, showing only an alert."
+    "raw": "Honestly, the issue with GHL embeds on Netlify likely isn\u2019t an AI tooling problem but a technical one tied to CSP, iframe restrictions, or Netlify\u2019s rendering. Current AI tools (Claude, Grok, etc.) are sufficient for guidance, but they can\u2019t execute fixes. Adding more AI like Manus or Devin won\u2019t solve this today. Successful developers often rely on community forums (Stack Overflow, GitHub issues) and direct debugging over AI for niche issues like GHL. I recommend manually testing CSP headers in Netlify\u2019s config and inspecting iframe errors in browser dev tools. If stuck, consult a Netlify/GHL expert."
   },
   {
     "ai": "Gemini",
-    "raw": "The website's contact form is improperly configured, bypassing the intended GHL integration. The Sarah button is malfunctioning, likely due to a broken link or script error. The website is loading only the floating icon for Sarah, not the full widget. The system is in a minimalist icon state.\n"
+    "raw": "Okay, here's my individual assessment, assuming the persona of a seasoned, pragmatic board member:\n\n1.  **Better AI Tools?** Unlikely a single tool will magically fix it. Focus on prompt engineering and leveraging the *right* tool for *specific* tasks (Claude for analysis, ChatGPT for code gen). Stop tool-hopping.\n2.  **Add More Agents?** No. Complexity kills. Master what you have. Adding more layers just obscures the root problem.\n3.  **Successful Devs Use?** Mostly focused debugging tools (browser dev tools, network analyzers) and meticulous documentation. AI assists, *doesn't replace* fundamental skills.\n4.  **Flawed Approach?** Maybe. Over-reliance on AI without understanding the underlying issue is a problem.\n5.  **Fix Today?** Ditch the AI for now. *Manually* inspect the rendered HTML, network requests, and GHL embed script in a live browser. Simplify the embed code. Isolate the problem by starting with the most basic iframe. Look for hard errors in the browser console. Focus.\n"
   },
   {
     "ai": "ChatGPT",
-    "raw": "The root cause of the website issues is the integration of third-party tools. The contact section uses Calendly instead of GHL, causing functionality discrepancies. The Sarah button issues may stem from incomplete integration of the communication tool, leading to alerts without calls. The floating icon lacks a full widget display."
+    "raw": "1. While tools like Claude, Grok, and ChatGPT are capable, exploring specialized AI platforms tailored for web development, such as GitHub Copilot or Tabnine, may yield better results for specific tasks.  \n2. Adding Manus AI or Llama could diversify our approaches, but thorough research is needed.  \n3. Successful developers often utilize tools like Stack Overflow, MDN, and community forums alongside their chosen AI.  \n4. Our approach may lack diversity; we should consider integrating multiple tools for broader insights.  \n5. For the iframe issue, systematically check embed code, CSP settings, and inspect the console for errors before seeking AI assistance."
   }
 ]
