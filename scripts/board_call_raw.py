@@ -6,50 +6,52 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD PROTOCOL: SEO Score 61 → 100 Emergency
+PROMPT = '''BOARD PROTOCOL: Best Practices 73 → 90+ and Performance 82 → 90+
 
-CONTEXT:
-We just optimized aiserviceco.com for PageSpeed Insights:
-- Added OG meta tags (og:title, og:description, og:image, og:url, og:type)
-- Added Twitter Card tags
-- Added JSON-LD structured data (Organization, Service)
-- Added canonical URL
-- Improved title and meta description
-- Converted inline iframes to lazy-loaded modal buttons
+PROGRESS REPORT:
+We just fixed SEO and it jumped from 61 → 92! Now we need the final push.
 
-CURRENT SCORES (after first round of fixes):
-- Performance: 75-79 (was 62) ⬆️
+CURRENT SCORES (Desktop):
+- Performance: 82 (need 90+)
 - Accessibility: 92 ✅
-- Best Practices: 73 (no change)
-- SEO: 61 (was 58) ⬆️ BUT STILL FAILING
+- Best Practices: 73 (need 90+)
+- SEO: 92 ✅
 
-USER REQUIREMENT:
-"We need to be in 90s on all 4, especially SEO - I want us up close to 100"
+ALREADY IMPLEMENTED:
+- robots.txt and sitemap.xml
+- rel="noopener noreferrer" on all external links
+- Meta tags (OG, Twitter, JSON-LD)
+- Font preconnect/preload
+- Lazy loading iframes
+- lang="en" on html tag
 
-QUESTIONS FOR THE BOARD:
+SPECIFIC QUESTIONS:
 
-1. **SEO: 61 → 100**:
-   - What specific items are typically failed in Lighthouse SEO audits?
-   - What are the TOP missing items we haven't implemented yet?
-   - robots.txt? sitemap.xml? hreflang? lang attribute?
-   - Image alt text? Link descriptions?
-   - Is our structured data complete?
-
-2. **BEST PRACTICES: 73 → 90+**:
-   - Console errors?
+1. **BEST PRACTICES 73 → 90+**:
+   - What EXACT issues typically drop this score?
+   - Console JS errors?
+   - HTTPS mixed content?
+   - document.write()?
    - Deprecated APIs?
-   - External links without rel="noopener"?
-   - What common issues drop this score?
+   - What code should I ADD/REMOVE?
 
-3. **PERFORMANCE: 75 → 90+**:
-   - After lazy loading iframes, what else?
-   - Font loading? Critical CSS?
-   - Image format/compression?
+2. **PERFORMANCE 82 → 90+**:
+   - What's the most impactful fix for +8 points?
+   - Critical CSS inlining?
+   - Image optimization (WebP)?
+   - Script defer/async?
+   - Remove unused CSS/JS?
 
-4. **CHECKLIST**:
-   - Give me a concrete checklist of exactly what to add/fix
+3. **SPECIFIC CODE TO ADD/CHANGE**:
+   - Give me EXACT HTML/CSS/JS snippets
+   - Tell me EXACT files to modify
+   - Don't be generic - be surgical
 
-Be SPECIFIC. No general advice. Tell me exactly what code/files to add.'''
+4. **QUICK WINS ONLY**:
+   - What gets us to 90+ fastest?
+   - Prioritize by impact/effort ratio
+
+Be SPECIFIC. Give me actionable code changes.'''
 
 def query_claude():
     api_key = os.getenv("ANTHROPIC_API_KEY")
@@ -125,14 +127,7 @@ def query_chatgpt():
 
 if __name__ == "__main__":
     from concurrent.futures import ThreadPoolExecutor
-    print("=== CLAUDE ===")
-    print(f"curl -X POST https://api.anthropic.com/v1/messages")
-    print("=== GROK ===")
-    print(f"curl -X POST https://api.x.ai/v1/chat/completions")
-    print("=== GEMINI ===")
-    print(f"curl -X POST https://generativelanguage.googleapis.com/...")
-    print("=== CHATGPT ===")
-    print(f"curl -X POST https://api.openai.com/v1/chat/completions")
+    print("Querying Board: Best Practices + Performance...")
     
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [
@@ -148,6 +143,6 @@ if __name__ == "__main__":
     
     for r in results:
         print(f"=== {r['ai']} ===")
-        print(r['raw'][:500] + "..." if len(r['raw']) > 500 else r['raw'])
+        print(r['raw'][:800] + "..." if len(r['raw']) > 800 else r['raw'])
     
-    print("=== DONE ===")
+    print("\n=== DONE ===")
