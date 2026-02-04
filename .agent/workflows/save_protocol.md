@@ -41,13 +41,16 @@ This applies to: Railway, Modal, Vercel, new APIs, new libraries, etc.
 
 ## Required Actions at Session End
 
-### 1. Git Commit & Push
+### 1. Git Commit & Push + Vercel Deploy
 
 // turbo
 
 ```bash
 git add -A && git commit -m "💾 SAVE PROTOCOL: [brief description]"
 git push origin main
+
+# Force Vercel deploy (bypasses Git sync issues)
+cd public && vercel --prod --yes
 ```
 
 ### 1.5 SEND EMAIL SUMMARY (MANDATORY)
