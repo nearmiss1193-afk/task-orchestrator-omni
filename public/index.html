@@ -786,29 +786,38 @@
     <section id="contact"
         style="padding: 120px 0; background: radial-gradient(circle at 50% 100%, rgba(255, 62, 62, 0.1), transparent 70%); scroll-margin-top: 100px;">
 
-        <h2 style="text-align:center; margin-bottom:40px;">Start Your Sovereign Audit</h2>
+        <h2 style="text-align:center; margin-bottom:40px; color:white;">Start Your Sovereign Audit</h2>
 
-        <div style="max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:40px;">
-            <!-- GHL Form - Script Based -->
+        <div
+            style="max-width:1000px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:40px; padding:0 20px;">
+            <!-- GHL Form - IFRAME (guaranteed to work) -->
             <div style="background:rgba(30,41,59,0.5); padding:30px; border-radius:20px; border:1px solid #ff3e3e;">
-                <h3>Send a Message</h3>
-                <div class="ghl-form" data-id="RnK4OjX0oDcqtWw0VyLr"></div>
-                <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+                <h3 style="color:white; margin-bottom:15px;">Send a Message</h3>
+                <iframe src="https://api.leadconnectorhq.com/widget/form/RnK4OjX0oDcqtWw0VyLr"
+                    style="width:100%; height:600px; border:none; border-radius:12px; background:white;" scrolling="no"
+                    id="inline-RnK4OjX0oDcqtWw0VyLr" title="Contact Form">
+                </iframe>
             </div>
 
-            <!-- GHL Calendar - iframe -->
+            <!-- GHL Calendar - IFRAME -->
             <div
                 style="background:rgba(255,62,62,0.05); padding:30px; border-radius:20px; border:1px solid #ff3e3e; text-align:center;">
-                <h3>Book Discovery Call</h3>
-                <iframe src="https://calendar.gohighlevel.com/v2/M7YwDClf34RsNhPQfhS7" width="100%" height="500"
-                    frameborder="0" style="border-radius:12px;"></iframe>
+                <h3 style="color:white; margin-bottom:15px;">Book Discovery Call</h3>
+                <iframe src="https://api.leadconnectorhq.com/widget/booking/M7YwDClf34RsNhPQfhS7"
+                    style="width:100%; height:600px; border:none; border-radius:12px; background:white;" scrolling="no"
+                    id="inline-M7YwDClf34RsNhPQfhS7" title="Book a Call">
+                </iframe>
             </div>
         </div>
 
-        <button onclick="startSarahCall()"
-            style="display:block; margin:40px auto; padding:16px 32px; background:#22c55e; color:white; border:none; border-radius:100px; font-weight:bold; font-size:18px; cursor:pointer;">
-            📞 Call Sarah AI (Voice)
-        </button>
+        <!-- SARAH CALL BUTTON -->
+        <div style="text-align:center; margin-top:40px;">
+            <button onclick="startSarahCall()"
+                style="padding:20px 40px; background:linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color:white; border:none; border-radius:100px; font-weight:bold; font-size:20px; cursor:pointer; box-shadow: 0 4px 20px rgba(34,197,94,0.4);">
+                📞 Call Sarah AI Now
+            </button>
+            <p style="color:#94a3b8; margin-top:15px; font-size:14px;">Instant AI voice conversation - no waiting</p>
+        </div>
 
     </section>
 
