@@ -105,6 +105,47 @@ def bridge_instructions():
                      json_data={"value": instructions, "updated_at": datetime.now().isoformat()})
     return jsonify({"status": "Instructions Updated"})
 
+# ==== SOVEREIGN STATE API (External AI Audit Endpoint) ====
+SOVEREIGN_TOKEN = "sov-audit-2026-ghost"
+
+@app.route("/api/sovereign/state", methods=["GET"])
+def sovereign_state():
+    """Public endpoint for external AI audits (ChatGPT, Gemini, Grok)."""
+    token = request.headers.get("X-Sovereign-Token")
+    if token != SOVEREIGN_TOKEN:
+        return jsonify({"error": "Unauthorized. Provide X-Sovereign-Token header."}), 401
+    
+    try:
+        # Get campaign mode
+        campaign_mode = supabase_request("GET", "system_state", params={"key": "eq.campaign_mode", "select": "status"})
+        mode = campaign_mode[0].get("status") if campaign_mode else "unknown"
+        
+        # Get embed codes
+        embeds = supabase_request("GET", "embeds", params={"select": "type,code"})
+        locked_embeds = {e.get("type"): e.get("code")[:50] + "..." if e.get("code") else None for e in embeds} if embeds else {}
+        
+        # Get last outreach
+        last_touch = supabase_request("GET", "outbound_touches", params={"select": "ts", "order": "ts.desc", "limit": "1"})
+        last_outreach = last_touch[0].get("ts") if last_touch else None
+        
+        # Get lead count
+        leads = supabase_request("GET", "contacts_master", params={"select": "id", "limit": "1"})
+        
+        return jsonify({
+            "system_mode": mode,
+            "sarah_status": "minimalist_icon_v4",
+            "embed_source": "supabase_locked",
+            "last_outreach": last_outreach,
+            "health": {
+                "supabase": "✅" if leads is not None else "❌",
+                "api": "✅"
+            },
+            "locked_embeds": locked_embeds,
+            "audit_timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 # ==== CORE APP LOGIC ====
 stats = {"emails": 0, "sms": 0, "calls": 0, "last_heartbeat": time.time()}
 
