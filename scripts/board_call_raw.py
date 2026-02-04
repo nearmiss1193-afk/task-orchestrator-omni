@@ -3,18 +3,36 @@ import os, json, requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD QUESTION: Should we use different AI tools?
+PROMPT = '''BOARD VALIDATION: Consolidated AI Memory System Proposal
 
-Context: We've spent multiple days trying to fix GHL embeds on a Netlify site. Despite 5+ deploy attempts, the board's recommendations (CSP, cache clear, etc.) have not worked. The site still shows blank iframes.
+Based on previous board input, here is the proposed implementation. Please validate or suggest improvements.
 
-Questions for the board:
-1. Are there better AI tools than our current setup (Claude, Grok, Gemini, ChatGPT) for web dev and deployment tasks?
-2. Should we add Manus AI, Llama, Devin, or other agents to our board?
-3. What AI tools do successful developers use to handle GHL/web embedding issues?
-4. Is our agentic approach fundamentally flawed, or is this a tooling problem?
-5. What would you recommend to solve this specific issue TODAY?
+PROPOSED SUPABASE TABLES:
+1. sovereign_config - Critical config (embed IDs, API keys, URLs, widget settings)
+2. sovereign_actions - All actions taken with success/failure, input/output, timestamps
+3. sovereign_errors - Error patterns with solutions (auto-lookup when same error occurs)
+4. sovereign_code - Code snippets that worked (auto-retrieved for similar tasks)
+5. sovereign_preferences - User corrections and preferences (hard rules)
+6. sovereign_embeddings - Vector embeddings for semantic search (pgvector)
 
-Be honest. Give your individual assessment in 100 words or less.'''
+RETRIEVAL STRATEGY:
+- Before ANY task: Query sovereign_config for relevant config
+- Before ANY code edit: Query sovereign_code for similar patterns
+- On ANY error: Query sovereign_errors for known solutions
+- Always apply: sovereign_preferences as hard rules
+
+REDUNDANCY MECHANISMS:
+- Local file backup (GHL_EMBED_REFERENCE.md, operational_memory.md)
+- Supabase as primary source of truth
+- Auto-sync between file and DB on session start
+
+QUESTIONS:
+1. Is this schema complete? What's missing?
+2. How should we implement the "query before action" hard rule?
+3. What vector DB solution works best with Supabase?
+4. Any redundancy mechanisms we're missing?
+
+Give specific, actionable recommendations.'''
 
 results = []
 

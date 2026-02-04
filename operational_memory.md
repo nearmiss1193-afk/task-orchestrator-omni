@@ -450,3 +450,49 @@ USER: "board call on [topic]"
 **SAVE PROTOCOL locked – push is now fatal. No more skipping.**
 
 ---
+
+## 🧠 SOVEREIGN MEMORY SYSTEM (Feb 4, 2026)
+
+### HARD RULES - QUERY BEFORE ACTION
+
+1. **BEFORE editing ANY embed, form, or widget code** → Query `system_state` for config keys starting with `ghl_` or `vapi_`
+2. **BEFORE ANY code edit** → Query for similar patterns in saved code
+3. **ON ANY error** → Query for known solutions before debugging from scratch
+4. **ALWAYS save working code** → After successful fix, save to memory
+5. **NEVER rely on AI memory** → Always verify against Supabase
+
+### Critical Config (NEVER CHANGE WITHOUT VERIFICATION)
+
+| Key | Value | Domain |
+|-----|-------|--------|
+| ghl_form_id | 7TTJ1CUAFjhON69ZsOZK | links.aiserviceco.com |
+| ghl_calendar_id | YWQcHuXXznQEQa7LAWeB | links.aiserviceco.com |
+| vapi_public_key | 3b065ff0-a721-4b66-8255-30b6b8d6daab | - |
+| vapi_assistant_id | 1a797f12-e2dd-4f7f-b2c5-08c38c74859a | - |
+| vapi_widget_title | Talk to Sales | - |
+| vapi_widget_color | #f59e0b | Yellow/orange |
+
+### WRONG VALUES - NEVER USE
+
+- ❌ `RnK4OjX0oDcqtWw0VyLr` (wrong form ID)
+- ❌ `M7YwDClf34RsNhPQfhS7` (wrong calendar ID)
+- ❌ `api.leadconnectorhq.com` (wrong domain)
+- ❌ `link.msgsndr.com` (wrong domain)
+- ❌ `calendar.gohighlevel.com` (wrong domain)
+
+### Supabase Tables (Pending Creation in Dashboard)
+
+Run `create_sovereign_tables.sql` in Supabase SQL Editor to create:
+
+- sovereign_config
+- sovereign_actions
+- sovereign_errors
+- sovereign_code
+- sovereign_preferences
+- sovereign_tasks
+- sovereign_embeddings
+- sovereign_sessions
+- sovereign_logs
+- sovereign_alerts
+
+---
