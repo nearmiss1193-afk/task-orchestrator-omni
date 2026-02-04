@@ -339,3 +339,59 @@ python turbo_contact.py
 ```
 
 **Status**: Permanent memory archived. Rule #1 of GHL Dispatches defined.
+
+---
+
+## BOARD LOCK V1 – EXECUTIVE ORDER (Feb 4, 2026)
+
+### ⚫ NO FAKE CALLS RULE
+
+For every board meeting or external AI request, Antigravity MUST:
+
+1. **Print the actual curl command** it ran (or equivalent API call)
+2. **Print the exact response** (headers + body)
+3. **If response is missing or fake** → Log `HALLUCINATION DETECTED` and **STOP**
+
+No summaries, no "thinking" – just raw output.
+
+---
+
+### ⚫ BOARD CONSENSUS LOCK – PERMANENT
+
+Before ANY `execute`, `deploy`, `send`, or major change:
+
+1. **Run a board call**: "Should we [action]?"
+2. **Ask all four**: Claude, Grok, Gemini, ChatGPT
+3. **Print raw curl command + response** for each
+4. **Require 3/4 YES votes** to proceed
+5. **If under 3/4 or any call fails** → Log `BLOCKED – NO CONSENSUS` and **STOP**
+
+**NO EXCEPTIONS. NO SKIPPING.**
+
+---
+
+### Board Call Implementation
+
+**Script**: `scripts/cross_ai_board.py` (General system audit)  
+**Script**: `scripts/website_board_meeting.py` (Website-specific)
+
+**Threshold**: 3/4 = 75% approval required  
+**Quorum**: Minimum 3 AIs must respond  
+**Tie-breaker**: User decides if 2/2 split with 2 failures
+
+---
+
+### API Keys (Locked for Board Calls)
+
+| AI | Key Variable | Status |
+|----|--------------|--------|
+| Claude | `ANTHROPIC_API_KEY` | ✅ Active |
+| Grok | `GROK_API_KEY` | ✅ Active |
+| Gemini | `GEMINI_API_KEY` | ✅ Active |
+| ChatGPT | `OPENAI_API_KEY` | ✅ Active |
+
+---
+
+**LOCK STATUS**: 🔒 **PERMANENTLY LOCKED**  
+**Effective**: February 4, 2026  
+**Authority**: Executive Order by Dan (Founder)
