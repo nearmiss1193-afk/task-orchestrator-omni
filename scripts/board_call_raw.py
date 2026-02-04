@@ -3,36 +3,36 @@ import os, json, requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD VALIDATION: Consolidated AI Memory System Proposal
+PROMPT = '''BOARD PROTOCOL: Hero Section Links - Comprehensive Fix
 
-Based on previous board input, here is the proposed implementation. Please validate or suggest improvements.
+CONTEXT:
+We have multiple link/button issues in the hero section of aiserviceco.com. The Vapi widget (bottom-right orange pill) is working correctly.
 
-PROPOSED SUPABASE TABLES:
-1. sovereign_config - Critical config (embed IDs, API keys, URLs, widget settings)
-2. sovereign_actions - All actions taken with success/failure, input/output, timestamps
-3. sovereign_errors - Error patterns with solutions (auto-lookup when same error occurs)
-4. sovereign_code - Code snippets that worked (auto-retrieved for similar tasks)
-5. sovereign_preferences - User corrections and preferences (hard rules)
-6. sovereign_embeddings - Vector embeddings for semantic search (pgvector)
+ISSUE 1 (Previously Discussed):
+- CENTER orange "Call Sarah AI (Voice)" BUTTON shows alert popup
+- Board consensus: Option A - Make it activate Vapi widget directly
 
-RETRIEVAL STRATEGY:
-- Before ANY task: Query sovereign_config for relevant config
-- Before ANY code edit: Query sovereign_code for similar patterns
-- On ANY error: Query sovereign_errors for known solutions
-- Always apply: sovereign_preferences as hard rules
+ISSUE 2 (NEW):
+- The TEXT LINK "📞 Call Sarah (Voice AI): Talk to Sarah (Voice AI)"
+- When clicked, shows browser popup "Open Phone Link?"
+- This is because it's using a tel: link (href="tel:+18632132505")
+- User does NOT want phone app to open
+- User wants it to either activate Vapi OR be removed/replaced
 
-REDUNDANCY MECHANISMS:
-- Local file backup (GHL_EMBED_REFERENCE.md, operational_memory.md)
-- Supabase as primary source of truth
-- Auto-sync between file and DB on session start
+QUESTION FOR THE BOARD:
+1. Should this link activate Vapi or be removed entirely?
+2. If kept: How to make text link trigger Vapi (onclick vs href)?
+3. Having both a tel: link AND Vapi is confusing - which is better UX?
+4. Overall hero section strategy: What's the cleanest layout?
 
-QUESTIONS:
-1. Is this schema complete? What's missing?
-2. How should we implement the "query before action" hard rule?
-3. What vector DB solution works best with Supabase?
-4. Any redundancy mechanisms we're missing?
+Current hero section elements:
+- [Button] "Talk to Sarah (Voice AI)" → shows alert
+- [Link] "📞 Call Sarah (Voice AI): Talk to Sarah (Voice AI)" → shows phone popup
+- [Link] "💬 Text Sarah: +1 (352) 758-5336" → SMS link
+- [Link] "👨‍💼 Talk to Dan (Human): +1 (352) 936-8152" → phone link
+- [Widget] Vapi pill (bottom-right) → WORKS
 
-Give specific, actionable recommendations.'''
+Give focused suggestions for the cleanest UX.'''
 
 results = []
 

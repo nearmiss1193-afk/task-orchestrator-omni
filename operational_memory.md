@@ -1,5 +1,26 @@
 # Empire Unified - Operational Memory
 
+## 🚨 CRITICAL: READ FIRST BEFORE ANY ACTION (Updated Feb 4, 2026)
+
+### INFRASTRUCTURE (NEVER ASK USER)
+
+| Key | Value | Notes |
+|-----|-------|-------|
+| **HOSTING_PROVIDER** | **Vercel** | User confirmed: "I have been on Vercel forever" |
+| **DOMAIN_REGISTRAR** | **Squarespace** | DNS managed by Squarespace, points to Vercel |
+| **PRODUCTION_DOMAIN** | **aiserviceco.com** | THE ONLY DOMAIN TO VERIFY - NOT netlify subdomain |
+| **DEPLOY_COMMAND** | `vercel --prod --yes` | Run from public/ directory |
+| **STAGING_DOMAIN** | aiserviceco-empire.netlify.app | STAGING ONLY - never verify as production |
+
+### HARD RULES (MANDATORY)
+
+1. **ALWAYS deploy to Vercel** - `cd public && vercel --prod --yes`
+2. **ALWAYS verify aiserviceco.com** - NOT netlify subdomain
+3. **NEVER ask user about hosting** - Info is RIGHT HERE
+4. **BEFORE claiming success**: Open browser to aiserviceco.com and verify
+
+---
+
 ## Jan 30: Sovereign 2.0 Hardening
 
 - **Architecture Split**:

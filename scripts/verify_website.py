@@ -1,10 +1,10 @@
-"""Playwright verification script for aiserviceco.com"""
+"""Playwright verification script for aiserviceco.com - PRODUCTION"""
 import asyncio
 from playwright.async_api import async_playwright
 import os
 from datetime import datetime
 
-SITE_URL = "https://aiserviceco-empire.netlify.app"
+SITE_URL = "https://aiserviceco.com"  # PRODUCTION - NOT netlify subdomain
 SCREENSHOT_DIR = "verification_screenshots"
 
 async def verify_website():

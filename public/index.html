@@ -983,62 +983,66 @@
         </div>
     </footer>
 
-    <!-- Sarah AI Voice Widget (Sovereign v5 - Fixed SDK Load) -->
+    <!-- Sarah AI Voice Widget (Fixed using EXACT Vapi GitHub format) -->
     <script>
-        // Load Vapi SDK properly with async handling
-        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab";
-        const SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a";
+        // VAPI WIDGET - EXACT FORMAT FROM OFFICIAL GITHUB DOCS
+        // https://github.com/VapiAI/client-sdk-html-script-tag
 
-        (function () {
-            const script = document.createElement('script');
-            script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-            script.async = true;
-            script.onload = function () {
-                if (window.vapiSDK) {
-                    window.vapiSDK.run({
-                        apiKey: VAPI_PUBLIC_KEY,
-                        assistant: SARAH_ASSISTANT_ID,
-                        config: {
-                            position: "bottom-right",
-                            offset: "20px",
-                            idle: { color: "#f59e0b", type: "pill", title: "Talk to Sales", subtitle: "Ask anything", icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg" },
-                            loading: { color: "#f59e0b", type: "pill", title: "Connecting...", subtitle: "" },
-                            active: { color: "#ef4444", type: "pill", title: "End Call", subtitle: "" }
-                        }
-                    });
-                    console.log('[Sovereign Voice v5] Sarah SDK Loaded & Ready');
-                }
+        const buttonConfig = {
+            position: "bottom-right",
+            offset: "40px",
+            width: "50px",
+            height: "50px",
+            idle: {
+                color: `rgb(245, 158, 11)`,
+                type: "pill",
+                title: "Talk to Sales",
+                subtitle: "Ask anything",
+                icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`,
+            },
+            loading: {
+                color: `rgb(245, 158, 11)`,
+                type: "pill",
+                title: "Connecting...",
+                subtitle: "Please wait",
+                icon: `https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg`,
+            },
+            active: {
+                color: `rgb(239, 68, 68)`,
+                type: "pill",
+                title: "Call in progress...",
+                subtitle: "End the call.",
+                icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg`,
+            },
+        };
+
+        (function (d, t) {
+            var g = document.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+            g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            g.defer = true;
+            g.async = true;
+            s.parentNode.insertBefore(g, s);
+
+            g.onload = function () {
+                vapiInstance = window.vapiSDK.run({
+                    apiKey: "3b065ff0-a721-4b66-8255-30b6b8d6daab",
+                    assistant: "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+                    config: buttonConfig
+                });
+                console.log('[Vapi] Widget loaded with orange pill config');
             };
-            document.head.appendChild(script);
-        })();
+        })(document, "script");
 
         function startSarahCall() {
-            if (window.vapiSDK && typeof window.vapiSDK.start === 'function') {
-                window.vapiSDK.start(SARAH_ASSISTANT_ID);
-                console.log("[Sovereign Voice v5] Sarah Call Started");
+            if (window.vapiInstance && window.vapiInstance.start) {
+                window.vapiInstance.start();
+                console.log("[Vapi] Call started");
+            } else if (window.vapiSDK && window.vapiSDK.start) {
+                window.vapiSDK.start("1a797f12-e2dd-4f7f-b2c5-08c38c74859a");
+                console.log("[Vapi] Call started via SDK");
             } else {
-                console.error("[Sovereign Voice v5] SDK not ready, reloading...");
-                // Retry loading SDK
-                const script = document.createElement('script');
-                script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-                script.onload = function () {
-                    if (window.vapiSDK) {
-                        window.vapiSDK.run({
-                            apiKey: VAPI_PUBLIC_KEY,
-                            assistant: SARAH_ASSISTANT_ID,
-                            config: {
-                                position: "bottom-right",
-                                offset: "20px",
-                                idle: { color: "#f59e0b", type: "pill", title: "Talk to Sales", subtitle: "Ask anything", icon: "https://unpkg.com/lucide-static@0.321.0/icons/mic.svg" },
-                                loading: { color: "#f59e0b", type: "pill", title: "Connecting...", subtitle: "" },
-                                active: { color: "#ef4444", type: "pill", title: "End Call", subtitle: "" }
-                            }
-                        });
-                        setTimeout(() => window.vapiSDK.start(SARAH_ASSISTANT_ID), 500);
-                    }
-                };
-                document.head.appendChild(script);
-                alert("Connecting to Sarah... please wait.");
+                alert("Voice assistant loading... try again in a moment.");
             }
         }
     </script>
