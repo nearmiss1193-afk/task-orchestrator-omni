@@ -4,12 +4,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empire Sovereign | Total Automation & Revenue Velocity</title>
+    <title>AI Service Co | Sovereign AI Automation for Service Businesses</title>
     <meta name="description"
-        content="Custom AI workforce solutions for Lakeland businesses. Free visibility audit with Sarah AI.">
+        content="Deploy your autonomous AI workforce in 24 hours. Voice AI, automated outreach, and intelligent CRM for HVAC, roofing, and service businesses in Lakeland, FL.">
     <meta name="keywords"
-        content="AI Service, AI Workforce, Logistics AI, HVAC AI, Roofing AI, Lakeland AI, AI Dispatching, AI Payroll">
-    <meta name="version" content="SOV-V3.3-ULTIMATE-READY">
+        content="AI automation, voice AI, business automation, service industry AI, HVAC AI, roofing AI, Lakeland FL, AI workforce">
+    <meta name="author" content="AI Service Co">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.aiserviceco.com/">
+
+    <!-- Open Graph (Facebook, LinkedIn) -->
+    <meta property="og:title" content="AI Service Co | Sovereign AI Automation">
+    <meta property="og:description"
+        content="Deploy your autonomous AI workforce in 24 hours. Voice AI, automated outreach, and intelligent CRM.">
+    <meta property="og:image" content="https://www.aiserviceco.com/og-image.png">
+    <meta property="og:url" content="https://www.aiserviceco.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="AI Service Co">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Service Co | Sovereign AI Automation">
+    <meta name="twitter:description" content="Deploy your autonomous AI workforce in 24 hours.">
+    <meta name="twitter:image" content="https://www.aiserviceco.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "AI Service Co",
+        "alternateName": "Empire Sovereign",
+        "url": "https://www.aiserviceco.com",
+        "logo": "https://www.aiserviceco.com/logo.png",
+        "description": "AI-powered business automation for service industries. Deploy voice AI, automated outreach, and intelligent CRM in 24 hours.",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Lakeland",
+            "addressRegion": "FL",
+            "addressCountry": "US"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-352-936-8152",
+            "contactType": "sales",
+            "availableLanguage": "English"
+        },
+        "sameAs": []
+    }
+    </script>
+
+    <!-- Service Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "serviceType": "AI Business Automation",
+        "provider": {
+            "@type": "Organization",
+            "name": "AI Service Co"
+        },
+        "areaServed": {
+            "@type": "Place",
+            "name": "Lakeland, Florida"
+        },
+        "description": "Autonomous AI workforce including voice AI assistants, automated lead outreach, and intelligent CRM integration."
+    }
+    </script>
 
     <!-- Vercel Analytics -->
     <script defer src="/_vercel/insights/script.js"></script>
@@ -792,33 +853,97 @@
             </div>
 
             <div style="max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:40px;">
-                <!-- GHL Form -->
-                <div style="background:rgba(30,41,59,0.5); padding:30px; border-radius:20px; border:1px solid #ff3e3e;">
+                <!-- Contact Form Button -->
+                <div
+                    style="background:rgba(30,41,59,0.5); padding:40px; border-radius:20px; border:1px solid #ff3e3e; text-align:center;">
                     <h3>Send a Message</h3>
-                    <iframe src="https://links.aiserviceco.com/widget/form/7TTJ1CUAFjhON69ZsOZK"
-                        style="width:100%;height:785px;border:none;border-radius:3px" id="inline-7TTJ1CUAFjhON69ZsOZK"
-                        data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-trigger-value=""
-                        data-activation-type="alwaysActivated" data-activation-value=""
-                        data-deactivation-type="neverDeactivate" data-deactivation-value=""
-                        data-form-name="AI Service Co Contact form" data-height="785"
-                        data-layout-iframe-id="inline-7TTJ1CUAFjhON69ZsOZK" data-form-id="7TTJ1CUAFjhON69ZsOZK"
-                        title="AI Service Co Contact form">
-                    </iframe>
-                    <script src="https://links.aiserviceco.com/js/form_embed.js"></script>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Get in touch with our team</p>
+                    <button onclick="openContactModal()" class="cta-btn"
+                        style="width:100%; padding: 16px 32px; font-size: 18px;">
+                        📧 Contact Us
+                    </button>
                 </div>
 
-                <!-- GHL Calendar -->
+                <!-- Calendar Button -->
                 <div
-                    style="background:rgba(255,62,62,0.05); padding:30px; border-radius:20px; border:1px solid #ff3e3e; text-align:center;">
+                    style="background:rgba(255,62,62,0.05); padding:40px; border-radius:20px; border:1px solid #ff3e3e; text-align:center;">
                     <h3>Book Discovery Call</h3>
-                    <iframe src="https://links.aiserviceco.com/widget/booking/YWQcHuXXznQEQa7LAWeB"
-                        style="width: 100%;height:600px;border:none;overflow: hidden;" scrolling="no"
-                        id="YWQcHuXXznQEQa7LAWeB_1770232516945" title="Book Discovery Call"></iframe>
-                    <script src="https://links.aiserviceco.com/js/form_embed.js" type="text/javascript"></script>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Schedule a 30-min consultation</p>
+                    <button onclick="openCalendarModal()" class="cta-btn secondary"
+                        style="width:100%; padding: 16px 32px; font-size: 18px;">
+                        📅 Book a Call
+                    </button>
                 </div>
             </div>
 
-            <!-- Option B: Removed Sarah Voice Button - Vapi widget is the ONLY voice entry point -->
+            <!-- Contact Form Modal -->
+            <div id="contactModal" class="modal-overlay"
+                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+                <div
+                    style="background: var(--bg-card); border-radius:20px; padding:20px; max-width:600px; width:90%; max-height:90vh; overflow:auto; position:relative;">
+                    <button onclick="closeContactModal()"
+                        style="position:absolute; top:10px; right:15px; background:none; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button>
+                    <iframe id="contactIframe" loading="lazy" src="about:blank"
+                        data-src="https://links.aiserviceco.com/widget/form/7TTJ1CUAFjhON69ZsOZK"
+                        style="width:100%;height:700px;border:none;border-radius:3px"
+                        title="AI Service Co Contact form">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Calendar Modal -->
+            <div id="calendarModal" class="modal-overlay"
+                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+                <div
+                    style="background: var(--bg-card); border-radius:20px; padding:20px; max-width:700px; width:90%; max-height:90vh; overflow:auto; position:relative;">
+                    <button onclick="closeCalendarModal()"
+                        style="position:absolute; top:10px; right:15px; background:none; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button>
+                    <iframe id="calendarIframe" loading="lazy" src="about:blank"
+                        data-src="https://links.aiserviceco.com/widget/booking/YWQcHuXXznQEQa7LAWeB"
+                        style="width:100%;height:650px;border:none;overflow:hidden;" scrolling="no"
+                        title="Book Discovery Call">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Modal Script -->
+            <script>
+                function openContactModal() {
+                    const modal = document.getElementById('contactModal');
+                    const iframe = document.getElementById('contactIframe');
+                    if (iframe.src === 'about:blank') {
+                        iframe.src = iframe.dataset.src;
+                    }
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+                function closeContactModal() {
+                    document.getElementById('contactModal').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+                function openCalendarModal() {
+                    const modal = document.getElementById('calendarModal');
+                    const iframe = document.getElementById('calendarIframe');
+                    if (iframe.src === 'about:blank') {
+                        iframe.src = iframe.dataset.src;
+                    }
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+                function closeCalendarModal() {
+                    document.getElementById('calendarModal').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+                // Close modal on backdrop click
+                document.addEventListener('click', function (e) {
+                    if (e.target.classList.contains('modal-overlay')) {
+                        e.target.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            </script>
+
+            <!-- Option B: Vapi widget is the ONLY voice entry point -->
             <div style="text-align:center; margin-top:40px;">
                 <p style="color: #888; font-size: 14px;">
                     💡 <em>Click the orange "Talk to Sales" button in the bottom-right corner to speak with Sarah

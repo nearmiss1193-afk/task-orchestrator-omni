@@ -3,42 +3,56 @@ import os, json, requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD PROTOCOL: Sarah AI Intelligent Mode Switching Strategy
+PROMPT = '''BOARD PROTOCOL: PageSpeed Optimization + Form UX Strategy
 
 CONTEXT:
-We have Sarah AI (Vapi voice assistant) that handles both:
-1. OUTBOUND/PROSPECTING: Cold calls to leads from our database
-2. INBOUND: Customers calling in via the Vapi widget on our website
+We are aiserviceco.com - an AI service company claiming to be smart, capable, and competent. 
+Our PageSpeed Insights scores are embarrassingly low for an AI company:
 
-CURRENT PROBLEM:
-- There's NO automatic detection of call type (inbound vs outbound)
-- Sarah doesn't intelligently switch her behavior/persona
-- No notification system when a high-value conversation happens
-- Dan (owner) doesn't get alerted when potential customers engage
+CURRENT SCORES (Mobile):
+- Performance: 62 (ORANGE)
+- Accessibility: 92 (GREEN - good!)
+- Best Practices: 73 (ORANGE)
+- SEO: 58 (ORANGE)
+
+PROBLEMS:
+1. As an AI company, we should have ALL scores in 90s to demonstrate competence
+2. SEO at 58 hurts discoverability and credibility
+3. Performance at 62 means slow load times
+
+UX ISSUE:
+- Calendar and Contact forms are currently embedded INLINE (auto-opening)
+- User wants BUTTONS that trigger MODALS instead
+- Current behavior: User sees forms immediately without clicking
+- Desired behavior: "Book Call" button → Opens modal with calendar
+- Desired behavior: "Contact Us" button → Opens modal with form
 
 QUESTIONS FOR THE BOARD:
 
-1. **MODE SWITCHING STRATEGY**:
-   - How should Sarah detect if a call is inbound (customer-initiated) vs outbound (prospecting)?
-   - Should she have different scripts/personas for each mode?
-   - Best practices for seamless switching?
+1. **PAGESPEED PERFORMANCE (62 → 90+)**:
+   - What are the biggest quick wins for performance?
+   - Image optimization, lazy loading, code splitting?
+   - Which iframes/scripts are hurting performance?
 
-2. **CUSTOMER NOTIFICATION SYSTEM**:
-   - How to detect a "high-value" conversation (potential customer)?
-   - What signals indicate someone is ready to buy?
-   - Best way to notify Dan in real-time (SMS, email, dashboard alert)?
+2. **SEO (58 → 90+)**:
+   - What meta tags are we missing?
+   - Structured data / JSON-LD needed?
+   - Title/description optimization?
 
-3. **IMPLEMENTATION APPROACH**:
-   - What Vapi webhooks/events are needed?
-   - How to score conversation quality?
-   - Database schema for tracking conversation outcomes?
+3. **BEST PRACTICES (73 → 90+)**:
+   - Common issues causing this score?
+   - HTTPS, console errors, deprecated APIs?
 
-4. **SHOULD WE BUILD THIS?**
-   - Is this feature worth the development time?
-   - ROI assessment: Will this increase conversions?
-   - Alternative simpler approaches?
+4. **FORM MODAL UX**:
+   - User assessment: "Calendar and forms are just auto-opening" - correct?
+   - Best practice: Inline embeds vs button-triggered modals?
+   - User experience impact?
 
-Give focused, actionable recommendations. Vote YES/NO on whether to build this feature.'''
+5. **PRIORITY ORDER**:
+   - What should we fix first?
+   - Which changes give biggest ROI?
+
+Provide actionable, specific recommendations. We need to hit 90+ on ALL metrics.'''
 
 results = []
 
