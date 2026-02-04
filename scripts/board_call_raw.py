@@ -6,52 +6,42 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''EMERGENCY DIAGNOSIS: Best Practices STUCK at 73 Despite Security Headers
+PROMPT = '''TWO QUESTIONS FOR THE BOARD:
 
-SITUATION:
-We added security headers to aiserviceco.com but Best Practices is STILL 73.
+## Question 1: Branding Change Investigation
 
-CURRENT SCORES (Desktop):
-- Performance: 76 (was 82, dropped)
-- Accessibility: 92 ✅
-- Best Practices: 73 (STUCK - won't move)
-- SEO: 92 ✅
+Our website aiserviceco.com is now showing "Empire Sovereign - A Division of World Unities" instead of "AI Service Co". 
 
-WHAT WE ALREADY ADDED:
-- X-Content-Type-Options: nosniff
-- X-Frame-Options: SAMEORIGIN  
-- Referrer-Policy: strict-origin-when-cross-origin
-- DNS prefetch for fonts, CDN, etc
-- rel="noopener noreferrer" on all external links
-- All scripts already use defer or async
-- YouTube iframes have lazy loading + titles
+**Why might this have happened?**
+- Did a recent deployment overwrite the branding?
+- Is there a config file that might have been changed?
+- Could this be intentional or accidental?
 
-WHY IS BEST PRACTICES STUCK AT 73?
+**What should we do about it?**
+- Restore to "AI Service Co" if it was accidental
+- Or keep "Empire Sovereign" if this was intentional rebranding
 
-Board, I need you to diagnose the EXACT remaining issues:
+## Question 2: Capabilities List for Commercial
 
-1. **What are the ONLY remaining Best Practices audit items?**
-   - List each one specifically
-   - What % weight does each carry?
+We need to make a commercial with Veo Visionary (AI video generator) for the website.
 
-2. **Third-party scripts?**
-   - We have: Vapi widget, Microsoft Clarity, Google Analytics, YouTube embeds
-   - Which of these is hurting Best Practices?
-   - Can we defer/async them better?
+**What are our ACTUAL capabilities that should be featured?**
 
-3. **Console errors?**
-   - What specific JS errors would cause -27 points?
-   - How do I check without access to browser console?
+List the capabilities in a format suitable for a cinematic commercial:
+1. Capability name
+2. One-line description
+3. Visual suggestion for the commercial
 
-4. **Vercel/CDN headers?**
-   - Do meta http-equiv work for security headers on Vercel?
-   - Or do we need vercel.json headers config?
+Context - our system does:
+- Voice AI (Rachel/Sarah via Vapi)
+- AI-powered outreach (email/SMS/calls)
+- Lead prospecting (Apollo integration)
+- CRM automation (GHL)
+- AI appointment booking
+- 24/7 autonomous operation
+- Multi-channel automation
 
-5. **EXACT CODE to push 73 → 90+**
-   - Be surgical
-   - Tell me exactly what to add/remove/change
-
-Target: Best Practices 90+, ALL metrics 90+'''
+Make the capabilities list DRAMATIC and suitable for a high-production commercial.'''
 
 def query_claude():
     api_key = os.getenv("ANTHROPIC_API_KEY")
@@ -127,7 +117,7 @@ def query_chatgpt():
 
 if __name__ == "__main__":
     from concurrent.futures import ThreadPoolExecutor
-    print("Querying Board: Best Practices 73 Diagnosis...")
+    print("Querying Board: Branding + Capabilities...")
     
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [
@@ -143,6 +133,6 @@ if __name__ == "__main__":
     
     for r in results:
         print(f"=== {r['ai']} ===")
-        print(r['raw'][:1000] + "..." if len(r['raw']) > 1000 else r['raw'])
+        print(r['raw'][:1500] + "..." if len(r['raw']) > 1500 else r['raw'])
     
     print("\n=== DONE ===")
