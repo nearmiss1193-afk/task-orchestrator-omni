@@ -6,52 +6,52 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD PROTOCOL: Best Practices 73 → 90+ and Performance 82 → 90+
+PROMPT = '''EMERGENCY DIAGNOSIS: Best Practices STUCK at 73 Despite Security Headers
 
-PROGRESS REPORT:
-We just fixed SEO and it jumped from 61 → 92! Now we need the final push.
+SITUATION:
+We added security headers to aiserviceco.com but Best Practices is STILL 73.
 
 CURRENT SCORES (Desktop):
-- Performance: 82 (need 90+)
+- Performance: 76 (was 82, dropped)
 - Accessibility: 92 ✅
-- Best Practices: 73 (need 90+)
+- Best Practices: 73 (STUCK - won't move)
 - SEO: 92 ✅
 
-ALREADY IMPLEMENTED:
-- robots.txt and sitemap.xml
+WHAT WE ALREADY ADDED:
+- X-Content-Type-Options: nosniff
+- X-Frame-Options: SAMEORIGIN  
+- Referrer-Policy: strict-origin-when-cross-origin
+- DNS prefetch for fonts, CDN, etc
 - rel="noopener noreferrer" on all external links
-- Meta tags (OG, Twitter, JSON-LD)
-- Font preconnect/preload
-- Lazy loading iframes
-- lang="en" on html tag
+- All scripts already use defer or async
+- YouTube iframes have lazy loading + titles
 
-SPECIFIC QUESTIONS:
+WHY IS BEST PRACTICES STUCK AT 73?
 
-1. **BEST PRACTICES 73 → 90+**:
-   - What EXACT issues typically drop this score?
-   - Console JS errors?
-   - HTTPS mixed content?
-   - document.write()?
-   - Deprecated APIs?
-   - What code should I ADD/REMOVE?
+Board, I need you to diagnose the EXACT remaining issues:
 
-2. **PERFORMANCE 82 → 90+**:
-   - What's the most impactful fix for +8 points?
-   - Critical CSS inlining?
-   - Image optimization (WebP)?
-   - Script defer/async?
-   - Remove unused CSS/JS?
+1. **What are the ONLY remaining Best Practices audit items?**
+   - List each one specifically
+   - What % weight does each carry?
 
-3. **SPECIFIC CODE TO ADD/CHANGE**:
-   - Give me EXACT HTML/CSS/JS snippets
-   - Tell me EXACT files to modify
-   - Don't be generic - be surgical
+2. **Third-party scripts?**
+   - We have: Vapi widget, Microsoft Clarity, Google Analytics, YouTube embeds
+   - Which of these is hurting Best Practices?
+   - Can we defer/async them better?
 
-4. **QUICK WINS ONLY**:
-   - What gets us to 90+ fastest?
-   - Prioritize by impact/effort ratio
+3. **Console errors?**
+   - What specific JS errors would cause -27 points?
+   - How do I check without access to browser console?
 
-Be SPECIFIC. Give me actionable code changes.'''
+4. **Vercel/CDN headers?**
+   - Do meta http-equiv work for security headers on Vercel?
+   - Or do we need vercel.json headers config?
+
+5. **EXACT CODE to push 73 → 90+**
+   - Be surgical
+   - Tell me exactly what to add/remove/change
+
+Target: Best Practices 90+, ALL metrics 90+'''
 
 def query_claude():
     api_key = os.getenv("ANTHROPIC_API_KEY")
@@ -127,7 +127,7 @@ def query_chatgpt():
 
 if __name__ == "__main__":
     from concurrent.futures import ThreadPoolExecutor
-    print("Querying Board: Best Practices + Performance...")
+    print("Querying Board: Best Practices 73 Diagnosis...")
     
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [
@@ -143,6 +143,6 @@ if __name__ == "__main__":
     
     for r in results:
         print(f"=== {r['ai']} ===")
-        print(r['raw'][:800] + "..." if len(r['raw']) > 800 else r['raw'])
+        print(r['raw'][:1000] + "..." if len(r['raw']) > 1000 else r['raw'])
     
     print("\n=== DONE ===")
