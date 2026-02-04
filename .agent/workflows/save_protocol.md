@@ -41,17 +41,23 @@ This applies to: Railway, Modal, Vercel, new APIs, new libraries, etc.
 
 ## Required Actions at Session End
 
-### 1. Git Commit & Push + Vercel Deploy
+### 1. Git Commit & Push + Deploy (FATAL - PUSH OR DIE)
 
 // turbo
 
 ```bash
-git add -A && git commit -m "💾 SAVE PROTOCOL: [brief description]"
-git push origin main
+# Push is FATAL - abort if fails
+git add -A
+git commit -m "💾 SAVE PROTOCOL: [timestamp]" || echo "Commit failed - aborting"
+git push origin main --force || { echo "PUSH FAILED - DEPLOY ABORTED"; exit 1; }
 
-# Force Vercel deploy (bypasses Git sync issues)
-cd public && vercel --prod --yes
+# Deploy to Netlify (primary) and Vercel (backup)
+cd public && netlify deploy --prod --dir=. --message "SAVE PROTOCOL deploy" || { echo "NETLIFY DEPLOY FAILED"; }
+cd public && vercel --prod --yes --force || { echo "VERCEL DEPLOY FAILED - ABORTED"; exit 1; }
 ```
+
+> [!CAUTION]
+> **NEVER skip git push.** If push fails, abort deploy immediately and log 'PUSH FAILED - DEPLOY ABORTED'. This is FATAL. No bypass. No partial deploy.
 
 ### 1.5 SEND EMAIL SUMMARY (MANDATORY)
 

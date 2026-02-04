@@ -433,3 +433,20 @@ USER: "board call on [topic]"
 **LOCK STATUS**: 🔒 **PERMANENTLY LOCKED**  
 **Effective**: February 4, 2026  
 **Authority**: Executive Order by Dan (Founder)
+
+---
+
+## 🔴 PUSH OR DIE PROTOCOL (Feb 4, 2026)
+
+> **NEVER skip git push.** If push fails, abort deploy immediately and log 'PUSH FAILED - DEPLOY ABORTED'. This is FATAL. No bypass. No partial deploy.
+
+### Rules
+
+1. `git push --force` is MANDATORY before any deploy
+2. If push fails → abort immediately, log error, exit 1
+3. No deploy without successful push
+4. Both Netlify and Vercel deploys require push first
+
+**SAVE PROTOCOL locked – push is now fatal. No more skipping.**
+
+---
