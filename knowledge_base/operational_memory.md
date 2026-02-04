@@ -97,6 +97,59 @@ This is the "Safety Valve" to prevent system paralysis.
 
 ---
 
+## 🏛️ SECTION 6: SESSION LEARNINGS (Feb 4, 2026)
+
+### 🔧 Website Fixes - Lessons Learned
+
+| Issue | Root Cause | Fix |
+|-------|------------|-----|
+| Vapi widget green circle | Wrong Vercel project deployed | Deploy to correct `empire-unified` project |
+| "Call Sarah" button alert | `startSarahCall()` not ready | Remove button, use Vapi widget only (Option B) |
+| "Call Sarah" tel: link popup | `href="tel:"` opens phone app | Remove tel: link entirely |
+| Changes not appearing | Deployed to wrong project | Always verify deploy target URL |
+
+### 📍 Deployment Config (CRITICAL)
+
+```
+HOSTING: Vercel
+PROJECT: empire-unified
+DOMAIN: aiserviceco.com
+DEPLOY: cd public && vercel --prod --yes
+```
+
+### 🤖 Sarah AI Intelligence Strategy (Board Approved 4/4)
+
+**Feature: Intelligent Mode Switching**
+
+| Capability | Status |
+|------------|--------|
+| Inbound/Outbound Detection | USE Vapi metadata |
+| Different Scripts | YES - empathetic vs assertive |
+| Hot Lead Notification | SMS to Dan for high-value keywords |
+| Webhooks Needed | call.initiated, call.completed |
+
+**Phased Build:**
+
+1. MVP: Call type detection + hot keyword SMS
+2. Phase 2: Sentiment analysis + scoring
+3. Phase 3: Dynamic scripts
+
+### 🔄 Rollback Strategy (ALWAYS CREATE CHECKPOINTS)
+
+```bash
+# Before major changes:
+git tag -a checkpoint-YYYY-MM-DD -m "Description"
+git push origin [tag-name]
+
+# To rollback:
+git checkout [tag-name]
+cd public && vercel --prod --yes
+```
+
+**Current Checkpoint:** `checkpoint-2026-02-04`
+
+---
+
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║

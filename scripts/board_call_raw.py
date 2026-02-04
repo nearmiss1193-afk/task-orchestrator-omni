@@ -3,36 +3,42 @@ import os, json, requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD PROTOCOL: Hero Section Links - Comprehensive Fix
+PROMPT = '''BOARD PROTOCOL: Sarah AI Intelligent Mode Switching Strategy
 
 CONTEXT:
-We have multiple link/button issues in the hero section of aiserviceco.com. The Vapi widget (bottom-right orange pill) is working correctly.
+We have Sarah AI (Vapi voice assistant) that handles both:
+1. OUTBOUND/PROSPECTING: Cold calls to leads from our database
+2. INBOUND: Customers calling in via the Vapi widget on our website
 
-ISSUE 1 (Previously Discussed):
-- CENTER orange "Call Sarah AI (Voice)" BUTTON shows alert popup
-- Board consensus: Option A - Make it activate Vapi widget directly
+CURRENT PROBLEM:
+- There's NO automatic detection of call type (inbound vs outbound)
+- Sarah doesn't intelligently switch her behavior/persona
+- No notification system when a high-value conversation happens
+- Dan (owner) doesn't get alerted when potential customers engage
 
-ISSUE 2 (NEW):
-- The TEXT LINK "📞 Call Sarah (Voice AI): Talk to Sarah (Voice AI)"
-- When clicked, shows browser popup "Open Phone Link?"
-- This is because it's using a tel: link (href="tel:+18632132505")
-- User does NOT want phone app to open
-- User wants it to either activate Vapi OR be removed/replaced
+QUESTIONS FOR THE BOARD:
 
-QUESTION FOR THE BOARD:
-1. Should this link activate Vapi or be removed entirely?
-2. If kept: How to make text link trigger Vapi (onclick vs href)?
-3. Having both a tel: link AND Vapi is confusing - which is better UX?
-4. Overall hero section strategy: What's the cleanest layout?
+1. **MODE SWITCHING STRATEGY**:
+   - How should Sarah detect if a call is inbound (customer-initiated) vs outbound (prospecting)?
+   - Should she have different scripts/personas for each mode?
+   - Best practices for seamless switching?
 
-Current hero section elements:
-- [Button] "Talk to Sarah (Voice AI)" → shows alert
-- [Link] "📞 Call Sarah (Voice AI): Talk to Sarah (Voice AI)" → shows phone popup
-- [Link] "💬 Text Sarah: +1 (352) 758-5336" → SMS link
-- [Link] "👨‍💼 Talk to Dan (Human): +1 (352) 936-8152" → phone link
-- [Widget] Vapi pill (bottom-right) → WORKS
+2. **CUSTOMER NOTIFICATION SYSTEM**:
+   - How to detect a "high-value" conversation (potential customer)?
+   - What signals indicate someone is ready to buy?
+   - Best way to notify Dan in real-time (SMS, email, dashboard alert)?
 
-Give focused suggestions for the cleanest UX.'''
+3. **IMPLEMENTATION APPROACH**:
+   - What Vapi webhooks/events are needed?
+   - How to score conversation quality?
+   - Database schema for tracking conversation outcomes?
+
+4. **SHOULD WE BUILD THIS?**
+   - Is this feature worth the development time?
+   - ROI assessment: Will this increase conversions?
+   - Alternative simpler approaches?
+
+Give focused, actionable recommendations. Vote YES/NO on whether to build this feature.'''
 
 results = []
 
