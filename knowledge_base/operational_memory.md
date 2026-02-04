@@ -99,10 +99,29 @@ This is the "Safety Valve" to prevent system paralysis.
 
 ## 🏛️ SECTION 6: SESSION LEARNINGS (Feb 4, 2026)
 
+### 🚨 CRITICAL BRANDING RULE (OWNER MANDATE - Feb 4, 2026)
+
+> **DO NOT CHANGE WITHOUT OWNER AUTHORIZATION**
+
+| Rule | Value |
+| ---- | ----- |
+| **Company Name** | AI Service Co |
+| **Tagline** | (A Division of WORLD UNITIES) |
+| **NEVER USE** | "Empire Sovereign" (was a hallucination) |
+| **Authorization** | Owner only (Dan) can change branding |
+
+**Files Fixed (Feb 4, 2026):**
+
+- index.html, features.html, media.html, payment.html, intake.html
+
+**If you see "Empire Sovereign" anywhere, it is WRONG and must be corrected.**
+
+---
+
 ### 🔧 Website Fixes - Lessons Learned
 
 | Issue | Root Cause | Fix |
-|-------|------------|-----|
+| ----- | ---------- | --- |
 | Vapi widget green circle | Wrong Vercel project deployed | Deploy to correct `empire-unified` project |
 | "Call Sarah" button alert | `startSarahCall()` not ready | Remove button, use Vapi widget only (Option B) |
 | "Call Sarah" tel: link popup | `href="tel:"` opens phone app | Remove tel: link entirely |

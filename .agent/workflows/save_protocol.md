@@ -133,10 +133,17 @@ Include what the system CAN do:
 
 Include 2-3 next priority actions.
 
-### 7. Update Brain
+### 7. Update Brain (MANDATORY - Owner Rule Feb 4, 2026)
 
-- Update `knowledge_base/operational_memory.md` with learnings
-- Log any new credentials or configurations
+> [!CAUTION]
+> **EVERY save protocol MUST update operational_memory.md with session learnings.**
+
+- [ ] Update `knowledge_base/operational_memory.md` with:
+  - New learnings from this session
+  - Any fixes applied
+  - Any new rules or mandates from owner
+- [ ] Log any new credentials or configurations
+- [ ] Check branding (must be "AI Service Co" - see Section 6 branding rule)
 
 ### 8. Browser Cleanup
 
