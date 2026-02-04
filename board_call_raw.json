@@ -1,0 +1,18 @@
+[
+  {
+    "ai": "Claude",
+    "raw": "**Root cause:** The website is using external contact tools (Calendly/formsubmit.co) instead of the integrated GHL system. Sarah's call functionality is broken (alert instead of actual calls), and the AI assistant is stuck in minimal icon mode rather than full widget deployment."
+  },
+  {
+    "ai": "Grok",
+    "raw": "The root cause is likely the system configuration set to \"minimalist_icon_v4\" with \"supabase_locked\" embed source, limiting functionality to a floating icon without full widget features. This setup prevents GHL integration in the Contact section and disables call functionality for the Sarah button, showing only an alert."
+  },
+  {
+    "ai": "Gemini",
+    "raw": "The website's contact form is improperly configured, bypassing the intended GHL integration. The Sarah button is malfunctioning, likely due to a broken link or script error. The website is loading only the floating icon for Sarah, not the full widget. The system is in a minimalist icon state.\n"
+  },
+  {
+    "ai": "ChatGPT",
+    "raw": "The root cause of the website issues is the integration of third-party tools. The contact section uses Calendly instead of GHL, causing functionality discrepancies. The Sarah button issues may stem from incomplete integration of the communication tool, leading to alerts without calls. The floating icon lacks a full widget display."
+  }
+]

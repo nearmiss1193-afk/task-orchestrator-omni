@@ -780,66 +780,38 @@
         </div>
     </section>
 
-    <!-- SOVEREIGN AUDIT & INTAKE -->
+    <!-- CONTACT - GHL ONLY (Locked Embeds - No Drift) -->
     <section id="contact"
         style="padding: 120px 0; background: radial-gradient(circle at 50% 100%, rgba(255, 62, 62, 0.1), transparent 70%); scroll-margin-top: 100px;">
         <div class="container">
             <div class="section-header">
-                <h2 style="font-size: 52px;">Initiate Sovereign Audit</h2>
+                <h2 style="font-size: 52px;">Get Started</h2>
                 <p>Deploy your autonomous workforce. Start with a real-time system evaluation.</p>
             </div>
 
-            <form id="sovAuditForm" class="contact-form"
-                style="max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.5); padding: 40px; border-radius: 24px; border: 1px solid var(--border);">
-                <div style="margin-bottom: 20px;">
-                    <input type="text" id="leader_name" placeholder="Business Owner Name" required
-                        style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <input type="text" id="biz_name" placeholder="Company Name" required
-                        style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <input type="tel" id="leader_phone" placeholder="Mobile Phone (for Audit results)" required
-                        style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <select id="mission_focus"
-                        style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border); border-radius: 8px; color: white;">
-                        <option value="lead_gen">More Qualified Leads</option>
-                        <option value="receptionist">24/7 AI Receptionist</option>
-                        <option value="intel">Deep Market Intel</option>
-                    </select>
-                </div>
-                <button type="submit" class="cta-btn"
-                    style="width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">⚡
-                    Initiate Sovereign Audit</button>
-            </form>
-
             <div id="contact-container"
                 style="max-width: 900px; margin: 40px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                <!-- GHL Contact Form (Locked from Supabase) -->
+
+                <!-- GHL Form (LOCKED) -->
                 <div
                     style="background: rgba(30, 41, 59, 0.5); padding: 30px; border-radius: 20px; border: 1px solid var(--border);">
-                    <h3 style="margin-bottom: 20px; color: white;">📝 Send a Message</h3>
+                    <h3 style="margin-bottom: 20px; color: white;">Send a Message</h3>
                     <div class="ghl-form" data-id="RnK4OjX0oDcqtWw0VyLr"></div>
                     <script src="https://link.msgsndr.com/js/form_embed.js"></script>
                 </div>
 
-                <!-- GHL Calendar (Locked from Supabase) -->
+                <!-- GHL Calendar (LOCKED) -->
                 <div
                     style="background: rgba(255, 62, 62, 0.05); padding: 30px; border-radius: 20px; border: 1px solid var(--primary);">
-                    <h3 style="margin-bottom: 15px; color: white;">📅 Book Discovery Call</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Ready to automate? Book a 10-minute audit
-                        strategy session.</p>
+                    <h3 style="margin-bottom: 15px; color: white;">Book Discovery Call</h3>
                     <iframe src="https://calendar.gohighlevel.com/v2/preview/M7YwDClf34RsNhPQfhS7" width="100%"
-                        height="500" frameborder="0" style="border-radius: 12px;"></iframe>
+                        height="500" frameborder="0" style="border-radius:12px;" title="Book a call"></iframe>
                 </div>
             </div>
 
             <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
                 <button onclick="startSarahCall()" class="cta-btn"
-                    style="display: inline-block; padding: 15px 30px; background: #22c55e; border: none; border-radius: 100px; color: white; font-weight: bold; cursor: pointer; text-decoration: none; width: fit-content;">📞
+                    style="display: inline-block; padding: 15px 30px; background: #22c55e; border: none; border-radius: 100px; color: white; font-weight: bold; cursor: pointer; width: fit-content;">📞
                     Call Sarah AI (Voice)</button>
                 <a href="tel:+13529368152" class="cta-btn"
                     style="display: inline-block; padding: 15px 30px; border: 2px solid white; border-radius: 100px; color: white; font-weight: bold; text-decoration: none; width: fit-content;">👨‍💼
@@ -1022,7 +994,7 @@
                     window.vapiSDK.run({
                         apiKey: VAPI_PUBLIC_KEY,
                         assistant: SARAH_ASSISTANT_ID,
-                        config: { position: "bottom-right", offset: "20px", width: "50px", height: "50px" }
+                        config: { position: "bottom-right", offset: "20px", width: "200px", height: "200px" }
                     });
                     console.log('[Sovereign Voice v5] Sarah SDK Loaded & Ready');
                 }
@@ -1044,7 +1016,7 @@
                         window.vapiSDK.run({
                             apiKey: VAPI_PUBLIC_KEY,
                             assistant: SARAH_ASSISTANT_ID,
-                            config: { position: "bottom-right", offset: "20px", width: "50px", height: "50px" }
+                            config: { position: "bottom-right", offset: "20px", width: "200px", height: "200px" }
                         });
                         setTimeout(() => window.vapiSDK.start(SARAH_ASSISTANT_ID), 500);
                     }
