@@ -1,0 +1,39 @@
+{
+  "meeting_type": "Website Analysis",
+  "website": "aiserviceco.com",
+  "timestamp": "2026-02-04T11:51:00.740759",
+  "sovereign_state": {
+    "system_mode": "working",
+    "sarah_status": "minimalist_icon_v4",
+    "embed_source": "supabase_locked",
+    "last_outreach": "2026-01-30T02:28:57.787716+00:00",
+    "health": {
+      "supabase": "\u2705",
+      "api": "\u2705"
+    },
+    "locked_embeds": {
+      "form": "<div class=\"ghl-form\" data-id=\"RnK4OjX0oDcqtWw0VyL...",
+      "calendar": "<iframe src=\"https://calendar.gohighlevel.com/v2/p...",
+      "widget_emoji": "\u26a1..."
+    },
+    "audit_timestamp": "2026-02-04T16:50:34.936106"
+  },
+  "board_recommendations": [
+    {
+      "ai": "Claude",
+      "response": "## Website Assessment: aiserviceco.com\n\n**Critical Fix #1:**\n**Verify GHL embed deployment** - System shows embeds are locked in Supabase but may not be live on the contact section. Check if old Calendly/formsubmit.co forms are still showing instead of the GHL calendar and form embeds. This directly impacts lead capture.\n\n**Quick Wins:**\n1. **Confirm Sarah Widget display** - Verify the minimalist icon (v4) is actually rendering, not a broken state\n2. **Test form submissions** - Ensure the locked GHL form embed (`RnK4OjX0oDc...`) is properly capturing leads\n\n**Recommended Action:**\nImmediate site audit of the contact section. Compare what's live on the frontend versus what's stored in Supabase. If embeds aren't deployed, push the locked embed codes to production immediately. This is revenue-critical for an AI service agency.\n\nThe 5-day outreach gap is secondary to ensuring your lead capture system actually works."
+    },
+    {
+      "ai": "Grok",
+      "response": "**Assessment for aiserviceco.com**\n\n1. **Critical Fix**: Update the Contact section to replace old Calendly/formsubmit.co with the current GHL embeds (form and calendar) from the locked Supabase data. This ensures consistent user experience and accurate data capture\u2014deploy immediately.\n\n2. **Quick Wins**: \n   - Confirm Sarah Voice Widget display; if not showing minimalist icon (v4), adjust to match the intended design for branding consistency.\n   - Trigger a follow-up outreach to re-engage users, as the last outreach was 5 days ago (Jan 30).\n\n3. **Recommended Action**: Conduct a full site audit to verify all Supabase-locked embeds are live on the website. Use the audit timestamp (Feb 4) as a baseline to log changes and ensure no outdated elements remain. Schedule this within 48 hours."
+    },
+    {
+      "ai": "Gemini",
+      "response": "**Assessment of aiserviceco.com**\n\n1. **Critical Fix:** Verify and deploy the GHL contact form and calendar embeds from Supabase (locked_embeds) to replace any old Calendly/formsubmit.co instances in the contact section. Incorrect contact information directly impacts lead generation.\n\n2. **Quick Wins:**\n    *  Confirm the Sarah voice widget is displaying the correct minimalist icon (sarah_status). If it's the full text box, revert to the icon.\n    *  Implement a content refresh or new offer to initiate customer outreach, given the last outreach was 5 days ago.\n\n3. **Recommended Action:** Audit the entire website codebase and CMS to ensure *all* locked embeds in Supabase (including the widget_emoji) are correctly implemented and functioning as intended. This eliminates discrepancies between database and live site.\n"
+    },
+    {
+      "ai": "ChatGPT",
+      "response": "**Critical Fix**: Immediately update the contact section to replace any old Calendly/formsubmit.co embeds with the new GHL embeds. This ensures clients can reach out effectively via the latest integration.\n\n**Quick Wins**: \n1. Verify and resolve the uncertainty around the Sarah Voice Widget\u2014confirm whether it's displaying as expected (either minimalist icon or full white text box) and adjust it as necessary.\n2. Update the last outreach entry to ensure timely follow-ups\u2014consider scheduling the next outreach for February 4, 2026.\n\n**Recommended Action**: Access Supabase to unlock the embed codes and ensure they are correctly deployed on the site. Once resolved, conduct a full test of all functionality to confirm everything operates as intended."
+    }
+  ]
+}

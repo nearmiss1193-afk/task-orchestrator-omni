@@ -110,6 +110,56 @@ def test_db_psycopg2():
     except Exception as e:
         print(f"❌ RAW PSQL FAIL: {e}")
 
+# ==== SOVEREIGN STATE API (External AI Audit Endpoint) ====
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="GET")
+def sovereign_state(token: str = ""):
+    """Public endpoint for external AI audits (ChatGPT, Gemini, Grok)."""
+    import os
+    from datetime import datetime
+    from supabase import create_client
+    
+    SOVEREIGN_TOKEN = "sov-audit-2026-ghost"
+    if token != SOVEREIGN_TOKEN:
+        return {"error": "Unauthorized. Pass ?token=sov-audit-2026-ghost"}
+    
+    # Direct initialization with fallbacks
+    url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or "https://rzcpfwkygdvoshtwxncs.supabase.co"
+    key = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SERVICE_ROLE_KEY")
+    
+    if not key:
+        return {"error": "SUPABASE_KEY not found in Modal vault", "audit_timestamp": datetime.now().isoformat()}
+    
+    try:
+        sb = create_client(url, key)
+        
+        # Get campaign mode
+        campaign_mode = sb.table("system_state").select("status").eq("key", "campaign_mode").execute()
+        mode = campaign_mode.data[0].get("status") if campaign_mode.data else "unknown"
+        
+        # Get embeds
+        embeds = sb.table("embeds").select("type,code").execute()
+        locked_embeds = {e.get("type"): (e.get("code") or "")[:50] + "..." for e in embeds.data} if embeds.data else {}
+        
+        # Get last outreach
+        touch = sb.table("outbound_touches").select("ts").order("ts", desc=True).limit(1).execute()
+        last_outreach = touch.data[0].get("ts") if touch.data else None
+        
+        # Get lead count
+        leads = sb.table("contacts_master").select("id", count="exact").limit(1).execute()
+        
+        return {
+            "system_mode": mode,
+            "sarah_status": "minimalist_icon_v4",
+            "embed_source": "supabase_locked",
+            "last_outreach": last_outreach,
+            "health": {"supabase": "✅" if leads.count else "❌", "api": "✅"},
+            "locked_embeds": locked_embeds,
+            "audit_timestamp": datetime.now().isoformat()
+        }
+    except Exception as e:
+        return {"error": str(e), "audit_timestamp": datetime.now().isoformat()}
+
 # OUTREACH & SYNC WORKERS (Imported from workers/outreach.py)
 from workers.outreach import sync_ghl_contacts, auto_outreach_loop, dispatch_sms_logic, dispatch_email_logic, dispatch_call_logic
 
