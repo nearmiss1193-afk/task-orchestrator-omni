@@ -395,3 +395,41 @@ Before ANY `execute`, `deploy`, `send`, or major change:
 **LOCK STATUS**: 🔒 **PERMANENTLY LOCKED**  
 **Effective**: February 4, 2026  
 **Authority**: Executive Order by Dan (Founder)
+
+---
+
+## BOARD OVERRIDE V2 – EXECUTIVE ORDER (Feb 4, 2026)
+
+### ⚫ NO SELF-FIX RULE
+
+When user says **"board call"** on any topic:
+
+1. **STOP ALL INTERNAL LOGIC** – No diagnosis, no code review, no thinking
+2. **ONLY call the real APIs** – Print the curl command + raw response
+3. **DO NOT diagnose** – No root cause analysis
+4. **DO NOT fix** – No code changes
+5. **DO NOT summarize** – Only raw API output
+6. **If ANY AI call fails** → Log `BOARD FAILED` and **STOP**
+
+**NO EXCEPTIONS.**
+
+---
+
+### Execution Flow for "board call"
+
+```
+USER: "board call on [topic]"
+
+→ Antigravity runs: python scripts/cross_ai_board.py
+→ Prints: curl command for each AI
+→ Prints: raw response body for each AI
+→ NO analysis
+→ NO recommendations
+→ STOP
+```
+
+---
+
+**LOCK STATUS**: 🔒 **PERMANENTLY LOCKED**  
+**Effective**: February 4, 2026  
+**Authority**: Executive Order by Dan (Founder)
