@@ -540,18 +540,19 @@
             <p>The integrated AI workforce for logistics, service, and high-growth businesses. Answering calls, managing
                 payroll, and driving your mission with unrelenting desire.</p>
             <div class="hero-cta">
-                <button onclick="startSarahCall()" class="cta-btn secondary">Talk to Sarah (Voice AI)</button>
+                <!-- Option B: Removed "Talk to Sarah (Voice AI)" button - Vapi widget is now the ONLY voice entry point -->
                 <a href="#contact" class="cta-btn outline" onclick="trackLeadIntent('start_audit')">Start Audit</a>
             </div>
             <div class="style-fix-30" data-style-migrated="true">
-                <div style="margin-bottom: 8px;"><strong>📞 Call Sarah (Voice AI):</strong> <a href="tel:+18632132505"
-                        style="color: var(--primary); font-weight: bold; text-decoration: underline;"
-                        onclick="trackLeadIntent('call_sarah_voice_ai')">Talk
-                        to Sarah (Voice AI)</a></div>
+                <!-- Removed: "📞 Call Sarah (Voice AI)" tel: link - was causing phone popup -->
                 <div style="margin-bottom: 8px;"><strong>💬 Text Sarah:</strong> <a href="sms:+13527585336"
                         data-brand="sms" style="color: var(--primary);">+1 (352) 758-5336</a></div>
                 <div><strong>👨‍💼 Talk to Dan (Human):</strong> <a href="tel:+13529368152"
                         style="color: var(--primary);">+1 (352) 936-8152</a></div>
+                <div style="margin-top: 10px; font-size: 0.9em; color: #888;">
+                    <em>💡 Click the orange "Talk to Sales" button in the bottom-right corner to speak with Sarah
+                        AI</em>
+                </div>
             </div>
         </div>
     </section>
