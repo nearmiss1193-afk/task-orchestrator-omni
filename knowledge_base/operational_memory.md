@@ -108,6 +108,29 @@ This is the "Safety Valve" to prevent system paralysis.
 | "Call Sarah" tel: link popup | `href="tel:"` opens phone app | Remove tel: link entirely |
 | Changes not appearing | Deployed to wrong project | Always verify deploy target URL |
 
+### 📊 PageSpeed Optimization (Feb 4, 2026)
+
+**Problem:** Scores were embarrassingly low for an AI company
+
+- Performance: 62 → Target 90+
+- SEO: 58 → Target 90+  
+- Best Practices: 73 → Target 90+
+- Accessibility: 92 ✅
+
+**Fixes Applied:**
+
+| Fix | Impact |
+|-----|--------|
+| Added OG meta tags | +SEO |
+| Added Twitter card tags | +SEO |
+| Added JSON-LD Organization | +SEO, +rich results |
+| Added JSON-LD Service | +SEO |
+| Canonical URL | +SEO |
+| Better title/description | +SEO |
+| Modal buttons (lazy load iframes) | +Performance |
+
+**Board Decision:** Forms should be button-triggered modals, NOT inline embeds.
+
 ### 📍 Deployment Config (CRITICAL)
 
 ```
@@ -115,6 +138,7 @@ HOSTING: Vercel
 PROJECT: empire-unified
 DOMAIN: aiserviceco.com
 DEPLOY: cd public && vercel --prod --yes
+MODAL: python -m modal deploy deploy.py
 ```
 
 ### 🤖 Sarah AI Intelligence Strategy (Board Approved 4/4)
