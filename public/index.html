@@ -44,6 +44,13 @@
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="//links.aiserviceco.com">
 
+    <!-- Preload Critical Fonts (Performance) -->
+    <link rel="preload"
+        href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2"
+        as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/QGYyz_MVcBeNP4NjuGObqx1XmO1I4TC1C4G-EiAou6Y.woff2"
+        as="font" type="font/woff2" crossorigin>
+
     <!-- Open Graph (Facebook, LinkedIn) -->
     <meta property="og:title" content="AI Service Co | Sovereign AI Automation">
     <meta property="og:description"
@@ -585,14 +592,17 @@
         });
     </script>
 
-    // Track Lead Intent Events
-    function trackLeadIntent(type) {
-    gtag('event', 'lead_intent_' + type, {
-    'event_category': 'conversion',
-    'event_label': type,
-    'device_type': /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
-    });
-    }
+    <!-- Lead Intent Tracking -->
+    <script>
+        function trackLeadIntent(type) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'lead_intent_' + type, {
+                    'event_category': 'conversion',
+                    'event_label': type,
+                    'device_type': /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+                });
+            }
+        }
     </script>
     <link rel="stylesheet" href="css/autofix.css?v=17.5">
 </head>

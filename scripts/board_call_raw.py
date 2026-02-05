@@ -6,57 +6,47 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''STRATEGIC BOARD QUERY: Operational Excellence & PageSpeed 90+
+PROMPT = '''BOARD QUERY: PageSpeed Score Optimization
 
-## CURRENT STATE (Feb 4, 2026)
-- Performance: Mobile 77, Desktop 81
+## Current Scores (Feb 4, 2026)
+- Performance: 76 (target: 90+)
 - Accessibility: 92 ✅
-- Best Practices: 73 (STUCK despite error suppression)
+- Best Practices: 73 (target: 90+)
 - SEO: 92
 
-## QUESTIONS FOR THE BOARD:
+## Current Optimizations Already Applied
+1. Clarity/GA4 scripts delayed 3 seconds after load
+2. Error suppression for third-party script errors
+3. DNS prefetch for fonts and CDNs
+4. Fonts with display=swap
+5. No YouTube iframes on page
+6. Inline critical CSS
 
-### 1. SUPABASE SYNC FOR OPERATIONAL MEMORY
-Currently we have `operational_memory.md` in git. Should we sync this to Supabase so Modal webhooks can read the latest memory?
+## Known Issues
+- Best Practices stuck at 73 despite error suppression
+- Performance at 76 on mobile
 
-Options:
-A) Create `sovereign_memory` table in Supabase
-B) Use Supabase Edge Functions to read from git
-C) Keep as file-only (current)
-D) Other approach?
+## Questions for the Board
 
-**What gives us the BEST:**
-- Operational awareness
-- Operational capabilities
-- Operational competency
-- Operational memory for daily tasks and customer handling
+1. **What specific changes will boost Best Practices 73→90+?**
+   - Is there something beyond console errors causing BP issues?
+   - Should we remove Clarity/GA4 entirely for testing?
 
-### 2. WHAT TO DO ABOUT payment.html?
-We have a payment.html file but user says we don't have a payment page anymore. Options:
-A) Delete it
-B) Keep for future use
-C) Redirect to checkout
-D) Archive it
+2. **What will boost Performance 76→90+?**
+   - Image optimization? (but we have no images)
+   - Font loading strategy change?
+   - More aggressive script deferral?
 
-### 3. BEST PRACTICES 73 → 90+
-Error suppression was added but BP is still 73. What else?
-- Should we go nuclear (remove Clarity/GA4/Vapi)?
-- Any other fixes we're missing?
+3. **Should we defer Vapi widget load as well?**
+   - Currently loads in footer
+   - Could delay 5+ seconds
 
-### 4. SEO 92 → 100
-What specific fixes would push SEO from 92 to 100?
-- Missing meta tags?
-- Structured data improvements?
-- Performance impact on SEO?
+4. **Is there a nuclear option?**
+   - Remove all third-party until 90+ reached?
+   - Then add back one-by-one?
 
-### 5. PERFORMANCE 77-81 → 90+
-Key blockers for performance?
-- YouTube embeds (lazy loaded already)
-- Third-party scripts
-- Image optimization
-- Code splitting
-
-PROVIDE SPECIFIC, ACTIONABLE RECOMMENDATIONS WITH CODE EXAMPLES WHERE APPLICABLE.'''
+Give specific, actionable code fixes with examples.
+'''
 
 def query_claude():
     api_key = os.getenv("ANTHROPIC_API_KEY")
