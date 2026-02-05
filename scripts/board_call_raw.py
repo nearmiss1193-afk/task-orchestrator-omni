@@ -6,73 +6,48 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD REVIEW: Email Drafts for Outreach Campaign
+PROMPT = '''BOARD EMERGENCY: Security Incident and System Failures
 
-## CONTEXT
-Dan has approved 10 email drafts for his outreach campaign. Before sending to Dan for final review, the board must achieve 3/4 (75%) consensus on whether these emails are ready.
+## INCIDENT 1: EXPOSED API KEY (CRITICAL)
+Google Cloud Trust & Safety detected a publicly accessible API key:
+- Key: AIzaSyC5-5NI3HEyJiTscHYp-IKU6t2ebtKAtxQ (Gmail API)
+- Location: https://github.com/nearmiss1193-afk/task-orchestrator-omni/blob/d5fc29114d68a89e2dcfad9974aa3a7ed823ff1b/knowledge_base/operational_memory.md
+- Project: Empire-Email-Integration
 
-## EMAIL TEMPLATE FORMAT
-All 10 emails follow the "bfisher audit format" with:
-1. Traffic Light table (CRITICAL/WARNING/OPPORTUNITY)
-2. Industry-specific language
-3. "Free fix" local guarantee
-4. 14-day trial offer
-5. "Follow up in an hour" CTA
+**ROOT CAUSE**: operational_memory.md was pushed to GitHub with API keys in Section 13. 
+We tried to exclude it from commits but it was already in git history.
 
-## SAMPLE EMAIL (Representative of all 10)
+**QUESTIONS**:
+1. Should we regenerate this Gmail API key immediately?
+2. How do we remove the key from git history (BFG Repo Cleaner or git filter-branch)?
+3. Should we restrict the key's scope in Google Cloud Console?
 
-Subject: [Business Name] - Digital Performance Audit Results
+## INCIDENT 2: GITHUB WORKFLOW FAILURES
+Two workflows are failing:
+1. "Deploy Empire Unified" - Some jobs not successful (commit 12a5ed2)
+2. "System Watchdog" - All jobs have failed
 
-Dear [Name/Business Owner],
+**QUESTIONS**:
+1. What's causing these failures?
+2. Should we investigate before pushing more code?
 
-I am a local digital strategist here in Lakeland, and I've conducted a brief health audit of [Business]'s online presence.
+## INCIDENT 3: SESSION SUMMARY EMAILS NOT ARRIVING
+Dan reports he hasn't received any session summary emails despite Status 200 responses from GHL webhook.
 
-AREA                 STATUS              THE RISK TO THE BUSINESS
----------------------------------------------------------------------------
-Search Visibility    CRITICAL (RED)      The site may be failing Google's Core Web Vitals...
-Legal Compliance     WARNING (YELLOW)    The site may be missing a dedicated Privacy Policy...
-Lead Efficiency      OPPORTUNITY         Your team may be manually filtering every inquiry...
+**QUESTIONS**:
+1. Is the GHL webhook URL correct?
+2. Is there an issue with the email workflow in GHL?
+3. How do we verify email delivery?
 
-THE SOLUTION: I specialize in helping [industry] businesses bridge these gaps. 14-day trial offer...
+## BOARD RECOMMENDATIONS NEEDED
 
-MY LOCAL GUARANTEE: Because I am a local Lakeland resident, I would like to fix your Search Visibility for free this week...
+1. **IMMEDIATE**: What's the priority order for addressing these issues?
+2. **API KEY**: Regenerate now or wait for board consensus?
+3. **GIT HISTORY**: Best approach to remove secrets from history?
+4. **WORKFLOWS**: Fix now or investigate first?
+5. **EMAILS**: How to debug the delivery issue?
 
-I will follow up with your office in an hour to see if you have any questions.
-
-Best regards,
-Daniel Coffman
-352-936-8152
-Owner, AI Service Co
-
-## 10 BUSINESSES TARGETED
-1. Lakeland Roofing Company (roofing)
-2. All Pro Roofing (roofing)
-3. Precision Roofing Lakeland (roofing)
-4. Scott's Air Conditioning - Contact: Craig Fortin (HVAC)
-5. Air Pros USA - Contact: Allisa Sommers (HVAC)
-6. Lakeland Air Conditioning (HVAC)
-7. Viper Auto Care (auto)
-8. Honest 1 Auto Care Lakeland (auto)
-9. Premium Auto Repair (auto)
-10. ABC Plumbing Lakeland (plumbing)
-
-## BOARD QUESTIONS
-
-1. **FORMAT**: Does the Traffic Light table format effectively communicate value? Any improvements?
-
-2. **CLAIMS**: Are there any legal/ethical concerns with:
-   - Saying the site "may be failing" Google standards?
-   - Offering a "free fix" for search visibility?
-   - Mentioning the "Florida Digital Bill of Rights"?
-
-3. **CTA**: Is "I will follow up in an hour" too aggressive? Should it be softened?
-
-4. **PERSONALIZATION**: 4 emails have contact names (Craig, Allisa), 6 say "Dear Business Owner". Is this balance acceptable?
-
-5. **APPROVAL**: Do you approve sending these emails to Dan for final review?
-
-Please vote: APPROVE / REJECT with specific feedback.
-3/4 consensus required to proceed.
+This is a security incident - please prioritize recommendations accordingly.
 '''
 
 

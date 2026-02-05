@@ -382,15 +382,14 @@ ALWAYS verify webhook URLs against GHL dashboard screenshots.
 
 | Field | Value |
 |-------|-------|
-| **Client ID** | `***REMOVED***.apps.googleusercontent.com` |
-| **Client Secret** | `***REMOVED***` |
+| **Client ID** | `MOVED TO .secrets/secrets.env - DO NOT STORE HERE` |
+| **Client Secret** | `MOVED TO .secrets/secrets.env - DO NOT STORE HERE` |
 | **Project ID** | `empire-email-integration` |
 
 ### API Key
 
-```
-AIzaSyC5-5NI3HEyJiTscHYp-IKU6t2ebtKAtxQ
-```
+> ⚠️ **SECURITY NOTICE**: API keys have been moved to `.secrets/secrets.env` (gitignored).
+> Never store API keys in this file as it is tracked by git.
 
 ### Service Account
 
@@ -433,6 +432,154 @@ pip install google-auth-oauthlib google-api-python-client
 ### Token Storage
 
 After first authentication, token is saved to `gmail_token.json` for future use.
+
+---
+
+## 🔑 SECTION 13: API KEYS BACKUP (CRITICAL - Feb 5, 2026)
+
+> ⚠️ **SECURITY UPDATE**: All API keys have been moved to `.secrets/secrets.env`.
+> This file is gitignored and will NEVER be pushed to GitHub.
+>
+> **Location:** `.secrets/secrets.env`
+>
+> Keys stored there:
+>
+> - ANTHROPIC_API_KEY (Claude)
+> - GEMINI_API_KEY (Google Gemini)  
+> - GROK_API_KEY (xAI Grok)
+> - OPENAI_API_KEY (ChatGPT)
+> - GMAIL_API_KEY (Google Gmail)
+> - STRIPE keys
+> - SUPABASE service role key
+
+### Gmail API
+
+> Keys moved to `.secrets/secrets.env` - DO NOT STORE HERE
+
+### Other Critical Keys
+
+> ⚠️ **MOVED TO .secrets/secrets.env**
+> Hunter.io, Modal, and Stripe keys are stored securely in the gitignored secrets file.
+
+### Lesson Learned
+
+**ROOT CAUSE OF KEY LOSS**: API keys were stored in `.env` only, never backed up to `operational_memory.md`. When context was truncated or during long sessions, references to keys were lost.
+
+**NEW POLICY (Feb 5, 2026)**:
+
+- All API keys stored in `.secrets/secrets.env` (gitignored, never pushed)
+- `operational_memory.md` contains ONLY non-sensitive documentation
+- GitHub secret scanning will catch any accidental exposures
+
+---
+
+## 📧 SECTION 14: EMAIL OUTREACH STANDARD (MANDATORY - Feb 5, 2026)
+
+> [!CAUTION]
+> **THIS IS THE STANDARD.** All prospecting emails MUST follow this format until something better is adopted and approved by Dan.
+
+### Standard Email Format (bfisher Template)
+
+**Reference Files:** `email_templates/bfisher_*.png`
+
+#### 1. Email Subject Line
+
+```
+[Business Name] - Technical Health Audit of [Website]
+```
+
+#### 2. Email Body Structure
+
+**Opening:**
+
+```
+Dear [Mr./Ms. Last Name],
+
+I've been researching local [INDUSTRY] providers in [CITY], and I conducted a technical health audit of [BUSINESS NAME]'s digital presence.
+
+To save you time, I have summarized the three critical areas currently impacting your customer acquisition and search ranking:
+```
+
+**Traffic Light Table:**
+
+| AREA | STATUS | THE RISK TO THE FIRM |
+|------|--------|---------------------|
+| Mobile Speed | 🔴 CRITICAL | The site takes X.X seconds to load. Emergency customers searching on phones will abandon your site before it even appears. |
+| Security & Trust | 🟡 WARNING | The site lacks HTTPS encryption. This flags your business as "Not Secure" to customers and causes Google to penalize your ranking. |
+| Lead Capture | 🟢 OPPORTUNITY | With X.XMB of data to download, potential leads are "timing out" on mobile networks before they can call you. |
+
+**The Solution:**
+
+```
+The Solution: I specialize in helping [CITY] [INDUSTRY] businesses bridge these gaps. I would like to offer you a 14-day "AI Intake" trial. We can deploy an intelligent phone system that answers emergency calls 24/7, qualifies leads, and schedules appointments—ensuring you never miss a job.
+
+My Local Guarantee: Because I am a [CITY] resident, I would like to fix your Mobile Performance for free this week. I will optimize your load time to get you back into Google's "Green" zone and ensure you are the first firm customers see when they need help fast.
+```
+
+**Attachments & CTA:**
+
+```
+I have attached your full Performance Report and a 1-page Executive Summary. I'll follow up with your office in an hour to see if you have any questions.
+
+Best regards,
+
+Daniel Coffman
+Owner, AI Service Co
+352-936-8152
+```
+
+#### 3. REQUIRED Attachments (2 minimum)
+
+1. **Website Screenshot** - Shows specific problem found (broken form, slow load, etc.)
+2. **PDF Audit Report** - "DIGITAL RISK & PERFORMANCE AUDIT" with:
+   - Executive Summary
+   - Critical Findings (Mobile Performance score, load time, CLS, HTTPS, page weight)
+   - Proposed Solutions (numbered list)
+
+#### 4. Screenshot Strategy
+
+**ALWAYS include screenshot of THEIR SPECIFIC PROBLEM:**
+
+- Broken form ("Unable to load form")
+- Slow load time indicator
+- "Not Secure" warning in browser
+- Mobile rendering issues
+
+This personalizes the email and proves you actually visited their site.
+
+### PDF Audit Report Format
+
+**Title:** DIGITAL RISK & PERFORMANCE AUDIT
+**Client:** [Business Name] LLC
+**Date:** [Current Date]
+
+**Sections:**
+
+1. **EXECUTIVE SUMMARY** - 2-3 sentences about critical issues found
+2. **CRITICAL FINDINGS** - Bullet list with specific metrics
+3. **PROPOSED SOLUTIONS** - Numbered list of 3-4 fixes
+
+### Session Lessons (Feb 5, 2026)
+
+**INCIDENT**: Gemini API key was lost, bfisher template was never saved.
+
+**ROOT CAUSES**:
+
+1. API keys only in `.env`, not backed up to operational_memory.md
+2. Email template screenshots were never saved to permanent files
+3. Agent acted unilaterally instead of consulting board first
+
+**FIXES APPLIED**:
+
+1. Added Section 13 with all API keys backup
+2. Created `email_templates/` folder with bfisher screenshots
+3. Added this Section 14 with email standard format
+
+**NEW RULES**:
+
+- When Dan mentions `/board_protocol`, QUERY THE BOARD FIRST before taking action
+- All email templates must be saved to `email_templates/` folder
+- New API keys must be added to BOTH `.env` AND operational_memory.md
 
 ---
 
