@@ -99,6 +99,43 @@ This is the "Safety Valve" to prevent system paralysis.
 
 ## 🏛️ SECTION 6: SESSION LEARNINGS (Feb 4, 2026)
 
+### 🚦 Traffic Light Audit Email (Board Consensus)
+
+**Format:** RED → YELLOW → GREEN for prospect emails
+
+| Color | Meaning | Threshold |
+|-------|---------|-----------|
+| 🔴 RED | Critical (Fix NOW) | PageSpeed <50, Load >5s |
+| 🟡 YELLOW | Warning (Fix Soon) | PageSpeed 50-74, Load 3-5s |
+| 🟢 GREEN | Good (Keep Up) | PageSpeed 75+, Load <3s |
+
+**Order:** RED first (urgency) → YELLOW (concern) → GREEN last (rapport)
+
+### 📧 Prospecting Sequence (Board Adjusted)
+
+| Step | Timing |
+|------|--------|
+| Email | Day 1 |
+| SMS | Day 3 (NOT 1 hour later) |
+| Call | Day 5 |
+
+**Key:** 24-48 hours between touches, not 1 hour
+
+### 🛠️ Prospecting Toolkit
+
+- Google Maps (find prospects)
+- LLMs (research websites)
+- PageSpeed screenshots (performance hook)
+- GHL Style Audits (CRM hook - needs Playwright/Puppeteer)
+- LinkedIn/Reviews (find names)
+- Gemini (create personalized docs)
+
+### 📊 PageSpeed Optimization
+
+- Performance: 76 → 88 (+12 points)
+- Event-based analytics loading implemented
+- Best Practices stuck at 73 (Vapi widget likely cause - acceptable)
+
 ### 🚨 CRITICAL BRANDING RULE (OWNER MANDATE - Feb 4, 2026)
 
 > **DO NOT CHANGE WITHOUT OWNER AUTHORIZATION**
@@ -224,6 +261,47 @@ cd public && vercel --prod --yes
 - `NEXT_PUBLIC_SUPABASE_URL` (not SUPABASE_URL)
 - `SUPABASE_SERVICE_ROLE_KEY` for backend access
 - `DATABASE_URL` for direct psycopg2 connections
+
+---
+
+## 🚂 SECTION 10: RAILWAY DEPLOYMENT (Feb 4, 2026)
+
+### Board Consensus: 100% Railway over Modal
+
+**Reason:** Modal's CRON limits (5 max) and cold start issues caused crashes.
+
+| Platform | Verdict |
+|----------|---------|
+| Modal | ❌ Crashes, 5 CRON limit |
+| Railway | ✅ Kubernetes-based, stable, unlimited CRONs |
+
+### Railway Prospecting Engine
+
+**Live URL:** `https://prospector-production-f12d.up.railway.app`
+
+| Endpoint | Purpose |
+|----------|---------|
+| `/health` | Health check |
+| `/ghl/webhook` | Receives GHL engagement events |
+
+### Files Created
+
+Location: `empire-unified/railway/`
+
+| File | Purpose |
+|------|---------|
+| `prospecting_worker.py` | Google Maps scraper (every 6h) |
+| `enrichment_worker.py` | PageSpeed audits (every 2h) |
+| `email_engine.py` | GHL outreach trigger (every 30m) |
+| `webhook_handler.py` | Flask webhook receiver |
+| `supabase_client.py` | Shared DB connection |
+| `ghl_client.py` | GHL API wrapper |
+
+### Key Learnings
+
+1. **Flask required** - Railway needs explicit Flask in requirements.txt
+2. **PORT env var** - Railway sets port automatically, use `os.getenv("PORT", 5000)`
+3. **service_role key** - Must use Supabase service_role key for backend queries
 
 ---
 

@@ -6,51 +6,68 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD QUERY: Design a "Street Light" Audit Email Format for B2B Prospecting
+PROMPT = '''BOARD QUERY: Modal vs Railway - Platform Selection for Prospecting Engine
 
 ## Context
-AI Service Co sends personalized prospecting emails that include audit results (PageSpeed scores, GHL/CRM audits, website analysis). The owner wants a "traffic light" format to present findings:
+Building a prospecting + email engine. Need to choose the right platform.
 
-- 🔴 **RED** = CRITICAL - Things they MUST fix immediately (urgent problems)
-- 🟡 **YELLOW** = WARNING - Things they SHOULD fix (moderate issues)  
-- 🟢 **GREEN** = GOOD - Things that are working well (positives)
+**User Experience:**
+- Used Modal before (5 CRONs) and it "crashed a lot"
+- Wants more stable architecture
 
-**Goal:** Make the audit results easy to understand at a 5th grade reading level. Visual. Scannable. Drives action.
+## Our Requirements
 
-**Current Audit Data Available:**
-- PageSpeed scores (Performance, Accessibility, Best Practices, SEO)
-- Website analysis (loading speed, mobile-friendly, etc.)
-- GHL/CRM gaps (missing automations, lead tracking issues)
+1. **Prospecting Worker** - Scrape Google Maps every 6 hours
+2. **Enrichment Worker** - Run website audits every 2 hours
+3. **Email Engine** - Trigger outreach every 30 minutes
+4. **Webhook Handler** - Receive GHL events in real-time
+5. **Heartbeat** - Health monitoring */5 min
+6. **Warmup** - Email reputation daily
 
-## Questions for the Board
+## Current State
+- Modal: 5 CRON limit, 8 endpoint limit (Starter plan)
+- Already have 3 Modal CRONs working (heartbeat, outreach, warmup)
+- Already have Railway account
 
-1. **What's the ideal structure for a traffic light audit email?**
-   - How should RED/YELLOW/GREEN sections be organized?
-   - What's the right balance of findings per category?
-   - Should GREEN come first (build rapport) or RED (create urgency)?
+## BOARD QUESTIONS:
 
-2. **What specific metrics map to each color?**
-   - PageSpeed: What scores = RED vs YELLOW vs GREEN?
-   - Other website metrics: What thresholds matter?
-   - How do you communicate CRM/GHL gaps in this format?
+### 1. WHY IS RAILWAY MORE STABLE?
+- What makes Railway more reliable than Modal?
+- Is this actually true or perception?
+- What are each platform's failure modes?
 
-3. **How should the email be worded?**
-   - Bullet points vs sentences?
-   - Technical jargon vs plain English?
-   - Example text for each color section?
+### 2. WHY WAS MODAL SUGGESTED INITIALLY?
+- What are Modal's advantages?
+- When is Modal the right choice?
+- Why did the board recommend Modal before?
 
-4. **What psychological principles make this effective?**
-   - How does the color coding drive action?
-   - What order maximizes response rates?
+### 3. CAN RAILWAY DO EVERYTHING WE NEED?
+- Cron jobs (scheduled tasks)
+- Long-running workers
+- Webhooks (always-on endpoints)
+- Web scraping with Playwright/Puppeteer
+- Database connections
 
-5. **Please provide a COMPLETE EMAIL TEMPLATE example**
-   - Subject line
-   - Opening line (personalized)
-   - The traffic light audit section
-   - Call-to-action
-   - Signature
+### 4. PLATFORM COMPARISON
 
-The template should be at a 5th grade reading level. Make it visual, simple, and action-driving.
+Compare these specific aspects:
+- Stability/uptime
+- Cron job support
+- Cold start times
+- Timeout limits
+- Cost at our scale
+- Deployment complexity
+- Debugging/logs
+- Scalability
+
+### 5. FINAL RECOMMENDATION
+
+For OUR specific use case (prospecting + email engine):
+- Which platform should we use?
+- Should we hybrid (some Modal, some Railway)?
+- Or go 100% one platform?
+
+Give me a CLEAR recommendation with reasoning.
 '''
 
 def query_claude():

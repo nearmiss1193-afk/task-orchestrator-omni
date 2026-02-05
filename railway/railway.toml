@@ -1,0 +1,26 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python webhook_handler.py"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# Cron jobs for workers
+# Note: Railway cron syntax is standard cron format
+# Format: "minute hour day month weekday"
+
+[[crons]]
+name = "prospecting"
+schedule = "0 */6 * * *"  # Every 6 hours
+command = "python prospecting_worker.py"
+
+[[crons]]
+name = "enrichment"
+schedule = "0 */2 * * *"  # Every 2 hours
+command = "python enrichment_worker.py"
+
+[[crons]]
+name = "outreach"
+schedule = "*/30 * * * *"  # Every 30 minutes
+command = "python email_engine.py"
