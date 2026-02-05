@@ -1,10 +1,12 @@
 # Email Drafts for Dan's Review - Traffic Light Format
+
 Generated: 2026-02-05 07:45 AM
 
 ---
 
 ## Email 1: Lakeland Roofing Company
-**To:** info@lakelandroofing.com
+
+**To:** <info@lakelandroofing.com>
 
 ```
 Subject: Lakeland Roofing Company - Digital Performance Audit Results
@@ -40,7 +42,8 @@ www.aiserviceco.com
 ---
 
 ## Email 2: All Pro Roofing
-**To:** info@allproroofingfl.com
+
+**To:** <info@allproroofingfl.com>
 
 ```
 Subject: All Pro Roofing - Digital Performance Audit Results
@@ -76,7 +79,8 @@ www.aiserviceco.com
 ---
 
 ## Email 3: Precision Roofing Lakeland
-**To:** info@precisionroofinglakeland.com
+
+**To:** <info@precisionroofinglakeland.com>
 
 ```
 Subject: Precision Roofing Lakeland - Digital Performance Audit Results
@@ -112,7 +116,8 @@ www.aiserviceco.com
 ---
 
 ## Email 4: Scott's Air Conditioning | Contact: Craig Fortin
-**To:** craig@scottsair.com
+
+**To:** <craig@scottsair.com>
 
 ```
 Subject: Scott's Air Conditioning - Digital Performance Audit Results
@@ -148,7 +153,8 @@ www.aiserviceco.com
 ---
 
 ## Email 5: Air Pros USA | Contact: Allisa Sommers
-**To:** allisa.sommers@airprosusa.com
+
+**To:** <allisa.sommers@airprosusa.com>
 
 ```
 Subject: Air Pros USA - Digital Performance Audit Results
@@ -183,13 +189,14 @@ www.aiserviceco.com
 
 ---
 
-## Email 6: Lakeland Air Conditioning
-**To:** info@lakelandac.com
+## Email 6: Lakeland Air Conditioning | Contact: Tony Agnello
+
+**To:** <tony@thelakelandac.com>
 
 ```
 Subject: Lakeland Air Conditioning - Digital Performance Audit Results
 
-Dear Business Owner,
+Dear Tony,
 
 I am a local digital strategist here in Lakeland, and I've conducted a brief health audit of Lakeland Air Conditioning's online presence.
 
@@ -220,7 +227,8 @@ www.aiserviceco.com
 ---
 
 ## Email 7: Viper Auto Care
-**To:** info@viperautocare.com
+
+**To:** <info@viperautocare.com>
 
 ```
 Subject: Viper Auto Care - Digital Performance Audit Results
@@ -256,7 +264,8 @@ www.aiserviceco.com
 ---
 
 ## Email 8: Honest 1 Auto Care Lakeland
-**To:** info@honest1lakeland.com
+
+**To:** <info@honest1lakeland.com>
 
 ```
 Subject: Honest 1 Auto Care Lakeland - Digital Performance Audit Results
@@ -292,7 +301,8 @@ www.aiserviceco.com
 ---
 
 ## Email 9: Premium Auto Repair
-**To:** info@premiumautorepairlakeland.com
+
+**To:** <info@premiumautorepairlakeland.com>
 
 ```
 Subject: Premium Auto Repair - Digital Performance Audit Results
@@ -328,7 +338,8 @@ www.aiserviceco.com
 ---
 
 ## Email 10: ABC Plumbing Lakeland
-**To:** info@abcplumbinglakeland.com
+
+**To:** <info@abcplumbinglakeland.com>
 
 ```
 Subject: ABC Plumbing Lakeland - Digital Performance Audit Results
@@ -362,4 +373,3 @@ www.aiserviceco.com
 ```
 
 ---
-

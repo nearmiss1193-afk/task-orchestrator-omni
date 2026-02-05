@@ -9,17 +9,31 @@ jobs:
   health-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Empire API Health
+      - name: Check Empire API Health (with retries for cold start)
         id: check
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://prospector-production-f12d.up.railway.app/health)
-          echo "Status Code: $response"
-          if [ "$response" != "200" ]; then
-            echo "❌ API is down!"
-            exit 1
-          else
-            echo "✅ API is healthy"
-          fi
+          max_attempts=3
+          delay=30
+          
+          for attempt in $(seq 1 $max_attempts); do
+            echo "Attempt $attempt of $max_attempts..."
+            response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 https://prospector-production-f12d.up.railway.app/health)
+            echo "Status Code: $response"
+            
+            if [ "$response" == "200" ]; then
+              echo "✅ API is healthy"
+              exit 0
+            else
+              echo "⚠️ Attempt $attempt failed with status: $response"
+              if [ $attempt -lt $max_attempts ]; then
+                echo "Waiting ${delay}s for Railway cold start..."
+                sleep $delay
+              fi
+            fi
+          done
+          
+          echo "❌ API is down after $max_attempts attempts!"
+          exit 1
 
       - name: Check Main Website
         run: |

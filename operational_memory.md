@@ -1,6 +1,4 @@
-# Empire Unified - Operational Memory
-
-## 🚨 CRITICAL: READ FIRST BEFORE ANY ACTION (Updated Feb 4, 2026)
+## 🚨 CRITICAL: READ FIRST BEFORE ANY ACTION (Updated Feb 5, 2026)
 
 ### INFRASTRUCTURE (NEVER ASK USER)
 
@@ -18,6 +16,89 @@
 2. **ALWAYS verify aiserviceco.com** - NOT netlify subdomain
 3. **NEVER ask user about hosting** - Info is RIGHT HERE
 4. **BEFORE claiming success**: Open browser to aiserviceco.com and verify
+
+---
+
+## Feb 5, 2026: Prospecting Workflow & Contact Research
+
+### PROSPECTING BATCHING PROTOCOL (MANDATORY)
+
+| Batch Type | Trigger | Action |
+|------------|---------|--------|
+| **Ready for Outreach** | 10 prospects with owner/contact info | Send emails to Dan for approval |
+| **Missing Contacts** | 30 prospects without owner info | Compile list + Manus prompt + failed tactics |
+
+### Contact Research Order (Exhaustive)
+
+1. **Hunter.io API** - Search by domain for decision-makers
+2. **Web Search** - "[Business Name] [City] FL owner"
+3. **LinkedIn Search** - "[Business Name] LinkedIn"
+4. **Domain Variations** - Try "firstname@domain" patterns
+5. **If ALL fail** → Add to Manus batch list
+
+### Failed Tactics to Report (Feb 5, 2026)
+
+When compiling Manus list, include these failed tactics:
+
+- Hunter.io API: Works for some, returns empty for many local businesses
+- Google Search: "[Business] owner" - Works for larger companies, fails for small local
+- Franchise businesses: Owner info not public (e.g., Honest 1 Auto Care)
+
+### Manus Prompt Template
+
+```
+Find the owner or primary decision-maker for these 30 businesses:
+
+[LIST OF BUSINESSES WITH:
+- Business Name
+- Website/Domain
+- City, State
+- Industry]
+
+For each business, return:
+- Owner/Contact Name
+- Title/Role
+- Email (if available)
+- Source where found
+
+Search tactics to try:
+1. Business registration records
+2. LinkedIn company pages
+3. Local news/press releases
+4. BBB listings
+5. Industry directories
+```
+
+### GitHub Watchdog Status
+
+- **Issue**: System Watchdog was failing (Railway endpoint not responding)
+- **Status**: RESOLVED (Railway returning 200 OK as of Feb 5, 2026)
+- **Cause**: Transient - Railway cold start or temporary network issue
+- **Action**: No fix needed - endpoint is healthy
+
+### Board Analysis Summary (Feb 5, 2026)
+
+Dual-transcript analysis completed (Nick Ponty AEO + Jack Roberts AntiGravity):
+
+**Validated Tactics:**
+
+- AEO pricing $500-$3K/month ✅
+- Trust Audits via High Level ✅
+- Soft-sell email templates ✅
+- GBP 16-point optimization ✅
+- Target $500K-$2M revenue businesses ✅
+
+**Tools to Invest In:**
+
+- Manis AI ($30/month) - Already have subscription ✅
+- Zapier/High Level - For automation
+- Firecrawl - For competitor research
+
+**Dismissed as Hype:**
+
+- Apple/Google Siri partnership claims ❌
+- "30-minute 6-figure apps" ❌
+- Google "Guided Learning" ❌
 
 ---
 
