@@ -6,43 +6,51 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD QUERY: Impact of Delaying GA4/Clarity Scripts
+PROMPT = '''BOARD QUERY: Design a "Street Light" Audit Email Format for B2B Prospecting
 
 ## Context
-We are AI Service Co - an AI automation agency with a website at aiserviceco.com.
+AI Service Co sends personalized prospecting emails that include audit results (PageSpeed scores, GHL/CRM audits, website analysis). The owner wants a "traffic light" format to present findings:
 
-**Current Implementation:**
-- GA4 (Google Analytics 4) loads 3 seconds after page load
-- Microsoft Clarity loads 3 seconds after page load
-- Both are analytics/tracking tools
+- 🔴 **RED** = CRITICAL - Things they MUST fix immediately (urgent problems)
+- 🟡 **YELLOW** = WARNING - Things they SHOULD fix (moderate issues)  
+- 🟢 **GREEN** = GOOD - Things that are working well (positives)
 
-**Proposed Change (Option A):**
-- Delay GA4 and Clarity to load 5 seconds after page load (instead of 3)
+**Goal:** Make the audit results easy to understand at a 5th grade reading level. Visual. Scannable. Drives action.
+
+**Current Audit Data Available:**
+- PageSpeed scores (Performance, Accessibility, Best Practices, SEO)
+- Website analysis (loading speed, mobile-friendly, etc.)
+- GHL/CRM gaps (missing automations, lead tracking issues)
 
 ## Questions for the Board
 
-1. **What data/tracking would we lose with 5s delay vs 3s delay?**
-   - Bounce rate accuracy?
-   - Session recording completeness?
-   - User behavior data?
+1. **What's the ideal structure for a traffic light audit email?**
+   - How should RED/YELLOW/GREEN sections be organized?
+   - What's the right balance of findings per category?
+   - Should GREEN come first (build rapport) or RED (create urgency)?
 
-2. **What is the typical user behavior timeline?**
-   - How long do users typically wait before interacting?
-   - At what point would delayed tracking miss critical data?
+2. **What specific metrics map to each color?**
+   - PageSpeed: What scores = RED vs YELLOW vs GREEN?
+   - Other website metrics: What thresholds matter?
+   - How do you communicate CRM/GHL gaps in this format?
 
-3. **Is 5 seconds too aggressive or not aggressive enough?**
-   - Some recommend 5-10 second delays for performance
-   - What's the sweet spot for analytics accuracy vs performance?
+3. **How should the email be worded?**
+   - Bullet points vs sentences?
+   - Technical jargon vs plain English?
+   - Example text for each color section?
 
-4. **Are there alternative approaches?**
-   - Load on user interaction instead of timeout?
-   - Use lighter analytics alternatives?
+4. **What psychological principles make this effective?**
+   - How does the color coding drive action?
+   - What order maximizes response rates?
 
-5. **What's the actual PageSpeed benefit?**
-   - Will going from 3s to 5s make a measurable difference?
-   - Or is the benefit diminishing returns at that point?
+5. **Please provide a COMPLETE EMAIL TEMPLATE example**
+   - Subject line
+   - Opening line (personalized)
+   - The traffic light audit section
+   - Call-to-action
+   - Signature
 
-Give specific, data-driven recommendations.
+The template should be at a 5th grade reading level. Make it visual, simple, and action-driving.
 '''
 
 def query_claude():
