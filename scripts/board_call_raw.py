@@ -6,46 +6,73 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD INVESTIGATION: Lost API Keys and Attachments
+PROMPT = '''BOARD REVIEW: Email Drafts for Outreach Campaign
 
-## INCIDENT REPORT
-Antigravity agent lost critical information during this session and acted without board approval. Dan has requested a board investigation.
+## CONTEXT
+Dan has approved 10 email drafts for his outreach campaign. Before sending to Dan for final review, the board must achieve 3/4 (75%) consensus on whether these emails are ready.
 
-## WHAT WAS LOST
+## EMAIL TEMPLATE FORMAT
+All 10 emails follow the "bfisher audit format" with:
+1. Traffic Light table (CRITICAL/WARNING/OPPORTUNITY)
+2. Industry-specific language
+3. "Free fix" local guarantee
+4. 14-day trial offer
+5. "Follow up in an hour" CTA
 
-### 1. Gemini API Key
-- The .env file had an OLD Gemini API key that hit 429 rate limit
-- Dan provided a NEW key but it wasn't in operational_memory.md
-- Root cause hypothesis: Keys only stored in .env, never backed up to permanent memory
+## SAMPLE EMAIL (Representative of all 10)
 
-### 2. bfisher Audit Attachment
-- Dan referenced a "Gemini-style audit attachment" from an email sent to bfisher@petersonmyers.com
-- Only a task reference exists in code: "Follow up with bfisher@petersonmyers.com regarding CLS failure"
-- The actual attachment file was never saved
+Subject: [Business Name] - Digital Performance Audit Results
+
+Dear [Name/Business Owner],
+
+I am a local digital strategist here in Lakeland, and I've conducted a brief health audit of [Business]'s online presence.
+
+AREA                 STATUS              THE RISK TO THE BUSINESS
+---------------------------------------------------------------------------
+Search Visibility    CRITICAL (RED)      The site may be failing Google's Core Web Vitals...
+Legal Compliance     WARNING (YELLOW)    The site may be missing a dedicated Privacy Policy...
+Lead Efficiency      OPPORTUNITY         Your team may be manually filtering every inquiry...
+
+THE SOLUTION: I specialize in helping [industry] businesses bridge these gaps. 14-day trial offer...
+
+MY LOCAL GUARANTEE: Because I am a local Lakeland resident, I would like to fix your Search Visibility for free this week...
+
+I will follow up with your office in an hour to see if you have any questions.
+
+Best regards,
+Daniel Coffman
+352-936-8152
+Owner, AI Service Co
+
+## 10 BUSINESSES TARGETED
+1. Lakeland Roofing Company (roofing)
+2. All Pro Roofing (roofing)
+3. Precision Roofing Lakeland (roofing)
+4. Scott's Air Conditioning - Contact: Craig Fortin (HVAC)
+5. Air Pros USA - Contact: Allisa Sommers (HVAC)
+6. Lakeland Air Conditioning (HVAC)
+7. Viper Auto Care (auto)
+8. Honest 1 Auto Care Lakeland (auto)
+9. Premium Auto Repair (auto)
+10. ABC Plumbing Lakeland (plumbing)
 
 ## BOARD QUESTIONS
 
-### 1. ROOT CAUSE ANALYSIS
-- Why do AI agents lose critical information between sessions?
-- What is the best practice for ensuring API keys are never lost?
-- Should keys be stored in multiple locations (backup redundancy)?
+1. **FORMAT**: Does the Traffic Light table format effectively communicate value? Any improvements?
 
-### 2. PROCESS FAILURE
-- The agent (Antigravity) acted unilaterally to fix the issue instead of consulting the board first
-- Was this the wrong approach?
-- What should the proper escalation protocol be?
+2. **CLAIMS**: Are there any legal/ethical concerns with:
+   - Saying the site "may be failing" Google standards?
+   - Offering a "free fix" for search visibility?
+   - Mentioning the "Florida Digital Bill of Rights"?
 
-### 3. ATTACHMENT MANAGEMENT
-- How should critical email attachments and templates be stored?
-- Should there be a dedicated folder for "proven templates" that must never be overwritten?
-- How do we prevent this loss from happening again?
+3. **CTA**: Is "I will follow up in an hour" too aggressive? Should it be softened?
 
-### 4. RECOMMENDATIONS
-- What specific changes should be made to operational_memory.md?
-- What new protocols should be added?
-- How should the agent prevent future incidents?
+4. **PERSONALIZATION**: 4 emails have contact names (Craig, Allisa), 6 say "Dear Business Owner". Is this balance acceptable?
 
-Give SPECIFIC process recommendations, not general advice.
+5. **APPROVAL**: Do you approve sending these emails to Dan for final review?
+
+Please vote: APPROVE / REJECT with specific feedback.
+3/4 consensus required to proceed.
 '''
 
 

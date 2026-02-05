@@ -1,0 +1,81 @@
+{
+    "version": "1.0",
+    "last_updated": "2026-02-05T10:21:00-05:00",
+    "critical_triggers": {
+        "board_protocol": [
+            "/board_protocol",
+            "[BOARD_PROTOCOL_INITIATE]",
+            "/execute_board_protocol"
+        ],
+        "save_protocol": [
+            "/save_protocol"
+        ],
+        "turbo_mode": [
+            "/turbo"
+        ]
+    },
+    "pre_action_checklist": {
+        "board_protocol_steps": [
+            "1. Update PROMPT in scripts/board_call_raw.py",
+            "2. Run: python scripts/board_call_raw.py",
+            "3. Review board_call_raw.json - check all 4 AIs responded",
+            "4. If any AI missing → INFORM DAN",
+            "5. Synthesize recommendations into table",
+            "6. Present to Dan for APPROVAL",
+            "7. ONLY act after approval received"
+        ],
+        "before_any_action": [
+            "Has /board_protocol been invoked?",
+            "If yes - have I queried the board?",
+            "Have I received Dan's explicit approval?",
+            "Am I about to push secrets to git?"
+        ]
+    },
+    "email_template": {
+        "standard": "bfisher_format",
+        "location": "email_templates/",
+        "components": [
+            "Traffic Light table (CRITICAL/WARNING/OPPORTUNITY)",
+            "Inline screenshot of their specific problem",
+            "PDF audit report attachment",
+            "Website screenshot attachment"
+        ]
+    },
+    "secrets_policy": {
+        "storage_location": ".secrets/secrets.env",
+        "never_commit": [
+            "API keys",
+            "passwords",
+            "tokens",
+            "service role keys"
+        ],
+        "gitignore_patterns": [
+            ".secrets/*",
+            "*.env",
+            "**/*secrets*"
+        ]
+    },
+    "api_keys_status": {
+        "claude": "ACTIVE - updated 2026-02-05",
+        "grok": "ACTIVE",
+        "gemini": "ACTIVE - updated 2026-02-05",
+        "chatgpt": "ACTIVE"
+    },
+    "session_learnings": [
+        {
+            "date": "2026-02-05",
+            "lesson": "Agent must QUERY BOARD FIRST when /board_protocol is invoked, not act unilaterally",
+            "action": "Updated board_protocol.md with mandatory 6-step process"
+        },
+        {
+            "date": "2026-02-05",
+            "lesson": "API keys in operational_memory.md trigger GitHub secret scanning GH013",
+            "action": "Created .secrets/secrets.env for API key storage, never pushed to git"
+        },
+        {
+            "date": "2026-02-05",
+            "lesson": "bfisher email format is the STANDARD until something better is adopted",
+            "action": "Saved templates to email_templates/ folder"
+        }
+    ]
+}
