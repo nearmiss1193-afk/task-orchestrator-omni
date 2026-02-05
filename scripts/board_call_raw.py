@@ -6,46 +6,43 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD QUERY: PageSpeed Score Optimization
+PROMPT = '''BOARD QUERY: Impact of Delaying GA4/Clarity Scripts
 
-## Current Scores (Feb 4, 2026)
-- Performance: 76 (target: 90+)
-- Accessibility: 92 ✅
-- Best Practices: 73 (target: 90+)
-- SEO: 92
+## Context
+We are AI Service Co - an AI automation agency with a website at aiserviceco.com.
 
-## Current Optimizations Already Applied
-1. Clarity/GA4 scripts delayed 3 seconds after load
-2. Error suppression for third-party script errors
-3. DNS prefetch for fonts and CDNs
-4. Fonts with display=swap
-5. No YouTube iframes on page
-6. Inline critical CSS
+**Current Implementation:**
+- GA4 (Google Analytics 4) loads 3 seconds after page load
+- Microsoft Clarity loads 3 seconds after page load
+- Both are analytics/tracking tools
 
-## Known Issues
-- Best Practices stuck at 73 despite error suppression
-- Performance at 76 on mobile
+**Proposed Change (Option A):**
+- Delay GA4 and Clarity to load 5 seconds after page load (instead of 3)
 
 ## Questions for the Board
 
-1. **What specific changes will boost Best Practices 73→90+?**
-   - Is there something beyond console errors causing BP issues?
-   - Should we remove Clarity/GA4 entirely for testing?
+1. **What data/tracking would we lose with 5s delay vs 3s delay?**
+   - Bounce rate accuracy?
+   - Session recording completeness?
+   - User behavior data?
 
-2. **What will boost Performance 76→90+?**
-   - Image optimization? (but we have no images)
-   - Font loading strategy change?
-   - More aggressive script deferral?
+2. **What is the typical user behavior timeline?**
+   - How long do users typically wait before interacting?
+   - At what point would delayed tracking miss critical data?
 
-3. **Should we defer Vapi widget load as well?**
-   - Currently loads in footer
-   - Could delay 5+ seconds
+3. **Is 5 seconds too aggressive or not aggressive enough?**
+   - Some recommend 5-10 second delays for performance
+   - What's the sweet spot for analytics accuracy vs performance?
 
-4. **Is there a nuclear option?**
-   - Remove all third-party until 90+ reached?
-   - Then add back one-by-one?
+4. **Are there alternative approaches?**
+   - Load on user interaction instead of timeout?
+   - Use lighter analytics alternatives?
 
-Give specific, actionable code fixes with examples.
+5. **What's the actual PageSpeed benefit?**
+   - Will going from 3s to 5s make a measurable difference?
+   - Or is the benefit diminishing returns at that point?
+
+Give specific, data-driven recommendations.
 '''
 
 def query_claude():
