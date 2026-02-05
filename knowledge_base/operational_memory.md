@@ -372,6 +372,70 @@ ALWAYS verify webhook URLs against GHL dashboard screenshots.
 
 ---
 
+## 📧 SECTION 12: GMAIL API CREDENTIALS (CRITICAL - Feb 5, 2026)
+
+### Google Cloud Project: Empire-Email-Integration
+
+**Organization:** aiserviceco.com
+
+### OAuth 2.0 Client ID (Desktop Application)
+
+| Field | Value |
+|-------|-------|
+| **Client ID** | `***REMOVED***.apps.googleusercontent.com` |
+| **Client Secret** | `***REMOVED***` |
+| **Project ID** | `empire-email-integration` |
+
+### API Key
+
+```
+AIzaSyC5-5NI3HEyJiTscHYp-IKU6t2ebtKAtxQ
+```
+
+### Service Account
+
+```
+empire-email-integration@empire-email-integration.iam.gserviceaccount.com
+```
+
+### Credentials File Location
+
+```
+empire-unified/gmail_credentials.json
+```
+
+### How to Use Gmail API for Sending Emails
+
+```python
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+
+SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+
+# First run: opens browser for OAuth consent
+flow = InstalledAppFlow.from_client_secrets_file('gmail_credentials.json', SCOPES)
+creds = flow.run_local_server(port=0)
+
+# Build Gmail service
+service = build('gmail', 'v1', credentials=creds)
+
+# Send email
+service.users().messages().send(userId='me', body={'raw': raw_message}).execute()
+```
+
+### Required Packages
+
+```bash
+pip install google-auth-oauthlib google-api-python-client
+```
+
+### Token Storage
+
+After first authentication, token is saved to `gmail_token.json` for future use.
+
+---
+
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║

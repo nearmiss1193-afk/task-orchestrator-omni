@@ -1,0 +1,212 @@
+"""
+Send emails via Gmail API with OAuth2
+Uses gmail_credentials.json from empire-unified
+
+// turbo-all
+"""
+import os
+import base64
+import json
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from datetime import datetime
+from pathlib import Path
+
+# Check for google auth libraries
+try:
+    from google.oauth2.credentials import Credentials
+    from google_auth_oauthlib.flow import InstalledAppFlow
+    from google.auth.transport.requests import Request
+    from googleapiclient.discovery import build
+except ImportError:
+    print("Installing required packages...")
+    import subprocess
+    subprocess.run(["pip", "install", "google-auth-oauthlib", "google-api-python-client"], check=True)
+    from google.oauth2.credentials import Credentials
+    from google_auth_oauthlib.flow import InstalledAppFlow
+    from google.auth.transport.requests import Request
+    from googleapiclient.discovery import build
+
+# Scopes for Gmail API
+SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+
+# Files
+CREDENTIALS_FILE = 'gmail_credentials.json'
+TOKEN_FILE = 'gmail_token.json'
+
+def get_gmail_service():
+    """Get authenticated Gmail API service"""
+    creds = None
+    
+    # Check for existing token
+    if os.path.exists(TOKEN_FILE):
+        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
+    
+    # If no valid credentials, need to authenticate
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            print("Refreshing expired token...")
+            creds.refresh(Request())
+        else:
+            print("Need to authenticate with Google...")
+            print("A browser window will open for authentication.")
+            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
+            creds = flow.run_local_server(port=0)
+        
+        # Save the token for future runs
+        with open(TOKEN_FILE, 'w') as token:
+            token.write(creds.to_json())
+            print(f"Token saved to {TOKEN_FILE}")
+    
+    return build('gmail', 'v1', credentials=creds)
+
+def create_traffic_light_email(business_name: str, contact_name: str, score: int, industry: str) -> MIMEMultipart:
+    """Create Traffic Light format HTML email"""
+    
+    # Determine status based on score
+    if score < 50:
+        status_emoji = "🔴"
+        status_text = "CRITICAL"
+        status_color = "#dc3545"
+    elif score < 75:
+        status_emoji = "🟡"
+        status_text = "WARNING"
+        status_color = "#ffc107"
+    else:
+        status_emoji = "🟢"
+        status_text = "GOOD"
+        status_color = "#28a745"
+    
+    subject = f"{business_name} - Your Website Performance Audit is Ready"
+    
+    html_body = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; }}
+        .score-box {{ background: {status_color}; color: white; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; }}
+        .score-number {{ font-size: 48px; font-weight: bold; }}
+        table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
+        th {{ background: #f5f5f5; padding: 12px; text-align: left; border: 1px solid #ddd; }}
+        td {{ padding: 12px; border: 1px solid #ddd; }}
+        .critical {{ color: #dc3545; font-weight: bold; }}
+        .warning {{ color: #ffc107; font-weight: bold; }}
+        .opportunity {{ color: #6c757d; font-weight: bold; }}
+        .cta {{ background: #007bff; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0; }}
+        .signature {{ margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }}
+    </style>
+</head>
+<body>
+    <p>Dear {contact_name},</p>
+    
+    <p>I am a local digital strategist here in Lakeland, and I've conducted a brief health audit of <strong>{business_name}</strong>'s online presence.</p>
+    
+    <div class="score-box">
+        <div class="score-number">{score}/100</div>
+        <div style="font-size: 18px;">{status_emoji} {status_text}</div>
+        <div style="font-size: 14px; margin-top: 10px;">Google PageSpeed Performance Score</div>
+    </div>
+    
+    <h3>📊 Traffic Light Summary</h3>
+    
+    <table>
+        <tr>
+            <th>AREA</th>
+            <th>STATUS</th>
+            <th>RISK TO YOUR BUSINESS</th>
+        </tr>
+        <tr>
+            <td><strong>Search Visibility</strong></td>
+            <td class="critical">{status_emoji} {status_text}</td>
+            <td>Your site scored <strong>{score}/100</strong> on Google PageSpeed. {"This hidden penalty pushes you below competitors in search results." if score < 50 else "Room for improvement to beat competitors."}</td>
+        </tr>
+        <tr>
+            <td><strong>Legal Compliance</strong></td>
+            <td class="warning">🟡 WARNING</td>
+            <td>Missing Privacy Policy page. Florida law requires this for data collection.</td>
+        </tr>
+        <tr>
+            <td><strong>Lead Efficiency</strong></td>
+            <td class="opportunity">⚪ OPPORTUNITY</td>
+            <td>An intelligent intake system could pre-qualify leads 24/7 for your {industry} business.</td>
+        </tr>
+    </table>
+    
+    <h3>🎁 What I'm Offering (Free)</h3>
+    <ol>
+        <li><strong>Free PageSpeed Fix</strong> - I'll move your site from {score} → 90+ this week, at no cost</li>
+        <li><strong>14-Day Intelligent Intake Trial</strong> - AI assistant that pre-qualifies leads 24/7</li>
+    </ol>
+    
+    <h3>🏠 My Local Guarantee</h3>
+    <p>Because I am a local Lakeland resident, I want to prove my value before asking for anything. The PageSpeed fix is <strong>completely free</strong>.</p>
+    
+    <p>I will follow up with your office in an hour to see if you have any questions.</p>
+    
+    <div class="signature">
+        <strong>Daniel Coffman</strong><br>
+        📞 352-936-8152<br>
+        Owner, AI Service Co<br>
+        🌐 <a href="https://www.aiserviceco.com">www.aiserviceco.com</a>
+    </div>
+</body>
+</html>
+    """
+    
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = "Daniel Coffman <owner@aiserviceco.com>"
+    msg['To'] = "nearmiss1193@gmail.com"  # Test recipient
+    
+    # Plain text fallback
+    plain_text = f"Dear {contact_name},\n\nYour PageSpeed Score: {score}/100 ({status_text})\n\nPlease view this email in HTML format for the full audit report.\n\nDaniel Coffman\n352-936-8152"
+    
+    msg.attach(MIMEText(plain_text, 'plain'))
+    msg.attach(MIMEText(html_body, 'html'))
+    
+    return msg
+
+def send_email(service, message):
+    """Send email via Gmail API"""
+    raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
+    try:
+        sent = service.users().messages().send(userId='me', body={'raw': raw_message}).execute()
+        print(f"   ✅ Email sent! Message ID: {sent['id']}")
+        return True
+    except Exception as e:
+        print(f"   ❌ Error: {e}")
+        return False
+
+def main():
+    print("=" * 60)
+    print("GMAIL API EMAIL SENDER")
+    print(f"Time: {datetime.now().strftime('%I:%M %p')}")
+    print("=" * 60)
+    
+    # Get Gmail service
+    print("\n[1] Authenticating with Gmail API...")
+    service = get_gmail_service()
+    print("   ✅ Authenticated!")
+    
+    # Create test email
+    print("\n[2] Creating Traffic Light email for Scott's AC...")
+    email = create_traffic_light_email(
+        business_name="Scott's Air Conditioning",
+        contact_name="Craig",
+        score=34,
+        industry="HVAC"
+    )
+    
+    # Send email
+    print("\n[3] Sending email...")
+    success = send_email(service, email)
+    
+    if success:
+        print("\n✅ Test email sent to nearmiss1193@gmail.com")
+        print("   Check your inbox!")
+    else:
+        print("\n❌ Failed to send. See error above.")
+
+if __name__ == "__main__":
+    main()
