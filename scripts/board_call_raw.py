@@ -6,69 +6,48 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD QUERY: Modal vs Railway - Platform Selection for Prospecting Engine
+PROMPT = '''BOARD INVESTIGATION: Lost API Keys and Attachments
 
-## Context
-Building a prospecting + email engine. Need to choose the right platform.
+## INCIDENT REPORT
+Antigravity agent lost critical information during this session and acted without board approval. Dan has requested a board investigation.
 
-**User Experience:**
-- Used Modal before (5 CRONs) and it "crashed a lot"
-- Wants more stable architecture
+## WHAT WAS LOST
 
-## Our Requirements
+### 1. Gemini API Key
+- The .env file had an OLD Gemini API key that hit 429 rate limit
+- Dan provided a NEW key but it wasn't in operational_memory.md
+- Root cause hypothesis: Keys only stored in .env, never backed up to permanent memory
 
-1. **Prospecting Worker** - Scrape Google Maps every 6 hours
-2. **Enrichment Worker** - Run website audits every 2 hours
-3. **Email Engine** - Trigger outreach every 30 minutes
-4. **Webhook Handler** - Receive GHL events in real-time
-5. **Heartbeat** - Health monitoring */5 min
-6. **Warmup** - Email reputation daily
+### 2. bfisher Audit Attachment
+- Dan referenced a "Gemini-style audit attachment" from an email sent to bfisher@petersonmyers.com
+- Only a task reference exists in code: "Follow up with bfisher@petersonmyers.com regarding CLS failure"
+- The actual attachment file was never saved
 
-## Current State
-- Modal: 5 CRON limit, 8 endpoint limit (Starter plan)
-- Already have 3 Modal CRONs working (heartbeat, outreach, warmup)
-- Already have Railway account
+## BOARD QUESTIONS
 
-## BOARD QUESTIONS:
+### 1. ROOT CAUSE ANALYSIS
+- Why do AI agents lose critical information between sessions?
+- What is the best practice for ensuring API keys are never lost?
+- Should keys be stored in multiple locations (backup redundancy)?
 
-### 1. WHY IS RAILWAY MORE STABLE?
-- What makes Railway more reliable than Modal?
-- Is this actually true or perception?
-- What are each platform's failure modes?
+### 2. PROCESS FAILURE
+- The agent (Antigravity) acted unilaterally to fix the issue instead of consulting the board first
+- Was this the wrong approach?
+- What should the proper escalation protocol be?
 
-### 2. WHY WAS MODAL SUGGESTED INITIALLY?
-- What are Modal's advantages?
-- When is Modal the right choice?
-- Why did the board recommend Modal before?
+### 3. ATTACHMENT MANAGEMENT
+- How should critical email attachments and templates be stored?
+- Should there be a dedicated folder for "proven templates" that must never be overwritten?
+- How do we prevent this loss from happening again?
 
-### 3. CAN RAILWAY DO EVERYTHING WE NEED?
-- Cron jobs (scheduled tasks)
-- Long-running workers
-- Webhooks (always-on endpoints)
-- Web scraping with Playwright/Puppeteer
-- Database connections
+### 4. RECOMMENDATIONS
+- What specific changes should be made to operational_memory.md?
+- What new protocols should be added?
+- How should the agent prevent future incidents?
 
-### 4. PLATFORM COMPARISON
-
-Compare these specific aspects:
-- Stability/uptime
-- Cron job support
-- Cold start times
-- Timeout limits
-- Cost at our scale
-- Deployment complexity
-- Debugging/logs
-- Scalability
-
-### 5. FINAL RECOMMENDATION
-
-For OUR specific use case (prospecting + email engine):
-- Which platform should we use?
-- Should we hybrid (some Modal, some Railway)?
-- Or go 100% one platform?
-
-Give me a CLEAR recommendation with reasoning.
+Give SPECIFIC process recommendations, not general advice.
 '''
+
 
 def query_claude():
     api_key = os.getenv("ANTHROPIC_API_KEY")
