@@ -12,7 +12,7 @@ jobs:
       - name: Check Empire API Health
         id: check
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/health)
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://prospector-production-f12d.up.railway.app/health)
           echo "Status Code: $response"
           if [ "$response" != "200" ]; then
             echo "❌ API is down!"
