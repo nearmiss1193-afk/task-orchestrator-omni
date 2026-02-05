@@ -305,6 +305,73 @@ Location: `empire-unified/railway/`
 
 ---
 
+## 📧 SECTION 11: GHL EMAIL WEBHOOK (CRITICAL - Feb 5, 2026)
+
+### ⚠️ CORRECT Outbound Email Webhook
+
+**Workflow Name:** `outbound emails prospects21ST`
+
+**CORRECT URL (VERIFIED):**
+
+```
+https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/uKaqY2KaULkCeMHM7wmt
+```
+
+**❌ OLD WRONG URL (DO NOT USE):**
+
+```
+https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/5148d523-9899-446a-9410-144465ab96d8
+```
+
+### Workflow Flow
+
+1. **Inbound Webhook** (Trigger)
+2. **Create Contact** (with email, firstName, etc.)
+3. **Wait** (configurable delay)
+4. **Drip Mode** (rate limiting)
+5. **Send mapped email** (uses payload fields)
+6. **END**
+
+### Required Payload
+
+```python
+payload = {
+    "email": "target@example.com",     # Required
+    "firstName": "First",              # Recommended
+    "lastName": "Last",                # Recommended
+    "phone": "+1234567890",            # Optional
+    "subject": "Email Subject",        # Required for mapped email
+    "message": "Email body content",   # Required for mapped email
+    "body": "Email body HTML"          # Alternative for HTML
+}
+```
+
+### Sending Email via Python
+
+```python
+import requests
+
+GHL_OUTBOUND_EMAIL_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/uKaqY2KaULkCeMHM7wmt"
+
+payload = {
+    "email": "target@example.com",
+    "firstName": "John",
+    "subject": "Your Subject Here",
+    "message": "Your email body here"
+}
+
+r = requests.post(GHL_OUTBOUND_EMAIL_WEBHOOK, json=payload, timeout=30)
+print(f"Status: {r.status_code}")
+```
+
+### Lesson Learned (Feb 5, 2026)
+
+The OLD webhook (`5148d523...`) was stored in operational_memory but was **WRONG**.
+The CORRECT webhook (`uKaqY2KaULkCeMHM7wmt`) is in the actual GHL workflow.
+ALWAYS verify webhook URLs against GHL dashboard screenshots.
+
+---
+
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
