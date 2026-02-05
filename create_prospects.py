@@ -1,0 +1,123 @@
+"""
+Create prospect JSON for PageSpeed testing - only companies with email + website.
+
+// turbo-all
+"""
+import json
+
+# Companies ready for outreach (have email + website)
+prospects = [
+    {
+        "company_name": "Affordable Air Conditioning",
+        "email": "affordable.airconditioning@yahoo.com",
+        "website": "https://www.airconditioningandheatingfla.com",
+        "phone": "(863) 860-7633",
+        "industry": "HVAC",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "American Air Repair",
+        "email": "contact@americanairrepairllc.com",
+        "website": "https://www.americanairrepairllc.com",
+        "phone": "(813) 802-2183",
+        "industry": "HVAC",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "Lakeland Air Conditioning",
+        "email": "info@thelakelandac.com",
+        "website": "https://www.thelakelandac.com",
+        "phone": "(863) 859-4090",
+        "industry": "HVAC",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "Vanguard Plumbing & Air",
+        "email": "info@vanguardplumbingair.com",
+        "website": "https://www.vanguardplumbingair.com",
+        "phone": "(863) 271-7988",
+        "industry": "HVAC/Plumbing",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "Lakeland Roofing Solutions",
+        "email": "lakelandroofingsolutions@gmail.com",
+        "website": "https://www.lakelandroofingsolutions.com",
+        "phone": "",
+        "industry": "Roofing",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "Trimm Roofing",
+        "email": "support@trimmroofing.com",
+        "website": "https://www.trimmroofing.com",
+        "phone": "",
+        "industry": "Roofing",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "Five Points Roofing",
+        "email": "fivepointsroofingfl@gmail.com",
+        "website": "https://www.fivepointsroofingfl.com",
+        "phone": "",
+        "industry": "Roofing",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "The Original Pro Plumbing",
+        "email": "proplumbing1@originalplumber.com",
+        "website": "https://www.originalplumber.com",
+        "phone": "(863) 669-1905",
+        "industry": "Plumbing",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "Curry Plumbing",
+        "email": "curryco@curryplumbing.com",
+        "website": "https://www.curryplumbing.com",
+        "phone": "(863) 644-0061",
+        "industry": "Plumbing",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "B&W Plumbing LLC",
+        "email": "bwplumbing@yahoo.com",
+        "website": "https://www.bandwplumbing.com",
+        "phone": "(863) 859-7200",
+        "industry": "Plumbing",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "Hunter Plumbing Inc",
+        "email": "hunterplumbing@hunterplumbinginc.com",
+        "website": "https://www.hunterplumbinginc.com",
+        "phone": "",
+        "industry": "Plumbing",
+        "city": "Winter Haven"
+    },
+    {
+        "company_name": "Andress Electric",
+        "email": "info@andresselectric.com",
+        "website": "https://www.andresselectric.com",
+        "phone": "(863) 661-0097",
+        "industry": "Electrical",
+        "city": "Lakeland"
+    },
+    {
+        "company_name": "Leaf Electric",
+        "email": "leafelectricinfo@gmail.com",
+        "website": "https://www.leafelectricfl.com",
+        "phone": "(863) 377-0217",
+        "industry": "Electrical",
+        "city": "Lakeland"
+    }
+]
+
+# Save to JSON
+with open("prospects_ready.json", "w") as f:
+    json.dump(prospects, f, indent=2)
+
+print(f"Saved {len(prospects)} prospects to prospects_ready.json")
+print("\nProspects:")
+for i, p in enumerate(prospects, 1):
+    print(f"  {i}. {p['company_name']} ({p['industry']}) - {p['website']}")

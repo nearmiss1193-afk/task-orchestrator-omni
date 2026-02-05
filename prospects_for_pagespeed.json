@@ -1,0 +1,102 @@
+[
+  {
+    "id": "3a6f104a-a227-4124-b3ae-17f18723f08a",
+    "company_name": "Leeds Professional Resources",
+    "contact_name": "Leeds Professional Resources",
+    "email": null,
+    "website": "http://www.leedsresources.com",
+    "phone": "+12502211154",
+    "status": "outreach_dispatched",
+    "niche": null
+  },
+  {
+    "id": "607ab8fd-83b9-42e3-b4eb-a18b842062d7",
+    "company_name": "NextPath Career Partners",
+    "contact_name": "NextPath Career Partners",
+    "email": null,
+    "website": "http://www.nextpathcp.com",
+    "phone": "+11999999999",
+    "status": "calling_initiated",
+    "niche": null
+  },
+  {
+    "id": "35189655-3013-4b05-b387-c99378b81e87",
+    "company_name": "The Immigrant Academy",
+    "contact_name": "The Immigrant Academy",
+    "email": null,
+    "website": "http://www.theimmigrantacademy.com",
+    "phone": "+14066143815",
+    "status": "calling_initiated",
+    "niche": null
+  },
+  {
+    "id": "e35967d1-97bd-4bf9-86c5-09be9c8424b4",
+    "company_name": "Leeds Professional Resources",
+    "contact_name": "Leeds Professional Resources",
+    "email": null,
+    "website": "http://www.leedsresources.com",
+    "phone": "+12502211154",
+    "status": "calling_initiated",
+    "niche": null
+  },
+  {
+    "id": "892898f9-c98a-45fc-949d-3d3f40a4ccc9",
+    "company_name": "Owner 1",
+    "contact_name": "Owner 1",
+    "email": "contact@cooling1.com",
+    "website": "https://www.cooling1.com",
+    "phone": "+18635550001",
+    "status": "calling_initiated",
+    "niche": null
+  },
+  {
+    "id": "31e37173-5cb0-4dcb-9d68-ca6f63a2881b",
+    "company_name": "Test Vanderbilt",
+    "contact_name": "Test Vanderbilt",
+    "email": "test.vanderbilt.1e0d@example.com",
+    "website": "vanderbilt-test.example.com",
+    "phone": "+15550199999",
+    "status": "calling_initiated",
+    "niche": null
+  },
+  {
+    "id": "c1e9846e-34ec-45ee-8c1a-906f8a82e465",
+    "company_name": "Podean",
+    "contact_name": "Podean",
+    "email": "hello@podean.com",
+    "website": "https://podean.com",
+    "phone": null,
+    "status": "outreach_sent",
+    "niche": null
+  },
+  {
+    "id": "03bd86fd-3389-4371-be58-8d77eafefd12",
+    "company_name": "Talentify.io",
+    "contact_name": "Talentify.io",
+    "email": null,
+    "website": "http://www.talentify.io",
+    "phone": "+11701429735",
+    "status": "outreach_sent",
+    "niche": null
+  },
+  {
+    "id": "2532cef2-3e4d-4a72-a9dc-e69390af4a97",
+    "company_name": "Leeds Professional Resources",
+    "contact_name": "Leeds Professional Resources",
+    "email": null,
+    "website": "http://www.leedsresources.com",
+    "phone": "+12502211154",
+    "status": "outreach_sent",
+    "niche": null
+  },
+  {
+    "id": "2bd70946-9043-4449-914a-a157bcef0283",
+    "company_name": "The Immigrant Academy",
+    "contact_name": "The Immigrant Academy",
+    "email": null,
+    "website": "http://www.theimmigrantacademy.com",
+    "phone": "+14066143815",
+    "status": "outreach_sent",
+    "niche": null
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "business": "Lakeland Roofing Company",
+    "domain": "lakelandroofing.com",
+    "contact_name": null,
+    "first_name": null,
+    "email": null,
+    "position": null,
+    "found": false
+  },
+  {
+    "business": "All Pro Roofing",
+    "domain": "allproroofingfl.com",
+    "contact_name": null,
+    "first_name": null,
+    "email": null,
+    "position": null,
+    "found": false
+  },
+  {
+    "business": "Precision Roofing Lakeland",
+    "domain": "precisionroofinglakeland.com",
+    "contact_name": null,
+    "first_name": null,
+    "email": null,
+    "position": null,
+    "found": false
+  },
+  {
+    "business": "Scotts Air Conditioning",
+    "domain": "scottsair.com",
+    "contact_name": "Craig Fortin",
+    "first_name": "Craig",
+    "email": "craig@scottsair.com",
+    "position": "Sales Specialist",
+    "found": true
+  },
+  {
+    "business": "Air Pros USA",
+    "domain": "airprosusa.com",
+    "contact_name": "Luis Maldonado",
+    "first_name": "Luis",
+    "email": "luis.maldonado@airprosusa.com",
+    "position": "Director of Operations",
+    "found": true
+  },
+  {
+    "business": "Lakeland Air Conditioning",
+    "domain": "lakelandairconditioning.com",
+    "contact_name": null,
+    "first_name": null,
+    "email": null,
+    "position": null,
+    "found": false
+  },
+  {
+    "business": "Viper Auto Care",
+    "domain": "viperautocare.com",
+    "contact_name": null,
+    "first_name": null,
+    "email": null,
+    "position": null,
+    "found": false
+  },
+  {
+    "business": "Honest 1 Auto Care Lakeland",
+    "domain": "honest1lakeland.com",
+    "contact_name": null,
+    "first_name": null,
+    "email": null,
+    "position": null,
+    "found": false
+  },
+  {
+    "business": "Premium Auto Repair",
+    "domain": "premiumautorepairlakeland.com",
+    "contact_name": null,
+    "first_name": null,
+    "email": null,
+    "position": null,
+    "found": false
+  },
+  {
+    "business": "ABC Plumbing Lakeland",
+    "domain": "abcplumbinglakeland.com",
+    "contact_name": null,
+    "first_name": null,
+    "email": null,
+    "position": null,
+    "found": false
+  }
+]

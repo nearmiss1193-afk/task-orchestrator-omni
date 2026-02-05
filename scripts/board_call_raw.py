@@ -6,48 +6,62 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-PROMPT = '''BOARD EMERGENCY: Security Incident and System Failures
+PROMPT = '''SESSION REVIEW: Process Improvement Analysis (Feb 5, 2026)
 
-## INCIDENT 1: EXPOSED API KEY (CRITICAL)
-Google Cloud Trust & Safety detected a publicly accessible API key:
-- Key: AIzaSyC5-5NI3HEyJiTscHYp-IKU6t2ebtKAtxQ (Gmail API)
-- Location: https://github.com/nearmiss1193-afk/task-orchestrator-omni/blob/d5fc29114d68a89e2dcfad9974aa3a7ed823ff1b/knowledge_base/operational_memory.md
-- Project: Empire-Email-Integration
+## CONTEXT
+Today's session revealed several inefficiencies that caused delays. The user (Dan) expressed frustration that tasks which were completed successfully earlier in the session couldn't be replicated later without wasting time.
 
-**ROOT CAUSE**: operational_memory.md was pushed to GitHub with API keys in Section 13. 
-We tried to exclude it from commits but it was already in git history.
+## KEY ISSUES IDENTIFIED
 
-**QUESTIONS**:
-1. Should we regenerate this Gmail API key immediately?
-2. How do we remove the key from git history (BFG Repo Cleaner or git filter-branch)?
-3. Should we restrict the key's scope in Google Cloud Console?
+### Issue 1: Email Sending Capability Lost
+- Earlier in session: Successfully sent emails via reliable_email.py
+- Later in session: Agent tried Gmail (wrong approach), had PowerShell syntax errors
+- User feedback: "I hate to have to spend an hour each day to have you find a way to do something that you did yesterday"
 
-## INCIDENT 2: GITHUB WORKFLOW FAILURES
-Two workflows are failing:
-1. "Deploy Empire Unified" - Some jobs not successful (commit 12a5ed2)
-2. "System Watchdog" - All jobs have failed
+### Issue 2: Batch Count Confusion
+- User originally asked for 10 emails
+- Agent only prepared 6 emails initially
+- User had to correct this mid-task
 
-**QUESTIONS**:
-1. What's causing these failures?
-2. Should we investigate before pushing more code?
+### Issue 3: Approval Email Never Sent
+- Gmail approach failed (needs app password)
+- Multiline string caused PowerShell syntax error
+- Finally used reliable_email.py (the correct method)
 
-## INCIDENT 3: SESSION SUMMARY EMAILS NOT ARRIVING
-Dan reports he hasn't received any session summary emails despite Status 200 responses from GHL webhook.
+## SESSION TIMELINE
 
-**QUESTIONS**:
-1. Is the GHL webhook URL correct?
-2. Is there an issue with the email workflow in GHL?
-3. How do we verify email delivery?
+1. User requested 10 emails for owner approval
+2. Agent researched and verified email addresses
+3. Agent drafted emails using approved template
+4. Board review completed (4/4 approval for Batch 1)
+5. Approval email failed multiple times before success
+6. User had to remind agent about correct email count
+7. User requested process improvement review
 
-## BOARD RECOMMENDATIONS NEEDED
+## QUESTIONS FOR BOARD
 
-1. **IMMEDIATE**: What's the priority order for addressing these issues?
-2. **API KEY**: Regenerate now or wait for board consensus?
-3. **GIT HISTORY**: Best approach to remove secrets from history?
-4. **WORKFLOWS**: Fix now or investigate first?
-5. **EMAILS**: How to debug the delivery issue?
+1. **How can we ensure learned capabilities are not forgotten mid-session?**
+   - Should there be a "working commands" log?
+   - Should operational_memory.md be updated more aggressively?
 
-This is a security incident - please prioritize recommendations accordingly.
+2. **What protocols should be added to prevent these specific issues?**
+   - Pre-task checklist?
+   - Mandatory re-read of operational_memory before each major action?
+
+3. **How can we improve user experience?**
+   - Faster execution with fewer errors
+   - Better confirmation of completed actions
+   - Proactive communication
+
+4. **What documentation changes are needed?**
+   - operational_memory.md updates?
+   - New workflow files?
+   - Quick reference cards?
+
+Please provide:
+- Specific recommendations
+- Priority ranking (High/Medium/Low)
+- Implementation suggestions
 '''
 
 

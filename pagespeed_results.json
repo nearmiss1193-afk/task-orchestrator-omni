@@ -1,0 +1,44 @@
+[
+  {
+    "error": "API returned 429",
+    "url": "http://www.leedsresources.com",
+    "prospect_id": "3a6f104a-a227-4124-b3ae-17f18723f08a",
+    "company_name": "Leeds Professional Resources",
+    "email": null
+  },
+  {
+    "error": "API returned 429",
+    "url": "http://www.nextpathcp.com",
+    "prospect_id": "607ab8fd-83b9-42e3-b4eb-a18b842062d7",
+    "company_name": "NextPath Career Partners",
+    "email": null
+  },
+  {
+    "error": "API returned 429",
+    "url": "http://www.theimmigrantacademy.com",
+    "prospect_id": "35189655-3013-4b05-b387-c99378b81e87",
+    "company_name": "The Immigrant Academy",
+    "email": null
+  },
+  {
+    "error": "API returned 429",
+    "url": "https://www.cooling1.com",
+    "prospect_id": "892898f9-c98a-45fc-949d-3d3f40a4ccc9",
+    "company_name": "Owner 1",
+    "email": "contact@cooling1.com"
+  },
+  {
+    "error": "API returned 429",
+    "url": "https://podean.com",
+    "prospect_id": "c1e9846e-34ec-45ee-8c1a-906f8a82e465",
+    "company_name": "Podean",
+    "email": "hello@podean.com"
+  },
+  {
+    "error": "API returned 429",
+    "url": "http://www.talentify.io",
+    "prospect_id": "03bd86fd-3389-4371-be58-8d77eafefd12",
+    "company_name": "Talentify.io",
+    "email": null
+  }
+]

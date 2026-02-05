@@ -4,6 +4,28 @@
 
 ---
 
+## 🚨 CRITICAL RULE: EMAIL OUTREACH WORKFLOW (Feb 5, 2026)
+
+> [!CAUTION]
+> **NEVER SKIP THIS WORKFLOW. NEVER SHOW EMAILS TO OWNER BEFORE BOARD APPROVAL.**
+
+```
+1. PROSPECT      → Always prospecting, collect 10+ with real data
+2. REAL DATA     → Run ACTUAL PageSpeed tests (NO HALLUCINATIONS)
+3. EMAIL DRAFTS  → bfisher format with REAL metrics only
+4. BOARD REVIEW  → Submit to Claude/Grok/Gemini FIRST
+5. OWNER REVIEW  → AFTER board approves, show to Dan
+6. SEND          → Gmail API only after Dan approves
+```
+
+**MISTAKES MADE (Don't Repeat):**
+
+- Sent test email before board approval ❌
+- Used spammy HTML template instead of bfisher plain text ❌
+- Missing PDF audit attachment ❌
+
+---
+
 ## 🏛️ SECTION 1: USER-CENTRIC PROTOCOLS
 
 ### ⚖️ The "Speak-Before-Fix" Mandate
@@ -374,6 +396,36 @@ ALWAYS verify webhook URLs against GHL dashboard screenshots.
 
 ## 📧 SECTION 12: GMAIL API CREDENTIALS (CRITICAL - Feb 5, 2026)
 
+### ⚠️ CRITICAL RULE: Gmail API is PRIMARY Email Method
+
+**GHL is for CRM only, NOT for sending cold emails.**
+
+```
+PRIMARY: Gmail OAuth/API via gmail_api_sender.py
+BACKUP:  Resend API (goes to spam)
+AVOID:   GHL webhooks (broken), GHL API (private, doesn't work)
+```
+
+### Files
+
+- `gmail_token.json` - OAuth token (auto-refreshes)
+- `gmail_credentials.json` - OAuth client credentials  
+- `scripts/gmail_api_sender.py` - Sender with attachment support
+
+### Features
+
+- ✅ Attachments up to 25MB
+- ✅ HTML formatting (Traffic Light emails)
+- ✅ Uses Dan's Gmail account (warmed up)
+- ✅ Auto token refresh
+
+### Usage
+
+```python
+cd empire-unified
+python scripts/gmail_api_sender.py
+```
+
 ### Google Cloud Project: Empire-Email-Integration
 
 **Organization:** aiserviceco.com
@@ -477,6 +529,21 @@ After first authentication, token is saved to `gmail_token.json` for future use.
 
 > [!CAUTION]
 > **THIS IS THE STANDARD.** All prospecting emails MUST follow this format until something better is adopted and approved by Dan.
+
+### ⚠️ CRITICAL WORKFLOW (Feb 5, 2026 Update)
+
+```
+1. PROSPECTING     → Always running, collect 10+ prospects
+2. REAL DATA       → Run ACTUAL PageSpeed tests (NO HALLUCINATIONS)
+3. EMAIL DRAFTS    → Generate using bfisher format with REAL metrics
+4. BOARD REVIEW    → Submit to Claude/Grok/Gemini for approval
+5. OWNER APPROVAL  → AFTER board approves, show to Dan
+6. SEND            → Via Gmail API only after Dan approves
+```
+
+> [!IMPORTANT]
+> **NEVER** show emails to owner BEFORE board approval.
+> **NEVER** use fake/hallucinated metrics. All data must be from actual PageSpeed tests.
 
 ### Standard Email Format (bfisher Template)
 

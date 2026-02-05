@@ -17,6 +17,345 @@
 3. **NEVER ask user about hosting** - Info is RIGHT HERE
 4. **BEFORE claiming success**: Open browser to aiserviceco.com and verify
 
+### GHL API LIMITATION (CRITICAL - VERIFIED Feb 5, 2026)
+
+> [!CAUTION]
+> **GHL API DOES NOT WORK** - Private integration only!
+> **MUST USE WEBHOOKS** for all GHL email/SMS
+
+| What | Status | Solution |
+|------|--------|----------|
+| GHL REST API | ❌ DOES NOT WORK | Private integration - not accessible |
+| GHL Webhooks | ✅ WORKS | Use webhook URLs from reliable_email.py |
+| Verified By | Reddit, past sessions, user confirmation | Multiple sources confirm |
+
+**GHL Login Credentials (SAVE - NEVER LOSE):**
+
+```
+Email: nearmiss1193@gmail.com
+Password: Inez11752990@
+Location ID: RnK4OjX0oDcqtWw0VyLr
+```
+
+**Working Email Webhook (.env - CORRECT):**
+
+```
+https://services.leadconnectorhq.com/hooks/uFYcZA7Zk6EcBze5B4oH/webhook-trigger/4ac9b8e9-d444-461d-840b-a14ebf09c4dc
+```
+
+**OLD Webhook (reliable_email.py - MAY BE WRONG):**
+
+```
+https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/uKaqY2KaULkCeMHM7wmt
+```
+
+**Payload Format:**
+
+```json
+{
+  "email": "recipient@email.com",
+  "from_name": "Daniel Coffman",
+  "from_email": "owner@aiserviceco.com",
+  "subject": "Subject Line",
+  "html_body": "<html>...</html>"
+}
+```
+
+**Reference Files:**
+
+- `reliable_email.py` - Working email sender with webhook
+- `send_session_summary.py` - Another working example
+
+---
+
+## 📧 EMAIL SENDING PROTOCOL (Updated Feb 5, 2026)
+
+> [!IMPORTANT]
+> **NEVER WASTE TIME FIGURING OUT HOW TO SEND EMAILS**
+>
+> Priority order (TRY IN THIS ORDER):
+>
+> 1. **GHL Webhook** (first choice - production system)
+> 2. **Gmail API** (second choice - user's primary)
+> 3. **Resend** (last resort backup)
+
+### Priority 1: GHL Webhook (FIRST CHOICE)
+
+```python
+import requests
+
+GHL_EMAIL_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/uKaqY2KaULkCeMHM7wmt"
+
+payload = {
+    "email": "nearmiss1193@gmail.com",
+    "from_name": "Daniel Coffman",
+    "from_email": "owner@aiserviceco.com",
+    "subject": "Subject Here",
+    "html_body": "<html>Content</html>"
+}
+r = requests.post(GHL_EMAIL_WEBHOOK, json=payload)
+print(f"GHL: {r.status_code}")
+```
+
+### Priority 2: Gmail API (SECOND CHOICE)
+
+Located in `scripts/gmail_email_sender.py`:
+
+```python
+# Requires GMAIL_APP_PASSWORD in .secrets/secrets.env
+from scripts.gmail_email_sender import send_email_gmail
+result = send_email_gmail(to_email, subject, html_body)
+```
+
+### Priority 3: Resend (LAST RESORT)
+
+Located in `reliable_email.py`:
+
+```python
+from reliable_email import send_email
+result = send_email('nearmiss1193@gmail.com', 'Subject', html)
+```
+
+### Quick Reference
+
+| Priority | Provider | File | When to Use |
+|----------|----------|------|-------------|
+| 1 | GHL Webhook | reliable_email.py | Always try first |
+| 2 | Gmail API | scripts/gmail_email_sender.py | If GHL fails |
+| 3 | Resend | reliable_email.py | Last resort only |
+
+### Dan's Email
+
+```text
+nearmiss1193@gmail.com
+```
+
+### Incident Log
+
+| Date | Issue | Root Cause | Fix |
+|------|-------|------------|-----|
+| Feb 5, 2026 | Wasted time on email | Forgot GHL priority | Use this protocol |
+
+---
+
+## 🔴 BOARD REVIEW PROTOCOL (MANDATORY)
+
+> [!IMPORTANT]
+> **ALL major decisions must go through board review.**
+>
+> Use `/board_protocol` workflow for strategic decisions.
+> Board must verify against BOTH internal logic AND our documented protocols.
+
+### When Board Review is REQUIRED
+
+| Scenario | Required? | Approval Threshold |
+|----------|-----------|-------------------|
+| Cold email outreach | ✅ YES | **4/4 unanimous** |
+| New SOP/process changes | ✅ YES | **4/4 unanimous** |
+| Major code changes | ⚠️ RECOMMENDED | 4/4 (or 3/3 if API down) |
+| Research synthesis | ⚠️ RECOMMENDED | 4/4 (or 3/3 if API down) |
+| Simple clarifications | ❌ NO | N/A |
+
+> **Note:** If an AI API is at its limit/down, then 3/3 of available AIs is acceptable.
+
+### Board Review Workflow
+
+```text
+STEP 1: Prepare prompt with context + specific questions
+STEP 2: Run python scripts/board_call_raw.py
+STEP 3: Synthesize 4 AI responses (Claude, Grok, Gemini, ChatGPT)
+STEP 4: If 3/4 APPROVE → Proceed to owner approval
+STEP 5: If REVISE → Apply changes and resubmit
+STEP 6: If REJECT → Start over
+```
+
+### Board Prompt Template
+
+```text
+BOARD REVIEW: [Topic]
+
+## CONTEXT
+[Situation and background]
+
+## PROPOSED ACTION
+[What we want to do]
+
+## QUESTIONS FOR BOARD
+1. [Specific question 1]
+2. [Specific question 2]
+...
+
+## VERIFY AGAINST
+- Internal logic (does this make sense?)
+- Our documented protocols in operational_memory.md
+- Past incidents and lessons learned
+
+## EXPECTED OUTPUT
+- APPROVE / REVISE / REJECT for each question
+- Specific recommendations if REVISE
+- Final vote
+```
+
+### Past Board Decisions (Reference)
+
+| Date | Topic | Vote | Key Decision |
+|------|-------|------|--------------|
+| Feb 5, 2026 | Email verification process | 4/4 YES | Use 6-step verification sequence |
+| Feb 5, 2026 | Email format revisions | 3/4 YES | Use text labels, owner names, bullet format |
+
+## 🔴 MANDATORY: EMAIL VERIFICATION BEFORE SENDING (Feb 5, 2026)
+
+> [!CAUTION]
+> **NEVER GUESS EMAIL ADDRESSES**
+>
+> On Feb 5, 2026: 6/10 emails bounced because agent guessed `info@`, `contact@`, `service@` formats.
+>
+> **RULE: Use `/email_outreach` workflow for ALL email sends.**
+
+### Email Verification Sequence (MANDATORY)
+
+| Step | Tool | Action |
+|------|------|--------|
+| 1 | Hunter.io API | Search domain for contacts |
+| 2 | Apollo.io API | Search company for decision-makers |
+| 3 | Company Website | Check Contact/About/Team pages |
+| 4 | LinkedIn Search | Find owner/manager profiles |
+| 5 | Google Search | "[Company] [City] FL owner email" |
+| 6 | `search_web` | Web search for verified contact |
+
+**If ALL fail:** Add to Manus batch list, DO NOT GUESS.
+
+### Workflow Slash Command
+
+Invoke `/email_outreach` before any cold email task. This enforces:
+
+- ✅ Research each email before sending
+- ✅ Document source of each verified email
+- ✅ Get owner approval before sending
+- ✅ Check for bounces after sending
+
+### Complete Email Workflow (MANDATORY)
+
+```
+STEP 1: RESEARCH
+└── Verify email addresses (Hunter → Apollo → Website → LinkedIn → Google → search_web)
+└── Find owner/contact names
+└── Document sources
+
+STEP 2: DRAFT
+└── Use proven B&W template format
+└── Include PageSpeed data if available
+└── Attach PDF audit report
+
+STEP 3: BOARD REVIEW
+└── Run drafts through /board_protocol
+└── Get 4 AI responses (Claude, Grok, Gemini, ChatGPT)
+└── Synthesize recommendations
+
+STEP 4: BOARD APPROVAL
+└── All 4 AIs must vote APPROVE or majority (3/4)
+└── If REVISE: Make changes and resubmit
+└── If REJECT: Do not proceed
+
+STEP 5: OWNER APPROVAL (EMAIL REQUIRED)
+└── EMAIL drafts to Dan (nearmiss1193@gmail.com)
+└── Include all email content in one consolidated email
+└── Subject: "APPROVAL REQUESTED: [X] Email Drafts"
+└── Wait for reply: APPROVE / REVISE / REJECT
+└── If changes requested: Go back to Step 2
+
+STEP 6: SEND
+└── Only after owner APPROVES via email reply
+└── Send via Gmail API or GHL webhook
+└── Verify no bounces within 30 min
+```
+
+> [!IMPORTANT]
+> **Owner approval = EMAIL to Dan, not just showing in artifact.**
+> Dan must receive and reply to an email before sending outreach.
+
+---
+
+## 🔴 EMAIL OUTREACH SOP V2 – BOARD APPROVED (Feb 5, 2026)
+
+> **AUTHORITY**: 4/4 Board Vote (Claude, Grok, Gemini, ChatGPT all YES)
+
+### Issue 1: Contact Name Research (MANDATORY)
+
+**NEVER send to "Dear Team"** - Find actual contact names first.
+
+**Research Order (Exhaustive):**
+
+1. **LinkedIn Sales Navigator** - Search by company name for owner/manager
+2. **Hunter.io/Apollo.io** - Domain search for decision-makers
+3. **Company Website** - "About Us" / "Team" / "Contact" pages
+4. **Google Search** - "[Business Name] [City] FL owner"
+5. **BBB Listings** - Business registration records
+6. **Industry Directories** - Trade associations
+
+**Fallback (Last Resort):** "Dear Business Owner" - NOT "Dear Team"
+
+**Time Limit:** 10 minutes per business. If nothing found → Manus batch list.
+
+### Issue 2: Comprehensive PDF Audit Structure
+
+**Current (Too Basic):** Only repeats email content.
+
+**New Structure (Board-Approved):**
+
+```
+PAGE 1: COVER + EXECUTIVE SUMMARY
+- Company name, date, personalized greeting
+- Key findings overview
+
+PAGE 2: CURRENT PROBLEMS
+- Issues hurting their business NOW
+- Future risks they should be aware of
+- Basic competition analysis (2-3 competitors)
+
+PAGE 3: INTERNAL OFFICE SYSTEMS
+- Dispatch management
+- Payroll handling
+- Company newsletters for customer retention
+
+PAGE 4: DIGITAL MARKETING SERVICES
+- Google Business Profile upgrades + monitoring
+- Facebook management
+- Instagram management
+- Online reputation management
+
+PAGE 5: CUSTOMER RETENTION STRATEGIES
+- Newsletter program for referrals
+- First-name recognition benefits
+- Referral program setup
+- Customer lifetime value improvement
+
+PAGE 6: NEXT STEPS + CTA
+- Service packages (Basic/Premium/Complete)
+- Case study examples
+- Contact information
+```
+
+### Issue 3: Additional Services to Mention
+
+**Internal Systems:**
+
+- ✅ Dispatch management
+- ✅ Payroll handling
+- ✅ Company newsletters
+
+**Digital Marketing:**
+
+- ✅ Google Business Profile
+- ✅ Facebook management
+- ✅ Instagram management
+
+**Customer Retention:**
+
+- ✅ Newsletter → referrals → first-name recognition
+- ✅ Long-term engagement strategies
+- ✅ Customer lifetime value focus
+
 ---
 
 ## Feb 5, 2026: Prospecting Workflow & Contact Research
