@@ -148,6 +148,51 @@ When a method fails:
 3. **FALLBACK** to Priority 1 method for that task
 4. **REPORT** failure before trying alternative
 
+### User Decision Protocol (Added Feb 5, 2026 21:15)
+
+> [!IMPORTANT]
+> **When presenting options to the user, follow this protocol:**
+
+| Situation | Action | Example |
+|-----------|--------|---------|
+| **Quick fix with clear path** | Do it, don't ask | Fix typo, apply board-unanimous feedback |
+| **Multiple valid approaches** | Send to Board, present consensus | Template revisions |
+| **Time/cost tradeoff** | Ask user preference | Speed vs. thoroughness |
+| **Breaking change** | ALWAYS ask first | Delete files, change strategy |
+| **Board split decision** | Present to user with synthesis | 2/4 agree vs. 2/4 disagree |
+
+**DEFAULT BEHAVIOR:** If board has clear consensus (3+/4), apply changes without asking.
+
+**NEVER ASK OPTIONS FOR:**
+
+- Board-approved changes (just apply them)
+- Fixing obvious errors (just fix them)
+- Adding to batch (just research and add)
+
+## 📧 EMAIL BATCH PROTOCOL (Added Feb 5, 2026 20:10)
+
+> [!CAUTION]
+> **MANDATORY: Email batches MUST be 10 emails minimum.**
+>
+> DO NOT send partial batches (3-4 emails) - wastes API calls.
+
+### Workflow (REQUIRED)
+
+| Step | Action | Who |
+|------|--------|-----|
+| 1 | Generate 10 prospect emails | Agent |
+| 2 | Send to Board for review | Agent → Board |
+| 3 | Iterate until Board approves | Agent ↔ Board |
+| 4 | Present to Dan for final approval | Agent → Dan |
+| 5 | Send only after Dan approves | Agent |
+
+### Rules
+
+- **Minimum batch size:** 10 emails
+- **Board approval required:** Yes, all 4 AIs
+- **Owner approval required:** Yes, after board
+- **Partial batches:** ❌ NOT ALLOWED
+
 ---
 
 ## 📧 EMAIL SENDING PROTOCOL (Updated Feb 5, 2026 16:49)
