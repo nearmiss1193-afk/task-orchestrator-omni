@@ -87,6 +87,19 @@ https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/
 
 ---
 
+## 📊 GOOGLE ADS CONVERSION TRACKING (Added Feb 5, 2026 21:24)
+
+| ID | Purpose | Location |
+|----|---------|----------|
+| G-8080RNWHVV | Google Analytics ID | All pages (in gtag) |
+| AW-17858959033 | Google Ads Conversion ID | All pages (in gtag) |
+| He5zCNq-qe8bELmt6MNC | Conversion Event Label | thank-you.html only |
+
+**Installed on:** ALL 15 HTML pages in /public
+**Conversion fires on:** thank-you.html (post-payment)
+
+---
+
 ## 🎯 BOARD-APPROVED SYSTEM PROTOCOLS (Added Feb 5, 2026 19:47)
 
 > [!IMPORTANT]
