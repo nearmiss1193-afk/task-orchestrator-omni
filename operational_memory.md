@@ -377,6 +377,102 @@ Do NOT approve if ANY requirement is missing.
 
 ---
 
+## 📧 EMAIL OUTREACH REQUIREMENTS (MANDATORY - Added Feb 5, 2026 22:25)
+
+> [!CAUTION]
+> **5-LAYER ARCHITECTURE - BOARD APPROVED 4/4**
+>
+> These requirements are MANDATORY for EVERY email. No exceptions.
+> If ANY item is missing → STOP → Fix → Restart checklist
+
+### Pre-Send Checklist (ALL MUST BE ✅)
+
+| # | Requirement | How to Verify | Status |
+|---|-------------|---------------|--------|
+| 1 | **Street Light HTML Email** | Email has colored 🔴🟡🟢 traffic lights | [ ] |
+| 2 | **PageSpeed Screenshot Attached** | `PageSpeed_{Domain}.png` attached | [ ] |
+| 3 | **Audit PDF/Link Attached** | `Audit_{Domain}.pdf` or link included | [ ] |
+| 4 | **Open Tracking Pixel Injected** | Pixel HTML at bottom of email body | [ ] |
+| 5 | **Email Address Verified** | Hunter.io or research confirmed | [ ] |
+| 6 | **Board Verification Complete** | Board stated all 4 items verified | [ ] |
+
+### FAILURE PROTOCOL
+
+```
+IF any requirement missing:
+  1. STOP immediately
+  2. FIX the missing item
+  3. RESTART checklist from #1
+  4. DO NOT send until ALL items ✅
+```
+
+### Street Light HTML Email Format (REQUIRED)
+
+Every email MUST use HTML with colored traffic light indicators:
+
+```html
+<!-- Traffic Light Table - REQUIRED in every email body -->
+<table style="border-collapse: collapse; width: 100%; max-width: 500px;">
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd;">Mobile Speed</td>
+    <td style="padding: 8px; border: 1px solid #ddd; background-color: #FF6B6B; color: white; text-align: center;">🔴 POOR (32)</td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd;">Desktop Speed</td>
+    <td style="padding: 8px; border: 1px solid #ddd; background-color: #FFE66D; color: black; text-align: center;">🟡 NEEDS WORK (68)</td>
+  </tr>
+  <tr>
+    <td style="padding: 8px; border: 1px solid #ddd;">SEO Score</td>
+    <td style="padding: 8px; border: 1px solid #ddd; background-color: #4ECB71; color: white; text-align: center;">🟢 GOOD (85)</td>
+  </tr>
+</table>
+```
+
+### Tracking Pixel HTML (REQUIRED at bottom of every email)
+
+```html
+<img src="https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run?eid={EMAIL_UUID}" 
+     width="1" height="1" style="display:none;" />
+```
+
+### Board Verification Prompt (HARDCODED)
+
+When querying board for email approval, ALWAYS include:
+
+```
+MANDATORY EMAIL REQUIREMENTS CHECK:
+
+Before approving ANY email, verify these 4 items explicitly:
+1. Street Light HTML with traffic light colors (🔴🟡🟢) → STATE: "Verified ✅" or "MISSING ❌"
+2. PageSpeed screenshot attached → STATE: "Verified ✅" or "MISSING ❌"  
+3. Audit PDF/link attached → STATE: "Verified ✅" or "MISSING ❌"
+4. Open tracking pixel present → STATE: "Verified ✅" or "MISSING ❌"
+
+If ANY item is MISSING, respond: "REQUIREMENTS CHECK FAILED: [list missing items]"
+Do NOT approve without stating verification status for all 4 items.
+```
+
+### After Every Email Batch - Owner Report Template
+
+```
+📧 EMAIL BATCH STATUS REPORT
+
+Batch: [Batch Name]
+Emails: [Count]
+
+REQUIREMENTS VERIFIED:
+1. Street Light HTML: ✅/❌
+2. PageSpeed Screenshots: ✅/❌
+3. Audit PDFs: ✅/❌
+4. Tracking Pixels: ✅/❌
+5. Emails Verified: ✅/❌
+6. Board Approved: ✅/❌
+
+Owner Approval Requested: [YES/NO]
+```
+
+---
+
 ## 📊 EMAIL TRACKING PIXELS (MANDATORY - Added Feb 5, 2026 18:48)
 
 > [!CAUTION]

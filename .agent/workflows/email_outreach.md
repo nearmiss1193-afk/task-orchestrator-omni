@@ -19,6 +19,19 @@ Ensure all outbound emails have **verified email addresses** before sending. NEV
 >
 > **Guessing = Bounces = Wasted effort + damages sender reputation**
 
+> [!IMPORTANT]
+> **MANDATORY REQUIREMENTS CHECK (Added Feb 5, 2026)**
+>
+> Before proceeding to Step 6 (Send), verify ALL of these:
+>
+> - [ ] Street Light HTML styling with colored traffic lights (🔴🟡🟢)
+> - [ ] PageSpeed screenshot attached (PageSpeed_{Domain}.png)
+> - [ ] Audit PDF/link attached (Audit_{Domain}.pdf)
+> - [ ] Open tracking pixel at bottom of email body
+>
+> **If ANY is missing → STOP → Cannot proceed until fixed**
+
+
 ## Complete Steps (MANDATORY)
 
 ### Step 1: Research Contact Information
