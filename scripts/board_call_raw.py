@@ -138,7 +138,14 @@ def query_chatgpt():
         return {"ai": "ChatGPT", "raw": f"ERROR: {e}"}
 
 if __name__ == "__main__":
+    import sys
     from concurrent.futures import ThreadPoolExecutor
+    
+    # Accept prompt from command line if provided
+    if len(sys.argv) > 1:
+        PROMPT = sys.argv[1]
+        print(f">> {PROMPT[:200]}..." if len(PROMPT) > 200 else f">> {PROMPT}")
+    
     print("Querying Board: Operational Excellence...")
     
     with ThreadPoolExecutor(max_workers=4) as executor:

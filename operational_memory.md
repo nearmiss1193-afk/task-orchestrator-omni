@@ -17,6 +17,25 @@
 3. **NEVER ask user about hosting** - Info is RIGHT HERE
 4. **BEFORE claiming success**: Open browser to aiserviceco.com and verify
 
+### NON-LOCAL PROSPECTING (MANDATORY - Added Feb 5, 2026)
+
+> [!CAUTION]
+> **PROSPECTING MUST BE NON-LOCAL**
+> PageSpeed audits, web scraping, and prospect research MUST run on Modal cloud - NOT locally.
+
+| What | How | Why |
+|------|-----|-----|
+| **PageSpeed Audits** | Modal function or PageSpeed API | Avoid rate limits, consistent results |
+| **Web Scraping** | Modal with Playwright | Distributed, avoid IP blocks |
+| **Email Verification** | Modal or API | Server-side validation |
+| **Lead Research** | Modal cron jobs | 24/7 automated prospecting |
+
+**Implementation:**
+
+- Use `deploy.py` to add Modal endpoints for prospecting
+- Store results in Supabase for persistence
+- Pre-run audits, don't run at email-send time
+
 ### GHL API LIMITATION (CRITICAL - VERIFIED Feb 5, 2026)
 
 > [!CAUTION]
@@ -68,18 +87,99 @@ https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/
 
 ---
 
-## 📧 EMAIL SENDING PROTOCOL (Updated Feb 5, 2026)
+## 🎯 BOARD-APPROVED SYSTEM PROTOCOLS (Added Feb 5, 2026 19:47)
 
 > [!IMPORTANT]
-> **NEVER WASTE TIME FIGURING OUT HOW TO SEND EMAILS**
+> **UNANIMOUS BOARD RECOMMENDATION (Claude, Grok, Gemini, ChatGPT)**
 >
-> Priority order (TRY IN THIS ORDER):
->
-> 1. **GHL Webhook** (first choice - production system)
-> 2. **Gmail API** (second choice - user's primary)
-> 3. **Resend** (last resort backup)
+> These protocols prevent capability loss and session inefficiency.
 
-### Priority 1: GHL Webhook (FIRST CHOICE)
+### Method Priority Hierarchy
+
+| Task | Priority 1 (TRY FIRST) | Priority 2 | Priority 3 (AVOID) |
+|------|------------------------|------------|-------------------|
+| **Email Sending** | `reliable_email.py` | GHL Webhook | Gmail (app password) |
+| **Email Verification** | Hunter.io API | Modal endpoint | Manual lookup |
+| **Prospecting** | Modal cloud functions | PageSpeed API | Local scripts |
+
+### When to Run /system_ops
+
+| Timing | Required? | Why |
+|--------|-----------|-----|
+| **Start of session** | ✅ YES | Fresh rule recall |
+| **Before major tasks** | ✅ YES | Pre-task checklist |
+| **After failures** | ✅ YES | Check missed rules |
+| **After every task** | ❌ NO | Too frequent |
+
+### Pre-Task Checklist (MANDATORY)
+
+Before starting any multi-step task:
+
+- [ ] Confirm all quantities/requirements
+- [ ] Check this memory for established methods
+- [ ] Verify working directory and file availability
+- [ ] State planned approach
+
+### Session Working Commands Log
+
+After successful operations, update `working_commands_log.md`:
+
+```markdown
+## [Date] - [Task]
+- Method: [what worked]
+- Command: [exact syntax]
+- Status: ✅ SUCCESS
+```
+
+### Progress Confirmation Protocol
+
+After each major step:
+
+1. Confirm completion with specific details
+2. State what was done (not what will be done)
+3. Ask if user wants to proceed to next step
+
+### Error Recovery Protocol
+
+When a method fails:
+
+1. **STOP** trying variations
+2. **CHECK** this memory for proven alternatives
+3. **FALLBACK** to Priority 1 method for that task
+4. **REPORT** failure before trying alternative
+
+---
+
+## 📧 EMAIL SENDING PROTOCOL (Updated Feb 5, 2026 16:49)
+
+> [!IMPORTANT]
+> **PRIORITY ORDER (Dan's Order - DO NOT CHANGE)**
+>
+> 1. **Gmail API** - First choice (CONFIGURED ✅)
+> 2. **GHL Webhook** - Second choice
+> 3. **Resend** - Last resort backup
+
+### Priority 1: Gmail API (FIRST CHOICE) ✅
+
+**Status:** CONFIGURED - Token valid until Feb 5, 2026 21:10
+
+**Script:** `scripts/gmail_api_sender.py`
+
+```python
+from scripts.gmail_api_sender import get_gmail_service, send_email, create_bfisher_email
+
+service = get_gmail_service()
+email = create_bfisher_email(to_email, business_name, contact_name, website, industry, city)
+result = send_email(service, email)
+```
+
+**Files:**
+
+- `gmail_credentials.json` - OAuth credentials
+- `gmail_token.json` - Active token (auto-refreshes)
+- `scripts/gmail_api_sender.py` - Main sender script
+
+### Priority 2: GHL Webhook (SECOND CHOICE)
 
 ```python
 import requests
@@ -94,22 +194,9 @@ payload = {
     "html_body": "<html>Content</html>"
 }
 r = requests.post(GHL_EMAIL_WEBHOOK, json=payload)
-print(f"GHL: {r.status_code}")
-```
-
-### Priority 2: Gmail API (SECOND CHOICE)
-
-Located in `scripts/gmail_email_sender.py`:
-
-```python
-# Requires GMAIL_APP_PASSWORD in .secrets/secrets.env
-from scripts.gmail_email_sender import send_email_gmail
-result = send_email_gmail(to_email, subject, html_body)
 ```
 
 ### Priority 3: Resend (LAST RESORT)
-
-Located in `reliable_email.py`:
 
 ```python
 from reliable_email import send_email
@@ -118,11 +205,11 @@ result = send_email('nearmiss1193@gmail.com', 'Subject', html)
 
 ### Quick Reference
 
-| Priority | Provider | File | When to Use |
-|----------|----------|------|-------------|
-| 1 | GHL Webhook | reliable_email.py | Always try first |
-| 2 | Gmail API | scripts/gmail_email_sender.py | If GHL fails |
-| 3 | Resend | reliable_email.py | Last resort only |
+| Priority | Provider | Status | Script |
+|----------|----------|--------|--------|
+| 1 | **Gmail API** | ✅ CONFIGURED | scripts/gmail_api_sender.py |
+| 2 | GHL Webhook | ✅ Available | reliable_email.py |
+| 3 | Resend | ✅ Backup | reliable_email.py |
 
 ### Dan's Email
 
@@ -130,11 +217,341 @@ result = send_email('nearmiss1193@gmail.com', 'Subject', html)
 nearmiss1193@gmail.com
 ```
 
+### Board Recommendations Implemented
+
+| Item | File | Status |
+|------|------|--------|
+| Working Commands Log | working_commands.log | ✅ Created |
+| Pre-Task Checklist | pre_task_checklist.md | ✅ Created |
+
 ### Incident Log
 
 | Date | Issue | Root Cause | Fix |
 |------|-------|------------|-----|
-| Feb 5, 2026 | Wasted time on email | Forgot GHL priority | Use this protocol |
+| Feb 5, 2026 16:51 | Emails sent consolidated | Owner can't preview as customer sees | Send individually with attachments |
+| Feb 5, 2026 16:49 | Wrong priority order | Agent changed order without approval | Restored Dan's order |
+| Feb 5, 2026 16:18 | Emails not received | Unknown delivery issue | Tested Resend as backup |
+
+---
+
+## 📧 EMAIL APPROVAL WORKFLOW (CRITICAL)
+
+> [!CAUTION]
+> **Dan MUST see each email EXACTLY as the customer will receive it:**
+>
+> - ❌ NO consolidated HTML bundles
+> - ❌ NO JavaScript code previews
+> - ❌ NO markdown summaries
+> - ✅ INDIVIDUAL emails with PDF attachments
+> - ✅ Sent to Dan's inbox one-by-one
+> - ✅ Identical format the customer will receive
+
+### Approval Process
+
+```text
+STEP 1: Create PDFs for each prospect (email_attachments/ folder)
+STEP 2: Run: python send_individual_previews.py
+STEP 3: Dan receives each email individually with attachment
+STEP 4: Dan reviews FROM CUSTOMER PERSPECTIVE
+STEP 5: Dan replies: APPROVE / REVISE / REJECT
+STEP 6: If APPROVE → Script sends to actual recipients
+```
+
+### Script Location
+
+```text
+send_individual_previews.py - Sends previews to Dan
+```
+
+### Why This Matters
+
+Dan needs to see emails as the CUSTOMER will see them:
+
+- Same subject line
+- Same body formatting
+- Same PDF attachment
+- Same sender signature
+
+---
+
+## 🔍 BOARD EMAIL REVIEW CHECKLIST (MANDATORY - Added Feb 5, 2026)
+
+> [!CAUTION]
+> **WHY THIS EXISTS:** Board approved emails without verifying against email_standards.md.
+> Emails went to owner missing: traffic light format, PageSpeed screenshots, PDF attachments.
+>
+> **ROOT CAUSE:** Board was asked "are these good emails?" but NOT "do these match the standard?"
+
+### Before Board Approval, VERIFY Against email_standards.md
+
+| Requirement | Source | Verified? |
+|-------------|--------|-----------|
+| **PageSpeed PNG screenshot attached** | email_standards.md | [ ] |
+| **Mobile view screenshot** (optional) | email_standards.md | [ ] |
+| **PDF audit report (2-4 pages)** | email_standards.md | [ ] |
+| **Traffic light table in email body** | email_standards.md | [ ] |
+| **HTML email format (not plain text)** | email_standards.md | [ ] |
+| **Owner name in salutation** | Board consensus | [ ] |
+| **Local Florida mention in P.S.** | Board consensus | [ ] |
+
+### Board Review Query Template
+
+```text
+Review these email drafts against C:\Users\nearm\.gemini\antigravity\brain\0b97dae9-c5c0-4924-8d97-793b59319985\email_standards.md
+
+VERIFY EACH:
+1. Does email have PageSpeed screenshot attached? (REQUIRED)
+2. Does email have PDF audit report attached? (REQUIRED)
+3. Does email body have traffic light table (🔴🟡🟢)? (REQUIRED)
+4. Is email HTML formatted, not plain text? (REQUIRED)
+5. Does PDF follow 2-4 page format? (REQUIRED)
+
+Do NOT approve if ANY requirement is missing.
+```
+
+### Incident: Feb 5, 2026
+
+| What Happened | Root Cause | Prevention |
+|---------------|------------|------------|
+| Board approved emails 4/4 | Asked "good emails?" not "match standard?" | Use query template above |
+| Owner rejected at preview | Missing: traffic light, PageSpeed, PDF | Verify against email_standards.md |
+| 6 emails had to be redone | No checklist verification | This checklist is now mandatory |
+
+---
+
+## 📊 EMAIL TRACKING PIXELS (MANDATORY - Added Feb 5, 2026 18:48)
+
+> [!CAUTION]
+> **MANDATORY SOP - NO EXCEPTIONS**
+>
+> 1. ALL outbound emails MUST contain tracking pixels
+> 2. After every 10 emails approved, INFORM OWNER that pixels are in place
+> 3. Board MUST verify pixels before final approval
+>
+> **NEVER send marketing emails without tracking pixels.**
+
+### What Gets Tracked
+
+| Metric | How | Storage |
+|--------|-----|---------|
+| **Open Rate** | 1x1 transparent pixel image | Supabase `email_opens` |
+| **Open Time** | Pixel request timestamp | Supabase `email_opens` |
+| **Email ID** | UUID in pixel URL | Links open to contact |
+| **IP/Location** | Optional from request | Rough geography |
+
+### Implementation
+
+```html
+<!-- Add to bottom of every HTML email body -->
+<img src="https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run?eid={EMAIL_UUID}" 
+     width="1" height="1" style="display:none;" />
+```
+
+### Modal Endpoint Required
+
+```python
+@app.function()
+@modal.web_endpoint()
+def track_email_open(eid: str):
+    """Log email open to Supabase"""
+    supabase.table("email_opens").insert({
+        "email_id": eid,
+        "opened_at": datetime.utcnow().isoformat(),
+        "ip": get_client_ip()
+    }).execute()
+    # Return 1x1 transparent pixel
+    return Response(content=TRANSPARENT_PIXEL, media_type="image/gif")
+```
+
+### Board Verification Checklist
+
+After every 10 emails approved, Board MUST verify:
+
+| Item | Verify How | ✓ |
+|------|-----------|---|
+| Pixel URL present in HTML | View email source | [ ] |
+| Modal endpoint responding | curl endpoint URL | [ ] |
+| Supabase table exists | Check email_opens table | [ ] |
+| Owner notified | Tag owner with summary | [ ] |
+
+### Notification Template (After Every 10 Emails)
+
+```text
+📊 TRACKING PIXEL STATUS
+
+Batch: [Batch Name]
+Emails Approved: [X]
+Pixels Verified: ✅
+
+Board confirms:
+- [ ] Pixel in each email HTML
+- [ ] Modal endpoint active
+- [ ] Supabase logging configured
+
+Ready to send: [YES/NO]
+```
+
+### Why This Exists
+
+Without tracking:
+
+- ❌ No open rate visibility
+- ❌ Can't measure campaign success
+- ❌ Can't optimize subject lines
+- ❌ No engagement data for follow-up
+
+With tracking:
+
+- ✅ Know who opened
+- ✅ Know when they opened
+- ✅ Can follow up intelligently
+- ✅ Measure campaign ROI
+
+---
+
+## 📸 PRIVACY/TERMS EVIDENCE SCREENSHOTS (MANDATORY - Added Feb 5, 2026 19:01)
+
+> [!CAUTION]
+> **MANDATORY EVIDENCE COLLECTION**
+>
+> Before sending ANY email claiming a prospect is missing privacy policy or terms:
+>
+> 1. Take screenshot of their website footer
+> 2. Take screenshot showing absence of privacy/terms links
+> 3. Store screenshots internally as evidence
+>
+> **NEVER claim privacy/terms violation without screenshot proof.**
+
+### Why This Exists
+
+If we claim a business is missing a privacy policy and they actually have one:
+
+- ❌ We look unprofessional
+- ❌ We lose credibility
+- ❌ Prospect dismisses entire email
+
+### Evidence Collection Process
+
+| Step | Action | Storage Location |
+|------|--------|------------------|
+| 1 | Screenshot website homepage | `evidence/{business_name}/homepage.png` |
+| 2 | Screenshot footer area | `evidence/{business_name}/footer.png` |
+| 3 | Search for "Privacy" link | Document if found/not found |
+| 4 | Search for "Terms" link | Document if found/not found |
+| 5 | Log finding in evidence JSON | `evidence/{business_name}/audit.json` |
+
+### Evidence Folder Structure
+
+```
+evidence/
+├── Lakeland_AC/
+│   ├── homepage.png
+│   ├── footer.png
+│   ├── audit.json
+│   └── timestamp.txt
+├── Trimm_Roofing/
+│   └── ...
+```
+
+### Audit JSON Format
+
+```json
+{
+  "business": "Lakeland Air Conditioning",
+  "website": "thelakelandac.com",
+  "audited_at": "2026-02-05T19:01:00",
+  "privacy_policy": {
+    "found": false,
+    "location_checked": ["footer", "homepage", "/privacy"],
+    "screenshot": "footer.png"
+  },
+  "terms_conditions": {
+    "found": false,
+    "location_checked": ["footer", "homepage", "/terms"],
+    "screenshot": "footer.png"
+  },
+  "notes": "No visible privacy or terms links in footer or homepage"
+}
+```
+
+### Retention Policy
+
+- **Keep evidence for 2 years minimum**
+- **Never delete before contract signed or lead marked dead**
+- **Use for legal protection if prospect disputes claims**
+
+---
+
+## 📄 PDF AUDIT REQUIREMENTS (Updated Feb 5, 2026 17:49)
+
+> [!CAUTION]
+> **MANDATORY RULES - NO EXCEPTIONS**
+>
+> 1. Traffic light order: RED top → YELLOW middle → GREEN bottom
+> 2. PageSpeed screenshot REQUIRED in PDF
+> 3. PDF must contain MORE info than email (otherwise why attach?)
+> 4. Privacy = ALWAYS CRITICAL (red)
+
+### Traffic Light Row Order (MANDATORY)
+
+```text
+ROW 1: 🔴 CRITICAL (red background)    ← ALWAYS ON TOP
+ROW 2: 🟡 WARNING (yellow background)  ← ALWAYS IN MIDDLE  
+ROW 3: 🟢 OPPORTUNITY (green background) ← ALWAYS ON BOTTOM
+```
+
+**If data doesn't fit this order, REORDER THE ROWS to match this color sequence.**
+
+### PageSpeed Screenshot (REQUIRED)
+
+| Item | Requirement |
+|------|-------------|
+| **Screenshot** | PageSpeed Insights results page showing actual scores |
+| **Format** | PNG embedded in PDF |
+| **Shows** | Mobile score, LCP, FCP, CLS, Speed Index |
+| **Source** | Captured from pagespeed.web.dev or stored from prior analysis |
+
+### PDF vs Email Content (CRITICAL)
+
+| Content | Email | PDF |
+|---------|-------|-----|
+| Traffic Light Table | ✅ Summary only | ✅ Full table with details |
+| PageSpeed Screenshot | ❌ Never | ✅ REQUIRED |
+| Detailed Metrics | ❌ Brief | ✅ Full breakdown |
+| Proposed Solutions | ✅ Summary | ✅ Detailed explanation |
+| Company/Contact Info | ✅ Brief | ✅ Full cover page |
+
+**The PDF must provide VALUE beyond the email. Email = teaser, PDF = proof.**
+
+### Color Palette for Traffic Lights
+
+```python
+# Use these exact colors in reportlab:
+RED = colors.HexColor('#dc3545')       # CRITICAL text
+LIGHT_RED = colors.HexColor('#f8d7da') # CRITICAL row background
+YELLOW = colors.HexColor('#ffc107')    # WARNING text
+LIGHT_YELLOW = colors.HexColor('#fff3cd') # WARNING row background
+GREEN = colors.HexColor('#28a745')     # OPPORTUNITY text
+LIGHT_GREEN = colors.HexColor('#d4edda') # OPPORTUNITY row background
+```
+
+### Why Privacy is ALWAYS CRITICAL
+
+1. **Florida Digital Bill of Rights** - Real law, real fines ($50K+)
+2. **Creates urgency** - Gives reason to respond
+3. **FREE FIX offer** - Our hook to get foot in door
+4. **True statement** - Most small business sites ARE non-compliant
+
+### Incidents: Feb 5, 2026
+
+| Time | Issue | Fix Applied |
+|------|-------|-------------|
+| 17:19 | No traffic light format | Added colored table |
+| 17:42 | PDF had no color backgrounds | Added TableStyle BACKGROUND |
+| 17:42 | Privacy was WARNING | Changed to CRITICAL always |
+| 17:49 | Wrong row order | Fixed to RED→YELLOW→GREEN |
+| 17:49 | No PageSpeed screenshot | Added screenshot to PDF |
+| 17:49 | PDF same as email | Added more content to PDF |
 
 ---
 

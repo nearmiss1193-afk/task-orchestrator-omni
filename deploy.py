@@ -160,6 +160,44 @@ def sovereign_state(token: str = ""):
     except Exception as e:
         return {"error": str(e), "audit_timestamp": datetime.now().isoformat()}
 
+# ==== EMAIL TRACKING PIXEL ENDPOINT ====
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="GET")
+def track_email_open(eid: str = "", recipient: str = "", business: str = ""):
+    """Track email opens via 1x1 pixel - Added Feb 5, 2026"""
+    import os
+    from datetime import datetime
+    from supabase import create_client
+    from fastapi.responses import Response
+    
+    # 1x1 transparent GIF
+    TRANSPARENT_GIF = bytes([
+        0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00,
+        0x01, 0x00, 0x80, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
+        0x00, 0x00, 0x00, 0x21, 0xF9, 0x04, 0x01, 0x00,
+        0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00,
+        0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x02, 0x44,
+        0x01, 0x00, 0x3B
+    ])
+    
+    if eid:
+        try:
+            url = os.environ.get("SUPABASE_URL") or "https://rzcpfwkygdvoshtwxncs.supabase.co"
+            key = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+            
+            if key:
+                sb = create_client(url, key)
+                sb.table("email_opens").insert({
+                    "email_id": eid,
+                    "recipient_email": recipient or None,
+                    "business_name": business or None,
+                    "opened_at": datetime.utcnow().isoformat()
+                }).execute()
+        except Exception as e:
+            print(f"Track error: {e}")
+    
+    return Response(content=TRANSPARENT_GIF, media_type="image/gif")
+
 # OUTREACH & SYNC WORKERS (Imported from workers/outreach.py)
 from workers.outreach import sync_ghl_contacts, auto_outreach_loop, dispatch_sms_logic, dispatch_email_logic, dispatch_call_logic
 

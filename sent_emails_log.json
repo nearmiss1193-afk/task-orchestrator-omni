@@ -1,0 +1,45 @@
+{
+  "batch": "V3",
+  "approved_at": "2026-02-05T18:17:04",
+  "sent_at": "2026-02-05T18:18:08.005920",
+  "total": 6,
+  "succeeded": 6,
+  "emails": [
+    {
+      "business": "Lakeland Air Conditioning",
+      "email": "tony@thelakelandac.com",
+      "status": "SENT",
+      "timestamp": "2026-02-05T18:18:02.294191"
+    },
+    {
+      "business": "Trimm Roofing",
+      "email": "support@trimmroofing.com",
+      "status": "SENT",
+      "timestamp": "2026-02-05T18:18:03.202295"
+    },
+    {
+      "business": "Curry Plumbing",
+      "email": "chrisshills@curryplumbing.com",
+      "status": "SENT",
+      "timestamp": "2026-02-05T18:18:04.436121"
+    },
+    {
+      "business": "Andress Electric",
+      "email": "info@andresselectric.com",
+      "status": "SENT",
+      "timestamp": "2026-02-05T18:18:05.762531"
+    },
+    {
+      "business": "Hunter Plumbing Inc",
+      "email": "hunterplumbing@hunterplumbinginc.com",
+      "status": "SENT",
+      "timestamp": "2026-02-05T18:18:06.860787"
+    },
+    {
+      "business": "Original Pro Plumbing",
+      "email": "proplumbing1@originalplumber.com",
+      "status": "SENT",
+      "timestamp": "2026-02-05T18:18:08.004996"
+    }
+  ]
+}
