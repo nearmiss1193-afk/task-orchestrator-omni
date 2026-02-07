@@ -18,64 +18,54 @@ xai = OpenAI(api_key=os.getenv("XAI_API_KEY"), base_url="https://api.x.ai/v1")
 PROMPT = """
 You are a strategic advisor for AI Service Co, a B2B service agency selling AI automation to local businesses.
 
-**RESEARCH TOPICS (Fact-Finding Only):**
+**INVESTIGATION TOPIC: Sarah Inbound vs Outbound Call Detection**
 
-## TOPIC 1: UNIVERSAL SARAH LOGIC
-How should we implement UNIFIED behavior for Sarah (AI assistant) across ALL channels?
-- SMS inbound/outbound
-- Voice calls (Vapi) inbound/outbound
-- Website chat (if applicable)
+## CURRENT STATE
+Sarah is our AI voice assistant powered by Vapi.ai. She has:
+- Different prompt scripts for INBOUND calls ("Hey thanks for calling! This is Sarah...")  
+- Different prompt scripts for OUTBOUND calls ("Hey, is this [name]?")
 
-Current Problem: Sarah has different prompts/logic per channel, which could cause conflicting information.
+## KEY QUESTIONS
 
-## TOPIC 2: PERSISTENT CUSTOMER MEMORY
-How should Sarah maintain memory of customer conversations across:
-- Multiple SMS exchanges
-- Inbound calls → Outbound calls (same customer)
-- Outbound calls → Customer calls back
-- Cross-channel (SMS then call, or call then SMS)
+### Q1: Can Vapi detect call direction automatically?
+- Does Vapi provide metadata indicating if a call is inbound vs outbound?
+- What webhook fields contain this information?
+- Is this available BEFORE the call starts or only after?
 
-Requirements:
-1. Sarah should recognize returning customers
-2. Sarah should NOT repeat questions already answered
-3. Sarah should remember context from previous conversations
-4. Memory should persist until customer converts or is marked dead
+### Q2: How should Sarah dynamically switch behavior?
+- Should we use serverUrl webhooks to inject call type into the prompt?
+- Should we create 2 separate assistants (one for inbound, one for outbound)?
+- Should we use Vapi's assistant overrides feature?
 
-## TOPIC 3: SELF-HEALING & AUTONOMOUS OPERATION
-How do we make Sarah's system run 24/7 without manual intervention?
-- Auto-detect crashes or API failures
-- Auto-restart failed services
-- Alert owner only when human intervention truly needed
-- Log all issues for later review
+### Q3: What about knowing WHERE the lead came from?
+- If someone calls in, can we know if they saw an ad, got an SMS, visited website?
+- Can we pass UTM parameters or source tags to voice calls?
+- How do we link an inbound caller to their existing lead record?
 
-Current Problem: System requires manual monitoring and restarts after crashes.
+### Q4: Cross-channel continuity
+- If we SMS a lead, then they call back, how does Sarah know this is the same person?
+- Phone number matching? GHL contact ID lookup?
+- How do we sync context between SMS Sarah and Voice Sarah?
 
-**WHAT WE NEED:**
-1. Architecture recommendations for unified logic
-2. Database schema for customer memory
-3. Technical approach for cross-channel memory sync
-4. Self-healing implementation patterns
-5. Monitoring & alerting strategy
-
-**CONTEXT:**
+## CONTEXT
+- Voice Platform: Vapi.ai (using Groq LLM)
 - Backend: Modal (Python serverless)
-- Database: Supabase (PostgreSQL)
-- Voice: Vapi.ai
-- SMS/Email: GHL webhooks
+- Database: Supabase (customer_memory table with phone number key)
 - CRM: GoHighLevel
+- Current serverUrl: https://nearmiss1193-afk--vapi-live.modal.run
 
-**YOUR TASK:**
-Provide technical recommendations for each topic. Be specific about:
-- Database tables needed
-- How to store/retrieve conversation context
-- How to sync across channels
-- How to implement self-healing
-- What monitoring is needed
+## WHAT WE NEED
+1. Technical answer: Can Vapi detect inbound vs outbound?
+2. Best practice: Single assistant or multiple?
+3. Implementation: How to pass call type to the assistant
+4. Source tracking: Can we know where the caller came from?
+5. Memory sync: Best way to link voice calls to existing customer_memory records
 
 **FORMAT:**
-- Topic 1: [Your recommendations]
-- Topic 2: [Your recommendations]  
-- Topic 3: [Your recommendations]
+- Q1 Answer: [Your findings]
+- Q2 Answer: [Your recommendation]
+- Q3 Answer: [Your findings]
+- Q4 Answer: [Your recommendation]
 - Key Warnings: [Any concerns or gotchas]
 """
 

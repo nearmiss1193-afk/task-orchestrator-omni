@@ -385,7 +385,187 @@ FALLBACK (if confused or asked something weird):
     return {"sarah_reply": reply, "status": "success", "customer_id": str(customer_id) if customer_id else None}
 
 
-# ==== HEALTH CHECK ENDPOINT ====
+# ==== VAPI WEBHOOK HANDLER (Call Direction + Memory) ====
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="POST")
+def vapi_webhook(data: dict = {}):
+    """
+    Handles Vapi serverUrl callbacks for inbound and outbound calls.
+    
+    Board-Approved Implementation (Feb 7, 2026):
+    1. Detect call direction from webhook payload
+    2. Extract caller phone number
+    3. Look up customer_memory for context
+    4. Return assistantOverrides with injected context and call type
+    
+    Webhook events: assistant-request, call-started, etc.
+    """
+    import re
+    from supabase import create_client
+    
+    print(f"📞 [VAPI WEBHOOK] Received: {data.get('message', {}).get('type', 'unknown')}")
+    
+    message = data.get("message", {})
+    event_type = message.get("type", "")
+    call = message.get("call", {})
+    
+    # Extract call direction - check multiple possible fields (board recommended)
+    direction = call.get("direction") or call.get("type") or call.get("callType", "unknown")
+    
+    # Normalize direction values
+    if direction in ["inboundPhoneCall", "inbound"]:
+        direction = "inbound"
+    elif direction in ["outboundPhoneCall", "outbound"]:
+        direction = "outbound"
+    
+    # Extract phone number (normalize format per board warning)
+    customer = message.get("customer", {})
+    caller_phone = customer.get("number", "") or call.get("customerNumber", "") or call.get("to", "")
+    
+    # Normalize phone number (strip non-digits, add +1 if needed)
+    if caller_phone:
+        caller_phone = re.sub(r'[^\d+]', '', caller_phone)
+        if caller_phone and not caller_phone.startswith('+'):
+            if len(caller_phone) == 10:
+                caller_phone = f"+1{caller_phone}"
+            elif len(caller_phone) == 11 and caller_phone.startswith('1'):
+                caller_phone = f"+{caller_phone}"
+    
+    print(f"   Direction: {direction} | Phone: {caller_phone}")
+    
+    # === Handle assistant-request event ===
+    # This is the key event where we can inject context
+    if event_type == "assistant-request":
+        assistant_config = None
+        context_summary = ""
+        customer_name = ""
+        
+        # Look up customer memory by phone if we have valid phone
+        if caller_phone and len(caller_phone) >= 10:
+            try:
+                supabase_url = os.environ.get("SUPABASE_URL")
+                supabase_key = os.environ.get("SUPABASE_KEY")
+                
+                if supabase_url and supabase_key:
+                    supabase = create_client(supabase_url, supabase_key)
+                    
+                    # Query customer_memory by phone number
+                    result = supabase.table("customer_memory").select("*").eq("phone_number", caller_phone).limit(1).execute()
+                    
+                    if result.data and len(result.data) > 0:
+                        customer_data = result.data[0]
+                        context_summary = customer_data.get("context_summary", "")
+                        customer_name = customer_data.get("customer_name", "")
+                        print(f"   ✅ Found customer: {customer_name} | Context: {context_summary[:50]}...")
+                    else:
+                        print(f"   ℹ️ No existing customer record for {caller_phone}")
+            except Exception as e:
+                print(f"   ⚠️ Memory lookup failed: {e}")
+        
+        # Build dynamic prompt injection based on direction
+        if direction == "inbound":
+            greeting_instruction = """
+INBOUND CALL - Customer is calling us!
+Greeting: "Hey, thanks for calling AI Service Company! This is Sarah. Who am I speaking with?"
+- After they give their name: "Nice to meet you, [name]! What's going on with your business that made you reach out today?"
+"""
+        elif direction == "outbound":
+            greeting_instruction = f"""
+OUTBOUND CALL - We are calling the customer!
+Greeting: "Hey, is this {customer_name or 'there'}?"
+- If yes: "Hey {customer_name or 'there'}, this is Sarah from AI Service Company. Quick question - are you missing revenue from after-hours calls or leads that slip through the cracks? Got 30 seconds?"
+"""
+        else:
+            greeting_instruction = "Unable to determine call direction. Use inbound greeting by default."
+        
+        # Add customer context if available
+        context_injection = ""
+        if context_summary:
+            context_injection = f"""
+
+CUSTOMER CONTEXT (from previous interactions):
+{context_summary}
+
+Use this context to personalize the conversation. Don't repeat questions they've already answered.
+"""
+        
+        # Return assistant overrides with injected context
+        return {
+            "assistantOverrides": {
+                "variableValues": {
+                    "callDirection": direction,
+                    "customerPhone": caller_phone,
+                    "customerName": customer_name or "",
+                    "customerContext": context_summary or "No prior context"
+                },
+                "firstMessage": None,  # Let the model handle greeting based on prompt
+                "systemPrompt": f"""You are Sarah, AI phone assistant for AI Service Company. Be warm, genuine, casual.
+
+{greeting_instruction}
+{context_injection}
+
+YOUR MISSION: Gather useful intel through natural conversation using BANT framework.
+Questions to ask naturally (1-2 per turn):
+1. NEED: "What challenges are you facing with calls or customer service?"
+2. BUSINESS: "What kind of business do you run?"
+3. AUTHORITY: "Are you the one making decisions on new tools?"
+4. BUDGET (if asked): "Our solutions range from around $100-500/mo depending on needs."
+5. TIMELINE: "When are you looking to get something like this in place?"
+
+WHEN READY TO CLOSE:
+"Based on what you've shared, I think Dan can help. Want me to get you on a quick call with him?"
+
+STYLE: Casual, concise, human. Use "totally", "honestly", "got it". Keep responses short.
+"""
+            }
+        }
+    
+    # === Handle end-of-call-report event ===
+    # Log call outcome to customer_memory
+    elif event_type == "end-of-call-report":
+        transcript = message.get("transcript", "")
+        summary = message.get("summary", "")
+        
+        if caller_phone and (transcript or summary):
+            try:
+                supabase_url = os.environ.get("SUPABASE_URL")
+                supabase_key = os.environ.get("SUPABASE_KEY")
+                
+                if supabase_url and supabase_key:
+                    supabase = create_client(supabase_url, supabase_key)
+                    
+                    # Log to conversation_logs
+                    supabase.table("conversation_logs").insert({
+                        "phone_number": caller_phone,
+                        "channel": "voice",
+                        "direction": direction,
+                        "message": transcript[:2000] if transcript else summary[:500],
+                        "response": f"Call summary: {summary}" if summary else None
+                    }).execute()
+                    
+                    # Update customer_memory context if we got useful info
+                    if summary:
+                        # Append to existing context
+                        result = supabase.table("customer_memory").select("context_summary").eq("phone_number", caller_phone).limit(1).execute()
+                        existing_context = result.data[0].get("context_summary", "") if result.data else ""
+                        new_context = f"{existing_context}\n[Voice {direction} call]: {summary}"
+                        
+                        supabase.table("customer_memory").upsert({
+                            "phone_number": caller_phone,
+                            "context_summary": new_context[-2000:],  # Keep last 2000 chars
+                            "last_interaction": "now()"
+                        }, on_conflict="phone_number").execute()
+                        
+                        print(f"   ✅ Updated memory for {caller_phone} with call summary")
+            except Exception as e:
+                print(f"   ⚠️ Failed to log call: {e}")
+        
+        return {"status": "logged"}
+    
+    # Default response for other events
+    return {"status": "received", "event": event_type}
+
+
 @app.function(image=image, secrets=[VAULT])
 @modal.web_endpoint(method="GET")
 def health_check():
