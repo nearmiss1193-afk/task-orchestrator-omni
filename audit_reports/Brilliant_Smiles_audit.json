@@ -1,0 +1,25 @@
+{
+  "business_name": "Brilliant Smiles",
+  "url": "https://yourlakelanddentist.com",
+  "timestamp": "2026-02-06 10:11:52",
+  "legal": {
+    "privacy_found": true,
+    "terms_found": false,
+    "contact_consent_found": false,
+    "contact_form_found": true
+  },
+  "performance": {
+    "performance": 63,
+    "best_practices": 100,
+    "accessibility": 90,
+    "speed_index": "5.6\u00a0s",
+    "fcp": "2.4\u00a0s",
+    "raw_json_path": null
+  },
+  "screenshots": {
+    "homepage": "c:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\audit_screenshots\\homepage_footer.png",
+    "contact": "c:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\audit_screenshots\\contact_page.png",
+    "search_privacy": "c:\\Users\\nearm\\.gemini\\antigravity\\scratch\\empire-unified\\audit_screenshots\\search_privacy.png"
+  },
+  "duration": 33.81
+}

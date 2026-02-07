@@ -1,0 +1,30 @@
+{
+  "site_title": "Locally-Owned Dentist In Lakeland, FL | Brilliant Smiles Lakeland",
+  "footer_links": [
+    "privacy-policy"
+  ],
+  "contact_form": {
+    "fields": [
+      "post_id",
+      "form_id",
+      "referer_title",
+      "queried_id",
+      "form_fields[name]",
+      "form_fields[email]",
+      "form_fields[phone]",
+      "form_fields[field_b198f12]",
+      "form_fields[field_595687e]",
+      "form_fields[message]",
+      "g-recaptcha-response"
+    ],
+    "submit_button": "Submit",
+    "consent_checkbox": false,
+    "privacy_link_near_form": false,
+    "tcp_consent_text": null
+  },
+  "broken_links": [],
+  "forms_loading": true,
+  "buttons_working": true,
+  "page_speed": 56,
+  "mobile_bounce": "approx 20%"
+}

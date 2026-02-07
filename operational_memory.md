@@ -297,11 +297,12 @@ nearmiss1193@gmail.com
 > [!CAUTION]
 > **Dan MUST see each email EXACTLY as the customer will receive it:**
 >
+> - ❌ NO local image mockups (DALL-E etc.) - waste of resources
 > - ❌ NO consolidated HTML bundles
 > - ❌ NO JavaScript code previews
 > - ❌ NO markdown summaries
 > - ✅ INDIVIDUAL emails with PDF attachments
-> - ✅ Sent to Dan's inbox one-by-one
+> - ✅ Sent to Dan's inbox one-by-one by script
 > - ✅ Identical format the customer will receive
 
 ### Approval Process
@@ -471,6 +472,36 @@ REQUIREMENTS VERIFIED:
 Owner Approval Requested: [YES/NO]
 ```
 
+## 📊 EMAIL TRACKING PIXELS (MANDATORY - Added Feb 6, 2026)
+
+> [!CAUTION]
+> **MANDATORY SOP - NO EXCEPTIONS**
+>
+> 1. ALL outbound emails MUST contain tracking pixels
+> 2. After every 10 emails approved, INFORM OWNER that pixels are in place
+> 3. Board MUST verify pixels before final approval
+>
+> **NEVER send marketing emails without tracking pixels.**
+
+### Implementation
+
+```html
+<!-- Add to bottom of every HTML email body -->
+<img src="https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run?eid={EMAIL_UUID}" 
+     width="1" height="1" style="display:none;" />
+```
+
+### Board Verification Checklist
+
+After every 10 emails approved, Board MUST verify:
+
+| Item | Verify How | ✓ |
+|------|-----------|---|
+| Pixel URL present in HTML | View email source | [ ] |
+| Modal endpoint responding | curl endpoint URL | [ ] |
+| Supabase table exists | Check email_opens table | [ ] |
+| Owner notified | Tag owner with summary | [ ] |
+
 ---
 
 ## 📊 EMAIL TRACKING PIXELS (MANDATORY - Added Feb 5, 2026 18:48)
@@ -633,6 +664,40 @@ evidence/
 - **Keep evidence for 2 years minimum**
 - **Never delete before contract signed or lead marked dead**
 - **Use for legal protection if prospect disputes claims**
+
+---
+
+## 📸 VISUAL EVIDENCE STANDARDS (CRITICAL - Added Feb 6, 2026)
+
+> [!CAUTION]
+> **UNREADABLE EVIDENCE = NO EVIDENCE**
+>
+> 1. **Check Aspect Ratio**: Screenshots must be LANDSCAPE or SQUARE (4:3 or 16:9). NEVER vertical strips (1:10).
+> 2. **Check Dimensions**: Min width 800px. Max height 1000px.
+> 3. **Context**: Must show the "Copyright" year or Footer links.
+> 4. **Annotation**: The "MISSING PRIVACY" arrow/box must be LARGE and RED.
+
+### Verification (Agent Must Run)
+
+Before sending any screenshot:
+
+```python
+from PIL import Image
+with Image.open("evidence.png") as img:
+    w, h = img.size
+    ratio = w / h
+    # REJECT if too tall and skinny (e.g., mobile long-scroll)
+    if ratio < 0.5:
+        raise ValueError(f"Shape Error: Image is a vertical strip ({w}x{h}). Retake.")
+    if h > 2000:
+        raise ValueError("Height Error: Image too tall. Crop to relevant footer area.")
+```
+
+### Why This Exists
+
+Incident Feb 6, 2026: User received a "white strip" screenshot that was illegible.
+Board approved it because they couldn't see it (blind voting).
+**Fix:** Agent must verify dimensions programmatically.
 
 ---
 
@@ -1410,6 +1475,14 @@ Before ANY `execute`, `deploy`, `send`, or major change:
 
 ---
 
+## [Feb 5, 2026] - Batch 3 PDF & Preview Protocol
+
+- **Learning**: Visual mockups (DALL-E/Images) are banned.
+- **New Standard**: Generate REAL PDF audits using `reportlab` script.
+- **Verification**: Send INDIVIDUAL emails to Owner (`nearmiss1193@gmail.com`) with PDF attached.
+- **Scripts Created**: `generate_batch3_pdfs.py` (Generation), `send_batch3_previews.py` (Sending).
+- **Outcome**: 100% compliance with "Customer Perspective" review rule.
+
 ## BOARD OVERRIDE V2 – EXECUTIVE ORDER (Feb 4, 2026)
 
 ### ⚫ NO SELF-FIX RULE
@@ -1508,3 +1581,73 @@ Run `create_sovereign_tables.sql` in Supabase SQL Editor to create:
 - sovereign_alerts
 
 ---
+
+## 🛡️ 5-LAYER REDUNDANCY CHECK (MANDATORY - Added Feb 6, 2026)
+
+> [!CAUTION]
+> **VERIFICATION IS THE ONLY TRUTH**
+>
+> We nearly sent a false claim ("Missing Privacy Policy") because we relied on code without eyes.
+> **NEW RULE:** We NEVER trust the code's finding alone.
+
+### The 5 Layers of Verification
+
+| Layer | Who Checks | Method | Criteria |
+|-------|------------|--------|----------|
+| **1. Code** | Python Script | `keyword in page_text` | Scanner flags "Missing" |
+| **2. Visual** | Evidence Bot | `Red Arrow Screenshot` | Evidence file created & readable |
+| **3. Agent** | Operations AI | `verify_dimensions` & `os.path.exists` | File > 800px width, > 50kb |
+| **4. Board** | Claim Council | `Describe the evidence` | "I see the red arrow pointing to empty space" |
+| **5. Owner** | Dan | `Final Preview` | "Approve" reply to identical draft |
+
+### 🛑 STOP FAIL-SAFE
+
+If ANY layer disagrees (e.g., Code says missing, but Board sees it in screenshot), the claim is **KILLED**.
+
+---
+
+## ⚖️ CLAIM VERIFICATION PROTOCOL (CVP)
+
+> [!IMPORTANT]
+> **BOARD MUST VERIFY THE TRUTH, NOT JUST THE VIBE.**
+
+When asking the Board to approve an email, you must provide the **EVIDENCE** and ask them to verify the **CLAIM**.
+
+**Bad Prompt:** "Does this email look good?"
+**Required Prompt:**
+> "I am claiming the target is missing a 'Terms of Use'.
+> I found keywords: ['Privacy', 'Contact', 'Home'].
+> I did NOT find: ['Terms', 'Conditions', 'Liability'].
+> **VERIFY:** Does this evidence support the claim that Terms are missing?
+> search_web('site.com') if unsure."
+
+---
+
+## 🚦 B FISHER EMAIL STANDARD (STRICT)
+
+> [!CAUTION]
+> **AESTHETICS ARE NOT OPTIONAL.**
+> The "B Fisher" standard is a proven high-converting format. Deviating breaks the system.
+
+### The Standard
+
+1. **Traffic Light Table**:
+    - **RED (🔴 CRITICAL)**: Top row. Fills cell. White text on Red bg.
+    - **YELLOW (🟡 WARNING)**: Middle row. Black Text on Yellow bg.
+    - **GREEN (🟢 GOOD)**: Bottom row. White text on Green bg.
+    - **NOTE**: Do NOT use white backgrounds for status cells.
+
+2. **Minimalist Layout**:
+    - No huge banners.
+    - One clear call to action.
+    - "Sent from my iPhone" style brevity in body.
+
+3. **The Hook**:
+    - "I found a liability risk" (Terms) OR "I found a compliance fine" (Privacy).
+    - NEVER both in the subject line (too cluttered).
+
+### Valid Colors (Hex)
+
+* 🔴 Red Background: `#FF6B6B` (Text: White)
+- 🟡 Yellow Background: `#FFE66D` (Text: Black)
+- 🟢 Green Background: `#4ECB71` (Text: White)

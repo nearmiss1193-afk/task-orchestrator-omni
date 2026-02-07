@@ -198,8 +198,323 @@ def track_email_open(eid: str = "", recipient: str = "", business: str = ""):
     
     return Response(content=TRANSPARENT_GIF, media_type="image/gif")
 
+# ==== SMS INBOUND HANDLER (Sarah AI Reply with Memory) ====
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="POST")
+def sms_inbound(data: dict = {}):
+    """
+    Receives inbound SMS from GHL webhook, generates Sarah AI reply with persistent memory.
+    GHL workflow calls this with: phone, message, contact_name
+    Returns: sarah_reply for GHL to send as SMS
+    """
+    import os
+    import requests
+    import json
+    from datetime import datetime
+    from supabase import create_client
+    
+    phone = data.get("phone", "").strip()
+    message = data.get("message", "")
+    contact_name = data.get("contact_name", "there")
+    
+    print(f"[{datetime.now().strftime('%I:%M %p')}] SMS from {phone}: {message[:50]}...")
+    
+    # --- MEMORY LOOKUP ---
+    context_summary = {}
+    customer_id = None
+    
+    try:
+        supabase_url = os.environ.get("SUPABASE_URL")
+        supabase_key = os.environ.get("SUPABASE_KEY")
+        if supabase_url and supabase_key:
+            supabase = create_client(supabase_url, supabase_key)
+            
+            # Lookup by phone number
+            result = supabase.table("customer_memory").select("*").eq("phone_number", phone).execute()
+            
+            if result.data and len(result.data) > 0:
+                # Returning customer - get their context
+                customer = result.data[0]
+                customer_id = customer["customer_id"]
+                context_summary = customer.get("context_summary", {}) or {}
+                print(f"📝 Found returning customer: {customer_id}, context: {json.dumps(context_summary)[:100]}")
+            else:
+                # New customer - create record
+                new_customer = supabase.table("customer_memory").insert({
+                    "phone_number": phone,
+                    "context_summary": {"contact_name": contact_name},
+                    "status": "active"
+                }).execute()
+                if new_customer.data:
+                    customer_id = new_customer.data[0]["customer_id"]
+                    print(f"🆕 Created new customer: {customer_id}")
+    except Exception as e:
+        print(f"⚠️ Memory lookup failed (continuing without): {e}")
+    
+    # --- BUILD CONTEXT-AWARE PROMPT ---
+    context_str = ""
+    if context_summary:
+        context_str = "\n\nCUSTOMER CONTEXT (from previous conversations):\n"
+        if context_summary.get("contact_name"):
+            context_str += f"- Name: {context_summary['contact_name']}\n"
+        if context_summary.get("business_type"):
+            context_str += f"- Business: {context_summary['business_type']}\n"
+        if context_summary.get("main_challenge"):
+            context_str += f"- Challenge: {context_summary['main_challenge']}\n"
+        if context_summary.get("budget_mentioned"):
+            context_str += f"- Budget hint: {context_summary['budget_mentioned']}\n"
+        if context_summary.get("questions_asked"):
+            context_str += f"- Already asked: {', '.join(context_summary['questions_asked'])}\n"
+        context_str += "\nDO NOT repeat questions already asked. Build on previous context."
+    
+    # Sarah's BANT fact-finding prompt (Board-approved Option C)
+    SARAH_PROMPT = f"""You are Sarah, AI assistant for AI Service Co.
+
+YOUR MISSION: Gather useful intel through natural conversation BEFORE offering a call with Dan.
+Use the BANT framework naturally - don't sound like an interrogation!
+{context_str}
+
+CONVERSATION FLOW (ask 1-2 questions per message, keep it SHORT):
+
+1. NEED: First understand their challenge
+   - "What challenges are you facing with automation or customer service?"
+   - "What's the biggest headache in your business right now?"
+
+2. BUSINESS TYPE: Understand their context
+   - "What kind of business do you run?"
+   - "Got it! Are you running a service business, retail, or...?"
+
+3. AUTHORITY: Check if they're the decision maker
+   - "Are you the one making decisions on new tools, or should I loop someone else in?"
+
+4. BUDGET (if they ask about pricing):
+   - "Our solutions range from around $100-500/mo depending on needs. What's your ballpark budget?"
+   - NEVER quote specific dollar amounts beyond this range
+
+5. TIMELINE: When they need it
+   - "When are you looking to get something like this in place?"
+
+RULES:
+- Keep responses SHORT (1-3 sentences max for SMS)
+- Be warm, friendly, conversational - NOT robotic
+- Acknowledge what they said before asking next question ("Got it!", "Makes sense!")
+- After 2-3 good exchanges, offer the call: "Based on what you've shared, I think Dan can help. Want me to set up a quick call?"
+- If they seem annoyed or impatient, skip straight to: "Let me get you on a quick call with Dan - when works?"
+
+FALLBACK (if confused or asked something weird):
+- "I want to make sure I get you the best help - let me have Dan reach out directly. When's a good time?"
+"""
+    
+    # Generate reply using Grok
+    api_key = os.environ.get("GROK_API_KEY") or os.environ.get("XAI_API_KEY")
+    if not api_key:
+        return {"sarah_reply": "Hey! Let me have Dan call you back shortly. -Sarah", "status": "fallback"}
+    
+    reply = ""
+    try:
+        resp = requests.post(
+            "https://api.x.ai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "messages": [
+                    {"role": "system", "content": SARAH_PROMPT},
+                    {"role": "user", "content": f"Incoming SMS from {contact_name}: \"{message}\"\n\nWrite a short SMS reply:"}
+                ],
+                "model": "grok-3",
+                "temperature": 0.7,
+                "max_tokens": 100
+            },
+            timeout=30
+        )
+        if resp.status_code == 200:
+            reply = resp.json()['choices'][0]['message']['content'].strip()
+            print(f"Sarah reply: {reply[:50]}...")
+        else:
+            print(f"Grok error: {resp.status_code}")
+            reply = "Hey! I'll have Dan reach out shortly. -Sarah"
+    except Exception as e:
+        print(f"Error: {e}")
+        reply = "Hey! Let me have Dan follow up with you. -Sarah"
+    
+    # --- LOG CONVERSATION & UPDATE CONTEXT ---
+    try:
+        if supabase_url and supabase_key and customer_id:
+            supabase = create_client(supabase_url, supabase_key)
+            
+            # Log the conversation
+            supabase.table("conversation_logs").insert({
+                "customer_id": customer_id,
+                "channel": "sms",
+                "direction": "inbound",
+                "content": message,
+                "sarah_response": reply,
+                "metadata": {"contact_name": contact_name}
+            }).execute()
+            
+            # Update context_summary with any new intel (basic extraction)
+            updated_context = context_summary.copy()
+            updated_context["contact_name"] = contact_name
+            message_lower = message.lower()
+            
+            # Simple keyword extraction for context
+            if any(word in message_lower for word in ["hvac", "plumber", "plumbing", "contractor", "roofing", "electrician"]):
+                updated_context["business_type"] = message.split()[0] if message else "service business"
+            if any(word in message_lower for word in ["miss", "calls", "after hours", "weekend"]):
+                updated_context["main_challenge"] = "missed calls"
+            if "$" in message or "budget" in message_lower:
+                updated_context["budget_mentioned"] = message
+            
+            # Track questions Sarah asked
+            questions_asked = updated_context.get("questions_asked", [])
+            if "what kind of business" in reply.lower():
+                questions_asked.append("business_type")
+            if "challenge" in reply.lower() or "headache" in reply.lower():
+                questions_asked.append("challenge")
+            updated_context["questions_asked"] = list(set(questions_asked))
+            
+            # Save updated context
+            supabase.table("customer_memory").update({
+                "context_summary": updated_context,
+                "last_interaction": datetime.now().isoformat()
+            }).eq("customer_id", customer_id).execute()
+            
+            print(f"✅ Logged conversation and updated context for {customer_id}")
+    except Exception as e:
+        print(f"⚠️ Failed to log conversation: {e}")
+    
+    return {"sarah_reply": reply, "status": "success", "customer_id": str(customer_id) if customer_id else None}
+
+
+# ==== HEALTH CHECK ENDPOINT ====
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="GET")
+def health_check():
+    """Quick health check for all critical services - used by UptimeRobot/monitoring"""
+    import os
+    from datetime import datetime
+    from supabase import create_client
+    
+    checks = {}
+    
+    # Check Supabase connection
+    try:
+        supabase_url = os.environ.get("SUPABASE_URL")
+        supabase_key = os.environ.get("SUPABASE_KEY")
+        if supabase_url and supabase_key:
+            supabase = create_client(supabase_url, supabase_key)
+            result = supabase.table("system_state").select("key").limit(1).execute()
+            checks["supabase"] = "ok"
+        else:
+            checks["supabase"] = "no_creds"
+    except Exception as e:
+        checks["supabase"] = f"fail: {str(e)[:50]}"
+    
+    # Check Grok API key exists
+    checks["grok_key"] = "ok" if os.environ.get("GROK_API_KEY") or os.environ.get("XAI_API_KEY") else "missing"
+    
+    # Check GHL key exists
+    checks["ghl_key"] = "ok" if os.environ.get("GHL_API_KEY") else "missing"
+    
+    # Check Vapi key exists
+    checks["vapi_key"] = "ok" if os.environ.get("VAPI_API_KEY") else "missing"
+    
+    all_ok = all(v == "ok" for v in checks.values())
+    status = "healthy" if all_ok else "degraded"
+    
+    return {
+        "status": status,
+        "timestamp": datetime.now().isoformat(),
+        "checks": checks
+    }
+
+
+# ==== SELF-HEALING MONITOR (Runs every 10 minutes) ====
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/10 * * * *"))
+def self_healing_monitor():
+    """Auto-detect issues, log health, alert on critical failures"""
+    import os
+    from datetime import datetime, timedelta
+    from supabase import create_client
+    
+    print(f"🔍 Self-healing monitor running at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    issues = []
+    recovery_actions = []
+    
+    try:
+        supabase_url = os.environ.get("SUPABASE_URL")
+        supabase_key = os.environ.get("SUPABASE_KEY")
+        
+        if not supabase_url or not supabase_key:
+            issues.append("Missing Supabase credentials")
+            # Can't proceed without DB - this is critical
+            print(f"❌ CRITICAL: {issues}")
+            return {"status": "critical", "issues": issues}
+        
+        supabase = create_client(supabase_url, supabase_key)
+        
+        # 1. Check for recent error logs
+        try:
+            recent_errors = supabase.table("system_health_log")\
+                .select("*")\
+                .eq("status", "error")\
+                .gte("checked_at", (datetime.now() - timedelta(minutes=30)).isoformat())\
+                .execute()
+            
+            if recent_errors.data and len(recent_errors.data) > 5:
+                issues.append(f"High error rate: {len(recent_errors.data)} errors in last 30 min")
+        except Exception as e:
+            print(f"⚠️ Could not check error logs: {e}")
+        
+        # 2. Check campaign_mode status
+        try:
+            campaign = supabase.table("system_state").select("status").eq("key", "campaign_mode").execute()
+            if campaign.data:
+                mode = campaign.data[0].get("status")
+                if mode != "working":
+                    issues.append(f"Campaign mode is '{mode}' (should be 'working')")
+        except Exception as e:
+            print(f"⚠️ Could not check campaign mode: {e}")
+        
+        # 3. Check customer_memory table is accessible
+        try:
+            mem_check = supabase.table("customer_memory").select("customer_id").limit(1).execute()
+            print(f"✅ customer_memory table accessible")
+        except Exception as e:
+            issues.append(f"customer_memory table error: {str(e)[:50]}")
+        
+        # 4. Log health status
+        try:
+            supabase.table("system_health_log").insert({
+                "checked_at": datetime.now().isoformat(),
+                "status": "error" if issues else "ok",
+                "details": {"issues": issues, "recovery_actions": recovery_actions}
+            }).execute()
+        except Exception as e:
+            print(f"⚠️ Could not log health status: {e}")
+        
+        # 5. Alert if too many issues (would integrate with Slack/email)
+        if len(issues) >= 3:
+            print(f"🚨 ALERT: Multiple issues detected: {issues}")
+            # TODO: Send Slack/email alert
+            # For now just log
+        
+        print(f"✅ Self-healing check complete. Issues: {len(issues)}")
+        return {
+            "status": "ok" if not issues else "issues_detected",
+            "issues_count": len(issues),
+            "issues": issues,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        print(f"❌ Self-healing monitor error: {e}")
+        return {"status": "error", "error": str(e)}
+
+
 # OUTREACH & SYNC WORKERS (Imported from workers/outreach.py)
 from workers.outreach import sync_ghl_contacts, auto_outreach_loop, dispatch_sms_logic, dispatch_email_logic, dispatch_call_logic
 
 if __name__ == "__main__":
     print("Nexus Outreach V1 - Clean Architecture")
+

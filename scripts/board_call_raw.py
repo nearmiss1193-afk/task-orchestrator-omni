@@ -1,167 +1,146 @@
-#!/usr/bin/env python3
-"""Board Protocol: Query all AIs for strategic decision."""
+
 import os
 import json
-import requests
 from dotenv import load_dotenv
-load_dotenv()
+from openai import OpenAI
+import anthropic
+import google.generativeai as genai
 
-PROMPT = '''SESSION REVIEW: Process Improvement Analysis (Feb 5, 2026)
+# Load secrets
+load_dotenv(r"C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\.secrets\secrets.env")
 
-## CONTEXT
-Today's session revealed several inefficiencies that caused delays. The user (Dan) expressed frustration that tasks which were completed successfully earlier in the session couldn't be replicated later without wasting time.
+# 1. SETUP CLIENTS
+claude = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+xai = OpenAI(api_key=os.getenv("XAI_API_KEY"), base_url="https://api.x.ai/v1")
+# 2. DEFINING THE BOARD PROMPT
+PROMPT = """
+You are a strategic advisor for AI Service Co, a B2B service agency selling AI automation to local businesses.
 
-## KEY ISSUES IDENTIFIED
+**RESEARCH TOPICS (Fact-Finding Only):**
 
-### Issue 1: Email Sending Capability Lost
-- Earlier in session: Successfully sent emails via reliable_email.py
-- Later in session: Agent tried Gmail (wrong approach), had PowerShell syntax errors
-- User feedback: "I hate to have to spend an hour each day to have you find a way to do something that you did yesterday"
+## TOPIC 1: UNIVERSAL SARAH LOGIC
+How should we implement UNIFIED behavior for Sarah (AI assistant) across ALL channels?
+- SMS inbound/outbound
+- Voice calls (Vapi) inbound/outbound
+- Website chat (if applicable)
 
-### Issue 2: Batch Count Confusion
-- User originally asked for 10 emails
-- Agent only prepared 6 emails initially
-- User had to correct this mid-task
+Current Problem: Sarah has different prompts/logic per channel, which could cause conflicting information.
 
-### Issue 3: Approval Email Never Sent
-- Gmail approach failed (needs app password)
-- Multiline string caused PowerShell syntax error
-- Finally used reliable_email.py (the correct method)
+## TOPIC 2: PERSISTENT CUSTOMER MEMORY
+How should Sarah maintain memory of customer conversations across:
+- Multiple SMS exchanges
+- Inbound calls → Outbound calls (same customer)
+- Outbound calls → Customer calls back
+- Cross-channel (SMS then call, or call then SMS)
 
-## SESSION TIMELINE
+Requirements:
+1. Sarah should recognize returning customers
+2. Sarah should NOT repeat questions already answered
+3. Sarah should remember context from previous conversations
+4. Memory should persist until customer converts or is marked dead
 
-1. User requested 10 emails for owner approval
-2. Agent researched and verified email addresses
-3. Agent drafted emails using approved template
-4. Board review completed (4/4 approval for Batch 1)
-5. Approval email failed multiple times before success
-6. User had to remind agent about correct email count
-7. User requested process improvement review
+## TOPIC 3: SELF-HEALING & AUTONOMOUS OPERATION
+How do we make Sarah's system run 24/7 without manual intervention?
+- Auto-detect crashes or API failures
+- Auto-restart failed services
+- Alert owner only when human intervention truly needed
+- Log all issues for later review
 
-## QUESTIONS FOR BOARD
+Current Problem: System requires manual monitoring and restarts after crashes.
 
-1. **How can we ensure learned capabilities are not forgotten mid-session?**
-   - Should there be a "working commands" log?
-   - Should operational_memory.md be updated more aggressively?
+**WHAT WE NEED:**
+1. Architecture recommendations for unified logic
+2. Database schema for customer memory
+3. Technical approach for cross-channel memory sync
+4. Self-healing implementation patterns
+5. Monitoring & alerting strategy
 
-2. **What protocols should be added to prevent these specific issues?**
-   - Pre-task checklist?
-   - Mandatory re-read of operational_memory before each major action?
+**CONTEXT:**
+- Backend: Modal (Python serverless)
+- Database: Supabase (PostgreSQL)
+- Voice: Vapi.ai
+- SMS/Email: GHL webhooks
+- CRM: GoHighLevel
 
-3. **How can we improve user experience?**
-   - Faster execution with fewer errors
-   - Better confirmation of completed actions
-   - Proactive communication
+**YOUR TASK:**
+Provide technical recommendations for each topic. Be specific about:
+- Database tables needed
+- How to store/retrieve conversation context
+- How to sync across channels
+- How to implement self-healing
+- What monitoring is needed
 
-4. **What documentation changes are needed?**
-   - operational_memory.md updates?
-   - New workflow files?
-   - Quick reference cards?
-
-Please provide:
-- Specific recommendations
-- Priority ranking (High/Medium/Low)
-- Implementation suggestions
-'''
+**FORMAT:**
+- Topic 1: [Your recommendations]
+- Topic 2: [Your recommendations]  
+- Topic 3: [Your recommendations]
+- Key Warnings: [Any concerns or gotchas]
+"""
 
 
-def query_claude():
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    if not api_key:
-        return {"ai": "Claude", "raw": "ERROR: No ANTHROPIC_API_KEY"}
+
+
+def call_board():
+    responses = {}
+    
+    # CLAUDE
     try:
-        response = requests.post(
-            "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": api_key,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-            },
-            json={
-                "model": "claude-sonnet-4-20250514",
-                "max_tokens": 2500,
-                "messages": [{"role": "user", "content": PROMPT}],
-            },
-            timeout=120,
+        msg = claude.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=1000,
+            messages=[{"role": "user", "content": PROMPT}]
         )
-        data = response.json()
-        return {"ai": "Claude", "raw": data.get("content", [{}])[0].get("text", str(data))}
+        responses["Claude"] = msg.content[0].text
     except Exception as e:
-        return {"ai": "Claude", "raw": f"ERROR: {e}"}
+        responses["Claude"] = str(e)
 
-def query_grok():
-    api_key = os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY")
-    if not api_key:
-        return {"ai": "Grok", "raw": "ERROR: No GROK_API_KEY or XAI_API_KEY"}
+    # CHATGPT
     try:
-        response = requests.post(
-            "https://api.x.ai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={"model": "grok-3-latest", "messages": [{"role": "user", "content": PROMPT}]},
-            timeout=120,
+        completion = openai.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": PROMPT}]
         )
-        data = response.json()
-        return {"ai": "Grok", "raw": data.get("choices", [{}])[0].get("message", {}).get("content", str(data))}
+        responses["ChatGPT"] = completion.choices[0].message.content
     except Exception as e:
-        return {"ai": "Grok", "raw": f"ERROR: {e}"}
+        responses["ChatGPT"] = str(e)
 
-def query_gemini():
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        return {"ai": "Gemini", "raw": "ERROR: No GEMINI_API_KEY"}
+    # GEMINI
     try:
-        response = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}",
-            headers={"Content-Type": "application/json"},
-            json={"contents": [{"parts": [{"text": PROMPT}]}]},
-            timeout=120,
-        )
-        data = response.json()
-        return {"ai": "Gemini", "raw": data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", str(data))}
+        # 'gemini-1.5-flash' is the stable latest model
+        model = genai.GenerativeModel('models/gemini-2.0-flash')
+        response = model.generate_content(PROMPT)
+        responses["Gemini"] = response.text
     except Exception as e:
-        return {"ai": "Gemini", "raw": f"ERROR: {e}"}
+        responses["Gemini"] = f"Gemini Error: {str(e)}"
 
-def query_chatgpt():
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        return {"ai": "ChatGPT", "raw": "ERROR: No OPENAI_API_KEY"}
+    # GROK (xAI)
     try:
-        response = requests.post(
-            "https://api.openai.com/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={"model": "gpt-4o", "messages": [{"role": "user", "content": PROMPT}]},
-            timeout=120,
-        )
-        data = response.json()
-        return {"ai": "ChatGPT", "raw": data.get("choices", [{}])[0].get("message", {}).get("content", str(data))}
+        # CORRECTED VARIABLE NAME (Found via diagnostics)
+        api_key = os.getenv("GROK_API_KEY") 
+        
+        if not api_key:
+             responses["Grok"] = "SKIPPED: GROK_API_KEY missing in .secrets.env"
+        else:
+            client = OpenAI(
+                api_key=api_key, 
+                base_url="https://api.x.ai/v1"
+            )
+            completion = client.chat.completions.create(
+                model="grok-3",
+                messages=[{"role": "system", "content": "You are a strategic board member."},
+                        {"role": "user", "content": PROMPT}]
+            )
+            responses["Grok"] = completion.choices[0].message.content
     except Exception as e:
-        return {"ai": "ChatGPT", "raw": f"ERROR: {e}"}
+        responses["Grok"] = f"Grok Error: {str(e)}"
+
+    # SAVE RESULTS
+    with open("board_call_raw.json", "w") as f:
+        json.dump(responses, f, indent=2)
+    
+    print("✅ Board meeting adjourned. Results saved to board_call_raw.json")
 
 if __name__ == "__main__":
-    import sys
-    from concurrent.futures import ThreadPoolExecutor
-    
-    # Accept prompt from command line if provided
-    if len(sys.argv) > 1:
-        PROMPT = sys.argv[1]
-        print(f">> {PROMPT[:200]}..." if len(PROMPT) > 200 else f">> {PROMPT}")
-    
-    print("Querying Board: Operational Excellence...")
-    
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        futures = [
-            executor.submit(query_claude),
-            executor.submit(query_grok),
-            executor.submit(query_gemini),
-            executor.submit(query_chatgpt),
-        ]
-        results = [f.result() for f in futures]
-    
-    with open("board_call_raw.json", "w") as f:
-        json.dump(results, f, indent=2)
-    
-    for r in results:
-        print(f"=== {r['ai']} ===")
-        print(r['raw'][:2000] + "..." if len(r['raw']) > 2000 else r['raw'])
-    
-    print("\n=== DONE ===")
+    call_board()

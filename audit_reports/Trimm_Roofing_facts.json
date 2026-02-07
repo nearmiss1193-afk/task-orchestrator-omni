@@ -1,0 +1,14 @@
+{
+  "site_title": "Roofing Professionals Lakeland, FL | Trimm Roofing",
+  "footer_links": [
+    "privacy-policy"
+  ],
+  "contact_form": {
+    "consent_checkbox": false,
+    "tcp_consent_text": false,
+    "privacy_link_near_form": false
+  },
+  "page_speed": 90,
+  "mobile_bounce": "20%",
+  "broken_links": []
+}

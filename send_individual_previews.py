@@ -41,58 +41,13 @@ OWNER_EMAIL = "nearmiss1193@gmail.com"
 # Email batches to send for preview
 EMAILS_TO_PREVIEW = [
     {
-        "subject": "[PREVIEW 1/6] Lakeland Air Conditioning - Tony Agnello",
-        "to_name": "Tony",
-        "business": "Lakeland Air Conditioning",
-        "website": "thelakelandac.com",
-        "industry": "HVAC",
-        "actual_recipient": "info@thelakelandac.com",
-        "pdf": "email_attachments/Lakeland_Air_Conditioning_Digital_Audit_Feb_2026.pdf"
-    },
-    {
-        "subject": "[PREVIEW 2/6] Trimm Roofing - Nathane Trimm",
-        "to_name": "Nathane",
-        "business": "Trimm Roofing",
-        "website": "trimmroofing.com",
-        "industry": "roofing",
-        "actual_recipient": "support@trimmroofing.com",
-        "pdf": "email_attachments/Trimm_Roofing_Digital_Audit_Feb_2026.pdf"
-    },
-    {
-        "subject": "[PREVIEW 3/6] Curry Plumbing - Chris Shills",
-        "to_name": "Chris",
-        "business": "Curry Plumbing",
-        "website": "curryplumbing.com",
-        "industry": "plumbing",
-        "actual_recipient": "chrisshills@curryplumbing.com",
-        "pdf": "email_attachments/Curry_Plumbing_Digital_Audit_Feb_2026.pdf"
-    },
-    {
-        "subject": "[PREVIEW 4/6] Andress Electric - Marshall Andress",
-        "to_name": "Marshall",
-        "business": "Andress Electric",
-        "website": "andresselectric.com",
-        "industry": "electrical",
-        "actual_recipient": "info@andresselectric.com",
-        "pdf": "email_attachments/Andress_Electric_Digital_Audit_Feb_2026.pdf"
-    },
-    {
-        "subject": "[PREVIEW 5/6] Hunter Plumbing - Bill Lerch",
-        "to_name": "Bill",
-        "business": "Hunter Plumbing Inc",
-        "website": "hunterplumbinginc.com",
-        "industry": "plumbing",
-        "actual_recipient": "hunterplumbing@hunterplumbinginc.com",
-        "pdf": "email_attachments/Hunter_Plumbing_Inc_Digital_Audit_Feb_2026.pdf"
-    },
-    {
-        "subject": "[PREVIEW 6/6] Original Pro Plumbing - David Smith",
-        "to_name": "David",
-        "business": "Original Pro Plumbing",
-        "website": "originalplumber.com",
-        "industry": "plumbing",
-        "actual_recipient": "proplumbing1@originalplumber.com",
-        "pdf": "email_attachments/Original_Pro_Plumbing_Digital_Audit_Feb_2026.pdf"
+        "subject": "[PREVIEW] Brilliant Smiles Lakeland - Digital Performance Audit Results",
+        "to_name": "Dr. Parmar",
+        "business": "Brilliant Smiles Lakeland",
+        "website": "yourlakelanddentist.com",
+        "industry": "Dental",
+        "actual_recipient": "info@yourlakelanddentist.com",
+        "pdf": "email_attachments/batch3/Audit_Brilliant_Smiles_Lakeland.pdf"
     }
 ]
 

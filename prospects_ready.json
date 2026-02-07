@@ -1,6 +1,7 @@
 [
   {
     "company_name": "Affordable Air Conditioning",
+    "name": "Orlando Hernandez Jr.",
     "email": "affordable.airconditioning@yahoo.com",
     "website": "https://www.airconditioningandheatingfla.com",
     "phone": "(863) 860-7633",
@@ -9,6 +10,7 @@
   },
   {
     "company_name": "American Air Repair",
+    "name": "Robert Kinney",
     "email": "contact@americanairrepairllc.com",
     "website": "https://www.americanairrepairllc.com",
     "phone": "(813) 802-2183",
@@ -17,6 +19,7 @@
   },
   {
     "company_name": "Lakeland Air Conditioning",
+    "name": "Tony Agnello",
     "email": "info@thelakelandac.com",
     "website": "https://www.thelakelandac.com",
     "phone": "(863) 859-4090",
@@ -25,6 +28,7 @@
   },
   {
     "company_name": "Vanguard Plumbing & Air",
+    "name": "Dave Reep",
     "email": "info@vanguardplumbingair.com",
     "website": "https://www.vanguardplumbingair.com",
     "phone": "(863) 271-7988",
