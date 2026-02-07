@@ -650,6 +650,59 @@ This personalizes the email and proves you actually visited their site.
 
 ---
 
+## 🧠 SECTION 15: SARAH UNIVERSAL MEMORY (Feb 7, 2026)
+
+### New Database Tables
+
+| Table | Purpose |
+|-------|---------|
+| `customer_memory` | Stores customer context (JSONB) keyed by phone number |
+| `conversation_logs` | Full conversation history per customer |
+| `prompt_templates` | Central Sarah prompt storage |
+
+### SMS Memory Implementation
+
+**File:** `deploy.py` → `sms_inbound()` function
+
+| Feature | Implementation |
+|---------|----------------|
+| Memory Lookup | Query `customer_memory` by phone before response |
+| Context Injection | Add customer context to Sarah's prompt |
+| Auto-extraction | Extract business type, challenges from message content |
+| Conversation Logging | Save each exchange to `conversation_logs` |
+
+### Env Var Corrections
+
+- `SUPABASE_SERVICE_ROLE_KEY` (not `SUPABASE_KEY`)
+- Direct DB: use `DATABASE_URL` with psycopg2
+
+### Self-Healing Monitor
+
+| Endpoint | Type | Schedule |
+|----------|------|----------|
+| `/health_check` | GET | On-demand |
+| `self_healing_monitor` | CRON | Every 10 min |
+
+**Checks performed:**
+
+- Supabase connectivity
+- API keys present (Grok, GHL, Vapi)
+- Recent error log count
+- Campaign mode status
+- customer_memory table accessibility
+
+### Key Code Pattern
+
+```python
+# Memory lookup before Sarah responds
+result = supabase.table("customer_memory").select("*").eq("phone_number", phone).execute()
+if result.data:
+    context_summary = result.data[0].get("context_summary", {})
+    # Inject context into prompt
+```
+
+---
+
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
