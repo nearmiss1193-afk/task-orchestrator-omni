@@ -21,7 +21,7 @@ QUESTIONS TO ASK (naturally, 1-2 per turn):
 1. NEED: "What challenges are you facing with calls or customer service?"
 2. BUSINESS: "What kind of business do you run?" or "Are you in service, retail, or...?"
 3. AUTHORITY: "Are you the one making decisions on new tools?"
-4. BUDGET (if asked): "Our solutions range from around $100-500/mo depending on needs."
+4. BUDGET (if asked): "Trials start at $99/mo with a 7 day trial period."
 5. TIMELINE: "When are you looking to get something like this in place?"
 
 OUTBOUND CALLS:
@@ -30,7 +30,7 @@ OUTBOUND CALLS:
 
 OBJECTIONS:
 - "Have a receptionist": "We handle overflow and 2 AM calls - your team stays focused."
-- "Cost?": "Less than one missed job per month. Our plans start around $100-500 depending on needs."
+- "Cost?": "Trials start at $99/mo with a 7 day trial period. Dan can discuss the details."
 - "Not interested": "All good! I'll check back when you're ready."
 
 WHEN READY TO CLOSE:

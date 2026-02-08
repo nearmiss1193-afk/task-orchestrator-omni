@@ -217,6 +217,10 @@ def sms_inbound(data: dict = {}):
     message = data.get("message", "")
     contact_name = data.get("contact_name", "there")
     
+    # CRITICAL FIX (Board 4/4 Approved): Normalize phone to E.164
+    # Without this, SMS stores "(352) 936-8152" but Voice looks up "+13529368152"
+    phone = normalize_phone(phone)
+    
     print(f"[{datetime.now().strftime('%I:%M %p')}] SMS from {phone}: {message[:50]}...")
     
     # --- MEMORY LOOKUP ---
@@ -229,7 +233,7 @@ def sms_inbound(data: dict = {}):
         if supabase_url and supabase_key:
             supabase = create_client(supabase_url, supabase_key)
             
-            # Lookup by phone number
+            # Lookup by NORMALIZED phone number (E.164 format)
             result = supabase.table("customer_memory").select("*").eq("phone_number", phone).execute()
             
             if result.data and len(result.data) > 0:
@@ -288,8 +292,8 @@ CONVERSATION FLOW (ask 1-2 questions per message, keep it SHORT):
    - "Are you the one making decisions on new tools, or should I loop someone else in?"
 
 4. BUDGET (if they ask about pricing):
-   - "Our solutions range from around $100-500/mo depending on needs. What's your ballpark budget?"
-   - NEVER quote specific dollar amounts beyond this range
+   - "Trials start at $99/mo with a 7 day trial period."
+   - Defer specific pricing discussions to Dan
 
 5. TIMELINE: When they need it
    - "When are you looking to get something like this in place?"
@@ -385,6 +389,44 @@ FALLBACK (if confused or asked something weird):
     return {"sarah_reply": reply, "status": "success", "customer_id": str(customer_id) if customer_id else None}
 
 
+# ==== SHARED PHONE NORMALIZATION (Board Requirement) ====
+def normalize_phone(raw_phone: str) -> str:
+    """
+    Standardize phone to E.164 format: +1XXXXXXXXXX
+    Used by BOTH vapi_webhook and sms_inbound for consistency.
+    Board mandate: prevent format mismatch causing memory lookup failures.
+    """
+    import re
+    if not raw_phone:
+        return ""
+    digits = re.sub(r'\D', '', raw_phone)
+    if len(digits) == 10:
+        return f"+1{digits}"
+    elif len(digits) == 11 and digits.startswith('1'):
+        return f"+{digits}"
+    elif len(digits) > 11:
+        return f"+{digits}"  # Already has country code
+    return f"+{digits}" if digits else ""
+
+
+# ==== VEO VISIONARY SERVICE KNOWLEDGE (Board Approved) ====
+SERVICE_KNOWLEDGE = """
+SERVICES WE OFFER (VEO Visionary / AI Service Co):
+- AI Voice/SMS automation (24/7 answering, booking, lead qualification)
+- Facebook & Instagram ad campaigns (lead generation)
+- Google Ads management
+- Marketing for local businesses
+- Website optimization and SEO
+
+FLEXIBLE POLICY:
+If a customer asks for ANY service related to marketing, automation, or lead generation - say "Yes, we can help with that!" 
+We accommodate custom requests. Don't turn customers away.
+For requests clearly outside our expertise, politely explain we specialize in marketing/automation and offer to explore related solutions.
+
+BRAND: We operate under AI Service Co and VEO Visionary Ads.
+"""
+
+
 # ==== VAPI WEBHOOK HANDLER (Call Direction + Memory) ====
 @app.function(image=image, secrets=[VAULT])
 @modal.web_endpoint(method="POST")
@@ -394,16 +436,22 @@ def vapi_webhook(data: dict = {}):
     
     Board-Approved Implementation (Feb 7, 2026):
     1. Detect call direction from webhook payload
-    2. Extract caller phone number
+    2. Extract caller phone number (normalized E.164)
     3. Look up customer_memory for context
     4. Return assistantOverrides with injected context and call type
+    5. On end-of-call, WRITE to customer_memory (fix "invisible success")
     
-    Webhook events: assistant-request, call-started, etc.
+    Webhook events: assistant-request, call-started, end-of-call-report
     """
     import re
     from supabase import create_client
+    from datetime import datetime
     
-    print(f"📞 [VAPI WEBHOOK] Received: {data.get('message', {}).get('type', 'unknown')}")
+    # ========== PHASE 0: OBSERVABILITY LOGGING ==========
+    print(f"\n{'='*60}")
+    print(f"📞 [VAPI WEBHOOK] ENTRY - {datetime.utcnow().isoformat()}")
+    print(f"📞 [VAPI WEBHOOK] Full payload keys: {list(data.keys())}")
+    print(f"📞 [VAPI WEBHOOK] Event type: {data.get('message', {}).get('type', 'MISSING')}")
     
     message = data.get("message", {})
     event_type = message.get("type", "")
@@ -418,20 +466,15 @@ def vapi_webhook(data: dict = {}):
     elif direction in ["outboundPhoneCall", "outbound"]:
         direction = "outbound"
     
-    # Extract phone number (normalize format per board warning)
+    # Extract phone number - LOG RAW VALUE FIRST (observability)
     customer = message.get("customer", {})
-    caller_phone = customer.get("number", "") or call.get("customerNumber", "") or call.get("to", "")
+    raw_phone = customer.get("number", "") or call.get("customerNumber", "") or call.get("to", "")
+    print(f"📱 [MEMORY] Raw phone from Vapi: '{raw_phone}'")
     
-    # Normalize phone number (strip non-digits, add +1 if needed)
-    if caller_phone:
-        caller_phone = re.sub(r'[^\d+]', '', caller_phone)
-        if caller_phone and not caller_phone.startswith('+'):
-            if len(caller_phone) == 10:
-                caller_phone = f"+1{caller_phone}"
-            elif len(caller_phone) == 11 and caller_phone.startswith('1'):
-                caller_phone = f"+{caller_phone}"
-    
-    print(f"   Direction: {direction} | Phone: {caller_phone}")
+    # Normalize using shared function (Board Phase 3)
+    caller_phone = normalize_phone(raw_phone)
+    print(f"📱 [MEMORY] Normalized phone: '{caller_phone}'")
+    print(f"📱 [MEMORY] Direction: {direction}")
     
     # === Handle assistant-request event ===
     # This is the key event where we can inject context
@@ -440,32 +483,56 @@ def vapi_webhook(data: dict = {}):
         context_summary = ""
         customer_name = ""
         
-        # Look up customer memory by phone if we have valid phone
+        # Look up customer memory by phone (use SERVICE_ROLE key per operational_memory.md)
         if caller_phone and len(caller_phone) >= 10:
+            print(f"📱 [MEMORY] Attempting lookup for: {caller_phone}")
             try:
                 supabase_url = os.environ.get("SUPABASE_URL")
-                supabase_key = os.environ.get("SUPABASE_KEY")
+                # CRITICAL: Use service_role key, NOT anon key (operational_memory Section 13)
+                supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
                 
                 if supabase_url and supabase_key:
+                    print(f"📱 [MEMORY] Supabase URL: {supabase_url[:30]}...")
+                    print(f"📱 [MEMORY] Key type: {'SERVICE_ROLE' if 'SERVICE_ROLE' in (os.environ.get('SUPABASE_SERVICE_ROLE_KEY') or '') else 'ANON'}")
+                    
                     supabase = create_client(supabase_url, supabase_key)
                     
                     # Query customer_memory by phone number
                     result = supabase.table("customer_memory").select("*").eq("phone_number", caller_phone).limit(1).execute()
                     
+                    print(f"📱 [MEMORY] Lookup result: {len(result.data) if result.data else 0} records found")
+                    
                     if result.data and len(result.data) > 0:
                         customer_data = result.data[0]
                         context_summary = customer_data.get("context_summary", "")
-                        customer_name = customer_data.get("customer_name", "")
-                        print(f"   ✅ Found customer: {customer_name} | Context: {context_summary[:50]}...")
+                        # Extract name from nested JSONB field (Board fix 2026-02-07)
+                        ctx = customer_data.get("context_summary", {})
+                        if isinstance(ctx, dict):
+                            customer_name = ctx.get("contact_name", "")
+                        else:
+                            customer_name = ""
+                        print(f"📱 [MEMORY] ✅ FOUND - Name: '{customer_name}' | Context: '{str(context_summary)[:100]}...'")
                     else:
-                        print(f"   ℹ️ No existing customer record for {caller_phone}")
+                        print(f"📱 [MEMORY] ℹ️ NOT FOUND - No record for {caller_phone}")
+                else:
+                    print(f"📱 [MEMORY] ❌ ERROR - Missing Supabase credentials")
             except Exception as e:
-                print(f"   ⚠️ Memory lookup failed: {e}")
+                print(f"📱 [MEMORY] ❌ LOOKUP FAILED: {type(e).__name__}: {e}")
         
         # Build dynamic prompt injection based on direction
         if direction == "inbound":
-            greeting_instruction = """
-INBOUND CALL - Customer is calling us!
+            if customer_name:
+                # RETURNING customer - greet by name!
+                greeting_instruction = f"""
+INBOUND CALL - RETURNING Customer calling us!
+Greeting: "Hey {customer_name}! Thanks for calling back. This is Sarah. What can I help you with today?"
+- You already know their name is {customer_name}, DON'T ask for it again.
+- Reference prior conversations if context is available.
+"""
+            else:
+                # NEW customer - ask for name
+                greeting_instruction = """
+INBOUND CALL - NEW customer calling us!
 Greeting: "Hey, thanks for calling AI Service Company! This is Sarah. Who am I speaking with?"
 - After they give their name: "Nice to meet you, [name]! What's going on with your business that made you reach out today?"
 """
@@ -504,12 +571,14 @@ Use this context to personalize the conversation. Don't repeat questions they've
 {greeting_instruction}
 {context_injection}
 
+{SERVICE_KNOWLEDGE}
+
 YOUR MISSION: Gather useful intel through natural conversation using BANT framework.
 Questions to ask naturally (1-2 per turn):
 1. NEED: "What challenges are you facing with calls or customer service?"
 2. BUSINESS: "What kind of business do you run?"
 3. AUTHORITY: "Are you the one making decisions on new tools?"
-4. BUDGET (if asked): "Our solutions range from around $100-500/mo depending on needs."
+4. BUDGET (if asked): "Trials start at $99/mo with a 7 day trial period."
 5. TIMELINE: "When are you looking to get something like this in place?"
 
 WHEN READY TO CLOSE:
@@ -521,50 +590,156 @@ STYLE: Casual, concise, human. Use "totally", "honestly", "got it". Keep respons
         }
     
     # === Handle end-of-call-report event ===
-    # Log call outcome to customer_memory
+    # CRITICAL: This is where voice memory MUST be saved (Board Phase 2)
     elif event_type == "end-of-call-report":
+        print(f"📱 [MEMORY] Processing end-of-call-report for {caller_phone}")
         transcript = message.get("transcript", "")
         summary = message.get("summary", "")
+        
+        print(f"📱 [MEMORY] Transcript length: {len(transcript) if transcript else 0}")
+        print(f"📱 [MEMORY] Summary: '{summary[:100]}...'" if summary else "📱 [MEMORY] Summary: NONE")
         
         if caller_phone and (transcript or summary):
             try:
                 supabase_url = os.environ.get("SUPABASE_URL")
-                supabase_key = os.environ.get("SUPABASE_KEY")
+                supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
                 
                 if supabase_url and supabase_key:
                     supabase = create_client(supabase_url, supabase_key)
                     
+                    # ========== PHASE 2: EXTRACT CUSTOMER NAME FROM TRANSCRIPT ==========
+                    extracted_name = ""
+                    if transcript:
+                        # Look for common name introduction patterns
+                        import re
+                        name_patterns = [
+                            r"(?:my name is|i'm|this is|i am|call me)\s+([A-Z][a-z]+)",
+                            r"(?:it's|its)\s+([A-Z][a-z]+)\s+(?:here|calling)"
+                        ]
+                        for pattern in name_patterns:
+                            match = re.search(pattern, transcript, re.IGNORECASE)
+                            if match:
+                                extracted_name = match.group(1).title()
+                                print(f"📱 [MEMORY] ✅ Extracted name from transcript: '{extracted_name}'")
+                                break
+                    
                     # Log to conversation_logs
-                    supabase.table("conversation_logs").insert({
+                    log_result = supabase.table("conversation_logs").insert({
                         "phone_number": caller_phone,
                         "channel": "voice",
                         "direction": direction,
                         "message": transcript[:2000] if transcript else summary[:500],
                         "response": f"Call summary: {summary}" if summary else None
                     }).execute()
+                    print(f"📱 [MEMORY] conversation_logs INSERT: {'SUCCESS' if log_result.data else 'FAILED'}")
                     
-                    # Update customer_memory context if we got useful info
-                    if summary:
-                        # Append to existing context
-                        result = supabase.table("customer_memory").select("context_summary").eq("phone_number", caller_phone).limit(1).execute()
-                        existing_context = result.data[0].get("context_summary", "") if result.data else ""
-                        new_context = f"{existing_context}\n[Voice {direction} call]: {summary}"
-                        
-                        supabase.table("customer_memory").upsert({
-                            "phone_number": caller_phone,
-                            "context_summary": new_context[-2000:],  # Keep last 2000 chars
-                            "last_interaction": "now()"
-                        }, on_conflict="phone_number").execute()
-                        
-                        print(f"   ✅ Updated memory for {caller_phone} with call summary")
+                    # ========== CRITICAL: Update customer_memory (Board Phase 2) ==========
+                    # Get existing context to append
+                    result = supabase.table("customer_memory").select("context_summary, customer_name").eq("phone_number", caller_phone).limit(1).execute()
+                    existing_context = result.data[0].get("context_summary", "") if result.data else ""
+                    existing_name = result.data[0].get("customer_name", "") if result.data else ""
+                    
+                    # Build new context
+                    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
+                    new_context = f"{existing_context}\n[Voice {direction} {timestamp}]: {summary or 'Call completed'}" if summary else existing_context
+                    
+                    # Use extracted name if we found one and don't have existing
+                    final_name = extracted_name if extracted_name else existing_name
+                    
+                    # UPSERT to customer_memory
+                    upsert_data = {
+                        "phone_number": caller_phone,
+                        "context_summary": new_context[-2000:],  # Keep last 2000 chars
+                        "updated_at": datetime.utcnow().isoformat()
+                    }
+                    if final_name:
+                        upsert_data["customer_name"] = final_name
+                    
+                    upsert_result = supabase.table("customer_memory").upsert(
+                        upsert_data, 
+                        on_conflict="phone_number"
+                    ).execute()
+                    
+                    print(f"📱 [MEMORY] customer_memory UPSERT: {'SUCCESS' if upsert_result.data else 'FAILED'}")
+                    print(f"📱 [MEMORY] ✅ Saved to customer_memory: phone={caller_phone}, name={final_name}")
+                else:
+                    print(f"📱 [MEMORY] ❌ ERROR - Missing Supabase credentials for write")
             except Exception as e:
-                print(f"   ⚠️ Failed to log call: {e}")
+                print(f"📱 [MEMORY] ❌ WRITE FAILED: {type(e).__name__}: {e}")
+        else:
+            print(f"📱 [MEMORY] ⚠️ Skipping write - no phone or content")
         
-        return {"status": "logged"}
+        print(f"{'='*60}\n")
+        return {"status": "logged", "phone": caller_phone, "name_extracted": extracted_name if 'extracted_name' in dir() else ""}
     
     # Default response for other events
     return {"status": "received", "event": event_type}
 
+
+# ==== MEMORY CHECK ENDPOINT (Board Phase 4 - Verification Tool) ====
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="GET")
+def memory_check(phone: str = ""):
+    """
+    Diagnostic endpoint to verify memory contents for a phone number.
+    Returns exact data stored in customer_memory table.
+    
+    Usage: /memory_check?phone=+15551234567
+    
+    Board mandate: Never claim "success" without database proof.
+    This endpoint provides that proof.
+    """
+    from supabase import create_client
+    from datetime import datetime
+    
+    print(f"\n📋 [MEMORY_CHECK] Query for: '{phone}'")
+    
+    if not phone:
+        return {
+            "status": "error",
+            "message": "Phone parameter required. Usage: ?phone=+15551234567"
+        }
+    
+    # Normalize the input phone
+    normalized = normalize_phone(phone)
+    print(f"📋 [MEMORY_CHECK] Normalized to: '{normalized}'")
+    
+    try:
+        supabase_url = os.environ.get("SUPABASE_URL")
+        supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+        
+        if not supabase_url or not supabase_key:
+            return {"status": "error", "message": "Missing Supabase credentials"}
+        
+        supabase = create_client(supabase_url, supabase_key)
+        
+        # Query customer_memory
+        result = supabase.table("customer_memory").select("*").eq("phone_number", normalized).limit(1).execute()
+        
+        if result.data and len(result.data) > 0:
+            data = result.data[0]
+            print(f"📋 [MEMORY_CHECK] ✅ FOUND - {data}")
+            return {
+                "status": "found",
+                "phone_queried": normalized,
+                "customer_name": data.get("customer_name", ""),
+                "context_summary": data.get("context_summary", ""),
+                "updated_at": data.get("updated_at", ""),
+                "record_id": data.get("id", "")
+            }
+        else:
+            print(f"📋 [MEMORY_CHECK] ❌ NOT FOUND")
+            return {
+                "status": "not_found",
+                "phone_queried": normalized,
+                "message": f"No memory record for {normalized}"
+            }
+    except Exception as e:
+        print(f"📋 [MEMORY_CHECK] ❌ ERROR: {e}")
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 @app.function(image=image, secrets=[VAULT])
 @modal.web_endpoint(method="GET")
@@ -608,8 +783,8 @@ def health_check():
     }
 
 
-# ==== SELF-HEALING MONITOR (Runs every 10 minutes) ====
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/10 * * * *"))
+# ==== SELF-HEALING MONITOR (Schedule temporarily disabled - Modal plan limit) ====
+@app.function(image=image, secrets=[VAULT])  # TODO: Re-enable schedule=modal.Cron("*/10 * * * *") after plan upgrade
 def self_healing_monitor():
     """Auto-detect issues, log health, alert on critical failures"""
     import os

@@ -1,0 +1,101 @@
+=== STDOUT ===
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:115     │
+│   @modal.web_endpoint(method="GET")                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:165     │
+│   @modal.web_endpoint(method="GET")                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:203     │
+│   @modal.web_endpoint(method="POST")                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:428     │
+│   @modal.web_endpoint(method="POST")                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:662     │
+│   @modal.web_endpoint(method="GET")                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:726     │
+│   @modal.web_endpoint(method="GET")                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+✓ Created objects.
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py
+├── 🔨 Created mount modules\outbound_dialer.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\ai
+├── 🔨 Created mount modules\__init__.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\analytics
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\database
+├── 🔨 Created mount workers\instant_response.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\utils
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\core
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\api
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\workers
+├── 🔨 Created mount PythonPackage:workers
+├── 🔨 Created function print_env_diagnostics.
+├── 🔨 Created function test_db_connection.
+├── 🔨 Created function verify_outreach_worker.
+├── 🔨 Created function test_db_psycopg2.
+├── 🔨 Created web function sovereign_state => 
+│   https://nearmiss1193-afk--ghl-omni-automation-sovereign-state.modal.run
+├── 🔨 Created web function track_email_open => 
+│   https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run
+├── 🔨 Created web function sms_inbound => 
+│   https://nearmiss1193-afk--ghl-omni-automation-sms-inbound.modal.run
+├── 🔨 Created web function vapi_webhook => 
+│   https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+├── 🔨 Created web function memory_check => 
+│   https://nearmiss1193-afk--ghl-omni-automation-memory-check.modal.run
+├── 🔨 Created web function health_check => 
+│   https://nearmiss1193-afk--ghl-omni-automation-health-check.modal.run
+├── 🔨 Created function self_healing_monitor.
+├── 🔨 Created function sync_ghl_contacts.
+├── 🔨 Created function log_consent.
+├── 🔨 Created function dispatch_email_logic.
+├── 🔨 Created function dispatch_sms_logic.
+├── 🔨 Created function dispatch_call_logic.
+└── 🔨 Created function auto_outreach_loop.
+✓ App deployed in 1.886s! 🎉
+
+View Deployment: 
+https://modal.com/apps/nearmiss1193-afk/main/deployed/ghl-omni-automation
+
+=== STDERR ===
+
+=== EXIT CODE: 0 ===

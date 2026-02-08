@@ -16,58 +16,87 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 xai = OpenAI(api_key=os.getenv("XAI_API_KEY"), base_url="https://api.x.ai/v1")
 # 2. DEFINING THE BOARD PROMPT
 PROMPT = """
-You are a strategic advisor for AI Service Co, a B2B service agency selling AI automation to local businesses.
+# BOARD INVESTIGATION: SMS Memory Works, Voice Memory Fails
 
-**INVESTIGATION TOPIC: Sarah Inbound vs Outbound Call Detection**
+## CURRENT STATUS (as of 2026-02-07 21:59 EST)
+- ✅ **PRICING FIXED:** Sarah now says "$99/mo with 7 day trial" (confirmed working)
+- ✅ **SMS MEMORY WORKS:** SMS channel remembers "Michael" correctly
+- ❌ **VOICE MEMORY FAILS:** Phone calls don't remember caller name on callback
 
-## CURRENT STATE
-Sarah is our AI voice assistant powered by Vapi.ai. She has:
-- Different prompt scripts for INBOUND calls ("Hey thanks for calling! This is Sarah...")  
-- Different prompt scripts for OUTBOUND calls ("Hey, is this [name]?")
+## THE MYSTERY
+Same database. Same customer_memory table. But:
+- SMS → Remembers name ✅
+- Voice → Doesn't remember name ❌
 
-## KEY QUESTIONS
+## WHAT WE KNOW
 
-### Q1: Can Vapi detect call direction automatically?
-- Does Vapi provide metadata indicating if a call is inbound vs outbound?
-- What webhook fields contain this information?
-- Is this available BEFORE the call starts or only after?
+### Database Schema (customer_memory table)
+```sql
+phone_number TEXT PRIMARY KEY
+context_summary JSONB  -- Contains {"contact_name": "Dan", ...}
+last_interaction TIMESTAMP
+```
 
-### Q2: How should Sarah dynamically switch behavior?
-- Should we use serverUrl webhooks to inject call type into the prompt?
-- Should we create 2 separate assistants (one for inbound, one for outbound)?
-- Should we use Vapi's assistant overrides feature?
+### SMS Handler (deploy.py ~line 216)
+- Receives phone from GHL webhook
+- Looks up customer_memory by phone_number
+- WORKS - remembers "Michael"
 
-### Q3: What about knowing WHERE the lead came from?
-- If someone calls in, can we know if they saw an ad, got an SMS, visited website?
-- Can we pass UTM parameters or source tags to voice calls?
-- How do we link an inbound caller to their existing lead record?
+### Voice Handler (deploy.py ~line 471)
+- Receives phone from Vapi webhook
+- Runs normalize_phone() on the number
+- Looks up customer_memory by phone_number  
+- FAILS - doesn't remember Dan
 
-### Q4: Cross-channel continuity
-- If we SMS a lead, then they call back, how does Sarah know this is the same person?
-- Phone number matching? GHL contact ID lookup?
-- How do we sync context between SMS Sarah and Voice Sarah?
+### Previous Fix Applied
+Fixed code at line 507-508 to extract name from `context_summary.contact_name` instead of non-existent `customer_name` column.
 
-## CONTEXT
-- Voice Platform: Vapi.ai (using Groq LLM)
-- Backend: Modal (Python serverless)
-- Database: Supabase (customer_memory table with phone number key)
-- CRM: GoHighLevel
-- Current serverUrl: https://nearmiss1193-afk--vapi-live.modal.run
+## HYPOTHESES TO INVESTIGATE
 
-## WHAT WE NEED
-1. Technical answer: Can Vapi detect inbound vs outbound?
-2. Best practice: Single assistant or multiple?
-3. Implementation: How to pass call type to the assistant
-4. Source tracking: Can we know where the caller came from?
-5. Memory sync: Best way to link voice calls to existing customer_memory records
+### Hypothesis 1: Phone Number Format Mismatch
+- SMS might store as "+13529368152"
+- Voice might query as "13529368152" (no +)
+- normalize_phone() might produce different format
 
-**FORMAT:**
-- Q1 Answer: [Your findings]
-- Q2 Answer: [Your recommendation]
-- Q3 Answer: [Your findings]
-- Q4 Answer: [Your recommendation]
-- Key Warnings: [Any concerns or gotchas]
+### Hypothesis 2: Different Database Records
+- SMS and Voice might be creating SEPARATE records
+- One for "+1352..." 
+- One for "1352..." (without +)
+
+### Hypothesis 3: Vapi Event Timing
+- Voice memory is saved on `end-of-call-report` event
+- Memory lookup happens on `assistant-request` event
+- Is the save completing before Vapi caches the assistant?
+
+### Hypothesis 4: Vapi Assistant Caching
+- Vapi might be caching the assistant config at session start
+- Dynamic greeting injection might not be working
+- Static assistant in dashboard overrides webhook response
+
+### Hypothesis 5: SMS Uses Different Lookup Path
+- SMS handler might use a different query pattern
+- Perhaps SMS doesn't use normalize_phone() and matches raw number
+
+## YOUR TASK
+
+Board members, please analyze:
+
+1. **Root Cause:** Which hypothesis is most likely? Or is there another cause?
+
+2. **Evidence Needed:** What specific database queries or code inspection would prove/disprove each hypothesis?
+
+3. **Why SMS Works:** Specifically explain WHY SMS memory retrieval succeeds while Voice fails, given they use the same table.
+
+4. **Recommended Fix:** What code change would fix Voice memory WITHOUT breaking SMS?
+
+5. **Verification Plan:** How can we verify the fix works before deployment?
+
+Provide confidence level (high/medium/low) for your analysis.
 """
+
+
+
+
 
 
 
