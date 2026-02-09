@@ -116,21 +116,35 @@ def dispatch_email_logic(lead_id: str):
         return False
 
     hook_url = os.environ.get("GHL_EMAIL_WEBHOOK_URL")
+    if not hook_url:
+        print("❌ Error: GHL_EMAIL_WEBHOOK_URL missing")
+        return False
+
+    # Standardized Webhook Bridge Payload
     payload = {
-        "contact_id": lead['ghl_contact_id'],
+        "contact_id": lead.get('ghl_contact_id') or lead.get('ghl_id'),
+        "first_name": lead.get('full_name', '').split(' ')[0],
+        "email": lead.get('email'),
         "subject": "quick question",
-        "body": lead.get('ai_strategy', 'hey, saw your site and had a question')
+        "body": lead.get('ai_strategy', 'hey, saw your site and had a question'),
+        "type": "Email"
     }
     
-    requests.post(hook_url, json=payload, timeout=10)
-    supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
-    
-    supabase.table("outbound_touches").insert({
-        "phone": lead.get("phone"),
-        "channel": "email",
-        "company": lead.get("company_name", "Unknown"),
-        "status": "sent"
-    }).execute()
+    try:
+        requests.post(hook_url, json=payload, timeout=10)
+        supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
+        
+        supabase.table("outbound_touches").insert({
+            "phone": lead.get("phone"),
+            "channel": "email",
+            "company": lead.get("company_name", "Unknown"),
+            "status": "sent"
+        }).execute()
+        print(f"✅ EMAIL DISPATCHED via Bridge")
+        return True
+    except Exception as e:
+        print(f"❌ EMAIL BRIDGE FAIL: {e}")
+        return False
     
     print(f"✅ EMAIL SENT")
     return True
@@ -147,24 +161,31 @@ def dispatch_sms_logic(lead_id: str, message: str = None):
     lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
     
     hook_url = os.environ.get("GHL_SMS_WEBHOOK_URL")
+    if not hook_url:
+        print("❌ Error: GHL_SMS_WEBHOOK_URL missing")
+        return False
+
     ghl_id = lead.get('ghl_id') or lead.get('ghl_contact_id')
     phone = lead.get('phone', '')
     if phone and not phone.startswith('+'):
         phone = f"+1{phone.replace('-', '').replace('(', '').replace(')', '').replace(' ', '')}"
     
+    # Standardized Webhook Bridge Payload
     payload = {
         "phone": phone,
         "contact_id": ghl_id,
-        "message": message or "hey, saw your site. had a quick question. you around?"
+        "first_name": lead.get('full_name', '').split(' ')[0],
+        "message": message or "hey, saw your site. had a quick question. you around?",
+        "type": "SMS"
     }
     
     try:
         response = requests.post(hook_url, json=payload, timeout=10)
-        status = "dispatched" if response.status_code == 200 else f"failed_{response.status_code}"
-        print(f"📡 GHL SMS STATUS: {status}")
+        status = "dispatched" if response.status_code in [200, 201, 202] else f"failed_{response.status_code}"
+        print(f"📡 GHL SMS BRIDGE STATUS: {status}")
     except Exception as e:
         status = f"error: {str(e)}"
-        print(f"❌ SMS POST ERROR: {status}")
+        print(f"❌ SMS BRIDGE ERROR: {status}")
 
     supabase.table("contacts_master").update({"status": "outreach_dispatched" if "dispatched" in status else "failed"}).eq("id", lead_id).execute()
     

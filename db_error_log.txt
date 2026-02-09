@@ -1,2 +1,0 @@
-connection to server at "db.rzcpfwkygdvoshtwxncs.supabase.co" (2600:1f13:838:6e13:453e:4229:7ddd:eaf4), port 5432 failed: Connection timed out (0x0000274C/10060)
-	Is the server running on that host and accepting TCP/IP connections?

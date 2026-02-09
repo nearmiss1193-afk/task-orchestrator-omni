@@ -1,9 +1,0 @@
-🎯 CAMPAIGN RESULTS for https://polkcountyac.com (Source: Heuristic Engine):
-------------------------------------------------
-Inefficiencies: [
-  "No Intelligent Chat Widget detected (Leaking 24/7 leads)."
-]
-------------------------------------------------
-🪝 HOOK: hey, saw polkcountyac.com. noticed you're missing a 24/7 AI capture. you're likely paying for traffic that bounces. i built a fix.
-------------------------------------------------
-Score: 65/100

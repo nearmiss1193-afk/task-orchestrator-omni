@@ -701,6 +701,40 @@ if result.data:
     # Inject context into prompt
 ```
 
+### Session Learnings (Feb 7-8, 2026)
+
+**ISSUE:** SMS memory worked (remembered "Michael"), but Voice memory failed (didn't greet by name on callback).
+
+**BOARD INVESTIGATION:**
+
+- Board (4/4) hypothesized phone number format mismatch
+- **Board was WRONG** - after code inspection, both SMS and Voice use `normalize_phone()`
+
+**ACTUAL ROOT CAUSE:**
+The inbound greeting logic (lines 523-528) NEVER used the customer's name:
+
+```python
+# OLD CODE - always asked "who is this"
+if direction == "inbound":
+    greeting = "Who am I speaking with?"  # Even if we knew the name!
+```
+
+Only OUTBOUND calls used the stored name.
+
+**FIX APPLIED:**
+
+```python
+# NEW CODE - personalized greeting for returning callers
+if direction == "inbound":
+    if customer_name:
+        greeting = f"Hey {customer_name}! Thanks for calling back..."
+    else:
+        greeting = "Who am I speaking with?"
+```
+
+**LESSON:**
+Board consensus is a STARTING POINT, not ground truth. Always verify hypothesis with actual code inspection before implementing fixes.
+
 ---
 
 ```

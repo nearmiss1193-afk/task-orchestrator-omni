@@ -31,6 +31,7 @@ def get_base_image():
         .add_local_dir("modules/ai", remote_path="/root/modules/ai")
         .add_local_dir("modules/analytics", remote_path="/root/modules/analytics")
         .add_local_file("modules/outbound_dialer.py", remote_path="/root/modules/outbound_dialer.py")
+        .add_local_dir("modules/voice", remote_path="/root/modules/voice")
     )
 
 image = get_base_image()
@@ -446,12 +447,34 @@ def vapi_webhook(data: dict = {}):
     import re
     from supabase import create_client
     from datetime import datetime
+    from modules.voice.sales_persona import get_persona_prompt, SALES_SARAH_PROMPT
     
     # ========== PHASE 0: OBSERVABILITY LOGGING ==========
     print(f"\n{'='*60}")
     print(f"📞 [VAPI WEBHOOK] ENTRY - {datetime.utcnow().isoformat()}")
     print(f"📞 [VAPI WEBHOOK] Full payload keys: {list(data.keys())}")
     print(f"📞 [VAPI WEBHOOK] Event type: {data.get('message', {}).get('type', 'MISSING')}")
+    
+    # Helper function to log to vapi_debug_logs table (persistent diagnostics)
+    def log_to_debug_table(sb, event_type: str, raw_phone: str, normalized_phone: str,
+                           lookup_result: str, customer_name: str = None, context_summary: dict = None,
+                           assistant_overrides: dict = None, call_mode: str = "default", notes: str = None, direction: str = None):
+        try:
+            sb.table("vapi_debug_logs").insert({
+                "event_type": event_type,
+                "call_direction": direction,
+                "raw_phone": raw_phone,
+                "normalized_phone": normalized_phone,
+                "lookup_result": lookup_result,
+                "customer_name_found": customer_name,
+                "context_summary": context_summary,
+                "assistant_overrides_sent": assistant_overrides,
+                "call_mode": call_mode,
+                "notes": notes
+            }).execute()
+            print(f"📝 [DEBUG_LOG] Logged to vapi_debug_logs")
+        except Exception as e:
+            print(f"⚠️ [DEBUG_LOG] Failed to log: {e}")
     
     message = data.get("message", {})
     event_type = message.get("type", "")
@@ -512,12 +535,25 @@ def vapi_webhook(data: dict = {}):
                         else:
                             customer_name = ""
                         print(f"📱 [MEMORY] ✅ FOUND - Name: '{customer_name}' | Context: '{str(context_summary)[:100]}...'")
+                        lookup_status = "FOUND"
+                        
+                        # Check for call_mode in context (sales vs support)
+                        call_mode = "support"  # Default
+                        if isinstance(ctx, dict) and ctx.get("call_purpose") == "sales":
+                            call_mode = "sales"
+                            print(f"🎯 [MEMORY] Call mode: SALES")
                     else:
                         print(f"📱 [MEMORY] ℹ️ NOT FOUND - No record for {caller_phone}")
+                        lookup_status = "NOT_FOUND"
+                        call_mode = "support"
                 else:
                     print(f"📱 [MEMORY] ❌ ERROR - Missing Supabase credentials")
+                    lookup_status = "ERROR"
+                    call_mode = "support"
             except Exception as e:
                 print(f"📱 [MEMORY] ❌ LOOKUP FAILED: {type(e).__name__}: {e}")
+                lookup_status = "ERROR"
+                call_mode = "support"
         
         # Build dynamic prompt injection based on direction
         if direction == "inbound":
@@ -556,17 +592,19 @@ CUSTOMER CONTEXT (from previous interactions):
 Use this context to personalize the conversation. Don't repeat questions they've already answered.
 """
         
-        # Return assistant overrides with injected context
-        return {
-            "assistantOverrides": {
-                "variableValues": {
-                    "callDirection": direction,
-                    "customerPhone": caller_phone,
-                    "customerName": customer_name or "",
-                    "customerContext": context_summary or "No prior context"
-                },
-                "firstMessage": None,  # Let the model handle greeting based on prompt
-                "systemPrompt": f"""You are Sarah, AI phone assistant for AI Service Company. Be warm, genuine, casual.
+        # ========== BUILD PROMPT BASED ON CALL MODE ==========
+        call_mode = locals().get('call_mode', 'support')  # Get from memory lookup or default
+        
+        if call_mode == "sales":
+            # Use Sales Sarah for outbound sales calls
+            system_prompt = SALES_SARAH_PROMPT.format(
+                customer_name=customer_name or "there",
+                service_knowledge=SERVICE_KNOWLEDGE
+            )
+            print(f"🎯 [PERSONA] Using SALES Sarah")
+        else:
+            # Use Support Sarah (BANT fact-finding)
+            system_prompt = f"""You are Sarah, AI phone assistant for AI Service Company. Be warm, genuine, casual.
 
 {greeting_instruction}
 {context_injection}
@@ -586,8 +624,45 @@ WHEN READY TO CLOSE:
 
 STYLE: Casual, concise, human. Use "totally", "honestly", "got it". Keep responses short.
 """
-            }
+            print(f"📞 [PERSONA] Using SUPPORT Sarah")
+        
+        # Build assistant overrides
+        assistant_overrides = {
+            "variableValues": {
+                "callDirection": direction,
+                "customerPhone": caller_phone,
+                "customerName": customer_name or "",
+                "customerContext": context_summary or "No prior context",
+                "callMode": call_mode
+            },
+            "firstMessage": None,  # Let the model handle greeting based on prompt
+            "systemPrompt": system_prompt
         }
+        
+        # ========== LOG TO DEBUG TABLE (Persistent Diagnostics) ==========
+        try:
+            supabase_url = os.environ.get("SUPABASE_URL")
+            supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+            if supabase_url and supabase_key:
+                sb = create_client(supabase_url, supabase_key)
+                log_to_debug_table(
+                    sb=sb,
+                    event_type=event_type,
+                    raw_phone=raw_phone,
+                    normalized_phone=caller_phone,
+                    lookup_result=locals().get('lookup_status', 'UNKNOWN'),
+                    customer_name=customer_name,
+                    context_summary=context_summary if isinstance(context_summary, dict) else {"raw": str(context_summary)[:500]},
+                    assistant_overrides=assistant_overrides,
+                    call_mode=call_mode,
+                    direction=direction,
+                    notes=f"Greeting: {'returning' if customer_name else 'new'} customer"
+                )
+        except Exception as e:
+            print(f"⚠️ [DEBUG_LOG] Failed: {e}")
+        
+        # Return assistant overrides with injected context
+        return {"assistantOverrides": assistant_overrides}
     
     # === Handle end-of-call-report event ===
     # CRITICAL: This is where voice memory MUST be saved (Board Phase 2)

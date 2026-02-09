@@ -16,82 +16,81 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 xai = OpenAI(api_key=os.getenv("XAI_API_KEY"), base_url="https://api.x.ai/v1")
 # 2. DEFINING THE BOARD PROMPT
 PROMPT = """
-# BOARD INVESTIGATION: SMS Memory Works, Voice Memory Fails
+# BOARD INVESTIGATION: Why Voice Memory Keeps Failing Despite "Fixes"
 
-## CURRENT STATUS (as of 2026-02-07 21:59 EST)
-- ✅ **PRICING FIXED:** Sarah now says "$99/mo with 7 day trial" (confirmed working)
-- ✅ **SMS MEMORY WORKS:** SMS channel remembers "Michael" correctly
-- ❌ **VOICE MEMORY FAILS:** Phone calls don't remember caller name on callback
+## CONTEXT - THE PATTERN
+We have Sarah AI (Vapi voice assistant + SMS handler). Critical observation:
+- ✅ SMS remembers name correctly (stored in Supabase customer_memory table)
+- ❌ Voice STILL doesn't remember name on callback - **despite multiple "fixes"**
 
-## THE MYSTERY
-Same database. Same customer_memory table. But:
-- SMS → Remembers name ✅
-- Voice → Doesn't remember name ❌
+**THE PATTERN WE'RE INVESTIGATING:**
+1. We identify a "root cause"
+2. We apply a fix
+3. We claim "success"
+4. Dan reports it STILL doesn't work
+5. Repeat cycle
 
-## WHAT WE KNOW
+This has happened 3+ times now. The board needs to analyze WHY this pattern keeps repeating.
 
-### Database Schema (customer_memory table)
-```sql
-phone_number TEXT PRIMARY KEY
-context_summary JSONB  -- Contains {"contact_name": "Dan", ...}
-last_interaction TIMESTAMP
-```
+## EVIDENCE GATHERED (Feb 8, 2026)
 
-### SMS Handler (deploy.py ~line 216)
-- Receives phone from GHL webhook
-- Looks up customer_memory by phone_number
-- WORKS - remembers "Michael"
+### What We Found:
+1. **`vapi_debug_logs` table is EMPTY** - Zero entries
+   - Our code has `log_to_debug_table()` that SHOULD log to this table on every call
+   - If no logs exist, either: (a) webhook isn't being called, or (b) logging fails silently
 
-### Voice Handler (deploy.py ~line 471)
-- Receives phone from Vapi webhook
-- Runs normalize_phone() on the number
-- Looks up customer_memory by phone_number  
-- FAILS - doesn't remember Dan
+2. **`conversation_logs` has a column mismatch error** (Postgres error 42703)
+   - The INSERT statement may be referencing columns that don't exist
 
-### Previous Fix Applied
-Fixed code at line 507-508 to extract name from `context_summary.contact_name` instead of non-existent `customer_name` column.
+3. **Code looks correct** - The vapi_webhook function in deploy.py:
+   - Uses normalize_phone() for consistency ✅
+   - Looks up customer_memory correctly ✅
+   - Builds personalized greeting with customer_name ✅
+   - Has extensive print statements for debugging ✅
 
-## HYPOTHESES TO INVESTIGATE
+4. **SMS uses the same database and phone normalization and IT WORKS**
 
-### Hypothesis 1: Phone Number Format Mismatch
-- SMS might store as "+13529368152"
-- Voice might query as "13529368152" (no +)
-- normalize_phone() might produce different format
+### The Question:
+If the code is correct, why isn't it working? Where is the silent failure?
 
-### Hypothesis 2: Different Database Records
-- SMS and Voice might be creating SEPARATE records
-- One for "+1352..." 
-- One for "1352..." (without +)
+## QUESTIONS FOR THE BOARD
 
-### Hypothesis 3: Vapi Event Timing
-- Voice memory is saved on `end-of-call-report` event
-- Memory lookup happens on `assistant-request` event
-- Is the save completing before Vapi caches the assistant?
+### 1. What Are The Most Likely Silent Failure Points?
+Given the evidence (empty debug logs, correct-looking code, SMS works but Voice doesn't):
+- Is Vapi even calling our serverUrl webhook?
+- Is there a Vapi assistant configuration issue (wrong serverUrl setting)?
+- Does Vapi cache assistant configs and ignore webhook updates?
+- Is our Modal endpoint actually deployed with the latest code?
 
-### Hypothesis 4: Vapi Assistant Caching
-- Vapi might be caching the assistant config at session start
-- Dynamic greeting injection might not be working
-- Static assistant in dashboard overrides webhook response
+### 2. Why Do Our "Fixes" Keep Not Working?
+We keep applying code fixes that look correct but don't solve the problem. Why?
+- Are we fixing symptoms instead of root causes?
+- Is there a configuration layer we're not checking?
+- Is there a verification step we're skipping?
 
-### Hypothesis 5: SMS Uses Different Lookup Path
-- SMS handler might use a different query pattern
-- Perhaps SMS doesn't use normalize_phone() and matches raw number
+### 3. What Is The Proper Diagnostic Sequence?
+What should we check IN ORDER to find the ACTUAL failure point?
+Propose a step-by-step diagnostic protocol.
+
+### 4. Who Has Successfully Built Vapi + External Memory?
+- Is there a reference implementation we can study?
+- What gotchas have others encountered?
+- Is serverUrl webhook the right approach, or is there a better pattern?
 
 ## YOUR TASK
 
-Board members, please analyze:
+Each board member should provide:
+1. **Your hypothesis** - What do YOU think is failing?
+2. **Evidence that would confirm your hypothesis** - What specific test would prove it?
+3. **Recommended next step** - What should we check FIRST?
+4. **Confidence level** (high/medium/low)
 
-1. **Root Cause:** Which hypothesis is most likely? Or is there another cause?
+BE SPECIFIC. Don't give generic advice. Give actionable diagnostic steps.
 
-2. **Evidence Needed:** What specific database queries or code inspection would prove/disprove each hypothesis?
-
-3. **Why SMS Works:** Specifically explain WHY SMS memory retrieval succeeds while Voice fails, given they use the same table.
-
-4. **Recommended Fix:** What code change would fix Voice memory WITHOUT breaking SMS?
-
-5. **Verification Plan:** How can we verify the fix works before deployment?
-
-Provide confidence level (high/medium/low) for your analysis.
+## CONSTRAINTS
+- Discovery only. NO CODE CHANGES until we find the real root cause.
+- We use: Vapi, Supabase, Modal, GHL
+- Dan is frustrated with the "fixed it, oops still doesn't work" cycle
 """
 
 
