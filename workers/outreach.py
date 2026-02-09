@@ -79,6 +79,12 @@ def dispatch_email_logic(lead_id: str):
         print(f"❌ Error: Lead {lead_id} has no email")
         return False
 
+    # Filter out placeholder/test emails that waste Resend credits
+    skip_patterns = ['placeholder', 'test@', 'demo.com', 'funnel.com', 'example.com', 'unassigned']
+    if any(p in email.lower() for p in skip_patterns):
+        print(f"⚠️ Skipping placeholder email: {email}")
+        return False
+
     resend_key = os.environ.get("RESEND_API_KEY")
     if not resend_key:
         print("❌ Error: RESEND_API_KEY missing")
@@ -90,9 +96,9 @@ def dispatch_email_logic(lead_id: str):
     niche = lead.get('niche') or 'your industry'
     
     subject_variants = [
-        {"id": "A", "subject": f"Quick {company} question"},
+        {"id": "A", "subject": f"Quick question about {company}"},
         {"id": "B", "subject": "Noticed something on your site"},
-        {"id": "C", "subject": f"{first_name}, quick question about {niche}"},
+        {"id": "C", "subject": f"{first_name}, saw something about {niche}"},
         {"id": "D", "subject": f"This caught my eye about {company}"},
     ]
     
@@ -170,7 +176,14 @@ Dan"""
                 "status": "sent",
                 "variant_id": variant_id,
                 "variant_name": subject,
-                "correlation_id": resend_email_id
+                "correlation_id": resend_email_id,
+                "payload": {
+                    "resend_email_id": resend_email_id,
+                    "email_uid": email_uid,
+                    "to": email,
+                    "from": from_email,
+                    "variant": variant_id
+                }
             }).execute()
             
             return True
