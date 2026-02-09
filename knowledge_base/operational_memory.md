@@ -897,11 +897,41 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
   2. ✅ Smart personalized body template (67% of leads had NULL ai_strategy, got generic email)
   3. ✅ Tracking pixel embedded in every email → logs to `email_opens` table
   4. ⚠️ GHL contact enrichment BLOCKED → can't use API, 444 SCRAPED_ leads stay as-is until GHL migration
+- **Bugs Found by Visual Verification (Feb 9, 2026):**
+  1. Fixed: From-email was `onboarding@resend.dev` (Resend test domain) → `dan@aiserviceco.com` (verified)
+  2. Fixed: Subject variant A was `Quick {company} question` → `Quick question about {company}`
+  3. Fixed: Resend email ID not saved to `payload` JSON → now includes resend_email_id, email_uid, to, from
+  4. Fixed: Placeholder emails (`placeholder_lead@funnel.com`, `demo.com`) wasting credits → filter added
 
 **Sovereign Laws Added:**
 
 - "GHL API is banned. Webhooks only. Plan to migrate away." (Owner Directive, Feb 9, 2026)
 - "SCRAPED_ leads can't receive SMS. Only 171/615 have real GHL IDs." (Feb 9, 2026)
+
+---
+
+### Section 20: Feb 9, 2026 — Visual Verification Protocol (Owner Directive)
+
+> [!IMPORTANT]
+> **AFTER EVERY DEPLOY:** Run `python scripts/visual_verify.py` to produce a full proof report.
+> Database rows + exit codes are not enough. Visual verification is MANDATORY.
+
+- **Verification Worker:** `scripts/visual_verify.py` — reusable script that queries:
+  1. **Resend API** — domains, recent emails, delivery status, detailed view of latest email (checks tracking pixel)
+  2. **Supabase** — today's touches, A/B variant distribution, email opens, lead status, heartbeats, campaign mode
+  3. **GHL API** — confirms 401 ban status
+- **Output:** Full text report saved to `scripts/visual_verify_output.txt`
+- **When to Run:**
+  - After every `modal deploy`
+  - After any outreach code change
+  - As part of save protocol verification
+- **Bugs Caught by Visual Verification (First Run):**
+  - Resend test domain couldn't deliver to real leads → 0 emails for 20 min
+  - Subject lines read awkwardly (`Quick your company question`)
+  - Placeholder leads wasting Resend credits (3 bounces from fake emails)
+  - Resend email IDs not persisted for cross-referencing
+
+**Sovereign Law:** "Exit codes lie. Database rows lie. Only visual proof is truth." (Owner Directive, Feb 9, 2026)
 
 ---
 
@@ -917,8 +947,9 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 ║   "Stopped apps still hold CRON slots." (Feb 9, 2026)                       ║
 ║   "Always save learnings on completion."(Feb 9, 2026)                       ║
 ║   "GHL API is BANNED. Webhooks only."   (Feb 9, 2026)                       ║
+║   "Exit codes lie. Visual proof only."  (Feb 9, 2026)                       ║
 ║                                                                               ║
-║                              - SOVEREIGN MEMORY v5.1                          ║
+║                              - SOVEREIGN MEMORY v5.2                          ║
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```

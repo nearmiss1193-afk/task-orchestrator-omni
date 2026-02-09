@@ -1,0 +1,134 @@
+VISUAL VERIFICATION REPORT — 2026-02-09 18:08:15
+============================================================
+
+============================================================
+  RESEND DASHBOARD (API Equivalent)
+============================================================
+
+--- Verified Domains ---
+  aiserviceco.com | status=verified | region=us-east-1
+
+--- Recent Emails (Last 15) ---
+  Total returned: 20
+  2026-02-09 23:05:06 | delivered    | to=info@sunsethc.com
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: 124b0c45-4c25-469a-a...
+  2026-02-09 23:05:05 | delivered    | to=info@freshairhvac.co
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: 40322a0d-c015-4bcf-b...
+  2026-02-09 23:00:14 | delivered    | to=admin@airsolutionsbcs.com
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: bf0bd3ab-bfb9-46e4-b...
+  2026-02-09 23:00:14 | bounced      | to=info@northsideair.com
+    subject: Noticed something on your site
+    from: Dan <dan@aiserviceco.com> | id: 547eeca2-5b75-413c-b...
+  2026-02-09 23:00:13 | delivered    | to=northaustin@temperaturepro.com
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: ac53cce2-709f-42ec-a...
+  2026-02-09 23:00:12 | delivery_delayed | to=placeholder_lead@funnel.com
+    subject: placeholder_lead, quick question about your i
+    from: Dan <dan@aiserviceco.com> | id: c0c29f46-3910-461f-a...
+  2026-02-09 23:00:10 | sent         | to=vortex-test@aiservico.com
+    subject: vortex, quick question about your industry
+    from: Dan <dan@aiserviceco.com> | id: 035c462b-4f9e-44f5-9...
+  2026-02-09 23:00:09 | delivered    | to=customercare@brodypennell.com
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: 360e186a-7917-4d74-b...
+  2026-02-09 23:00:08 | delivered    | to=info@willardac.com
+    subject: Noticed something on your site
+    from: Dan <dan@aiserviceco.com> | id: b7b92a1f-db29-4452-8...
+  2026-02-09 22:55:09 | delivered    | to=e.hearsey@abcairandheat.com
+    subject: Quick your company question
+    from: Dan <dan@aiserviceco.com> | id: 60fe0d7b-d1c6-4920-8...
+  2026-02-09 22:55:09 | bounced      | to=unassigned_lead@demo.com
+    subject: Noticed something on your site
+    from: Dan <dan@aiserviceco.com> | id: 20a2fe89-d438-412a-a...
+  2026-02-09 22:55:08 | bounced      | to=info@roth-heat.com
+    subject: Roth, quick question about your industry
+    from: Dan <dan@aiserviceco.com> | id: 8b854ff3-adac-45d8-8...
+  2026-02-09 22:55:08 | delivered    | to=office@theweatherchangers.com
+    subject: The, quick question about your industry
+    from: Dan <dan@aiserviceco.com> | id: 8ea1b563-5086-4d94-9...
+  2026-02-09 22:55:07 | delivered    | to=CONTACT@BTACINC.COM
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: 10aa9a12-43a8-4710-8...
+  2026-02-09 22:55:06 | delivery_delayed | to=info@mesquiteheatingandair.com
+    subject: Noticed something on your site
+    from: Dan <dan@aiserviceco.com> | id: 2f527107-226a-4ae0-8...
+
+  Summary: delivered=9, bounced=3, opened=0
+
+--- Detailed View: Most Recent Email ---
+  ID: 124b0c45-4c25-469a-ac10-eadbb2aabacb
+  From: Dan <dan@aiserviceco.com>
+  To: ['info@sunsethc.com']
+  Subject: This caught my eye about your company
+  Created: 2026-02-09 23:05:06.216439+00
+  Last Event: delivered
+  HTML Body: 650 chars
+  Tracking Pixel: YES
+
+============================================================
+  SUPABASE DATABASE (Live Data)
+============================================================
+
+--- Today's Outreach Activity ---
+  Total touches today: 20+
+  Emails: 18 | SMS: 2
+  With A/B variant: 15
+  With Resend ID: 0
+
+--- Latest 5 Touches ---
+  2026-02-09T23:05:06 | ch=email | variant=This caught my eye about your company | your company
+    status=sent | resend_id= | uid=
+  2026-02-09T23:05:05 | ch=email | variant=This caught my eye about your company | your company
+    status=sent | resend_id= | uid=
+  2026-02-09T23:00:15 | ch=email | variant=This caught my eye about your company | your company
+    status=sent | resend_id= | uid=
+  2026-02-09T23:00:14 | ch=email | variant=Noticed something on your site | your company
+    status=sent | resend_id= | uid=
+  2026-02-09T23:00:13 | ch=email | variant=This caught my eye about your company | your company
+    status=sent | resend_id= | uid=
+
+--- A/B Variant Distribution ---
+  Noticed something on your site: 3 emails
+  Quick your company question: 1 emails
+  Roth, quick question about your industry: 1 emails
+  The, quick question about your industry: 1 emails
+  This caught my eye about your company: 8 emails
+  pre-AB: 47 emails
+  vortex, quick question about your industry: 1 emails
+
+--- Email Opens (Pixel Tracking) ---
+  Recent opens: 5
+  2026-02-09T23:05:22 | ? | ?
+  2026-02-09T23:00:21 | ? | ?
+  2026-02-09T23:00:20 | ? | ?
+  2026-02-09T23:00:20 | ? | ?
+  2026-02-09T22:59:00 | ? | ?
+
+--- Lead Status Distribution ---
+  new: 275
+  research_done: 94
+  outreach_sent: 71
+  no_contact_info: 13
+  customer: 0
+
+--- System Heartbeat ---
+  2026-02-09T23:05:01 | working
+  2026-02-09T23:00:03 | working
+  2026-02-09T22:55:01 | working
+
+--- Campaign Mode ---
+  status=working
+
+============================================================
+  GHL API STATUS (Confirming Ban)
+============================================================
+  GET /contacts: HTTP 401
+  CONFIRMED: 401 Unauthorized — GHL API BAN is correct
+  Response: {"statusCode":401,"message":"The token is not authorized for this scope."}
+
+============================================================
+  VERIFICATION COMPLETE
+============================================================
