@@ -858,6 +858,24 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 
 ---
 
+### Section 18: Feb 9, 2026 — Phase 2: SMS Fix + Root Cleanup
+
+- **Board Call (3/4 responded, Claude overloaded):** ChatGPT, Gemini, Grok unanimous on all 4 issues
+- **SMS Root Cause (CRITICAL):** 444/615 leads (72%) had fake `SCRAPED_` GHL contact IDs
+  - `dispatch_sms_logic` sent these to GHL webhook → GHL rejected → silent exception
+  - `except` block caught error but `continue` skipped to next lead without falling to email
+  - Result: zero SMS ever sent, leads with phone numbers always fell through to email
+- **Fix Applied:**
+  1. Added `SCRAPED_` ID check in `dispatch_sms_logic` — returns False instead of crashing
+  2. Changed outreach loop: SMS requires `has_real_ghl` flag; if SMS fails, falls to email instead of skipping
+  3. Added `traceback.print_exc()` for full error logging per board recommendation
+  4. Only 171/615 leads eligible for SMS (real GHL IDs)
+- **Root Cleanup:** Archived 367 files from root → `_archive/root_cleanup_feb9/` (root: 374 → 53 items)
+- **Verification (PASSED):** SMS all-time jumped from 0 → 178, outreach 4/30min, heartbeat live
+- **Sovereign Law:** "SCRAPED_IDs are not GHL IDs. Never send webhooks with fake contact_ids."
+
+---
+
 ```text
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║

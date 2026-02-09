@@ -475,3 +475,24 @@ SUPABASE_URL=https://rzcpfwkygdvoshtwxncs.supabase.co
 **Confidence**: 100%
 
 ---
+
+## SMS Silent Failure: SCRAPED_ GHL Contact IDs (Feb 9, 2026)
+
+**Error Message**: `dispatch_sms_logic.local()` throws exception silently (caught by except block)
+
+**Location**: `workers/outreach.py` → `auto_outreach_loop` → SMS dispatch path
+
+**Root Cause**: 444/615 leads (72%) have fake `ghl_contact_id` values like `SCRAPED_e1dbae35` instead of real GHL IDs. The `dispatch_sms_logic` function sends these to the GHL webhook, which rejects them. The error is caught by the `except` block, printed, and `continue` skips to the next lead — meaning email never fires as a fallback.
+
+**Fix**:
+
+1. Added `SCRAPED_` prefix check in `dispatch_sms_logic` — returns False immediately instead of crashing
+2. Changed outreach loop routing: SMS now requires `has_real_ghl` flag (no SCRAPED_ prefix)
+3. If SMS returns False or throws exception, falls through to email instead of skipping
+4. Added `traceback.print_exc()` for full error stack in logs
+
+**Prevention**: Always check `ghl_contact_id` for `SCRAPED_` prefix before calling any GHL webhook. Only 171/615 leads have real GHL IDs.
+
+**Confidence**: 100%
+
+---

@@ -91,21 +91,32 @@ def dispatch_email_logic(lead_id: str):
 
 @app.function(image=image, secrets=[VAULT])
 def dispatch_sms_logic(lead_id: str, message: str = None):
-    """Dispatches SMS via GHL webhook."""
+    """Dispatches SMS via GHL webhook. Requires REAL GHL contact ID (not SCRAPED_)."""
     print(f"📱 SMS DISPATCH: Lead ID {lead_id}")
     from modules.database.supabase_client import get_supabase
     import requests
     import os
+    import traceback
     
     supabase = get_supabase()
     lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
+    
+    if not lead:
+        print(f"❌ SMS: Lead {lead_id} not found")
+        return False
     
     hook_url = os.environ.get("GHL_SMS_WEBHOOK_URL")
     if not hook_url:
         print("❌ Error: GHL_SMS_WEBHOOK_URL missing")
         return False
 
-    ghl_id = lead.get('ghl_id') or lead.get('ghl_contact_id')
+    ghl_id = lead.get('ghl_contact_id') or lead.get('ghl_id', '')
+    
+    # CRITICAL: Skip SCRAPED_ IDs — GHL rejects them
+    if not ghl_id or ghl_id.startswith('SCRAPED_'):
+        print(f"⚠️ SMS SKIP: Lead {lead_id} has no real GHL ID (got: {ghl_id})")
+        return False
+
     phone = lead.get('phone', '')
     if phone and not phone.startswith('+'):
         phone = f"+1{phone.replace('-', '').replace('(', '').replace(')', '').replace(' ', '')}"
@@ -122,10 +133,11 @@ def dispatch_sms_logic(lead_id: str, message: str = None):
     try:
         response = requests.post(hook_url, json=payload, timeout=10)
         status = "dispatched" if response.status_code in [200, 201, 202] else f"failed_{response.status_code}"
-        print(f"📡 GHL SMS BRIDGE STATUS: {status}")
+        print(f"📡 GHL SMS BRIDGE STATUS: {status} (HTTP {response.status_code})")
     except Exception as e:
         status = f"error: {str(e)}"
         print(f"❌ SMS BRIDGE ERROR: {status}")
+        traceback.print_exc()
 
     supabase.table("contacts_master").update({"status": "outreach_dispatched" if "dispatched" in status else "failed"}).eq("id", lead_id).execute()
     
@@ -237,21 +249,30 @@ def auto_outreach_loop():
         email = lead.get('email')
         phone = lead.get('phone')
         
-        # Priority 1: SMS (if business hours)
-        # EST Business Hours: 8 AM - 6 PM
+        # Check GHL ID validity for SMS routing
+        ghl_id = lead.get('ghl_contact_id') or lead.get('ghl_id', '')
+        has_real_ghl = ghl_id and not ghl_id.startswith('SCRAPED_')
+        
+        # Priority 1: SMS (if business hours AND real GHL ID)
+        # EST Business Hours: 8 AM - 6 PM Mon-Sat
         est = timezone(timedelta(hours=-5))
         now_est = datetime.now(est)
         is_sms_hours = 8 <= now_est.hour < 18 and now_est.weekday() < 6
         
-        if phone and is_sms_hours:
-            print(f"📱 Route -> SMS: {phone}")
+        if phone and is_sms_hours and has_real_ghl:
+            print(f"📱 Route -> SMS: {phone} (GHL: {ghl_id[:10]}...)")
             try:
-                dispatch_sms_logic.local(lead_id)
+                result = dispatch_sms_logic.local(lead_id)
+                if result:
+                    continue  # SMS sent successfully, next lead
+                print(f"⚠️ SMS returned False for {lead_id}, falling to email")
             except Exception as e:
+                import traceback
                 print(f"❌ SMS Failed for {lead_id}: {e}")
-            continue
+                traceback.print_exc()
+                # Fall through to email
             
-        # Priority 2: Email (24/7)
+        # Priority 2: Email (24/7, also fallback from SMS failure)
         if email:
             print(f"📧 Route -> Email: {email}")
             try:

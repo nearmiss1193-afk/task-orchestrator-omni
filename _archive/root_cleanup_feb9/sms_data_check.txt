@@ -1,0 +1,8 @@
+﻿=== GHL ID ANALYSIS ===
+REAL GHL IDs:    171
+SCRAPED_ IDs:    444
+No GHL ID:       0
+Total:           615
+
+SCRAPED_ leads can NOT be sent outreach via GHL webhooks.
+Only REAL GHL IDs (171) can receive GHL-routed SMS/Email.
