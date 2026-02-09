@@ -737,6 +737,103 @@ Board consensus is a STARTING POINT, not ground truth. Always verify hypothesis 
 
 ---
 
+## 🧠 SECTION 16: SESSION LEARNINGS (Feb 9, 2026)
+
+### 🚨 CRITICAL INCIDENT: 10-Day Outreach Gap
+
+**INCIDENT DATE:** Jan 30 - Feb 9, 2026 (10 days of zero outreach)
+
+**Symptom:** System "deployed successfully" but `outbound_touches` count = 0 for 10 days.
+
+**Root Cause:** ALL 615 leads were moved out of contactable statuses. The outreach loop queries `status IN ('new', 'research_done')` but found 0 matching leads.
+
+| Status | Count | Contactable? |
+|--------|-------|-------------|
+| outreach_sent | ~500+ | NO |
+| contacted | 2 | NO |
+| failed | ~50+ | NO |
+| no_contact_info | ~50+ | NO |
+| **new** | **0** | **YES (but empty!)** |
+| **research_done** | **0** | **YES (but empty!)** |
+
+**The Fix:** Reset lead statuses back to 'new':
+
+```python
+sb.table("contacts_master").update({"status": "new"}).in_(
+    "status", ["outreach_sent", "outreach_dispatched", "contacted", "failed", "no_contact_info"]
+).execute()
+```
+
+### ⚠️ NEW SOVEREIGN LAW: Lead Queue Monitoring
+
+**RULE:** Before declaring outreach "working," ALWAYS check contactable lead count:
+
+```sql
+SELECT COUNT(*) FROM contacts_master WHERE status IN ('new', 'research_done');
+-- Result MUST be > 0 for outreach to function
+```
+
+**IMPLEMENT:** Lead recycling CRON to prevent future exhaustion:
+
+```python
+# Daily at midnight: Reset stale leads after 7 days
+@app.function(schedule=modal.Cron("0 0 * * *"))
+def recycle_stale_leads():
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    supabase.table("contacts_master").update({"status": "new"}).in_(
+        "status", ["outreach_sent", "no_response"]
+    ).lt("updated_at", cutoff).execute()
+```
+
+### 🔑 Environment Variable Fix (Feb 9, 2026)
+
+**ISSUE:** Local `.env` was missing `SUPABASE_URL` - only had `NEXT_PUBLIC_SUPABASE_URL`.
+
+**FIX:** Both must exist:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://rzcpfwkygdvoshtwxncs.supabase.co
+SUPABASE_URL=https://rzcpfwkygdvoshtwxncs.supabase.co
+SUPABASE_KEY=<service_role_key>
+SUPABASE_SERVICE_ROLE_KEY=<service_role_key>
+```
+
+**Lesson:** Different parts of the codebase look for different env var names. BOTH `SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_URL` MUST be set.
+
+### 📊 Modal Dashboard State (Feb 9, 2026)
+
+**5 Live Apps:**
+
+| App | Status | Notes |
+|-----|--------|-------|
+| ghl-omni-automation | Active (5h ago) | Main app, 4 CRONs |
+| nexus-engine | Active (11d ago) | dispatch_call: 135 errors |
+| nexus-portal | Active (11d ago) | 0 calls |
+| test-atomic | Active (13d ago) | 0 calls |
+| empire-api-v3 | CRASH-LOOPING | 2000 inputs, 0 containers |
+
+**Action Items:**
+
+- Stop `empire-api-v3` (crash-looping, wasting resources)
+- Stop `test-atomic` (unused)
+- Investigate `nexus-engine` dispatch_call errors (135/135 failed)
+
+### 🔄 .modalignore Update
+
+Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with main deployment (it defines its own `modal.App("voice-nexus-vapi")`).
+
+### 🔧 Diagnostic Scripts Created
+
+| Script | Purpose |
+|--------|---------|
+| `test_outreach_simple.py` | Simulate outreach loop locally |
+| `status_breakdown.py` | Show lead status distribution |
+| `reset_lead_statuses.py` | Reset leads to 'new' for re-contact |
+| `verify_reset.py` | Confirm reset and check readiness |
+| `check_outreach_schema.py` | Inspect outbound_touches table |
+
+---
+
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
@@ -744,8 +841,9 @@ Board consensus is a STARTING POINT, not ground truth. Always verify hypothesis 
 ║   "Delegation is not abandonment; it is focused stewardship."                ║
 ║   "Outreach is oxygen. Voice is truth."                                      ║
 ║   "Personalized rescue is the only path to ROI."                             ║
+║   "An empty queue is a silent killer."   (NEW - Feb 9, 2026)                 ║
 ║                                                                               ║
-║                              - SOVEREIGN MEMORY v3.0                          ║
+║                              - SOVEREIGN MEMORY v4.0                          ║
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```

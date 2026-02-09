@@ -1,5 +1,6 @@
 modules/orchestrator/**
 modules/architect/**
+modules/expanse/**
 **/deploy.py
 **/deploy_v2.py
 **/*.db

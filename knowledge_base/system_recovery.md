@@ -98,6 +98,38 @@ python run_save_protocol.py
 python send_save_protocol.py
 ```
 
+### Scenario 6: Zero Outreach Despite Successful Deployment (Feb 9, 2026)
+
+**Impact:** System appears healthy but sends 0 messages
+
+**Symptoms:**
+
+- Modal dashboard shows green CRONs
+- Heartbeat is logging
+- Campaign mode is 'working'
+- BUT `outbound_touches` count = 0
+
+**Root Cause:** Lead status queue exhausted - all leads moved to non-contactable statuses
+
+**Recovery Steps:**
+
+1. Check contactable lead count:
+
+   ```sql
+   SELECT COUNT(*) FROM contacts_master WHERE status IN ('new', 'research_done');
+   ```
+
+2. If count = 0, reset lead statuses:
+
+   ```python
+   python reset_lead_statuses.py
+   ```
+
+3. Verify outreach resumes within 5 minutes
+4. Check `outbound_touches` after 10 minutes
+
+**Key Learning:** "Deployed" does NOT mean "Working". Always verify `outbound_touches` count > 0.
+
 ---
 
 ## 📂 KEY FILE LOCATIONS
