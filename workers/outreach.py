@@ -301,10 +301,12 @@ def dispatch_call_logic(lead_id: str):
     return True
 def auto_outreach_loop():
     """
-    AUTONOMOUS OUTREACH ENGINE v2 (Board-Approved Feb 9, 2026):
-    - Processes 'new' or 'research_done' leads first (fresh leads).
-    - Recycles 'outreach_sent' leads after 3-day cooldown (prevents queue exhaustion).
-    - Routes to SMS/Email based on business hours and contact info.
+    AUTONOMOUS OUTREACH ENGINE v3 (Board Consensus Feb 9, 2026):
+    - Step 1: Fresh leads (new/research_done) → initial email
+    - Step 2: Follow-up #1 after 3 days (different angle)
+    - Step 3: Follow-up #2 after 7 days (final attempt / value offer)
+    - Max 3 email touches per lead, then mark as 'sequence_complete'
+    - Routes SMS during business hours for leads with real GHL IDs
     - SOVEREIGN LAW: "An empty queue is a silent killer."
     """
     import os
@@ -312,10 +314,10 @@ def auto_outreach_loop():
     from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
     
-    print("🚀 ENGINE v2: Starting autonomous outreach cycle...")
+    print("🚀 ENGINE v3: Starting autonomous outreach cycle...")
     supabase = get_supabase()
     
-    # 1. Fetch FRESH leads first (priority)
+    # 1. Fetch FRESH leads first (priority) → Step 1 initial email
     leads = []
     try:
         res = supabase.table("contacts_master") \
@@ -328,28 +330,32 @@ def auto_outreach_loop():
     except Exception as e:
         print(f"❌ ENGINE: fresh lead fetch error: {e}")
     
-    # 2. If fresh queue is low, RECYCLE old leads (3-day cooldown)
-    if len(leads) < 10:
+    fresh_count = len(leads)
+    
+    # 2. If fresh queue is low, fetch FOLLOW-UP candidates
+    followup_leads = []
+    if fresh_count < 10:
         try:
-            cooldown_cutoff = (datetime.now(timezone.utc) - timedelta(days=3)).isoformat()
+            # Leads sent outreach 3+ days ago → eligible for follow-up
+            day3_cutoff = (datetime.now(timezone.utc) - timedelta(days=3)).isoformat()
             recycled = supabase.table("contacts_master") \
                 .select("*") \
                 .eq("status", "outreach_sent") \
-                .lt("updated_at", cooldown_cutoff) \
-                .limit(10 - len(leads)) \
+                .lt("updated_at", day3_cutoff) \
+                .limit(10 - fresh_count) \
                 .execute()
-            recycled_leads = recycled.data or []
-            if recycled_leads:
-                print(f"♻️ Recycling {len(recycled_leads)} leads past 3-day cooldown")
-                leads.extend(recycled_leads)
+            followup_leads = recycled.data or []
+            if followup_leads:
+                print(f"♻️ Follow-up candidates: {len(followup_leads)} leads past 3-day cooldown")
         except Exception as e:
-            print(f"⚠️ ENGINE: recycle query error (non-fatal): {e}")
+            print(f"⚠️ ENGINE: follow-up query error (non-fatal): {e}")
     
-    if not leads:
-        print("😴 ENGINE: No leads ready for outreach (fresh or recycled).")
+    if not leads and not followup_leads:
+        print("😴 ENGINE: No leads ready for outreach (fresh or follow-up).")
         return
 
-    print(f"📈 ENGINE: Processing {len(leads)} leads...")
+    # --- PROCESS FRESH LEADS (Step 1: Initial Email) ---
+    print(f"📈 ENGINE: Processing {len(leads)} fresh + {len(followup_leads)} follow-up leads...")
     
     for lead in leads:
         lead_id = lead['id']
@@ -361,7 +367,6 @@ def auto_outreach_loop():
         has_real_ghl = ghl_id and not ghl_id.startswith('SCRAPED_')
         
         # Priority 1: SMS (if business hours AND real GHL ID)
-        # EST Business Hours: 8 AM - 6 PM Mon-Sat
         est = timezone(timedelta(hours=-5))
         now_est = datetime.now(est)
         is_sms_hours = 8 <= now_est.hour < 18 and now_est.weekday() < 6
@@ -377,11 +382,10 @@ def auto_outreach_loop():
                 import traceback
                 print(f"❌ SMS Failed for {lead_id}: {e}")
                 traceback.print_exc()
-                # Fall through to email
             
         # Priority 2: Email (24/7, also fallback from SMS failure)
         if email:
-            print(f"📧 Route -> Email: {email}")
+            print(f"📧 Route -> Email (Step 1): {email}")
             try:
                 dispatch_email_logic.local(lead_id)
             except Exception as e:
@@ -391,4 +395,172 @@ def auto_outreach_loop():
         print(f"⚠️ Skipping Lead {lead_id}: No contact path.")
         supabase.table("contacts_master").update({"status": "no_contact_info"}).eq("id", lead_id).execute()
 
-    print("✅ ENGINE v2: Outreach cycle complete.")
+    # --- PROCESS FOLLOW-UP LEADS (Step 2 or 3) ---
+    for lead in followup_leads:
+        lead_id = lead['id']
+        email = lead.get('email')
+        
+        if not email:
+            continue
+        
+        # Count prior email touches for this lead
+        try:
+            prior = supabase.table("outbound_touches") \
+                .select("ts,variant_name", count="exact") \
+                .eq("channel", "email") \
+                .eq("phone", lead.get("phone")) \
+                .execute()
+            touch_count = prior.count or 0
+            
+            # Also check by company name if phone is null
+            if touch_count == 0 and lead.get("company_name"):
+                prior2 = supabase.table("outbound_touches") \
+                    .select("ts", count="exact") \
+                    .eq("channel", "email") \
+                    .eq("company", lead.get("company_name")) \
+                    .execute()
+                touch_count = prior2.count or 0
+        except Exception as e:
+            print(f"⚠️ Touch count query error for {lead_id}: {e}")
+            touch_count = 1  # Assume at least 1
+
+        if touch_count >= 3:
+            # Max sequence reached → mark complete
+            print(f"✅ Sequence complete for {lead_id} ({touch_count} touches)")
+            supabase.table("contacts_master").update({"status": "sequence_complete"}).eq("id", lead_id).execute()
+            continue
+        
+        # Determine follow-up step
+        step = touch_count + 1  # 2 = first follow-up, 3 = final follow-up
+        
+        # Check timing: Step 2 after 3 days, Step 3 after 7 days
+        if step == 3:
+            day7_cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+            if lead.get("updated_at", "") > day7_cutoff:
+                print(f"⏳ Lead {lead_id} not ready for Step 3 yet (needs 7 days)")
+                continue
+        
+        print(f"📧 Route -> Follow-up Email (Step {step}): {email}")
+        try:
+            dispatch_followup_email(lead_id, step)
+        except Exception as e:
+            import traceback
+            print(f"❌ Follow-up Failed for {lead_id} Step {step}: {e}")
+            traceback.print_exc()
+
+
+def dispatch_followup_email(lead_id: str, step: int):
+    """
+    Follow-up email dispatch — Step 2 (Day 3) or Step 3 (Day 7).
+    Different subject/body per step. References the first email.
+    """
+    import os, requests, traceback, uuid
+    from modules.database.supabase_client import get_supabase
+    
+    supabase = get_supabase()
+    lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
+    if not lead:
+        print(f"❌ Follow-up: Lead {lead_id} not found")
+        return False
+    
+    email = lead.get("email")
+    if not email:
+        return False
+    
+    # Filter placeholder emails
+    skip_patterns = ['placeholder', 'test@', 'demo.com', 'funnel.com', 'example.com', 'unassigned']
+    if any(p in email.lower() for p in skip_patterns):
+        print(f"⚠️ Skipping placeholder: {email}")
+        return False
+    
+    resend_key = os.environ.get("RESEND_API_KEY")
+    if not resend_key:
+        print("❌ RESEND_API_KEY missing")
+        return False
+    
+    first_name = (lead.get('full_name') or 'there').split(' ')[0]
+    company = lead.get('company_name') or 'your company'
+    niche = lead.get('niche') or 'your industry'
+    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+    email_uid = str(uuid.uuid4())[:8]
+    
+    # --- STEP-SPECIFIC TEMPLATES ---
+    if step == 2:
+        subject = f"Following up, {first_name}"
+        body = f"""<html><body style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
+<p>Hi {first_name},</p>
+<p>I reached out a few days ago about {company}. Wanted to make sure my email didn't get buried.</p>
+<p>We've been helping {niche} businesses increase their online visibility by an average of 40% — and I noticed some quick wins that could apply to {company}.</p>
+<p>Would you have 10 minutes this week for a quick call? No pressure, just want to share what I found.</p>
+<p>Best,<br>Dan</p>
+<img src="https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run?eid={email_uid}" width="1" height="1" style="display:none;" />
+</body></html>"""
+        variant_name = f"Follow-up #{step-1}: Following up"
+    
+    elif step == 3:
+        subject = f"Last note about {company}"
+        body = f"""<html><body style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
+<p>Hi {first_name},</p>
+<p>I'll keep this short — I've reached out a couple times about some opportunities I spotted for {company}.</p>
+<p>I put together a free AI visibility audit for businesses in {niche}. It takes 2 minutes to review and shows exactly where you're losing traffic to competitors.</p>
+<p>Want me to send it over? Just reply "yes" and I'll have it in your inbox within the hour.</p>
+<p>If the timing isn't right, no worries at all. I'll leave you be.</p>
+<p>Best,<br>Dan</p>
+<img src="https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run?eid={email_uid}" width="1" height="1" style="display:none;" />
+</body></html>"""
+        variant_name = f"Follow-up #{step-1}: Last note + free audit offer"
+    else:
+        return False
+    
+    # --- SEND VIA RESEND ---
+    payload = {
+        "from": from_email,
+        "to": [email],
+        "subject": subject,
+        "html": body,
+        "headers": {"X-Entity-Ref-ID": email_uid}
+    }
+    
+    try:
+        r = requests.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            json=payload, timeout=15
+        )
+        
+        if r.status_code in [200, 201]:
+            resend_data = r.json()
+            resend_email_id = resend_data.get("id", "")
+            print(f"✅ FOLLOW-UP Step {step} SENT (ID: {resend_email_id})")
+            
+            # Update lead timestamp (resets cooldown timer for next step)
+            from datetime import datetime, timezone
+            supabase.table("contacts_master").update({"updated_at": datetime.now(timezone.utc).isoformat()}).eq("id", lead_id).execute()
+            
+            # Log to outbound_touches
+            supabase.table("outbound_touches").insert({
+                "phone": lead.get("phone"),
+                "channel": "email",
+                "company": company,
+                "status": "sent",
+                "variant_id": f"FU{step}",
+                "variant_name": variant_name,
+                "correlation_id": resend_email_id,
+                "payload": {
+                    "resend_email_id": resend_email_id,
+                    "email_uid": email_uid,
+                    "to": email,
+                    "from": from_email,
+                    "step": step,
+                    "sequence": "follow_up"
+                }
+            }).execute()
+            
+            return True
+        else:
+            print(f"❌ FOLLOW-UP RESEND FAILED: HTTP {r.status_code} - {r.text[:200]}")
+            return False
+    except Exception as e:
+        print(f"❌ FOLLOW-UP ERROR: {e}")
+        traceback.print_exc()
+        return False
