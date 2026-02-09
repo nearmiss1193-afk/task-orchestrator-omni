@@ -42,52 +42,137 @@ def log_consent(lead_id: str, consent_type: str, source: str = "checkout"):
 
 @app.function(image=image, secrets=[VAULT])
 def dispatch_email_logic(lead_id: str):
-    """Dispatches email via GHL webhook."""
-    print(f"📧 EMAIL DISPATCH: Lead ID {lead_id}")
+    """
+    Dispatches email via Resend API with full tracking.
+    Board-approved Phase 3 (Feb 9, 2026):
+    - A/B tests 4 subject lines (tracked in outbound_touches.variant_name)
+    - Smart personalized body for leads without ai_strategy
+    - Embedded tracking pixel for open detection
+    - No GHL ID required (sends directly to email address)
+    """
+    print(f"📧 EMAIL DISPATCH [Resend]: Lead ID {lead_id}")
     from modules.database.supabase_client import get_supabase
     import requests
     import os
+    import random
+    import traceback
+    import uuid
     
     supabase = get_supabase()
     lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
     
-    if not lead or not lead.get("ghl_contact_id"):
-        print(f"❌ Error: Lead {lead_id} has no GHL ID")
+    if not lead:
+        print(f"❌ Error: Lead {lead_id} not found")
         return False
 
-    hook_url = os.environ.get("GHL_EMAIL_WEBHOOK_URL")
-    if not hook_url:
-        print("❌ Error: GHL_EMAIL_WEBHOOK_URL missing")
+    email = lead.get('email')
+    if not email:
+        print(f"❌ Error: Lead {lead_id} has no email")
         return False
 
-    # Standardized Webhook Bridge Payload
+    resend_key = os.environ.get("RESEND_API_KEY")
+    if not resend_key:
+        print("❌ Error: RESEND_API_KEY missing")
+        return False
+
+    # --- A/B SUBJECT LINES (4 variants) ---
+    first_name = (lead.get('full_name') or 'there').split(' ')[0]
+    company = lead.get('company_name') or 'your company'
+    niche = lead.get('niche') or 'your industry'
+    
+    subject_variants = [
+        {"id": "A", "subject": f"Quick {company} question"},
+        {"id": "B", "subject": "Noticed something on your site"},
+        {"id": "C", "subject": f"{first_name}, quick question about {niche}"},
+        {"id": "D", "subject": f"This caught my eye about {company}"},
+    ]
+    
+    chosen = random.choice(subject_variants)
+    subject = chosen["subject"]
+    variant_id = chosen["id"]
+    
+    # --- SMART EMAIL BODY ---
+    ai_body = lead.get('ai_strategy')
+    if ai_body and len(ai_body) > 20:
+        # Use AI-generated strategy if available
+        body_text = ai_body
+    else:
+        # Smart fallback for the 67% of leads without ai_strategy
+        body_text = f"""Hi {first_name},
+
+I was just reviewing {company}'s online presence and had a quick question.
+
+Are you currently looking to get more customers from Google and social media?
+
+I work with {niche} businesses and noticed a few quick wins that could help drive more leads to your site.
+
+Worth a 5-min chat this week?
+
+Best,
+Dan"""
+
+    # --- TRACKING PIXEL ---
+    email_uid = str(uuid.uuid4())[:8]
+    tracking_base = os.environ.get("MODAL_TRACKING_URL", "https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run")
+    tracking_pixel = f'<img src="{tracking_base}?eid={email_uid}&recipient={email}&business={company}" width="1" height="1" style="display:none" />'
+    
+    # Build HTML body
+    html_body = f"""<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.6;">
+{body_text.replace(chr(10), '<br>')}
+</div>
+{tracking_pixel}"""
+
+    # --- SEND VIA RESEND API ---
+    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <onboarding@resend.dev>")
+    
     payload = {
-        "contact_id": lead.get('ghl_contact_id') or lead.get('ghl_id'),
-        "first_name": lead.get('full_name', '').split(' ')[0],
-        "email": lead.get('email'),
-        "subject": "quick question",
-        "body": lead.get('ai_strategy', 'hey, saw your site and had a question'),
-        "type": "Email"
+        "from": from_email,
+        "to": [email],
+        "subject": subject,
+        "html": html_body,
+        "tags": [
+            {"name": "lead_id", "value": lead_id},
+            {"name": "variant", "value": variant_id},
+            {"name": "email_uid", "value": email_uid}
+        ]
     }
     
     try:
-        requests.post(hook_url, json=payload, timeout=10)
-        supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
+        r = requests.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            json=payload,
+            timeout=15
+        )
         
-        supabase.table("outbound_touches").insert({
-            "phone": lead.get("phone"),
-            "channel": "email",
-            "company": lead.get("company_name", "Unknown"),
-            "status": "sent"
-        }).execute()
-        print(f"✅ EMAIL DISPATCHED via Bridge")
-        return True
+        if r.status_code in [200, 201]:
+            resend_data = r.json()
+            resend_email_id = resend_data.get("id", "")
+            print(f"✅ EMAIL SENT via Resend (ID: {resend_email_id}, Variant: {variant_id})")
+            
+            # Update lead status
+            supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
+            
+            # Log to outbound_touches with A/B tracking
+            supabase.table("outbound_touches").insert({
+                "phone": lead.get("phone"),
+                "channel": "email",
+                "company": company,
+                "status": "sent",
+                "variant_id": variant_id,
+                "variant_name": subject,
+                "correlation_id": resend_email_id
+            }).execute()
+            
+            return True
+        else:
+            print(f"❌ RESEND FAILED: HTTP {r.status_code} - {r.text[:200]}")
+            return False
+            
     except Exception as e:
-        print(f"❌ EMAIL BRIDGE FAIL: {e}")
+        print(f"❌ RESEND ERROR: {e}")
+        traceback.print_exc()
         return False
-    
-    print(f"✅ EMAIL SENT")
-    return True
 
 @app.function(image=image, secrets=[VAULT])
 def dispatch_sms_logic(lead_id: str, message: str = None):
