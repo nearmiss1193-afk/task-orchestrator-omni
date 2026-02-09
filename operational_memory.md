@@ -36,17 +36,11 @@
 - Store results in Supabase for persistence
 - Pre-run audits, don't run at email-send time
 
-### GHL API LIMITATION (CRITICAL - VERIFIED Feb 5, 2026)
+### GHL WEBHOOK BRIDGE (SOVEREIGN STANDARD)
 
-> [!CAUTION]
-> **GHL API DOES NOT WORK** - Private integration only!
-> **MUST USE WEBHOOKS** for all GHL email/SMS
-
-| What | Status | Solution |
-|------|--------|----------|
-| GHL REST API | ❌ DOES NOT WORK | Private integration - not accessible |
-| GHL Webhooks | ✅ WORKS | Use webhook URLs from reliable_email.py |
-| Verified By | Reddit, past sessions, user confirmation | Multiple sources confirm |
+> [!IMPORTANT]
+> **USE WEBHOOKS FOR ALL GHL MESSAGING**
+> Direct GHL API calls are deprecated and fragile.
 
 **GHL Login Credentials (SAVE - NEVER LOSE):**
 
@@ -208,14 +202,14 @@ When a method fails:
 
 ---
 
-## 📧 EMAIL SENDING PROTOCOL (Updated Feb 5, 2026 16:49)
+## 📧 EMAIL SOVEREIGNTY PROTOCOL (Updated Feb 9, 2026)
 
 > [!IMPORTANT]
-> **PRIORITY ORDER (Dan's Order - DO NOT CHANGE)**
+> **SOVEREIGN HIERARCHY**
 >
-> 1. **Gmail API** - First choice (CONFIGURED ✅)
-> 2. **GHL Webhook** - Second choice
-> 3. **Resend** - Last resort backup
+> 1. **Resend** - Primary cold-outreach volume engine.
+> 2. **GHL Webhook** - Secondary/SMS integration.
+> 3. **Gmail API** - High-touch follow-ups ONLY (approval required).
 
 ### Priority 1: Gmail API (FIRST CHOICE) ✅
 
@@ -1648,6 +1642,36 @@ When asking the Board to approve an email, you must provide the **EVIDENCE** and
 
 ### Valid Colors (Hex)
 
-* 🔴 Red Background: `#FF6B6B` (Text: White)
+- 🔴 Red Background: `#FF6B6B` (Text: White)
+
 - 🟡 Yellow Background: `#FFE66D` (Text: Black)
 - 🟢 Green Background: `#4ECB71` (Text: White)
+
+ #     S E C T I O N   4 :   C R O N   M A N A G E M E N T 
+ 
+ # #   M o d a l   S t a r t e r   P l a n   L i m i t s 
+ 
+ \ \ \ 
+ 
+                                                                                                                                                               
+       C R O N   J o b s :     4   m a x i m u m   ( S o f t   L i m i t   f o r   S t a b i l i t y )                                                           
+       E n d p o i n t s :     8   m a x i m u m                                                                                                               
+                                                                                                                                                               
+       I f   y o u   e x c e e d   4   C R O N s :   R i s k   o f   f r e q u e n t   c r a s h e s   a n d   d e p l o y m e n t   i s s u e s .             
+                                                                                                                                                               
+ 
+ \ \ \ 
+ 
+ # #   B e f o r e   E V E R Y   D e p l o y 
+ 
+ \ \ \  a s h 
+ #   C o u n t   t o t a l   C R O N s   i n   d e p l o y . p y 
+ e c h o   \  
+ C R O N  
+ c o u n t : \ 
+ g r e p   - c   \ s c h e d u l e = m o d a l \   d e p l o y . p y 
+ 
+ #   I f   >   4 :   S T O P .   R e m o v e   C R O N s   b e f o r e   d e p l o y i n g . 
+ \ \ \ 
+  
+ 

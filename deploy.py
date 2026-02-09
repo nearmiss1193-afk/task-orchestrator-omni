@@ -247,7 +247,10 @@ def sms_inbound(data: dict = {}):
                 # New customer - create record
                 new_customer = supabase.table("customer_memory").insert({
                     "phone_number": phone,
-                    "context_summary": {"contact_name": contact_name},
+                    "context_summary": {
+                        "contact_name": contact_name,
+                        "history": f"[System]: Customer {contact_name} started conversation via SMS"
+                    },
                     "status": "active"
                 }).execute()
                 if new_customer.data:
@@ -380,6 +383,7 @@ FALLBACK (if confused or asked something weird):
             # Save updated context
             supabase.table("customer_memory").update({
                 "context_summary": updated_context,
+                "customer_name": contact_name, # Also update top-level name if possible
                 "last_interaction": datetime.now().isoformat()
             }).eq("customer_id", customer_id).execute()
             
@@ -525,20 +529,22 @@ def vapi_webhook(data: dict = {}):
                     
                     print(f"📱 [MEMORY] Lookup result: {len(result.data) if result.data else 0} records found")
                     
-                    if result.data and len(result.data) > 0:
+                    if result.data:
                         customer_data = result.data[0]
-                        context_summary = customer_data.get("context_summary", "")
-                        # Extract name from nested JSONB field (Board fix 2026-02-07)
-                        ctx = customer_data.get("context_summary", {})
-                        if isinstance(ctx, dict):
-                            customer_name = ctx.get("contact_name", "")
+                        context_data = customer_data.get("context_summary", {})
+                        if isinstance(context_data, str):
+                            # Migration: convert string context to dict
+                            context_summary = {"history": context_data}
                         else:
-                            customer_name = ""
-                        print(f"📱 [MEMORY] ✅ FOUND - Name: '{customer_name}' | Context: '{str(context_summary)[:100]}...'")
+                            context_summary = context_data
+                            
+                        customer_name = context_summary.get("contact_name", "") or customer_data.get("customer_name", "")
+                        print(f"📱 [MEMORY] ✅ FOUND - Name: '{customer_name}' | History Len: {len(str(context_summary.get('history', '')))} chars")
                         lookup_status = "FOUND"
                         
                         # Check for call_mode in context (sales vs support)
                         call_mode = "support"  # Default
+                        ctx = context_summary
                         if isinstance(ctx, dict) and ctx.get("call_purpose") == "sales":
                             call_mode = "sales"
                             print(f"🎯 [MEMORY] Call mode: SALES")
@@ -708,32 +714,28 @@ STYLE: Casual, concise, human. Use "totally", "honestly", "got it". Keep respons
                     }).execute()
                     print(f"📱 [MEMORY] conversation_logs INSERT: {'SUCCESS' if log_result.data else 'FAILED'}")
                     
-                    # ========== CRITICAL: Update customer_memory (Board Phase 2) ==========
-                    # Get existing context to append
-                    result = supabase.table("customer_memory").select("context_summary, customer_name").eq("phone_number", caller_phone).limit(1).execute()
-                    existing_context = result.data[0].get("context_summary", "") if result.data else ""
-                    existing_name = result.data[0].get("customer_name", "") if result.data else ""
+                    # Refresh result for latest context to append
+                    res_latest = supabase.table("customer_memory").select("context_summary").eq("phone_number", caller_phone).single().execute()
+                    ctx_latest = res_latest.data.get("context_summary", {}) if res_latest.data else {}
+                    if isinstance(ctx_latest, str):
+                        ctx_latest = {"history": ctx_latest}
                     
-                    # Build new context
+                    # Update history
+                    history = ctx_latest.get("history", "")
                     timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
-                    new_context = f"{existing_context}\n[Voice {direction} {timestamp}]: {summary or 'Call completed'}" if summary else existing_context
+                    new_history = f"{history}\n[Voice {direction} {timestamp}]: {summary or 'Call completed'}"
+                    ctx_latest["history"] = new_history[-3000:] # Keep last 3000 chars of history
                     
-                    # Use extracted name if we found one and don't have existing
-                    final_name = extracted_name if extracted_name else existing_name
-                    
+                    if extracted_name:
+                        ctx_latest["contact_name"] = extracted_name
+
                     # UPSERT to customer_memory
-                    upsert_data = {
+                    upsert_result = supabase.table("customer_memory").upsert({
                         "phone_number": caller_phone,
-                        "context_summary": new_context[-2000:],  # Keep last 2000 chars
+                        "customer_name": extracted_name or res_latest.data.get("customer_name") if res_latest.data else "",
+                        "context_summary": ctx_latest,
                         "updated_at": datetime.utcnow().isoformat()
-                    }
-                    if final_name:
-                        upsert_data["customer_name"] = final_name
-                    
-                    upsert_result = supabase.table("customer_memory").upsert(
-                        upsert_data, 
-                        on_conflict="phone_number"
-                    ).execute()
+                    }, on_conflict="phone_number").execute()
                     
                     print(f"📱 [MEMORY] customer_memory UPSERT: {'SUCCESS' if upsert_result.data else 'FAILED'}")
                     print(f"📱 [MEMORY] ✅ Saved to customer_memory: phone={caller_phone}, name={final_name}")
@@ -858,93 +860,58 @@ def health_check():
     }
 
 
-# ==== SELF-HEALING MONITOR (Schedule temporarily disabled - Modal plan limit) ====
-@app.function(image=image, secrets=[VAULT])  # TODO: Re-enable schedule=modal.Cron("*/10 * * * *") after plan upgrade
-def self_healing_monitor():
-    """Auto-detect issues, log health, alert on critical failures"""
+# ==== SYSTEM HEARTBEAT (Phase 5 Sovereign Standard) ====
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+def system_heartbeat():
+    """Auto-detect issues, log health, and verify 4-cron stability."""
     import os
-    from datetime import datetime, timedelta
-    from supabase import create_client
+    from datetime import datetime, timezone
+    from modules.database.supabase_client import get_supabase
     
-    print(f"🔍 Self-healing monitor running at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"💓 HEARTBEAT: Running at {datetime.now(timezone.utc).isoformat()}")
     
     issues = []
-    recovery_actions = []
-    
     try:
-        supabase_url = os.environ.get("SUPABASE_URL")
-        supabase_key = os.environ.get("SUPABASE_KEY")
+        supabase = get_supabase()
         
-        if not supabase_url or not supabase_key:
-            issues.append("Missing Supabase credentials")
-            # Can't proceed without DB - this is critical
-            print(f"❌ CRITICAL: {issues}")
-            return {"status": "critical", "issues": issues}
-        
-        supabase = create_client(supabase_url, supabase_key)
-        
-        # 1. Check for recent error logs
-        try:
-            recent_errors = supabase.table("system_health_log")\
-                .select("*")\
-                .eq("status", "error")\
-                .gte("checked_at", (datetime.now() - timedelta(minutes=30)).isoformat())\
-                .execute()
+        # 1. Check Campaign Mode
+        campaign = supabase.table("system_state").select("status").eq("key", "campaign_mode").execute()
+        mode = campaign.data[0].get("status") if campaign.data else "unknown"
+        if mode != "working":
+            issues.append(f"Campaign mode is '{mode}'")
             
-            if recent_errors.data and len(recent_errors.data) > 5:
-                issues.append(f"High error rate: {len(recent_errors.data)} errors in last 30 min")
-        except Exception as e:
-            print(f"⚠️ Could not check error logs: {e}")
-        
-        # 2. Check campaign_mode status
-        try:
-            campaign = supabase.table("system_state").select("status").eq("key", "campaign_mode").execute()
-            if campaign.data:
-                mode = campaign.data[0].get("status")
-                if mode != "working":
-                    issues.append(f"Campaign mode is '{mode}' (should be 'working')")
-        except Exception as e:
-            print(f"⚠️ Could not check campaign mode: {e}")
-        
-        # 3. Check customer_memory table is accessible
-        try:
-            mem_check = supabase.table("customer_memory").select("customer_id").limit(1).execute()
-            print(f"✅ customer_memory table accessible")
-        except Exception as e:
-            issues.append(f"customer_memory table error: {str(e)[:50]}")
-        
-        # 4. Log health status
-        try:
-            supabase.table("system_health_log").insert({
-                "checked_at": datetime.now().isoformat(),
-                "status": "error" if issues else "ok",
-                "details": {"issues": issues, "recovery_actions": recovery_actions}
-            }).execute()
-        except Exception as e:
-            print(f"⚠️ Could not log health status: {e}")
-        
-        # 5. Alert if too many issues (would integrate with Slack/email)
-        if len(issues) >= 3:
-            print(f"🚨 ALERT: Multiple issues detected: {issues}")
-            # TODO: Send Slack/email alert
-            # For now just log
-        
-        print(f"✅ Self-healing check complete. Issues: {len(issues)}")
-        return {
-            "status": "ok" if not issues else "issues_detected",
-            "issues_count": len(issues),
-            "issues": issues,
-            "timestamp": datetime.now().isoformat()
-        }
+        # 2. Log Pulse
+        supabase.table("system_health_log").insert({
+            "checked_at": datetime.now(timezone.utc).isoformat(),
+            "status": "ok" if not issues else "degraded",
+            "details": {"issues": issues, "cron_limit": 4}
+        }).execute()
         
     except Exception as e:
-        print(f"❌ Self-healing monitor error: {e}")
-        return {"status": "error", "error": str(e)}
+        print(f"❌ Heartbeat Error: {e}")
 
+# --- CENTRALIZED PHASE 5 WORKERS (3-CRON LIMIT - User Rule: Max 4, stale apps hold 2 slots) ---
+from workers.outreach import auto_outreach_loop as outreach_logic
+from workers.lead_unifier import unified_lead_sync as sync_logic
+from workers.self_learning_cron import trigger_self_learning_loop as learning_logic
 
-# OUTREACH & SYNC WORKERS (Imported from workers/outreach.py)
-from workers.outreach import sync_ghl_contacts, auto_outreach_loop, dispatch_sms_logic, dispatch_email_logic, dispatch_call_logic
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+def auto_outreach_loop():
+    """Triggers autonomous outreach engine."""
+    outreach_logic()
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+def unified_lead_sync():
+    """Triggers unified lead synchronization."""
+    sync_logic()
+
+@app.function(image=image, secrets=[VAULT])
+def trigger_self_learning_loop():
+    """Brain reflection - MANUAL ONLY (CRON removed to stay under limit)."""
+    learning_logic()
+
+# system_heartbeat already defined above with its own schedule
 
 if __name__ == "__main__":
-    print("Nexus Outreach V1 - Clean Architecture")
+    print("⚫ ANTIGRAVITY v5.0 - SOVEREIGN DEPLOY")
 

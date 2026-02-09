@@ -67,6 +67,6 @@ async def synthesize_wisdom():
     except Exception as e:
         print(f"❌ WISDOM SYNTHESIS ERROR: {e}")
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 0 * * *")) # Every day at midnight
+@app.function(image=image, secrets=[VAULT]) # Schedule disabled to stay under 5-cron limit
 async def daily_wisdom_cron():
     await synthesize_wisdom.remote()

@@ -16,81 +16,27 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 xai = OpenAI(api_key=os.getenv("XAI_API_KEY"), base_url="https://api.x.ai/v1")
 # 2. DEFINING THE BOARD PROMPT
 PROMPT = """
-# BOARD INVESTIGATION: Why Voice Memory Keeps Failing Despite "Fixes"
+# BOARD STRATEGIC CORE AUDIT: Data Unification, Vapi Competence, & System Learning
 
-## CONTEXT - THE PATTERN
-We have Sarah AI (Vapi voice assistant + SMS handler). Critical observation:
-- ✅ SMS remembers name correctly (stored in Supabase customer_memory table)
-- ❌ Voice STILL doesn't remember name on callback - **despite multiple "fixes"**
+## CONTEXT
+The **'Empire Unified'** is scaling toward full autonomy. Dan is raising three critical structural concerns:
+1. **Source of Truth (Lead Dashboard)**: We have data fragmented across Supabase, Resend (Email), GHL (CRM/SMS), and Vapi (Voice). We need a unified "Lead Truth" (Prospected -> Emailed -> SMSed -> Called).
+2. **Vapi Competence Audit**: Sarah's memory failed even after a hard refresh. Are internal Vapi configuration settings (e.g., model selection, temperature, endpoint timeout, or 'Assistant Request' logic) sabotaging coherence?
+3. **System Learning/Upgrade**: How well is the system "learning" from interactions and self-improving? (Reference: `self_healing_monitor` and `self_learning_cron`).
 
-**THE PATTERN WE'RE INVESTIGATING:**
-1. We identify a "root cause"
-2. We apply a fix
-3. We claim "success"
-4. Dan reports it STILL doesn't work
-5. Repeat cycle
-
-This has happened 3+ times now. The board needs to analyze WHY this pattern keeps repeating.
-
-## EVIDENCE GATHERED (Feb 8, 2026)
-
-### What We Found:
-1. **`vapi_debug_logs` table is EMPTY** - Zero entries
-   - Our code has `log_to_debug_table()` that SHOULD log to this table on every call
-   - If no logs exist, either: (a) webhook isn't being called, or (b) logging fails silently
-
-2. **`conversation_logs` has a column mismatch error** (Postgres error 42703)
-   - The INSERT statement may be referencing columns that don't exist
-
-3. **Code looks correct** - The vapi_webhook function in deploy.py:
-   - Uses normalize_phone() for consistency ✅
-   - Looks up customer_memory correctly ✅
-   - Builds personalized greeting with customer_name ✅
-   - Has extensive print statements for debugging ✅
-
-4. **SMS uses the same database and phone normalization and IT WORKS**
-
-### The Question:
-If the code is correct, why isn't it working? Where is the silent failure?
-
-## QUESTIONS FOR THE BOARD
-
-### 1. What Are The Most Likely Silent Failure Points?
-Given the evidence (empty debug logs, correct-looking code, SMS works but Voice doesn't):
-- Is Vapi even calling our serverUrl webhook?
-- Is there a Vapi assistant configuration issue (wrong serverUrl setting)?
-- Does Vapi cache assistant configs and ignore webhook updates?
-- Is our Modal endpoint actually deployed with the latest code?
-
-### 2. Why Do Our "Fixes" Keep Not Working?
-We keep applying code fixes that look correct but don't solve the problem. Why?
-- Are we fixing symptoms instead of root causes?
-- Is there a configuration layer we're not checking?
-- Is there a verification step we're skipping?
-
-### 3. What Is The Proper Diagnostic Sequence?
-What should we check IN ORDER to find the ACTUAL failure point?
-Propose a step-by-step diagnostic protocol.
-
-### 4. Who Has Successfully Built Vapi + External Memory?
-- Is there a reference implementation we can study?
-- What gotchas have others encountered?
-- Is serverUrl webhook the right approach, or is there a better pattern?
+## THE QUESTIONS FOR THE BOARD
+1. **The Unified Dashboard**: What is the most resilient architecture for a "Lead Source of Truth"? Should we use a Modal-driven Cron that periodically syncs Resend/GHL into a Master Supabase table, or a real-time event-driven bridge?
+2. **Vapi Sabotage**: Beyond the 'Hard Refresh', what specific Vapi API settings or hidden dashboard configurations could be preventing "coherent" memory? (e.g., prompt length limits, specific model parameters).
+3. **The Learning Audit**: How do we measure and upgrade the "System Intelligence"? What specific feedback loops are missing to make Sarah objectively smarter every day?
+4. **ROI Check**: How do we reconcile Resend's delivery data with GHL's lead status to ensure we aren't "double-tapping" or wasting credits?
 
 ## YOUR TASK
+Provide recommendations in three formats:
+1. **Individual Perspectives**: Each AI's unique take.
+2. **Collective Consensus**: Where you all agree.
+3. **Steps to Success**: A numbered, actionable roadmap for Dan.
 
-Each board member should provide:
-1. **Your hypothesis** - What do YOU think is failing?
-2. **Evidence that would confirm your hypothesis** - What specific test would prove it?
-3. **Recommended next step** - What should we check FIRST?
-4. **Confidence level** (high/medium/low)
-
-BE SPECIFIC. Don't give generic advice. Give actionable diagnostic steps.
-
-## CONSTRAINTS
-- Discovery only. NO CODE CHANGES until we find the real root cause.
-- We use: Vapi, Supabase, Modal, GHL
-- Dan is frustrated with the "fixed it, oops still doesn't work" cycle
+**STRICT CONSTRAINT: NO CODE OR FILE CHANGES.**
 """
 
 

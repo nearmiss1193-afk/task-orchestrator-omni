@@ -1,0 +1,6 @@
+Fresh leads: 434
+Recyclable leads: 38
+Campaign mode: working
+Last heartbeat: 2026-02-09T20:15:01.95261+00:00
+Outreach 30min: 31
+Total leads: 615

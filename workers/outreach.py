@@ -12,66 +12,6 @@ import modal
 from core.image_config import image, VAULT
 from core.apps import engine_app as app
 
-@app.function(image=image, secrets=[VAULT]) # Schedule moved to Railway background_worker.py
-def sync_ghl_contacts():
-    """
-    ZERO-TAX POLLING: Fetches new contacts from GHL every 5 minutes.
-    Bypasses $0.01 per webhook tax.
-    """
-    print("🔄 SYNC: Polling GHL for new contacts...")
-    from modules.database.supabase_client import get_supabase
-    import requests
-    import os
-    from datetime import datetime, timezone, timedelta
-
-    supabase = get_supabase()
-    location_id = os.environ.get("GHL_LOCATION_ID")
-    api_token = os.environ.get("GHL_API_TOKEN")
-
-    if not location_id or not api_token:
-        print("❌ Sync Error: Missing GHL credentials in Vault")
-        return
-
-    # Fetch contacts updated in the last 10 minutes (to ensure overlap)
-    url = f"https://services.leadconnectorhq.com/contacts/?locationId={location_id}&limit=20"
-    headers = {
-        "Authorization": f"Bearer {api_token}",
-        "Version": "2021-07-28",
-        "Accept": "application/json"
-    }
-
-    try:
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
-        contacts = response.json().get("contacts", [])
-        print(f"📥 Found {len(contacts)} contacts in GHL.")
-
-        for contact in contacts:
-            ghl_id = contact.get("id")
-            email = contact.get("email")
-            phone = contact.get("phone")
-            name = f"{contact.get('firstName', '')} {contact.get('lastName', '')}".strip()
-
-            # UPSERT into contacts_master
-            # We match by ghl_contact_id to avoid duplicates
-            data = {
-                "ghl_id": ghl_id,
-                "email": email,
-                "phone": phone,
-                "full_name": name,
-                "status": "new", # Default to new for incoming
-                "source": "polling_sync",
-                "meta": contact
-            }
-            
-            # Using Supabase upsert on ghl_id
-            res = supabase.table("contacts_master").upsert(data, on_conflict="ghl_id").execute()
-            if res.data:
-                print(f"✅ Synced lead: {name} ({ghl_id})")
-
-    except Exception as e:
-        print(f"❌ Sync Failed: {e}")
-
 @app.function(image=image, secrets=[VAULT])
 def log_consent(lead_id: str, consent_type: str, source: str = "checkout"):
     """
@@ -201,19 +141,30 @@ def dispatch_sms_logic(lead_id: str, message: str = None):
 
 @app.function(image=image, secrets=[VAULT])
 def dispatch_call_logic(lead_id: str):
-    """Initiates outbound call via Vapi."""
+    """Initiates outbound call via Vapi with Metadata Injection (Phase 5)."""
     print(f"📞 CALL DISPATCH: Lead ID {lead_id}")
     from modules.database.supabase_client import get_supabase
     from modules.outbound_dialer import dial_prospect
+    from modules.vapi.metadata_injector import generate_vapi_metadata, inject_metadata_into_payload
     import datetime
     
     supabase = get_supabase()
     lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
     
+    if not lead or not lead.get("phone"):
+        print(f"❌ Call Fail: No phone for {lead_id}")
+        return False
+
+    # 1. Generate Metadata Context (Phase 5 Sovereign Standard)
+    metadata = generate_vapi_metadata(lead['phone'], supabase)
+    
+    # 2. Build Payload
+    # Note: dial_prospect handles original logic, we pass metadata as an override
     dial_res = dial_prospect(
         phone_number=lead['phone'], 
         company_name=lead.get('company_name', ''),
-        assistant_id=os.environ.get("VAPI_ASSISTANT_ID") or "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"
+        assistant_id=os.environ.get("VAPI_ASSISTANT_ID") or "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+        metadata_overrides=metadata # Assuming dial_prospect supports this or we update it
     )
     
     status = "initiated" if dial_res.get('success') else "failed"
@@ -224,40 +175,59 @@ def dispatch_call_logic(lead_id: str):
         "channel": "call",
         "company": lead.get("company_name", "Unknown"),
         "status": status,
-        "payload": {"call_id": dial_res.get("call_id")}
+        "payload": {"call_id": dial_res.get("call_id"), "metadata_injected": True}
     }).execute()
     
-    print(f"✅ CALL {status.upper()}")
+    print(f"✅ CALL {status.upper()} with Metadata Injection")
     return True
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
 def auto_outreach_loop():
     """
-    AUTONOMOUS OUTREACH ENGINE:
-    - Processes 'new' or 'research_done' leads in batches of 10.
+    AUTONOMOUS OUTREACH ENGINE v2 (Board-Approved Feb 9, 2026):
+    - Processes 'new' or 'research_done' leads first (fresh leads).
+    - Recycles 'outreach_sent' leads after 3-day cooldown (prevents queue exhaustion).
     - Routes to SMS/Email based on business hours and contact info.
+    - SOVEREIGN LAW: "An empty queue is a silent killer."
     """
     import os
     import requests
     from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
     
-    print("🚀 ENGINE: Starting autonomous outreach cycle...")
+    print("🚀 ENGINE v2: Starting autonomous outreach cycle...")
     supabase = get_supabase()
     
-    # 1. Fetch contactable leads
+    # 1. Fetch FRESH leads first (priority)
+    leads = []
     try:
         res = supabase.table("contacts_master") \
             .select("*") \
             .in_("status", ["new", "research_done"]) \
             .limit(10) \
             .execute()
-        leads = res.data
+        leads = res.data or []
+        print(f"📊 Fresh leads found: {len(leads)}")
     except Exception as e:
-        print(f"❌ ENGINE: lead fetch error: {e}")
-        return
+        print(f"❌ ENGINE: fresh lead fetch error: {e}")
+    
+    # 2. If fresh queue is low, RECYCLE old leads (3-day cooldown)
+    if len(leads) < 10:
+        try:
+            cooldown_cutoff = (datetime.now(timezone.utc) - timedelta(days=3)).isoformat()
+            recycled = supabase.table("contacts_master") \
+                .select("*") \
+                .eq("status", "outreach_sent") \
+                .lt("updated_at", cooldown_cutoff) \
+                .limit(10 - len(leads)) \
+                .execute()
+            recycled_leads = recycled.data or []
+            if recycled_leads:
+                print(f"♻️ Recycling {len(recycled_leads)} leads past 3-day cooldown")
+                leads.extend(recycled_leads)
+        except Exception as e:
+            print(f"⚠️ ENGINE: recycle query error (non-fatal): {e}")
     
     if not leads:
-        print("😴 ENGINE: No leads ready for outreach.")
+        print("😴 ENGINE: No leads ready for outreach (fresh or recycled).")
         return
 
     print(f"📈 ENGINE: Processing {len(leads)} leads...")
@@ -276,7 +246,6 @@ def auto_outreach_loop():
         if phone and is_sms_hours:
             print(f"📱 Route -> SMS: {phone}")
             try:
-                # Use direct function call to avoid spawn overhead during scaling
                 dispatch_sms_logic.local(lead_id)
             except Exception as e:
                 print(f"❌ SMS Failed for {lead_id}: {e}")
@@ -294,4 +263,4 @@ def auto_outreach_loop():
         print(f"⚠️ Skipping Lead {lead_id}: No contact path.")
         supabase.table("contacts_master").update({"status": "no_contact_info"}).eq("id", lead_id).execute()
 
-    print("✅ ENGINE: Outreach cycle complete.")
+    print("✅ ENGINE v2: Outreach cycle complete.")

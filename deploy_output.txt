@@ -1,0 +1,89 @@
+﻿+- Modal Deprecation Warning (2025-03-05) ------------------------------------+
+| The `@modal.web_endpoint` decorator has been renamed to                     |
+| `@modal.fastapi_endpoint`.                                                  |
+|                                                                             |
+| Source:                                                                     |
+| C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:116     |
+|   @modal.web_endpoint(method="GET")                                         |
++-----------------------------------------------------------------------------+
++- Modal Deprecation Warning (2025-03-05) ------------------------------------+
+| The `@modal.web_endpoint` decorator has been renamed to                     |
+| `@modal.fastapi_endpoint`.                                                  |
+|                                                                             |
+| Source:                                                                     |
+| C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:166     |
+|   @modal.web_endpoint(method="GET")                                         |
++-----------------------------------------------------------------------------+
++- Modal Deprecation Warning (2025-03-05) ------------------------------------+
+| The `@modal.web_endpoint` decorator has been renamed to                     |
+| `@modal.fastapi_endpoint`.                                                  |
+|                                                                             |
+| Source:                                                                     |
+| C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:204     |
+|   @modal.web_endpoint(method="POST")                                        |
++-----------------------------------------------------------------------------+
++- Modal Deprecation Warning (2025-03-05) ------------------------------------+
+| The `@modal.web_endpoint` decorator has been renamed to                     |
+| `@modal.fastapi_endpoint`.                                                  |
+|                                                                             |
+| Source:                                                                     |
+| C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:437     |
+|   @modal.web_endpoint(method="POST")                                        |
++-----------------------------------------------------------------------------+
++- Modal Deprecation Warning (2025-03-05) ------------------------------------+
+| The `@modal.web_endpoint` decorator has been renamed to                     |
+| `@modal.fastapi_endpoint`.                                                  |
+|                                                                             |
+| Source:                                                                     |
+| C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:758     |
+|   @modal.web_endpoint(method="GET")                                         |
++-----------------------------------------------------------------------------+
++- Modal Deprecation Warning (2025-03-05) ------------------------------------+
+| The `@modal.web_endpoint` decorator has been renamed to                     |
+| `@modal.fastapi_endpoint`.                                                  |
+|                                                                             |
+| Source:                                                                     |
+| C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:822     |
+|   @modal.web_endpoint(method="GET")                                         |
++-----------------------------------------------------------------------------+
+python : +- Error ---
+---------------------
+---------------------
+---------------------
+---+
+At line:1 char:1
++ python -m modal 
+deploy deploy.py 
+2>&1 | Out-File 
+-FilePath deploy_out 
+...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
+    + CategoryInfo   
+           : 
+NotSpecified: (+    
+- Error 
+------...----    
+----------+:String) 
+[    ], 
+RemoteException
+    + 
+FullyQualifiedError  
+  Id : 
+NativeCommandErr    
+or
+ 
+| 'charmap' codec 
+can't encode 
+character '\u2713' 
+in position 0: 
+character    |
+| maps to 
+<undefined>          
+                     
+                     
+     |
++--------------------
+---------------------
+---------------------
+---------------+

@@ -834,16 +834,43 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 
 ---
 
-```
+### Section 17: Feb 9, 2026 — Board-Approved System Recovery
+
+- **Incident:** System stalled again due to stale CRON slots from orphaned Modal apps preventing deployment
+- **Root Cause #1:** 2 stale apps (`test-deploy-delete-me`, `empire-command-center`) were holding CRON slots even when stopped
+- **Root Cause #2:** Previous `ghl-omni-automation` deployment held 2 CRONs that counted against the 5-CRON workspace limit
+- **Fix Applied:**
+  1. Stopped all stale Modal apps by App ID
+  2. Stopped old `ghl-omni-automation` to clear stale CRONs
+  3. Removed `trigger_self_learning_loop` CRON schedule (made manual-only)
+  4. Reduced deploy CRONs from 4 to 3 (heartbeat, outreach, lead_sync)
+  5. Deployed successfully with 3 CRONs
+- **Board Consensus (4/4 Unanimous):**
+  - Consolidated to `deploy.py` (archived `master_deploy.py`)
+  - Added lead recycling: 'outreach_sent' leads re-queued after 3-day cooldown
+  - Dead apps cleaned up
+- **Sovereign Laws:**
+  - "4 CRONs max, not 5 — 5 crashes a lot" (User Rule)
+  - "Stopped apps still hold CRON slots — must stop by App ID before redeploying"
+  - "Always update knowledge base on task completion"
+- **Verification (PASSED):** 434 fresh leads, 38 recyclable, campaign working, 31 outreach in 30min
+- **Workflow Shortcuts Created:** `/turbo`, `/save_protocol`, `/review_operations`
+
+---
+
+```text
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
 ║   "The system only learns if it listens."                                    ║
 ║   "Delegation is not abandonment; it is focused stewardship."                ║
 ║   "Outreach is oxygen. Voice is truth."                                      ║
 ║   "Personalized rescue is the only path to ROI."                             ║
-║   "An empty queue is a silent killer."   (NEW - Feb 9, 2026)                 ║
+║   "An empty queue is a silent killer."   (Feb 9, 2026)                       ║
+║   "4 CRONs max. 5 crashes a lot."       (Feb 9, 2026)                       ║
+║   "Stopped apps still hold CRON slots." (Feb 9, 2026)                       ║
+║   "Always save learnings on completion."(Feb 9, 2026)                       ║
 ║                                                                               ║
-║                              - SOVEREIGN MEMORY v4.0                          ║
+║                              - SOVEREIGN MEMORY v5.0                          ║
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```

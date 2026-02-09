@@ -31,19 +31,17 @@ VAPI_API_URL = "https://api.vapi.ai/call"
 
 
 def dial_prospect(phone_number: str, company_name: str = "", city: str = "", 
-                  assistant_id: str = None, first_message: str = None) -> dict:
+                  assistant_id: str = None, first_message: str = None,
+                  metadata_overrides: dict = None) -> dict:
     """
-    Make an outbound call to a prospect.
+    Make an outbound call to a prospect with Metadata Injection support.
     
     Args:
         phone_number: Customer phone number (E.164 format: +1XXXXXXXXXX)
         company_name: Company name for context
         city: City for context
         assistant_id: Which assistant to use (defaults to Sarah)
-        first_message: Custom first message (optional)
-    
-    Returns:
-        dict with call_id and status
+        metadata_overrides: Context metadata for Sarah's memory (Phase 5)
     """
     if not VAPI_PRIVATE_KEY:
         return {"error": "VAPI_PRIVATE_KEY not configured"}
@@ -67,13 +65,16 @@ def dial_prospect(phone_number: str, company_name: str = "", city: str = "",
     }
     
     # Optional: Add context as metadata
-    if company_name or city:
+    if company_name or city or metadata_overrides:
         payload["metadata"] = {
             "company_name": company_name,
             "city": city,
             "source": "outbound_dialer",
             "timestamp": datetime.now().isoformat()
         }
+        if metadata_overrides:
+            from modules.vapi.metadata_injector import inject_metadata_into_payload
+            payload = inject_metadata_into_payload(payload, metadata_overrides)
     
     try:
         response = requests.post(

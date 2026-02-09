@@ -11,7 +11,7 @@ import modal
 from core.image_config import image, VAULT
 from core.apps import engine_app as app
 
-@app.function(schedule=modal.Cron("*/1 * * * *"), image=image, secrets=[VAULT])
+@app.function(image=image, secrets=[VAULT]) # Schedule disabled (using Phase 5 Heartbeat instead)
 def master_pulse():
     """
     UNIFIED ORCHESTRATOR - Handles all scheduling priorities:

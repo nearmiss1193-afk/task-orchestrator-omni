@@ -6,7 +6,7 @@ import modal
 from core.image_config import image, VAULT
 from core.apps import engine_app as app
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/2 * * * *"))
+@app.function(image=image, secrets=[VAULT]) # Schedule disabled to satisfy 5-cron limit
 def tag_triggered_ai_response():
     """
     Checks for contacts with 'ai_reply_requested' tag and fires response.

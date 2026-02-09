@@ -26,7 +26,7 @@ def get_base_image():
             "pytz",
             "python-dateutil"
         )
-        .run_commands("playwright install --with-deps chromium")
+#        .run_commands("playwright install --with-deps chromium")
         .add_local_dir("utils", remote_path="/root/utils")
         .add_local_dir("workers", remote_path="/root/workers")
         .add_local_file("workers/instant_response.py", remote_path="/root/workers/instant_response.py")
@@ -37,6 +37,9 @@ def get_base_image():
         .add_local_dir("modules/database", remote_path="/root/modules/database")
         .add_local_dir("modules/ai", remote_path="/root/modules/ai")
         .add_local_dir("modules/analytics", remote_path="/root/modules/analytics")
+        .add_local_dir("modules/vapi", remote_path="/root/modules/vapi")
+        .add_local_dir("modules/learning", remote_path="/root/modules/learning")
+        .add_local_dir("modules/bridge", remote_path="/root/modules/bridge")
         .add_local_file("modules/outbound_dialer.py", remote_path="/root/modules/outbound_dialer.py")
     )
 

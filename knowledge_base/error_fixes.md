@@ -453,3 +453,25 @@ SUPABASE_URL=https://rzcpfwkygdvoshtwxncs.supabase.co
 **Confidence**: 100%
 
 ---
+
+## DeploymentError: CRON Limit Exceeded (Feb 9, 2026)
+
+**Error Message**: `Deployment failed: reached limit of 5 cron jobs (# already deployed => 2, # in this app => 4)`
+
+**Location**: Modal CLI during `modal deploy deploy.py`
+
+**Root Cause**: Modal workspace has a hard 5-CRON limit. Stopped apps still hold CRON slots. Previous deployments and orphaned apps (`test-deploy-delete-me`, `empire-command-center`, old `ghl-omni-automation`) were holding stale CRON slots even after being stopped.
+
+**Fix**:
+
+1. Stop ALL stale apps by App ID (not name): `python -m modal app stop <app-id>`
+2. Stop the existing `ghl-omni-automation` to clear its stale CRONs
+3. Reduce CRONs in `deploy.py` — remove lowest priority CRON (`trigger_self_learning_loop`)
+4. User Rule: **Max 4 CRONs, not 5** — using 5 causes instability
+5. Redeploy fresh
+
+**Prevention**: Before every deploy, run `python -m modal app list --json` and count total CRONs across ALL apps. Keep our app at 3 CRONs max (heartbeat, outreach, lead_sync). Use `--json` flag to avoid Windows Unicode rendering issues.
+
+**Confidence**: 100%
+
+---
