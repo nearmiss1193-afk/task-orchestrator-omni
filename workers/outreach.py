@@ -132,7 +132,7 @@ Dan"""
 {tracking_pixel}"""
 
     # --- SEND VIA RESEND API ---
-    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <onboarding@resend.dev>")
+    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
     
     payload = {
         "from": from_email,

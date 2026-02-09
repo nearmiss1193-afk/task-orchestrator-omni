@@ -21,6 +21,7 @@ def get_base_image():
             "supabase",
             "fastapi",
             "stripe",
+            "resend",
             "google-generativeai>=0.5.0",
             "dnspython",
             "pytz",
