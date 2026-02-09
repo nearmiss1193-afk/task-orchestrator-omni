@@ -394,17 +394,24 @@ ALWAYS verify webhook URLs against GHL dashboard screenshots.
 
 ---
 
-## 📧 SECTION 12: GMAIL API CREDENTIALS (CRITICAL - Feb 5, 2026)
+## 📧 SECTION 12: EMAIL DELIVERY STACK (Updated Feb 9, 2026)
 
-### ⚠️ CRITICAL RULE: Gmail API is PRIMARY Email Method
+### ⚠️ CRITICAL RULE: Email Delivery Priority
 
-**GHL is for CRM only, NOT for sending cold emails.**
+**GHL is for CRM + SMS webhooks ONLY. NOT for sending emails directly.**
 
 ```
-PRIMARY: Gmail OAuth/API via gmail_api_sender.py
-BACKUP:  Resend API (goes to spam)
-AVOID:   GHL webhooks (broken), GHL API (private, doesn't work)
+PRIMARY:  Resend API (tracked: opens, clicks, bounces, delivery)
+BACKUP:   Gmail OAuth/API via gmail_api_sender.py
+SMS ONLY: GHL webhooks (for SMS dispatch to real GHL contacts)
+BANNED:   GHL API (PIT token returns 401, $99 plan has no proper scopes)
 ```
+
+> [!CAUTION]
+> **DO NOT USE GHL API FOR ANYTHING.** The $99/month GHL plan only includes
+> a Private Integration Token (PIT) that returns 401 Unauthorized on most
+> endpoints. We have verified this is unreliable. Use GHL WEBHOOKS only
+> for SMS. Until full GHL migration away.
 
 ### Files
 
@@ -876,6 +883,28 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 
 ---
 
+### Section 19: Feb 9, 2026 — GHL API Policy + Phase 3 Revenue Optimization
+
+> [!CAUTION]
+> **GHL API IS BANNED.** Owner directive: unreliable on $99/month plan.
+> PIT token returns 401. Use GHL WEBHOOKS only. Plan to migrate away from GHL entirely.
+
+- **GHL API (BANNED):** PIT token `pit-1bc9b50a...` returns 401 Unauthorized on Contacts API (both GET and POST). $99/month plan only provides Private Integration Token with insufficient scopes. Verified Feb 9, 2026.
+- **GHL WEBHOOKS (APPROVED):** SMS dispatch goes through GHL webhook `uKaqY2KaULkCeMHM7wmt` — this works and is the ONLY way we interact with GHL for outbound messaging.
+- **Email: Resend API (PRIMARY):** Switched email dispatch from GHL webhook to Resend API. Gives full tracking: opens, clicks, bounces. No GHL ID needed.
+- **Phase 3 Revenue Optimization (Board-Approved):**
+  1. ✅ Resend API email dispatch with A/B testing (4 subject variants)
+  2. ✅ Smart personalized body template (67% of leads had NULL ai_strategy, got generic email)
+  3. ✅ Tracking pixel embedded in every email → logs to `email_opens` table
+  4. ⚠️ GHL contact enrichment BLOCKED → can't use API, 444 SCRAPED_ leads stay as-is until GHL migration
+
+**Sovereign Laws Added:**
+
+- "GHL API is banned. Webhooks only. Plan to migrate away." (Owner Directive, Feb 9, 2026)
+- "SCRAPED_ leads can't receive SMS. Only 171/615 have real GHL IDs." (Feb 9, 2026)
+
+---
+
 ```text
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
@@ -887,8 +916,9 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 ║   "4 CRONs max. 5 crashes a lot."       (Feb 9, 2026)                       ║
 ║   "Stopped apps still hold CRON slots." (Feb 9, 2026)                       ║
 ║   "Always save learnings on completion."(Feb 9, 2026)                       ║
+║   "GHL API is BANNED. Webhooks only."   (Feb 9, 2026)                       ║
 ║                                                                               ║
-║                              - SOVEREIGN MEMORY v5.0                          ║
+║                              - SOVEREIGN MEMORY v5.1                          ║
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```

@@ -496,3 +496,29 @@ SUPABASE_URL=https://rzcpfwkygdvoshtwxncs.supabase.co
 **Confidence**: 100%
 
 ---
+
+## GHL API 401 Unauthorized — PIT Token Scope Insufficient (Feb 9, 2026)
+
+**Error Message**: `{"statusCode":401,"message":"The token is not authorized for this scope."}`
+
+**Location**: Any call to `https://services.leadconnectorhq.com/contacts/` or other GHL v2 API endpoints
+
+**Root Cause**: The $99/month GHL plan only provides a Private Integration Token (PIT) with insufficient scopes. Both GET and POST requests to the Contacts API return 401. The PIT (`pit-1bc9b50a...`) cannot read or write contacts. This is a plan limitation, not a code bug.
+
+**Fix**:
+
+> [!CAUTION]
+> **OWNER DIRECTIVE: DO NOT USE GHL API. It is unreliable on the $99 plan.**
+
+```text
+BANNED:   GHL API (all endpoints) — returns 401 on $99 plan
+APPROVED: GHL webhooks — for SMS dispatch to contacts with real GHL IDs only
+PRIMARY:  Resend API — for all email sending (tracked: opens, clicks, bounces)
+PLAN:     Migrate away from GHL entirely
+```
+
+**Prevention**: Never write code that calls `services.leadconnectorhq.com` directly. Use GHL webhooks (`hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/...`) for SMS only. For emails, use Resend API. The `scripts/enrich_ghl_contacts.py` script is archived — it cannot work on the current plan.
+
+**Confidence**: 100% (verified both GET and POST return 401)
+
+---

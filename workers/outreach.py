@@ -1,6 +1,15 @@
 """
 MISSION: OUTREACH WORKERS - Hardened Email/SMS/Call Dispatch
 All with webhook validation and error checks
+
+GHL API POLICY (Owner Directive, Feb 9, 2026):
+  ❌ BANNED:  GHL API (all endpoints) — $99 plan PIT token returns 401
+  ✅ EMAIL:   Resend API (tracked: opens, clicks, bounces, A/B tested)
+  ✅ SMS:     GHL webhooks ONLY (for leads with real GHL contact IDs)
+  🔄 PLAN:   Migrate away from GHL entirely
+
+DO NOT write code that calls services.leadconnectorhq.com directly.
+Use GHL webhook URL for SMS only. Use Resend API for all email.
 """
 import sys
 import os
