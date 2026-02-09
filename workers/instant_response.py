@@ -1,6 +1,11 @@
 """
 MISSION: INSTANT RESPONSE WORKER
 Triggers AI responses based on GHL tag changes ('ai_reply_requested')
+
+⚠️ DEPRECATED: This file uses GHL API direct calls (services.leadconnectorhq.com)
+   which return 401 on our $99/month plan. Owner directive (Feb 9, 2026):
+   GHL API is BANNED. Use GHL webhooks only. Plan to migrate away from GHL.
+   This worker will NOT function until migrated to webhook-based approach.
 """
 import modal
 from core.image_config import image, VAULT

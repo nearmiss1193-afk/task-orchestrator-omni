@@ -1,3 +1,10 @@
+"""
+⚠️ DEPRECATED — GHL API BANNED (Owner Directive, Feb 9, 2026)
+This file uses GHL API direct calls (services.leadconnectorhq.com/contacts/)
+which return 401 Unauthorized on our $99/month plan. DO NOT USE.
+Use GHL webhooks for SMS only. Use Resend API for email.
+Plan to migrate away from GHL entirely.
+"""
 import json
 import os
 import requests

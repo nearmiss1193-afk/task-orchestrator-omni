@@ -2,6 +2,10 @@
 MISSION: UNIFIED LEAD SYNC (Phase 5)
 Establishing a single Source of Truth by merging Resend delivery stats 
 and GHL pipeline stages into the Supabase master_lead_dossier.
+
+⚠️ DEPRECATED: GHL pipeline sync uses GHL API direct calls which return
+   401 on our $99/month plan. Owner directive (Feb 9, 2026): GHL API is
+   BANNED. Use GHL webhooks only. Plan to migrate away from GHL entirely.
 """
 
 import os
