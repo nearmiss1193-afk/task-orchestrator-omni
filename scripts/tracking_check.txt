@@ -1,0 +1,4 @@
+﻿Error: {'message': "Could not find the table 'public.email_tracking' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.email_opens'", 'details': None}
+email_opens table exists, has 1 rows
+
+outbound_touches columns: ['channel', 'company', 'correlation_id', 'id', 'payload', 'phone', 'run_id', 'status', 'ts', 'variant_id', 'variant_name', 'vertical']

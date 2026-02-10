@@ -1,0 +1,12 @@
+﻿Sample of 10 leads:
+  With ai_strategy content: 2
+  With SCRAPED_ GHL IDs: 7
+
+=== ALL LEADS ===
+Total: 615
+ai_strategy NULL: 411
+ai_strategy SET: 204
+SCRAPED_ GHL IDs: 444
+Real GHL IDs: 171
+
+Sample ai_strategy: saw your site, had a quick question...

@@ -1,0 +1,37 @@
+﻿==================================================
+PHASE 3 VERIFICATION
+==================================================
+
+--- 1. Latest 10 Email Touches ---
+  2026-02-09T21:10 | ? | V-: - | ID: -
+  2026-02-09T21:00 | ? | V-: - | ID: -
+  2026-02-09T21:00 | ? | V-: - | ID: -
+  2026-02-09T20:50 | ? | V-: - | ID: -
+  2026-02-09T20:50 | ? | V-: - | ID: -
+  2026-02-09T20:50 | ? | V-: - | ID: -
+  2026-02-09T20:50 | ? | V-: - | ID: -
+  2026-02-09T19:54 | ? | V-: - | ID: -
+  2026-02-09T19:54 | ? | V-: - | ID: -
+  2026-02-09T19:54 | ? | V-: - | ID: -
+
+--- 2. A/B Variant Distribution ---
+  Variant pre-AB: 247 emails
+  Variant v1_cold_email: 196 emails
+
+--- 3. Email Opens (Pixel Tracking) ---
+  Total tracked opens: 5
+  2026-02-08T15:50 | None | None
+  2026-02-08T15:50 | None | None
+  2026-02-08T15:26 | None | None
+  2026-02-08T15:26 | None | None
+  2026-02-08T15:26 | None | None
+
+--- 4. Today's Activity ---
+  Emails today: 38
+
+--- 5. GHL ID Status ---
+  Real GHL IDs: 171 (SMS eligible)
+  SCRAPED_ IDs: 444 (need enrichment)
+  Total: 615
+
+==================================================

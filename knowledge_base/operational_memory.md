@@ -935,6 +935,78 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 
 ---
 
+### Section 21: Feb 9, 2026 — Revenue Strategy & Audit Pipeline (Board Consensus)
+
+> [!CAUTION]
+> **3 MONTHS, 0 CUSTOMERS, $0 REVENUE.** The system works. The pipeline works.
+> The emails deliver. But the MESSAGE doesn't give prospects a reason to reply.
+> Generic cold pitches are indistinguishable from spam. The audit PDF is the fix.
+
+- **Root Cause of Zero Revenue:** Emails are generic cold pitches ("we help businesses like yours"). No value delivered upfront. Nothing that makes a prospect think "I need this."
+- **The Fix:** AI Visibility Audit PDF attached to outreach emails. Prospect gets a personalized 2-4 page report showing their website's performance, privacy compliance gaps, and competitor comparison.
+
+#### System State (Honest Assessment)
+
+| Channel | Status | Quality | Revenue Impact |
+|---------|--------|---------|----------------|
+| Email (Resend) | ✅ Live | Generic pitch | Zero replies |
+| SMS (GHL) | ⚠️ Partial | 171 eligible, basic template | Zero replies |
+| Voice (Sarah/Vapi) | ❌ Not connected | Code exists, not wired | N/A |
+| AI Audit PDF | ❌ Not built | Knowledge exists, code not written | **Highest ROI** |
+
+#### Engine v3 Follow-Up Deployed
+
+- Step 1: Day 0 — Initial email (A/B subject, 4 variants)
+- Step 2: Day 3 — Follow-up ("Following up, {name}")
+- Step 3: Day 7 — Final attempt ("Last note + free AI audit offer")
+- Max 3 touches then `sequence_complete`
+- **108 leads already in pipeline, follow-ups start ~Feb 12**
+
+#### Lead Data for Audit Pipeline
+
+| Metric | Count | Notes |
+|--------|-------|-------|
+| Total leads | 615 | In `contacts_master` |
+| Has `website_url` | 172 | Can generate real PageSpeed audit |
+| Has `email` | 252 | Can receive audit email |
+| Audit candidates (website + email) | ~150 | Best prospects for audit email |
+| No website | 443 | Can still get FDBR-only audit (research phase) |
+
+#### Audit PDF Pipeline (NEXT BUILD)
+
+1. **`workers/audit_generator.py`** — New Modal function:
+   - Input: `lead_id` from `contacts_master`
+   - Calls Google PageSpeed Insights API (free, no key needed for basic)
+   - Checks for privacy policy page (`/privacy`, `/privacy-policy`)
+   - Generates PDF with ReportLab (Traffic Light table)
+   - Uploads PDF to Supabase Storage or encodes as base64
+   - Returns PDF URL/attachment
+
+2. **FDBR Compliance Hook (Always Red)**
+   - Every Florida business without a FDBR-compliant privacy policy = 🔴 CRITICAL
+   - Mentions $50K fine potential
+   - Offer: "We'll fix this for free as a local business courtesy"
+   - This is the emotional trigger that gets replies
+
+3. **Email Integration**
+   - Modify `dispatch_email_logic` to generate audit → attach PDF → personalized email
+   - Subject: "{company_name}: Your AI Visibility Audit Results"
+   - Body references specific findings from the audit
+   - PDF attached via Resend attachments API
+
+4. **Dependencies to Install**
+   - `reportlab` — PDF generation
+   - `Pillow` — for screenshots if needed
+   - Google PageSpeed API — free tier, no auth needed
+
+**Sovereign Laws Added:**
+
+- "Generic cold emails are spam. Audit PDFs are value." (Feb 9, 2026)
+- "Infrastructure without a message is a silent machine." (Feb 9, 2026)
+- "The audit sells the service. The email delivers the audit." (Feb 9, 2026)
+
+---
+
 ```text
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
@@ -948,8 +1020,10 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 ║   "Always save learnings on completion."(Feb 9, 2026)                       ║
 ║   "GHL API is BANNED. Webhooks only."   (Feb 9, 2026)                       ║
 ║   "Exit codes lie. Visual proof only."  (Feb 9, 2026)                       ║
+║   "Generic emails are spam. Audits are value." (Feb 9, 2026)                ║
+║   "The audit sells the service."        (Feb 9, 2026)                       ║
 ║                                                                               ║
-║                              - SOVEREIGN MEMORY v5.2                          ║
+║                              - SOVEREIGN MEMORY v5.3                          ║
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```

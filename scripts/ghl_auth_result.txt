@@ -1,0 +1,12 @@
+﻿Token: pit-1bc9b50a-7e5e-4c...
+Location: uFYcZA7Zk6EcBze5B4oH
+
+--- Test 1: GET contacts (existing working pattern) ---
+  Status: 401
+  Response: {"statusCode":401,"message":"The token is not authorized for this scope."}
+
+--- Test 2: POST create contact ---
+  Status: 401
+  Response: {"statusCode":401,"message":"The token is not authorized for this scope."}
+  ❌ Failed to create contact
+  Full response: {"statusCode":401,"message":"The token is not authorized for this scope."}

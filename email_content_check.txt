@@ -1,0 +1,28 @@
+﻿python :   File 
+"<string>", line 7
+At line:1 char:32
++ $env:PYTHONIOENCODI
+NG='utf-8'; python 
+-c "
++                    
+            
+~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (  File    
+ "<string>", line    
+ 7:String) [], R    
+emoteException
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+    print(f'Name: 
+{l.get(" 
+full_name\)}')
+                     
+    ^
+SyntaxError: 
+unterminated string 
+literal (detected at 
+line 7)
