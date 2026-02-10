@@ -579,13 +579,34 @@ def auto_outreach_loop():
                 print(f"⏳ Lead {lead_id} not ready for Step 3 yet (needs 7 days)")
                 continue
         
-        print(f"📧 Route -> Follow-up Email (Step {step}): {email}")
-        try:
-            dispatch_followup_email(lead_id, step)
-        except Exception as e:
-            import traceback
-            print(f"❌ Follow-up Failed for {lead_id} Step {step}: {e}")
-            traceback.print_exc()
+        # Route follow-up: audit PDF for Step 2 if has website, generic otherwise
+        website = lead.get('website_url')
+        if step == 2 and website:
+            print(f"📊 Route -> AUDIT Follow-up (Step 2): {email} | site: {website}")
+            try:
+                dispatch_audit_email.local(lead_id)
+                # Update timestamp so Day 7 timing works correctly
+                from datetime import datetime as dt
+                supabase.table("contacts_master").update({
+                    "updated_at": dt.now(timezone.utc).isoformat()
+                }).eq("id", lead_id).execute()
+            except Exception as e:
+                import traceback
+                print(f"❌ Audit Follow-up Failed for {lead_id}: {e}")
+                traceback.print_exc()
+                # Fallback to generic follow-up
+                try:
+                    dispatch_followup_email(lead_id, step)
+                except Exception as e2:
+                    print(f"❌ Generic follow-up also failed: {e2}")
+        else:
+            print(f"📧 Route -> Follow-up Email (Step {step}): {email}")
+            try:
+                dispatch_followup_email(lead_id, step)
+            except Exception as e:
+                import traceback
+                print(f"❌ Follow-up Failed for {lead_id} Step {step}: {e}")
+                traceback.print_exc()
 
 
 def dispatch_followup_email(lead_id: str, step: int):
