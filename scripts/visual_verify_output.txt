@@ -1,4 +1,4 @@
-VISUAL VERIFICATION REPORT — 2026-02-09 18:33:42
+VISUAL VERIFICATION REPORT — 2026-02-09 20:31:23
 ============================================================
 
 ============================================================
@@ -10,53 +10,53 @@ VISUAL VERIFICATION REPORT — 2026-02-09 18:33:42
 
 --- Recent Emails (Last 15) ---
   Total returned: 20
-  2026-02-09 23:30:11 | delivered    | to=bookingteam@callahoy.com
+  2026-02-10 01:25:12 | delivered    | to=dreyna1973@gmail.com
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: 1fe58836-ea46-4b5f-9...
+  2026-02-10 01:25:11 | sent         | to=joe@yps.com
+    subject: YPS, saw something about your industry
+    from: Dan <dan@aiserviceco.com> | id: a99d51b3-d298-4895-b...
+  2026-02-10 01:25:11 | delivered    | to=info@baconplumbing.com
+    subject: Noticed something on your site
+    from: Dan <dan@aiserviceco.com> | id: 0a49bf13-bcab-43cd-a...
+  2026-02-10 01:25:10 | delivered    | to=lynxhvactx@gmail.com
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: 55d0581a-baea-4ac2-b...
+  2026-02-10 01:25:08 | delivered    | to=info@acmeusa.net
+    subject: Noticed something on your site
+    from: Dan <dan@aiserviceco.com> | id: 6dc1b3df-e438-489a-b...
+  2026-02-10 01:25:08 | delivered    | to=RedeemedAirAndHVAC@Gmail.com
     subject: Quick question about your company
-    from: Dan <dan@aiserviceco.com> | id: 96aa9405-53d0-4bd9-9...
-  2026-02-09 23:30:10 | bounced      | to=contactusackennysair@gmail.com
+    from: Dan <dan@aiserviceco.com> | id: 7e37f999-17b6-494c-a...
+  2026-02-10 01:20:10 | sent         | to=info@easyac.net
     subject: Quick question about your company
-    from: Dan <dan@aiserviceco.com> | id: 164868f9-8527-4cd9-b...
-  2026-02-09 23:30:09 | bounced      | to=austin@abcpest.com
-    subject: ABC, saw something about your industry
-    from: Dan <dan@aiserviceco.com> | id: 9c7de6fe-fe39-40c0-a...
-  2026-02-09 23:30:09 | sent         | to=contact@miamicomfort.com
-    subject: Noticed something on your site
-    from: Dan <dan@aiserviceco.com> | id: ee98c40c-1804-40af-8...
-  2026-02-09 23:30:08 | delivered    | to=service@alamoaustinair.com
-    subject: Noticed something on your site
-    from: Dan <dan@aiserviceco.com> | id: 88172ab6-9cc7-4f43-9...
-  2026-02-09 23:30:08 | delivered    | to=admin@thecoolestservice.com
-    subject: Noticed something on your site
-    from: Dan <dan@aiserviceco.com> | id: 4059fb9a-8079-47f2-b...
-  2026-02-09 23:30:07 | delivered    | to=tempcontrolinc@frontier.com
-    subject: Temp, saw something about your industry
-    from: Dan <dan@aiserviceco.com> | id: 93b0b94c-e226-45d4-8...
-  2026-02-09 23:30:06 | delivered    | to=service_request@standardtvandappliance.com
+    from: Dan <dan@aiserviceco.com> | id: e628aabe-9931-4ab4-b...
+  2026-02-10 01:20:10 | delivered    | to=belleairoffice@belleairac.com
+    subject: Belle, saw something about your industry
+    from: Dan <dan@aiserviceco.com> | id: fc3b06d7-6f2d-4fe1-8...
+  2026-02-10 01:20:09 | delivered    | to=hello@efficienttexas.com
     subject: Quick question about your company
-    from: Dan <dan@aiserviceco.com> | id: f31b584c-5dd8-462d-a...
-  2026-02-09 23:25:09 | delivered    | to=maintenance@soundheating.com
+    from: Dan <dan@aiserviceco.com> | id: a984af8d-7874-491c-8...
+  2026-02-10 01:20:09 | delivered    | to=customerservice@abacusplumbing.net
+    subject: This caught my eye about your company
+    from: Dan <dan@aiserviceco.com> | id: eb7d84a1-4c48-4cb5-a...
+  2026-02-10 01:20:08 | delivered    | to=info@jacobsheating.com
+    subject: Jacobs, saw something about your industry
+    from: Dan <dan@aiserviceco.com> | id: 1786657f-2c79-49b8-8...
+  2026-02-10 01:20:07 | delivered    | to=info@tobinhvac.com
+    subject: TOBIN, saw something about your industry
+    from: Dan <dan@aiserviceco.com> | id: 63af59dc-873c-436b-8...
+  2026-02-10 01:20:07 | delivered    | to=info@bleuwavecommercialhvac.com
     subject: Noticed something on your site
-    from: Dan <dan@aiserviceco.com> | id: 2ad63c38-04f6-49ee-9...
-  2026-02-09 23:25:08 | bounced      | to=service@spencerheatingandair.com
+    from: Dan <dan@aiserviceco.com> | id: 4822592c-bb0b-4ed9-9...
+  2026-02-10 01:15:10 | delivered    | to=info@callacr.com
     subject: This caught my eye about your company
-    from: Dan <dan@aiserviceco.com> | id: f6510f81-b501-4e62-b...
-  2026-02-09 23:25:07 | delivered    | to=anytimeairabilene@yahoo.com
-    subject: This caught my eye about your company
-    from: Dan <dan@aiserviceco.com> | id: 658b1106-7e52-4e9f-9...
-  2026-02-09 23:25:06 | delivered    | to=norwayacteam@gmail.com
-    subject: Noticed something on your site
-    from: Dan <dan@aiserviceco.com> | id: 23b56c73-55e4-4e8b-9...
-  2026-02-09 23:20:07 | delivered    | to=info@forestairac.com
-    subject: This caught my eye about your company
-    from: Dan <dan@aiserviceco.com> | id: 06583e6e-ef4d-4105-8...
-  2026-02-09 23:15:12 | delivery_delayed | to=contact@sanantonioair.com
-    subject: This caught my eye about your company
-    from: Dan <dan@aiserviceco.com> | id: e62306f4-2d1e-4fd3-9...
-  2026-02-09 23:15:12 | delivered    | to=staff@hacr.alabama.gov
-    subject: This caught my eye about your company
-    from: Dan <dan@aiserviceco.com> | id: b156f670-c8e9-4c9a-9...
+    from: Dan <dan@aiserviceco.com> | id: 6536fdb5-96e5-480c-a...
+  2026-02-10 01:15:09 | delivered    | to=service@bobheinmiller.com
+    subject: Quick question about your company
+    from: Dan <dan@aiserviceco.com> | id: f2cb5e52-61a4-487f-b...
 
-  Summary: delivered=10, bounced=3, opened=0
+  Summary: delivered=13, bounced=0, opened=0
 
 --- Detailed View: Most Recent Email ---
 
@@ -67,53 +67,57 @@ VISUAL VERIFICATION REPORT — 2026-02-09 18:33:42
 --- Today's Outreach Activity ---
   Total touches today: 20+
   Emails: 20 | SMS: 0
-  With A/B variant: 16
-  With Resend ID: 16
+  With A/B variant: 18
+  With Resend ID: 18
 
 --- Latest 5 Touches ---
-  2026-02-09T23:30:11 | ch=email | variant=Quick question about your company | your company
-    status=sent | resend_id=96aa9405-53d0-4 | uid=9603385f
-  2026-02-09T23:30:10 | ch=email | variant=Quick question about your company | your company
-    status=sent | resend_id=164868f9-8527-4 | uid=1fd9a856
-  2026-02-09T23:30:10 | ch=email | variant=ABC, saw something about your industry | your company
-    status=sent | resend_id=9c7de6fe-fe39-4 | uid=4646dfa3
-  2026-02-09T23:30:09 | ch=email | variant=Noticed something on your site | your company
-    status=sent | resend_id=ee98c40c-1804-4 | uid=2f2487e5
-  2026-02-09T23:30:09 | ch=email | variant=Noticed something on your site | your company
-    status=sent | resend_id=88172ab6-9cc7-4 | uid=658126e5
+  2026-02-10T01:30:12 | ch=email | variant=- | ?
+    status=sent | resend_id= | uid=
+  2026-02-10T01:25:12 | ch=email | variant=This caught my eye about your company | your company
+    status=sent | resend_id=1fe58836-ea46-4 | uid=f315f798
+  2026-02-10T01:25:12 | ch=email | variant=YPS, saw something about your industry | your company
+    status=sent | resend_id=a99d51b3-d298-4 | uid=08f371d8
+  2026-02-10T01:25:11 | ch=email | variant=Noticed something on your site | your company
+    status=sent | resend_id=0a49bf13-bcab-4 | uid=ac0d8fb8
+  2026-02-10T01:25:10 | ch=email | variant=This caught my eye about your company | your company
+    status=sent | resend_id=55d0581a-baea-4 | uid=c2894a58
 
 --- A/B Variant Distribution ---
-  ABC, saw something about your industry: 1 emails
-  Comfort, quick question about your industry: 1 emails
-  Noticed something on your site: 11 emails
-  Quick question about your company: 7 emails
-  Quick your company question: 3 emails
-  Roth, quick question about your industry: 1 emails
-  Temp, saw something about your industry: 1 emails
-  The, quick question about your industry: 1 emails
-  This caught my eye about your company: 19 emails
-  pre-AB: 53 emails
-  vortex, quick question about your industry: 1 emails
+  All, saw something about your industry: 1 emails
+  Belle, saw something about your industry: 1 emails
+  Colair, saw something about your industry: 1 emails
+  Gulf, saw something about your industry: 1 emails
+  Jacobs, saw something about your industry: 1 emails
+  Modern, saw something about your industry: 1 emails
+  Noticed something on your site: 10 emails
+  Pell, saw something about your industry: 1 emails
+  Quick question about your company: 17 emails
+  Scott's, saw something about your industry: 1 emails
+  TOBIN, saw something about your industry: 1 emails
+  This caught my eye about your company: 23 emails
+  Washington, saw something about your industry: 1 emails
+  YPS, saw something about your industry: 1 emails
+  pre-AB: 10 emails
 
 --- Email Opens (Pixel Tracking) ---
   Recent opens: 5
-  2026-02-09T23:31:16 | ? | ?
-  2026-02-09T23:30:13 | ? | ?
-  2026-02-09T23:27:33 | ? | ?
-  2026-02-09T23:23:26 | ? | ?
-  2026-02-09T23:15:41 | ? | ?
+  2026-02-10T01:25:21 | ? | ?
+  2026-02-10T01:20:24 | ? | ?
+  2026-02-10T01:20:23 | ? | ?
+  2026-02-10T01:15:14 | ? | ?
+  2026-02-10T00:57:30 | ? | ?
 
 --- Lead Status Distribution ---
-  new: 233
-  research_done: 83
-  outreach_sent: 108
-  no_contact_info: 29
+  new: 89
+  research_done: 8
+  outreach_sent: 210
+  no_contact_info: 146
   customer: 0
 
 --- System Heartbeat ---
-  2026-02-09T23:30:02 | working
-  2026-02-09T23:25:01 | working
-  2026-02-09T23:20:01 | working
+  2026-02-10T01:30:02 | working
+  2026-02-10T01:25:01 | working
+  2026-02-10T01:20:01 | working
 
 --- Campaign Mode ---
   status=working

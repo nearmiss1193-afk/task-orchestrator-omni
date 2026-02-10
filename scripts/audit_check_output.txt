@@ -1,0 +1,23 @@
+﻿New/research_done leads (sample): 20
+  With website_url: 0
+  With email: 13
+  Both (audit candidates): 0
+
+First 5 with both:
+
+First 5 WITHOUT website:
+  ? | email: notfound@example.com | NO WEBSITE
+  ? | email: Info@Seatownservices.Com | NO WEBSITE
+  ? | email: info@hollidayheating.com | NO WEBSITE
+  ? | email: ltrujillo@inlandmechanicalservices.com | NO WEBSITE
+  ? | email: bgladow@salemheatingandsheetmetal.com | NO WEBSITE
+
+Latest 8 touches:
+  2026-02-10T01:35:09.37 | A | your company | Quick question about your company
+  2026-02-10T01:35:08.47 | D | your company | This caught my eye about your company
+  2026-02-10T01:35:07.60 | A | your company | Quick question about your company
+  2026-02-10T01:30:12.40 | ? | ? | ?
+  2026-02-10T01:25:12.82 | D | your company | This caught my eye about your company
+  2026-02-10T01:25:12.12 | C | your company | YPS, saw something about your industry
+  2026-02-10T01:25:11.51 | B | your company | Noticed something on your site
+  2026-02-10T01:25:10.88 | D | your company | This caught my eye about your company
