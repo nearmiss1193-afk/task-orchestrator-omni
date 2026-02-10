@@ -19,7 +19,8 @@ def get_base_image():
             "dnspython",
             "pytz",
             "python-dateutil",
-            "psycopg2-binary"
+            "psycopg2-binary",
+            "reportlab"
         )
         .run_commands("playwright install --with-deps chromium")
         .add_local_dir("utils", remote_path="/root/utils")
