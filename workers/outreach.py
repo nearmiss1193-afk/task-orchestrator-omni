@@ -440,7 +440,7 @@ def auto_outreach_loop():
     from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
     
-    print("🚀 ENGINE v3: Starting autonomous outreach cycle...")
+    print("🚀 ENGINE v4.2: Starting autonomous outreach cycle...")
     supabase = get_supabase()
     
     # 1. Fetch FRESH leads first (priority) → Step 1 initial email
@@ -459,22 +459,20 @@ def auto_outreach_loop():
     fresh_count = len(leads)
     
     # 2. If fresh queue is low, fetch FOLLOW-UP candidates
+    # NOTE: No date filter here — timing check happens per-lead via outbound_touches
     followup_leads = []
     if fresh_count < 10:
         try:
-            # Leads sent outreach 3+ days ago → eligible for follow-up
-            day3_cutoff = (datetime.now(timezone.utc) - timedelta(days=3)).isoformat()
             recycled = supabase.table("contacts_master") \
                 .select("*") \
                 .eq("status", "outreach_sent") \
-                .lt("updated_at", day3_cutoff) \
-                .limit(10 - fresh_count) \
+                .limit(15) \
                 .execute()
             followup_leads = recycled.data or []
             if followup_leads:
-                print(f"♻️ Follow-up candidates: {len(followup_leads)} leads past 3-day cooldown")
+                print(f"♻️ Follow-up candidates found: {len(followup_leads)}")
         except Exception as e:
-            print(f"⚠️ ENGINE: follow-up query error (non-fatal): {e}")
+            print(f"❌ ENGINE: follow-up query error: {e}")
     
     if not leads and not followup_leads:
         print("😴 ENGINE: No leads ready for outreach (fresh or follow-up).")
@@ -542,14 +540,19 @@ def auto_outreach_loop():
         if not email:
             continue
         
-        # Count prior email touches for this lead
+        # Count prior email touches and get last touch timestamp
+        touch_count = 0
+        last_touch_ts = None
         try:
             prior = supabase.table("outbound_touches") \
                 .select("ts,variant_name", count="exact") \
                 .eq("channel", "email") \
                 .eq("phone", lead.get("phone")) \
+                .order("ts", desc=True) \
                 .execute()
             touch_count = prior.count or 0
+            if prior.data:
+                last_touch_ts = prior.data[0].get("ts")
             
             # Also check by company name if phone is null
             if touch_count == 0 and lead.get("company_name"):
@@ -557,8 +560,11 @@ def auto_outreach_loop():
                     .select("ts", count="exact") \
                     .eq("channel", "email") \
                     .eq("company", lead.get("company_name")) \
+                    .order("ts", desc=True) \
                     .execute()
                 touch_count = prior2.count or 0
+                if prior2.data:
+                    last_touch_ts = prior2.data[0].get("ts")
         except Exception as e:
             print(f"⚠️ Touch count query error for {lead_id}: {e}")
             touch_count = 1  # Assume at least 1
@@ -569,14 +575,21 @@ def auto_outreach_loop():
             supabase.table("contacts_master").update({"status": "sequence_complete"}).eq("id", lead_id).execute()
             continue
         
+        # Check timing from LAST TOUCH (source of truth = outbound_touches.ts)
+        if last_touch_ts:
+            day3_cutoff = (datetime.now(timezone.utc) - timedelta(days=3)).isoformat()
+            if last_touch_ts > day3_cutoff:
+                # Last touch was less than 3 days ago — skip
+                continue
+        
         # Determine follow-up step
         step = touch_count + 1  # 2 = first follow-up, 3 = final follow-up
         
-        # Check timing: Step 2 after 3 days, Step 3 after 7 days
-        if step == 3:
+        # Check timing: Step 3 needs 7 days since last touch
+        if step == 3 and last_touch_ts:
             day7_cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
-            if lead.get("updated_at", "") > day7_cutoff:
-                print(f"⏳ Lead {lead_id} not ready for Step 3 yet (needs 7 days)")
+            if last_touch_ts > day7_cutoff:
+                print(f"⏳ Lead {lead_id} not ready for Step 3 yet (needs 7 days since last touch)")
                 continue
         
         # Route follow-up: audit PDF for Step 2 if has website, generic otherwise
@@ -585,11 +598,6 @@ def auto_outreach_loop():
             print(f"📊 Route -> AUDIT Follow-up (Step 2): {email} | site: {website}")
             try:
                 dispatch_audit_email.local(lead_id)
-                # Update timestamp so Day 7 timing works correctly
-                from datetime import datetime as dt
-                supabase.table("contacts_master").update({
-                    "updated_at": dt.now(timezone.utc).isoformat()
-                }).eq("id", lead_id).execute()
             except Exception as e:
                 import traceback
                 print(f"❌ Audit Follow-up Failed for {lead_id}: {e}")
@@ -693,9 +701,7 @@ def dispatch_followup_email(lead_id: str, step: int):
             resend_email_id = resend_data.get("id", "")
             print(f"✅ FOLLOW-UP Step {step} SENT (ID: {resend_email_id})")
             
-            # Update lead timestamp (resets cooldown timer for next step)
-            from datetime import datetime, timezone
-            supabase.table("contacts_master").update({"updated_at": datetime.now(timezone.utc).isoformat()}).eq("id", lead_id).execute()
+            # Timing tracked via outbound_touches.ts (no updated_at column on contacts_master)
             
             # Log to outbound_touches
             supabase.table("outbound_touches").insert({

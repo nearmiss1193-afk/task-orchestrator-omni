@@ -1,0 +1,41 @@
+﻿============================================================
+  BOARD CENSUS — Feb 9, 2026
+============================================================
+
+--- LEAD PIPELINE (615 total) ---
+  outreach_sent: 235
+  no_contact_info: 159
+  skipped_no_url: 101
+  new: 58
+  outreach_dispatched: 22
+  skipped_no_contact: 20
+  calling_initiated: 18
+  interested: 1
+  research_done: 1
+
+--- FOLLOW-UP ELIGIBLE ---
+TOTAL follow-up eligible (3+ days old): 235
+  Sample: 50
+  With website (audit PDF!): 35
+  With email: 28
+
+--- OUTREACH ACTIVITY ---
+Last 24h: 228
+All time: 814
+
+--- HEARTBEAT ---
+  2026-02-10T01:50:01.71 | working
+  2026-02-10T01:45:01.71 | working
+
+--- DATA QUALITY ---
+Website + email: 41
+
+--- TOP AUDIT FOLLOW-UP CANDIDATES ---
+  ? | http://www.atlanticpartnerscorp.com | ?
+  ? | https://www.cooling25.com | contact@cooling25.com
+  ? | http://www.leedsresources.com | ?
+  ? | http://www.theimmigrantacademy.com | ?
+  ? | http://www.lateampartners.com | ?
+  ? | http://www.worldbranddesign.com | ?
+  ? | http://www.siira.world | ?
+  ? | http://www.theimmigrantacademy.com | ?
