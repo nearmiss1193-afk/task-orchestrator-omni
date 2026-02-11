@@ -1,0 +1,37 @@
+﻿============================================================
+  TURBO INSERT — Verified FL Business Leads
+============================================================
+  Total leads: 27
+  With email (priority): 14
+  Website only (will scrape emails later): 13
+  ❌ Roth's Air Conditioning & Refrigeration: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Acu-Temp Heating & Cooling: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ The Lakeland Air Conditioning Company: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Affordable Air Conditioning and Heating: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Action Heating and Cooling: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ CAMS A/C N Plumbing: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Comfort Temp HVAC: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Sun State Air Conditioning: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Energy Air Inc: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Premium Plumbing Tampa: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Cass Plumbing Tampa Bay: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Bay Area Plumbing Inc: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Friends Plumbing Tampa: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Aztec Plumbing & Drains: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Roof Company Orlando: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Quality Roofing Solutions: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ My Roofers Orlando: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Performance Roofing USA: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Knock Out Pest Control Jax: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Turner Pest Control: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Lindsey Pest Services: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Sarasota Lawn & Landscaping: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Sarasota Landscaping Inc: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Segura Landscaping LLC: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Plant Source FL: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Southwest Florida Electric Inc: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  ❌ Collier Electric Fort Myers: {'message': "Could not find the 'campaign_type' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+
+  INSERTED: 0
+  SKIPPED (dup): 0
+  All have websites -> AUDIT PIPELINE READY

@@ -1,0 +1,337 @@
+﻿============================================================
+  NEWSLETTER #1 — LIVE SEND
+============================================================
+Subject: Is Your Website Invisible to 40% of the Internet?
+Eligible recipients: 325
+  ❌ Failed: admin@momentummechanical.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@besttowingdallas.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@dallaselitehvac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@besthvacdallas.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@dallaseliteplumber.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestplumberdallas.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: admin@dallaselitelocksmith.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@houstoneliteelectrician.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestelectricianhouston.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@besttowinghouston.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@besthvachouston.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@houstoneliteplumber.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: admin@houstonelitelocksmith.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestlocksmithhouston.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@miamieliteelectrician.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bestelectricianmiami.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@miamielitetowing.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@besttowingmiami.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: admin@miamielitehvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@miamieliteplumber.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestplumbermiami.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bestlocksmithmiami.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@austineliteelectrician.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestelectricianaustin.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@besttowingaustin.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@austinelitehvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@besthvacaustin.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: admin@austineliteplumber.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestplumberaustin.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@austinelitelocksmith.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bestlocksmithaustin.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestelectriciantampa.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@tampaelitetowing.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: admin@tampaelitehvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@besthvactampa.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@tampaeliteplumber.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bestlocksmithtampa.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@sunsetlawfirm.io — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@westcoastjustice.net — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@metroaccident-la.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@pacificlegal.io — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@lainjuryadvocates.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@floodproofmiami.io — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@dryoutmiami.net — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@waterdamageprofl.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: admin@dallaselitetowing.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@houstonelitetowing.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: nmiss1193@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: owner@aiserviceco.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling25.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: quotes@dallashvac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@centralaireinc.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@mesquiteheatingandair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: CONTACT@BTACINC.COM — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: office@theweatherchangers.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@roth-heat.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@willardac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling1.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: test.vanderbilt.1e0d@example.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: hello@theimmigrantacademy.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: spartantest@aiservico.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@miamielitelocksmith.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: danes@englishforsuccessusa.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: unassigned_lead@demo.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: hvacapplianceguys@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: test@example.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@besttowingtampa.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestelectriciandallas.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: test.vanderbilt.5385@example.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling5.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling7.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling16.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling9.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling3.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling8.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling6.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling12.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling11.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bestlocksmithdallas.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: niss1193@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bestplumberhouston.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@besthvacmiami.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@austinelitetowing.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@tampaeliteelectrician.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: admin@tampaelitelocksmith.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@eliterestorationfl.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: nearmi193@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@miamifloodrescue.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: Info@Seatownservices.Com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: hello@podean.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: nearmiss1193@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@dallaseliteelectrician.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@houstonelitehvac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bestplumbertampa.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: test1@coolairhvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: test2@sunshine.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: test3@arcticbreeze.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: test4@comfortzone.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: test5@proclimate.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: secret_shopper_fixed@aiserviceco.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: ads@doordash.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: ads@block.xyz — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@grey.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: customercare@brodypennell.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: vortex-test@aiservico.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: e.hearsey@abcairandheat.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bobsheating.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@criticalmass.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling13.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: final_successful_test@example.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling10.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling21.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling18.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling19.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling22.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling15.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling26.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling17.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling28.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling20.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling23.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling24.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: placeholder_lead@funnel.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: oneteamhvac@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling27.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@newgen.agency — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: ads@nextdoor.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: northaustin@temperaturepro.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@northsideair.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: admin@airsolutionsbcs.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@freshairhvac.co — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: rayburn_r@suncountryheatingandcooling.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling4.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling29.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: heartlandheatingcooling@yahoo.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@cooling30.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling14.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@cooling2.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@leedsresources.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: seguralandscapingllc@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@rothsairconditioning.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@myroofersorlando.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: sarasotalawnandlandscaping@yahoo.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: roofcompanyorlando@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@knockoutpestelimination.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: support@cassplumbingtampabay.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@sunsethc.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: service@delair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@qualityroofingsolutions.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bayareaplumbinginc.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@performanceroofingusa.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@mypremiumplumbing.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: landscapesarasota@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: office@plantsourcefl.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: customerservice@turnerpest.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@alamoaustinair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@championac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: tworks113@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@comfortairfl.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@aaacalvert.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: hello-austin@radiantplumbing.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@washingtonenergy.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: notfound@example.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: robyn@vickreyheatair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@forestairac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: norwayacteam@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@downtown-air.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@rainaldiplumbing.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: Info.AUB@CallFarnell.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: service@orlandohvacpros.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@superheatandair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: Service@cbhvac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: Info@protekps.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@phoenixclimate.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: maintenance@ferran-services.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: michaelndiane@msn.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@totallycoolac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: bob@gwhac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: staff@hacr.alabama.gov — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contact@sanantonioair.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: anytimeairabilene@yahoo.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@spencerheatingandair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: tempcontrolinc@frontier.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: maintenance@soundheating.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service_request@standardtvandappliance.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: admin@thecoolestservice.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: contact@miamicomfort.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: austin@abcpest.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: contactusackennysair@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: bookingteam@callahoy.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: rgood@cabri-management.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: projects@mullinsheatingandair.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@precisionheatingandair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: Admin@essmwa.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: office@acguyoftampa.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: information@airtechcfl.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: matthew@make-it-wright.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@4seasonsair.net — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: Service@ProTechAC.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@iernaair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: repair@cardinalheating.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: Bruce@dayandnite.net — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@genesrefrigeration.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: jblack@wshvac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@nvstatehvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@seatownservices.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: tgerber@san.rr.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bcbuildingservicesinc.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@honestabeservices.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: homeservice@aircoaustin.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: Info@austinairconditioning.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: Christy@coolatmospherehvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@foxservice.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@hanksheatingcooling.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@coolmenow.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@garymunson.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@airmasters.net — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: gbeurmann@delair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@directhome.solutions — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@mechanicalone.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@millsair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@scottsair.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@gulfcoastairsystems.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: salescoordinators@homecomfortalliance.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@airrescueflorida.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: coolspecialist33@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: strandbrothers@serviceexperts.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: perfectclimate75@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@modernheatandcool.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: sherry@southernheatingllc.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: mitzi.bumpers@farnellac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: service@baldwinhvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@onewayhvactexas.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: pchcsusan@hotmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: callcenter@pcs1201.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: office@haglerac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: landona@perfectservicehvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: office@fairwayhnc.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: Ward@sweatcool.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: sjn9598@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: davidboston388@hotmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: sarah@scott-electric.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: koolkatzac2020@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bryantsheating.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@idealairservices.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@houstonhvacmasters.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: office@headshvac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: sales@colairinc.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: jms@gcincac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@greenwoodheating.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: A1hvac334@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@jaxcooling.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@atlantaairexperts.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: quotes@charlotteclimate.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@comfortairsolutions.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@actionairconditioning.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@tobinhvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@wedohvacus.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: extremeacandheating@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: service@calllocalroots.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: help@ssrfg.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: stanleyhvac.co@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: service@bobheinmiller.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@callacr.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@bleuwavecommercialhvac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@jacobsheating.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: customerservice@abacusplumbing.net — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: hello@efficienttexas.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: belleairoffice@belleairac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@easyac.net — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: RedeemedAirAndHVAC@Gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@acmeusa.net — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: lynxhvactx@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@baconplumbing.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: joe@yps.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: dreyna1973@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@cmheating.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bobjenson.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: m.abdul@jaguarheatingandair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@mrcool4ac.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@hollidayheating.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: ltrujillo@inlandmechanicalservices.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: bgladow@salemheatingandsheetmetal.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@californiaac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: support@airmaxx.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@fischerheating.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@bakerhomeenergy.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@blacklionhvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: hello@glendaleheating.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: service@cornerstonepros.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: kyle@callwaycool.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: shields.ac.az@gmail.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: yvonne.lanot@actionac.net — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@belred.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: kevin@blueflamecomfort.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@wecareairlasvegas.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@guinservice.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: Anthony.snead@unitedheating.net — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: tim@jchamm.tech — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: ewingairandheat@gmail.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: ideal@idealservice.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: support@fuseservice.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: customerservice@pacificheatingcooling.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@aztrademasters.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@frankgayservices.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@ritewayac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: jeff.amelio@olsonenergy.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@dalcohvac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@sierracoolslv.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@greensenergy.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: bumblebreeze.ccr@anyhour.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: service@sammsheatingandair.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: csrleads@skyheating.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: service@coppellac.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: support@hylandservices.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@BullMountainHeating.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: Sales@AAAIAQ.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: gphillis@pyramidheating.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@cytechheatingandcooling.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: administrator@freedom.repair — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: ta-service@lsmech.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: support@lonestarhatxk.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+  ❌ Failed: info@indoorcomforthsv.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: info@mansfieldtxplumbing.com — The mygrowthengine.com domain is not verified. Please, add and verify your domain on https://resend.com/domains
+  ❌ Failed: mail@teamenoch.com — Too many requests. You can only make 2 requests per second. See rate limit response headers for more information. Or contact support to increase rate limit.
+
+============================================================
+  NEWSLETTER #1 RESULTS
+============================================================
+  Sent: 0
+  Errors: 325
+  Subject: Is Your Website Invisible to 40% of the Internet?

@@ -1,0 +1,183 @@
+﻿============================================================
+  AUTO PROSPECTOR v3 — Curated Florida Business List
+============================================================
+
+  Processing: Hays Cooling Heating & Plumbing (https://www.haysusa.com)
+    Skip: no email found
+
+  Processing: Pro-Tech Air Conditioning (https://www.protechac.com)
+    Skip: no email found
+
+  Processing: Gulf Shore Cooling (https://www.gulfshorecooling.com)
+    Skip: no email found
+
+  Processing: Comfort Temp (https://www.comforttemp.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (aa4170d9-91f3-4477-8005-62a3ce9ad1a0, 2026-02-10 03:03:16.55327+00, null, null, info@comforttemp.com, null, https://www.comforttemp.com, 0, null, null, null, new, new, 2026-02-10 03:03:16.55327+00, null, auto_prospect_v3, HVAC contractor, null, 0, f, direct-audit, Comfort Temp).'}
+
+  Processing: Sun State Air Conditioning (https://www.sunstateac.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (d916de96-cd20-44b6-8fb0-df18d29e4f3f, 2026-02-10 03:03:19.090858+00, null, null, ZAC@SUNSTATEAC.COM, null, https://www.sunstateac.com, 0, null, null, null, new, new, 2026-02-10 03:03:19.090858+00, null, auto_prospect_v3, HVAC contractor, null, 0, f, direct-audit, Sun State Air Conditioning).'}
+
+  Processing: Energy Air (https://www.energyair.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (84822cdf-81d1-469d-be7a-db3554d86617, 2026-02-10 03:03:21.108525+00, null, null, info@mysite.com, null, https://www.energyair.com, 0, null, null, null, new, new, 2026-02-10 03:03:21.108525+00, null, auto_prospect_v3, HVAC contractor, null, 0, f, direct-audit, Energy Air).'}
+
+  Processing: Colman Heating & Air (https://www.colmanheatingandair.com)
+    Email extraction error for https://www.colmanheatingandair.com: HTTPSConnectionPool(host='www.colmanheatingandair.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA16D0>: Failed to resolve 'www.colmanheatingandair.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.colmanheatingandair.com/contact: HTTPSConnectionPool(host='www.colmanheatingandair.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA1BD0>: Failed to resolve 'www.colmanheatingandair.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.colmanheatingandair.com/contact-us: HTTPSConnectionPool(host='www.colmanheatingandair.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA1F90>: Failed to resolve 'www.colmanheatingandair.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.colmanheatingandair.com/about: HTTPSConnectionPool(host='www.colmanheatingandair.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA2350>: Failed to resolve 'www.colmanheatingandair.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.colmanheatingandair.com/about-us: HTTPSConnectionPool(host='www.colmanheatingandair.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA2710>: Failed to resolve 'www.colmanheatingandair.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: One Hour Air Orlando (https://www.onehourairorlandofl.com)
+    Email extraction error for https://www.onehourairorlandofl.com: HTTPSConnectionPool(host='www.onehourairorlandofl.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6AC10>: Failed to resolve 'www.onehourairorlandofl.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.onehourairorlandofl.com/contact: HTTPSConnectionPool(host='www.onehourairorlandofl.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE69E50>: Failed to resolve 'www.onehourairorlandofl.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.onehourairorlandofl.com/contact-us: HTTPSConnectionPool(host='www.onehourairorlandofl.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B610>: Failed to resolve 'www.onehourairorlandofl.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.onehourairorlandofl.com/about: HTTPSConnectionPool(host='www.onehourairorlandofl.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B250>: Failed to resolve 'www.onehourairorlandofl.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.onehourairorlandofl.com/about-us: HTTPSConnectionPool(host='www.onehourairorlandofl.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6AE90>: Failed to resolve 'www.onehourairorlandofl.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: Del-Air Heating and Air Conditioning (https://www.delair.com)
+    Skip: no email found
+
+  Processing: Climate Experts Air (https://www.climateexpertsair.com)
+    Email extraction error for https://www.climateexpertsair.com: HTTPSConnectionPool(host='www.climateexpertsair.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6A490>: Failed to resolve 'www.climateexpertsair.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.climateexpertsair.com/contact: HTTPSConnectionPool(host='www.climateexpertsair.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6AD50>: Failed to resolve 'www.climateexpertsair.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.climateexpertsair.com/contact-us: HTTPSConnectionPool(host='www.climateexpertsair.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA2350>: Failed to resolve 'www.climateexpertsair.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.climateexpertsair.com/about: HTTPSConnectionPool(host='www.climateexpertsair.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA1F90>: Failed to resolve 'www.climateexpertsair.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.climateexpertsair.com/about-us: HTTPSConnectionPool(host='www.climateexpertsair.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA1BD0>: Failed to resolve 'www.climateexpertsair.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: Roto-Rooter Tampa (https://www.rotorooter.com)
+    Skip: no email found
+
+  Processing: Alvarez Plumbing (https://www.alvarezplumbing.com)
+    Skip: no email found
+
+  Processing: Clog Kings (https://www.clogkings.com)
+    Email extraction error for https://www.clogkings.com: HTTPSConnectionPool(host='www.clogkings.com', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001790EEA1450>, 'Connection to www.clogkings.com timed out. (connect timeout=10)'))
+    Email extraction error for https://www.clogkings.com/contact: HTTPSConnectionPool(host='www.clogkings.com', port=443): Max retries exceeded with url: /contact (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001790EE6B750>, 'Connection to www.clogkings.com timed out. (connect timeout=10)'))
+    Email extraction error for https://www.clogkings.com/contact-us: HTTPSConnectionPool(host='www.clogkings.com', port=443): Max retries exceeded with url: /contact-us (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001790EE6A990>, 'Connection to www.clogkings.com timed out. (connect timeout=10)'))
+    Email extraction error for https://www.clogkings.com/about: HTTPSConnectionPool(host='www.clogkings.com', port=443): Max retries exceeded with url: /about (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001790EE6B4D0>, 'Connection to www.clogkings.com timed out. (connect timeout=10)'))
+    Email extraction error for https://www.clogkings.com/about-us: HTTPSConnectionPool(host='www.clogkings.com', port=443): Max retries exceeded with url: /about-us (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001790EE6B890>, 'Connection to www.clogkings.com timed out. (connect timeout=10)'))
+    Skip: no email found
+
+  Processing: Bill Fenwick Plumbing (https://www.billfenwick.com)
+    Skip: no email found
+
+  Processing: Aztec Plumbing (https://www.aztecplumbing.net)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (83840780-ff88-4a84-a0d3-a6913d48188c, 2026-02-10 03:05:29.834501+00, null, null, tobacco-free-logo@2x-1-300x225.webp, null, https://www.aztecplumbing.net, 0, null, null, null, new, new, 2026-02-10 03:05:29.834501+00, null, auto_prospect_v3, plumbing company, null, 0, f, direct-audit, Aztec Plumbing).'}
+
+  Processing: Sun Plumbing (https://www.sunplumbing.com)
+    Skip: no email found
+
+  Processing: Sewer Pros (https://www.sewerpros.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (846e74e3-918a-4545-80ca-b5e8d9b23657, 2026-02-10 03:05:41.057784+00, null, null, armando@sewerpros.com, null, https://www.sewerpros.com, 0, null, null, null, new, new, 2026-02-10 03:05:41.057784+00, null, auto_prospect_v3, plumbing company, null, 0, f, direct-audit, Sewer Pros).'}
+
+  Processing: My Plumber SA (https://www.myplumbersa.com)
+    Email extraction error for https://www.myplumbersa.com: HTTPSConnectionPool(host='www.myplumbersa.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE69BD0>: Failed to resolve 'www.myplumbersa.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.myplumbersa.com/contact: HTTPSConnectionPool(host='www.myplumbersa.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B9D0>: Failed to resolve 'www.myplumbersa.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.myplumbersa.com/contact-us: HTTPSConnectionPool(host='www.myplumbersa.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6BED0>: Failed to resolve 'www.myplumbersa.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.myplumbersa.com/about: HTTPSConnectionPool(host='www.myplumbersa.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6AC10>: Failed to resolve 'www.myplumbersa.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.myplumbersa.com/about-us: HTTPSConnectionPool(host='www.myplumbersa.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B250>: Failed to resolve 'www.myplumbersa.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: Universal Roof & Contracting (https://www.universalroof.com)
+    Skip: no email found
+
+  Processing: Code Engineered Systems (https://www.caboroof.com)
+    Email extraction error for https://www.caboroof.com: HTTPSConnectionPool(host='www.caboroof.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6A990>: Failed to resolve 'www.caboroof.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.caboroof.com/contact: HTTPSConnectionPool(host='www.caboroof.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6A490>: Failed to resolve 'www.caboroof.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.caboroof.com/contact-us: HTTPSConnectionPool(host='www.caboroof.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6AAD0>: Failed to resolve 'www.caboroof.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.caboroof.com/about: HTTPSConnectionPool(host='www.caboroof.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA1310>: Failed to resolve 'www.caboroof.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.caboroof.com/about-us: HTTPSConnectionPool(host='www.caboroof.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA1D10>: Failed to resolve 'www.caboroof.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: Mighty Dog Roofing (https://www.mightydogroofing.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (37a27056-c425-4643-9093-15a8687164b1, 2026-02-10 03:05:47.258566+00, null, null, help@mightydogroofing.com, null, https://www.mightydogroofing.com, 0, null, null, null, new, new, 2026-02-10 03:05:47.258566+00, null, auto_prospect_v3, roofing contractor, null, 0, f, direct-audit, Mighty Dog Roofing).'}
+
+  Processing: Westfall Roofing (https://www.westfallroofing.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (44cf889f-605b-4456-b2f9-08cc7420f430, 2026-02-10 03:05:49.222623+00, null, null, info@westfallroofing.com, null, https://www.westfallroofing.com, 0, null, null, null, new, new, 2026-02-10 03:05:49.222623+00, null, auto_prospect_v3, roofing contractor, null, 0, f, direct-audit, Westfall Roofing).'}
+
+  Processing: Done Rite Roofing (https://www.doneriteroofinginc.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (1c74da98-9c4b-407e-97e3-a17f99aba409, 2026-02-10 03:05:51.203077+00, null, null, doneriteroofing@msn.com, null, https://www.doneriteroofinginc.com, 0, null, null, null, new, new, 2026-02-10 03:05:51.203077+00, null, auto_prospect_v3, roofing contractor, null, 0, f, direct-audit, Done Rite Roofing).'}
+
+  Processing: Earl W Johnston Roofing (https://www.ewjroofing.com)
+    Email extraction error for https://www.ewjroofing.com: HTTPSConnectionPool(host='www.ewjroofing.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA2350>: Failed to resolve 'www.ewjroofing.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.ewjroofing.com/contact: HTTPSConnectionPool(host='www.ewjroofing.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA2490>: Failed to resolve 'www.ewjroofing.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.ewjroofing.com/contact-us: HTTPSConnectionPool(host='www.ewjroofing.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA2710>: Failed to resolve 'www.ewjroofing.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.ewjroofing.com/about: HTTPSConnectionPool(host='www.ewjroofing.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA1590>: Failed to resolve 'www.ewjroofing.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.ewjroofing.com/about-us: HTTPSConnectionPool(host='www.ewjroofing.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA07D0>: Failed to resolve 'www.ewjroofing.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: Mister Sparky Tampa (https://www.mistersparky.com)
+    Skip: no email found
+
+  Processing: ServiceMaster Restore (https://www.servicemaster.com)
+    Skip: no email found
+
+  Processing: Wirenut Electric (https://www.callwirenut.com)
+    Skip: no email found
+
+  Processing: Nozzle Nolen (https://www.nozzlenolen.com)
+    Skip: no email found
+
+  Processing: Florida Pest Control (https://www.floridapestcontrol.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (62eeaad3-e5d3-4cc1-b057-01dbbddbd029, 2026-02-10 03:06:30.258616+00, null, null, fbc8c7850da54d7785ed99094f4f9140@sentry.argo22.com, null, https://www.floridapestcontrol.com, 0, null, null, null, new, new, 2026-02-10 03:06:30.258616+00, null, auto_prospect_v3, pest control company, null, 0, f, direct-audit, Florida Pest Control).'}
+
+  Processing: Hulett Environmental Services (https://www.hulettinc.com)
+    Email extraction error for https://www.hulettinc.com: HTTPSConnectionPool(host='www.hulettinc.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B750>: Failed to resolve 'www.hulettinc.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.hulettinc.com/contact: HTTPSConnectionPool(host='www.hulettinc.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6A990>: Failed to resolve 'www.hulettinc.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.hulettinc.com/contact-us: HTTPSConnectionPool(host='www.hulettinc.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B250>: Failed to resolve 'www.hulettinc.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.hulettinc.com/about: HTTPSConnectionPool(host='www.hulettinc.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B890>: Failed to resolve 'www.hulettinc.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.hulettinc.com/about-us: HTTPSConnectionPool(host='www.hulettinc.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6A0D0>: Failed to resolve 'www.hulettinc.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: Massey Services (https://www.masseyservices.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (05ca464f-aab3-439c-bccd-0382b816056a, 2026-02-10 03:06:32.465965+00, null, null, wecare@masseyservices.com, null, https://www.masseyservices.com, 0, null, null, null, new, new, 2026-02-10 03:06:32.465965+00, null, auto_prospect_v3, pest control company, null, 0, f, direct-audit, Massey Services).'}
+
+  Processing: Turner Pest Control (https://www.turnerpest.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (d4a13c43-1bb5-42ee-8acb-19733a7024ff, 2026-02-10 03:06:34.470003+00, null, null, customerservice@turnerpest.com, null, https://www.turnerpest.com, 0, null, null, null, new, new, 2026-02-10 03:06:34.470003+00, null, auto_prospect_v3, pest control company, null, 0, f, direct-audit, Turner Pest Control).'}
+
+  Processing: Pool Troopers (https://www.pooltroopers.com)
+    Skip: no email found
+
+  Processing: ABC Pool Service (https://www.abcpoolservice.com)
+    ❌ DB Error: {'message': 'null value in column "ghl_contact_id" of relation "contacts_master" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (0fa2d001-64ab-47a4-9c18-e5902fc23457, 2026-02-10 03:06:41.663323+00, null, null, info@abcpoolservice.com, null, https://www.abcpoolservice.com, 0, null, null, null, new, new, 2026-02-10 03:06:41.663323+00, null, auto_prospect_v3, pool service company, null, 0, f, direct-audit, ABC Pool Service).'}
+
+  Processing: BrightView Landscapes (https://www.brightview.com)
+    Skip: no email found
+
+  Processing: Down To Earth Landscape (https://www.dtefl.com)
+    Email extraction error for https://www.dtefl.com: HTTPSConnectionPool(host='www.dtefl.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE69E50>: Failed to resolve 'www.dtefl.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.dtefl.com/contact: HTTPSConnectionPool(host='www.dtefl.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6A0D0>: Failed to resolve 'www.dtefl.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.dtefl.com/contact-us: HTTPSConnectionPool(host='www.dtefl.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B890>: Failed to resolve 'www.dtefl.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.dtefl.com/about: HTTPSConnectionPool(host='www.dtefl.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6AC10>: Failed to resolve 'www.dtefl.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.dtefl.com/about-us: HTTPSConnectionPool(host='www.dtefl.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6A990>: Failed to resolve 'www.dtefl.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: Precision Door Service (https://www.precisiondoor.net)
+    Skip: no email found
+
+  Processing: CertaPro Painters Tampa (https://www.certapro.com)
+    Skip: no email found
+
+  Processing: Prolific Powerhouse (https://www.prolificpowerhouse.com)
+    Email extraction error for https://www.prolificpowerhouse.com: HTTPSConnectionPool(host='www.prolificpowerhouse.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE69F90>: Failed to resolve 'www.prolificpowerhouse.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.prolificpowerhouse.com/contact: HTTPSConnectionPool(host='www.prolificpowerhouse.com', port=443): Max retries exceeded with url: /contact (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA2710>: Failed to resolve 'www.prolificpowerhouse.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.prolificpowerhouse.com/contact-us: HTTPSConnectionPool(host='www.prolificpowerhouse.com', port=443): Max retries exceeded with url: /contact-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EEA2490>: Failed to resolve 'www.prolificpowerhouse.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.prolificpowerhouse.com/about: HTTPSConnectionPool(host='www.prolificpowerhouse.com', port=443): Max retries exceeded with url: /about (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE69F90>: Failed to resolve 'www.prolificpowerhouse.com' ([Errno 11001] getaddrinfo failed)"))
+    Email extraction error for https://www.prolificpowerhouse.com/about-us: HTTPSConnectionPool(host='www.prolificpowerhouse.com', port=443): Max retries exceeded with url: /about-us (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001790EE6B750>: Failed to resolve 'www.prolificpowerhouse.com' ([Errno 11001] getaddrinfo failed)"))
+    Skip: no email found
+
+  Processing: ProClean Pressure Washing (https://www.procleanpw.com)
+    Skip: no email found
+
+============================================================
+  RESULTS
+============================================================
+  Total processed: 40
+  Inserted: 0
+  Skipped (duplicate): 0
+  Skipped (no email): 28
+
+  All new leads have website + email -> AUDIT PIPELINE READY

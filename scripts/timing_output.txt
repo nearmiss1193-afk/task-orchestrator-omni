@@ -1,0 +1,28 @@
+﻿Oldest 5 touches:
+  2026-01-18T18:21:47.66 | variant_a | None
+  2026-01-18T22:34:57.33 | variant_a | TestHVAC
+  2026-01-18T23:05:37.96 | variant_b | TestHVAC
+  2026-01-18T23:08:51.33 | variant_final | TestHVAC
+  2026-01-18T23:12:30.04 | variant_url_fix | TestHVAC
+
+Newest 5 touches:
+  2026-02-10T02:05:46.46 | D | your company
+  2026-02-10T02:05:44.03 | A | your company
+  2026-02-10T02:05:42.06 | B | your company
+  2026-02-10T02:05:39.92 | D | your company
+  2026-02-10T02:05:37.86 | B | your company
+
+Total touches all time: 832
+  Last 0 days: 0
+  Last 1 days: 246
+  Last 2 days: 246
+  Last 3 days: 246
+  Last 7 days: 246
+
+Lead created_at distribution:
+  Created in last 0 days: 0
+  Created in last 1 days: 0
+  Created in last 3 days: 0
+  Created in last 7 days: 0
+  Created in last 14 days: 445
+  Created in last 30 days: 483

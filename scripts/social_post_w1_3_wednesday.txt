@@ -1,0 +1,25 @@
+PLATFORM: FACEBOOK
+DAY: Wednesday
+CATEGORY: value
+NICHE FOCUS: pest control company
+==================================================
+
+💰 Slow websites lose 7% in conversions for every 1-second delay.
+
+I just audited 50 pest control company websites in Florida. The average load time? 6.8 seconds. 🐌
+
+Google's benchmark: Under 2.5 seconds.
+
+That means most local businesses are losing over 30% of potential customers before they even see the homepage.
+
+Quick wins to speed up your site:
+🔧 Compress images (use WebP format)
+🔧 Enable browser caching
+🔧 Minimize JavaScript
+🔧 Use a CDN
+
+Or let us run a FREE PageSpeed audit and give you a detailed report.
+
+DM "SPEED" for yours 🏎️
+
+#WebPerformance #SmallBusiness #PageSpeed #FloridaContractor

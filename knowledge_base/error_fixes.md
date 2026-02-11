@@ -522,3 +522,36 @@ PLAN:     Migrate away from GHL entirely
 **Confidence**: 100% (verified both GET and POST return 401)
 
 ---
+
+## Vercel: Stale/Ghost Deployment — Code Pushed But Not Live
+
+**Error Message**: Changes committed and pushed to GitHub but NOT appearing on the live Vercel site
+
+**Symptoms**:
+
+- `git log` shows the latest commit
+- `git status` says "up to date with origin/master"
+- Live site still shows OLD version (missing components, old footer, etc.)
+- No obvious build errors in Vercel dashboard
+
+**Root Cause**: Vercel's GitHub auto-deploy webhook sometimes silently fails to trigger. The code is in the repo but Vercel never received the webhook to start a new build. This has happened MULTIPLE times across projects (AI Service Co, LakelandFinds).
+
+**Fix**:
+
+```bash
+# Force a production deploy from the CLI
+npx -y vercel --prod --yes
+```
+
+**Prevention Checklist** — After EVERY `git push`, verify the deploy actually happened:
+
+1. Check Vercel dashboard for a new deployment timestamp
+2. If no new deployment within 2 minutes, run `npx -y vercel --prod --yes`
+3. Hard refresh the live site (Ctrl+Shift+R) to bypass browser cache
+4. Verify the specific changes are visible (don't just check "site loads")
+
+**Key Lesson**: `git push` ≠ deployed. Always verify the specific changes you made are actually visible on the live site. Exit code 0 on push means nothing — check the actual rendered page.
+
+**Confidence**: 100% (hit this Feb 10, 2026 on LakelandFinds — VAPI widget + newsletter missing despite code being pushed)
+
+---
