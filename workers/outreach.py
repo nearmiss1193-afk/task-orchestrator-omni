@@ -170,7 +170,7 @@ Just reply to this email, text me at (352) 936-8152, or grab 15 min on my calend
 
 - Dan, Lakeland Finds"""
         
-        from_email = os.environ.get("LAKELAND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+        from_email = os.environ.get("LAKELAND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
     else:
         # --- ORIGINAL AI SERVICE CO TEMPLATE ---
         subject_variants = [
@@ -200,7 +200,7 @@ Or just reply to this email.
 Best,
 Dan"""
         
-        from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+        from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
     
     chosen = random.choice(subject_variants)
     subject = chosen["subject"]
@@ -330,7 +330,7 @@ def dispatch_audit_email(lead_id: str):
     html_body = audit["body"] + tracking_pixel
 
     # Resend payload WITH PDF attachment
-    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
     payload = {
         "from": from_email,
         "reply_to": "owner@aiserviceco.com",
@@ -728,7 +728,7 @@ def dispatch_followup_email(lead_id: str, step: int):
     first_name = (lead.get('full_name') or 'there').split(' ')[0]
     company = lead.get('company_name') or 'your company'
     niche = lead.get('niche') or 'your industry'
-    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
     email_uid = str(uuid.uuid4())[:8]
     
     # --- STEP-SPECIFIC TEMPLATES ---

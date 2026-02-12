@@ -1357,7 +1357,7 @@ def resend_webhook(data: dict):
                 # ACTION 1: Auto-reply with booking link
                 try:
                     resend_key = os.environ.get("RESEND_API_KEY")
-                    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+                    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
                     
                     # Get lead's first name
                     lead_name = "there"
@@ -1402,7 +1402,7 @@ def resend_webhook(data: dict):
                 try:
                     dan_email = os.environ.get("DAN_EMAIL", "nearmiss1193@gmail.com")
                     resend_key = os.environ.get("RESEND_API_KEY")
-                    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+                    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
                     
                     # Send Dan an email notification (instant)
                     notify_html = f"""<div style="font-family: Arial; font-size: 14px;">
@@ -1544,8 +1544,8 @@ def daily_digest():
             print("❌ No RESEND_API_KEY — can't send digest")
             return
         
-        from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
-        dan_email = os.environ.get("DAN_EMAIL", "dan@aiserviceco.com")
+        from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
+        dan_email = os.environ.get("DAN_EMAIL", "owner@aiserviceco.com")
         
         r = requests.post(
             "https://api.resend.com/emails",
