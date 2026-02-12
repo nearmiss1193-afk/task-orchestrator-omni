@@ -650,3 +650,56 @@ Two bugs in sequence:
 **Confidence**: 100% (3 successful board calls verified with receipts)
 
 ---
+
+## Email Replies Bouncing: <dan@aiserviceco.com> Has No Inbox
+
+**Date**: 2026-02-12
+
+**Error Message**: `550 5.1.1 The Gmail account that you tried to reach does not exist`
+
+**Location**: Resend emails sent via `outreach.py` and `deploy.py`
+
+**Root Cause**: `dan@aiserviceco.com` is a **Resend sending alias ONLY** — it has no inbox. When leads reply, their email goes to `dan@aiserviceco.com` which bounces. The `reply_to` header was added as a fix but Gmail sometimes ignores it (e.g., when sender/recipient share the same domain, or when the "from" address is configured as a Gmail alias).
+
+**Fix**: Changed ALL `from_email` defaults from `dan@aiserviceco.com` to `owner@aiserviceco.com` (Dan's real inbox). Changed in 7 places:
+
+- `outreach.py` lines 173, 203, 333, 731 (4 instances)
+- `deploy.py` lines 1360, 1405, 1547-1548 (3 instances)
+
+Also added `reply_to: owner@aiserviceco.com` to all 3 email payloads in `outreach.py` as belt-and-suspenders.
+
+**Key Rule**: NEVER send from an address that doesn't have a real inbox. Resend domain verification ≠ inbox existence.
+
+**Verification**: Dan tested reply and confirmed it lands in `owner@aiserviceco.com` ✅
+
+**Confidence**: 100% (Dan-verified)
+
+---
+
+## 26% Email Bounce Rate — Validation + Rate Limiting Fix
+
+**Date**: 2026-02-12
+
+**Error Message**: Resend dashboard showed 26.13% bounce rate (158 transient + 33 permanent)
+
+**Location**: `outreach.py` `dispatch_email_logic()` and `auto_outreach_loop()`
+
+**Root Cause**: Two issues:
+
+1. **No email validation** — sending to invalid, disposable, and role-based addresses
+2. **300 emails/hr send rate** — overwhelming recipient servers causing transient bounces
+
+**Fix**:
+
+1. Added `is_valid_email()` function that blocks bad patterns, disposable domains (mailinator, yopmail, etc.), and role-based prefixes (info@, admin@, support@)
+2. Reduced batch sizes: 10 fresh + 15 follow-up → **5 fresh + 5 follow-up** per cycle (max 60/hr)
+3. In `resend_webhook`: permanent bounces auto-mark leads as `status = bad_email`
+4. Invalid emails caught pre-send also get `status = bad_email`
+
+**Key Rule**: Always validate email before sending. Rate limit to prevent transient bounces. Auto-purge permanent bounces.
+
+**Verification**: Post-deploy system check passed — 24 touches in 30 min, 317 lead pool, heartbeat active ✅
+
+**Confidence**: 95% (bounce rate reduction requires 24-48 hrs to fully measure)
+
+---
