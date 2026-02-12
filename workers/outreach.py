@@ -219,6 +219,7 @@ Dan"""
     
     payload = {
         "from": from_email,
+        "reply_to": "owner@aiserviceco.com",
         "to": [email],
         "subject": subject,
         "html": html_body,
@@ -332,6 +333,7 @@ def dispatch_audit_email(lead_id: str):
     from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
     payload = {
         "from": from_email,
+        "reply_to": "owner@aiserviceco.com",
         "to": [email],
         "subject": audit["subject"],
         "html": html_body,
@@ -760,6 +762,7 @@ def dispatch_followup_email(lead_id: str, step: int):
     # --- SEND VIA RESEND ---
     payload = {
         "from": from_email,
+        "reply_to": "owner@aiserviceco.com",
         "to": [email],
         "subject": subject,
         "html": body,
