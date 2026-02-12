@@ -1,0 +1,70 @@
+
+==================================================
+GROK
+==================================================
+### Analysis of Code-Level Bugs:
+
+1. **Upsert Crash and Notification Skip?** No, the upsert (line 827) is in a try/except block (lines 765-840), so a 'customer_name' column error would catch the exception and print it, allowing execution to continue to the notification (lines 844-874). Check logs for upsert errors (e.g., via Supabase console) to confirm it's failing silently or not.
+
+2. **GHL Webhook Status?** The webhook might be inactive or misconfigured. Test it independently by sending a sample payload to the URL in lines 844-874. Verify API keys, endpoint status, and response codes in your server logs.
+
+3. **Sarah's Looping Issue?** Despite question tracking, the authority question loop suggests a flaw in state management (e.g., in conversation_logs or AI logic). Check lines related to transcript parsing (772-786) and context refresh (811-815) for incomplete resets or infinite loops in the AI's response handler.
+
+4. **Other Notification Prevents?** Possible: (a) `caller_phone` condition failing (line 764), (b) network issues blocking the webhook, or (c) GHL rate limits. Verify `caller_phone` values in logs and ensure the if-block executes by adding debug prints before line 844.
+
+**Next Checks (Specific Actions):**
+- Review Supabase schema for 'customer_memory' and fix the missing column.
+- Add logging right before and after the notification code (e.g., line 843 and 875) to confirm execution.
+- Test GHL webhook with Postman using a dummy event.
+- Inspect conversation_logs for Sarah's sessions to debug looping patterns.
+
+Total: 248 words.
+
+==================================================
+CHATGPT
+==================================================
+1. **Customer Name Column Crash**: Yes, if the `customer_name` column does not exist in the `customer_memory` table, the upsert operation at line 829 would raise an exception, which would be caught by the try/except block at line 839. However, since the notification code at line 844 is still within the outer if-block, it should execute unless the outer try (line 765) catches an exception before reaching it. Check the logs for any exceptions raised during the upsert operation.
+
+2. **GHL Webhook URL**: Verify that the GHL webhook URL used for notifications is correct and active. You can test the webhook independently to ensure it is receiving requests and responding appropriately. Check for any logs or error messages related to webhook calls.
+
+3. **Authority Question Loop**: The looping on the authority question may indicate that the state tracking for user context is not updating correctly. Investigate how the context is being refreshed after each interaction. Ensure that the logic for tracking authority questions is functioning as intended and that the context is being saved and retrieved correctly.
+
+4. **Other Notification Issues**: Check if there are any conditions or filters in the notification logic that might prevent the webhook from being triggered. Additionally, confirm that there are no rate limits or restrictions on the GHL side that could be blocking the notifications. Review the logs for any missed notifications or errors that could indicate why Dan is not receiving them. 
+
+Next steps: 
+- Check the database schema for the `customer_memory` table.
+- Test the GHL webhook independently.
+- Review the context management logic for authority questions.
+- Investigate the notification logic for any overlooked conditions.
+
+==================================================
+GEMINI
+==================================================
+Okay, let's focus on the most likely culprits and gather more data.
+
+**Immediate Actions:**
+
+1.  **Database Schema:** **CRITICAL:** Verify the `customer_memory` table schema.  Confirm the *absence* of the `customer_name` column. This is the most likely cause of the notification failure. If the column exists, investigate its data type and constraints.
+
+2.  **Logging:** Add detailed logging *immediately before* line 829 (the upsert) to print the exact `extracted_name` value and the full `upsert` payload. Add logging *immediately after* line 840 (the end of the try/except) to confirm execution reaches that point. This will confirm if the exception is happening and if the notification code is reached.
+
+3.  **GHL Webhook Verification:**  Test the GHL webhook URL independently (e.g., using Postman) with a sample payload mimicking the data sent in lines 844-874.  Confirm it's active and correctly configured.
+
+**Analysis & Next Steps:**
+
+*   **If `customer_name` column exists:** Investigate its data type. A type mismatch could still cause an error.
+*   **If the upsert is failing:**  The missing column is the likely cause.  Either add the column (if appropriate) or remove the `customer_name` field from the upsert payload.
+*   **If the upsert is NOT failing:** The problem lies elsewhere. Focus on the GHL webhook and notification logic.
+*   **Sarah Looping:** This is a separate issue. Check the question tracking logic and ensure it's correctly updating the conversation state. Review the relevant code sections for errors in state management.
+
+Dan's "still not working" comment is too vague. Clarify exactly which functionality he's referring to.
+
+
+==================================================
+ANTIGRAVITY
+==================================================
+Code analysis:
+1. The upsert at line 827-832 writes customer_name which doesn't exist. BUT Supabase PostgREST upsert with non-existent columns returns 400 error, not a crash. The outer try/except at line 765 catches this, prints error, and execution continues to notification at line 844.
+2. The REAL question: Does the GHL webhook at line 861 actually send SMS? We need to test this webhook URL directly.
+3. SMS looping: questions_asked tracking was just deployed but won't help until the PROMPT is updated to actually CHECK questions_asked before asking them. The system prompt (lines 694-713) still lists all 5 BANT questions with no condition to skip already-asked ones.
+4. RECOMMENDATION: (a) Test the GHL notification webhook directly, (b) Inject questions_asked into Sarah's prompt so she skips already-asked ones.

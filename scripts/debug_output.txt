@@ -1,0 +1,66 @@
+﻿=== VAPI ASSISTANT CONFIG ===
+serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+serverMessages: ['end-of-call-report', 'hang', 'function-call']
+
+=== RECENT VAPI CALLS ===
+  Call: 019c4d95-4c79-76
+    Status: ended  Duration: 0s
+    EndReason: customer-ended-call
+    Created: 2026-02-11T16:42:36
+    Customer: +13529368152
+
+  Call: 019c4d8f-c1c1-73
+    Status: ended  Duration: 0s
+    EndReason: customer-ended-call
+    Created: 2026-02-11T16:36:32
+    Customer: +13529368152
+
+  Call: 019c4d53-3ba0-73
+    Status: ended  Duration: 0s
+    EndReason: customer-ended-call
+    Created: 2026-02-11T15:30:26
+    Customer: +13529368152
+
+  Call: 019c4d4f-bb5e-78
+    Status: ended  Duration: 0s
+    EndReason: customer-ended-call
+    Created: 2026-02-11T15:26:36
+    Customer: +13529368152
+
+  Call: 019c4ab6-23e1-78
+    Status: ended  Duration: 0s
+    EndReason: call.in-progress.error-assistant-did-not-receive-customer-audio
+    Created: 2026-02-11T03:19:36
+    Customer: unknown
+
+=== MODAL WEBHOOK CHECK ===
+Modal apps: Apps                               
++------------------------------------------------------------------------------
+| App ID                    | Description   | State    | Tasks | Created at   |
+|---------------------------+---------------+----------+-------+--------------+
+| ap-zjpwYF8TbZMlzdOmVWCzd3 | empire-api-v3 | deployed | 0     | 2026-01-26   |
+|                           |               |          |       | 12:10        |
+|                           |               |          |       | Eastern      |
+|                           |               |          |       | Standard     |
+|                           |               |          |       | Time         |
+| ap-7JSLg1OR6rP5kcE2hW7yCP | test-atomic   | deployed | 0     | 2026-01-27   |
+|                           |               |          |       | 17:16        |
+|                           |               |          |       | Eastern      |
+|                           |               |          |       | Standard     |
+|                           |               |          |       | Time         |
+| ap-wjmY8aadhi7YUi95Q2GYYO | nexus-engine  | deployed | 2     | 2026-01-29   |
+|                           |               |          |       | 03:24        |
+|                           |               |          |       | Eastern      |
+|                           |               |          |       | Standard     |
+|                           |               |          |       | Time         |
+| ap-6NyDjz211wCsx5Xg4hJw30 | nexus-portal  | deployed | 0     | 2026-01-29   |
+|                           |               |          |       | 03:25        |
+|                           |               |          |       | Eastern      |
+|                           |               |          |       | Standard     |
+|                           |               |          |       | Time         |
+| ap-YFg0wKlQyKAZyLyvpOS3QK | ghl-omni-autà | deployed | 0     | 2026-01-29   |
+|                           |               |          |       | 12:30        |
+|                           |               |          |       | Eastern      |
+|                           |               |          |       | Standard     |
+|                           |               |          |       | Time         |
++------------------------------------------------------------------------------

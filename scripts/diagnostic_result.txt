@@ -1,0 +1,10 @@
+﻿=== WEBHOOK.SITE RESULTS ===
+Total requests received: 0
+
+NO REQUESTS RECEIVED -- Vapi is NOT sending webhooks (known Dec 2025 bug)
+Recommendation: Use Option C (Make.com bypass) or contact Vapi support
+
+=== RESTORING ORIGINAL SERVERURL ===
+Assistant restore: 200
+Phone restore: 200
+Restored to: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run

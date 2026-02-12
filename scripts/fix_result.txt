@@ -1,0 +1,28 @@
+﻿=== STEP 1: Update Sarah Assistant ===
+Status: 400
+ERROR: {"message":["each value in serverMessages must be one of the following values: assistant.started, conversation-update, end-of-call-report, function-call, hang, language-changed, language-change-detect
+
+=== STEP 2: Update Sarah's Phone Number ===
+Status: 200
+Phone serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+Phone number FIXED
+
+=== STEP 3: Verify Config ===
+Name: Sarah Spart#
+serverUrl: None
+serverMessages: None
+Phone: +19362984339
+Phone serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+
+=== DONE ===
+Sarah's assistant now has:
+  serverUrl -> https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+  serverMessages -> includes end-of-call-report
+This means Vapi will now POST to our Modal webhook when calls end.
+Our vapi_webhook handler in deploy.py will process it.
+PLUS the heartbeat polling will catch any missed calls as backup.
+
+Phone architecture:
+  +19362984339 (Vapi) = CALLS ONLY, cannot receive SMS
+  GHL/Lead Connector 5336 number = SMS via website
+

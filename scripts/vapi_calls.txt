@@ -1,0 +1,45 @@
+﻿{
+  "id": "019c4dc6-a2a3-733b-9",
+  "status": "ended",
+  "duration": 0,
+  "endedReason": "customer-ended-call",
+  "created": "2026-02-11T17:36:29",
+  "customer": "+13529368152",
+  "serverUrl": "null"
+}
+{
+  "id": "019c4db7-9f08-777e-9",
+  "status": "ended",
+  "duration": 0,
+  "endedReason": "customer-ended-call",
+  "created": "2026-02-11T17:20:05",
+  "customer": "+13529368152",
+  "serverUrl": "null"
+}
+{
+  "id": "019c4da7-5b5c-7663-9",
+  "status": "ended",
+  "duration": 0,
+  "endedReason": "customer-ended-call",
+  "created": "2026-02-11T17:02:19",
+  "customer": "+13529368152",
+  "serverUrl": "null"
+}
+{
+  "id": "019c4d95-4c79-7663-9",
+  "status": "ended",
+  "duration": 0,
+  "endedReason": "customer-ended-call",
+  "created": "2026-02-11T16:42:36",
+  "customer": "+13529368152",
+  "serverUrl": "null"
+}
+{
+  "id": "019c4d8f-c1c1-7335-a",
+  "status": "ended",
+  "duration": 0,
+  "endedReason": "customer-ended-call",
+  "created": "2026-02-11T16:36:32",
+  "customer": "+13529368152",
+  "serverUrl": "null"
+}

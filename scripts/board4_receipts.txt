@@ -1,0 +1,38 @@
+BOARD CALL 4 RECEIPTS - 2026-02-11T16:12:28.253824
+
+--- GROK ---
+Timestamp: 2026-02-11T16:12:20.452131
+Endpoint: https://api.x.ai/v1/chat/completions
+HTTP: 200
+Request: {"messages": [{"role": "system", "content": "You are GROK. Analyze Vapi webhook issues."}, {"role": "user", "content": "BOARD CALL ROUND 4 - ROOT CAUSE FOUND\n\nSMOKING GUN EVIDENCE (from Vapi API dir
+Response: {"id":"ad7d3564-ee09-c6db-8f69-fd1e5cdac7c9","object":"chat.completion","created":1770844328,"model":"grok-3-mini","choices":[{"index":0,"message":{"role":"assistant","content":"### Analysis of Vapi Webhook Issues\n\nBased on your findings, the core issue appears to be a discrepancy between the assistant config (which includes 'end-of-call-report') and the empty serverMessages arrays in actual calls, yet conversation_logs show successful end-of-call-report processing. This suggests:\n\n1. **Empt
+
+--- CHATGPT ---
+Timestamp: 2026-02-11T16:12:25.868298
+Endpoint: https://api.openai.com/v1/chat/completions
+HTTP: 200
+Request: {"messages": [{"role": "system", "content": "You are CHATGPT. Analyze Vapi webhook issues."}, {"role": "user", "content": "BOARD CALL ROUND 4 - ROOT CAUSE FOUND\n\nSMOKING GUN EVIDENCE (from Vapi API 
+Response: {
+  "id": "chatcmpl-D8BnPxo24x8plrpC1zjTh5lZ2OIJc",
+  "object": "chat.completion",
+  "created": 1770844339,
+  "model": "gpt-4o-mini-2024-07-18",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "The analysis reveals a critical issue with the Vapi webhook. While the assistant configuration includes `end-of-call-report`, actual calls show an empty `serverMessages` array, raising questions about whether events are being sent. Despite this, `c
+
+--- GEMINI ---
+Timestamp: 2026-02-11T16:12:28.250535
+Endpoint: googleapis.com
+HTTP: 200
+Request: {"contents": [{"parts": [{"text": "BOARD CALL ROUND 4 - ROOT CAUSE FOUND\n\nSMOKING GUN EVIDENCE (from Vapi API direct query):\n\n1. Assistant config (1a797f12): serverMessages = ['end-of-call-report'
+Response: {
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "We've pinpointed the root cause: end-of-call-reports aren't triggering notifications despite being logged in conversation_logs.\n\nKey findings: Assistant config includes 'end-of-call-report', but call logs show empty `serverMessages`. However, conversation_logs contain call summaries, indicating end-of-call-report receipt.\n\nPossible causes:\n* A. GHL webhook failure.\n* B. Customer_name crash (fix

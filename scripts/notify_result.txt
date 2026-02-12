@@ -1,0 +1,9 @@
+﻿Latest call: 019c4dde-3a6f-788f-9596-bfefeb46e004
+Created: 2026-02-11T18:02:15
+Ended: 2026-02-11T18:03:50
+Customer: +13529368152
+ServerUrl: NULL
+
+--- Sending Dan a direct notification about his most recent call ---
+GHL webhook status: 200
+Response: {"status":"Success: request sent to trigger execution server","id":"IurwkdZmRZjzUn2KjI54"}

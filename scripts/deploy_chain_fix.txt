@@ -1,0 +1,25 @@
+EXIT: 0
+k-email-open.modal.run
+├── 🔨 Created web function sms_inbound => 
+│   https://nearmiss1193-afk--ghl-omni-automation-sms-inbound.modal.run
+├── 🔨 Created web function vapi_webhook => 
+│   https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+├── 🔨 Created web function memory_check => 
+│   https://nearmiss1193-afk--ghl-omni-automation-memory-check.modal.run
+├── 🔨 Created web function health_check => 
+│   https://nearmiss1193-afk--ghl-omni-automation-health-check.modal.run
+├── 🔨 Created function system_heartbeat.
+├── 🔨 Created function auto_outreach_loop.
+├── 🔨 Created function unified_lead_sync.
+├── 🔨 Created function trigger_self_learning_loop.
+├── 🔨 Created function log_consent.
+├── 🔨 Created function dispatch_email_logic.
+├── 🔨 Created function dispatch_audit_email.
+├── 🔨 Created function dispatch_sms_logic.
+└── 🔨 Created function dispatch_call_logic.
+✓ App deployed in 2.382s! 🎉
+
+View Deployment: 
+https://modal.com/apps/nearmiss1193-afk/main/deployed/ghl-omni-automation
+
+STDERR: 

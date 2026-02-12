@@ -1,0 +1,42 @@
+﻿==================================================
+CONTACTS_MASTER STATUS BREAKDOWN
+==================================================
+Total leads: 642
+  outreach_sent: 363
+  no_contact_info: 185
+  skipped_no_url: 31
+  outreach_dispatched: 22
+  skipped_no_contact: 20
+  calling_initiated: 18
+  sequence_complete: 1
+  interested: 1
+  new: 1
+
+==================================================
+MOST RECENT 5 LEADS (by creation)
+==================================================
+  2026-02-10T03:24:22 | outreach_sent |   | email: False | phone: True
+  2026-02-10T03:24:22 | outreach_sent |   | email: False | phone: True
+  2026-02-10T03:24:21 | outreach_sent |   | email: True | phone: False
+  2026-02-10T03:24:21 | outreach_sent |   | email: True | phone: False
+  2026-02-10T03:24:20 | outreach_sent |   | email: True | phone: False
+
+==================================================
+LEADS ADDED TODAY
+==================================================
+Leads added today: 0
+
+==================================================
+CONTACT INFO AVAILABILITY
+==================================================
+With email: 325
+With phone: 533
+
+==================================================
+THE CONTACTABLE LEAD(S)
+==================================================
+  Status: new
+  Name: Unknown
+  Email: notfound@example.com
+  Phone: (940) 458-4980
+  Created: 2026-01-29T09:10:40

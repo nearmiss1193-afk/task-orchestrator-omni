@@ -66,6 +66,7 @@ def dispatch_email_logic(lead_id: str):
     import random
     import traceback
     import uuid
+    import json
     
     supabase = get_supabase()
     lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
@@ -87,33 +88,75 @@ def dispatch_email_logic(lead_id: str):
 
     resend_key = os.environ.get("RESEND_API_KEY")
     if not resend_key:
-        print("❌ Error: RESEND_API_KEY missing")
+        print("Error: RESEND_API_KEY missing")
         return False
 
-    # --- A/B SUBJECT LINES (4 variants) ---
+    # --- LEAD INFO ---
     first_name = (lead.get('full_name') or 'there').split(' ')[0]
     company = lead.get('company_name') or 'your company'
     niche = lead.get('niche') or 'your industry'
+    source = lead.get('source', '')
     
-    subject_variants = [
-        {"id": "A", "subject": f"Quick question about {company}"},
-        {"id": "B", "subject": "Noticed something on your site"},
-        {"id": "C", "subject": f"{first_name}, saw something about {niche}"},
-        {"id": "D", "subject": f"This caught my eye about {company}"},
-    ]
+    # --- Parse Google review data from notes (Lakeland Finds leads) ---
+    google_rating = 0
+    total_reviews = 0
+    try:
+        notes = json.loads(lead.get('notes') or '{}')
+        google_rating = notes.get('google_rating', 0)
+        total_reviews = notes.get('total_reviews', 0)
+    except:
+        pass
     
-    chosen = random.choice(subject_variants)
-    subject = chosen["subject"]
-    variant_id = chosen["id"]
-    
-    # --- SMART EMAIL BODY ---
-    ai_body = lead.get('ai_strategy')
-    if ai_body and len(ai_body) > 20:
-        # Use AI-generated strategy if available
-        body_text = ai_body
-    else:
-        # Smart fallback for the 67% of leads without ai_strategy
+    # --- LAKELAND FINDS TEMPLATE (Google Reviews Hook) ---
+    if source == 'lakeland_finds':
+        # A/B subject lines for Lakeland Finds
+        subject_variants = [
+            {"id": "LF_A", "subject": f"{company} is on LakelandFinds.com"},
+            {"id": "LF_B", "subject": f"Your Google reviews, {first_name}"},
+            {"id": "LF_C", "subject": f"Noticed {company}'s listing"},
+            {"id": "LF_D", "subject": f"Quick tip for {company}'s Google presence"},
+        ]
+        
+        # Build review-specific body
+        review_line = ""
+        if total_reviews > 0 and google_rating > 0:
+            review_line = f"While setting up your page, I noticed you have {total_reviews} Google reviews with a {google_rating} star rating. "
+            if total_reviews < 10:
+                review_line += "Most businesses in your category that show up first on Google Maps have 30-50+ reviews — and there's a simple way to get there."
+            elif total_reviews < 30:
+                review_line += "That's solid! Businesses that push past 50 reviews see 2-3x more calls from Google Maps."
+            else:
+                review_line += "That's great — you're ahead of most. A few tweaks could help you dominate your category."
+        else:
+            review_line = "I noticed your Google profile could use a boost — businesses with 30+ reviews get significantly more calls from Maps."
+        
         body_text = f"""Hi {first_name},
+
+Dan here with Lakeland Finds. We just launched a local business directory for the Lakeland area, and {company} is already featured.
+
+{review_line}
+
+Want a few quick tips on getting more reviews on autopilot? Happy to share what's working for other Lakeland businesses right now.
+
+Just reply to this email or text me at (352) 936-8152.
+
+- Dan, Lakeland Finds"""
+        
+        from_email = os.environ.get("LAKELAND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+    else:
+        # --- ORIGINAL AI SERVICE CO TEMPLATE ---
+        subject_variants = [
+            {"id": "A", "subject": f"Quick question about {company}"},
+            {"id": "B", "subject": "Noticed something on your site"},
+            {"id": "C", "subject": f"{first_name}, saw something about {niche}"},
+            {"id": "D", "subject": f"This caught my eye about {company}"},
+        ]
+        
+        ai_body = lead.get('ai_strategy')
+        if ai_body and len(ai_body) > 20:
+            body_text = ai_body
+        else:
+            body_text = f"""Hi {first_name},
 
 I was just reviewing {company}'s online presence and had a quick question.
 
@@ -125,7 +168,13 @@ Worth a 5-min chat this week?
 
 Best,
 Dan"""
-
+        
+        from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+    
+    chosen = random.choice(subject_variants)
+    subject = chosen["subject"]
+    variant_id = chosen["id"]
+    
     # --- TRACKING PIXEL ---
     email_uid = str(uuid.uuid4())[:8]
     tracking_base = os.environ.get("MODAL_TRACKING_URL", "https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run")
@@ -136,9 +185,6 @@ Dan"""
 {body_text.replace(chr(10), '<br>')}
 </div>
 {tracking_pixel}"""
-
-    # --- SEND VIA RESEND API ---
-    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
     
     payload = {
         "from": from_email,

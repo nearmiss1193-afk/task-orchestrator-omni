@@ -274,6 +274,11 @@ def sms_inbound(data: dict = {}):
             context_str += f"- Budget hint: {context_summary['budget_mentioned']}\n"
         if context_summary.get("questions_asked"):
             context_str += f"- Already asked: {', '.join(context_summary['questions_asked'])}\n"
+        if context_summary.get("history"):
+            hist_preview = context_summary['history'][-500:]
+            if len(context_summary['history']) > 500:
+                hist_preview = '...' + hist_preview
+            context_str += f"- Previous interaction notes:\n{hist_preview}\n"
         context_str += "\nDO NOT repeat questions already asked. Build on previous context."
     
     # Sarah's BANT fact-finding prompt (Board-approved Option C)
@@ -314,6 +319,38 @@ FALLBACK (if confused or asked something weird):
 - "I want to make sure I get you the best help - let me have Dan reach out directly. When's a good time?"
 """
     
+    # --- LOAD CONVERSATION HISTORY (prevents looping/re-asking) ---
+    conversation_history = []
+    try:
+        if supabase_url and supabase_key and customer_id:
+            sb = create_client(supabase_url, supabase_key)
+            recent = sb.table("conversation_logs").select("content,sarah_response,direction").eq("customer_id", customer_id).eq("channel", "sms").order("timestamp", desc=True).limit(5).execute()
+            if recent.data:
+                for msg_row in reversed(recent.data):  # oldest first
+                    if msg_row.get('content'):
+                        conversation_history.append({"role": "user", "content": msg_row['content']})
+                    if msg_row.get('sarah_response'):
+                        conversation_history.append({"role": "assistant", "content": msg_row['sarah_response']})
+                print(f"📝 Loaded {len(recent.data)} past conversations for context")
+    except Exception as hist_err:
+        print(f"⚠️ History load failed (continuing): {hist_err}")
+    
+    # --- BUILD CONTEXT-AWARE SYSTEM PROMPT ---
+    context_info = ""
+    if context_summary:
+        if context_summary.get('contact_name'):
+            context_info += f"\nCustomer name: {context_summary['contact_name']}"
+        if context_summary.get('business_type'):
+            context_info += f"\nBusiness type: {context_summary['business_type']}"
+        if context_summary.get('main_challenge'):
+            context_info += f"\nMain challenge: {context_summary['main_challenge']}"
+        if context_summary.get('questions_asked'):
+            context_info += f"\nQuestions already asked (DO NOT re-ask): {', '.join(context_summary['questions_asked'])}"
+    
+    full_prompt = SARAH_PROMPT
+    if context_info:
+        full_prompt += f"\n\nKNOWN CUSTOMER INFO:{context_info}\n\nIMPORTANT: Do NOT re-ask questions you've already asked. Move the conversation forward."
+    
     # Generate reply using Grok
     api_key = os.environ.get("GROK_API_KEY") or os.environ.get("XAI_API_KEY")
     if not api_key:
@@ -321,14 +358,16 @@ FALLBACK (if confused or asked something weird):
     
     reply = ""
     try:
+        # Build messages with conversation history
+        messages = [{"role": "system", "content": full_prompt}]
+        messages.extend(conversation_history)  # Past conversation
+        messages.append({"role": "user", "content": f"Incoming SMS from {contact_name}: \"{message}\"\n\nWrite a short SMS reply:"})
+        
         resp = requests.post(
             "https://api.x.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "messages": [
-                    {"role": "system", "content": SARAH_PROMPT},
-                    {"role": "user", "content": f"Incoming SMS from {contact_name}: \"{message}\"\n\nWrite a short SMS reply:"}
-                ],
+                "messages": messages,
                 "model": "grok-3",
                 "temperature": 0.7,
                 "max_tokens": 100
@@ -362,35 +401,79 @@ FALLBACK (if confused or asked something weird):
             
             # Update context_summary with any new intel (basic extraction)
             updated_context = context_summary.copy()
-            updated_context["contact_name"] = contact_name
             message_lower = message.lower()
             
+            # --- NAME EXTRACTION (Board Fix #2): User's stated name > GHL name ---
+            import re
+            name_patterns = [
+                r"(?:my name is|i'm|i am|this is|it's|call me)\s+([A-Z][a-z]+)",
+                r"^([A-Z][a-z]+)\s+here",
+            ]
+            extracted_name = None
+            for pattern in name_patterns:
+                match = re.search(pattern, message, re.IGNORECASE)
+                if match:
+                    extracted_name = match.group(1).title()
+                    break
+            
+            if extracted_name:
+                # User explicitly stated their name — this takes priority
+                updated_context["contact_name"] = extracted_name
+                print(f"📝 Name extracted from message: '{extracted_name}' (overrides GHL: '{contact_name}')")
+            elif not updated_context.get("contact_name"):
+                # No existing name — use GHL's as initial fallback
+                updated_context["contact_name"] = contact_name
+            # Otherwise: keep whatever name is already stored (don't overwrite)
+            
             # Simple keyword extraction for context
-            if any(word in message_lower for word in ["hvac", "plumber", "plumbing", "contractor", "roofing", "electrician"]):
-                updated_context["business_type"] = message.split()[0] if message else "service business"
+            if any(word in message_lower for word in ["hvac", "plumber", "plumbing", "contractor", "roofing", "electrician", "lawn", "landscap", "cleaning", "pest", "pool", "tire", "auto", "mechanic"]):
+                for word in message.split():
+                    if word.lower() in ["hvac", "plumber", "plumbing", "contractor", "roofing", "electrician", "lawn", "landscaping", "cleaning", "pest", "pool", "tire", "auto", "mechanic"]:
+                        updated_context["business_type"] = word.lower()
+                        break
             if any(word in message_lower for word in ["miss", "calls", "after hours", "weekend"]):
                 updated_context["main_challenge"] = "missed calls"
             if "$" in message or "budget" in message_lower:
                 updated_context["budget_mentioned"] = message
             
-            # Track questions Sarah asked
+            # --- QUESTION TRACKING (Board Fix #3): Track ALL questions Sarah asks ---
             questions_asked = updated_context.get("questions_asked", [])
-            if "what kind of business" in reply.lower():
+            reply_lower = reply.lower()
+            if "what kind of business" in reply_lower or "what do you do" in reply_lower:
                 questions_asked.append("business_type")
-            if "challenge" in reply.lower() or "headache" in reply.lower():
+            if "challenge" in reply_lower or "headache" in reply_lower or "pain point" in reply_lower:
                 questions_asked.append("challenge")
+            if "making decisions" in reply_lower or "decision maker" in reply_lower:
+                questions_asked.append("authority")
+            if "pricing" in reply_lower or "$99" in reply_lower or "cost" in reply_lower:
+                questions_asked.append("budget")
+            if "when" in reply_lower and ("looking" in reply_lower or "timeline" in reply_lower):
+                questions_asked.append("timeline")
+            if "set up a" in reply_lower and ("call" in reply_lower or "chat" in reply_lower):
+                questions_asked.append("call_offer")
             updated_context["questions_asked"] = list(set(questions_asked))
             
-            # Save updated context
+            # Save updated context (NOTE: customer_name column doesn't exist on table)
             supabase.table("customer_memory").update({
-                "context_summary": updated_context,
-                "customer_name": contact_name, # Also update top-level name if possible
-                "last_interaction": datetime.now().isoformat()
+                "context_summary": updated_context
             }).eq("customer_id", customer_id).execute()
             
             print(f"✅ Logged conversation and updated context for {customer_id}")
     except Exception as e:
         print(f"⚠️ Failed to log conversation: {e}")
+    
+    # --- NOTIFY DAN about incoming SMS ---
+    try:
+        import urllib.request
+        dan_phone = "+13529368152"
+        notify_msg = f"💬 SMS to Sarah\nFrom: {contact_name} ({phone})\nMsg: {message[:150]}\nSarah replied: {reply[:100]}"
+        ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+        notify_payload = json.dumps({"phone": dan_phone, "message": notify_msg}).encode()
+        notify_req = urllib.request.Request(ghl_webhook, data=notify_payload, headers={"Content-Type": "application/json"})
+        urllib.request.urlopen(notify_req, timeout=10)
+        print(f"📱 [NOTIFY] ✅ Dan notified about SMS from {contact_name}")
+    except Exception as notify_err:
+        print(f"📱 [NOTIFY] ⚠️ Failed to notify Dan: {notify_err}")
     
     return {"sarah_reply": reply, "status": "success", "customer_id": str(customer_id) if customer_id else None}
 
@@ -450,6 +533,7 @@ def vapi_webhook(data: dict = {}):
     Webhook events: assistant-request, call-started, end-of-call-report
     """
     import re
+    import json
     from supabase import create_client
     from datetime import datetime
     from modules.voice.sales_persona import get_persona_prompt, SALES_SARAH_PROMPT
@@ -495,8 +579,9 @@ def vapi_webhook(data: dict = {}):
         direction = "outbound"
     
     # Extract phone number - LOG RAW VALUE FIRST (observability)
-    customer = message.get("customer", {})
-    raw_phone = customer.get("number", "") or call.get("customerNumber", "") or call.get("to", "")
+    # Vapi puts customer in message.call.customer AND sometimes message.customer
+    customer = message.get("customer", {}) or call.get("customer", {})
+    raw_phone = customer.get("number", "") or call.get("customer", {}).get("number", "") or call.get("customerNumber", "") or call.get("to", "")
     print(f"📱 [MEMORY] Raw phone from Vapi: '{raw_phone}'")
     
     # Normalize using shared function (Board Phase 3)
@@ -588,13 +673,24 @@ Greeting: "Hey, is this {customer_name or 'there'}?"
         else:
             greeting_instruction = "Unable to determine call direction. Use inbound greeting by default."
         
-        # Add customer context if available
         context_injection = ""
         if context_summary:
+            ctx = context_summary if isinstance(context_summary, dict) else {}
+            qa = ', '.join(ctx.get('questions_asked', [])) or 'None yet'
+            hist = ctx.get('history', 'No previous conversations')
+            # Trim history to last 800 chars to keep prompt reasonable
+            if len(hist) > 800:
+                hist = '...' + hist[-800:]
             context_injection = f"""
 
-CUSTOMER CONTEXT (from previous interactions):
-{context_summary}
+CUSTOMER CONTEXT (from previous SMS + voice interactions):
+- Name: {ctx.get('contact_name', 'Unknown')}
+- Business: {ctx.get('business_type', 'Not known yet')}
+- Main challenge: {ctx.get('main_challenge', 'Not discussed yet')}
+- Budget mentioned: {ctx.get('budget_mentioned', 'Not discussed')}
+- Questions already asked: {qa}
+- Previous interaction notes:
+{hist}
 
 Use this context to personalize the conversation. Don't repeat questions they've already answered.
 """
@@ -705,15 +801,28 @@ STYLE: Casual, concise, human. Use "totally", "honestly", "got it". Keep respons
                                 print(f"📱 [MEMORY] ✅ Extracted name from transcript: '{extracted_name}'")
                                 break
                     
-                    # Log to conversation_logs
-                    log_result = supabase.table("conversation_logs").insert({
-                        "phone_number": caller_phone,
-                        "channel": "voice",
-                        "direction": direction,
-                        "message": transcript[:2000] if transcript else summary[:500],
-                        "response": f"Call summary: {summary}" if summary else None
-                    }).execute()
-                    print(f"📱 [MEMORY] conversation_logs INSERT: {'SUCCESS' if log_result.data else 'FAILED'}")
+                    # Log to conversation_logs (FIXED: correct column names)
+                    # Need customer_id from customer_memory lookup
+                    voice_customer_id = None
+                    try:
+                        cid_result = supabase.table("customer_memory").select("customer_id").eq("phone_number", caller_phone).single().execute()
+                        if cid_result.data:
+                            voice_customer_id = cid_result.data['customer_id']
+                    except:
+                        pass
+                    
+                    if voice_customer_id:
+                        log_result = supabase.table("conversation_logs").insert({
+                            "customer_id": voice_customer_id,
+                            "channel": "voice",
+                            "direction": direction,
+                            "content": transcript[:2000] if transcript else summary[:500],
+                            "sarah_response": f"Call summary: {summary}" if summary else None,
+                            "metadata": {"duration": str(message.get('durationSeconds', '?'))}
+                        }).execute()
+                        print(f"📱 [MEMORY] conversation_logs INSERT: {'SUCCESS' if log_result.data else 'FAILED'}")
+                    else:
+                        print(f"📱 [MEMORY] ⚠️ Skipping conversation_logs - no customer_id for {caller_phone}")
                     
                     # Refresh result for latest context to append
                     res_latest = supabase.table("customer_memory").select("context_summary").eq("phone_number", caller_phone).single().execute()
@@ -730,22 +839,62 @@ STYLE: Casual, concise, human. Use "totally", "honestly", "got it". Keep respons
                     if extracted_name:
                         ctx_latest["contact_name"] = extracted_name
 
-                    # UPSERT to customer_memory
+                    # UPSERT to customer_memory (NOTE: customer_name and updated_at columns removed - don't exist on table)
                     upsert_result = supabase.table("customer_memory").upsert({
                         "phone_number": caller_phone,
-                        "customer_name": extracted_name or res_latest.data.get("customer_name") if res_latest.data else "",
-                        "context_summary": ctx_latest,
-                        "updated_at": datetime.utcnow().isoformat()
+                        "context_summary": ctx_latest
                     }, on_conflict="phone_number").execute()
                     
                     print(f"📱 [MEMORY] customer_memory UPSERT: {'SUCCESS' if upsert_result.data else 'FAILED'}")
-                    print(f"📱 [MEMORY] ✅ Saved to customer_memory: phone={caller_phone}, name={final_name}")
+                    print(f"📱 [MEMORY] ✅ Saved to customer_memory: phone={caller_phone}")
+                    
                 else:
                     print(f"📱 [MEMORY] ❌ ERROR - Missing Supabase credentials for write")
             except Exception as e:
                 print(f"📱 [MEMORY] ❌ WRITE FAILED: {type(e).__name__}: {e}")
         else:
             print(f"📱 [MEMORY] ⚠️ Skipping write - no phone or content")
+        
+        # ========== NOTIFY DAN: Every Call (regardless of transcript) ==========
+        print(f"📱 [NOTIFY] === NOTIFICATION BLOCK REACHED for {caller_phone} ===")
+        if caller_phone:
+            try:
+                import urllib.request
+                dan_phone = "+13529368152"
+                caller_display = caller_phone or "Unknown"
+                name_display = extracted_name if 'extracted_name' in dir() and extracted_name else "Unknown"
+                summary_short = (summary or "Quick call - no summary")[:200]
+                duration = message.get("durationSeconds", call.get("duration", "?"))
+                
+                notify_msg = f"📞 Sarah AI Call Report\n"
+                notify_msg += f"Caller: {caller_display}\n"
+                notify_msg += f"Name: {name_display}\n"
+                notify_msg += f"Direction: {direction}\n"
+                notify_msg += f"Duration: {duration}s\n"
+                notify_msg += f"Summary: {summary_short}"
+                
+                ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+                notify_payload = json.dumps({
+                    "phone": dan_phone,
+                    "message": notify_msg
+                }).encode()
+                
+                print(f"📱 [NOTIFY] BEFORE GHL webhook POST - URL: {ghl_webhook[:60]}...")
+                print(f"📱 [NOTIFY] Payload phone: {dan_phone}, msg length: {len(notify_msg)}")
+                
+                notify_req = urllib.request.Request(
+                    ghl_webhook,
+                    data=notify_payload,
+                    headers={"Content-Type": "application/json"}
+                )
+                response = urllib.request.urlopen(notify_req, timeout=10)
+                resp_code = response.getcode()
+                resp_body = response.read().decode('utf-8', errors='replace')[:200]
+                print(f"📱 [NOTIFY] ✅ GHL webhook response: HTTP {resp_code}")
+                print(f"📱 [NOTIFY] ✅ Response body: {resp_body}")
+                print(f"📱 [NOTIFY] ✅ Dan notified about call from {caller_display}")
+            except Exception as notify_err:
+                print(f"📱 [NOTIFY] ❌ FAILED to notify Dan: {type(notify_err).__name__}: {notify_err}")
         
         print(f"{'='*60}\n")
         return {"status": "logged", "phone": caller_phone, "name_extracted": extracted_name if 'extracted_name' in dir() else ""}
@@ -861,15 +1010,16 @@ def health_check():
     }
 
 
-# ==== SYSTEM HEARTBEAT (Phase 5 Sovereign Standard) ====
+# ==== SYSTEM HEARTBEAT + CALL MONITOR (2-CRON app: heartbeat+outreach, zombie apps hold 2) ====
 @app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
 def system_heartbeat():
-    """Auto-detect issues, log health, and verify 4-cron stability."""
-    import os
-    from datetime import datetime, timezone
+    """Health check + Vapi call monitor (polls for completed calls, notifies Dan)."""
+    import os, json
+    import requests as req
+    from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
     
-    print(f"💓 HEARTBEAT: Running at {datetime.now(timezone.utc).isoformat()}")
+    print(f"HEARTBEAT: Running at {datetime.now(timezone.utc).isoformat()}")
     
     issues = []
     try:
@@ -885,33 +1035,154 @@ def system_heartbeat():
         supabase.table("system_health_log").insert({
             "checked_at": datetime.now(timezone.utc).isoformat(),
             "status": "ok" if not issues else "degraded",
-            "details": {"issues": issues, "cron_limit": 4}
+            "details": {"issues": issues, "cron_limit": 2}
         }).execute()
         
     except Exception as e:
-        print(f"❌ Heartbeat Error: {e}")
+        print(f"Heartbeat Error: {e}")
+    
+    # ---- AUTO-PROSPECTOR TRIGGER (every ~6 hours, piggybacked on heartbeat) ----
+    try:
+        from datetime import datetime, timezone, timedelta
+        from modules.database.supabase_client import get_supabase
+        supabase = get_supabase()
+        
+        should_prospect = False
+        last_run = supabase.table("system_state").select("status").eq("key", "prospector_last_run").execute()
+        
+        if last_run.data and last_run.data[0].get("status"):
+            last_ts = datetime.fromisoformat(last_run.data[0]["status"])
+            hours_since = (datetime.now(timezone.utc) - last_ts).total_seconds() / 3600
+            if hours_since >= 6:
+                should_prospect = True
+                print(f"PROSPECTOR: {hours_since:.1f}h since last run — triggering")
+        else:
+            should_prospect = True  # Never run before
+            print("PROSPECTOR: No previous run found — triggering first run")
+        
+        if should_prospect:
+            # Update the timestamp FIRST (prevents double-runs)
+            supabase.table("system_state").upsert({
+                "key": "prospector_last_run",
+                "status": datetime.now(timezone.utc).isoformat(),
+            }, on_conflict="key").execute()
+            
+            # Spawn async so heartbeat doesn't wait
+            auto_prospecting.spawn()
+            print("PROSPECTOR: Spawned async prospecting cycle")
+        else:
+            print(f"PROSPECTOR: Skipping ({hours_since:.1f}h since last run, need 6h)")
+    except Exception as e:
+        print(f"PROSPECTOR trigger error: {e}")
+    
+    # ---- VAPI CALL MONITOR (Bypass broken Vapi webhooks - Dec 2025 bug) ----
+    try:
+        vapi_key = os.environ.get('VAPI_PRIVATE_KEY')
+        if not vapi_key:
+            print("CALL MONITOR: No VAPI_PRIVATE_KEY, skipping")
+            return
+        
+        headers = {'Authorization': f'Bearer {vapi_key}'}
+        dan_phone = "+13529368152"
+        ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+        
+        r = req.get('https://api.vapi.ai/call?limit=5', headers=headers, timeout=15)
+        calls = r.json()
+        notified = 0
+        
+        supabase = get_supabase()
+        
+        for call in calls:
+            call_id = call.get('id', '')
+            if call.get('status') != 'ended' or not call.get('endedAt'):
+                continue
+            
+            # Only recent calls (last 10 min)
+            try:
+                end_time = datetime.fromisoformat(call['endedAt'].replace('Z', '+00:00'))
+                if (datetime.now(timezone.utc) - end_time).total_seconds() > 600:
+                    continue
+            except:
+                continue
+            
+            # Deduplicate
+            try:
+                existing = supabase.table("vapi_call_notifications").select("call_id").eq("call_id", call_id).execute()
+                if existing.data:
+                    continue
+            except:
+                pass
+            
+            # Build notification
+            customer = call.get('customer', {}).get('number', 'Unknown')
+            messages = call.get('messages', [])
+            msg_count = len(messages) if messages else 0
+            
+            duration_str = "unknown"
+            try:
+                s = datetime.fromisoformat(call['createdAt'].replace('Z', '+00:00'))
+                e = datetime.fromisoformat(call['endedAt'].replace('Z', '+00:00'))
+                secs = int((e - s).total_seconds())
+                duration_str = f"{secs // 60}m {secs % 60}s"
+            except:
+                pass
+            
+            summary = ""
+            if messages:
+                for m in messages[-2:]:
+                    role = m.get('role', '?')
+                    text = str(m.get('message', ''))[:60]
+                    if text:
+                        summary += f"\n{role}: {text}"
+            
+            notify_msg = f"Sarah AI Call Report\nCaller: {customer}\nDuration: {duration_str}\nMessages: {msg_count}{summary}"
+            
+            try:
+                r2 = req.post(ghl_webhook, json={"phone": dan_phone, "message": notify_msg}, timeout=10)
+                print(f"CALL MONITOR: Notified Dan about call {call_id[:12]}: {r2.status_code}")
+                notified += 1
+                
+                try:
+                    supabase.table("vapi_call_notifications").insert({
+                        "call_id": call_id,
+                        "customer_phone": customer,
+                        "notified_at": datetime.now(timezone.utc).isoformat()
+                    }).execute()
+                except:
+                    pass
+            except Exception as ne:
+                print(f"CALL MONITOR: Notify failed for {call_id[:12]}: {ne}")
+        
+        print(f"CALL MONITOR: checked {len(calls)} calls, notified {notified} new")
+    except Exception as e:
+        print(f"CALL MONITOR Error: {e}")
 
-# --- CENTRALIZED PHASE 5 WORKERS (3-CRON LIMIT - User Rule: Max 4, stale apps hold 2 slots) ---
+# --- WORKERS (2-CRON app: heartbeat + outreach. Others are MANUAL.) ---
 from workers.outreach import auto_outreach_loop as outreach_logic
 from workers.lead_unifier import unified_lead_sync as sync_logic
 from workers.self_learning_cron import trigger_self_learning_loop as learning_logic
+from workers.prospector import run_prospecting_cycle as prospector_logic
 
 @app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
 def auto_outreach_loop():
     """Triggers autonomous outreach engine."""
     outreach_logic()
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+@app.function(image=image, secrets=[VAULT])
+def auto_prospecting():
+    """Discovers new leads. 3-stage: Google Places → email enrichment → insert. Called by heartbeat every ~6h."""
+    prospector_logic()
+
+@app.function(image=image, secrets=[VAULT])
 def unified_lead_sync():
-    """Triggers unified lead synchronization."""
+    """Lead sync - MANUAL ONLY."""
     sync_logic()
 
 @app.function(image=image, secrets=[VAULT])
 def trigger_self_learning_loop():
-    """Brain reflection - MANUAL ONLY (CRON removed to stay under limit)."""
+    """Brain reflection - MANUAL ONLY."""
     learning_logic()
 
-# system_heartbeat already defined above with its own schedule
 
 if __name__ == "__main__":
     print("⚫ ANTIGRAVITY v5.0 - SOVEREIGN DEPLOY")

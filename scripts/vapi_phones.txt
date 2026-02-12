@@ -1,0 +1,81 @@
+﻿{
+  "id": "86f73243-8916-4897-b",
+  "number": "+19362984339",
+  "provider": "vapi",
+  "assistantId": "ae717f29-6542-422f-906f-ee7ba6fa0bfe",
+  "serverUrl": "NOT SET",
+  "serverMessages": "NOT SET"
+}
+
+{
+  "id": "ee668638-38f0-4984-8",
+  "number": "+18632608351",
+  "provider": "twilio",
+  "assistantId": "a04bd175-d106-41e1-9f53-ced7b148705b",
+  "serverUrl": "https://nearmiss1193-afk--ghl-omni-automation-office-voice-tool-logic.modal.run",
+  "serverMessages": "NOT SET"
+}
+
+{
+  "id": "c2afdc74-8d2a-4ebf-8",
+  "number": "+18636928474",
+  "provider": "vapi",
+  "assistantId": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+  "serverUrl": "https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run",
+  "serverMessages": "NOT SET"
+}
+
+{
+  "id": "0b6c4f0b-6f33-4068-b",
+  "number": "+18633373601",
+  "provider": "vapi",
+  "assistantId": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+  "serverUrl": "https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run",
+  "serverMessages": "NOT SET"
+}
+
+{
+  "id": "e6babb7e-ee38-44d1-8",
+  "number": "+18633373705",
+  "provider": "vapi",
+  "assistantId": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+  "serverUrl": "https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run",
+  "serverMessages": "NOT SET"
+}
+
+{
+  "id": "4e38087a-0937-4997-b",
+  "number": "+19045129565",
+  "provider": "vapi",
+  "assistantId": "93f64b69-314c-4040-b8d2-1c9f9a71dfc8",
+  "serverUrl": "https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run",
+  "serverMessages": "NOT SET"
+}
+
+{
+  "id": "40379c46-4b27-45de-8",
+  "number": "+18636928548",
+  "provider": "vapi",
+  "assistantId": "a04bd175-d106-41e1-9f53-ced7b148705b",
+  "serverUrl": "https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run",
+  "serverMessages": "NOT SET"
+}
+
+{
+  "id": "8a7f18bf-8c1e-4eaf-8",
+  "number": "+18632132505",
+  "provider": "vapi",
+  "assistantId": "1a797f12-e2dd-4f7f-b2c5-08c38c74859a",
+  "serverUrl": "NOT SET",
+  "serverMessages": "NOT SET"
+}
+
+{
+  "id": "6bb589da-04b4-4740-b",
+  "number": "?",
+  "provider": "vapi",
+  "assistantId": "033ec1d3-e17d-4611-a497-b47cab1fdb4e",
+  "serverUrl": "https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run",
+  "serverMessages": "NOT SET"
+}
+

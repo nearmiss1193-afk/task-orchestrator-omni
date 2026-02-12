@@ -1,0 +1,144 @@
+============================================================
+1. CURRENT CUSTOMER MEMORY STATE
+============================================================
+contact_name: Dan
+questions_asked: ['challenge', 'business_type']
+last_interaction: 2026-02-09T16:10:18.970848+00:00
+full context: {
+  "contact_name": "Dan",
+  "questions_asked": [
+    "challenge",
+    "business_type"
+  ]
+}
+
+============================================================
+2. CONVERSATION LOGS SINCE FIX (~15:14 EST = 20:14 UTC)
+============================================================
+
+  [2026-02-11T20:41:09] voice
+    User: AI: Hi there. This is Sarah from AI Service Company. Thanks for connecting.
+User: Hi. I just got 1 of those, uh, flyers.
+    Sarah: Call summary: Joe from AAA Service Tire called after receiving a flyer. He did not express specific pain points or objec
+
+  [2026-02-11T20:05:21] sms
+    User: Hi
+    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T20:04:21] sms
+    User: Just me
+    Sarah: Got it, Daniel! When are you looking to get something like this in place?
+
+  [2026-02-11T20:03:15] sms
+    User: My name is Daniel
+    Sarah: Hey Daniel, sorry for the mix-up! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:55:28] sms
+    User: Hi
+    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
+
+============================================================
+3. VAPI DEBUG LOGS (any new ones?)
+============================================================
+  [2026-02-09T16:18:56] assistant-request | +13529368152 | name: Michael | Greeting: returning customer
+  [2026-02-09T16:17:49] assistant-request | +13529368152 | name: Michael | Greeting: returning customer
+  [2026-02-09T16:17:24] assistant-request | +13529368152 | name: Michael | Greeting: returning customer
+  [2026-02-09T16:16:46] assistant-request | +13529368152 | name: Michael | Greeting: returning customer
+  [2026-02-08T18:25:21] assistant-request |  | name:  | Greeting: new customer
+
+============================================================
+4. VAPI ASSISTANT CONFIGS (post-fix)
+============================================================
+
+  Sarah the Spartan (1a797f12-e2dd-4f)
+    serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+    serverMessages: ['end-of-call-report', 'status-update', 'hang', 'speech-update', 'transcript', 'function-call', 'assistant.started', 'conversation-update']
+    server.url: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+
+  Sarah Spart# (ae717f29-6542-42)
+    serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+    serverMessages: ['end-of-call-report', 'status-update', 'hang', 'speech-update', 'transcript', 'function-call', 'assistant.started', 'conversation-update']
+    server.url: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+
+============================================================
+5. MOST RECENT VAPI CALLS (after fix)
+============================================================
+
+  Call: 019c4e6e-d165-7663-942f-
+  Created: 2026-02-11T20:40:11
+  Status: ended | Reason: customer-ended-call
+  Customer: +13529368152
+  AssistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+  Messages: 12 entries
+
+  Call: 019c4e47-02a4-7668-88df-
+  Created: 2026-02-11T19:56:42
+  Status: ended | Reason: customer-ended-call
+  Customer: +13529368152
+  AssistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+  Messages: 1 entries
+
+  Call: 019c4e46-bfee-755e-b4dd-
+  Created: 2026-02-11T19:56:25
+  Status: ended | Reason: customer-ended-call
+  Customer: +13529368152
+  AssistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+  Messages: 2 entries
+
+  Call: 019c4e44-956d-7663-93e2-
+  Created: 2026-02-11T19:54:03
+  Status: ended | Reason: customer-ended-call
+  Customer: +13529368152
+  AssistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+  Messages: 6 entries
+
+  Call: 019c4e36-e2f0-7330-8ca5-
+  Created: 2026-02-11T19:39:05
+  Status: ended | Reason: customer-ended-call
+  Customer: +13529368152
+  AssistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+  Messages: 12 entries
+
+============================================================
+6. PHONE NUMBER CONFIGS
+============================================================
+
+  Sarah Spart# phone (+19362984339)
+    assistantId: ae717f29-6542-422f-906f-ee7ba6fa0bfe
+    serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+
+  ALL PHONE NUMBERS (9 total):
+    +19362984339 -> assistant: ae717f29-6542-422f-9 | serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.m
+    +18632608351 -> assistant: a04bd175-d106-41e1-9 | serverUrl: https://nearmiss1193-afk--ghl-omni-automation-office-voice-t
+    +18636928474 -> assistant: 1a797f12-e2dd-4f7f-b | serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.
+    +18633373601 -> assistant: 1a797f12-e2dd-4f7f-b | serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.
+    +18633373705 -> assistant: 1a797f12-e2dd-4f7f-b | serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.
+    +19045129565 -> assistant: 93f64b69-314c-4040-b | serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.
+    +18636928548 -> assistant: a04bd175-d106-41e1-9 | serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.
+    +18632132505 -> assistant: 1a797f12-e2dd-4f7f-b | serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.m
+     -> assistant: 033ec1d3-e17d-4611-a | serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.
+
+============================================================
+7. WHICH NUMBER RECEIVES THE CALLS?
+============================================================
+
+  Call 019c4e6e-d165-76
+    phoneNumber.id: N/A
+    phoneNumber.number: N/A
+    phoneNumber.assistantId: N/A
+    phoneNumber.serverUrl: N/A
+    call assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+
+  Call 019c4e47-02a4-76
+    phoneNumber.id: N/A
+    phoneNumber.number: N/A
+    phoneNumber.assistantId: N/A
+    phoneNumber.serverUrl: N/A
+    call assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+
+  Call 019c4e46-bfee-75
+    phoneNumber.id: N/A
+    phoneNumber.number: N/A
+    phoneNumber.assistantId: N/A
+    phoneNumber.serverUrl: N/A
+    call assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a

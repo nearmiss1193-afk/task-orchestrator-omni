@@ -1,0 +1,21 @@
+﻿=== FULL CALL DETAILS ===
+id: 019c4dde-3a6f-788f-9596-bfefeb46e004
+status: ended
+duration: NULL
+endedReason: customer-ended-call
+serverUrl: NULL/MISSING
+serverMessages: NULL
+assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+phoneNumberId: 8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e
+createdAt: 2026-02-11T18:02:15.535Z
+endedAt: 2026-02-11T18:03:50.923Z
+
+messages: (16 messages)
+  role=bot | Love it. Dan's got a few openings later today or tomorrow.
+  role=user | Uh, today, anytime before 5.
+  role=bot | Perfect. I'll lock you in for a call with Dan before 5 today at 8 6 3 8 1 2 5 5 
+  role=user | Alright. Great. Thank you.
+  role=bot | You're welcome, Dan. Looking forward to helping you get those reviews. Have a gr
+
+assistant config's serverUrl: NOT IN RESPONSE
+phoneNumber config: {}

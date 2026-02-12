@@ -1,0 +1,69 @@
+
+==================================================
+GROK
+==================================================
+1. **ROOT CAUSE**: The primary issue is faulty data persistence and lookup in the customer database. Specifically, the error in customer_memory ("column customer_memory.customer_name does not exist") prevents updates to the customer's name (e.g., from "Michael" to "Daniel"), as seen in conversation logs where Sarah repeatedly addresses the user incorrectly despite corrections. This cascades to conversation looping and memory loss between calls, exacerbated by inconsistent VAPI configurations (e.g., serverUrl set to NONE).
+
+2. **QUICK WINS**: 
+   - Fix VAPI config by setting serverUrl for the main Sarah Assistant (currently NONE) – this can be done in under 10 minutes via the admin panel.
+   - Update context_summary in the customer record to reflect the correct name ("Daniel") based on logs, resolving misaddressing quickly.
+
+3. **RISKS**: If unaddressed, persistent misaddressing and looping could lead to customer frustration and churn, as evidenced by the user ending multiple calls (+13529368152). Notification failures (e.g., call notifications table error) might cause missed interactions, resulting in lost revenue. Additionally, database errors could corrupt more data over time.
+
+4. **RECOMMENDED FIX ORDER**:
+   1. Resolve database schema errors (e.g., add missing customer_name column) to enable proper data storage.
+   2. Update VAPI config for consistent serverUrl and assistant IDs.
+   3. Fix name and memory persistence in context_summary to stop looping and misaddressing.
+   4. Verify call notification table integration to prevent future failures.
+
+(Word count: 198)
+
+==================================================
+CHATGPT
+==================================================
+1. **ROOT CAUSE**: The primary issue causing the most problems is the lack of proper customer memory management. Sarah AI fails to retain context between interactions, as evidenced by the repeated use of the name "Michael" despite the user stating their name is "Daniel" (Conversation Logs, 2026-02-09T16:10:18). Additionally, the error in the customer_memory database indicates a missing column, which prevents storing and retrieving customer names effectively.
+
+2. **QUICK WINS**:
+   - **Fix the customer_memory schema**: Add the missing `customer_name` column to the `customer_memory` table to allow for proper name storage.
+   - **Update conversation logic**: Modify the response logic to avoid repeating the authority question in SMS conversations, addressing the looping issue.
+
+3. **RISKS**: If these issues are not addressed soon, customer dissatisfaction will likely increase due to the AI's inability to remember user preferences and names, leading to a poor user experience. Additionally, the failure of call notifications could result in missed opportunities and lost revenue.
+
+4. **RECOMMENDED FIX ORDER**:
+   1. Fix the `customer_memory` schema by adding the `customer_name` column.
+   2. Update the conversation logic to prevent looping questions in SMS interactions.
+   3. Investigate and resolve the call notification issue by checking the `vapi_call_notifications` table and ensuring it is properly configured.
+   4. Implement a mechanism to retain context between voice calls to improve memory and user experience.
+
+==================================================
+GEMINI
+==================================================
+Okay, here's my analysis of the diagnostic report:
+
+1.  **ROOT CAUSE:** The primary issue is the incorrect and persistent association of the name "Michael" with customer +13529368152 (Dan). This is evident in sections 3, 4, and 5. The system is consistently retrieving and using "Michael" from the `context_summary.contact_name`, even after the customer corrects the name. This incorrect name association is likely the root of the SMS conversation loops, as Sarah is operating under a false premise.
+
+2.  **QUICK WINS:**
+    *   **Clear the `context_summary.contact_name` for customer +13529368152.** This should immediately stop Sarah from calling him "Michael" in new interactions. This is a targeted data correction that can be done quickly.
+
+3.  **RISKS:**
+    *   **Customer Dissatisfaction:** Continuing to misidentify customers will lead to frustration and churn.
+    *   **Data Integrity Issues:** The underlying data model and retrieval logic are flawed, potentially affecting other customers. The error in retrieving customer names may be indicative of other data integrity issues.
+    *   **Broken Call Notifications:** The `vapi_call_notifications` table error suggests a deeper problem with call-related data management.
+
+4.  **RECOMMENDED FIX ORDER:**
+
+    1.  **Immediate Data Correction:** Clear the `context_summary.contact_name` for +13529368152.
+    2.  **Investigate and Fix Name Retrieval Logic:** Determine why "Michael" is persistently associated with +13529368152. Examine the code responsible for retrieving and updating `context_summary.contact_name`.
+    3.  **Address `vapi_call_notifications` Table Error:** Investigate why the table is missing and restore or recreate it. This is critical for call notifications to function.
+    4.  **Implement Robust Error Handling:** Improve error handling to prevent similar data inconsistencies in the future.
+    5.  **Review Data Model:** Examine the overall data model for potential weaknesses and inconsistencies. The error message "column customer_memory.customer_name does not exist" suggests a potential schema issue.
+
+
+==================================================
+ANTIGRAVITY
+==================================================
+Based on direct Supabase + Vapi API queries:
+1. ROOT CAUSE: Calls route to assistant 1a797f12 (NOT Sarah ae717f29). Our serverUrl fix was applied to the wrong assistant.
+2. QUICK WINS: (a) Fix Michael name in customer_memory, (b) Create vapi_call_notifications table
+3. RISKS: Real customers will get called Michael and Sarah will loop on them
+4. FIX ORDER: (1) Identify which phone Dan calls and fix that assistant's serverUrl, (2) Clear Michael from context_summary, (3) Fix name extraction logic, (4) Fix conversation flow

@@ -813,7 +813,7 @@ SUPABASE_SERVICE_ROLE_KEY=<service_role_key>
 
 | App | Status | Notes |
 |-----|--------|-------|
-| ghl-omni-automation | Active (5h ago) | Main app, 4 CRONs |
+| ghl-omni-automation | Active | Main app, 2 CRONs (heartbeat + outreach) |
 | nexus-engine | Active (11d ago) | dispatch_call: 135 errors |
 | nexus-portal | Active (11d ago) | 0 calls |
 | test-atomic | Active (13d ago) | 0 calls |
@@ -1007,34 +1007,6 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 
 ---
 
-```text
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                                                                               ║
-║   "The system only learns if it listens."                                    ║
-║   "Delegation is not abandonment; it is focused stewardship."                ║
-║   "Outreach is oxygen. Voice is truth."                                      ║
-║   "Personalized rescue is the only path to ROI."                             ║
-║   "An empty queue is a silent killer."   (Feb 9, 2026)                       ║
-║   "4 CRONs max. 5 crashes a lot."       (Feb 9, 2026)                       ║
-║   "Stopped apps still hold CRON slots." (Feb 9, 2026)                       ║
-║   "Always save learnings on completion."(Feb 9, 2026)                       ║
-║   "GHL API is BANNED. Webhooks only."   (Feb 9, 2026)                       ║
-║   "Exit codes lie. Visual proof only."  (Feb 9, 2026)                       ║
-║   "Generic emails are spam. Audits are value." (Feb 9, 2026)                ║
-║   "The audit sells the service."        (Feb 9, 2026)                       ║
-║   "Google Places API needs billing enabled." (Feb 10, 2026)                 ║
-║   "Vercel needs env vars set manually." (Feb 10, 2026)                      ║
-║   "aiserviceco.com NOT 'AI Service Code' (voice-to-text error)." (Feb 10)   ║
-║   "3,321 businesses is 30-40% of Lakeland. Sunbiz has the rest." (Feb 10)   ║
-║   "Directory UX must feel like Yelp or users won't return." (Feb 10)        ║
-║                                                                               ║
-║                              - SOVEREIGN MEMORY v5.5                          ║
-║                                                                               ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
-```
-
----
-
 ## 📍 LAKELAND LOCAL DIRECTORY — OPERATIONS LOG (Feb 10, 2026)
 
 ### Architecture
@@ -1114,3 +1086,116 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 - Added: `rating` (real), `totalRatings` (integer), `lat` (double), `lng` (double)
 - Removed AI scores from public-facing BusinessCard component
 - Added Google star ratings with review counts instead
+
+---
+
+### Section 22: Feb 11, 2026 — Prospecting Pipeline Fixed (3 Cascading Bugs)
+
+**INCIDENT:** Prospecting pipeline was non-functional. Google Places API returned results but 0 leads inserted.
+
+**Root Causes (3 cascading bugs):**
+
+| Bug | Root Cause | Fix |
+|-----|-----------|-----|
+| 🔑 API Key | Modal env var `GOOGLE_API_KEY` pointed to old key without Places API enabled. `GOOGLE_PLACES_API_KEY` not propagating in Modal dev runs | Hardcoded Dan's working key `AIzaSyDVL4v...` as fallback in `prospector.py` |
+| 📋 Column Mapping | Code used `business_name`, `location`, `industry`, `first_name`, `last_name`, `metadata` — NONE exist in `contacts_master` | Mapped to: `company_name`, `niche`, `full_name`, `lead_source`, `raw_research` |
+| 🔒 NOT NULL Constraint | `ghl_contact_id` is NOT NULL in `contacts_master`; prospector wasn't providing it | Added `ghl_contact_id: "prospector-{uuid12}"` placeholder |
+
+**Verification (PASSED):** 25 leads inserted into `contacts_master` from Google Places API. Niche rotation working. Email enrichment working (33/69 businesses got emails).
+
+#### contacts_master Schema (Actual Columns — Feb 11, 2026)
+
+```
+id, created_at, ghl_contact_id (NOT NULL!), full_name, email, phone,
+website_url, lead_score, sentiment, raw_research, ai_strategy, status,
+funnel_stage, stage_entered_at, deal_value, source, niche,
+last_contacted_at, total_touches, responded, lead_source, company_name
+```
+
+> [!WARNING]
+> **`ghl_contact_id` is NOT NULL.** Any insert without it will silently fail. Prospector uses `"prospector-{uuid}"` as placeholder.
+> **`business_name` DOES NOT EXIST.** The column is `company_name`. Grep codebase before assuming column names.
+
+#### Google Places API Keys (Feb 11, 2026)
+
+| Key | Purpose | Status |
+|-----|---------|--------|
+| `AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc` | **Prospector** (Places API enabled) | ✅ Working |
+| `AIzaSyABzZ31Qqw91JbI1cDWRhU8AxvnJPhIErY` | **LakelandFinds** directory scraping | ✅ Working |
+| `AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY` | **OLD key** (Places API NOT enabled) | ❌ REQUEST_DENIED |
+
+#### Modal Cron Inventory (ACCURATE — Feb 11, 2026)
+
+> [!IMPORTANT]
+> **LIMIT: 4 CRONs** (not 5, Dan's rule). Currently using **2/4**.
+
+| # | Function | Schedule | Type |
+|---|----------|----------|------|
+| 1 | `system_heartbeat` | `*/5 * * * *` | ✅ CRON |
+| 2 | `auto_outreach_loop` | `*/5 * * * *` | ✅ CRON |
+| — | `auto_prospecting` | None (spawned by heartbeat every ~6h) | Manual / spawned |
+| — | `unified_lead_sync` | None | Manual only |
+| — | `trigger_self_learning_loop` | None | Manual only |
+
+**Available cron slots: 2** (safe to add daily digest + 1 more)
+
+#### Prospecting Pipeline Architecture
+
+```
+Heartbeat (every 5 min)
+  └── Checks prospector_last_run timestamp in system_state
+  └── If >= 6 hours ago → auto_prospecting.spawn()
+        └── Stage 1: Google Places Text Search (5 niche×city combos per cycle)
+        └── Stage 2: Email enrichment (website scraping + Hunter.io)
+        └── Stage 3: Dedup + Insert into contacts_master
+        └── Saves cycle_index to system_state for rotation resume
+```
+
+**Search matrix:** 10 niches × 30 cities = 300 combos. 5 per cycle = 60 cycles to complete full rotation.
+
+#### Monitoring Recommendations (Approved — Not Yet Implemented)
+
+| Priority | What | Cron Slots | Effort |
+|----------|------|-----------|--------|
+| 🥇 | Daily digest email (leads, sends, errors) | +1 | 30 min |
+| 🥈 | Smarter heartbeat (detect broken outreach, stalled prospector) | +0 | 20 min |
+| 🥉 | External watchdog (UptimeRobot on /health_check) | +0 | 5 min |
+
+**Sovereign Laws Added:**
+
+- "Column names must be verified against live schema, never assumed." (Feb 11, 2026)
+- "ghl_contact_id is NOT NULL. All inserts must include it." (Feb 11, 2026)
+- "Modal env vars don't always propagate in dev runs. Hardcode fallbacks for critical keys." (Feb 11, 2026)
+- "Prospecting pipeline: Discover → Enrich → Dedup → Insert. All 4 stages must pass." (Feb 11, 2026)
+
+---
+
+```text
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                               ║
+║   "The system only learns if it listens."                                    ║
+║   "Delegation is not abandonment; it is focused stewardship."                ║
+║   "Outreach is oxygen. Voice is truth."                                      ║
+║   "Personalized rescue is the only path to ROI."                             ║
+║   "An empty queue is a silent killer."   (Feb 9, 2026)                       ║
+║   "4 CRONs max. 5 crashes a lot."       (Feb 9, 2026)                       ║
+║   "Stopped apps still hold CRON slots." (Feb 9, 2026)                       ║
+║   "Always save learnings on completion."(Feb 9, 2026)                       ║
+║   "GHL API is BANNED. Webhooks only."   (Feb 9, 2026)                       ║
+║   "Exit codes lie. Visual proof only."  (Feb 9, 2026)                       ║
+║   "Generic emails are spam. Audits are value." (Feb 9, 2026)                ║
+║   "The audit sells the service."        (Feb 9, 2026)                       ║
+║   "Google Places API needs billing enabled." (Feb 10, 2026)                 ║
+║   "Vercel needs env vars set manually." (Feb 10, 2026)                      ║
+║   "aiserviceco.com NOT 'AI Service Code' (voice-to-text error)." (Feb 10)   ║
+║   "3,321 businesses is 30-40% of Lakeland. Sunbiz has the rest." (Feb 10)   ║
+║   "Directory UX must feel like Yelp or users won't return." (Feb 10)        ║
+║   "Column names: verify against live DB, never assume." (Feb 11, 2026)      ║
+║   "ghl_contact_id is NOT NULL — every insert must include it." (Feb 11)     ║
+║   "Modal env vars unreliable in dev — hardcode critical fallbacks." (Feb 11) ║
+║   "Prospecting: Discover → Enrich → Dedup → Insert. All must pass." (Feb 11)║
+║                                                                               ║
+║                              - SOVEREIGN MEMORY v5.6                          ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```

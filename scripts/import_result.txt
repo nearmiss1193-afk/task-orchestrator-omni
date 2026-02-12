@@ -1,0 +1,25 @@
+﻿Total businesses: 3321
+With email: 1307
+Existing contacts: 324
+
+Skipped (already in DB): 340
+New leads to import: 967
+
+Importing first batch of 50 leads...
+  Error: {'message': "Could not find the 'notes' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  Error: {'message': "Could not find the 'notes' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+  Error: {'message': "Could not find the 'notes' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+
+=== IMPORT RESULTS ===
+Imported: 0
+Skipped (dupe): 340
+Errors: 50
+Remaining in queue: 917
+
+Priority breakdown (all 967 leads):
+  HIGH (<10 reviews): 141
+  MEDIUM (10-30 reviews): 158
+  LOW (30+ reviews): 668
+
+Result: {"imported": 0, "total_ready": 967, "errors": 50}
+

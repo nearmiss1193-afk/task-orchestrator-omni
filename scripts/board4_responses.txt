@@ -1,0 +1,60 @@
+
+==================================================
+GROK
+==================================================
+### Analysis of Vapi Webhook Issues
+
+Based on your findings, the core issue appears to be a discrepancy between the assistant config (which includes 'end-of-call-report') and the empty serverMessages arrays in actual calls, yet conversation_logs show successful end-of-call-report processing. This suggests:
+
+1. **Empty serverMessages**: Likely a Vapi API display bug; events are probably being sent but not reflected accurately in queries.
+
+2. **End-of-call-report receipt**: Yes, it's being received, as evidenced by the call summaries in conversation_logs, indicating the event triggers log inserts.
+
+3. **Dan's 21:03 call**: Given the ~21:00 deploy and the 21:04 log entry, it likely used old code due to potential Modal container staleness or caching.
+
+4. **Recommendation**: Dan should make one more test call immediately to confirm the new code (with customer_name fix) processes events correctly and triggers notifications.
+
+Next steps: Verify Vapi API behavior via direct logs and retest webhooks. If issues persist, investigate GHL webhook failures or redeploy. (142 words)
+
+==================================================
+CHATGPT
+==================================================
+The analysis reveals a critical issue with the Vapi webhook. While the assistant configuration includes `end-of-call-report`, actual calls show an empty `serverMessages` array, raising questions about whether events are being sent. Despite this, `conversation_logs` contains entries with call summaries, indicating that `end-of-call-report` is indeed being received, likely through an `assistant-request` event.
+
+However, the absence of notifications suggests a failure in the notification block, potentially due to the recent customer_name crash fix or the timing of the deployment. Dan's call at 21:03 UTC occurred shortly after the deployment at ~21:00 UTC, raising doubts whether it was processed by the old or new code.
+
+Key questions for the board include:
+1. Is the empty `serverMessages` a display issue or indicative of no events sent?
+2. Is `end-of-call-report` actually being received despite the empty array?
+3. Did Dan's call utilize the new code?
+4. Should Dan conduct one more test call to confirm the new code's functionality?
+
+==================================================
+GEMINI
+==================================================
+We've pinpointed the root cause: end-of-call-reports aren't triggering notifications despite being logged in conversation_logs.
+
+Key findings: Assistant config includes 'end-of-call-report', but call logs show empty `serverMessages`. However, conversation_logs contain call summaries, indicating end-of-call-report receipt.
+
+Possible causes:
+* A. GHL webhook failure.
+* B. Customer_name crash (fixed, but untested post-deploy).
+* C. Dan's 21:03 call processed by old code due to a stale Modal container.
+
+Critical questions:
+1. Is the empty `serverMessages` a Vapi API display issue or a real problem?
+2. Is end-of-call-report actually being received, given conversation_logs?
+3. Did Dan's 21:03 call use the new or old code?
+4. Should Dan make another test call to verify with the new code?
+
+
+==================================================
+ANTIGRAVITY
+==================================================
+DIRECT ANALYSIS:
+1. The conversation_logs entries with "Call summary: Joe from AAA Tire" PROVE end-of-call-report IS being received
+2. BUT vapi_debug_logs has ZERO entries in 60 min — means the code path that logs to debug table (assistant-request handler) is NOT firing
+3. The end-of-call-report handler writes to conversation_logs (works) then does customer_memory upsert (crashed on customer_name) then notification (never reached)
+4. Our fix removed customer_name at ~21:00 UTC. Dan's call was at 21:03. Modal containers may have been stale.
+5. RECOMMENDATION: Dan should make ONE MORE test call now (at least 10 min after deploy) to guarantee the new code runs.
+6. If it STILL fails, the GHL webhook is the remaining suspect.

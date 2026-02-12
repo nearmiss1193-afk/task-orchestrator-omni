@@ -1,0 +1,18 @@
+﻿=== Creating webhook.site test URL ===
+Test URL: https://webhook.site/132086b8-2330-49e2-b442-3a3ab661e2fb
+UUID: 132086b8-2330-49e2-b442-3a3ab661e2fb
+
+=== Updating assistant serverUrl to webhook.site ===
+Assistant update: 200
+New serverUrl: https://webhook.site/132086b8-2330-49e2-b442-3a3ab661e2fb
+
+=== Updating phone number serverUrl to webhook.site ===
+Phone update: 200
+New phone serverUrl: https://webhook.site/132086b8-2330-49e2-b442-3a3ab661e2fb
+
+=== INSTRUCTIONS ===
+1. Call Sarah at +1 (863) 213-2505
+2. Talk for at least 15-20 seconds
+3. Then run check_webhook_results.py to see if Vapi sent data
+
+Or check manually: https://webhook.site/#!/view/132086b8-2330-49e2-b442-3a3ab661e2fb

@@ -1,0 +1,1 @@
+﻿Error: {'message': "Could not find the table 'public.vapi_call_notifications' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.interactions'", 'details': None}

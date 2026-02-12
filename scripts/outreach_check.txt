@@ -1,0 +1,19 @@
+﻿python :   File "<string>", 
+line 18
+At line:1 char:1
++ python -c "
++ ~~~~~~~~~~~
+    + CategoryInfo          
+    : NotSpecified: (  Fil  
+  e "<string>", line 18:S   
+ tring) [], RemoteExcept    
+ion
+    + FullyQualifiedErrorId 
+    : NativeCommandError
+ 
+    print(f'  {t.get(" 
+ts\,\?\)[:19]}
+                     ^
+SyntaxError: unterminated 
+string literal (detected at 
+line 18)

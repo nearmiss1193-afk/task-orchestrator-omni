@@ -1,0 +1,273 @@
+﻿python : Traceback 
+(most recent call 
+last):
+At line:1 char:1
++ python scripts\chec
+k_vapi_10calls.py 
+2>&1 | Out-File 
+scripts\calls_10 ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~
+    + CategoryInfo   
+           : 
+NotSpecified: (T    
+raceback (most 
+recent     call 
+last)::String)     
+[], RemoteException
+    + 
+FullyQualifiedError  
+  Id : 
+NativeCommandErr    
+or
+ 
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\connec
+tionpool.py", line 
+787, in urlopen
+    response = 
+self._make_request(
+        conn,
+    ...<10 lines>...
+        
+**response_kw,
+    )
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\connec
+tionpool.py", line 
+534, in _make_request
+    response = 
+conn.getresponse()
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\connec
+tion.py", line 565, 
+in getresponse
+    httplib_response 
+= 
+super().getresponse()
+  File "C:\Python313\
+Lib\http\client.py", 
+line 1430, in 
+getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Python313\
+Lib\http\client.py", 
+line 331, in begin
+    version, status, 
+reason = 
+self._read_status()
+                     
+         
+~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\
+Lib\http\client.py", 
+line 300, in 
+_read_status
+    raise RemoteDisco
+nnected("Remote end 
+closed connection 
+without"
+                     
+        " response")
+http.client.RemoteDis
+connected: Remote 
+end closed 
+connection without 
+response
+
+During handling of 
+the above exception, 
+another exception 
+occurred:
+
+Traceback (most 
+recent call last):
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\requests\adapt
+ers.py", line 644, 
+in send
+    resp = 
+conn.urlopen(
+        method=reques
+t.method,
+    ...<9 lines>...
+        
+chunked=chunked,
+    )
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\connec
+tionpool.py", line 
+841, in urlopen
+    retries = 
+retries.increment(
+        method, url, 
+error=new_e, 
+_pool=self, _stacktra
+ce=sys.exc_info()[2]
+    )
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\util\r
+etry.py", line 474, 
+in increment
+    raise 
+reraise(type(error), 
+error, _stacktrace)
+          ~~~~~~~^^^^
+^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\util\u
+til.py", line 38, in 
+reraise
+    raise value.with_
+traceback(tb)
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\connec
+tionpool.py", line 
+787, in urlopen
+    response = 
+self._make_request(
+        conn,
+    ...<10 lines>...
+        
+**response_kw,
+    )
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\connec
+tionpool.py", line 
+534, in _make_request
+    response = 
+conn.getresponse()
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\urllib3\connec
+tion.py", line 565, 
+in getresponse
+    httplib_response 
+= 
+super().getresponse()
+  File "C:\Python313\
+Lib\http\client.py", 
+line 1430, in 
+getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Python313\
+Lib\http\client.py", 
+line 331, in begin
+    version, status, 
+reason = 
+self._read_status()
+                     
+         
+~~~~~~~~~~~~~~~~~^^
+  File "C:\Python313\
+Lib\http\client.py", 
+line 300, in 
+_read_status
+    raise RemoteDisco
+nnected("Remote end 
+closed connection 
+without"
+                     
+        " response")
+urllib3.exceptions.Pr
+otocolError: 
+('Connection 
+aborted.', RemoteDisc
+onnected('Remote end 
+closed connection 
+without response'))
+
+During handling of 
+the above exception, 
+another exception 
+occurred:
+
+Traceback (most 
+recent call last):
+  File "C:\Users\near
+m\.gemini\antigravity
+\scratch\empire-unifi
+ed\scripts\check_vapi
+_10calls.py", line 
+10, in <module>
+    r = requests.get(
+'https://api.vapi.ai/
+call?limit=10', 
+headers=headers)
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\requests\api.p
+y", line 73, in get
+    return 
+request("get", url, 
+params=params, 
+**kwargs)
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\requests\api.p
+y", line 59, in 
+request
+    return session.re
+quest(method=method, 
+url=url, **kwargs)
+           ~~~~~~~~~~
+~~~~~^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\requests\sessi
+ons.py", line 589, 
+in request
+    resp = 
+self.send(prep, 
+**send_kwargs)
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\requests\sessi
+ons.py", line 703, 
+in send
+    r = adapter.send(
+request, **kwargs)
+  File "C:\Users\near
+m\AppData\Roaming\Pyt
+hon\Python313\site-pa
+ckages\requests\adapt
+ers.py", line 659, 
+in send
+    raise 
+ConnectionError(err, 
+request=request)
+requests.exceptions.C
+onnectionError: 
+('Connection 
+aborted.', RemoteDisc
+onnected('Remote end 
+closed connection 
+without response'))

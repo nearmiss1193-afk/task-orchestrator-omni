@@ -1,0 +1,55 @@
+﻿=== ASSISTANT CONFIG ===
+Current serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+Current serverMessages: ['end-of-call-report', 'hang', 'function-call']
+python : Traceback 
+(most recent call 
+last):
+At line:1 char:1
++ python scripts\fix_
+vapi_complete.py 
+2>&1 | Out-File 
+scripts\fix_compl ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Traceba   
+ ck (most recent     
+call last)::Stri    
+ng) [], RemoteEx    
+ception
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  File "C:\Users\near
+m\.gemini\antigravity
+\scratch\empire-unifi
+ed\scripts\fix_vapi_c
+omplete.py", line 
+40, in <module>
+    print("\u2705 
+Assistant serverUrl 
+is correct")
+    ~~~~~^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+^^^^
+  File "C:\Python313\
+Lib\encodings\cp1252.
+py", line 19, in 
+encode
+    return codecs.cha
+rmap_encode(input,sel
+f.errors,encoding_tab
+le)[0]
+           ~~~~~~~~~~
+~~~~~~~~~~~^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+^^^
+UnicodeEncodeError: 
+'charmap' codec 
+can't encode 
+character '\u2705' 
+in position 0: 
+character maps to 
+<undefined>

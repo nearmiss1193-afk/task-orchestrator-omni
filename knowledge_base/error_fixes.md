@@ -555,3 +555,98 @@ npx -y vercel --prod --yes
 **Confidence**: 100% (hit this Feb 10, 2026 on LakelandFinds — VAPI widget + newsletter missing despite code being pushed)
 
 ---
+
+## Vapi Call Notifications Not Arriving (FIXED — Feb 11, 2026)
+
+**Symptom**: Dan calls Sarah, hangs up, never receives call report SMS.
+
+**Root Cause (CONFIRMED by Modal logs)**:
+
+```
+📱 [NOTIFY] === NOTIFICATION BLOCK REACHED for +13529368152 ===
+📱 [NOTIFY] ❌ FAILED: NameError: name 'json' is not defined
+```
+
+Two bugs in sequence:
+
+1. `json` module not imported in `vapi_webhook` function — `json.dumps()` crashed the notification
+2. `updated_at` column doesn't exist on `customer_memory` — upsert crashed (but notification was outside try/except)
+
+**Fix**:
+
+1. Added `import json` to `vapi_webhook` function (line 532 of deploy.py)
+2. Removed `updated_at` from upsert payload
+3. Previously also removed `customer_name` from upsert (same issue)
+
+**How we found it**: Dan clicked the `end-of-call-report` webhook call in Modal dashboard → logs showed the exact error.
+
+**Key lesson**: When Modal functions use local imports, ALL needed modules must be imported inside the function. The function had `import re` but not `import json`. Always check Modal logs FIRST — we spent 3 board calls theorizing when the answer was in one log line.
+
+**Also fixed in same session**: phone number serverUrls, Vapi assistant serverUrls, Michael→Dan name fix, question tracking.
+
+**Confidence**: 100% — Dan confirmed notifications working after fix
+
+---
+
+## SMS "Michael" Name Override (FIXED — Feb 11, 2026)
+
+**Error**: Sarah calls every customer "Michael" regardless of what they say their name is.
+
+**Root Cause**: Line 399 of `deploy.py` had `updated_context["contact_name"] = contact_name` which blindly overwrote with GHL's `contact_name` on EVERY message. GHL had "Michael" for Dan's contact.
+
+**Fix**:
+
+1. Cleared "Michael" → "Dan" in `context_summary` via direct DB update
+2. Changed code: user's stated name (extracted via regex) takes priority over GHL's contact_name
+3. GHL's name only used as initial fallback for new customers with no existing name
+
+**Confidence**: 95% (DB verified, code deployed, but not re-tested by Dan)
+
+---
+
+## customer_name and updated_at Column Crashes in Upsert (FIXED — Feb 11, 2026)
+
+**Error**: `deploy.py` upsert to `customer_memory` included `customer_name` AND `updated_at` fields, but NEITHER column exists on the table.
+
+**Modal log proof**: `APIError: Could not find the 'updated_at' column of 'customer_memory' in the schema cache (PGRST204)`
+
+**Impact**: Supabase returns 400 error on every `end-of-call-report` upsert. The try/except catches it but voice memory doesn't persist.
+
+**Fix**: Removed both `customer_name` and `updated_at` from the upsert payload. Only `phone_number` and `context_summary` remain.
+
+**Lesson**: ALWAYS verify table schema before writing. Use `sb.table('x').select('*').limit(1).execute()` to see actual columns.
+
+**Confidence**: 100% (Modal log confirmed, both columns removed, upsert now succeeds)
+
+---
+
+## Phone Number serverUrl Pointing to Dead Endpoint (FIXED — Feb 11, 2026)
+
+**Error**: Multiple Vapi phone numbers had `serverUrl` pointing to old `empire-inbound-vapi-webhook.modal.run` which no longer exists.
+
+**Affected numbers**: +18636928474, +18633373601, +18633373705, +19045129565, +18636928548, and one with no number.
+
+**Impact**: Calls to these numbers sent webhooks to a dead URL. In Vapi, phone-level serverUrl OVERRIDES assistant-level serverUrl.
+
+**Fix**: Updated all phone number serverUrls via Vapi API PATCH.
+
+**Confidence**: 100% (API verified post-fix)
+
+---
+
+## Anti-Hallucination Protocol (NEW — Feb 11, 2026)
+
+**Problem**: AI board calls were being hallucinated — claimed API calls to other AIs never actually happened.
+
+**Fix**: Board calls now use `scripts/board_call.py` which:
+
+1. Makes real HTTP requests to Grok (xAI), ChatGPT (OpenAI), Gemini (Google)
+2. Logs every request/response to `scripts/board_receipts.txt` with timestamps, HTTP codes, response IDs
+3. If an API key is missing, logs `NO API KEY AVAILABLE` instead of faking a response
+4. Dan can verify any board call by checking receipts file
+
+**Verification**: Ask Dan "did you receive the board responses?" and check receipt files exist with real HTTP 200 responses.
+
+**Confidence**: 100% (3 successful board calls verified with receipts)
+
+---

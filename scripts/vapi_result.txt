@@ -1,0 +1,71 @@
+=== ASSISTANTS ===
+Name: Ara - House of Help
+ID: a04bd175-d106-41e1-9f53-ced7b148705b
+serverUrl: NONE
+serverMessages: "NOT_SET"
+
+Name: Sarah Spart#
+ID: ae717f29-6542-422f-906f-ee7ba6fa0bfe
+serverUrl: NONE
+serverMessages: "NOT_SET"
+
+Name: Christina Outbound
+ID: f32b6c57-c8f9-438b-b634-2610dad5e610
+serverUrl: https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/webhook/vapi
+serverMessages: "NOT_SET"
+server.url: https://www.aiserviceco.com/api/webhook/vapi
+
+=== PHONE NUMBERS ===
+Number: +19362984339
+ID: 86f73243-8916-4897-bd91-c066193c22b7
+serverUrl: NONE
+assistantId: ae717f29-6542-422f-906f-ee7ba6fa0bfe
+
+Number: +18632608351
+ID: ee668638-38f0-4984-81ae-e2fd5d83084b
+serverUrl: https://nearmiss1193-afk--ghl-omni-automation-office-voice-tool-logic.modal.run
+assistantId: a04bd175-d106-41e1-9f53-ced7b148705b
+
+Number: +18636928474
+ID: c2afdc74-8d2a-4ebf-8736-7eecc1992204
+serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run
+assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+
+Number: +18633373601
+ID: 0b6c4f0b-6f33-4068-b1fa-69987a38169a
+serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run
+assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+
+Number: +18633373705
+ID: e6babb7e-ee38-44d1-8c8b-c96778ea4c18
+serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run
+assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+
+=== RECENT CALLS ===
+ID: 019c4e36-e2f0-7330-8
+status: in-progress | customer: +13529368152
+created: 2026-02-11T19:39:05 | ended: active
+reason: ? | msgs: 0
+
+ID: 019c4e2b-3670-7888-b
+status: ended | customer: +13529368152
+created: 2026-02-11T19:26:20 | ended: 2026-02-11T19:27:27
+reason: customer-ended-call | msgs: 12
+
+ID: 019c4e01-f9d0-7dd3-a
+status: ended | customer: +13529368152
+created: 2026-02-11T18:41:18 | ended: 2026-02-11T18:42:03
+reason: customer-ended-call | msgs: 8
+
+ID: 019c4ded-beac-711d-9
+status: ended | customer: +13529368152
+created: 2026-02-11T18:19:12 | ended: 2026-02-11T18:21:01
+reason: customer-ended-call | msgs: 19
+
+ID: 019c4dde-3a6f-788f-9
+status: ended | customer: +13529368152
+created: 2026-02-11T18:02:15 | ended: 2026-02-11T18:03:50
+reason: customer-ended-call | msgs: 16
+
+=== NOTIFICATION TEST ===
+Response: 200 | {"status":"Success: request sent to trigger execution server","id":"a0ITpsWIeFo1Vmk4y9W6"}

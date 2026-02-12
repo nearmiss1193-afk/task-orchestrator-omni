@@ -1,0 +1,130 @@
+﻿python : C:\Users\nearm\.g
+emini\antigravity\scratch\
+empire-unified\scripts\evi
+dence_check.py:16: 
+DeprecationWarning: dateti
+me.datetime.utcnow() is 
+deprecated and scheduled 
+for removal in a future 
+version. Use 
+timezone-aware objects to 
+represent datetimes in 
+UTC: datetime.datetime.now
+(datetime.UTC).
+At line:1 char:24
++ $env:PYTHONUTF8 = "1"; 
+python 
+scripts/evidence_check.py 
+2>&1 | Out-Fi ...
++                        ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (C  
+  :\Users\nearm\...(dat   
+ etime.UTC).:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+  cutoff = 
+(datetime.utcnow() - timed
+elta(minutes=60)).isoforma
+t()
+============================================================
+EVIDENCE CHECK ΓÇö Dan's test call
+Checking events after 2026-02-11T20:10:04.547266
+============================================================
+
+--- vapi_debug_logs (last 60 min) ---
+  Γ¥î NO ENTRIES ΓÇö webhook may not be firing at all
+
+--- conversation_logs (voice, last 60 min) ---
+
+  [1] timestamp: 2026-02-11T21:04:18.55678+00:00
+      customer_id: 37610d10-7d62-436a-aa3b-eacd197b74bb
+      direction: inbound
+      content: AI: Hi there, this is Sarah from AI Service Company. Thanks for connecting.
+User: Hi. How are you doing?
+AI: Hey, I'm doing great. Thanks
+User: I'm My
+      sarah_response: Call summary: Joe from AAA Tire called after receiving a brochure and requested a callback from the owner to discuss getting more Google reviews. He p
+
+  [2] timestamp: 2026-02-11T20:41:09.593276+00:00
+      customer_id: 37610d10-7d62-436a-aa3b-eacd197b74bb
+      direction: inbound
+      content: AI: Hi there. This is Sarah from AI Service Company. Thanks for connecting.
+User: Hi. I just got 1 of those, uh, flyers.
+AI: Oh, awesome. You got 1 of
+      sarah_response: Call summary: Joe from AAA Service Tire called after receiving a flyer. He did not express specific pain points or objections, but quickly requested a
+
+--- Vapi API: Recent calls ---
+
+  [1] created: 2026-02-11T21:03:39.359Z
+      ended: 2026-02-11T21:04:11.138Z
+      status: ended
+      customer: +13529368152
+      phone: NONE
+      assistant: 1a797f12-e2dd-4f7f-b
+      serverMessages: []
+      has end-of-call-report: NOT SET
+
+  [2] created: 2026-02-11T20:40:11.365Z
+      ended: 2026-02-11T20:41:03.041Z
+      status: ended
+      customer: +13529368152
+      phone: NONE
+      assistant: 1a797f12-e2dd-4f7f-b
+      serverMessages: []
+      has end-of-call-report: NOT SET
+
+  [3] created: 2026-02-11T19:56:42.532Z
+      ended: 2026-02-11T19:56:42.952Z
+      status: ended
+      customer: +13529368152
+      phone: NONE
+      assistant: 1a797f12-e2dd-4f7f-b
+      serverMessages: []
+      has end-of-call-report: NOT SET
+
+  [4] created: 2026-02-11T19:56:25.454Z
+      ended: 2026-02-11T19:56:28.679Z
+      status: ended
+      customer: +13529368152
+      phone: NONE
+      assistant: 1a797f12-e2dd-4f7f-b
+      serverMessages: []
+      has end-of-call-report: NOT SET
+
+  [5] created: 2026-02-11T19:54:03.501Z
+      ended: 2026-02-11T19:54:47.804Z
+      status: ended
+      customer: +13529368152
+      phone: NONE
+      assistant: 1a797f12-e2dd-4f7f-b
+      serverMessages: []
+      has end-of-call-report: NOT SET
+
+--- Vapi Assistants: serverMessages config ---
+
+  Sarah the Spartan (1a797f12-e2d...):
+    serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.m
+    server.url: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.m
+    serverMessages: ['end-of-call-report', 'status-update', 'hang', 'speech-update', 'transcript', 'function-call', 'assistant.started', 'conversation-update']
+    has end-of-call-report: True
+
+  Sarah Spart# (ae717f29-654...):
+    serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.m
+    server.url: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.m
+    serverMessages: ['end-of-call-report', 'status-update', 'hang', 'speech-update', 'transcript', 'function-call', 'assistant.started', 'conversation-update']
+    has end-of-call-report: True
+
+--- Phone +18632132505 config ---
+  serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+  assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+  serverMessages (phone-level): NOT SET
+
+============================================================
+EVIDENCE CHECK COMPLETE
+============================================================

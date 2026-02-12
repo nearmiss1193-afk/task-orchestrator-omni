@@ -1,0 +1,31 @@
+﻿==================================================
+FIX 1: Clearing 'Michael' from context_summary
+==================================================
+  Before: contact_name = 'Michael'
+  After: contact_name = 'Dan'
+  Γ£à Fix 1 DONE
+
+==================================================
+FIX 4: Finding and fixing assistant 1a797f12
+==================================================
+  Name: Sarah the Spartan
+  Current serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+  Current serverMessages: ['end-of-call-report', 'hang', 'function-call']
+  server.url: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run
+
+  PATCH status: 400
+  Γ¥î PATCH failed: {"message":["each value in serverMessages must be one of the following values: assistant.started, conversation-update, end-of-call-report, function-call, hang, language-changed, language-change-detected, model-output, phone-call-control, speech-update, status-update, transcript, transcript[transcrip
+
+  Also fixing Sarah assistant (ae717f29)...
+  Γ¥î Sarah PATCH: 400 {"message":["each value in serverMessages must be one of the following values: assistant.started, conversation-update, end-of-call-report, function-call, hang, language-changed, language-change-detect
+
+==================================================
+FIX 5 & 6: DB schema fixes
+==================================================
+  customer_memory columns: ['customer_id']
+
+  Note: Table creation requires Supabase dashboard or migration.
+  vapi_call_notifications table needs to be created manually.
+  Required columns: call_id (text), notified_at (timestamp), status (text), caller_phone (text)
+
+Γ£à ALL DB FIXES COMPLETE

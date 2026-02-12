@@ -1,0 +1,105 @@
+﻿============================================================
+LATEST CALL EVIDENCE ΓÇö What happened?
+Current time: 2026-02-11T21:40:24.049858+00:00
+============================================================
+
+--- LATEST VAPI CALLS (last 3) ---
+
+  [1]
+    created: 2026-02-11T21:40:21.824Z
+    ended: None
+    status: in-progress
+    customer: +13529368152
+    assistant: a04bd175-d106-41e1-9
+    endedReason: NONE
+    transcript length: 0
+    summary: NONE
+    serverUrl (call-level): NOT SET
+    server (call-level): NOT SET
+
+  [2]
+    created: 2026-02-11T21:40:18.506Z
+    ended: 2026-02-11T21:40:19.532Z
+    status: ended
+    customer: +13529368152
+    assistant: a04bd175-d106-41e1-9
+    endedReason: customer-ended-call
+    transcript length: 0
+    summary: NONE
+    serverUrl (call-level): NOT SET
+    server (call-level): NOT SET
+
+  [3]
+    created: 2026-02-11T21:37:23.521Z
+    ended: 2026-02-11T21:38:04.349Z
+    status: ended
+    customer: +13529368152
+    assistant: 1a797f12-e2dd-4f7f-b
+    endedReason: customer-ended-call
+    transcript length: 533
+    summary: Joe from "Fuck Off Everywhere" called, requesting to speak directly with the owner, Dan. No specific pain points or objections were discussed beyond t
+    serverUrl (call-level): NOT SET
+    server (call-level): NOT SET
+
+--- vapi_debug_logs (last 5 entries, any time) ---
+
+  [1]
+    created: 2026-02-09T16:18:56.152017+00:00
+    event_type: assistant-request
+    phone: +13529368152
+    notes: Greeting: returning customer
+
+  [2]
+    created: 2026-02-09T16:17:49.373969+00:00
+    event_type: assistant-request
+    phone: +13529368152
+    notes: Greeting: returning customer
+
+  [3]
+    created: 2026-02-09T16:17:24.765234+00:00
+    event_type: assistant-request
+    phone: +13529368152
+    notes: Greeting: returning customer
+
+  [4]
+    created: 2026-02-09T16:16:46.666624+00:00
+    event_type: assistant-request
+    phone: +13529368152
+    notes: Greeting: returning customer
+
+  [5]
+    created: 2026-02-08T18:25:21.239951+00:00
+    event_type: assistant-request
+    phone: 
+    notes: Greeting: new customer
+
+--- conversation_logs (voice, last 5) ---
+
+  [1]
+    timestamp: 2026-02-11T21:38:11.642482+00:00
+    direction: inbound
+    content: AI: Hi there, this is Sarah from AI Service Company. Thanks for connecting.
+User: Hi, Sarah. I need 
+    sarah_response: Call summary: Joe from "Fuck Off Everywhere" called, requesting to speak directly with the owner, Da
+
+  [2]
+    timestamp: 2026-02-11T21:04:18.55678+00:00
+    direction: inbound
+    content: AI: Hi there, this is Sarah from AI Service Company. Thanks for connecting.
+User: Hi. How are you do
+    sarah_response: Call summary: Joe from AAA Tire called after receiving a brochure and requested a callback from the 
+
+  [3]
+    timestamp: 2026-02-11T20:41:09.593276+00:00
+    direction: inbound
+    content: AI: Hi there. This is Sarah from AI Service Company. Thanks for connecting.
+User: Hi. I just got 1 o
+    sarah_response: Call summary: Joe from AAA Service Tire called after receiving a flyer. He did not express specific 
+
+--- customer_memory for Dan (+13529368152) ---
+  updated_at: None
+  contact_name: Dan
+  history (last 500): NONE
+
+============================================================
+EVIDENCE COMPLETE

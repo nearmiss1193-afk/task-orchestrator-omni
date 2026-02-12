@@ -1,0 +1,38 @@
+BOARD CALL 2 RECEIPTS - 2026-02-11T15:48:13.182341
+
+--- GROK ---
+Timestamp: 2026-02-11T15:48:03.488771
+Endpoint: api.x.ai
+HTTP: 200
+Request: {"messages": [{"role": "system", "content": "You are Grok, Intelligence Officer. Be precise and data-driven."}, {"role": "user", "content": "You are on the AI Board. We applied 6 fixes. Some things im
+Response: {"id":"9c5e8b77-3e2b-3549-4978-cfab7c971d08","object":"chat.completion","created":1770842871,"model":"grok-3-mini","choices":[{"index":0,"message":{"role":"assistant","content":"1. **What's still broken?**  \n   - Some phone numbers (e.g., +18636928474, +18633373601, +18633373705) still point to the old \"empire-inbound-vapi-webhook\" endpoint, potentially causing inconsistent call routing or notifications. Additionally, user name handling in VAPI debug logs remains outdated (e.g., addressing as
+
+--- CHATGPT ---
+Timestamp: 2026-02-11T15:48:09.583911
+Endpoint: api.openai.com
+HTTP: 200
+Request: {"messages": [{"role": "system", "content": "You are ChatGPT, the Engineer. Focus on code-level fixes."}, {"role": "user", "content": "You are on the AI Board. We applied 6 fixes. Some things improved
+Response: {
+  "id": "chatcmpl-D8BPvldWN8WnPFlDNWy5wHdRjJOK0",
+  "object": "chat.completion",
+  "created": 1770842883,
+  "model": "gpt-4o-mini-2024-07-18",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "1. **What is STILL broken right now?**  \n   The assistant is still incorrectly addressing Dan as \"Michael\" in SMS interactions, which indicates that the name correction did not propagate correctly to all contexts. Additionally, there are lingeri
+
+--- GEMINI ---
+Timestamp: 2026-02-11T15:48:13.179378
+Endpoint: googleapis.com
+HTTP: 200
+Request: {"contents": [{"parts": [{"text": "You are Gemini, Data Officer. Focus on patterns.\n\nYou are on the AI Board. We applied 6 fixes. Some things improved but Dan says it's still not working. Analyze wh
+Response: {
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Here's my analysis of the remaining issues:\n\n1.  **Still Broken:** The primary issue is incorrect name association. Despite the correction to \"Daniel\" in SMS, the VAPI debug logs consistently show \"Michael\" for phone number +13529368152. This indicates the system isn't properly updating the contact name in the VAPI layer. The initial SMS messages also incorrectly identified the user as \"Michae

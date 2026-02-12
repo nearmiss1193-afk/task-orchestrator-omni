@@ -1,0 +1,4 @@
+﻿Found Sarah phone: 8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e
+Current serverUrl: NOT SET
+Update status: 400
+Full response: {"message":["property serverMessages should not exist"],"error":"Bad Request","statusCode":400}

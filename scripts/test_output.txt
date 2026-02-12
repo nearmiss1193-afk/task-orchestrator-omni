@@ -1,0 +1,5 @@
+﻿Sending simulated end-of-call-report to: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+Payload phone: +13529368152
+
+Status: 200
+Response: {"status":"logged","phone":"+13529368152","name_extracted":"Sarah"}

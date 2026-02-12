@@ -1,0 +1,49 @@
+﻿
+=== lakeland_businesses.csv ===
+Total rows: 1089
+Columns: ['name', 'address', 'category', 'phone', 'website', 'rating', 'total_ratings', 'lat', 'lng', 'types', 'hours', 'place_id']
+Has email: 0
+Has phone: 1056
+Has website: 913
+
+Sample row:
+{
+  "name": "Lakeland Air Conditioning Company",
+  "address": "1220 George Jenkins Blvd, Lakeland, FL 33815, USA",
+  "category": "Hvac Contractor",
+  "phone": "(863) 859-4090",
+  "website": "http://thelakelandac.com/",
+  "rating": "4.9",
+  "total_ratings": "1242",
+  "lat": "28.0430792",
+  "lng": "-81.974927",
+  "types": "establishment,general_contractor,point_of_interest",
+  "hours": "[\"Monday: 8:00\\u202fAM\\u2009\\u2013\\u20097:00\\u202fPM\", \"Tuesday: 8:00\\u202fAM\\u2009\\u2013\\u20097:00\\u202fPM\", \"Wednesday: 8:00\\u202fAM\\u2009\\u2013\\u20097:00\\u202fPM\", \"Thursday: 8:00\\u202fAM\\u2009\\u2013\\u20097:00\\u202fPM\", \"Friday: 8:00\\u202fAM\\u2009\\u2013\\u20097:00\\u202fPM\", \"Saturday: 8:00\\u202fAM\\u2009\\u2013\\u20097:00\\u202fPM\", \"Sunday: 8:00\\u202fAM\\u2009\\u2013\\u20097:00\\u202fPM\"]",
+  "place_id": "ChIJsd-iWipB3YgRgyU68prsVLc"
+}
+
+=== lakeland_businesses_expanded.csv ===
+Total rows: 3321
+Columns: ['name', 'address', 'category', 'phone', 'website', 'rating', 'total_ratings', 'lat', 'lng', 'types', 'place_id']
+Has email: 0
+Has phone: 3217
+Has website: 2763
+
+Sample row:
+{
+  "name": "Lakeland Air Conditioning Company",
+  "address": "1220 George Jenkins Blvd, Lakeland, FL 33815, USA",
+  "category": "Hvac Contractor",
+  "phone": "(863) 859-4090",
+  "website": "http://thelakelandac.com/",
+  "rating": "4.9",
+  "total_ratings": "1242",
+  "lat": "28.0430792",
+  "lng": "-81.974927",
+  "types": "establishment,general_contractor,point_of_interest",
+  "place_id": "ChIJsd-iWipB3YgRgyU68prsVLc"
+}
+
+
+=== SUPABASE: contacts_master total ===
+Total contacts_master: 642

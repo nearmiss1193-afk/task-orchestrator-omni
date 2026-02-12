@@ -1,0 +1,23 @@
+﻿python :   File 
+"<string>", line 33
+At line:1 char:1
++ python -c "
++ ~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (   
+   File "<string>", lin   
+ e 33:String) [], Remo    
+teException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+    print(f'Current 
+serverUrl: 
+{sarah_phone.get(" 
+serverUrl\,
+                          
+                      ^
+SyntaxError: unterminated 
+string literal (detected 
+at line 33)

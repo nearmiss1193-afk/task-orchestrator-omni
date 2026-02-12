@@ -1,0 +1,56 @@
+﻿python :   File 
+"<string>", line 1
+At line:1 char:120
++ ... sv 2>$null; 
+python -c "import 
+csv; f=open(r'c:\User
+s\nearm\.gemini\an 
+...
++                 ~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (  File    
+ "<string>", line    
+ 1:String) [], R    
+emoteException
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+    import csv; f=ope
+n(r'c:\Users\nearm\.g
+emini\antigravity\scr
+atch\lakeland-local-p
+rod\scripts\lakeland_
+businesses_expanded.c
+sv','r',encoding='utf
+-8'); reader=csv.Dict
+Reader(f); 
+rows=list(reader); 
+print(f'Expanded CSV 
+rows: {len(rows)}'); 
+print(f'Columns: {lis
+t(rows[0].keys()) if 
+rows else " 
+empty\}');
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                   ^
+SyntaxError: 
+unterminated string 
+literal (detected at 
+line 1)

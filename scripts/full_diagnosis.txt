@@ -1,0 +1,194 @@
+============================================================
+1. VAPI SARAH ASSISTANT CONFIG
+============================================================
+Name: Sarah Spart#
+serverUrl: NONE
+serverMessages: NOT SET
+
+Phone: +19362984339
+Phone serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+Phone assistantId: ae717f29-6542-422f-906f-ee7ba6fa0bfe
+
+============================================================
+2. RECENT VAPI CALLS (last 10)
+============================================================
+
+  Call: 019c4e47-02a4-7668-88df-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T19:56:42 | Ended: 2026-02-11T19:56:42
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4e46-bfee-755e-b4dd-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T19:56:25 | Ended: 2026-02-11T19:56:28
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4e44-956d-7663-93e2-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T19:54:03 | Ended: 2026-02-11T19:54:47
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4e36-e2f0-7330-8ca5-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T19:39:05 | Ended: 2026-02-11T19:40:01
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4e2b-3670-7888-bd01-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T19:26:20 | Ended: 2026-02-11T19:27:27
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4e01-f9d0-7dd3-aae9-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T18:41:18 | Ended: 2026-02-11T18:42:03
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4ded-beac-711d-943d-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T18:19:12 | Ended: 2026-02-11T18:21:01
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4dde-3a6f-788f-9596-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T18:02:15 | Ended: 2026-02-11T18:03:50
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4dc6-a2a3-733b-9729-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T17:36:29 | Ended: 2026-02-11T17:37:47
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4db7-9f08-777e-91d1-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T17:20:05 | Ended: 2026-02-11T17:21:30
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+============================================================
+3. WHERE IS 'MICHAEL' STORED?
+============================================================
+customer_id: 37610d10-7d62-436a-aa3b-eacd197b74bb
+customer_name field: 'None'
+phone: +13529368152
+status: active
+updated_at: None
+last_interaction: 2026-02-09T16:10:18.970848+00:00
+context_summary:
+{
+    "contact_name": "Michael",
+    "questions_asked": [
+        "challenge",
+        "business_type"
+    ]
+}
+
+MICHAEL APPEARS IN:
+  -> context_summary.contact_name: 'Michael'
+  -> raw context_summary contains 'Michael'
+
+All customer_memory records:
+ERROR: {'message': 'column customer_memory.customer_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+
+============================================================
+4. CONVERSATION LOGS
+============================================================
+Dan's customer_id: 37610d10-7d62-436a-aa3b-eacd197b74bb
+Found 15 conversation logs:
+
+  [2026-02-11T19:55:28] sms/inbound
+    User: Hi
+    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:49:10] sms/inbound
+    User: Just me
+    Sarah: Got it, Michael! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:44:19] sms/inbound
+    User: Hi\nHey Michael, great to hear from you! I'd love to understand more about your needs-are there any specific challenges 
+    Sarah: Hey Dan, sorry for the confusion earlier! I’ve got your name and business, AAA Tire, noted now. Are you the one making d
+
+  [2026-02-11T19:42:29] sms/inbound
+    User: Yea
+    Sarah: Got it, Michael! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:42:15] sms/inbound
+    User: Yes my name is John
+    Sarah: Hey John, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:41:47] sms/inbound
+    User: Me only
+    Sarah: Got it, Michael! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:41:30] sms/inbound
+    User: Yea
+    Sarah: Got it, Michael! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:41:16] sms/inbound
+    User: Yes
+    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:41:02] sms/inbound
+    User: Yes
+    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:40:42] sms/inbound
+    User: Yeah I just got one of the year flyers at my store I was wanting to get somebody give me a call back my name is Jon my p
+    Sarah: Hey Jon, thanks for reaching out! I’m happy to get someone to call you. Are you the one making decisions on new tools, o
+
+  [2026-02-11T19:37:07] sms/inbound
+    User: Ok
+    Sarah: Hey Michael, got it! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T19:14:28] sms/inbound
+    User: Hi
+    Sarah: Hey Michael, great to hear from you! Can you tell me if there’s a specific challenge or goal you’re working on right now
+
+  [2026-02-09T16:10:18] sms/inbound
+    User: My name is not Michael
+    Sarah: My apologies for the mix-up! Can you tell me your name, and are you the one making decisions on new tools for your busin
+
+  [2026-02-09T16:08:46] sms/inbound
+    User: Well if you don't have my name from the previous shit I'm guessing you don't have the conversation either
+    Sarah: Hey Michael, I’m sorry for any mix-up! I’ve got your name and our past chat noted. Let’s pick up where we left off—are y
+
+  [2026-02-09T16:06:07] sms/inbound
+    User: Were you able to remember the conversation we just had one phone
+    Sarah: Hey Michael, I’ve got the details from our earlier chat. Just to make sure we're on the same page, are you the one makin
+
+============================================================
+5. VAPI DEBUG LOGS (recent)
+============================================================
+
+  [2026-02-09T16:18:56] assistant-request | inbound | +13529368152
+    lookup: FOUND | name: Michael
+    notes: Greeting: returning customer
+
+  [2026-02-09T16:17:49] assistant-request | inbound | +13529368152
+    lookup: FOUND | name: Michael
+    notes: Greeting: returning customer
+
+  [2026-02-09T16:17:24] assistant-request | inbound | +13529368152
+    lookup: FOUND | name: Michael
+    notes: Greeting: returning customer
+
+  [2026-02-09T16:16:46] assistant-request | inbound | +13529368152
+    lookup: FOUND | name: Michael
+    notes: Greeting: returning customer
+
+  [2026-02-08T18:25:21] assistant-request | unknown | 
+    lookup: UNKNOWN | name: 
+    notes: Greeting: new customer
+
+============================================================
+6. CALL NOTIFICATION RECORDS
+============================================================
+Table error: {'message': "Could not find the table 'public.vapi_call_notifications' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.interactions'", 'details': None}

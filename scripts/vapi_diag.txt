@@ -1,0 +1,34 @@
+﻿=== ASSISTANTS ===
+  Ara - House of Help
+  serverUrl: NONE
+  serverMessages: NOT_SET
+
+  Sarah Spart#
+  serverUrl: NONE
+  serverMessages: NOT_SET
+
+  Christina Outbound
+  serverUrl: https://nearmiss1193-afk--empire-api-v3-orchestration-api.modal.run/webhook/vapi
+  serverMessages: NOT_SET
+  server.url: https://www.aiserviceco.com/api/webhook/vapi
+
+=== PHONE NUMBERS ===
+  +19362984339
+  serverUrl: NONE
+  assistantId: ae717f29-6542-422f-906f-ee7ba6fa0bfe
+
+  +18632608351
+  serverUrl: https://nearmiss1193-afk--ghl-omni-automation-office-voice-tool-logic.modal.run
+  assistantId: a04bd175-d106-41e1-9f53-ced7b148705b
+
+  +18636928474
+  serverUrl: https://nearmiss1193-afk--empire-inbound-vapi-webhook.modal.run
+  assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a
+
+=== RECENT CALLS (last 3) ===
+  019c4e2b-3670-78... | ended | +13529368152 | 2026-02-11T19:26:20 -> 2026-02-11T19:27:27 | reason: customer-ended-call | msgs: 12
+  019c4e01-f9d0-7d... | ended | +13529368152 | 2026-02-11T18:41:18 -> 2026-02-11T18:42:03 | reason: customer-ended-call | msgs: 8
+  019c4ded-beac-71... | ended | +13529368152 | 2026-02-11T18:19:12 -> 2026-02-11T18:21:01 | reason: customer-ended-call | msgs: 19
+
+=== SENDING TEST NOTIFICATION ===
+  GHL webhook response: 200 {"status":"Success: request sent to trigger execution server","id":"8JRIvNjt67ebcOTWKwSr"}

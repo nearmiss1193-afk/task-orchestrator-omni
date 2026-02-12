@@ -1,0 +1,380 @@
+EXIT: 0
+
+STDOUT:
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:117     │
+│   @modal.web_endpoint(method="GET")                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:167     │
+│   @modal.web_endpoint(method="GET")                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:205     │
+│   @modal.web_endpoint(method="POST")                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:521     │
+│   @modal.web_endpoint(method="POST")                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:908     │
+│   @modal.web_endpoint(method="GET")                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+┌─ Modal Deprecation Warning (2025-03-05) ────────────────────────────────────┐
+│ The `@modal.web_endpoint` decorator has been renamed to                     │
+│ `@modal.fastapi_endpoint`.                                                  │
+│                                                                             │
+│ Source:                                                                     │
+│ C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:972     │
+│   @modal.web_endpoint(method="GET")                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+✓ Initialized. View run at 
+https://modal.com/apps/nearmiss1193-afk/main/ap-Ot0spFEN7maYxYzdGZhDUT
+✓ Created objects.
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py
+├── 🔨 Created mount modules\outbound_dialer.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\voice
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\learning
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\ai
+├── 🔨 Created mount modules\__init__.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\bridge
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\vapi
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\database
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\analytics
+├── 🔨 Created mount workers\instant_response.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\core
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\utils
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\api
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\workers
+├── 🔨 Created mount PythonPackage:workers
+├── 🔨 Created function print_env_diagnostics.
+├── 🔨 Created function test_db_connection.
+├── 🔨 Created function verify_outreach_worker.
+├── 🔨 Created function test_db_psycopg2.
+├── 🔨 Created web function sovereign_state => 
+│   https://nearmiss1193-afk--ghl-omni-automation-sovereign-state-dev.modal.run
+├── 🔨 Created web function track_email_open => 
+│   https://nearmiss1193-afk--ghl-omni-automation-track-email-open-dev.modal.ru
+│   n
+├── 🔨 Created web function sms_inbound => 
+│   https://nearmiss1193-afk--ghl-omni-automation-sms-inbound-dev.modal.run
+├── 🔨 Created web function vapi_webhook => 
+│   https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook-dev.modal.run
+├── 🔨 Created web function memory_check => 
+│   https://nearmiss1193-afk--ghl-omni-automation-memory-check-dev.modal.run
+├── 🔨 Created web function health_check => 
+│   https://nearmiss1193-afk--ghl-omni-automation-health-check-dev.modal.run
+├── 🔨 Created function system_heartbeat.
+├── 🔨 Created function auto_outreach_loop.
+├── 🔨 Created function auto_prospecting.
+├── 🔨 Created function unified_lead_sync.
+├── 🔨 Created function trigger_self_learning_loop.
+├── 🔨 Created function log_consent.
+├── 🔨 Created function dispatch_email_logic.
+├── 🔨 Created function dispatch_audit_email.
+├── 🔨 Created function dispatch_sms_logic.
+└── 🔨 Created function dispatch_call_logic.
+/root/deploy.py:117: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:167: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:205: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="POST")
+/root/deploy.py:521: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="POST")
+/root/deploy.py:908: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:972: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+
+============================================================
+🔍 PROSPECTOR ENGINE v1 — 2026-02-12T00:07:46.250034+00:00
+============================================================
+🔑 Google Places key: AIzaSyDVL4vf...
+📊 Search matrix: 15 niches × 20 cities = 300 combos
+📍 Resuming from index 20/300
+
+🔎 [1/5] Searching: pest control company Tampa FL
+  ⚠️ Places API status: ZERO_RESULTS — 
+
+🔎 [2/5] Searching: pool service company Tampa FL
+  📍 Google Places: found 15 businesses
+    📧 Website scrape found: filler@godaddy.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: user@domain.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: help@poolsharks.pro
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: info@a-qualitypools.net
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: example@domain.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: info@flpoolservicesinc.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+
+🔎 [3/5] Searching: pressure washing service Tampa FL
+  📍 Google Places: found 14 businesses
+    📧 Website scrape found: luism@tampaspressurewashing.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: washingtampa@gmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: tampawashbros@gmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: info@tbsoftwash.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: contact@adpressureclean.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: pressureking007@gmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: %20%20luxepowerwash@gmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: kenny@pressurewashingman.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: tampapressurewashing813@gmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+
+🔎 [4/5] Searching: auto repair shop Tampa FL
+  📍 Google Places: found 20 businesses
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: example@mysite.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: user@domain.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: juansorell@baybrothersauto.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: tshop1598@hotmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: hi@yourmechanic.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+/root/deploy.py:117: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:167: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:205: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="POST")
+/root/deploy.py:521: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="POST")
+/root/deploy.py:908: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:972: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:117: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:167: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:205: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="POST")
+/root/deploy.py:521: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="POST")
+/root/deploy.py:908: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+/root/deploy.py:972: DeprecationError: 2025-03-05: The `@modal.web_endpoint` decorator has been renamed to `@modal.fastapi_endpoint`.
+  @modal.web_endpoint(method="GET")
+🚀 ENGINE v4.2: Starting autonomous outreach cycle...
+HEARTBEAT: Running at 2026-02-12T00:10:04.539951+00:00
+📊 Fresh leads found: 1
+♻️ Follow-up candidates found: 15
+📈 ENGINE: Processing 1 fresh + 15 follow-up leads...
+📧 Route -> Generic Email (Step 1): notfound@example.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 4cbacd5e-be33-43c2-96da-83521c698b60
+Heartbeat Error: {'message': 'null value in column "check_type" of relation "system_health_log" violates not-null constraint', 'code': '23502', 'hint': None, 'details': 'Failing row contains (2fb25e83-dada-4517-8d6a-74be4157514b, null, ok, {"issues": [], "cron_limit": 2}, f, null, 2026-02-12 00:10:05.34481+00).'}
+PROSPECTOR: No previous run found — triggering first run
+⚠️ Skipping placeholder email: notfound@example.com
+PROSPECTOR trigger error: {'message': 'new row for relation "system_state" violates check constraint "system_state_status_check"', 'code': '23514', 'hint': None, 'details': 'Failing row contains (prospector_last_run, 2026-02-12T00:10:05.951025+00:00, null, 0, 2026-02-12 00:10:06.028075+00).'}
+CALL MONITOR: No VAPI_PRIVATE_KEY, skipping
+📧 Route -> Follow-up Email (Step 1): info@besttowingdallas.com
+📧 Route -> Follow-up Email (Step 1): admin@dallaseliteplumber.com
+📧 Route -> Follow-up Email (Step 1): info@bestplumberdallas.com
+📧 Route -> Follow-up Email (Step 1): admin@dallaselitelocksmith.com
+📧 Route -> Follow-up Email (Step 1): admin@houstoneliteelectrician.com
+📧 Route -> Follow-up Email (Step 1): info@bestelectricianhouston.com
+📧 Route -> Follow-up Email (Step 1): info@besttowinghouston.com
+📧 Route -> Follow-up Email (Step 1): info@besthvachouston.com
+📧 Route -> Follow-up Email (Step 1): admin@houstoneliteplumber.com
+📧 Route -> Follow-up Email (Step 1): info@bestlocksmithhouston.com
+📧 Route -> Follow-up Email (Step 1): admin@miamieliteelectrician.com
+📧 Route -> Follow-up Email (Step 1): info@bestelectricianmiami.com
+📧 Route -> Follow-up Email (Step 1): admin@miamielitetowing.com
+📧 Route -> Follow-up Email (Step 1): info@besttowingmiami.com
+📧 Route -> Follow-up Email (Step 1): admin@miamielitehvac.com
+    📧 Website scrape found: westshoreautomotive@gmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: southfloridaauto@verizon.net
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: name@email.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: fixtogoauto@gmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: bayshore@honest1.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+
+🔎 [5/5] Searching: dental clinic Tampa FL
+  📍 Google Places: found 20 businesses
+    📧 Website scrape found: contactinfo@rola.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: southtampa@mydentistgroup.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: tampa@mydentistgroup.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: office@heightsdentaltampa.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: npda@northpointedental.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: tfhccustomerservice@tfhc.org
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: playafamilydentistry@gmail.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    📧 Website scrape found: info@tampapalmsdentistry.com
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+    ⚠️ Dedup check error: {'message': 'column contacts_master.business_name does not exist', 'code': '42703', 'hint': None, 'details': None}
+    ❌ Insert error: {'message': "Could not find the 'business_name' column of 'contacts_master' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+
+============================================================
+📈 PROSPECTOR RESULTS:
+   Discovered: 69
+   Enriched (with email): 33
+   Inserted: 0
+   Duplicates skipped: 0
+   No contact info: 1
+   Next cycle index: 25/300
+============================================================
+
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/nearmiss1193-afk/main/ap-Ot0spFEN7maYxYzdGZhDUT
+
+
+STDERR:

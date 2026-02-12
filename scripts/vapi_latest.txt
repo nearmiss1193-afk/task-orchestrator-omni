@@ -1,0 +1,42 @@
+﻿=== LATEST VAPI CALLS ===
+{
+  "id": "019c4dde-3a6f-788f-9596-bfefeb46e004",
+  "status": "ended",
+  "duration": 0,
+  "endedReason": "customer-ended-call",
+  "created": "2026-02-11T18:02:15",
+  "customer": "+13529368152",
+  "serverUrl": "NULL",
+  "phoneNumberId": "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e",
+  "assistantId": "1a797f12-e2dd-4f7f-b"
+}
+
+{
+  "id": "019c4dc6-a2a3-733b-9729-f6f37bc245cf",
+  "status": "ended",
+  "duration": 0,
+  "endedReason": "customer-ended-call",
+  "created": "2026-02-11T17:36:29",
+  "customer": "+13529368152",
+  "serverUrl": "NULL",
+  "phoneNumberId": "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e",
+  "assistantId": "1a797f12-e2dd-4f7f-b"
+}
+
+{
+  "id": "019c4db7-9f08-777e-91d1-7e9920929c58",
+  "status": "ended",
+  "duration": 0,
+  "endedReason": "customer-ended-call",
+  "created": "2026-02-11T17:20:05",
+  "customer": "+13529368152",
+  "serverUrl": "NULL",
+  "phoneNumberId": "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e",
+  "assistantId": "1a797f12-e2dd-4f7f-b"
+}
+
+
+=== SARAH PHONE CONFIG ===
+ID: 8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e
+serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+assistantId: 1a797f12-e2dd-4f7f-b2c5-08c38c74859a

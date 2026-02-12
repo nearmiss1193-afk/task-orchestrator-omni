@@ -1,0 +1,34 @@
+=== 1. CUSTOMER_MEMORY ===
+  customer_id: 37610d10-7d62-436a-aa3b-eacd197b74bb
+  phone: +13529368152
+  name: None
+  status: active
+  updated_at: None
+  context_summary: {
+  "contact_name": "Michael",
+  "questions_asked": [
+    "challenge",
+    "business_type"
+  ]
+}
+
+=== 2. CONVERSATION_LOGS (last 10) ===
+  ERROR: {'message': 'column conversation_logs.phone_number does not exist', 'code': '42703', 'hint': None, 'details': None}
+
+=== 3. VAPI_DEBUG_LOGS (last 5) ===
+  [2026-02-09T16:18:56] assistant-request | inbound | lookup: FOUND | name: Michael
+    notes: Greeting: returning customer
+  [2026-02-09T16:17:49] assistant-request | inbound | lookup: FOUND | name: Michael
+    notes: Greeting: returning customer
+  [2026-02-09T16:17:24] assistant-request | inbound | lookup: FOUND | name: Michael
+    notes: Greeting: returning customer
+  [2026-02-09T16:16:46] assistant-request | inbound | lookup: FOUND | name: Michael
+    notes: Greeting: returning customer
+
+=== 4. CHECK ALL PHONE FORMATS ===
+  FOUND: '+13529368152' -> 37610d10-7d62-436a-aa3b-eacd197b74bb
+
+=== 5. TABLE SIZES ===
+  customer_memory: 5 rows
+  conversation_logs: ERROR {'message': 'column conversation_logs.id does not exist', 'code': '42703', 'hint': None, 'details': None}
+

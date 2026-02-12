@@ -1,0 +1,36 @@
+﻿python : +- Error ---
+---------------------
+---------------------
+---------------------
+---+
+At line:1 char:1
++ python -m modal 
+app logs 
+ghl-omni-automation 
+2>&1 | Out-File 
+-FilePat ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo   
+           : 
+NotSpecified: (+    
+- Error 
+------...----    
+----------+:String) 
+[    ], 
+RemoteException
+    + 
+FullyQualifiedError  
+  Id : 
+NativeCommandErr    
+or
+ 
+| Could not find a 
+deployed app named 'g
+hl-omni-automation'. 
+                 |
++--------------------
+---------------------
+---------------------
+---------------+
