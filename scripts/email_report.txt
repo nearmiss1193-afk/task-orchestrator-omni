@@ -1,0 +1,41 @@
+﻿=== EMAIL PERFORMANCE REPORT ===
+Total emails sent: 1147
+
+Status breakdown:
+  sent: 1141
+  delivered: 6
+
+--- REAL LEADS (excluding Dan) ---
+Emails to real leads: 1147
+Delivered: 6
+Opened by REAL leads: 0
+Open rate: 0.0%
+Opened by Dan (test): 0
+
+No real opens recorded yet.
+(Webhook was just configured ΓÇö opens will start appearing as leads read emails)
+
+--- TRACKING PIXEL OPENS (from our embedded pixel) ---
+Total pixel-tracked opens (not Dan): 0
+
+Bounced: 0
+
+=== A/B SUBJECT LINE PERFORMANCE ===
+  None: 389 sent, 0 opened (0.0%) | None
+  v1_cold_email: 196 sent, 0 opened (0.0%) | Day 0 - Value
+  D: 154 sent, 0 opened (0.0%) | This caught my eye about your company
+  A: 152 sent, 0 opened (0.0%) | Quick question about your company
+  C: 122 sent, 0 opened (0.0%) | Owner, saw something about your industry
+  B: 118 sent, 0 opened (0.0%) | Noticed something on your site
+  AUDIT: 16 sent, 0 opened (0.0%) | Your Company: Your AI visibility audit results
+
+=== SEND TIMELINE ===
+  2026-01-26: 151 emails
+  2026-01-27: 45 emails
+  2026-01-28: 7 emails
+  2026-01-29: 151 emails
+  2026-01-30: 51 emails
+  2026-02-09: 130 emails
+  2026-02-10: 141 emails
+  2026-02-11: 8 emails
+  2026-02-12: 463 emails

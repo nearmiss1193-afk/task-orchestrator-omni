@@ -1261,11 +1261,18 @@ def health_check():
 @app.function(image=image, secrets=[VAULT])
 @modal.web_endpoint(method="POST")
 def resend_webhook(data: dict):
-    """Receives Resend webhook events (delivered, opened, bounced, complained).
-    Updates outbound_touches with event data for A/B tracking."""
-    import json
+    """Receives Resend webhook events (delivered, opened, bounced, complained, replied).
+    - Tracks A/B performance in outbound_touches
+    - Auto-replies to lead replies with booking link
+    - SMS notifies Dan on hot leads (replies)
+    - Marks permanent bounces as bad_email
+    """
+    import json, os, requests, traceback
     from datetime import datetime, timezone
     from modules.database.supabase_client import get_supabase
+    
+    BOOKING_LINK = "https://links.aiserviceco.com/widget/booking/YWQcHuXXznQEQa7LAWeB"
+    DAN_EMAIL_ADDRS = ["owner@aiserviceco.com", "nearmiss1193@gmail.com"]
     
     event_type = data.get("type", "unknown")
     event_data = data.get("data", {})
@@ -1277,10 +1284,9 @@ def resend_webhook(data: dict):
         supabase = get_supabase()
         
         # Find the original outbound_touch by resend email ID
+        touch_record = None
         if email_id:
-            # Update the touch record with the event
-            # Store events as a log in the payload
-            touch = supabase.table("outbound_touches").select("id,payload").eq(
+            touch = supabase.table("outbound_touches").select("id,payload,phone,company").eq(
                 "correlation_id", email_id
             ).limit(1).execute()
             
@@ -1309,7 +1315,6 @@ def resend_webhook(data: dict):
                 
                 update = {"payload": payload}
                 if new_status:
-                    # Only upgrade status (sent→delivered→opened→clicked), never downgrade
                     priority = ["sent", "delivered", "opened", "clicked", "bounced", "complained"]
                     current = touch_record.get("status", "sent") if touch_record.get("status") in priority else "sent"
                     if priority.index(new_status) > priority.index(current):
@@ -1323,7 +1328,117 @@ def resend_webhook(data: dict):
             else:
                 print(f"  ⚠️ No matching touch for email_id: {email_id}")
         
-        # Also log to system_health for monitoring
+        # ─── BOUNCE HANDLER: Mark permanent bounces as bad_email ───
+        if event_type == "email.bounced" and touch_record:
+            bounce_type = event_data.get("bounce", {}).get("type", "transient")
+            recipient = event_data.get("to", [""])[0] if isinstance(event_data.get("to"), list) else ""
+            
+            if bounce_type == "permanent" and recipient:
+                # Mark this lead's email as bad so we never send again
+                try:
+                    supabase.table("contacts_master").update(
+                        {"status": "bad_email"}
+                    ).eq("email", recipient).execute()
+                    print(f"  🚫 Marked {recipient} as bad_email (permanent bounce)")
+                except Exception as be:
+                    print(f"  ⚠️ Bounce mark failed: {be}")
+        
+        # ─── REPLY HANDLER: Auto-respond + SMS Dan ───
+        if event_type == "email.replied":
+            recipient = event_data.get("from", "")  # The lead who replied
+            reply_text = event_data.get("text", "")[:200]  # First 200 chars of reply
+            company = touch_record.get("company", "Unknown") if touch_record else "Unknown"
+            
+            print(f"  🔥 REPLY from {recipient} ({company}): {reply_text[:80]}")
+            
+            # Skip if it's Dan replying to himself
+            if recipient.lower() not in DAN_EMAIL_ADDRS:
+                
+                # ACTION 1: Auto-reply with booking link
+                try:
+                    resend_key = os.environ.get("RESEND_API_KEY")
+                    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+                    
+                    # Get lead's first name
+                    lead_name = "there"
+                    try:
+                        lead_rec = supabase.table("contacts_master").select("full_name").eq("email", recipient).limit(1).execute()
+                        if lead_rec.data:
+                            lead_name = (lead_rec.data[0].get("full_name") or "there").split(" ")[0]
+                    except:
+                        pass
+                    
+                    auto_html = f"""<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.6;">
+<p>Hey {lead_name}!</p>
+<p>Great to hear from you. I'd love to chat about how we can help.</p>
+<p>You can grab a time on my calendar here — pick whatever works for you:</p>
+<p><a href="{BOOKING_LINK}" style="display:inline-block; background:#2563eb; color:#fff; padding:12px 24px; border-radius:6px; text-decoration:none; font-weight:bold;">Book a 15-min call</a></p>
+<p>Or just reply with a good time and I'll make it work.</p>
+<p>Talk soon,<br>Dan</p>
+</div>"""
+                    
+                    auto_payload = {
+                        "from": from_email,
+                        "to": [recipient],
+                        "subject": f"Re: Let's find a time to chat",
+                        "html": auto_html,
+                    }
+                    
+                    r = requests.post(
+                        "https://api.resend.com/emails",
+                        headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+                        json=auto_payload,
+                        timeout=15
+                    )
+                    if r.status_code in [200, 201]:
+                        print(f"  ✅ AUTO-REPLY sent to {recipient} with booking link")
+                    else:
+                        print(f"  ⚠️ Auto-reply failed: {r.status_code} {r.text[:100]}")
+                except Exception as are:
+                    print(f"  ❌ Auto-reply error: {are}")
+                    traceback.print_exc()
+                
+                # ACTION 2: SMS notify Dan
+                try:
+                    dan_email = os.environ.get("DAN_EMAIL", "nearmiss1193@gmail.com")
+                    resend_key = os.environ.get("RESEND_API_KEY")
+                    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+                    
+                    # Send Dan an email notification (instant)
+                    notify_html = f"""<div style="font-family: Arial; font-size: 14px;">
+<h2>🔥 HOT LEAD REPLY</h2>
+<p><strong>Company:</strong> {company}</p>
+<p><strong>From:</strong> {recipient}</p>
+<p><strong>Their reply:</strong> {reply_text[:200]}</p>
+<p>Auto-reply with booking link has been sent.</p>
+<p><a href="{BOOKING_LINK}">View your calendar</a></p>
+</div>"""
+                    
+                    requests.post(
+                        "https://api.resend.com/emails",
+                        headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+                        json={
+                            "from": from_email,
+                            "to": [dan_email],
+                            "subject": f"🔥 {company} replied to your email!",
+                            "html": notify_html,
+                        },
+                        timeout=10
+                    )
+                    print(f"  📲 Dan notified about reply from {company}")
+                except Exception as ne:
+                    print(f"  ⚠️ Dan notification error: {ne}")
+                
+                # ACTION 3: Upgrade lead status to 'replied'
+                try:
+                    supabase.table("contacts_master").update(
+                        {"status": "replied"}
+                    ).eq("email", recipient).execute()
+                    print(f"  ✅ Lead {recipient} status → replied")
+                except Exception as se:
+                    print(f"  ⚠️ Status update error: {se}")
+        
+        # Log to system_health for monitoring
         supabase.table("system_health_log").insert({
             "status": f"resend_{event_type}",
             "details": json.dumps({"email_id": email_id, "type": event_type}),
@@ -1331,6 +1446,7 @@ def resend_webhook(data: dict):
         
     except Exception as e:
         print(f"  ❌ Resend webhook error: {e}")
+        traceback.print_exc()
     
     return {"received": True}
 

@@ -18,8 +18,35 @@ if "/root" not in sys.path:
     sys.path.append("/root")
 
 import modal
+import re
 from core.image_config import image, VAULT
 from core.apps import engine_app as app
+
+BOOKING_LINK = "https://links.aiserviceco.com/widget/booking/YWQcHuXXznQEQa7LAWeB"
+DAN_PHONE = "+13529368152"
+
+def is_valid_email(email: str) -> bool:
+    """Basic email validation to prevent bounces from bad prospector data."""
+    if not email or not isinstance(email, str):
+        return False
+    email = email.strip().lower()
+    # Must have @ and domain
+    if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+        return False
+    # Skip known bad patterns
+    bad_patterns = [
+        'placeholder', 'test@', 'demo.com', 'funnel.com', 'example.com',
+        'unassigned', 'noreply', 'no-reply', 'wixpress', 'squarespace',
+        'sentry.io', 'mailinator', 'tempmail', 'throwaway', 'guerrilla',
+        'yopmail', 'sharklasers', 'grr.la', 'dispostable'
+    ]
+    if any(p in email for p in bad_patterns):
+        return False
+    # Skip role-based addresses (high bounce)
+    role_prefixes = ['info@', 'admin@', 'support@', 'contact@', 'sales@', 'hello@', 'office@']
+    if any(email.startswith(p) for p in role_prefixes):
+        return False
+    return True
 
 @app.function(image=image, secrets=[VAULT])
 def log_consent(lead_id: str, consent_type: str, source: str = "checkout"):
@@ -80,10 +107,10 @@ def dispatch_email_logic(lead_id: str):
         print(f"❌ Error: Lead {lead_id} has no email")
         return False
 
-    # Filter out placeholder/test emails that waste Resend credits
-    skip_patterns = ['placeholder', 'test@', 'demo.com', 'funnel.com', 'example.com', 'unassigned']
-    if any(p in email.lower() for p in skip_patterns):
-        print(f"⚠️ Skipping placeholder email: {email}")
+    # Validate email before sending (prevents bounces)
+    if not is_valid_email(email):
+        print(f"⚠️ Skipping invalid email: {email}")
+        supabase.table("contacts_master").update({"status": "bad_email"}).eq("id", lead_id).execute()
         return False
 
     resend_key = os.environ.get("RESEND_API_KEY")
@@ -138,7 +165,8 @@ Dan here with Lakeland Finds. We just launched a local business directory for th
 
 Want a few quick tips on getting more reviews on autopilot? Happy to share what's working for other Lakeland businesses right now.
 
-Just reply to this email or text me at (352) 936-8152.
+Just reply to this email, text me at (352) 936-8152, or grab 15 min on my calendar:
+{BOOKING_LINK}
 
 - Dan, Lakeland Finds"""
         
@@ -164,7 +192,10 @@ Are you currently looking to get more customers from Google and social media?
 
 I work with {niche} businesses and noticed a few quick wins that could help drive more leads to your site.
 
-Worth a 5-min chat this week?
+Worth a 15-min chat this week? You can grab a time here:
+{BOOKING_LINK}
+
+Or just reply to this email.
 
 Best,
 Dan"""
@@ -495,7 +526,7 @@ def auto_outreach_loop():
         res = supabase.table("contacts_master") \
             .select("*") \
             .in_("status", ["new", "research_done"]) \
-            .limit(10) \
+            .limit(5) \
             .execute()
         leads = res.data or []
         print(f"📊 Fresh leads found: {len(leads)}")
@@ -512,7 +543,7 @@ def auto_outreach_loop():
             recycled = supabase.table("contacts_master") \
                 .select("*") \
                 .eq("status", "outreach_sent") \
-                .limit(15) \
+                .limit(5) \
                 .execute()
             followup_leads = recycled.data or []
             if followup_leads:
