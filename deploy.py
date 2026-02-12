@@ -1041,6 +1041,68 @@ def system_heartbeat():
     except Exception as e:
         print(f"Heartbeat Error: {e}")
     
+    # ---- SELF-HEALING CHECKS (each independently try/excepted — cannot crash heartbeat) ----
+    
+    # Check A: Is outreach actually sending? (last 30 min)
+    try:
+        supabase = get_supabase()
+        cutoff = (datetime.now(timezone.utc) - timedelta(minutes=30)).isoformat()
+        recent = supabase.table("outbound_touches").select("id", count="exact").gte("ts", cutoff).execute()
+        outreach_count = recent.count if recent.count is not None else len(recent.data)
+        
+        if outreach_count == 0 and mode == "working":
+            issues.append("OUTREACH STALLED: 0 touches in 30 min")
+            print(f"⚠️ SELF-HEAL: Outreach stalled — 0 touches in last 30 min")
+        else:
+            print(f"✅ Outreach check: {outreach_count} touches in last 30 min")
+    except Exception as e:
+        print(f"Self-heal check A (outreach) error (non-fatal): {e}")
+    
+    # Check B: Are there contactable leads? (status = 'new' or 'research_done')
+    try:
+        supabase = get_supabase()
+        pool = supabase.table("contacts_master").select("id", count="exact").in_("status", ["new", "research_done"]).execute()
+        pool_count = pool.count if pool.count is not None else len(pool.data)
+        
+        if pool_count == 0:
+            issues.append(f"LEAD POOL EMPTY: 0 contactable leads")
+            print(f"🚨 SELF-HEAL: Lead pool exhausted — 0 leads with status new/research_done")
+        else:
+            print(f"✅ Lead pool check: {pool_count} contactable leads")
+    except Exception as e:
+        print(f"Self-heal check B (lead pool) error (non-fatal): {e}")
+    
+    # Check C: Has prospector run in last 12 hours?
+    try:
+        supabase = get_supabase()
+        last_run = supabase.table("system_state").select("status").eq("key", "prospector_last_run").execute()
+        
+        if last_run.data and last_run.data[0].get("status"):
+            last_ts = datetime.fromisoformat(last_run.data[0]["status"])
+            hours_since = (datetime.now(timezone.utc) - last_ts).total_seconds() / 3600
+            if hours_since > 12:
+                issues.append(f"PROSPECTOR STALLED: {hours_since:.1f}h since last run")
+                print(f"⚠️ SELF-HEAL: Prospector stalled — {hours_since:.1f}h since last run (threshold: 12h)")
+            else:
+                print(f"✅ Prospector check: ran {hours_since:.1f}h ago")
+        else:
+            print(f"⚠️ Prospector check: no run recorded yet")
+    except Exception as e:
+        print(f"Self-heal check C (prospector) error (non-fatal): {e}")
+    
+    # Log self-healing results (non-fatal)
+    try:
+        if any("STALLED" in i or "EMPTY" in i for i in issues):
+            supabase = get_supabase()
+            supabase.table("system_health_log").insert({
+                "checked_at": datetime.now(timezone.utc).isoformat(),
+                "status": "alert",
+                "details": {"self_healing": issues, "action": "logged_for_review"}
+            }).execute()
+            print(f"🔴 SELF-HEAL ALERT: {len([i for i in issues if 'STALLED' in i or 'EMPTY' in i])} issue(s) detected")
+    except Exception as e:
+        print(f"Self-heal logging error (non-fatal): {e}")
+    
     # ---- AUTO-PROSPECTOR TRIGGER (every ~6 hours, piggybacked on heartbeat) ----
     try:
         from datetime import datetime, timezone, timedelta

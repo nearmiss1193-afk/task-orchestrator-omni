@@ -1168,6 +1168,25 @@ Heartbeat (every 5 min)
 - "Modal env vars don't always propagate in dev runs. Hardcode fallbacks for critical keys." (Feb 11, 2026)
 - "Prospecting pipeline: Discover → Enrich → Dedup → Insert. All 4 stages must pass." (Feb 11, 2026)
 
+#### Section 22b: Feb 11, 2026 — Self-Healing Heartbeat Deployed
+
+- **Upgrade:** Added 3 crash-safe self-healing checks to `system_heartbeat`
+  - **Check A:** Outreach stall detection (0 touches in 30 min while campaign_mode = working)
+  - **Check B:** Lead pool exhaustion (0 leads with status new/research_done)
+  - **Check C:** Prospector stall detection (>12h since last run)
+- **Safety:** Each check is independently `try/excepted` — cannot crash heartbeat or affect existing functionality
+- **Alert logging:** If issues detected, logs `status: "alert"` row to `system_health_log` with details
+- **Verification (PASSED):** `modal run` EXIT 0, `modal deploy` EXIT 0, heartbeat logs show `working` status
+- **System State at Deploy (Feb 11, 10:10 PM EST):**
+  - Heartbeat: ✅ working
+  - Campaign: ✅ working
+  - CRONs: 2/4 (heartbeat + outreach)
+  - Google Places leads: 25
+  - Contactable leads: 1 (next prospector cycle will refill)
+- **Also created:** `scripts/system_check.py` — reusable 6-point verification script
+
+**Sovereign Law Added:** "Self-healing checks must never crash the parent function." (Feb 11, 2026)
+
 ---
 
 ```text
