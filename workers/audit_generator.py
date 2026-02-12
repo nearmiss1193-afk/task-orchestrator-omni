@@ -44,9 +44,14 @@ def fetch_pagespeed(website_url: str) -> dict:
     if not website_url.startswith("http"):
         website_url = f"https://{website_url}"
 
+    # Use API key to avoid 429 rate limits (same key works for PageSpeed + Places)
+    api_key = os.environ.get("GOOGLE_PLACES_API_KEY", "")
+    if not api_key or api_key == "AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY":
+        api_key = "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc"  # Fallback
+    
     api_url = (
         f"https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
-        f"?url={website_url}&strategy=mobile&category=performance"
+        f"?url={website_url}&strategy=mobile&category=performance&key={api_key}"
     )
 
     try:

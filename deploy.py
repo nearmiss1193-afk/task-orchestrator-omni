@@ -903,111 +903,9 @@ STYLE: Casual, concise, human. Use "totally", "honestly", "got it". Keep respons
     return {"status": "received", "event": event_type}
 
 
-# ==== MEMORY CHECK ENDPOINT (Board Phase 4 - Verification Tool) ====
-@app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="GET")
-def memory_check(phone: str = ""):
-    """
-    Diagnostic endpoint to verify memory contents for a phone number.
-    Returns exact data stored in customer_memory table.
-    
-    Usage: /memory_check?phone=+15551234567
-    
-    Board mandate: Never claim "success" without database proof.
-    This endpoint provides that proof.
-    """
-    from supabase import create_client
-    from datetime import datetime
-    
-    print(f"\n📋 [MEMORY_CHECK] Query for: '{phone}'")
-    
-    if not phone:
-        return {
-            "status": "error",
-            "message": "Phone parameter required. Usage: ?phone=+15551234567"
-        }
-    
-    # Normalize the input phone
-    normalized = normalize_phone(phone)
-    print(f"📋 [MEMORY_CHECK] Normalized to: '{normalized}'")
-    
-    try:
-        supabase_url = os.environ.get("SUPABASE_URL")
-        supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
-        
-        if not supabase_url or not supabase_key:
-            return {"status": "error", "message": "Missing Supabase credentials"}
-        
-        supabase = create_client(supabase_url, supabase_key)
-        
-        # Query customer_memory
-        result = supabase.table("customer_memory").select("*").eq("phone_number", normalized).limit(1).execute()
-        
-        if result.data and len(result.data) > 0:
-            data = result.data[0]
-            print(f"📋 [MEMORY_CHECK] ✅ FOUND - {data}")
-            return {
-                "status": "found",
-                "phone_queried": normalized,
-                "customer_name": data.get("customer_name", ""),
-                "context_summary": data.get("context_summary", ""),
-                "updated_at": data.get("updated_at", ""),
-                "record_id": data.get("id", "")
-            }
-        else:
-            print(f"📋 [MEMORY_CHECK] ❌ NOT FOUND")
-            return {
-                "status": "not_found",
-                "phone_queried": normalized,
-                "message": f"No memory record for {normalized}"
-            }
-    except Exception as e:
-        print(f"📋 [MEMORY_CHECK] ❌ ERROR: {e}")
-        return {
-            "status": "error",
-            "message": str(e)
-        }
 
-@app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="GET")
-def health_check():
-    """Quick health check for all critical services - used by UptimeRobot/monitoring"""
-    import os
-    from datetime import datetime
-    from supabase import create_client
-    
-    checks = {}
-    
-    # Check Supabase connection
-    try:
-        supabase_url = os.environ.get("SUPABASE_URL")
-        supabase_key = os.environ.get("SUPABASE_KEY")
-        if supabase_url and supabase_key:
-            supabase = create_client(supabase_url, supabase_key)
-            result = supabase.table("system_state").select("key").limit(1).execute()
-            checks["supabase"] = "ok"
-        else:
-            checks["supabase"] = "no_creds"
-    except Exception as e:
-        checks["supabase"] = f"fail: {str(e)[:50]}"
-    
-    # Check Grok API key exists
-    checks["grok_key"] = "ok" if os.environ.get("GROK_API_KEY") or os.environ.get("XAI_API_KEY") else "missing"
-    
-    # Check GHL key exists
-    checks["ghl_key"] = "ok" if os.environ.get("GHL_API_KEY") else "missing"
-    
-    # Check Vapi key exists
-    checks["vapi_key"] = "ok" if os.environ.get("VAPI_API_KEY") else "missing"
-    
-    all_ok = all(v == "ok" for v in checks.values())
-    status = "healthy" if all_ok else "degraded"
-    
-    return {
-        "status": status,
-        "timestamp": datetime.now().isoformat(),
-        "checks": checks
-    }
+# NOTE: memory_check and old health_check REMOVED (endpoint limit = 8)
+# New health_check endpoint below is more comprehensive.
 
 
 # ==== SYSTEM HEARTBEAT + CALL MONITOR (2-CRON app: heartbeat+outreach, zombie apps hold 2) ====
@@ -1136,6 +1034,31 @@ def system_heartbeat():
             print(f"PROSPECTOR: Skipping ({hours_since:.1f}h since last run, need 6h)")
     except Exception as e:
         print(f"PROSPECTOR trigger error: {e}")
+    
+    # ---- DAILY DIGEST TRIGGER (7 AM EST = 12:00 UTC, piggybacked on heartbeat) ----
+    try:
+        now_utc = datetime.now(timezone.utc)
+        if now_utc.hour == 12 and now_utc.minute < 5:  # 12:00-12:04 UTC = 7:00-7:04 AM EST
+            supabase = get_supabase()
+            last_digest = supabase.table("system_state").select("status").eq("key", "last_digest_sent").execute()
+            
+            should_send = True
+            if last_digest.data and last_digest.data[0].get("status"):
+                last_ts = datetime.fromisoformat(last_digest.data[0]["status"])
+                hours_since = (now_utc - last_ts).total_seconds() / 3600
+                should_send = hours_since >= 20  # At least 20h between digests
+            
+            if should_send:
+                supabase.table("system_state").upsert({
+                    "key": "last_digest_sent",
+                    "status": now_utc.isoformat(),
+                }, on_conflict="key").execute()
+                daily_digest.spawn()
+                print("📊 DIGEST: Spawned daily digest email")
+            else:
+                print(f"📊 DIGEST: Already sent today (skipping)")
+    except Exception as e:
+        print(f"Daily digest trigger error (non-fatal): {e}")
     
     # ---- VAPI CALL MONITOR (Bypass broken Vapi webhooks - Dec 2025 bug) ----
     try:
@@ -1280,6 +1203,256 @@ def auto_outreach_loop():
         print(f"Lead recycler error (non-fatal): {e}")
     
     outreach_logic()
+
+
+# ────────────────────────────────────────────────────────────
+#  HEALTH CHECK ENDPOINT (for UptimeRobot / external watchdog)
+# ────────────────────────────────────────────────────────────
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="GET")
+def health_check():
+    """Returns system health status for external monitoring (UptimeRobot)."""
+    import os, json
+    from datetime import datetime, timezone, timedelta
+    from modules.database.supabase_client import get_supabase
+    
+    try:
+        supabase = get_supabase()
+        now = datetime.now(timezone.utc)
+        
+        # Check 1: Heartbeat (last 15 min)
+        hb = supabase.table("system_health_log").select("checked_at").order(
+            "checked_at", desc=True
+        ).limit(1).execute()
+        last_hb = hb.data[0]["checked_at"] if hb.data else None
+        hb_ok = False
+        if last_hb:
+            hb_time = datetime.fromisoformat(last_hb.replace("Z", "+00:00"))
+            hb_ok = (now - hb_time).total_seconds() < 900  # 15 min
+        
+        # Check 2: Outreach (last 30 min)
+        touches = supabase.table("outbound_touches").select("ts", count="exact").gt(
+            "ts", (now - timedelta(minutes=30)).isoformat()
+        ).execute()
+        outreach_count = touches.count if touches.count is not None else len(touches.data)
+        
+        # Check 3: Lead pool
+        pool = supabase.table("contacts_master").select("id", count="exact").in_(
+            "status", ["new", "research_done"]
+        ).execute()
+        pool_count = pool.count if pool.count is not None else len(pool.data)
+        
+        healthy = hb_ok and pool_count > 0
+        
+        return {
+            "status": "healthy" if healthy else "degraded",
+            "heartbeat": {"ok": hb_ok, "last": last_hb},
+            "outreach_30m": outreach_count,
+            "lead_pool": pool_count,
+            "checked_at": now.isoformat(),
+        }
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+# ────────────────────────────────────────────────────────────
+#  RESEND WEBHOOK (track opens, replies, bounces per variant)
+# ────────────────────────────────────────────────────────────
+@app.function(image=image, secrets=[VAULT])
+@modal.web_endpoint(method="POST")
+def resend_webhook(data: dict):
+    """Receives Resend webhook events (delivered, opened, bounced, complained).
+    Updates outbound_touches with event data for A/B tracking."""
+    import json
+    from datetime import datetime, timezone
+    from modules.database.supabase_client import get_supabase
+    
+    event_type = data.get("type", "unknown")
+    event_data = data.get("data", {})
+    email_id = event_data.get("email_id", "")
+    
+    print(f"📬 RESEND WEBHOOK: {event_type} | email_id: {email_id}")
+    
+    try:
+        supabase = get_supabase()
+        
+        # Find the original outbound_touch by resend email ID
+        if email_id:
+            # Update the touch record with the event
+            # Store events as a log in the payload
+            touch = supabase.table("outbound_touches").select("id,payload").eq(
+                "correlation_id", email_id
+            ).limit(1).execute()
+            
+            if touch.data:
+                touch_record = touch.data[0]
+                payload = touch_record.get("payload") or {}
+                
+                # Add event to payload history
+                events = payload.get("events", [])
+                events.append({
+                    "type": event_type,
+                    "ts": datetime.now(timezone.utc).isoformat(),
+                    "raw": {k: v for k, v in event_data.items() if k != "headers"}
+                })
+                payload["events"] = events
+                
+                # Update status based on event type
+                status_map = {
+                    "email.delivered": "delivered",
+                    "email.opened": "opened",
+                    "email.clicked": "clicked",
+                    "email.bounced": "bounced",
+                    "email.complained": "complained",
+                }
+                new_status = status_map.get(event_type)
+                
+                update = {"payload": payload}
+                if new_status:
+                    # Only upgrade status (sent→delivered→opened→clicked), never downgrade
+                    priority = ["sent", "delivered", "opened", "clicked", "bounced", "complained"]
+                    current = touch_record.get("status", "sent") if touch_record.get("status") in priority else "sent"
+                    if priority.index(new_status) > priority.index(current):
+                        update["status"] = new_status
+                
+                supabase.table("outbound_touches").update(update).eq(
+                    "id", touch_record["id"]
+                ).execute()
+                
+                print(f"  ✅ Updated touch {touch_record['id']}: {event_type}")
+            else:
+                print(f"  ⚠️ No matching touch for email_id: {email_id}")
+        
+        # Also log to system_health for monitoring
+        supabase.table("system_health_log").insert({
+            "status": f"resend_{event_type}",
+            "details": json.dumps({"email_id": email_id, "type": event_type}),
+        }).execute()
+        
+    except Exception as e:
+        print(f"  ❌ Resend webhook error: {e}")
+    
+    return {"received": True}
+
+
+# ────────────────────────────────────────────────────────────
+#  DAILY DIGEST (Cron #3 — emails Dan a morning summary)
+# ────────────────────────────────────────────────────────────
+@app.function(image=image, secrets=[VAULT], timeout=120)  # Triggered by heartbeat at 7 AM EST
+def daily_digest():
+    """Sends Dan a daily summary email with outreach stats, lead pool, and system health."""
+    import os, json, requests
+    from datetime import datetime, timezone, timedelta
+    from modules.database.supabase_client import get_supabase
+    
+    print("📊 DAILY DIGEST: Generating morning report...")
+    supabase = get_supabase()
+    now = datetime.now(timezone.utc)
+    yesterday = (now - timedelta(hours=24)).isoformat()
+    
+    try:
+        # 1. Outreach stats (last 24h)
+        touches = supabase.table("outbound_touches").select(
+            "channel,variant_id,status"
+        ).gt("ts", yesterday).execute()
+        
+        total_sent = len(touches.data)
+        audit_sent = sum(1 for t in touches.data if t.get("variant_id") == "AUDIT")
+        generic_sent = total_sent - audit_sent
+        delivered = sum(1 for t in touches.data if t.get("status") == "delivered")
+        opened = sum(1 for t in touches.data if t.get("status") == "opened")
+        bounced = sum(1 for t in touches.data if t.get("status") == "bounced")
+        
+        # 2. Lead pool
+        pool = supabase.table("contacts_master").select("status", count="exact").in_(
+            "status", ["new", "research_done"]
+        ).execute()
+        pool_count = pool.count if pool.count is not None else len(pool.data)
+        
+        # Total leads
+        total = supabase.table("contacts_master").select("id", count="exact").execute()
+        total_count = total.count if total.count is not None else 0
+        
+        # 3. System health (errors in last 24h)
+        alerts = supabase.table("system_health_log").select("status,details").eq(
+            "status", "alert"
+        ).gt("checked_at", yesterday).execute()
+        alert_count = len(alerts.data)
+        
+        # Build email
+        open_rate = f"{(opened/total_sent*100):.0f}%" if total_sent > 0 else "N/A"
+        bounce_rate = f"{(bounced/total_sent*100):.0f}%" if total_sent > 0 else "N/A"
+        
+        html = f"""
+        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; color: #e2e8f0; padding: 32px; border-radius: 12px;">
+            <h1 style="color: #38bdf8; margin: 0 0 24px;">📊 Daily Empire Digest</h1>
+            <p style="color: #94a3b8; margin: 0 0 24px;">{now.strftime('%B %d, %Y')} — Last 24 Hours</p>
+            
+            <div style="background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 16px;">
+                <h2 style="color: #38bdf8; font-size: 16px; margin: 0 0 12px;">📨 Outreach</h2>
+                <table style="width: 100%; color: #e2e8f0; border-collapse: collapse;">
+                    <tr><td style="padding: 4px 0;">Total sent</td><td style="text-align: right; font-weight: bold;">{total_sent}</td></tr>
+                    <tr><td style="padding: 4px 0;">├ Audit PDFs</td><td style="text-align: right; color: #22d3ee;">{audit_sent}</td></tr>
+                    <tr><td style="padding: 4px 0;">├ Generic</td><td style="text-align: right;">{generic_sent}</td></tr>
+                    <tr><td style="padding: 4px 0;">Delivered</td><td style="text-align: right; color: #4ade80;">{delivered}</td></tr>
+                    <tr><td style="padding: 4px 0;">Opened</td><td style="text-align: right; color: #fbbf24;">{opened} ({open_rate})</td></tr>
+                    <tr><td style="padding: 4px 0;">Bounced</td><td style="text-align: right; color: #f87171;">{bounced} ({bounce_rate})</td></tr>
+                </table>
+            </div>
+            
+            <div style="background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 16px;">
+                <h2 style="color: #38bdf8; font-size: 16px; margin: 0 0 12px;">🎯 Lead Pool</h2>
+                <table style="width: 100%; color: #e2e8f0; border-collapse: collapse;">
+                    <tr><td style="padding: 4px 0;">Ready to contact</td><td style="text-align: right; font-weight: bold; color: {'#4ade80' if pool_count > 50 else '#f87171'};">{pool_count}</td></tr>
+                    <tr><td style="padding: 4px 0;">Total leads</td><td style="text-align: right;">{total_count}</td></tr>
+                </table>
+            </div>
+            
+            <div style="background: #1e293b; padding: 20px; border-radius: 8px;">
+                <h2 style="color: #38bdf8; font-size: 16px; margin: 0 0 12px;">🏥 System Health</h2>
+                <table style="width: 100%; color: #e2e8f0; border-collapse: collapse;">
+                    <tr><td style="padding: 4px 0;">Alerts (24h)</td><td style="text-align: right; color: {'#4ade80' if alert_count == 0 else '#f87171'};">{alert_count}</td></tr>
+                    <tr><td style="padding: 4px 0;">Status</td><td style="text-align: right; color: #4ade80;">{'✅ All Systems Go' if alert_count == 0 else '⚠️ Check Alerts'}</td></tr>
+                </table>
+            </div>
+            
+            <p style="color: #475569; font-size: 12px; margin-top: 24px; text-align: center;">
+                ⚫ Antigravity v5.0 — Sovereign Executor | Auto-generated
+            </p>
+        </div>
+        """
+        
+        # Send via Resend
+        resend_key = os.environ.get("RESEND_API_KEY")
+        if not resend_key:
+            print("❌ No RESEND_API_KEY — can't send digest")
+            return
+        
+        from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <dan@aiserviceco.com>")
+        dan_email = os.environ.get("DAN_EMAIL", "dan@aiserviceco.com")
+        
+        r = requests.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            json={
+                "from": from_email,
+                "to": [dan_email],
+                "subject": f"📊 Empire Digest — {total_sent} sent, {opened} opened, {pool_count} in pool",
+                "html": html,
+            },
+            timeout=15
+        )
+        
+        if r.status_code in [200, 201]:
+            print(f"✅ DIGEST SENT: {total_sent} sent, {opened} opened, {pool_count} pool")
+        else:
+            print(f"❌ DIGEST SEND FAILED: {r.status_code} — {r.text[:200]}")
+            
+    except Exception as e:
+        print(f"❌ DIGEST ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+
 
 @app.function(image=image, secrets=[VAULT])
 def auto_prospecting():

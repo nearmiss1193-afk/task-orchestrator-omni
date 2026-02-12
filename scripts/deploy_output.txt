@@ -1,0 +1,108 @@
+﻿ΓöîΓöÇ Modal Deprecation Warning (2025-03-05) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé The `@modal.web_endpoint` decorator has been renamed to                     Γöé
+Γöé `@modal.fastapi_endpoint`.                                                  Γöé
+Γöé                                                                             Γöé
+Γöé Source:                                                                     Γöé
+Γöé C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:117     Γöé
+Γöé   @modal.web_endpoint(method="GET")                                         Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöîΓöÇ Modal Deprecation Warning (2025-03-05) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé The `@modal.web_endpoint` decorator has been renamed to                     Γöé
+Γöé `@modal.fastapi_endpoint`.                                                  Γöé
+Γöé                                                                             Γöé
+Γöé Source:                                                                     Γöé
+Γöé C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:167     Γöé
+Γöé   @modal.web_endpoint(method="GET")                                         Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöîΓöÇ Modal Deprecation Warning (2025-03-05) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé The `@modal.web_endpoint` decorator has been renamed to                     Γöé
+Γöé `@modal.fastapi_endpoint`.                                                  Γöé
+Γöé                                                                             Γöé
+Γöé Source:                                                                     Γöé
+Γöé C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:205     Γöé
+Γöé   @modal.web_endpoint(method="POST")                                        Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöîΓöÇ Modal Deprecation Warning (2025-03-05) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé The `@modal.web_endpoint` decorator has been renamed to                     Γöé
+Γöé `@modal.fastapi_endpoint`.                                                  Γöé
+Γöé                                                                             Γöé
+Γöé Source:                                                                     Γöé
+Γöé C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:521     Γöé
+Γöé   @modal.web_endpoint(method="POST")                                        Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöîΓöÇ Modal Deprecation Warning (2025-03-05) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé The `@modal.web_endpoint` decorator has been renamed to                     Γöé
+Γöé `@modal.fastapi_endpoint`.                                                  Γöé
+Γöé                                                                             Γöé
+Γöé Source:                                                                     Γöé
+Γöé C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:1212    Γöé
+Γöé   @modal.web_endpoint(method="GET")                                         Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+ΓöîΓöÇ Modal Deprecation Warning (2025-03-05) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé The `@modal.web_endpoint` decorator has been renamed to                     Γöé
+Γöé `@modal.fastapi_endpoint`.                                                  Γöé
+Γöé                                                                             Γöé
+Γöé Source:                                                                     Γöé
+Γöé C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py:1262    Γöé
+Γöé   @modal.web_endpoint(method="POST")                                        Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+Γ£ô Created objects.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount modules\outbound_dialer.py
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\voice
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\learning
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\ai
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount modules\__init__.py
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\database
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\bridge
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\vapi
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\analytics
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\core
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\utils
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount workers\instant_response.py
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\api
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount 
+Γöé   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\workers
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created mount PythonPackage:workers
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function log_consent.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function dispatch_email_logic.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function dispatch_audit_email.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function dispatch_sms_logic.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function dispatch_call_logic.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function print_env_diagnostics.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function verify_outreach_worker.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function test_db_connection.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function test_db_psycopg2.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created web function sovereign_state => 
+Γöé   https://nearmiss1193-afk--ghl-omni-automation-sovereign-state.modal.run
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created web function track_email_open => 
+Γöé   https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function system_heartbeat.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created web function sms_inbound => 
+Γöé   https://nearmiss1193-afk--ghl-omni-automation-sms-inbound.modal.run
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created web function vapi_webhook => 
+Γöé   https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created web function resend_webhook => 
+Γöé   https://nearmiss1193-afk--ghl-omni-automation-resend-webhook.modal.run
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function auto_outreach_loop.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function daily_digest.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created web function health_check => 
+Γöé   https://nearmiss1193-afk--ghl-omni-automation-health-check.modal.run
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function auto_prospecting.
+Γö£ΓöÇΓöÇ ≡ƒö¿ Created function unified_lead_sync.
+ΓööΓöÇΓöÇ ≡ƒö¿ Created function trigger_self_learning_loop.
+Γ£ô App deployed in 2.380s! ≡ƒÄë
+
+View Deployment: 
+https://modal.com/apps/nearmiss1193-afk/main/deployed/ghl-omni-automation
