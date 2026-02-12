@@ -1227,7 +1227,58 @@ from workers.prospector import run_prospecting_cycle as prospector_logic
 
 @app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
 def auto_outreach_loop():
-    """Triggers autonomous outreach engine."""
+    """Triggers autonomous outreach engine with lead recycling."""
+    from datetime import datetime, timezone, timedelta
+    
+    # Auto-recycle stale leads before outreach (crash-safe)
+    try:
+        from modules.database.supabase_client import get_supabase
+        supabase = get_supabase()
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=3)).isoformat()
+        
+        # Find leads stuck at outreach_sent for >3 days
+        stale = supabase.table("contacts_master").select("id", count="exact").eq(
+            "status", "outreach_sent"
+        ).lt("last_contacted_at", cutoff).execute()
+        stale_count = stale.count if stale.count is not None else len(stale.data)
+        
+        if stale_count > 0:
+            # Recycle them back to 'new' (max 50 per cycle to avoid overload)
+            to_recycle = supabase.table("contacts_master").select("id").eq(
+                "status", "outreach_sent"
+            ).lt("last_contacted_at", cutoff).limit(50).execute()
+            
+            recycled = 0
+            for lead in to_recycle.data:
+                try:
+                    supabase.table("contacts_master").update({
+                        "status": "new",
+                        "total_touches": 0
+                    }).eq("id", lead["id"]).execute()
+                    recycled += 1
+                except:
+                    pass
+            
+            if recycled > 0:
+                print(f"♻️ Recycled {recycled} stale leads back to 'new' (cooldown >3 days)")
+        
+        # Also fix NULL last_contacted_at on outreach_sent (prevent future stuck leads)
+        null_leads = supabase.table("contacts_master").select("id,created_at").eq(
+            "status", "outreach_sent"
+        ).is_("last_contacted_at", "null").limit(50).execute()
+        
+        if null_leads.data:
+            for lead in null_leads.data:
+                try:
+                    supabase.table("contacts_master").update({
+                        "last_contacted_at": lead.get("created_at", datetime.now(timezone.utc).isoformat())
+                    }).eq("id", lead["id"]).execute()
+                except:
+                    pass
+            print(f"🔧 Fixed {len(null_leads.data)} leads with NULL last_contacted_at")
+    except Exception as e:
+        print(f"Lead recycler error (non-fatal): {e}")
+    
     outreach_logic()
 
 @app.function(image=image, secrets=[VAULT])

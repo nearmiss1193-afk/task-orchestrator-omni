@@ -1187,6 +1187,28 @@ Heartbeat (every 5 min)
 
 **Sovereign Law Added:** "Self-healing checks must never crash the parent function." (Feb 11, 2026)
 
+#### Section 22c: Feb 11, 2026 — Lead Pool Exhaustion Fixed + Auto-Recycler
+
+> [!CAUTION]
+> **ROOT CAUSE:** 388 leads stuck at `outreach_sent` with `last_contacted_at = NULL`. Recycler couldn't recycle them because NULL ≠ "3 days ago". Lead pool dropped to 1.
+
+- **Immediate Fix:** Set `last_contacted_at = created_at` for all 388 NULL records. 336 were >3 days old → recycled to `new`.
+- **Permanent Fix:** Added auto-recycler to `auto_outreach_loop` in `deploy.py`:
+  - Runs before every outreach cycle (every 5 min)
+  - Recycles up to 50 stale leads per cycle (`outreach_sent` >3 days → `new`)
+  - Fixes NULL `last_contacted_at` (up to 50/cycle) to prevent future stuck leads
+  - Fully `try/excepted` — cannot crash outreach
+- **Results:**
+  - Lead pool: 1 → **298**
+  - Outreach: 0 → **sending** (last touch 04:00 UTC)
+  - Prospector also ran: added ~52 new leads (total 692)
+- **Verification:** Deploy EXIT 0, last touch timestamp confirmed, campaign working
+
+**Sovereign Laws Added:**
+
+- "NULL last_contacted_at = stuck forever. Always set it on outreach_sent." (Feb 11, 2026)
+- "Lead recycling must be automatic, not manual. 3-day cooldown, 50/cycle max." (Feb 11, 2026)
+
 ---
 
 ```text
