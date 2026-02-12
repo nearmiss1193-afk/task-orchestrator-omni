@@ -1,0 +1,30 @@
+﻿
+============================================================
+SITE: https://aiserviceco.com
+============================================================
+Analytics IDs found: ['G-E', 'G-8W75D6LNDP', 'G-8W75D6LNDP', 'G-8080RNWHVV']
+No analytics script tags found
+Found: gtag() calls (Google Analytics)
+Analytics keyword context: ...ration."
+
+    }
+
+    </script>
+
+
+
+    <!-- Vercel Analytics -->
+
+    <script defer src="/_vercel/insights/script.js"></script>
+
+
+
+...
+
+============================================================
+SITE: https://lakelandfinds.com
+============================================================
+No Google Analytics/GTM IDs found
+No analytics script tags found
+
+Done.
