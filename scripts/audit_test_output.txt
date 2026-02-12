@@ -1,0 +1,76 @@
+﻿Testing 3 leads
+
+
+============================================================
+  LEAD #1: Best Pest Control | http://www.bestpestcfl.com/
+============================================================
+
+≡ƒöì AUDIT: Best Pest Control (http://www.bestpestcfl.com/)
+  [1/3] Running PageSpeed Insights...
+  PageSpeed API returned 429
+  [2/3] Checking privacy policy...
+  Privacy policy: NOT FOUND (CRITICAL)
+  [3/3] Checking AI readiness...
+  Generating PDF report...
+  PDF generated: 4116 bytes
+
+  RESULTS:
+    PageSpeed: None/100 (error)
+    Privacy:   CRITICAL ΓÇö No privacy policy found ΓÇö potential FDBR violation
+    AI Ready:  GOOD ΓÇö Site has chat, booking, and structured data
+    Criticals: 1
+
+  EMAIL:
+    Subject: Best Pest Control: 1 critical issue found in your AI visibility audit
+    PDF: Best_Pest_Control_AI_Audit.pdf (5488 chars b64)
+
+  >> PDF saved to scripts/test_audit.pdf (4116 bytes)
+
+============================================================
+  LEAD #2: Reliable Pressure PROS | https://www.reliablepressurepros.com/?utm_source=google&utm_medium=organic&utm_campaign=google_business_profile
+============================================================
+
+≡ƒöì AUDIT: Reliable Pressure PROS (https://www.reliablepressurepros.com/?utm_source=google&utm_medium=organic&utm_campaign=google_business_profile)
+  [1/3] Running PageSpeed Insights...
+  PageSpeed API returned 429
+  [2/3] Checking privacy policy...
+  Privacy policy: NOT FOUND (CRITICAL)
+  [3/3] Checking AI readiness...
+  Generating PDF report...
+  PDF generated: 4344 bytes
+
+  RESULTS:
+    PageSpeed: None/100 (error)
+    Privacy:   CRITICAL ΓÇö No privacy policy found ΓÇö potential FDBR violation
+    AI Ready:  WARNING ΓÇö No AI-powered features detected
+    Criticals: 1
+
+  EMAIL:
+    Subject: Reliable Pressure PROS: 1 critical issue found in your AI visibility audit
+    PDF: Reliable_Pressure_PROS_AI_Audit.pdf (5792 chars b64)
+
+============================================================
+  LEAD #3: Drake Lawn & Pest Control | https://www.drakepest.com/orlando/?utm_source=google&utm_medium=organic&utm_campaign=gbp_orlando
+============================================================
+
+≡ƒöì AUDIT: Drake Lawn & Pest Control (https://www.drakepest.com/orlando/?utm_source=google&utm_medium=organic&utm_campaign=gbp_orlando)
+  [1/3] Running PageSpeed Insights...
+  PageSpeed API returned 429
+  [2/3] Checking privacy policy...
+  Privacy policy link found on homepage
+  [3/3] Checking AI readiness...
+  Generating PDF report...
+  PDF generated: 2867 bytes
+
+  RESULTS:
+    PageSpeed: None/100 (error)
+    Privacy:   WARNING ΓÇö Privacy policy link found on homepage but page not verified
+    AI Ready:  GOOD ΓÇö Site has chat, booking, and structured data
+    Criticals: 0
+
+  EMAIL:
+    Subject: Drake Lawn & Pest Control: Your AI visibility audit results
+    PDF: Drake_Lawn_&_Pest_Control_AI_Audit.pdf (3824 chars b64)
+
+============================================================
+TESTS COMPLETE
