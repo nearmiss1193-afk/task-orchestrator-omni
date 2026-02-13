@@ -4,6 +4,16 @@
 
 ---
 
+## 🏛️ SECTION 13: Feb 13, 2026 — Vapi Stabilization & Schema Alignment
+
+- **Incident:** Persistent Vapi 500 errors on `assistant.started` and stale system heartbeats.
+- **Root Cause:** Escaped docstrings in `sales_persona.py`, `.format()` crashes on AI prompts containing braces, and missing `check_type` field in heartbeat SQL.
+- **Fix Applied:** Implemented "Absolute Hardened Webhook" with top-level try-except, shifted imports to runtime, migrated to `.replace()` for prompt generation, and aligned heartbeat code with Supabase schema.
+- **Sovereign Law:** "Never use `.format()` for AI prompts containing braces; use `.replace()`. Schema mismatch is the primary cause of 'silent' logging failures."
+- **Diagnostic Scripts:** `check_vapi_config.py`, `modal_log_audit.py`, remote mock tests for `assistant.started`.
+
+---
+
 ## 🚨 CRITICAL RULE: EMAIL OUTREACH WORKFLOW (Feb 5, 2026)
 
 > [!CAUTION]
@@ -1240,3 +1250,41 @@ Heartbeat (every 5 min)
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```
+
+---
+
+## 📧 SECTION 17: LINK-BASED AUDIT & WALK-IN PROTOCOLS (Feb 12, 2026)
+
+### 📈 Link-Based Audit Email (Engine v5)
+
+**The Problem:** PDF attachments increase spam risk and don't provide engagement tracking.
+**The Solution:** Replace attachments with a clickable "View Report" button linking to a live landing page.
+
+| Component | Implementation |
+|-----------|----------------|
+| **Vercel Hook** | Live viewer at `aiserviceco.com/report.html?id=[report_id]` |
+| **Storage** | Audit PDFs uploaded to Supabase Storage `audit-pdfs/` bucket |
+| **Logic** | `dispatch_audit_email` refactored to store results in `audit_reports` table |
+| **Tracking** | `viewed_at` and `view_count` on report page via Supabase update |
+
+**Table Schema:**
+`audit_reports`: id, report_id (unique), lead_id, company_name, website_url, audit_results (JSONB), pdf_url, created_at, viewed_at, view_count
+
+### 🚶 Walk-In Flyer Protocol ("The Unbelievable Offer")
+
+**Context:** Direct door-knocking/flyer drop for local businesses.
+**Offer Stack:**
+
+1. **Free AI Visibility Audit** (QR Code to Instant Scan)
+2. **Free Privacy Policy Fix** (FDBR compliance hook)
+3. **14-Day Free AI Receptionist Trial** (Sarah answers calls)
+4. **Google Business Profile Optimization**
+
+**Contact info (VERIFIED):**
+
+- Call Sarah (Voice AI): **863-213-2505**
+- Text Sarah: **352-758-5336**
+- Talk to Dan (Direct): **352-936-8152**
+- Website: **aiserviceco.com**
+
+**Learning:** Use `report.html` as the destination for flyer QR codes for a seamless "Paper to Cloud" conversion.

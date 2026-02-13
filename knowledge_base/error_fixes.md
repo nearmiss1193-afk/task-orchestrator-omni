@@ -703,3 +703,52 @@ Also added `reply_to: owner@aiserviceco.com` to all 3 email payloads in `outreac
 **Confidence**: 95% (bounce rate reduction requires 24-48 hrs to fully measure)
 
 ---
+
+## Vapi Webhook 500: Prompt Braces & Escaped Docstrings
+
+**Date**: 2026-02-13
+
+**Error Message**: `500 Internal Server Error` (Returned to Vapi dashboard)
+
+**Location**: `deploy.py` `vapi_webhook` and `modules/voice/sales_persona.py`
+
+**Root Cause**:
+
+1. **Syntax Error**: Escaped docstrings (`\"\"\"`) in `sales_persona.py` broke the module import.
+2. **Formatting Crash**: Using `.format()` on AI prompts containing curly braces (e.g., code snippets or internal logic placeholders) causes a `TypeError`.
+3. **Telemetry Overhead**: Vapi sends high-volume telemetry events like `speech-update` which were causing unnecessary overhead and potential crashes during high-concurrency periods.
+
+**Fix**:
+
+1. Fixed syntax in `sales_persona.py`.
+2. Migrated `get_persona_prompt` from `.format()` to `.replace()` for absolute safety against unintended braces.
+3. Implemented a "Universal 200 OK" safety wrapper in `vapi_webhook` that catches all errors and returns a valid JSON response instead of a 500.
+4. Added a "Fast Exit" for telemetry events.
+
+**Key Rule**: Never use `.format()` for AI prompts. Always wrap webhooks in a total safety `try-except` to prevent 500 errors from breaking 3rd-party integrations.
+
+**Verification**: Remote mock tests for `assistant.started` and `assistant-request` verified 200 OK and correct configuration payload. ✅
+
+**Confidence**: 100%
+
+---
+
+## Stale Heartbeats: Missing `check_type` Schema Field
+
+**Date**: 2026-02-13
+
+**Error Message**: Heartbeats stopped appearing in Supabase `system_health_log`.
+
+**Location**: `deploy.py` `system_heartbeat`
+
+**Root Cause**: The Supabase table `system_health_log` has a mandatory (or at least expected) `check_type` column. The insertion code was missing this field, causing the database to reject the row.
+
+**Fix**: Added `"check_type": "heartbeat_v3"` to the insert statement.
+
+**Key Rule**: Database schema changes are silent killers. Always verify mandatory fields when heartbeats or logs stop flowing.
+
+**Verification**: Log entries verified in Supabase after redeploy. ✅
+
+**Confidence**: 100%
+
+---
