@@ -1,38 +1,31 @@
-# Capabilities & Gaps — Feb 11, 2026
+# Capabilities & Gaps — Feb 15, 2026
 
 ## Active Capabilities ✅
 
 | Capability | Status | Location |
 |-----------|--------|----------|
+| Cloud Autonomy | ✅ LIVE | Modal 24/7 (Local power-down OK) |
 | Autonomous Outreach (email) | ✅ LIVE | `auto_outreach_loop` every 5 min |
-| AI Audit PDF Generation | ✅ LIVE | `audit_generator.py` + `dispatch_audit_email` |
-| FDBR Privacy Hook | ✅ LIVE | Always-red finding for FL businesses |
-| A/B Subject Line Testing | ✅ LIVE | 4 variants tracked in `outbound_touches` |
-| Lead Prospecting (Google Places) | ✅ LIVE | `auto_prospecting` via heartbeat trigger |
-| Lead Auto-Recycling | ✅ LIVE | 50/cycle, 3-day cooldown, crash-safe |
-| Self-Healing Heartbeat | ✅ LIVE | Outreach stall, pool empty, prospector stall |
-| Email Open Tracking | ✅ LIVE | Tracking pixel via Resend |
-| SMS via GHL Webhook | ✅ LIVE | Business hours only (Mon-Sat 8-6) |
-| Voice Calls via Vapi | ✅ LIVE | Business hours only |
-| System Health Monitoring | ✅ LIVE | `system_health_log` every 5 min |
-| System Check Script | ✅ READY | `scripts/system_check.py` |
+| AI Audit PDF Generation | ✅ LIVE | `audit_generator.py` |
+| Research Strike v1 | ✅ BUILT | Piggybacked on heartbeat |
+| Daily Digest Email | ✅ LIVE | 7 AM EST morning report |
+| FDBR Privacy Hook | ✅ LIVE | Strategy/Audits |
+| SMS via GHL Webhook | ✅ LIVE | Mon-Sat 8-6 |
+| Voice Calls via Vapi | ✅ LIVE | Personas aligned |
+| Sunday Safety Protocol | ✅ VERIFIED | 0 outbound noise on Sundays |
 
 ## Known Gaps 🔴
 
 | Gap | Impact | Priority | Fix |
 |-----|--------|----------|-----|
-| PageSpeed API 429s | Audit PDFs missing speed score | MEDIUM | Add API key or cache results |
-| No external health watchdog | Missed downtime | MEDIUM | UptimeRobot on `/health_check` |
-| No daily digest email | Dan can't see results at a glance | LOW | New cron (slot 3/4) |
-| No reply tracking | Can't measure audit vs generic performance | MEDIUM | Resend webhook for replies |
-| No Sunbiz prospecting | Missing 60-70% of Lakeland businesses | LOW | Future enhancement |
-| Follow-up email timing | Hardcoded 3/7 day intervals | LOW | Make configurable |
+| Research Strike Stall | 75 leads stuck, fallback to generic emails | **CRITICAL** | Diagnose worker spawning & API limits |
+| PageSpeed API 429s | Missing scores | MEDIUM | Cache or rotation |
+| No Sunbiz prospecting | Missing 60% of Lakeland | LOW | Future |
 
 ## Cron Budget
 
 | Used | Total | Remaining |
 |------|-------|-----------|
-| 2 | 4 | 2 slots |
+| 3 | 4 | 1 slot |
 
-**Active:** heartbeat (*/5), outreach (*/5)
-**Manual:** prospecting, lead sync, self-learning
+**Active:** heartbeat (*/5), outreach (*/5), daily_digest (0 7 ** *)
