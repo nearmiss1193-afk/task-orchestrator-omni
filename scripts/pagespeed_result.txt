@@ -1,0 +1,13 @@
+﻿PERFORMANCE SCORE: 0
+
+KEY METRICS:
+  first-contentful-paint: ? (score: ?)
+  largest-contentful-paint: ? (score: ?)
+  total-blocking-time: ? (score: ?)
+  cumulative-layout-shift: ? (score: ?)
+  speed-index: ? (score: ?)
+  interactive: ? (score: ?)
+
+OPPORTUNITIES:
+
+DIAGNOSTICS:

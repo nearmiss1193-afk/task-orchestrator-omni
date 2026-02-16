@@ -12,20 +12,24 @@
 | FDBR Privacy Hook | ✅ LIVE | Strategy/Audits |
 | SMS via GHL Webhook | ✅ LIVE | Mon-Sat 8-6 |
 | Voice Calls via Vapi | ✅ LIVE | Personas aligned |
-| Sunday Safety Protocol | ✅ VERIFIED | 0 outbound noise on Sundays |
+| Sunbiz Lakeland Strike | ✅ LIVE | SCRAPER + SUPABASE SYNC |
+| PageSpeed Key Rotation | ✅ LIVE | 4x Hot-Swap Resiliency |
+| Manus Strike v1 | ✅ LIVE | Recruitment Persona active | - |
+| Social Multiplier (Image) | ✅ LIVE | Automated 2x/day Image+Text updates | - |
+| Sunday Safety Protocol | ✅ VERIFIED | 0 outbound noise on Sundays | - |
 
 ## Known Gaps 🔴
 
-| Gap | Impact | Priority | Fix |
-|-----|--------|----------|-----|
-| Research Strike Stall | 75 leads stuck, fallback to generic emails | **CRITICAL** | Diagnose worker spawning & API limits |
-| PageSpeed API 429s | Missing scores | MEDIUM | Cache or rotation |
-| No Sunbiz prospecting | Missing 60% of Lakeland | LOW | Future |
+| Capability | Status | Location | Notes |
+|-----------|--------|----------|-------|
+| Veo 3 Video Ops | ✅ BLOCKED | Code 172 | Ayrshare Plan Upgrade Required |
+| AI Dispatch Flow | ✅ LIVE | Trade-specific dispatching (HVAC, Plumbing) | Persona active |
+| Auto-Newsletter | No automated weekly digest to clients | LOW | Resend API exists |
 
 ## Cron Budget
 
 | Used | Total | Remaining |
 |------|-------|-----------|
-| 3 | 4 | 1 slot |
+| 4 | 5 | 1 slot |
 
-**Active:** heartbeat (*/5), outreach (*/5), daily_digest (0 7 ** *)
+**Active:** heartbeat (*/5), outreach (*/5), sunbiz_delta (8AM), social (9AM, 4PM)

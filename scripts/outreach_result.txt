@@ -1,0 +1,57 @@
+﻿============================================================
+WHY AREN'T NEW LEADS BEING CONTACTED?
+============================================================
+
+1. 'NEW' LEADS:
+   Total: 241
+   Has email: 241
+   Has phone: 195
+   0 touches: 241
+
+2. OUTBOUND_TOUCHES SCHEMA:
+   channel
+   company
+   correlation_id
+   id
+   payload
+   phone
+   run_id
+   status
+   ts
+   variant_id
+   variant_name
+   vertical
+
+3. LAST 10 TOUCHES:
+   2026-02-12T15:00:12.447556+00:00 | email | delivered | contact: ?
+   2026-02-12T15:00:10.650546+00:00 | email | sent | contact: ?
+   2026-02-12T14:55:11.043826+00:00 | email | delivered | contact: ?
+   2026-02-12T14:55:09.764577+00:00 | email | delivered | contact: ?
+   2026-02-12T14:55:08.130472+00:00 | email | sent | contact: ?
+   2026-02-12T14:50:10.257869+00:00 | email | delivered | contact: ?
+   2026-02-12T14:50:08.980198+00:00 | email | sent | contact: ?
+   2026-02-12T14:45:09.968495+00:00 | email | delivered | contact: ?
+   2026-02-12T14:45:08.715255+00:00 | email | delivered | contact: ?
+   2026-02-12T14:45:07.528894+00:00 | email | sent | contact: ?
+
+4. SYSTEM STATE:
+   fusion_backend: working
+   cloud_prospector: working
+   scc_dashboard: working
+   vapi_closer: working
+   Advanced Neural Prospecting: working
+   Automated Reporting: working
+   Neural Prospector Level 2: working
+   ALF Referral Agency: working
+   Visitor Analytics: working
+   Neural Prospector Level 2 (Scaling): working
+   Revenue Loop (Stripe): working
+   campaign_mode: working
+   prospector_cycle_index: working
+
+5. LAST HEARTBEATS:
+   2026-02-12T14:20:01.749593+00:00 | working
+   2026-02-12T14:15:01.509998+00:00 | working
+   2026-02-12T14:10:01.780652+00:00 | working
+
+============================================================

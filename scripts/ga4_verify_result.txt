@@ -1,0 +1,17 @@
+﻿Measurement IDs found: ['G-XZK2Z9K3TW', 'G-XZK2Z9K3TW', 'G-E', 'G-8W75D6LNDP', 'G-8W75D6LNDP', 'G-8080RNWHVV']
+GTM script IDs: ['G-XZK2Z9K3TW', 'G-8W75D6LNDP']
+gtag config calls: ['G-XZK2Z9K3TW', 'G-8W75D6LNDP', 'G-8080RNWHVV', 'AW-17858959033']
+
+G-XZK2Z9K3TW present: True
+
+Response headers:
+  server: Vercel
+  x-vercel-id: iad1::h5rhz-1770903880803-c8f31210239f
+
+---
+
+Lakeland Finds headers:
+  server: Vercel
+  x-vercel-id: iad1::v5jnr-1770903881320-f0f45bfb3c21
+Has gtag: False
+Has G-SZWJKJNSZ9: False

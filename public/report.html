@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your AI Visibility Audit Report | AI Service Co</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .loading .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(245, 158, 11, 0.2);
+            border-top-color: #f59e0b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .report-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .report-card h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .score-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .score-row:last-child {
+            border-bottom: none;
+        }
+
+        .score-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .score-badge.critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 2px solid #ef4444;
+        }
+
+        .score-badge.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 2px solid #f59e0b;
+        }
+
+        .score-badge.good {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 2px solid #22c55e;
+        }
+
+        .score-label {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .score-detail {
+            font-size: 13px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.5);
+        }
+
+        .cta-subtext {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            color: #f59e0b;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .pdf-link:hover {
+            text-decoration: underline;
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: #444;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI Visibility Audit Report</h1>
+            <p id="companyName">Loading your personalized report...</p>
+        </div>
+
+        <div id="loadingState" class="loading">
+            <div class="spinner"></div>
+            <p>Retrieving your audit results...</p>
+        </div>
+
+        <div id="reportContent" style="display: none;">
+            <!-- Scores Card -->
+            <div class="report-card">
+                <h2>🔍 Audit Results</h2>
+                <div id="scoreRows"></div>
+            </div>
+
+            <!-- Key Findings Card -->
+            <div class="report-card">
+                <h2>📋 Key Findings</h2>
+                <div id="findings"></div>
+            </div>
+
+            <!-- CTA -->
+            <div class="cta-section">
+                <a href="https://links.aiserviceco.com/widget/booking/YWQcHuXXznQEQa7LAWeB" class="cta-btn" id="ctaBtn">
+                    Book a Free 15-Min Strategy Call
+                </a>
+                <p class="cta-subtext">I'll walk you through the findings and fix the most urgent issue — free.</p>
+                <a href="#" id="pdfDownload" class="pdf-link" style="display:none;">
+                    📄 Download Full PDF Report
+                </a>
+            </div>
+        </div>
+
+        <div id="errorState" class="error-state" style="display: none;">
+            <h2>Report Not Found</h2>
+            <p>This report may have expired or the link is invalid.</p>
+            <p style="margin-top: 16px;"><a href="https://www.aiserviceco.com/" style="color: #f59e0b;">Visit AI Service
+                    Co →</a></p>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 AI Service Co. | <a href="https://www.aiserviceco.com/" style="color: #666;">aiserviceco.com</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://rzcpfwkygdvoshtwxncs.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc2ODA5OTEsImV4cCI6MjA1MzI1Njk5MX0.kAlap91t3MFSoFo2GjPGSMPWBmqIWZKqB0_eSAH0fUM';
+
+        // Get report ID from URL params
+        const params = new URLSearchParams(window.location.search);
+        const reportId = params.get('id');
+        const trackingUrl = 'https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run';
+
+        async function loadReport() {
+            if (!reportId) {
+                showError();
+                return;
+            }
+
+            // Track the click
+            try {
+                fetch(`${trackingUrl}?eid=${reportId}&action=report_view`, { mode: 'no-cors' });
+            } catch (e) { }
+
+            try {
+                // Fetch report data from Supabase
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/audit_reports?report_id=eq.${reportId}&select=*`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_ANON,
+                            'Authorization': `Bearer ${SUPABASE_ANON}`
+                        }
+                    }
+                );
+                const data = await res.json();
+
+                if (!data || data.length === 0) {
+                    showError();
+                    return;
+                }
+
+                const report = data[0];
+                renderReport(report);
+
+            } catch (e) {
+                console.error('Failed to load report:', e);
+                showError();
+            }
+        }
+
+        function renderReport(report) {
+            const results = report.audit_results || {};
+            const ps = results.pagespeed || {};
+            const privacy = results.privacy || {};
+            const ai = results.ai_readiness || {};
+
+            // Set company name
+            document.getElementById('companyName').textContent =
+                `Personalized report for ${report.company_name || 'your business'}`;
+
+            // Build score rows
+            const rows = [
+                {
+                    label: 'Mobile Performance',
+                    score: ps.score || 'N/A',
+                    status: ps.status || 'warning',
+                    detail: ps.score ? `Your site scores ${ps.score}/100 on Google PageSpeed (mobile)` : 'Could not be measured'
+                },
+                {
+                    label: 'Privacy Policy (FDBR)',
+                    score: privacy.status === 'critical' ? '!' : '✓',
+                    status: privacy.status || 'warning',
+                    detail: privacy.status === 'critical'
+                        ? 'No privacy policy found — potential FDBR violation (up to $50K fine)'
+                        : 'Privacy policy detected on your site'
+                },
+                {
+                    label: 'AI Lead Capture',
+                    score: ai.status === 'good' ? '✓' : '✗',
+                    status: ai.status || 'critical',
+                    detail: ai.status === 'good'
+                        ? 'Chat or booking widgets detected'
+                        : 'No AI-powered lead capture found — you\'re losing after-hours leads'
+                }
+            ];
+
+            const container = document.getElementById('scoreRows');
+            rows.forEach(row => {
+                container.innerHTML += `
+                    <div class="score-row">
+                        <div class="score-badge ${row.status}">${row.score}</div>
+                        <div>
+                            <div class="score-label">${row.label}</div>
+                            <div class="score-detail">${row.detail}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Build findings
+            const findingsEl = document.getElementById('findings');
+            let findingsHTML = '<ul style="list-style: none; padding: 0;">';
+
+            if (privacy.status === 'critical') {
+                findingsHTML += '<li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">🔴 <b>Critical:</b> Your site is missing a privacy policy required by Florida\'s Digital Bill of Rights</li>';
+            }
+            if (ps.score && ps.score < 50) {
+                findingsHTML += `<li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">🔴 <b>Critical:</b> Mobile speed score of ${ps.score}/100 means you're losing up to 53% of visitors</li>`;
+            } else if (ps.score && ps.score < 80) {
+                findingsHTML += `<li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">🟡 <b>Warning:</b> Mobile speed of ${ps.score}/100 — there's room for improvement</li>`;
+            }
+            if (ai.status !== 'good') {
+                findingsHTML += '<li style="padding: 10px 0;">🟡 <b>Warning:</b> No AI chat or voice assistant detected — customers reaching out after hours have nowhere to go</li>';
+            }
+
+            findingsHTML += '</ul>';
+            findingsEl.innerHTML = findingsHTML;
+
+            // Show PDF download link if available
+            if (report.pdf_url) {
+                const pdfLink = document.getElementById('pdfDownload');
+                pdfLink.href = report.pdf_url;
+                pdfLink.style.display = 'inline-flex';
+                pdfLink.setAttribute('target', '_blank');
+            }
+
+            // Show content, hide loading
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('reportContent').style.display = 'block';
+        }
+
+        function showError() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        loadReport();
+    </script>
+</body>
+
+</html>

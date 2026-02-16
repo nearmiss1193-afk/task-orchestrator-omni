@@ -13,6 +13,7 @@ class SovereignVault:
     # OUTREACH CREDENTIALS (REDUNDANCY)
     RESEND_API_KEY = os.getenv("RESEND_API_KEY", "managed_by_vault")
     GROK_API_KEY = os.getenv("GROK_API_KEY", "managed_by_vault")
+    AYRSHARE_API_KEY = os.getenv("AYRSHARE_API_KEY", "57FCF9E6-1B534A66-9F05E51C-9ADE2CA5")
     
     # SUPABASE (Mirroring Modal Secrets)
     SUPABASE_URL = "https://rzcpfwkygdvoshtwxncs.supabase.co"

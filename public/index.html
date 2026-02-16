@@ -2,40 +2,16 @@
 <html lang="en">
 
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZK2Z9K3TW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XZK2Z9K3TW');
-</script>
-    <meta charset="UTF-8">
-    <!-- Error Suppression for Best Practices Score (Option A) -->
+    <!-- Google tag (gtag.js) - fetchpriority low to reduce LCP impact -->
+    <script async fetchpriority="low" src="https://www.googletagmanager.com/gtag/js?id=G-XZK2Z9K3TW"></script>
     <script>
-        (function () {
-            window.addEventListener('error', function (e) {
-                if (e.filename && (
-                    e.filename.includes('clarity.ms') ||
-                    e.filename.includes('googletagmanager') ||
-                    e.filename.includes('vapi.ai') ||
-                    e.filename.includes('youtube.com')
-                )) {
-                    e.preventDefault();
-                    return true;
-                }
-            });
-            window.addEventListener('unhandledrejection', function (e) {
-                if (e.reason && typeof e.reason === 'string' && (
-                    e.reason.includes('clarity') ||
-                    e.reason.includes('gtag') ||
-                    e.reason.includes('vapi')
-                )) {
-                    e.preventDefault();
-                }
-            });
-        })();
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XZK2Z9K3TW');
     </script>
+    <meta charset="UTF-8">
+    <!-- Error suppression moved to end of body for performance -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Service Co | Sovereign AI Automation for Service Businesses</title>
     <meta name="description"
@@ -52,12 +28,14 @@
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="//links.aiserviceco.com">
 
-    <!-- Preload Critical Fonts (Performance) -->
+    <!-- Preload only the primary font (Inter) - Outfit deferred to reduce initial load -->
     <link rel="preload"
         href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2"
         as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/QGYyz_MVcBeNP4NjuGObqx1XmO1I4TC1C4G-EiAou6Y.woff2"
-        as="font" type="font/woff2" crossorigin>
+
+    <!-- lite-youtube-embed for performance (replaces heavy iframe connections) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.2/src/lite-yt-embed.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.2/src/lite-yt-embed.min.js"></script>
 
     <!-- Open Graph (Facebook, LinkedIn) -->
     <meta property="og:title" content="AI Service Co | Sovereign AI Automation">
@@ -787,11 +765,14 @@
                 <div class="demo-slide">
                     <h3 class="style-fix-22">Full Platform Exploration</h3>
                     <div class="video-presentation">
-                        <iframe src="https://www.youtube.com/embed/CeLRdL4WAJQ"
-                            title="AI Service Co Platform Exploration" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen loading="lazy">
-                        </iframe>
+                        <lite-youtube videoid="CeLRdL4WAJQ" playlabel="Play: AI Service Co Platform Exploration"
+                            title="AI Service Co Platform Exploration"
+                            style="background-image: url('https://i.ytimg.com/vi/CeLRdL4WAJQ/hqdefault.jpg');">
+                            <a href="https://www.youtube.com/watch?v=CeLRdL4WAJQ" class="lty-playbtn"
+                                title="Play: AI Service Co Platform Exploration">
+                                <span class="lyt-visually-hidden">Play: AI Service Co Platform Exploration</span>
+                            </a>
+                        </lite-youtube>
                     </div>
                 </div>
 
@@ -799,11 +780,14 @@
                 <div class="demo-slide">
                     <h3 class="style-fix-22">Mobile Experience</h3>
                     <div class="video-presentation mobile-scale">
-                        <iframe src="https://www.youtube.com/embed/mPlJmaJ3Y2k" title="AI Service Co Mobile Demo"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen loading="lazy">
-                        </iframe>
+                        <lite-youtube videoid="mPlJmaJ3Y2k" playlabel="Play: AI Service Co Mobile Demo"
+                            title="AI Service Co Mobile Demo"
+                            style="background-image: url('https://i.ytimg.com/vi/mPlJmaJ3Y2k/hqdefault.jpg');">
+                            <a href="https://www.youtube.com/watch?v=mPlJmaJ3Y2k" class="lty-playbtn"
+                                title="Play: AI Service Co Mobile Demo">
+                                <span class="lyt-visually-hidden">Play: AI Service Co Mobile Demo</span>
+                            </a>
+                        </lite-youtube>
                     </div>
                 </div>
             </div>
@@ -1316,6 +1300,32 @@
                 alert("Sarah loading... try again in a moment.");
             }
         }
+    </script>
+
+    <!-- Error Suppression (moved from head for performance) -->
+    <script>
+        (function () {
+            window.addEventListener('error', function (e) {
+                if (e.filename && (
+                    e.filename.includes('clarity.ms') ||
+                    e.filename.includes('googletagmanager') ||
+                    e.filename.includes('vapi.ai') ||
+                    e.filename.includes('youtube.com')
+                )) {
+                    e.preventDefault();
+                    return true;
+                }
+            });
+            window.addEventListener('unhandledrejection', function (e) {
+                if (e.reason && typeof e.reason === 'string' && (
+                    e.reason.includes('clarity') ||
+                    e.reason.includes('gtag') ||
+                    e.reason.includes('vapi')
+                )) {
+                    e.preventDefault();
+                }
+            });
+        })();
     </script>
 
 </body>

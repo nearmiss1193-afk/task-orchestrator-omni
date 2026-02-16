@@ -1,0 +1,94 @@
+﻿node.exe : Vercel 
+CLI 50.14.0
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : 
+NotSpecified: (V    
+ercel CLI 
+50.14.0:Str    ing) 
+[], RemoteExcept    
+ion
+    + 
+FullyQualifiedError  
+  Id : 
+NativeCommandErr    
+or
+ 
+Retrieving projectΓÇª
+Deploying nearmiss119
+3-9477s-projects/empi
+re-unified
+Uploading [----------
+----------] 
+(0.0B/50KB)
+Uploading [======----
+----------] 
+(16.0KB/50KB)
+Uploading [==========
+==--------] 
+(32.0KB/50KB)
+Uploading [==========
+=========-] 
+(48.0KB/50KB)
+Uploading [==========
+==========] 
+(50.0KB/50KB)
+Inspect: https://verc
+el.com/nearmiss1193-9
+477s-projects/empire-
+unified/9QRUUz6Ymopb7
+11s5SJnivpj6HH2 [2s]
+Production: https://e
+mpire-unified-djezfoa
+do-nearmiss1193-9477s
+-projects.vercel.app 
+[2s]
+Building...
+Building...
+Building: Running 
+build in Washington, 
+D.C., USA (East) ΓÇô 
+iad1
+Building: Build 
+machine 
+configuration: 2 
+cores, 8 GB
+Building: Retrieving 
+list of deployment 
+files...
+Building: 
+Downloading 375 
+deployment files...
+Building: Restored 
+build cache from 
+previous deployment (
+UDAby7zU7AHUP4HxyT6Si
+87F6hJx)
+Building: Running 
+"vercel build"
+Building: Vercel CLI 
+50.15.1
+Building: Build 
+Completed in 
+/vercel/output 
+[291ms]
+Building: Deploying 
+outputs...
+[2K[1A[2K[GProduc
+tion: https://empire-
+unified-djezfoado-nea
+rmiss1193-9477s-proje
+cts.vercel.app [18s]
+Completing...
+Aliased: https://www.
+aiserviceco.com [18s]
+https://empire-unified-djezfoado-nearmiss1193-9477s-projects.vercel.app

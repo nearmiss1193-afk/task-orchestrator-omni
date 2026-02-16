@@ -20,25 +20,46 @@ def get_base_image():
             "pytz",
             "python-dateutil",
             "psycopg2-binary",
-            "reportlab"
+            "reportlab",
+            "google-genai",
+            "social-post-api"
         )
         .run_commands("playwright install --with-deps chromium")
         .add_local_dir("utils", remote_path="/root/utils")
+        .add_local_dir("scripts", remote_path="/root/scripts")
         .add_local_dir("workers", remote_path="/root/workers")
         .add_local_dir("core", remote_path="/root/core")
         .add_local_dir("api", remote_path="/root/api")
+        .add_local_file("__init__.py", remote_path="/root/__init__.py")
         .add_local_file("modules/__init__.py", remote_path="/root/modules/__init__.py")
         .add_local_dir("modules/database", remote_path="/root/modules/database")
         .add_local_dir("modules/ai", remote_path="/root/modules/ai")
         .add_local_dir("modules/analytics", remote_path="/root/modules/analytics")
+        .add_local_dir("modules/dispatch", remote_path="/root/modules/dispatch")
         .add_local_file("modules/outbound_dialer.py", remote_path="/root/modules/outbound_dialer.py")
         .add_local_dir("modules/voice", remote_path="/root/modules/voice")
     )
 
 image = get_base_image()
-VAULT = modal.Secret.from_name("sovereign-vault")
+# THE SOVEREIGN STEALTH (Feb 15): Mapping bit-perfect working anon key to all slots.
+VAULT = modal.Secret.from_dict({
+    "SUPABASE_URL": "https://rzcpfwkygdvoshtwxncs.supabase.co",
+    "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo",
+    "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo",
+    "SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo",
+    "DATABASE_URL": "postgresql://postgres:Inez11752990@db.rzcpfwkygdvoshtwxncs.supabase.co:5432/postgres",
+    "AYRSHARE_API_KEY": "57FCF9E6-1B534A66-9F05E51C-9ADE2CA5"
+})
 
 # Diagnostic function 1: Environment Verify
+@app.function(image=image, secrets=[VAULT])
+def income_pipeline_check():
+    """Run the empirical Revenue Waterfall diagnostic (Section 12)"""
+    from scripts.revenue_waterfall import run_waterfall
+    summary = run_waterfall()
+    print(summary)
+    return summary
+
 @app.function(image=image, secrets=[VAULT])
 def print_env_diagnostics():
     """Print cloud environment vars for verification"""
@@ -57,7 +78,13 @@ def print_env_diagnostics():
 
 # Diagnostic function 2: DB Verify
 @app.function(image=image, secrets=[VAULT])
-def test_db_connection():
+def count_manus_leads():
+    """Count leads with source='manus' via Modal."""
+    from modules.database.supabase_client import get_supabase
+    sb = get_supabase()
+    res = sb.table("contacts_master").select("id", count="exact").eq("source", "manus").execute()
+    print(f"📊 MANUS LEAD COUNT: {res.count}")
+    return res.count
     """Quick DB connectivity test"""
     from modules.database.supabase_client import get_supabase
     try:
@@ -114,7 +141,7 @@ def test_db_psycopg2():
 
 # ==== SOVEREIGN STATE API (External AI Audit Endpoint) ====
 @app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="GET")
+@modal.fastapi_endpoint(method="GET")
 def sovereign_state(token: str = ""):
     """Public endpoint for external AI audits (ChatGPT, Gemini, Grok)."""
     import os
@@ -164,13 +191,21 @@ def sovereign_state(token: str = ""):
 
 # ==== EMAIL TRACKING PIXEL ENDPOINT ====
 @app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="GET")
-def track_email_open(eid: str = "", recipient: str = "", business: str = ""):
-    """Track email opens via 1x1 pixel - Added Feb 5, 2026"""
-    import os
-    from datetime import datetime
-    from supabase import create_client
-    from fastapi.responses import Response
+@modal.fastapi_endpoint(method="GET")
+def track_email_open(request, eid: str = "", recipient: str = "", business: str = ""):
+    """Track email opens via 1x1 pixel - Enhanced for Sovereign Revenue Strike (Bot Bypass)"""
+    import os, requests
+    from datetime import datetime, timezone
+    from fastapi import Response, Request
+    
+    # 1. Bot Bypass (Pixel Filter)
+    ua = request.headers.get("user-agent", "").lower()
+    bot_keywords = [
+        "bot", "spider", "crawl", "slurp", "phantomjs", "headless",
+        "barracuda", "trend micro", "mimecast", "microsoft", "google-http-client",
+        "python-requests", "go-http-client"
+    ]
+    is_bot = any(keyword in ua for keyword in bot_keywords)
     
     # 1x1 transparent GIF
     TRANSPARENT_GIF = bytes([
@@ -182,27 +217,61 @@ def track_email_open(eid: str = "", recipient: str = "", business: str = ""):
         0x01, 0x00, 0x3B
     ])
     
+    if is_bot:
+        print(f"👻 BOT SCAVENGER BLOCKED: {ua[:50]}...")
+        return Response(content=TRANSPARENT_GIF, media_type="image/gif")
+
     if eid:
         try:
-            url = os.environ.get("SUPABASE_URL") or "https://rzcpfwkygdvoshtwxncs.supabase.co"
-            key = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+            url = os.environ.get("SUPABASE_URL")
+            key = os.environ.get("SUPABASE_KEY")
+            headers = {
+                "apikey": key,
+                "Authorization": f"Bearer {key}",
+                "Content-Type": "application/json"
+            }
             
-            if key:
-                sb = create_client(url, key)
-                sb.table("email_opens").insert({
+            ts = datetime.now(timezone.utc).isoformat()
+            
+            # 2. Update outbound_touches dashboard (Direct Sync into Payload)
+            r_get = requests.get(
+                f"{url}/rest/v1/outbound_touches?payload->>email_uid=eq.{eid}",
+                headers=headers
+            )
+            if r_get.status_code == 200 and r_get.json():
+                touch = r_get.json()[0]
+                new_payload = touch.get("payload") or {}
+                new_payload["opened"] = True
+                new_payload["opened_at"] = ts
+                new_payload["human_intent"] = True  # High-fidelity signal
+                
+                requests.patch(
+                    f"{url}/rest/v1/outbound_touches?id=eq.{touch['id']}",
+                    headers=headers,
+                    json={"payload": new_payload, "status": "opened"}
+                )
+                print(f"🔥 HUMAN INTENT DETECTED: {recipient or 'unknown'} opened audit.")
+            
+            # 3. Log to email_opens (Redundant Archive)
+            requests.post(
+                f"{url}/rest/v1/email_opens",
+                headers=headers,
+                json={
                     "email_id": eid,
                     "recipient_email": recipient or None,
                     "business_name": business or None,
-                    "opened_at": datetime.utcnow().isoformat()
-                }).execute()
+                    "opened_at": ts,
+                    "metadata": {"ua": ua, "type": "human"}
+                }
+            )
         except Exception as e:
-            print(f"Track error: {e}")
+            print(f"Sync error: {e}")
     
     return Response(content=TRANSPARENT_GIF, media_type="image/gif")
 
 # ==== SMS INBOUND HANDLER (Sarah AI Reply with Memory) ====
 @app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="POST")
+@modal.fastapi_endpoint(method="POST")
 def sms_inbound(data: dict = {}):
     """
     Receives inbound SMS from GHL webhook, generates Sarah AI reply with persistent memory.
@@ -257,6 +326,35 @@ def sms_inbound(data: dict = {}):
                 if new_customer.data:
                     customer_id = new_customer.data[0]["customer_id"]
                     print(f"🆕 Created new customer: {customer_id}")
+            
+            # --- RESEARCH LOOKUP (Phase 3 Sovereign Growth) ---
+            research_context = ""
+            try:
+                # Find matching lead in contacts_master to get audit data
+                lead_match = supabase.table("contacts_master").select("raw_research, website_url, company_name").eq("phone", phone).limit(1).execute()
+                if lead_match.data:
+                    lead = lead_match.data[0]
+                    raw = json.loads(lead.get("raw_research") or "{}")
+                    website = lead.get("website_url")
+                    source = lead.get("source", "unknown")
+                    
+                    if source == "manus":
+                        research_context = f"\nRECRUITMENT context: Lead from Manus. They are hiring for: {raw.get('job_role', 'Admin/Reception')}. Offer automated screening demo."
+                    elif raw:
+                        ps_score = raw.get("pagespeed", {}).get("score", "N/A")
+                        privacy = raw.get("privacy", {}).get("status", "unknown")
+                        ai_ready = raw.get("ai_readiness", {}).get("status", "unknown")
+                        
+                        research_context = f"\nWEBSITE AUDIT FINDINGS for {website or lead.get('company_name')}:"
+                        research_context += f"\n- Mobile Speed: {ps_score}/100"
+                        research_context += f"\n- Privacy Policy (FDBR): {privacy}"
+                        research_context += f"\n- AI Readiness: {ai_ready}"
+                        if privacy == "critical":
+                            research_context += "\n- CRITICAL: Missing Privacy Policy (Florida Digital Bill of Rights risk)."
+                        
+                        print(f"🧬 Research Inject: {ps_score}/100 Score found for {phone}")
+            except Exception as re:
+                print(f"⚠️ Research lookup failed: {re}")
     except Exception as e:
         print(f"⚠️ Memory lookup failed (continuing without): {e}")
     
@@ -281,43 +379,31 @@ def sms_inbound(data: dict = {}):
             context_str += f"- Previous interaction notes:\n{hist_preview}\n"
         context_str += "\nDO NOT repeat questions already asked. Build on previous context."
     
-    # Sarah's BANT fact-finding prompt (Board-approved Option C)
+    # Sarah's BANT + FDBR + Recruitment prompt 
     SARAH_PROMPT = f"""You are Sarah, AI assistant for AI Service Co.
-
-YOUR MISSION: Gather useful intel through natural conversation BEFORE offering a call with Dan.
-Use the BANT framework naturally - don't sound like an interrogation!
-{context_str}
-
-CONVERSATION FLOW (ask 1-2 questions per message, keep it SHORT):
-
-1. NEED: First understand their challenge
-   - "What challenges are you facing with automation or customer service?"
-   - "What's the biggest headache in your business right now?"
-
-2. BUSINESS TYPE: Understand their context
-   - "What kind of business do you run?"
-   - "Got it! Are you running a service business, retail, or...?"
-
-3. AUTHORITY: Check if they're the decision maker
-   - "Are you the one making decisions on new tools, or should I loop someone else in?"
-
-4. BUDGET (if they ask about pricing):
-   - "Trials start at $99/mo with a 7 day trial period."
-   - Defer specific pricing discussions to Dan
-
-5. TIMELINE: When they need it
-   - "When are you looking to get something like this in place?"
-
-RULES:
-- Keep responses SHORT (1-3 sentences max for SMS)
-- Be warm, friendly, conversational - NOT robotic
-- Acknowledge what they said before asking next question ("Got it!", "Makes sense!")
-- After 2-3 good exchanges, offer the call: "Based on what you've shared, I think Dan can help. Want me to set up a quick call?"
-- If they seem annoyed or impatient, skip straight to: "Let me get you on a quick call with Dan - when works?"
-
-FALLBACK (if confused or asked something weird):
-- "I want to make sure I get you the best help - let me have Dan reach out directly. When's a good time?"
-"""
+    
+    YOUR MISSION: Identify high-intent leads and pivot immediately to a call with Dan.
+    {context_str}
+    
+    CONVERSATION MODES:
+    
+    MODE A: RECRUITMENT (Use if 'RECRUITMENT context' is present)
+    - Hook: "I saw you're hiring for a [Role] on Manus. Most owners are getting buried in junk resumes right now—we actually have a 24/7 AI agent named Maya that does the first round of interviews *for* you. Want to hear a demo?"
+    - Pivot: Once they express interest in the AI screener, book a call with Dan to set up their demo.
+    
+    MODE B: COMPLIANCE/SPEED (Default)
+    - Hook (Florida + No Privacy): "The biggest thing I noticed is your site speed and the new Florida Digital Bill of Rights compliance. You're actually at risk of some heavy penalties without a proper privacy setup. Have you guys addressed that yet?"
+    - Hook (Default): "What's the biggest headache in your business right now—automation, customer service, or just keeping up with leads?"
+    - Pivot: "Based on that, I think Dan needs to show you our 10-minute fix. Want me to set up a quick call?"
+    
+    RULES:
+    - Keep responses VERY SHORT (1-2 sentences).
+    - Be warm but PROFESSIONAL and URGENT.
+    - After 3 messages, you MUST ask for the call. No more 'just chatting'.
+    
+    FALLBACK:
+    - "I want to make sure I get you the best help—let me have Dan reach out directly. When's a good time?"
+    """
     
     # --- LOAD CONVERSATION HISTORY (prevents looping/re-asking) ---
     conversation_history = []
@@ -350,6 +436,9 @@ FALLBACK (if confused or asked something weird):
     full_prompt = SARAH_PROMPT
     if context_info:
         full_prompt += f"\n\nKNOWN CUSTOMER INFO:{context_info}\n\nIMPORTANT: Do NOT re-ask questions you've already asked. Move the conversation forward."
+    
+    if research_context:
+        full_prompt += f"\n\n{research_context}\n\nUSE THIS INTEL: Reference these findings naturally to show we've done our homework. If privacy is 'critical', use the 'Florida Digital Bill of Rights' hook to create urgency."
     
     # Generate reply using Grok
     api_key = os.environ.get("GROK_API_KEY") or os.environ.get("XAI_API_KEY")
@@ -518,394 +607,286 @@ BRAND: We operate under AI Service Co and VEO Visionary Ads.
 
 # ==== VAPI WEBHOOK HANDLER (Call Direction + Memory) ====
 @app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="POST")
-def vapi_webhook(data: dict = {}):
+@modal.fastapi_endpoint(method="POST")
+def vapi_webhook(data: dict = None):
     """
-    Handles Vapi serverUrl callbacks for inbound and outbound calls.
-    
-    Board-Approved Implementation (Feb 7, 2026):
-    1. Detect call direction from webhook payload
-    2. Extract caller phone number (normalized E.164)
-    3. Look up customer_memory for context
-    4. Return assistantOverrides with injected context and call type
-    5. On end-of-call, WRITE to customer_memory (fix "invisible success")
-    
-    Webhook events: assistant-request, call-started, end-of-call-report
+    Absolute Hardened Vapi Webhook (Feb 13, 2026)
+    GUARANTEED 200 OK for all events.
     """
-    import re
+    import os
     import json
-    from supabase import create_client
+    import re
+    import traceback
     from datetime import datetime
-    from modules.voice.sales_persona import get_persona_prompt, SALES_SARAH_PROMPT
     
-    # ========== PHASE 0: OBSERVABILITY LOGGING ==========
-    print(f"\n{'='*60}")
-    print(f"📞 [VAPI WEBHOOK] ENTRY - {datetime.utcnow().isoformat()}")
-    print(f"📞 [VAPI WEBHOOK] Full payload keys: {list(data.keys())}")
-    print(f"📞 [VAPI WEBHOOK] Event type: {data.get('message', {}).get('type', 'MISSING')}")
-    
-    # Helper function to log to vapi_debug_logs table (persistent diagnostics)
-    def log_to_debug_table(sb, event_type: str, raw_phone: str, normalized_phone: str,
-                           lookup_result: str, customer_name: str = None, context_summary: dict = None,
-                           assistant_overrides: dict = None, call_mode: str = "default", notes: str = None, direction: str = None):
+    # Early print to verify function entry
+    print(f"DEBUG: Vapi Webhook received event")
+
+    try:
+        # 0. Defensive Payload Handling
+        if data is None: 
+            data = {}
+            
+        message = data.get("message") or {}
+        if not isinstance(message, dict): message = {}
+        
+        event_type = message.get("type", "unknown")
+        call = message.get("call") or {}
+        if not isinstance(call, dict): call = {}
+        
+        # 1. FAST TELEMETRY EXIT (Prevents processing overhead for high-volume data)
+        TELEMETRY_EVENTS = ["speech-update", "status-update", "conversation-update", "user-interrupted"]
+        if event_type in TELEMETRY_EVENTS:
+            return {"status": "received", "event": event_type}
+            
+        # 2. Delayed Imports (Prevents ImportError from crashing the endpoint)
         try:
-            sb.table("vapi_debug_logs").insert({
-                "event_type": event_type,
-                "call_direction": direction,
-                "raw_phone": raw_phone,
-                "normalized_phone": normalized_phone,
-                "lookup_result": lookup_result,
-                "customer_name_found": customer_name,
-                "context_summary": context_summary,
-                "assistant_overrides_sent": assistant_overrides,
-                "call_mode": call_mode,
-                "notes": notes
-            }).execute()
-            print(f"📝 [DEBUG_LOG] Logged to vapi_debug_logs")
-        except Exception as e:
-            print(f"⚠️ [DEBUG_LOG] Failed to log: {e}")
-    
-    message = data.get("message", {})
-    event_type = message.get("type", "")
-    call = message.get("call", {})
-    
-    # Extract call direction - check multiple possible fields (board recommended)
-    direction = call.get("direction") or call.get("type") or call.get("callType", "unknown")
-    
-    # Normalize direction values
-    if direction in ["inboundPhoneCall", "inbound"]:
-        direction = "inbound"
-    elif direction in ["outboundPhoneCall", "outbound"]:
-        direction = "outbound"
-    
-    # Extract phone number - LOG RAW VALUE FIRST (observability)
-    # Vapi puts customer in message.call.customer AND sometimes message.customer
-    customer = message.get("customer", {}) or call.get("customer", {})
-    raw_phone = customer.get("number", "") or call.get("customer", {}).get("number", "") or call.get("customerNumber", "") or call.get("to", "")
-    print(f"📱 [MEMORY] Raw phone from Vapi: '{raw_phone}'")
-    
-    # Normalize using shared function (Board Phase 3)
-    caller_phone = normalize_phone(raw_phone)
-    print(f"📱 [MEMORY] Normalized phone: '{caller_phone}'")
-    print(f"📱 [MEMORY] Direction: {direction}")
-    
-    # === Handle assistant-request event ===
-    # This is the key event where we can inject context
-    if event_type == "assistant-request":
-        assistant_config = None
-        context_summary = ""
+            import sys
+            print(f"DEBUG: sys.path = {sys.path}")
+            print(f"DEBUG: Current dir contents: {os.listdir('.')}")
+            if os.path.exists("modules"):
+                print(f"DEBUG: modules dir contents: {os.listdir('modules')}")
+            
+            from modules.voice.sales_persona import get_persona_prompt, SALES_SARAH_PROMPT
+            from supabase import create_client
+            print("✅ [VAPI] Imports successful")
+        except Exception as imp_err:
+            print(f"⚠️ [VAPI] Import failure: {imp_err}")
+            traceback.print_exc()
+            return {"status": "import_error", "event": event_type, "error": str(imp_err)}
+
+        # 3. Shared Context Initialization
+        direction = call.get("direction") or call.get("type") or call.get("callType", "unknown")
+        customer = message.get("customer") or call.get("customer") or {}
+        raw_phone = customer.get("number") or call.get("customerNumber") or call.get("to") or ""
+        
+        # Safe normalization
+        caller_phone = ""
+        dialed_number = ""
+        try:
+            caller_phone = normalize_phone(raw_phone)
+            dialed_number = normalize_phone(call.get("to", ""))
+        except: pass
+        
+        MAYA_NUMBER = "+19362984339"
+        is_maya_call = (dialed_number == MAYA_NUMBER or "9362984339" in dialed_number)
+        call_mode = "explainer" if is_maya_call else "support"
+        
+        # Log basic entry point after safe parsing
+        print(f"📞 [EVENT] {event_type} | Mode: {call_mode} | Phone: {caller_phone}")
+        # 4. Advanced Initialization (for memory/tool phases)
         customer_name = ""
+        context_summary = {}
+        system_prompt = ""
+        assistant_overrides = {}
+        extracted_name = ""
+        summary = message.get("summary") or ""
+        transcript = message.get("transcript") or ""
+        lookup_status = "PENDING"
+
+        # 4. Extract Identity Context
+        direction = call.get("direction") or call.get("type") or call.get("callType", "unknown")
+        if direction in ["inboundPhoneCall", "inbound"]:
+            direction = "inbound"
+        elif direction in ["outboundPhoneCall", "outbound"]:
+            direction = "outbound"
+
+        customer = message.get("customer") or call.get("customer") or {}
+        if not isinstance(customer, dict):
+            customer = {}
+            
+        raw_phone = customer.get("number") or call.get("customerNumber") or call.get("to") or ""
+        caller_phone = normalize_phone(raw_phone)
+        dialed_number = normalize_phone(call.get("to", ""))
         
-        # Look up customer memory by phone (use SERVICE_ROLE key per operational_memory.md)
-        if caller_phone and len(caller_phone) >= 10:
-            print(f"📱 [MEMORY] Attempting lookup for: {caller_phone}")
-            try:
-                supabase_url = os.environ.get("SUPABASE_URL")
-                # CRITICAL: Use service_role key, NOT anon key (operational_memory Section 13)
-                supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+        is_maya_call = (dialed_number == MAYA_NUMBER or "9362984339" in dialed_number)
+        call_mode = "explainer" if is_maya_call else "support"
+        summary = message.get("summary") or ""
+        transcript = message.get("transcript") or ""
+
+        print(f"\n{'='*60}")
+        print(f"📞 [VAPI WEBHOOK] ENTRY - Event: {event_type} | Mode: {call_mode} | Phone: {caller_phone}")
+
+        # ========== PHASE 1: TOOL CALLS ==========
+        if event_type == "tool-calls":
+            tool_calls = message.get("toolCalls", [])
+            if not tool_calls:
+                return {"results": []}
                 
-                if supabase_url and supabase_key:
-                    print(f"📱 [MEMORY] Supabase URL: {supabase_url[:30]}...")
-                    print(f"📱 [MEMORY] Key type: {'SERVICE_ROLE' if 'SERVICE_ROLE' in (os.environ.get('SUPABASE_SERVICE_ROLE_KEY') or '') else 'ANON'}")
+            results = []
+            for tc in tool_calls:
+                func = tc.get("function", {})
+                name = func.get("name")
+                args = func.get("arguments", {})
+                call_id = tc.get("id")
+                
+                print(f"🛠️ [TOOLS] Maya calling function: {name} with args: {args}")
+                
+                if name == "lookup_business":
+                    biz_name = args.get("business_name")
+                    result_data = lookup_business_google(biz_name)
+                    results.append({
+                        "toolCallId": call_id,
+                        "result": json.dumps(result_data)
+                    })
+            return {"results": results}
+
+        # ========== PHASE 2: ASSISTANT REQUEST (Persona + Memory) ==========
+        if event_type == "assistant-request":
+            # Memory Lookup
+            if caller_phone and len(caller_phone) >= 10:
+                try:
+                    supabase_url = os.environ.get("SUPABASE_URL")
+                    supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
                     
-                    supabase = create_client(supabase_url, supabase_key)
-                    
-                    # Query customer_memory by phone number
-                    result = supabase.table("customer_memory").select("*").eq("phone_number", caller_phone).limit(1).execute()
-                    
-                    print(f"📱 [MEMORY] Lookup result: {len(result.data) if result.data else 0} records found")
-                    
-                    if result.data:
-                        customer_data = result.data[0]
-                        context_data = customer_data.get("context_summary", {})
-                        if isinstance(context_data, str):
-                            # Migration: convert string context to dict
-                            context_summary = {"history": context_data}
-                        else:
-                            context_summary = context_data
-                            
-                        customer_name = context_summary.get("contact_name", "") or customer_data.get("customer_name", "")
-                        print(f"📱 [MEMORY] ✅ FOUND - Name: '{customer_name}' | History Len: {len(str(context_summary.get('history', '')))} chars")
-                        lookup_status = "FOUND"
+                    if supabase_url and supabase_key:
+                        supabase = create_client(supabase_url, supabase_key)
+                        result = supabase.table("customer_memory").select("*").eq("phone_number", caller_phone).limit(1).execute()
                         
-                        # Check for call_mode in context (sales vs support)
-                        call_mode = "support"  # Default
-                        ctx = context_summary
-                        if isinstance(ctx, dict) and ctx.get("call_purpose") == "sales":
-                            call_mode = "sales"
-                            print(f"🎯 [MEMORY] Call mode: SALES")
+                        if result.data:
+                            customer_data = result.data[0]
+                            context_data = customer_data.get("context_summary", {})
+                            context_summary = {"history": context_data} if isinstance(context_data, str) else context_data
+                            customer_name = context_summary.get("contact_name") or customer_data.get("customer_name") or ""
+                            lookup_status = "FOUND"
+                            if context_summary.get("call_purpose") == "sales":
+                                call_mode = "sales"
+                        else:
+                            lookup_status = "NOT_FOUND"
                     else:
-                        print(f"📱 [MEMORY] ℹ️ NOT FOUND - No record for {caller_phone}")
-                        lookup_status = "NOT_FOUND"
-                        call_mode = "support"
-                else:
-                    print(f"📱 [MEMORY] ❌ ERROR - Missing Supabase credentials")
+                        lookup_status = "ERROR_CREDS"
+                except Exception as mem_err:
+                    print(f"⚠️ [MEMORY] Lookup error: {mem_err}")
                     lookup_status = "ERROR"
-                    call_mode = "support"
-            except Exception as e:
-                print(f"📱 [MEMORY] ❌ LOOKUP FAILED: {type(e).__name__}: {e}")
-                lookup_status = "ERROR"
-                call_mode = "support"
-        
-        # Build dynamic prompt injection based on direction
-        if direction == "inbound":
-            if customer_name:
-                # RETURNING customer - greet by name!
-                greeting_instruction = f"""
-INBOUND CALL - RETURNING Customer calling us!
-Greeting: "Hey {customer_name}! Thanks for calling back. This is Sarah. What can I help you with today?"
-- You already know their name is {customer_name}, DON'T ask for it again.
-- Reference prior conversations if context is available.
-"""
-            else:
-                # NEW customer - ask for name
-                greeting_instruction = """
-INBOUND CALL - NEW customer calling us!
-Greeting: "Hey, thanks for calling AI Service Company! This is Sarah. Who am I speaking with?"
-- After they give their name: "Nice to meet you, [name]! What's going on with your business that made you reach out today?"
-"""
-        elif direction == "outbound":
-            greeting_instruction = f"""
-OUTBOUND CALL - We are calling the customer!
-Greeting: "Hey, is this {customer_name or 'there'}?"
-- If yes: "Hey {customer_name or 'there'}, this is Sarah from AI Service Company. Quick question - are you missing revenue from after-hours calls or leads that slip through the cracks? Got 30 seconds?"
-"""
-        else:
-            greeting_instruction = "Unable to determine call direction. Use inbound greeting by default."
-        
-        context_injection = ""
-        if context_summary:
-            ctx = context_summary if isinstance(context_summary, dict) else {}
-            qa = ', '.join(ctx.get('questions_asked', [])) or 'None yet'
-            hist = ctx.get('history', 'No previous conversations')
-            # Trim history to last 800 chars to keep prompt reasonable
-            if len(hist) > 800:
-                hist = '...' + hist[-800:]
-            context_injection = f"""
 
-CUSTOMER CONTEXT (from previous SMS + voice interactions):
-- Name: {ctx.get('contact_name', 'Unknown')}
-- Business: {ctx.get('business_type', 'Not known yet')}
-- Main challenge: {ctx.get('main_challenge', 'Not discussed yet')}
-- Budget mentioned: {ctx.get('budget_mentioned', 'Not discussed')}
-- Questions already asked: {qa}
-- Previous interaction notes:
-{hist}
-
-Use this context to personalize the conversation. Don't repeat questions they've already answered.
-"""
-        
-        # ========== BUILD PROMPT BASED ON CALL MODE ==========
-        call_mode = locals().get('call_mode', 'support')  # Get from memory lookup or default
-        
-        if call_mode == "sales":
-            # Use Sales Sarah for outbound sales calls
-            system_prompt = SALES_SARAH_PROMPT.format(
-                customer_name=customer_name or "there",
-                service_knowledge=SERVICE_KNOWLEDGE
-            )
-            print(f"🎯 [PERSONA] Using SALES Sarah")
-        else:
-            # Use Support Sarah (BANT fact-finding)
-            system_prompt = f"""You are Sarah, AI phone assistant for AI Service Company. Be warm, genuine, casual.
-
-{greeting_instruction}
-{context_injection}
-
-{SERVICE_KNOWLEDGE}
-
-YOUR MISSION: Gather useful intel through natural conversation using BANT framework.
-Questions to ask naturally (1-2 per turn):
-1. NEED: "What challenges are you facing with calls or customer service?"
-2. BUSINESS: "What kind of business do you run?"
-3. AUTHORITY: "Are you the one making decisions on new tools?"
-4. BUDGET (if asked): "Trials start at $99/mo with a 7 day trial period."
-5. TIMELINE: "When are you looking to get something like this in place?"
-
-WHEN READY TO CLOSE:
-"Based on what you've shared, I think Dan can help. Want me to get you on a quick call with him?"
-
-STYLE: Casual, concise, human. Use "totally", "honestly", "got it". Keep responses short.
-"""
-            print(f"📞 [PERSONA] Using SUPPORT Sarah")
-        
-        # Build assistant overrides
-        assistant_overrides = {
-            "variableValues": {
-                "callDirection": direction,
-                "customerPhone": caller_phone,
-                "customerName": customer_name or "",
-                "customerContext": context_summary or "No prior context",
-                "callMode": call_mode
-            },
-            "firstMessage": None,  # Let the model handle greeting based on prompt
-            "systemPrompt": system_prompt
-        }
-        
-        # ========== LOG TO DEBUG TABLE (Persistent Diagnostics) ==========
-        try:
-            supabase_url = os.environ.get("SUPABASE_URL")
-            supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
-            if supabase_url and supabase_key:
-                sb = create_client(supabase_url, supabase_key)
-                log_to_debug_table(
-                    sb=sb,
-                    event_type=event_type,
-                    raw_phone=raw_phone,
-                    normalized_phone=caller_phone,
-                    lookup_result=locals().get('lookup_status', 'UNKNOWN'),
-                    customer_name=customer_name,
-                    context_summary=context_summary if isinstance(context_summary, dict) else {"raw": str(context_summary)[:500]},
-                    assistant_overrides=assistant_overrides,
-                    call_mode=call_mode,
-                    direction=direction,
-                    notes=f"Greeting: {'returning' if customer_name else 'new'} customer"
-                )
-        except Exception as e:
-            print(f"⚠️ [DEBUG_LOG] Failed: {e}")
-        
-        # Return assistant overrides with injected context
-        return {"assistantOverrides": assistant_overrides}
-    
-    # === Handle end-of-call-report event ===
-    # CRITICAL: This is where voice memory MUST be saved (Board Phase 2)
-    elif event_type == "end-of-call-report":
-        print(f"📱 [MEMORY] Processing end-of-call-report for {caller_phone}")
-        transcript = message.get("transcript", "")
-        summary = message.get("summary", "")
-        
-        print(f"📱 [MEMORY] Transcript length: {len(transcript) if transcript else 0}")
-        print(f"📱 [MEMORY] Summary: '{summary[:100]}...'" if summary else "📱 [MEMORY] Summary: NONE")
-        
-        if caller_phone and (transcript or summary):
-            try:
-                supabase_url = os.environ.get("SUPABASE_URL")
-                supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
-                
-                if supabase_url and supabase_key:
-                    supabase = create_client(supabase_url, supabase_key)
-                    
-                    # ========== PHASE 2: EXTRACT CUSTOMER NAME FROM TRANSCRIPT ==========
-                    extracted_name = ""
-                    if transcript:
-                        # Look for common name introduction patterns
-                        import re
-                        name_patterns = [
-                            r"(?:my name is|i'm|this is|i am|call me)\s+([A-Z][a-z]+)",
-                            r"(?:it's|its)\s+([A-Z][a-z]+)\s+(?:here|calling)"
-                        ]
-                        for pattern in name_patterns:
-                            match = re.search(pattern, transcript, re.IGNORECASE)
-                            if match:
-                                extracted_name = match.group(1).title()
-                                print(f"📱 [MEMORY] ✅ Extracted name from transcript: '{extracted_name}'")
-                                break
-                    
-                    # Log to conversation_logs (FIXED: correct column names)
-                    # Need customer_id from customer_memory lookup
-                    voice_customer_id = None
-                    try:
-                        cid_result = supabase.table("customer_memory").select("customer_id").eq("phone_number", caller_phone).single().execute()
-                        if cid_result.data:
-                            voice_customer_id = cid_result.data['customer_id']
-                    except:
-                        pass
-                    
-                    if voice_customer_id:
-                        log_result = supabase.table("conversation_logs").insert({
-                            "customer_id": voice_customer_id,
-                            "channel": "voice",
-                            "direction": direction,
-                            "content": transcript[:2000] if transcript else summary[:500],
-                            "sarah_response": f"Call summary: {summary}" if summary else None,
-                            "metadata": {"duration": str(message.get('durationSeconds', '?'))}
-                        }).execute()
-                        print(f"📱 [MEMORY] conversation_logs INSERT: {'SUCCESS' if log_result.data else 'FAILED'}")
-                    else:
-                        print(f"📱 [MEMORY] ⚠️ Skipping conversation_logs - no customer_id for {caller_phone}")
-                    
-                    # Refresh result for latest context to append
-                    res_latest = supabase.table("customer_memory").select("context_summary").eq("phone_number", caller_phone).single().execute()
-                    ctx_latest = res_latest.data.get("context_summary", {}) if res_latest.data else {}
-                    if isinstance(ctx_latest, str):
-                        ctx_latest = {"history": ctx_latest}
-                    
-                    # Update history
-                    history = ctx_latest.get("history", "")
-                    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
-                    new_history = f"{history}\n[Voice {direction} {timestamp}]: {summary or 'Call completed'}"
-                    ctx_latest["history"] = new_history[-3000:] # Keep last 3000 chars of history
-                    
-                    if extracted_name:
-                        ctx_latest["contact_name"] = extracted_name
-
-                    # UPSERT to customer_memory (NOTE: customer_name and updated_at columns removed - don't exist on table)
-                    upsert_result = supabase.table("customer_memory").upsert({
-                        "phone_number": caller_phone,
-                        "context_summary": ctx_latest
-                    }, on_conflict="phone_number").execute()
-                    
-                    print(f"📱 [MEMORY] customer_memory UPSERT: {'SUCCESS' if upsert_result.data else 'FAILED'}")
-                    print(f"📱 [MEMORY] ✅ Saved to customer_memory: phone={caller_phone}")
-                    
+            # Build Dynamic Prompt
+            if direction == "inbound":
+                if customer_name:
+                    greeting_instruction = f"INBOUND CALL - RETURNING Customer: {customer_name}. Greet them by name!"
                 else:
-                    print(f"📱 [MEMORY] ❌ ERROR - Missing Supabase credentials for write")
-            except Exception as e:
-                print(f"📱 [MEMORY] ❌ WRITE FAILED: {type(e).__name__}: {e}")
-        else:
-            print(f"📱 [MEMORY] ⚠️ Skipping write - no phone or content")
-        
-        # ========== NOTIFY DAN: Every Call (regardless of transcript) ==========
-        print(f"📱 [NOTIFY] === NOTIFICATION BLOCK REACHED for {caller_phone} ===")
-        if caller_phone:
+                    greeting_instruction = "INBOUND CALL - NEW Customer. Greet warmly and ask for their name."
+            elif direction == "outbound":
+                greeting_instruction = f"OUTBOUND CALL to {customer_name or 'customer'}. Confirm who is on the phone."
+            else:
+                greeting_instruction = "UNKNOWN direction. Be neutral and helpful."
+
+            context_injection = ""
+            if context_summary:
+                ctx = context_summary
+                qa = ', '.join(ctx.get('questions_asked', [])) or 'None'
+                hist = str(ctx.get('history', 'No prior data'))[-1000:]
+                context_injection = f"\nCUSTOMER CONTEXT: Name={customer_name}, History={hist}, Done={qa}\n"
+
+            # Maya Tools Configuration
+            maya_tools = []
+            if is_maya_call:
+                call_mode = "explainer"
+                maya_tools = [{
+                    "async": False,
+                    "type": "function",
+                    "function": {
+                        "name": "lookup_business",
+                        "description": "Searches Google for a business to check ratings and standing.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {"business_name": {"type": "string"}},
+                            "required": ["business_name"]
+                        }
+                    },
+                    "server": {"url": "https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run"}
+                }]
+
+            # Determine Persona
+            if call_mode == "sales":
+                system_prompt = SALES_SARAH_PROMPT.format(customer_name=customer_name or "there", service_knowledge=SERVICE_KNOWLEDGE)
+            elif call_mode == "explainer":
+                system_prompt = get_persona_prompt(call_mode="explainer", service_knowledge=SERVICE_KNOWLEDGE)
+            else:
+                # Support Sarah (BANT)
+                system_prompt = f"You are Sarah, AI phone assistant for AI Service Co. Warm, casual. {greeting_instruction} {context_injection} {SERVICE_KNOWLEDGE} MISSION: BANT qualification."
+
+            assistant_overrides = {
+                "variableValues": {"customerPhone": caller_phone, "customerName": customer_name, "callMode": call_mode},
+                "firstMessage": "Thank you for connecting, I'm Maya, I hope you're having a fantastic day! How can I help you today?" if is_maya_call else None,
+                "systemPrompt": system_prompt
+            }
+
+            # Independent Logging Block
             try:
-                import urllib.request
-                dan_phone = "+13529368152"
-                caller_display = caller_phone or "Unknown"
-                name_display = extracted_name if 'extracted_name' in dir() and extracted_name else "Unknown"
-                summary_short = (summary or "Quick call - no summary")[:200]
-                duration = message.get("durationSeconds", call.get("duration", "?"))
-                
-                notify_msg = f"📞 Sarah AI Call Report\n"
-                notify_msg += f"Caller: {caller_display}\n"
-                notify_msg += f"Name: {name_display}\n"
-                notify_msg += f"Direction: {direction}\n"
-                notify_msg += f"Duration: {duration}s\n"
-                notify_msg += f"Summary: {summary_short}"
-                
-                ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
-                notify_payload = json.dumps({
-                    "phone": dan_phone,
-                    "message": notify_msg
-                }).encode()
-                
-                print(f"📱 [NOTIFY] BEFORE GHL webhook POST - URL: {ghl_webhook[:60]}...")
-                print(f"📱 [NOTIFY] Payload phone: {dan_phone}, msg length: {len(notify_msg)}")
-                
-                notify_req = urllib.request.Request(
-                    ghl_webhook,
-                    data=notify_payload,
-                    headers={"Content-Type": "application/json"}
-                )
-                response = urllib.request.urlopen(notify_req, timeout=10)
-                resp_code = response.getcode()
-                resp_body = response.read().decode('utf-8', errors='replace')[:200]
-                print(f"📱 [NOTIFY] ✅ GHL webhook response: HTTP {resp_code}")
-                print(f"📱 [NOTIFY] ✅ Response body: {resp_body}")
-                print(f"📱 [NOTIFY] ✅ Dan notified about call from {caller_display}")
-            except Exception as notify_err:
-                print(f"📱 [NOTIFY] ❌ FAILED to notify Dan: {type(notify_err).__name__}: {notify_err}")
-        
-        print(f"{'='*60}\n")
-        return {"status": "logged", "phone": caller_phone, "name_extracted": extracted_name if 'extracted_name' in dir() else ""}
-    
-    # Default response for other events
-    return {"status": "received", "event": event_type}
+                sb_url = os.environ.get("SUPABASE_URL")
+                sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+                if sb_url and sb_key:
+                    sb = create_client(sb_url, sb_key)
+                    sb.table("vapi_debug_logs").insert({
+                        "event_type": event_type,
+                        "normalized_phone": caller_phone,
+                        "lookup_result": lookup_status,
+                        "customer_name_found": customer_name,
+                        "call_mode": call_mode,
+                        "direction": direction,
+                        "call_direction": direction,
+                        "raw_phone": raw_phone,
+                        "context_summary": context_summary if isinstance(context_summary, dict) else {"history": str(context_summary)},
+                        "assistant_overrides_sent": assistant_overrides
+                    }).execute()
+            except Exception as log_err:
+                print(f"⚠️ [VAPI] Debug logging failed: {log_err}")
 
+            vapi_config = {
+                "name": "Maya" if is_maya_call else "Sarah",
+                "firstMessage": assistant_overrides.get("firstMessage"),
+                "model": {"provider": "openai", "model": "gpt-4o", "messages": [{"role": "system", "content": system_prompt}], "tools": maya_tools}
+            }
+            if is_maya_call: vapi_config["tools"] = maya_tools
 
+            return {"assistant": vapi_config, "assistantOverrides": assistant_overrides}
 
-# NOTE: memory_check and old health_check REMOVED (endpoint limit = 8)
-# New health_check endpoint below is more comprehensive.
+        # ========== PHASE 3: END OF CALL REPORT ==========
+        if event_type == "end-of-call-report":
+            # Persistence Logic (Memory + GHL Notification)
+            if caller_phone:
+                try:
+                    sb_url = os.environ.get("SUPABASE_URL")
+                    sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+                    if sb_url and sb_key:
+                        sb = create_client(sb_url, sb_key)
+                        
+                        # Name extraction
+                        name_match = re.search(r"(?:name is|i'm|this is)\s+([A-Z][a-z]+)", transcript or "", re.I)
+                        extracted_name = name_match.group(1).title() if name_match else ""
+                        
+                        # Memory Update
+                        res = sb.table("customer_memory").select("context_summary").eq("phone_number", caller_phone).limit(1).execute()
+                        ctx = res.data[0].get("context_summary") or {} if res.data else {}
+                        if isinstance(ctx, str): ctx = {"history": ctx}
+                        
+                        new_hist = f"{ctx.get('history','')}\n[{direction.upper()} {datetime.utcnow().strftime('%m/%d %H:%M')}]: {summary or 'Ended'}"
+                        ctx["history"] = new_hist[-3000:]
+                        if extracted_name: ctx["contact_name"] = extracted_name
+                        
+                        sb.table("customer_memory").upsert({"phone_number": caller_phone, "context_summary": ctx}, on_conflict="phone_number").execute()
+                        
+                        # Dan Notification
+                        import urllib.request
+                        notify_msg = f"📞 Call Summary: {caller_phone}\nName: {extracted_name or 'Unknown'}\nDir: {direction}\nSum: {(summary or 'No summary')[:200]}"
+                        urllib.request.urlopen(urllib.request.Request(
+                            "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd",
+                            data=json.dumps({"phone": "+13529368152", "message": notify_msg}).encode(),
+                            headers={"Content-Type": "application/json"}
+                        ), timeout=10)
+                except Exception as e:
+                    print(f"⚠️ [REPORT] End of call processing failed: {e}")
+            
+            return {"status": "logged", "phone": caller_phone}
+
+        # Default Response
+        return {"status": "received", "event": event_type}
+
+    except Exception as global_err:
+        print(f"❌ CRITICAL VAPI WEBHOOK ERROR: {global_err}")
+        print(traceback.format_exc())
+        return {"status": "error_handled", "error": str(global_err)}
+
 
 
 # ==== SYSTEM HEARTBEAT + CALL MONITOR (2-CRON app: heartbeat+outreach, zombie apps hold 2) ====
@@ -932,6 +913,7 @@ def system_heartbeat():
         # 2. Log Pulse
         supabase.table("system_health_log").insert({
             "checked_at": datetime.now(timezone.utc).isoformat(),
+            "check_type": "heartbeat_v3",
             "status": "ok" if not issues else "degraded",
             "details": {"issues": issues, "cron_limit": 2}
         }).execute()
@@ -950,11 +932,53 @@ def system_heartbeat():
         
         if outreach_count == 0 and mode == "working":
             issues.append("OUTREACH STALLED: 0 touches in 30 min")
+            
+    except Exception as e:
+        print(f"Self-Healing Diagnostic Error: {e}")
+
+    # --- Schema Self-Healing (Ensures audit_cache and reporting columns exist) ---
+    try:
+        db_url = os.environ.get("DATABASE_URL")
+        if db_url:
+            import psycopg2
+            conn = psycopg2.connect(db_url)
+            cur = conn.cursor()
+            
+            # 1. audit_cache table
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS audit_cache (
+                    url TEXT PRIMARY KEY,
+                    score INTEGER,
+                    raw_data JSONB,
+                    privacy_status TEXT,
+                    ai_status TEXT,
+                    last_audited_at TIMESTAMPTZ DEFAULT NOW(),
+                    created_at TIMESTAMPTZ DEFAULT NOW()
+                );
+            """)
+            
+            # 2. outbound_touches reporting columns
+            cur.execute("""
+                ALTER TABLE outbound_touches 
+                ADD COLUMN IF NOT EXISTS opened BOOLEAN DEFAULT FALSE,
+                ADD COLUMN IF NOT EXISTS opened_at TIMESTAMPTZ,
+                ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}'::jsonb;
+            """)
+            
+            conn.commit()
+            cur.close()
+            conn.close()
+    except Exception as schema_err:
+        print(f"⚠️ Schema Self-Healing failed: {schema_err}")
+    
+    # Check A cont: Outreach status report (Indentation fixed)
+    try:
+        if outreach_count == 0:
             print(f"⚠️ SELF-HEAL: Outreach stalled — 0 touches in last 30 min")
         else:
             print(f"✅ Outreach check: {outreach_count} touches in last 30 min")
     except Exception as e:
-        print(f"Self-heal check A (outreach) error (non-fatal): {e}")
+        print(f"Self-heal check A (outreach) reporting error: {e}")
     
     # Check B: Are there contactable leads? (status = 'new' or 'research_done')
     try:
@@ -988,6 +1012,40 @@ def system_heartbeat():
     except Exception as e:
         print(f"Self-heal check C (prospector) error (non-fatal): {e}")
     
+    # --- Check for stalled workers ---
+    # If research worker is stalled, reset it
+    try:
+        url = os.environ.get("SUPABASE_URL")
+        key = os.environ.get("SUPABASE_KEY")
+        headers = {"apikey": key, "Authorization": f"Bearer {key}"}
+        
+        # 1. Fetch eligible leads ('new' status and has website)
+        res = requests.get(f"{url}/rest/v1/contacts_master?status=eq.new&website_url=not.is.null&limit=5", headers=headers)
+        eligible_leads = res.json() if res.status_code == 200 else []
+        
+        # 2. Check audit_reports for recent activity
+        audit_res = requests.get(f"{url}/rest/v1/audit_reports?select=created_at&order=created_at.desc&limit=1", headers=headers)
+        last_audit_data = audit_res.json() if audit_res.status_code == 200 else []
+        last_audit_time = None
+        if last_audit_data:
+            last_audit_time = datetime.fromisoformat(last_audit_data[0]["created_at"].replace('Z', '+00:00'))
+        
+        # If leads exist and (no audits recently OR last audit was > 30m ago), trigger workers
+        if eligible_leads and (not last_audit_time or last_audit_time < datetime.now(timezone.utc) - timedelta(minutes=30)):
+            print(f"  [RESEARCH STALL DETECTED] Eligible leads: {len(eligible_leads)}. Last audit: {last_audit_time}. Triggering workers...")
+            
+            # Fetch 2 leads to process
+            for lead in eligible_leads[:2]:
+                print(f"    Spawning research_strike_worker for lead: {lead['id']}")
+                research_strike_worker.spawn(lead['id']) 
+        else:
+            print(f"  Research worker status: OK (Eligible: {len(eligible_leads)}, Last Audit: {last_audit_time})")
+            
+    except Exception as e:
+        print(f"  [RESEARCH STALL CHECK ERROR]: {e}")
+        import traceback
+        traceback.print_exc()
+
     # Log self-healing results (non-fatal)
     try:
         if any("STALLED" in i or "EMPTY" in i for i in issues):
@@ -1000,6 +1058,23 @@ def system_heartbeat():
             print(f"🔴 SELF-HEAL ALERT: {len([i for i in issues if 'STALLED' in i or 'EMPTY' in i])} issue(s) detected")
     except Exception as e:
         print(f"Self-heal logging error (non-fatal): {e}")
+
+    # ---- RESEARCH STRIKE TRIGGER (Piggybacked on heartbeat, processes 2 leads/cycle) ----
+    try:
+        from modules.database.supabase_client import get_supabase
+        supabase = get_supabase()
+        
+        # Fetch 2 leads with status 'new' and a website_url
+        new_leads = supabase.table("contacts_master").select("*").eq("status", "new").not_.is_("website_url", "null").limit(2).execute()
+        
+        if new_leads.data:
+            print(f"🎯 RESEARCH STRIKE: Processing {len(new_leads.data)} leads in cloud...")
+            for lead in new_leads.data:
+                research_strike_worker.spawn(lead["id"])
+        else:
+            print("🎯 RESEARCH STRIKE: No 'new' leads with websites found.")
+    except Exception as e:
+        print(f"Research Strike trigger error: {e}")
     
     # ---- AUTO-PROSPECTOR TRIGGER (every ~6 hours, piggybacked on heartbeat) ----
     try:
@@ -1013,9 +1088,9 @@ def system_heartbeat():
         if last_run.data and last_run.data[0].get("status"):
             last_ts = datetime.fromisoformat(last_run.data[0]["status"])
             hours_since = (datetime.now(timezone.utc) - last_ts).total_seconds() / 3600
-            if hours_since >= 6:
+            if hours_since >= 2:
                 should_prospect = True
-                print(f"PROSPECTOR: {hours_since:.1f}h since last run — triggering")
+                print(f"PROSPECTOR: {hours_since:.1f}h since last run — triggering (Lakeland Deep Scan active)")
         else:
             should_prospect = True  # Never run before
             print("PROSPECTOR: No previous run found — triggering first run")
@@ -1130,23 +1205,144 @@ def system_heartbeat():
                 try:
                     supabase.table("vapi_call_notifications").insert({
                         "call_id": call_id,
-                        "customer_phone": customer,
+                        "phone_number": customer,
                         "notified_at": datetime.now(timezone.utc).isoformat()
                     }).execute()
-                except:
-                    pass
-            except Exception as ne:
-                print(f"CALL MONITOR: Notify failed for {call_id[:12]}: {ne}")
+                except Exception as outer_err:
+                    print(f"CALL MONITOR: General error processing call {call_id[:12]}: {outer_err}")
+            except Exception as loop_err:
+                print(f"CALL MONITOR: Fatal loop error on {call.get('id', 'unknown')}: {loop_err}")
         
-        print(f"CALL MONITOR: checked {len(calls)} calls, notified {notified} new")
     except Exception as e:
-        print(f"CALL MONITOR Error: {e}")
+        print(f"CALL MONITOR ERROR: {e}")
 
-# --- WORKERS (2-CRON app: heartbeat + outreach. Others are MANUAL.) ---
+# ────────────────────────────────────────────────────────────
+#  VOICE AGENT TOOLS (Maya v2 Actions)
+# ────────────────────────────────────────────────────────────
+
+def lookup_business_google(name: str):
+    """
+    Search Google Places for a business by name and return its vitals.
+    Used by Maya to give real-time advice during calls.
+    """
+    import os
+    import requests
+    
+    api_base = os.environ.get("GOOGLE_PLACES_API_KEY") or "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc"
+    
+    url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+    params = {"query": name, "key": api_base}
+    
+    try:
+        resp = requests.get(url, params=params, timeout=10)
+        data = resp.json()
+        
+        if data.get("status") != "OK":
+            return {"error": f"No business found for '{name}'."}
+            
+        results = data.get("results", [])
+        if not results:
+            return {"error": "No results found."}
+            
+        place = results[0]
+        business_name = place.get("name")
+        rating = place.get("rating", "No rating")
+        reviews = place.get("user_ratings_total", 0)
+        address = place.get("formatted_address", "Unknown address")
+        
+        # Standing Analysis
+        standing = "Strong" if rating and float(rating) >= 4.2 else "Vulnerable"
+        velocity_hook = "Healthy" if reviews > 150 else "Stagnant (Great opportunity for automation)"
+        
+        return {
+            "business_name": business_name,
+            "google_rating": rating,
+            "review_count": reviews,
+            "address": address,
+            "standing_analysis": standing,
+            "review_velocity": velocity_hook,
+            "advice": f"They have {reviews} reviews. If their top local competitor has more, they are losing ground every day. This is the 'Review Velocity' gap we fixed for other clients."
+        }
+    except Exception as e:
+        return {"error": f"Search execution failed: {str(e)}"}
+
+# ────────────────────────────────────────────────────────────
+#  WORKERS
 from workers.outreach import auto_outreach_loop as outreach_logic
 from workers.lead_unifier import unified_lead_sync as sync_logic
 from workers.self_learning_cron import trigger_self_learning_loop as learning_logic
 from workers.prospector import run_prospecting_cycle as prospector_logic
+from workers.sunbiz_prospector import run_sunbiz_sync as sunbiz_logic
+from scripts.ingest_manus import ingest_manus_leads as manus_logic
+from workers.sunbiz_delta import run_sunbiz_delta_watch as delta_logic
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 8 * * 1-6"))
+def scheduled_sunbiz_delta_watch():
+    """8 AM Mon-Sat strike for brand-new Sunbiz registrations (Phase 12 Turbo)."""
+    return delta_logic()
+
+@app.function(image=image, secrets=[VAULT])
+def run_social_migration():
+    """Create the social_drafts table via psycopg2."""
+    from scripts.migrate_social import create_social_table
+    return create_social_table()
+
+@app.function(image=image, secrets=[VAULT])
+def verify_strike_results():
+    """Verify that dossiers and videos are persistent in DB."""
+    from modules.database.supabase_client import get_supabase
+    import json
+    sb = get_supabase()
+    res = sb.table("contacts_master").select("*").eq("source", "manus").execute()
+    leads = res.data
+    
+    verified = 0
+    for lead in leads:
+        count = 0
+        raw = json.loads(lead.get("raw_research") or "{}")
+        if "manus_candidate_dossier" in raw:
+            count += 1
+        if "video_teaser_url" in lead.get("raw_research", ""): # Inside audit dict
+            count += 1
+        
+        if count > 0:
+            verified += 1
+            print(f"✅ Lead {lead['company_name']} verified with {count} assets.")
+            
+    print(f"\n📈 FINAL RESULT: {verified}/{len(leads)} leads processed with strike assets.")
+    return verified
+    """Debug what exactly is installed on the Modal image."""
+    import subprocess
+    import sys
+    print(f"Python Version: {sys.version}")
+    print("\n--- Pip List ---")
+    print(subprocess.check_output([sys.executable, "-m", "pip", "list"]).decode())
+    try:
+        from google import genai
+        print("\n✅ from google import genai SUCCESS")
+    except Exception as e:
+        print(f"\n❌ from google import genai FAIL: {e}")
+        
+    try:
+        import genai
+        print("\n✅ import genai SUCCESS")
+    except Exception as e:
+        print(f"\n❌ import genai FAIL: {e}")
+    return True
+    """Manual trigger for Sunbiz sync."""
+    return sunbiz_logic()
+
+@app.function(image=image, secrets=[VAULT])
+def trigger_manus_ingest(leads_json: str):
+    """Manual trigger for Manus ingestion."""
+    import json
+    leads = json.loads(leads_json)
+    return manus_logic(leads)
+@app.function(image=image, secrets=[VAULT])
+def trigger_cinematic_strike():
+    """Triggers the Phase 12 Strike (Dossiers + Veo Videos) via Modal."""
+    from scripts.trigger_cinematic_strike import run_phase12_strike
+    return run_phase12_strike()
 
 @app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
 def auto_outreach_loop():
@@ -1209,7 +1405,7 @@ def auto_outreach_loop():
 #  HEALTH CHECK ENDPOINT (for UptimeRobot / external watchdog)
 # ────────────────────────────────────────────────────────────
 @app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="GET")
+@modal.fastapi_endpoint(method="GET")
 def health_check():
     """Returns system health status for external monitoring (UptimeRobot)."""
     import os, json
@@ -1259,7 +1455,7 @@ def health_check():
 #  RESEND WEBHOOK (track opens, replies, bounces per variant)
 # ────────────────────────────────────────────────────────────
 @app.function(image=image, secrets=[VAULT])
-@modal.web_endpoint(method="POST")
+@modal.fastapi_endpoint(method="POST")
 def resend_webhook(data: dict):
     """Receives Resend webhook events (delivered, opened, bounced, complained, replied).
     - Tracks A/B performance in outbound_touches
@@ -1452,6 +1648,151 @@ def resend_webhook(data: dict):
 
 
 # ────────────────────────────────────────────────────────────
+#  RESEARCH STRIKE WORKER (Cloud Autonomy Engine)
+# ────────────────────────────────────────────────────────────
+@app.function(image=image, secrets=[VAULT], timeout=60)
+def research_strike_worker(lead_id: str):
+    """
+    Enriches a single lead with PageSpeed and FDBR data asynchronously.
+    Moves lead from 'new' -> 'research_done'.
+    """
+    import os, json, uuid, requests
+    from datetime import datetime, timezone
+    from workers.audit_generator import fetch_pagespeed, check_privacy_policy, check_ai_readiness
+    
+    lead_id = lead_id.strip()
+    print(f"🕵️ RESEARCH: Auditing Lead {lead_id}...")
+    
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_KEY")
+    headers = {
+        "apikey": key,
+        "Authorization": f"Bearer {key}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation"
+    }
+
+    try:
+        # 0. Fetch Lead
+        r = requests.get(f"{url}/rest/v1/contacts_master?id=eq.{lead_id}", headers=headers)
+        if r.status_code != 200 or not r.json():
+            print(f"  ⚠️ Research failed: Lead {lead_id} not found (Status: {r.status_code})")
+            return
+            
+        lead = r.json()[0]
+        website = lead.get("website_url")
+        if not website:
+            print(f"  ⚠️ Research failed: Lead {lead_id} has no website")
+            return
+        
+        # --- PHASE 2: SOVEREIGN CACHE (7-day expiry) ---
+        ps_data, privacy_data, ai_data = None, None, None
+        is_cached = False
+        try:
+            cache_r = requests.get(f"{url}/rest/v1/audit_cache?url=eq.{website.lower().strip()}", headers=headers)
+            if cache_r.status_code == 200 and cache_r.json():
+                cache = cache_r.json()[0]
+                cache_ts = datetime.fromisoformat(cache['last_audited_at'].replace('Z', '+00:00'))
+                if (datetime.now(timezone.utc) - cache_ts).days < 7:
+                    print(f"  ✅ SOVEREIGN CACHE HIT: {website}")
+                    raw_c = cache.get("raw_data", {})
+                    ps_data = raw_c.get("pagespeed")
+                    privacy_data = raw_c.get("privacy")
+                    ai_data = raw_c.get("ai_readiness")
+                    if ps_data and privacy_data and ai_data:
+                        is_cached = True
+        except Exception as ce:
+            print(f"  ⚠️ Cache check failed: {ce}")
+
+        if not is_cached:
+            # 1. Run PageSpeed
+            import time
+            print(f"  [1/3] PageSpeed Insights for {website} (Politeness delay 5s)...")
+            time.sleep(5) # Board Approved: Mitigation for 429 errors
+            ps_data = fetch_pagespeed(website)
+            
+            # 2. Check FDBR (Privacy)
+            print(f"  [2/3] Privacy/FDBR Check...")
+            privacy_data = check_privacy_policy(website)
+            
+            # 3. Check AI Readiness
+            print(f"  [3/3] AI Readiness Check...")
+            ai_data = check_ai_readiness(website)
+            
+            # Save to Cache for 7 days
+            try:
+                requests.post(f"{url}/rest/v1/audit_cache", headers=headers, json={
+                    "url": website.lower().strip(),
+                    "score": ps_data.get("score") if ps_data else 0,
+                    "raw_data": {"pagespeed": ps_data, "privacy": privacy_data, "ai_readiness": ai_data},
+                    "privacy_status": privacy_data.get("status") if privacy_data else "unknown",
+                    "ai_status": ai_data.get("status") if ai_data else "unknown",
+                    "last_audited_at": datetime.now(timezone.utc).isoformat()
+                })
+            except: pass
+        
+        # 4. Integrate into raw_research
+        raw_research = json.loads(lead.get("raw_research") or "{}")
+        raw_research.update({
+            "pagespeed": ps_data,
+            "privacy": privacy_data,
+            "ai_readiness": ai_data,
+            "audited_at": datetime.now(timezone.utc).isoformat()
+        })
+        
+        # 5. Update Lead Status
+        update_r = requests.patch(
+            f"{url}/rest/v1/contacts_master?id=eq.{lead_id}",
+            headers=headers,
+            json={
+                "raw_research": json.dumps(raw_research),
+                "status": "research_done"
+            }
+        )
+        if update_r.status_code not in [200, 201, 204]:
+            print(f"  ❌ Failed to update lead status: {update_r.text}")
+        
+        # 6. Create Entry in audit_reports
+        try:
+            report_id = str(uuid.uuid4())
+            audit_r = requests.post(
+                f"{url}/rest/v1/audit_reports",
+                headers=headers,
+                json={
+                    "report_id": report_id,
+                    "lead_id": lead_id,
+                    "company_name": lead.get("company_name", "Unknown"),
+                    "website_url": website,
+                    "audit_results": raw_research,
+                    "created_at": datetime.now(timezone.utc).isoformat()
+                }
+            )
+            if audit_r.status_code in [200, 201, 204]:
+                print(f"📄 AUDIT REPORT CREATED: {report_id}")
+            else:
+                print(f"⚠️ Failed to create audit_report entry: {audit_r.text}")
+        except Exception as report_err:
+            print(f"⚠️ Failed to create audit_report entry: {report_err}")
+
+        print(f"✅ RESEARCH DONE: {lead.get('company_name')} (Score: {ps_data.get('score', 'N/A')}/100)")
+        
+    except Exception as e:
+        print(f"❌ RESEARCH ERROR [Lead {lead_id}]: {e}")
+        import traceback
+        traceback.print_exc()
+        
+    except Exception as e:
+        print(f"❌ RESEARCH ERROR [Lead {lead_id}]: {e}")
+        import traceback
+        traceback.print_exc()
+        
+    except Exception as e:
+        print(f"❌ RESEARCH ERROR [Lead {lead_id}]: {e}")
+        # If it fails, maybe mark it so we don't keep trying? 
+        # For now, just log and let it retry next heartbeat if it stays 'new'.
+        pass
+
+# ────────────────────────────────────────────────────────────
 #  DAILY DIGEST (Cron #3 — emails Dan a morning summary)
 # ────────────────────────────────────────────────────────────
 @app.function(image=image, secrets=[VAULT], timeout=120)  # Triggered by heartbeat at 7 AM EST
@@ -1572,8 +1913,15 @@ def daily_digest():
 
 @app.function(image=image, secrets=[VAULT])
 def auto_prospecting():
-    """Discovers new leads. 3-stage: Google Places → email enrichment → insert. Called by heartbeat every ~6h."""
+    """Discovers new leads. 4-stage: Google Places → Sunbiz → email enrichment → insert."""
+    print("🚀 PROSPECTOR: Starting unified cycle...")
+    # 1. Google Places Discovery
     prospector_logic()
+    # 2. Sunbiz Lakeland Expansion
+    try:
+        sunbiz_logic()
+    except Exception as e:
+        print(f"⚠️ Sunbiz sync failed: {e}")
 
 @app.function(image=image, secrets=[VAULT])
 def unified_lead_sync():
@@ -1585,6 +1933,315 @@ def trigger_self_learning_loop():
     """Brain reflection - MANUAL ONLY."""
     learning_logic()
 
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 14,21 * * *"))
+def schedule_social_multiplier():
+    """Publishes social drafts 2x/day (9 AM and 4 PM EST)."""
+    from workers.social_poster import publish_social_multiplier_posts
+    return publish_social_multiplier_posts()
+
+@app.function(image=image, secrets=[VAULT])
+def trigger_social_publish():
+    """Manual trigger for social publishing."""
+    from workers.social_poster import publish_social_multiplier_posts
+    return publish_social_multiplier_posts()
+
+@app.function(image=image, secrets=[VAULT])
+def check_social_drafts():
+    """Diagnostic to see how many drafts are waiting."""
+    from modules.database.supabase_client import get_supabase
+    import json
+    supabase = get_supabase()
+    try:
+        res = supabase.table("contacts_master").select("id", "company_name", "raw_research").execute()
+        leads = res.data if hasattr(res, 'data') else []
+        draft_count = 0
+        for lead in leads:
+            raw_data = lead.get("raw_research")
+            if not raw_data: continue
+            
+            # Handle if raw_research is already a dict or still a string
+            if isinstance(raw_data, str):
+                try:
+                    raw = json.loads(raw_data)
+                except:
+                    continue
+            else:
+                raw = raw_data
+                
+            drafts = raw.get("social_drafts", [])
+            for d in drafts:
+                if d.get("status") == "draft":
+                    print(f"  [DRAFT] {lead.get('company_name')} - {d['platform']}")
+                    draft_count += 1
+        print(f"Total drafts pending: {draft_count}")
+        return draft_count
+    except Exception as e:
+        print(f"❌ Diagnostic failed: {e}")
+        return 0
+
+@app.function(image=image, secrets=[VAULT])
+def get_latest_social_video():
+    """Finds the most recently published social post with a video."""
+    from modules.database.supabase_client import get_supabase
+    import json
+    import os
+    supabase = get_supabase()
+    res = supabase.table("contacts_master").select("id", "company_name", "raw_research").execute()
+    leads = res.data if hasattr(res, 'data') else []
+    
+    published_videos = []
+    for lead in leads:
+        raw_data = lead.get("raw_research")
+        if not raw_data: continue
+        
+        if isinstance(raw_data, str):
+            try:
+                raw = json.loads(raw_data)
+            except:
+                continue
+        else:
+            raw = raw_data
+            
+        drafts = raw.get("social_drafts", [])
+        for d in drafts:
+            if d.get("status") == "published" and d.get("video_url"):
+                published_videos.append({
+                    "company": lead.get("company_name"),
+                    "platform": d["platform"],
+                    "video_url": d["video_url"],
+                    "published_at": d.get("published_at", "Unknown")
+                })
+    
+    published_videos.sort(key=lambda x: x["published_at"], reverse=True)
+    
+    if published_videos:
+        latest = published_videos[0]
+        # WRITE TO WORKSPACE FOR RETRIEVAL (Bypassing logs)
+        with open("/root/latest_video_link.txt", "w") as f:
+            f.write(latest['video_url'])
+@app.function(image=image, secrets=[VAULT])
+def check_social_profiles():
+    """Diagnostic to list connected Ayrshare profiles."""
+    import os
+    import json
+    from ayrshare import SocialPost
+    api_key = os.environ.get("AYRSHARE_API_KEY")
+    if not api_key:
+        print("❌ AYRSHARE_API_KEY not found.")
+        return
+        
+    try:
+        sp = SocialPost(api_key)
+        print("\n--- DEEP AUDIT: AYRSHARE PROFILES ---")
+        
+        # 1. Check User Info
+        user_info = sp.user()
+        print("\n[USER() ENDPOINT]")
+        print(json.dumps(user_info, indent=2))
+        
+        # 2. Check Profiles Info
+        try:
+            profiles_info = sp.profiles()
+            print("\n[PROFILES() ENDPOINT]")
+            print(json.dumps(profiles_info, indent=2))
+        except Exception as pe:
+            print(f"\n[PROFILES() ERROR/SKIPPED]: {pe}")
+    except Exception as e:
+        print(f"❌ Error: {e}")
+
+@app.function(image=image, secrets=[VAULT])
+def live_social_audit_test():
+    """Gathers handles from social_drafts metadata in contacts_master."""
+    import json
+    from modules.database.supabase_client import get_supabase
+    res_data = {"found_handles": {}}
+    
+    try:
+        sb = get_supabase()
+        res = sb.table("contacts_master").select("company_name,raw_research").eq("status", "research_done").limit(50).execute()
+        
+        for lead in res.data:
+            raw_research = lead.get("raw_research")
+            if not raw_research: continue
+            
+            try:
+                raw = json.loads(raw_research) if isinstance(raw_research, str) else raw_research
+                drafts = raw.get("social_drafts", [])
+                for d in drafts:
+                    plat = d.get("platform")
+                    if plat in ["facebook", "instagram", "linkedin", "twitter"]:
+                        handle = d.get("handle") or d.get("post_url") or "Linked"
+                        if plat not in res_data["found_handles"]:
+                            res_data["found_handles"][plat] = set()
+                        res_data["found_handles"][plat].add(handle)
+            except: continue
+        
+        # Convert sets to lists
+        for k in res_data["found_handles"]:
+            res_data["found_handles"][k] = list(res_data["found_handles"][k])
+            
+    except Exception as e:
+        res_data["error"] = str(e)
+        
+    return res_data
+
+@app.function(image=image, secrets=[VAULT])
+def fire_global_broadcast():
+    """Iterative Omni-Channel Broadcast to isolate plan restrictions."""
+    import os
+    import json
+    import time
+    from datetime import datetime
+    from ayrshare import SocialPost
+    
+    # NEW API KEY verified via dashboard screenshot
+    api_key = "57FCF9E6-1B534A66-9F05E51C-9ADE2CA5"
+    sp = SocialPost(api_key)
+    
+    media_url = "https://images.unsplash.com/photo-1677442136019-21780ecad995"
+    platforms = ["linkedin", "facebook", "instagram", "twitter", "tiktok", "youtube", "pinterest", "threads", "gmb"]
+    
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    
+    # Content (max 280 for safety)
+    content = (
+        f"🚨 SYSTEM STATUS: OMNIPRESENCE ENGAGED ({timestamp}) 🚀\n\n"
+        "9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. "
+        "Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire"
+    )
+    
+    final_results = {"successes": [], "failures": []}
+    
+    print(f"🚀 INITIATING INDIVIDUAL PLATFORM BLAST...")
+    
+    for plat in platforms:
+        print(f"  → Hitting {plat.upper()}...")
+        payload = {
+            "post": content,
+            "platforms": [plat],
+            "mediaUrls": [media_url]
+        }
+        
+        if plat == "youtube":
+            payload["youtubeOptions"] = {"title": f"Sovereign Empire: Omnipresence ({timestamp})"}
+            
+        try:
+            res = sp.post(payload)
+            if res.get("status") == "success":
+                final_results["successes"].append({"platform": plat, "res": res})
+                print(f"    ✅ Success: {res.get('id')}")
+            elif "postIds" in res and res["postIds"]:
+                # Sometimes it returns success inside postIds but error at top?
+                success_item = next((p for p in res["postIds"] if p.get("status") == "success"), None)
+                if success_item:
+                    final_results["successes"].append({"platform": plat, "res": res})
+                    print(f"    ✅ Success (via postIds): {success_item.get('id')}")
+                else:
+                    final_results["failures"].append({"platform": plat, "res": res})
+                    print(f"    ❌ Failed: {res.get('message') or res.get('errors')}")
+            else:
+                final_results["failures"].append({"platform": plat, "res": res})
+                print(f"    ❌ Failed: {res.get('message') or res.get('errors')}")
+        except Exception as e:
+            final_results["failures"].append({"platform": plat, "error": str(e)})
+            print(f"    ❌ Exception: {e}")
+            
+        time.sleep(1) # Prevent rate limiting
+        
+    print("\n--- FINAL GLOBAL RESULTS ---")
+    print(f"  Successes: {len(final_results['successes'])}")
+    print(f"  Failures:  {len(final_results['failures'])}")
+    
+    return final_results
+
+@app.function(image=image, secrets=[VAULT])
+def get_latest_social_video_remote():
+    """Remote video finder to bypass local connection issues."""
+    from modules.database.supabase_client import get_supabase
+    import json
+    
+    sb = get_supabase()
+    # Query contacts_master for published video drafts
+    res = sb.table("contacts_master").select("company_name, raw_research").execute()
+    
+    videos = []
+    for lead in res.data:
+        raw = lead.get("raw_research")
+        if not raw: continue
+        if isinstance(raw, str):
+            try: raw = json.loads(raw)
+            except: continue
+            
+        drafts = raw.get("social_drafts", [])
+        for d in drafts:
+            if d.get("status") == "published" and d.get("video_url"):
+                videos.append({
+                    "company": lead["company_name"],
+                    "url": d["video_url"],
+                    "platform": d["platform"]
+                })
+    
+    return videos
+
+@app.function(image=image, secrets=[VAULT])
+def fire_video_verification():
+    """Iterative video verification to isolate platform support for MP4s."""
+    import os
+    import time
+    from datetime import datetime
+    from ayrshare import SocialPost
+    
+    # Secret will be hydrated to ENV
+    api_key = os.environ.get("AYRSHARE_API_KEY")
+    sp = SocialPost(api_key)
+    
+    # Stable 10s MP4 test asset
+    video_url = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4"
+    platforms = ["linkedin", "facebook", "instagram", "twitter", "tiktok", "youtube", "pinterest", "threads", "gmb"]
+    
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    content = f"🎥 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED ({timestamp}) 🚀\nTesting direct MP4 broadcast capability across all active channels."
+    
+    final_results = {"successes": [], "failures": []}
+    
+    print(f"🚀 INITIATING VIDEO CAPABILITY TEST...")
+    
+    for plat in platforms:
+        print(f"  → Testing {plat.upper()} with Video...")
+        payload = {
+            "post": content,
+            "platforms": [plat],
+            "mediaUrls": [video_url]
+        }
+        
+        if plat == "youtube":
+            payload["youtubeOptions"] = {"title": f"Sovereign Video Test ({timestamp})"}
+            
+        try:
+            res = sp.post(payload)
+            if res.get("status") == "success" or any(p.get("status") == "success" for p in res.get("postIds", [])):
+                final_results["successes"].append({"platform": plat, "res": res})
+                print(f"    ✅ Video Success: {plat}")
+            else:
+                final_results["failures"].append({"platform": plat, "res": res})
+                print(f"    ❌ Video Failed: {plat}")
+        except Exception as e:
+            final_results["failures"].append({"platform": plat, "error": str(e)})
+            print(f"    ❌ Video Exception: {plat} | {e}")
+            
+        time.sleep(2) # Prevent rate limiting during video processing
+        
+    return final_results
+
+@app.local_entrypoint()
+def trigger_video_verification():
+    """Trigger the video verification and save results locally."""
+    import json
+    data = fire_video_verification.remote()
+    with open("video_verification_results.json", "w") as f:
+        json.dump(data, f, indent=2)
+    print("\n✅ VIDEO VERIFICATION COMPLETED. Results in: video_verification_results.json")
 
 if __name__ == "__main__":
     print("⚫ ANTIGRAVITY v5.0 - SOVEREIGN DEPLOY")

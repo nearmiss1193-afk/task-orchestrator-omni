@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empire Sovereign Flyer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 816px;
+            /* 8.5 inches at 96dpi */
+            height: 1056px;
+            /* 11 inches at 96dpi */
+            background: #0f172a;
+            color: white;
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.1) 0%, transparent 20%);
+        }
+
+        .container {
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 20px solid #1e293b;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 52px;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            margin: 10px 0 0 0;
+            color: #cbd5e1;
+            letter-spacing: 1px;
+        }
+
+        .offer-box {
+            background: rgba(30, 41, 59, 0.6);
+            border: 2px solid #334155;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 20px 0;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .offer-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .icon {
+            font-size: 40px;
+            margin-right: 20px;
+            width: 60px;
+            text-align: center;
+        }
+
+        .details h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            margin: 0 0 5px 0;
+            color: #fff;
+        }
+
+        .details p {
+            font-size: 16px;
+            margin: 0;
+            color: #94a3b8;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #334155;
+            margin-top: auto;
+        }
+
+        .contact-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            margin: 10px;
+        }
+
+        .contact-label {
+            display: block;
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .website {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .highlight-badge {
+            background: #ef4444;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <span class="highlight-badge">Exclusive Neighborhood Offer</span>
+            <h1>Unlock Your Business's<br>Full Potential</h1>
+            <h2>Free AI Upgrades. No Strings Attached.</h2>
+        </header>
+
+        <div class="offer-box">
+            <div class="offer-item">
+                <div class="icon">🎁</div>
+                <div class="details">
+                    <h3>Free AI Visibility Audit</h3>
+                    <p>See exactly how Google sees your business. We'll show you the hidden gaps costing you customers.
+                    </p>
+                </div>
+            </div>
+
+            <div class="offer-item">
+                <div class="icon">🛡️</div>
+                <div class="details">
+                    <h3>Free Privacy Policy Fix (FDBR)</h3>
+                    <p>Florida's new digital laws carry $50k fines. We'll make your site compliant instantly. Free.</p>
+                </div>
+            </div>
+
+            <div class="offer-item">
+                <div class="icon">👩‍💼</div>
+                <div class="details">
+                    <h3>14-Day Free AI Receptionist</h3>
+                    <p>Meet "Sarah" — she answers calls 24/7, books appointments, and never sleeps. Try her out on us.
+                    </p>
+                </div>
+            </div>
+
+            <div class="offer-item">
+                <div class="icon">📈</div>
+                <div class="details">
+                    <h3>Google Business Optimization</h3>
+                    <p>We'll fix the settings almost everyone misses to help you rank higher on Maps instantly.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <div class="contact-row">
+                <div class="contact-item">
+                    <span class="contact-label">Call "Sarah" (Voice AI)</span>
+                    <span class="contact-number">(863) 213-2505</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">Text "Sarah"</span>
+                    <span class="contact-number">(352) 758-5336</span>
+                </div>
+            </div>
+            <div class="contact-row">
+                <div class="contact-item">
+                    <span class="contact-label">Talk to Dan (Direct)</span>
+                    <span class="contact-number">(352) 936-8152</span>
+                </div>
+            </div>
+            <span class="website">aiserviceco.com</span>
+        </div>
+
+        <div class="disclaimer">
+            No Credit Card Required • No Long-Term Obligation • Local Partner
+        </div>
+    </div>
+</body>
+
+</html>

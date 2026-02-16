@@ -43,38 +43,43 @@ NICHES = [
     "law firm",
     "real estate agency",
     "insurance agency",
+    "garage door repair",
+    "cleaning service",
+    "tree removal service",
+    "counseling center",
+    "accounting firm",
+    "medical spa",
+    "optometrist",
+    "martial arts school",
+    "daycare center",
+    "home security company",
+    "solar panel installation",
+    "remodeler",
+    "painting contractor",
+    "fencing company",
+    "towing service",
+    "moving company",
+    "florist",
+    "fitness center",
+    "auto detailing",
+    "window cleaning"
 ]
 
 CITIES = [
-    # Central Florida (Dan's home turf)
-    "Lakeland FL",
+    # Lakeland Zip Code Deep Scan
+    "33801", "33803", "33805", "33809", "33810", 
+    "33811", "33812", "33813", "33815", "Lakeland FL",
+    # Target Growth Markets
+    "Winter Haven FL",
+    "Plant City FL",
     "Tampa FL",
     "Orlando FL",
-    "Winter Haven FL",
-    "Daytona Beach FL",
-    # Broader Florida
-    "Jacksonville FL",
-    "Ocala FL",
-    "Gainesville FL",
-    "Sarasota FL",
-    "Fort Myers FL",
-    "Melbourne FL",
-    "Tallahassee FL",
-    # High-value out-of-state markets
-    "Dallas TX",
-    "Houston TX",
-    "Atlanta GA",
-    "Charlotte NC",
-    "Nashville TN",
-    "Phoenix AZ",
-    "Denver CO",
-    "San Antonio TX",
 ]
 
 # How many search combos to run per cycle (rate limit / cost control)
-SEARCHES_PER_CYCLE = 5
+SEARCHES_PER_CYCLE = 10
 # Max leads to insert per cycle
-MAX_INSERTS_PER_CYCLE = 25
+MAX_INSERTS_PER_CYCLE = 50
 
 
 # ============================================================

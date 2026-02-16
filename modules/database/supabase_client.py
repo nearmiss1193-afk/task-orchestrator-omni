@@ -4,6 +4,8 @@ from supabase import create_client, Client
 # Initialize Client
 def get_supabase() -> Client:
     url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
+    # THE SOVEREIGN LAW (Feb 15): Never use the anon key for backend updates.
+    # Service role key is required to bypass RLS.
     key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
     
     if not url or not key:

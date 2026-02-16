@@ -1,0 +1,160 @@
+﻿============================================================
+NO-CONTACT LEADS INVESTIGATION
+============================================================
+
+1. STATUS BREAKDOWN:
+   new: 241
+   no_contact_info: 190
+   outreach_sent: 81
+   research_done: 52
+   outreach_dispatched: 32
+   skipped_no_url: 31
+   bad_email: 25
+   skipped_no_contact: 20
+   calling_initiated: 18
+   sequence_complete: 1
+   interested: 1
+
+2. SCHEMA (all columns from first lead):
+   ai_strategy
+   company_name
+   created_at
+   deal_value
+   email
+   full_name
+   funnel_stage
+   ghl_contact_id
+   id
+   last_contacted_at
+   lead_score
+   lead_source
+   niche
+   phone
+   raw_research
+   responded
+   sentiment
+   source
+   stage_entered_at
+   status
+   total_touches
+   website_url
+
+3. SAMPLE LEADS (3 shown):
+
+   --- Lead 1 ---
+   ai_strategy: saw your site, had a quick question
+   created_at: 2026-01-29T09:10:49.48148+00:00
+   full_name: LaTeam Partners
+   funnel_stage: new
+   ghl_contact_id: SCRAPED_db16b2ce
+   id: 75f9f269-e952-4639-b3b3-4888a3c0dc0a
+   last_contacted_at: 2026-01-29T09:10:49.48148+00:00
+   lead_score: 0
+   lead_source: direct-audit
+   phone: +13320946824
+   responded: False
+   stage_entered_at: 2026-01-29T09:10:49.48148+00:00
+   status: no_contact_info
+   total_touches: 0
+   website_url: http://www.lateampartners.com
+
+   --- Lead 2 ---
+   ai_strategy: saw your site, had a quick question
+   created_at: 2026-01-29T09:11:13.430221+00:00
+   full_name: World Brand Design Society
+   funnel_stage: new
+   ghl_contact_id: SCRAPED_52edba66
+   id: e90106df-1b4c-4843-b14b-123421b03a03
+   last_contacted_at: 2026-01-29T09:11:13.430221+00:00
+   lead_score: 0
+   lead_source: direct-audit
+   phone: +11755155355
+   responded: False
+   stage_entered_at: 2026-01-29T09:11:13.430221+00:00
+   status: no_contact_info
+   total_touches: 0
+   website_url: http://www.worldbranddesign.com
+
+   --- Lead 3 ---
+   ai_strategy: saw your site, had a quick question
+   created_at: 2026-01-29T09:11:13.430221+00:00
+   full_name: The Immigrant Academy
+   funnel_stage: new
+   ghl_contact_id: SCRAPED_6a7373f5
+   id: f145442e-0192-48bc-9ba8-f7229f0869a2
+   last_contacted_at: 2026-01-29T09:11:13.430221+00:00
+   lead_score: 0
+   lead_source: direct-audit
+   phone: +14066143815
+   responded: False
+   stage_entered_at: 2026-01-29T09:11:13.430221+00:00
+   status: no_contact_info
+   total_touches: 0
+   website_url: http://www.theimmigrantacademy.com
+
+4. SAMPLE 'NEW' LEADS (3 shown):
+
+   --- New Lead 1 ---
+   created_at: 2026-01-29T09:11:13.430221+00:00
+   email: hvacapplianceguys@gmail.com
+   full_name: HVAC & Appliance Repair Guys
+   funnel_stage: new
+   ghl_contact_id: SCRAPED_f3156f20
+   id: 03fd93cb-570e-4d10-a140-61693501e654
+   last_contacted_at: 2026-01-29T09:11:13.430221+00:00
+   lead_score: 0
+   lead_source: direct-audit
+   phone: (503) 512-5900
+   responded: False
+   stage_entered_at: 2026-01-29T09:11:13.430221+00:00
+   status: new
+   total_touches: 0
+
+   --- New Lead 2 ---
+   created_at: 2026-01-29T09:11:13.430221+00:00
+   email: info@acmeusa.net
+   full_name: Acme USA
+   funnel_stage: new
+   ghl_contact_id: SCRAPED_ac0d8256
+   id: 0cb13779-2dc2-42ce-9fb2-5c6aab23aee3
+   last_contacted_at: 2026-01-29T09:11:13.430221+00:00
+   lead_score: 0
+   lead_source: direct-audit
+   phone: 305-836-4800
+   responded: False
+   stage_entered_at: 2026-01-29T09:11:13.430221+00:00
+   status: new
+   total_touches: 0
+
+   --- New Lead 3 ---
+   created_at: 2026-01-29T09:11:13.430221+00:00
+   email: lynxhvactx@gmail.com
+   full_name: Lynx HVAC Repair
+   funnel_stage: new
+   ghl_contact_id: SCRAPED_e2368c8d
+   id: d2dc080f-4188-4d25-917a-26a129dd073a
+   last_contacted_at: 2026-01-29T09:11:13.430221+00:00
+   lead_score: 0
+   lead_source: direct-audit
+   phone: 254-500-3188
+   responded: False
+   stage_entered_at: 2026-01-29T09:11:13.430221+00:00
+   status: new
+   total_touches: 0
+
+5. INTERESTED LEAD:
+   company_name: Vanguard Alpha Co
+   created_at: 2026-01-29T09:37:23.786568+00:00
+   email: final_successful_test@example.com
+   full_name: Vanguard Lead: Vanguard Alpha Co
+   funnel_stage: new
+   ghl_contact_id: VANGUARD_final_successful_test
+   id: 9b34b722-d25e-4eb9-b723-bceacef2ad69
+   lead_score: 0
+   lead_source: vanguard-waitlist
+   responded: False
+   stage_entered_at: 2026-01-29T09:37:23.786568+00:00
+   status: interested
+   total_touches: 0
+
+============================================================

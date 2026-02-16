@@ -1,0 +1,76 @@
+{
+  "id": "2e6b7c76-eb3f-4f42-8fa2-fa114b94f39c",
+  "ts": "2026-02-12T22:05:11.714758+00:00",
+  "phone": "813-997-3140",
+  "channel": "email",
+  "variant_id": "D",
+  "variant_name": "This caught my eye about Redeemed Air and HVAC",
+  "run_id": null,
+  "status": "delivered",
+  "payload": {
+    "to": "RedeemedAirAndHVAC@Gmail.com",
+    "from": "Dan <owner@aiserviceco.com>",
+    "events": [
+      {
+        "ts": "2026-02-12T22:05:16.838943+00:00",
+        "raw": {
+          "to": [
+            "RedeemedAirAndHVAC@gmail.com"
+          ],
+          "from": "Dan <owner@aiserviceco.com>",
+          "tags": {
+            "lead_id": "ab31c98e-bc55-4a94-8875-4424204a8b5b",
+            "variant": "D",
+            "email_uid": "db33947f"
+          },
+          "subject": "This caught my eye about Redeemed Air and HVAC",
+          "email_id": "b243d7b6-e9f0-4899-8649-165dc0a9b358",
+          "created_at": "2026-02-12T22:05:11.568Z"
+        },
+        "type": "email.delivered"
+      },
+      {
+        "ts": "2026-02-12T22:05:17.159789+00:00",
+        "raw": {
+          "to": [
+            "RedeemedAirAndHVAC@gmail.com"
+          ],
+          "from": "Dan <owner@aiserviceco.com>",
+          "tags": {
+            "lead_id": "ab31c98e-bc55-4a94-8875-4424204a8b5b",
+            "variant": "D",
+            "email_uid": "db33947f"
+          },
+          "subject": "This caught my eye about Redeemed Air and HVAC",
+          "email_id": "b243d7b6-e9f0-4899-8649-165dc0a9b358",
+          "created_at": "2026-02-12T22:05:11.568Z"
+        },
+        "type": "email.sent"
+      },
+      {
+        "ts": "2026-02-12T22:05:18.879304+00:00",
+        "raw": {
+          "to": [
+            "RedeemedAirAndHVAC@gmail.com"
+          ],
+          "from": "Dan <owner@aiserviceco.com>",
+          "tags": {
+            "lead_id": "ab31c98e-bc55-4a94-8875-4424204a8b5b",
+            "variant": "D",
+            "email_uid": "db33947f"
+          },
+          "subject": "This caught my eye about Redeemed Air and HVAC",
+          "email_id": "b243d7b6-e9f0-4899-8649-165dc0a9b358",
+          "created_at": "2026-02-12T22:05:11.568Z"
+        },
+        "type": "email.delivered"
+      }
+    ],
+    "variant": "D",
+    "email_uid": "db33947f",
+    "resend_email_id": "b243d7b6-e9f0-4899-8649-165dc0a9b358"
+  },
+  "vertical": "hvac",
+  "company": "Redeemed Air and HVAC",
+  "correlation_id": "b243d7b6-e9f0-4899-8649-165dc0a9b358"
+}

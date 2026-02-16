@@ -1,0 +1,181 @@
+{
+  "successes": [
+    {
+      "platform": "linkedin",
+      "res": {
+        "status": "success",
+        "errors": [],
+        "postIds": [
+          {
+            "status": "success",
+            "id": "urn:li:share:7428969536713875456",
+            "postUrl": "https://www.linkedin.com/feed/update/urn:li:share:7428969536713875456",
+            "owner": "urn:li:organization:110149287",
+            "platform": "linkedin"
+          }
+        ],
+        "id": "omtORr6C0pKk7p5IRE5I",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    },
+    {
+      "platform": "instagram",
+      "res": {
+        "status": "success",
+        "errors": [],
+        "postIds": [
+          {
+            "status": "success",
+            "id": "18311252572254934",
+            "postUrl": "https://www.instagram.com/p/DUzMfrPlIk1/",
+            "usedQuota": 1,
+            "platform": "instagram"
+          }
+        ],
+        "id": "REhkzzdDSjBO8bLNcT1O",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    },
+    {
+      "platform": "twitter",
+      "res": {
+        "status": "success",
+        "errors": [],
+        "postIds": [
+          {
+            "status": "success",
+            "id": "2023204068328435788",
+            "postUrl": "https://twitter.com/lollyshomes/status/2023204068328435788",
+            "platform": "twitter"
+          }
+        ],
+        "id": "3hxIUcpwdUs9lbGPrhf0",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    },
+    {
+      "platform": "pinterest",
+      "res": {
+        "status": "success",
+        "errors": [],
+        "postIds": [
+          {
+            "status": "success",
+            "id": "934285885212040525",
+            "postUrl": "https://www.pinterest.com/pin/934285885212040525/",
+            "platform": "pinterest"
+          }
+        ],
+        "id": "AsQWw1uRT4MGdyXoljNH",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    },
+    {
+      "platform": "threads",
+      "res": {
+        "status": "success",
+        "errors": [],
+        "postIds": [
+          {
+            "status": "success",
+            "id": "17933756223177778",
+            "postUrl": "https://www.threads.com/@freeaiplumber/post/DUzMlubj5NW",
+            "platform": "threads"
+          }
+        ],
+        "id": "GOGtgtMDCmBCDgPUMaXb",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    },
+    {
+      "platform": "gmb",
+      "res": {
+        "status": "success",
+        "errors": [],
+        "postIds": [
+          {
+            "status": "success",
+            "id": "9140456606433100486",
+            "postUrl": "https://lh3.googleusercontent.com/p/AF1QipNSMfX5UP5Q0he2UIKLm1MCpuKFnsP0ncup5aME",
+            "type": "localPosts",
+            "warning": "Google might still be processing and not yet published the post. This can occur if the Business Profile has not yet been verififed or the profile is not public: https://www.ayrshare.com/docs/apis/post/social-networks/google#video-processing",
+            "mediaFormat": "photo",
+            "platform": "gmb"
+          }
+        ],
+        "id": "uswM2PK0BPvb8xGy6wZP",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    }
+  ],
+  "failures": [
+    {
+      "platform": "facebook",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "post",
+            "status": "error",
+            "code": 156,
+            "message": "Facebook is not linked. Please confirm the linkage on the Social Accounts page in the dashboard. https://www.ayrshare.com/docs/dashboard/connect-social-accounts/overview",
+            "platform": "facebook"
+          }
+        ],
+        "postIds": [],
+        "id": "EBxYTMtfCQQlhcHlfGLG",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    },
+    {
+      "platform": "tiktok",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Paid Plan Required",
+            "status": "error",
+            "code": 169,
+            "message": "A Premium or Business Plan is required to access this endpoint. https://www.ayrshare.com/business-plan-for-multiple-users/"
+          }
+        ],
+        "id": "l3yiwP8WCgA3R92e8t2D",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    },
+    {
+      "platform": "youtube",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Paid Plan Required",
+            "status": "error",
+            "code": 169,
+            "message": "A Premium or Business Plan is required to access this endpoint. https://www.ayrshare.com/business-plan-for-multiple-users/"
+          }
+        ],
+        "id": "Eutt4Bh1C3doBUca2FuZ",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83d\udea8 SYSTEM STATUS: OMNIPRESENCE ENGAGED (01:12:35) \ud83d\ude80\n\n9 social channels unified into one AI command center. We're now broadcasting at scale across LI, FB, IG, X, TT, YT & more. Visibility is an automated reality. #AIAutomation #Omnipresence #SovereignEmpire",
+        "validate": true
+      }
+    }
+  ]
+}

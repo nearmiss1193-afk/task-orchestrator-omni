@@ -1,0 +1,20 @@
+﻿==================================================
+INCOME PIPELINE CHECK ΓÇö v6.0 Protocol
+==================================================
+
+1. SENDING:   10 most recent touches
+   Last touch: 2026-02-12T14:30:09.827037+00:00
+
+2. CHANNELS:  {"email": 20}
+   Latest:    2026-02-12T14:30:09.827037+00:00 via email
+
+3. PIPELINE:  {"outreach_sent": 81, "bad_email": 23, "sequence_complete": 1, "skipped_no_url": 31, "no_contact_info": 190, "outreach_dispatched": 32, "calling_initiated": 18, "skipped_no_contact": 20, "new": 243, "research_done": 52, "interested": 1}
+   Contactable leads: 295
+
+4. CAMPAIGN:  working
+
+5. HEARTBEAT: 2026-02-12T14:20:01.749593+00:00 ΓÇö working
+
+==================================================
+END PIPELINE CHECK
+==================================================

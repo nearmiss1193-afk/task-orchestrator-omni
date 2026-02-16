@@ -1,0 +1,143 @@
+﻿============================================================
+NO-CONTACT LEADS INVESTIGATION
+============================================================
+
+1. STATUS BREAKDOWN:
+   new: 240
+   no_contact_info: 190
+   outreach_sent: 82
+   research_done: 52
+   outreach_dispatched: 32
+   skipped_no_url: 31
+   bad_email: 25
+   skipped_no_contact: 20
+   calling_initiated: 18
+   sequence_complete: 1
+   interested: 1
+
+2. SAMPLE NO-CONTACT LEADS (5 shown):
+
+   --- Lead 1 ---
+   id: 75f9f269-e952-4639-b3b3-4888a3c0dc0a
+   created_at: 2026-01-29T09:10:49.48148+00:00
+   ghl_contact_id: SCRAPED_db16b2ce
+   full_name: LaTeam Partners
+   phone: +13320946824
+   website_url: http://www.lateampartners.com
+   lead_score: 0
+   ai_strategy: saw your site, had a quick question
+   status: no_contact_info
+   funnel_stage: new
+   stage_entered_at: 2026-01-29T09:10:49.48148+00:00
+   last_contacted_at: 2026-01-29T09:10:49.48148+00:00
+   total_touches: 0
+   responded: False
+   lead_source: direct-audit
+
+   --- Lead 2 ---
+   id: e90106df-1b4c-4843-b14b-123421b03a03
+   created_at: 2026-01-29T09:11:13.430221+00:00
+   ghl_contact_id: SCRAPED_52edba66
+   full_name: World Brand Design Society
+   phone: +11755155355
+   website_url: http://www.worldbranddesign.com
+   lead_score: 0
+   ai_strategy: saw your site, had a quick question
+   status: no_contact_info
+   funnel_stage: new
+   stage_entered_at: 2026-01-29T09:11:13.430221+00:00
+   last_contacted_at: 2026-01-29T09:11:13.430221+00:00
+   total_touches: 0
+   responded: False
+   lead_source: direct-audit
+
+   --- Lead 3 ---
+   id: f145442e-0192-48bc-9ba8-f7229f0869a2
+   created_at: 2026-01-29T09:11:13.430221+00:00
+   ghl_contact_id: SCRAPED_6a7373f5
+   full_name: The Immigrant Academy
+   phone: +14066143815
+   website_url: http://www.theimmigrantacademy.com
+   lead_score: 0
+   ai_strategy: saw your site, had a quick question
+   status: no_contact_info
+   funnel_stage: new
+   stage_entered_at: 2026-01-29T09:11:13.430221+00:00
+   last_contacted_at: 2026-01-29T09:11:13.430221+00:00
+   total_touches: 0
+   responded: False
+   lead_source: direct-audit
+
+   --- Lead 4 ---
+   id: 3a6f104a-a227-4124-b3ae-17f18723f08a
+   created_at: 2026-01-29T09:10:43.365307+00:00
+   ghl_contact_id: SCRAPED_fdc46098
+   full_name: Leeds Professional Resources
+   phone: +12502211154
+   website_url: http://www.leedsresources.com
+   lead_score: 0
+   ai_strategy: saw your site, had a quick question
+   status: no_contact_info
+   funnel_stage: new
+   stage_entered_at: 2026-01-29T09:10:43.365307+00:00
+   last_contacted_at: 2026-01-29T09:10:43.365307+00:00
+   total_touches: 0
+   responded: False
+   lead_source: direct-audit
+
+   --- Lead 5 ---
+   id: 6e53cfaf-72bd-4726-a7c5-e8606d93ae74
+   created_at: 2025-12-27T23:24:42.820541+00:00
+   ghl_contact_id: v5K8wRVwHSAoCXV1dsig
+   full_name: guest visitor wjbbt
+   lead_score: 50
+   raw_research: {'hook': 'saw your site, noticed some missed opportunities.', 'aeo_gap': True, 'est_revenue': '$1M - $5M', 'predator_data': {'note': 'Local Run'}, 'traffic_stats': {'direct_pct': 50, 'ai_search_pct': 5}, 'inefficiencies': ['Generic Failure'], 'automation_score': 50}
+   ai_strategy: saw your site, noticed some missed opportunities.
+   status: no_contact_info
+   funnel_stage: new
+   stage_entered_at: 2026-01-23T14:08:12.031571+00:00
+   total_touches: 0
+   responded: False
+   lead_source: direct-audit
+python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python scripts/investiga
+te_leads.py 2>&1 | 
+Out-File -Encoding utf8 
+sc ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (T  
+  raceback (most recent   
+  call last)::String)     
+[], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+  File "C:\Users\nearm\.ge
+mini\antigravity\scratch\e
+mpire-unified\scripts\inve
+stigate_leads.py", line 
+41, in <module>
+    r2 = sb.table("contact
+s_master").select("id,busi
+ness_name,website,city,sta
+te,email,phone").eq("statu
+s", "no_contact_info").lim
+it(30).execute()
+  File "C:\Users\nearm\App
+Data\Roaming\Python\Python
+313\site-packages\postgres
+t\_sync\request_builder.py
+", line 53, in execute
+    raise 
+APIError(dict(json_obj))
+postgrest.exceptions.APIEr
+ror: {'message': 'column c
+ontacts_master.business_na
+me does not exist', 
+'code': '42703', 'hint': 
+None, 'details': None}

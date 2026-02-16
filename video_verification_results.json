@@ -1,0 +1,167 @@
+{
+  "successes": [],
+  "failures": [
+    {
+      "platform": "linkedin",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "yBCXCnslB6ZVTr5y27Gc",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    },
+    {
+      "platform": "facebook",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "96RQybQpfgCCVOOAHgUk",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    },
+    {
+      "platform": "instagram",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "6lGbZAu9W1o9kJrUax7U",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    },
+    {
+      "platform": "twitter",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "irtUjFcKxiF0wuAyErAL",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    },
+    {
+      "platform": "tiktok",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "xJTSoqeF64yIO6F4iYAW",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    },
+    {
+      "platform": "youtube",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "iTlOubGSkGbKNlajDjUv",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    },
+    {
+      "platform": "pinterest",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "DF0zWg0XW2KFvNaEVhoc",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    },
+    {
+      "platform": "threads",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "c4sjn6aQBP2oDejnWO7G",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    },
+    {
+      "platform": "gmb",
+      "res": {
+        "status": "error",
+        "errors": [
+          {
+            "action": "Video Post",
+            "status": "error",
+            "code": 172,
+            "message": "Videos require a Premium or Business Plan. https://www.ayrshare.com/pricing/"
+          }
+        ],
+        "id": "Pi7PU3arX8JDEuFZuYR3",
+        "refId": "a5dbad30121f7ce92804cb897589ee967f9b8a08",
+        "post": "\ud83c\udfa5 SYSTEM VIDEO TEST: OMNIPRESENCE VERIFIED (02:08:19) \ud83d\ude80\nTesting direct MP4 broadcast capability across all active channels.",
+        "validate": true
+      }
+    }
+  ]
+}

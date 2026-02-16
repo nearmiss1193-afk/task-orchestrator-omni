@@ -118,11 +118,55 @@ def dispatch_email_logic(lead_id: str):
         print("Error: RESEND_API_KEY missing")
         return False
 
-    # --- LEAD INFO ---
-    first_name = (lead.get('full_name') or 'there').split(' ')[0]
-    company = lead.get('company_name') or 'your company'
-    niche = lead.get('niche') or 'your industry'
+    # --- LEAD INFO HARDENING (Anti-"None" Protocol - Aggressive v2) ---
+    def is_bad_value(val):
+        if not val: return True
+        v = str(val).strip().lower()
+        if v in ['none', 'none none', 'null', 'undefined', '[none]', 'n/a']: return True
+        # If it contains "none" and is very short, it's likely a placeholder
+        if 'none' in v and len(v) < 10: return True
+        return False
+
+    raw_full_name = lead.get('full_name')
+    if is_bad_value(raw_full_name):
+        full_name = ''
+    else:
+        full_name = str(raw_full_name).strip()
+
+    raw_company = lead.get('company_name')
+    if is_bad_value(raw_company):
+        company = full_name if full_name else 'your business'
+    else:
+        company = str(raw_company).strip()
+        
+    raw_niche = lead.get('niche')
+    if is_bad_value(raw_niche):
+        niche = 'local'
+    else:
+        niche = str(raw_niche).strip()
+
     source = lead.get('source', '')
+    city = lead.get('city') or lead.get('location') or ''
+    
+    # Smart possessive: "Guys'" not "Guys's"
+    def smart_possessive(name):
+        if name.lower().endswith(('s', 'z')):
+            return f"{name}'"
+        return f"{name}'s"
+    
+    # Smart greeting: detect if full_name is a person name vs business name
+    biz_keywords = ['llc', 'inc', 'co', 'corp', 'hvac', 'plumbing', 'electric', 
+                    'roofing', 'pest', 'air', 'repair', 'service', 'cleaning',
+                    'landscap', 'construction', 'painting', 'restoration', 'guys',
+                    'pros', 'team', 'group', 'academy', 'church', 'society',
+                    'partners', 'solutions', 'systems', 'brand', 'design']
+    name_lower = full_name.lower()
+    is_business_name = any(kw in name_lower for kw in biz_keywords) or len(full_name.split()) > 3 or not full_name
+    
+    if is_business_name:
+        first_name = 'there'
+    else:
+        first_name = full_name.split(' ')[0]
     
     # --- Parse Google review data from notes (Lakeland Finds leads) ---
     google_rating = 0
@@ -140,8 +184,8 @@ def dispatch_email_logic(lead_id: str):
         subject_variants = [
             {"id": "LF_A", "subject": f"{company} is on LakelandFinds.com"},
             {"id": "LF_B", "subject": f"Your Google reviews, {first_name}"},
-            {"id": "LF_C", "subject": f"Noticed {company}'s listing"},
-            {"id": "LF_D", "subject": f"Quick tip for {company}'s Google presence"},
+            {"id": "LF_C", "subject": f"Noticed {smart_possessive(company)} listing"},
+            {"id": "LF_D", "subject": f"Quick tip for {smart_possessive(company)} Google presence"},
         ]
         
         # Build review-specific body
@@ -171,6 +215,30 @@ Just reply to this email, text me at (352) 936-8152, or grab 15 min on my calend
 - Dan, Lakeland Finds"""
         
         from_email = os.environ.get("LAKELAND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
+    elif source == 'hiring_trigger':
+        # --- HIRING TRIGGER TEMPLATE (Maya as Labor Solution) ---
+        subject_variants = [
+            {"id": "HT_A", "subject": f"Question about your receptionist role at {company}"},
+            {"id": "HT_B", "subject": f"Regarding the hiring for {company}"},
+            {"id": "HT_C", "subject": f"Saw you're looking for help at {company}"},
+        ]
+        
+        body_text = f"""Hi {first_name},
+        
+Saw your posting on Indeed for a new receptionist at {company}.
+
+While you look for the right person, I wanted to see if you'd be open to a faster solution for your after-hours and overflow calls.
+
+We've been helping Lakeland businesses handle 100% of their missed calls and appointment booking using a specialized AI Receptionist (her name is Maya). She never misses a call, speaks perfect English, and integrates directly with your calendar.
+
+She's usually about 1/10th the cost of a full-time hire and she's ready to start today.
+
+Would you be open to a 2-minute demo? Just reply here or pick a time:
+{BOOKING_LINK}
+
+Best,
+Dan"""
+        from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
     else:
         # --- ORIGINAL AI SERVICE CO TEMPLATE ---
         subject_variants = [
@@ -184,18 +252,23 @@ Just reply to this email, text me at (352) 936-8152, or grab 15 min on my calend
         if ai_body and len(ai_body) > 20:
             body_text = ai_body
         else:
+            # Enhanced generic template — used for leads WITHOUT a website URL
+            location_line = f" in {city}" if city else ""
             body_text = f"""Hi {first_name},
 
-I was just reviewing {company}'s online presence and had a quick question.
+I was looking at {niche} businesses{location_line} and came across {company}.
 
-Are you currently looking to get more customers from Google and social media?
+I help businesses like yours get more calls and leads from Google without spending a dime on ads — usually within the first 30 days.
 
-I work with {niche} businesses and noticed a few quick wins that could help drive more leads to your site.
+Here's what I typically find for {niche} businesses:
+• Their Google Business Profile is missing 3-4 easy optimizations
+• Their website isn't showing up for the searches their customers actually make
+• They're leaving money on the table with no automated follow-up
 
-Worth a 15-min chat this week? You can grab a time here:
+Would a quick 15-min call be worth it this week? Grab a time here:
 {BOOKING_LINK}
 
-Or just reply to this email.
+Or just reply — happy to share what I'd do specifically for {company}.
 
 Best,
 Dan"""
@@ -277,18 +350,19 @@ Dan"""
 @app.function(image=image, secrets=[VAULT], timeout=120)
 def dispatch_audit_email(lead_id: str):
     """
-    ENGINE v4: Audit-Powered Email Dispatch (Board Consensus Feb 9, 2026)
-    Generates a personalized AI visibility audit PDF and sends via Resend.
-    Uses PageSpeed API + FDBR privacy check + AI readiness scan.
-    Sovereign Law: "The audit sells the service. The email delivers the audit."
+    ENGINE v5: Link-Based Audit Email (Feb 12, 2026)
+    Generates a personalized AI visibility audit, stores results in Supabase,
+    and sends email with a LINK to the report page instead of PDF attachment.
+    Better deliverability + click tracking + landing page upsell.
     """
-    print(f"📊 AUDIT EMAIL DISPATCH: Lead ID {lead_id}")
+    print(f"📊 AUDIT EMAIL DISPATCH (Link-Based): Lead ID {lead_id}")
     from modules.database.supabase_client import get_supabase
     from workers.audit_generator import generate_audit_for_lead
     import requests
     import os
     import uuid
     import traceback
+    import base64
 
     supabase = get_supabase()
     lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
@@ -320,16 +394,101 @@ def dispatch_audit_email(lead_id: str):
         print(f"⚠️ Audit generation failed: {audit.get('error')} — falling back to generic email")
         return dispatch_email_logic.local(lead_id)  # Fallback to generic
 
+    # Create unique report ID
+    report_id = str(uuid.uuid4())[:12]
+    company = lead.get('company_name') or lead.get('full_name') or 'your company'
+    ar = audit["audit_results"]
+
+    # Upload PDF to Supabase Storage (optional — report page works without it)
+    pdf_url = None
+    try:
+        pdf_bytes = base64.b64decode(audit["pdf_b64"])
+        storage_path = f"audits/{report_id}/{audit['pdf_filename']}"
+        supabase.storage.from_("audit-pdfs").upload(
+            storage_path,
+            pdf_bytes,
+            {"content-type": "application/pdf"}
+        )
+        pdf_url = supabase.storage.from_("audit-pdfs").get_public_url(storage_path)
+        print(f"📁 PDF uploaded to storage: {storage_path}")
+    except Exception as e:
+        print(f"⚠️ PDF storage upload failed (non-fatal): {e}")
+        # Report page still works — just won't have download link
+
+    # Store audit results in audit_reports table
+    try:
+        supabase.table("audit_reports").insert({
+            "report_id": report_id,
+            "lead_id": lead_id,
+            "company_name": company,
+            "website_url": lead.get("website_url"),
+            "audit_results": {
+                "pagespeed": ar["pagespeed"],
+                "privacy": ar["privacy"],
+                "ai_readiness": ar["ai_readiness"],
+                "criticals": ar["criticals"],
+            },
+            "pdf_url": pdf_url,
+        }).execute()
+        print(f"✅ Audit report stored: report_id={report_id}")
+    except Exception as e:
+        print(f"⚠️ audit_reports insert failed: {e}")
+        # Will fallback to email with inline findings (no link)
+
+    # Build report URL
+    report_url = f"https://www.aiserviceco.com/report.html?id={report_id}"
+
     # Tracking pixel
     email_uid = str(uuid.uuid4())[:8]
     tracking_base = os.environ.get("MODAL_TRACKING_URL", "https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run")
-    company = lead.get('company_name') or 'your company'
     tracking_pixel = f'<img src="{tracking_base}?eid={email_uid}&recipient={email}&business={company}" width="1" height="1" style="display:none" />'
 
-    # Build email body with audit findings + tracking pixel
-    html_body = audit["body"] + tracking_pixel
+    # Build email body WITH LINK (no attachment)
+    full_name = lead.get('full_name') or ''
+    biz_keywords = ['llc', 'inc', 'co', 'corp', 'hvac', 'plumbing', 'electric', 
+                    'roofing', 'pest', 'air', 'repair', 'service', 'cleaning',
+                    'landscap', 'construction', 'painting', 'restoration', 'guys',
+                    'pros', 'team', 'group', 'academy', 'church', 'society',
+                    'partners', 'solutions', 'systems', 'brand', 'design']
+    name_lower = full_name.lower()
+    is_business_name = any(kw in name_lower for kw in biz_keywords) or len(full_name.split()) > 3
+    owner = 'there' if (is_business_name or not full_name) else full_name.split(' ')[0]
 
-    # Resend payload WITH PDF attachment
+    score_text = f"{ar['pagespeed'].get('score', 'N/A')}/100" if ar['pagespeed'].get("score") else "unavailable"
+    privacy_text = "missing" if ar['privacy']["status"] == "critical" else "found but may need updates"
+
+    privacy_warning = ""
+    if ar['privacy']["status"] == "critical":
+        privacy_warning = f"""<p style='color: #dc3545;'><b>⚠ Important:</b> Your site appears to be missing a compliant privacy policy under Florida's Digital Bill of Rights (FDBR). This could expose {company} to fines of up to $50,000. I'd like to fix this for you — no cost, no catch, just a local business helping another.</p>"""
+
+    html_body = f"""<html><body style="font-family: Arial, sans-serif; color: #333; max-width: 600px; line-height: 1.6;">
+<p>Hi {owner},</p>
+
+<p>I ran a quick AI visibility audit on <b>{lead.get('website_url', company)}</b> and found some things worth sharing.</p>
+
+<p><b>Key findings:</b></p>
+<ul style="margin: 8px 0;">
+<li>Mobile Performance Score: <b>{score_text}</b></li>
+<li>Privacy Policy (FDBR Compliance): <b>{privacy_text}</b></li>
+<li>AI Lead Capture: <b>{"active" if ar['ai_readiness']["status"] == "good" else "not detected"}</b></li>
+</ul>
+
+{privacy_warning}
+
+<p>I put together a full report with detailed results and recommendations:</p>
+
+<p style="text-align: center; margin: 24px 0;">
+<a href="{report_url}" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; font-weight: bold; text-decoration: none; border-radius: 8px; font-size: 16px;">View Your Full Report →</a>
+</p>
+
+<p>Would you have 10 minutes for a quick call this week? I can walk you through the findings and we can fix the most urgent issue right away.</p>
+
+<p>Best,<br>Dan<br><span style="color: #666; font-size: 12px;">AI Service Co. | owner@aiserviceco.com</span></p>
+</body></html>"""
+
+    html_body += tracking_pixel
+
+    # Resend payload — NO attachment (link instead)
     from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
     payload = {
         "from": from_email,
@@ -337,16 +496,11 @@ def dispatch_audit_email(lead_id: str):
         "to": [email],
         "subject": audit["subject"],
         "html": html_body,
-        "attachments": [
-            {
-                "filename": audit["pdf_filename"],
-                "content": audit["pdf_b64"],  # base64 encoded PDF
-            }
-        ],
         "tags": [
             {"name": "lead_id", "value": lead_id},
-            {"name": "variant", "value": "AUDIT"},
-            {"name": "email_uid", "value": email_uid}
+            {"name": "variant", "value": "AUDIT_LINK"},
+            {"name": "email_uid", "value": email_uid},
+            {"name": "report_id", "value": report_id}
         ]
     }
 
@@ -355,14 +509,14 @@ def dispatch_audit_email(lead_id: str):
             "https://api.resend.com/emails",
             headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
             json=payload,
-            timeout=30  # Larger payload with PDF
+            timeout=15  # Smaller payload now (no PDF)
         )
 
         if r.status_code in [200, 201]:
             resend_data = r.json()
             resend_email_id = resend_data.get("id", "")
-            ar = audit["audit_results"]
-            print(f"✅ AUDIT EMAIL SENT via Resend (ID: {resend_email_id})")
+            print(f"✅ AUDIT EMAIL SENT (Link-Based) via Resend (ID: {resend_email_id})")
+            print(f"   Report: {report_url}")
             print(f"   PageSpeed: {ar['pagespeed'].get('score','N/A')}/100 | Privacy: {ar['privacy']['status']} | Criticals: {ar['criticals']}")
 
             # Update lead status
@@ -374,7 +528,7 @@ def dispatch_audit_email(lead_id: str):
                 "channel": "email",
                 "company": company,
                 "status": "sent",
-                "variant_id": "AUDIT",
+                "variant_id": "AUDIT_LINK",
                 "variant_name": audit["subject"],
                 "correlation_id": resend_email_id,
                 "payload": {
@@ -382,12 +536,13 @@ def dispatch_audit_email(lead_id: str):
                     "email_uid": email_uid,
                     "to": email,
                     "from": from_email,
-                    "type": "audit_email",
+                    "type": "audit_email_link",
+                    "report_id": report_id,
+                    "report_url": report_url,
                     "pagespeed_score": ar['pagespeed'].get('score'),
                     "privacy_status": ar['privacy']['status'],
                     "ai_readiness": ar['ai_readiness']['status'],
                     "criticals": ar['criticals'],
-                    "pdf_filename": audit["pdf_filename"],
                 }
             }).execute()
 
@@ -562,6 +717,16 @@ def auto_outreach_loop():
     
     for lead in leads:
         lead_id = lead['id']
+        
+        # --- NEW: AI DISPATCH ROUTING (Phase 13) ---
+        try:
+            from modules.dispatch.router import route_lead
+            route_lead(lead_id)
+            # Re-fetch lead to get assigned_to/niche updates
+            lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
+        except Exception as e:
+            print(f"🚦 Routing Error for {lead_id}: {e}")
+            
         email = lead.get('email')
         phone = lead.get('phone')
         
@@ -725,9 +890,22 @@ def dispatch_followup_email(lead_id: str, step: int):
         print("❌ RESEND_API_KEY missing")
         return False
     
-    first_name = (lead.get('full_name') or 'there').split(' ')[0]
-    company = lead.get('company_name') or 'your company'
-    niche = lead.get('niche') or 'your industry'
+    full_name = lead.get('full_name') or ''
+    company = lead.get('company_name') or full_name or 'your company'
+    niche = lead.get('niche') or 'local'
+    
+    # Smart greeting: detect business name vs person name
+    biz_keywords = ['llc', 'inc', 'co', 'corp', 'hvac', 'plumbing', 'electric', 
+                    'roofing', 'pest', 'air', 'repair', 'service', 'cleaning',
+                    'landscap', 'construction', 'painting', 'restoration', 'guys',
+                    'pros', 'team', 'group', 'academy', 'church', 'society',
+                    'partners', 'solutions', 'systems', 'brand', 'design']
+    name_lower = full_name.lower()
+    is_business_name = any(kw in name_lower for kw in biz_keywords) or len(full_name.split()) > 3
+    if is_business_name or not full_name:
+        first_name = 'there'
+    else:
+        first_name = full_name.split(' ')[0]
     from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
     email_uid = str(uuid.uuid4())[:8]
     

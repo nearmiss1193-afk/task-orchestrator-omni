@@ -1,0 +1,50 @@
+﻿6:<script async src="https://www.googletagmanager.com/gtag/js?id=G-XZK2Z9K3TW"></script>
+7:<script>
+12:</script>
+15:    <script>
+38:    </script>
+41:    <meta name="description"
+64:    <meta property="og:description"
+74:    <meta name="twitter:description" content="Deploy your autonomous AI workforce in 24 hours.">
+78:    <script type="application/ld+json">
+86:        "description": "AI-powered business automation for service industries. Deploy voice AI, automated outreach, and intelligent CRM in 24 hours.",
+101:    </script>
+104:    <script type="application/ld+json">
+117:        "description": "Autonomous AI workforce including voice AI assistants, automated lead outreach, and intelligent CRM integration."
+119:    </script>
+122:    <script defer src="/_vercel/insights/script.js"></script>
+420:        .feature-img img {
+574:    <script type="text/javascript">
+585:                    t = l.createElement(i); t.async = 1; t.src = "https://www.clarity.ms/tag/fplqf0e3zk";
+587:                })(window, document, "clarity", "script", "fplqf0e3zk");
+590:                var gaScript = document.createElement('script');
+591:                gaScript.async = true;
+592:                gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-8W75D6LNDP";
+593:                document.head.appendChild(gaScript);
+617:    </script>
+620:    <script>
+630:    </script>
+790:                        <iframe src="https://www.youtube.com/embed/CeLRdL4WAJQ"
+802:                        <iframe src="https://www.youtube.com/embed/mPlJmaJ3Y2k" title="AI Service Co Mobile Demo"
+958:                    <iframe id="contactIframe" loading="lazy" src="about:blank"
+959:                        data-src="https://links.aiserviceco.com/widget/form/7TTJ1CUAFjhON69ZsOZK"
+973:                    <iframe id="calendarIframe" loading="lazy" src="about:blank"
+974:                        data-src="https://links.aiserviceco.com/widget/booking/YWQcHuXXznQEQa7LAWeB"
+981:            <!-- Modal Script -->
+982:            <script>
+986:                    if (iframe.src === 'about:blank') {
+987:                        iframe.src = iframe.dataset.src;
+999:                    if (iframe.src === 'about:blank') {
+1000:                        iframe.src = iframe.dataset.src;
+1016:            </script>
+1165:                    <li><a href="javascript:void(0)" onclick="startSarahCall()">≡ƒô₧ Talk to Sarah AI</a></li>
+1186:    <script>
+1188:        // https://github.com/VapiAI/client-sdk-html-script-tag
+1221:            g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+1234:        })(document, "script");
+1247:    </script>
+1249:    <script>
+1296:    </script>
+1301:        iframe[src*="vapi.ai"],
+1310:    <script>
+1319:    </script>

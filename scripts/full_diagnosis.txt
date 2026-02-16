@@ -2,8 +2,9 @@
 1. VAPI SARAH ASSISTANT CONFIG
 ============================================================
 Name: Sarah Spart#
-serverUrl: NONE
-serverMessages: NOT SET
+serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
+serverMessages: ['end-of-call-report', 'status-update', 'hang', 'speech-update', 'transcript', 'function-call', 'assistant.started', 'conversation-update']
+server.url: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
 
 Phone: +19362984339
 Phone serverUrl: https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook.modal.run
@@ -12,6 +13,42 @@ Phone assistantId: ae717f29-6542-422f-906f-ee7ba6fa0bfe
 ============================================================
 2. RECENT VAPI CALLS (last 10)
 ============================================================
+
+  Call: 019c4ed0-ddbe-7336-bd78-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T22:27:17 | Ended: 2026-02-11T22:28:01
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4ea5-e8c0-711d-957f-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T21:40:21 | Ended: 2026-02-11T21:40:37
+  Reason: customer-ended-call
+  Assistant: a04bd175-d106-41e1-9
+
+  Call: 019c4ea5-dbca-7998-bca3-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T21:40:18 | Ended: 2026-02-11T21:40:19
+  Reason: customer-ended-call
+  Assistant: a04bd175-d106-41e1-9
+
+  Call: 019c4ea3-3041-7ff9-a5d8-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T21:37:23 | Ended: 2026-02-11T21:38:04
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4e84-4d5f-7000-80c9-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T21:03:39 | Ended: 2026-02-11T21:04:11
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
+
+  Call: 019c4e6e-d165-7663-942f-
+  Status: ended | Customer: +13529368152
+  Created: 2026-02-11T20:40:11 | Ended: 2026-02-11T20:41:03
+  Reason: customer-ended-call
+  Assistant: 1a797f12-e2dd-4f7f-b
 
   Call: 019c4e47-02a4-7668-88df-
   Status: ended | Customer: +13529368152
@@ -37,42 +74,6 @@ Phone assistantId: ae717f29-6542-422f-906f-ee7ba6fa0bfe
   Reason: customer-ended-call
   Assistant: 1a797f12-e2dd-4f7f-b
 
-  Call: 019c4e2b-3670-7888-bd01-
-  Status: ended | Customer: +13529368152
-  Created: 2026-02-11T19:26:20 | Ended: 2026-02-11T19:27:27
-  Reason: customer-ended-call
-  Assistant: 1a797f12-e2dd-4f7f-b
-
-  Call: 019c4e01-f9d0-7dd3-aae9-
-  Status: ended | Customer: +13529368152
-  Created: 2026-02-11T18:41:18 | Ended: 2026-02-11T18:42:03
-  Reason: customer-ended-call
-  Assistant: 1a797f12-e2dd-4f7f-b
-
-  Call: 019c4ded-beac-711d-943d-
-  Status: ended | Customer: +13529368152
-  Created: 2026-02-11T18:19:12 | Ended: 2026-02-11T18:21:01
-  Reason: customer-ended-call
-  Assistant: 1a797f12-e2dd-4f7f-b
-
-  Call: 019c4dde-3a6f-788f-9596-
-  Status: ended | Customer: +13529368152
-  Created: 2026-02-11T18:02:15 | Ended: 2026-02-11T18:03:50
-  Reason: customer-ended-call
-  Assistant: 1a797f12-e2dd-4f7f-b
-
-  Call: 019c4dc6-a2a3-733b-9729-
-  Status: ended | Customer: +13529368152
-  Created: 2026-02-11T17:36:29 | Ended: 2026-02-11T17:37:47
-  Reason: customer-ended-call
-  Assistant: 1a797f12-e2dd-4f7f-b
-
-  Call: 019c4db7-9f08-777e-91d1-
-  Status: ended | Customer: +13529368152
-  Created: 2026-02-11T17:20:05 | Ended: 2026-02-11T17:21:30
-  Reason: customer-ended-call
-  Assistant: 1a797f12-e2dd-4f7f-b
-
 ============================================================
 3. WHERE IS 'MICHAEL' STORED?
 ============================================================
@@ -81,19 +82,19 @@ customer_name field: 'None'
 phone: +13529368152
 status: active
 updated_at: None
-last_interaction: 2026-02-09T16:10:18.970848+00:00
+last_interaction: 2026-02-11T22:30:58.585438+00:00
 context_summary:
 {
-    "contact_name": "Michael",
+    "history": "\n[Voice inbound 2026-02-11 22:28]: Tony from Tony's Tires called after receiving a flyer and requested a callback from the owner, Dan. He provided his name, business type, and phone number, and the AI agent confirmed the information would be passed along. The outcome is a requested callback for Dan to follow up.",
+    "contact_name": "Sarah",
     "questions_asked": [
-        "challenge",
-        "business_type"
+        "business_type",
+        "authority",
+        "challenge"
     ]
 }
 
 MICHAEL APPEARS IN:
-  -> context_summary.contact_name: 'Michael'
-  -> raw context_summary contains 'Michael'
 
 All customer_memory records:
 ERROR: {'message': 'column customer_memory.customer_name does not exist', 'code': '42703', 'hint': None, 'details': None}
@@ -103,6 +104,48 @@ ERROR: {'message': 'column customer_memory.customer_name does not exist', 'code'
 ============================================================
 Dan's customer_id: 37610d10-7d62-436a-aa3b-eacd197b74bb
 Found 15 conversation logs:
+
+  [2026-02-11T22:30:58] sms/inbound
+    User: Hi
+    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T22:28:08] voice/inbound
+    User: AI: Hi there, this is Sarah from AI Service Company. Thanks
+User: Yeah. I just got 1 of your brochures or flyers at my b
+    Sarah: Call summary: Tony from Tony's Tires called after receiving a flyer and requested a callback from the owner, Dan. He pro
+
+  [2026-02-11T21:40:41] voice/inbound
+    User: AI: hello
+
+    Sarah: 
+
+  [2026-02-11T21:38:11] voice/inbound
+    User: AI: Hi there, this is Sarah from AI Service Company. Thanks for connecting.
+User: Hi, Sarah. I need you to see if you ca
+    Sarah: Call summary: Joe from "Fuck Off Everywhere" called, requesting to speak directly with the owner, Dan. No specific pain 
+
+  [2026-02-11T21:04:18] voice/inbound
+    User: AI: Hi there, this is Sarah from AI Service Company. Thanks for connecting.
+User: Hi. How are you doing?
+AI: Hey, I'm do
+    Sarah: Call summary: Joe from AAA Tire called after receiving a brochure and requested a callback from the owner to discuss get
+
+  [2026-02-11T20:41:09] voice/inbound
+    User: AI: Hi there. This is Sarah from AI Service Company. Thanks for connecting.
+User: Hi. I just got 1 of those, uh, flyers.
+    Sarah: Call summary: Joe from AAA Service Tire called after receiving a flyer. He did not express specific pain points or objec
+
+  [2026-02-11T20:05:21] sms/inbound
+    User: Hi
+    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
+
+  [2026-02-11T20:04:21] sms/inbound
+    User: Just me
+    Sarah: Got it, Daniel! When are you looking to get something like this in place?
+
+  [2026-02-11T20:03:15] sms/inbound
+    User: My name is Daniel
+    Sarah: Hey Daniel, sorry for the mix-up! Are you the one making decisions on new tools, or should I loop someone else in?
 
   [2026-02-11T19:55:28] sms/inbound
     User: Hi
@@ -127,42 +170,6 @@ Found 15 conversation logs:
   [2026-02-11T19:41:47] sms/inbound
     User: Me only
     Sarah: Got it, Michael! Are you the one making decisions on new tools, or should I loop someone else in?
-
-  [2026-02-11T19:41:30] sms/inbound
-    User: Yea
-    Sarah: Got it, Michael! Are you the one making decisions on new tools, or should I loop someone else in?
-
-  [2026-02-11T19:41:16] sms/inbound
-    User: Yes
-    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
-
-  [2026-02-11T19:41:02] sms/inbound
-    User: Yes
-    Sarah: Hey Michael, great to hear from you! Are you the one making decisions on new tools, or should I loop someone else in?
-
-  [2026-02-11T19:40:42] sms/inbound
-    User: Yeah I just got one of the year flyers at my store I was wanting to get somebody give me a call back my name is Jon my p
-    Sarah: Hey Jon, thanks for reaching out! I’m happy to get someone to call you. Are you the one making decisions on new tools, o
-
-  [2026-02-11T19:37:07] sms/inbound
-    User: Ok
-    Sarah: Hey Michael, got it! Are you the one making decisions on new tools, or should I loop someone else in?
-
-  [2026-02-11T19:14:28] sms/inbound
-    User: Hi
-    Sarah: Hey Michael, great to hear from you! Can you tell me if there’s a specific challenge or goal you’re working on right now
-
-  [2026-02-09T16:10:18] sms/inbound
-    User: My name is not Michael
-    Sarah: My apologies for the mix-up! Can you tell me your name, and are you the one making decisions on new tools for your busin
-
-  [2026-02-09T16:08:46] sms/inbound
-    User: Well if you don't have my name from the previous shit I'm guessing you don't have the conversation either
-    Sarah: Hey Michael, I’m sorry for any mix-up! I’ve got your name and our past chat noted. Let’s pick up where we left off—are y
-
-  [2026-02-09T16:06:07] sms/inbound
-    User: Were you able to remember the conversation we just had one phone
-    Sarah: Hey Michael, I’ve got the details from our earlier chat. Just to make sure we're on the same page, are you the one makin
 
 ============================================================
 5. VAPI DEBUG LOGS (recent)

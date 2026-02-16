@@ -18,6 +18,7 @@ import base64
 import requests
 import traceback
 from urllib.parse import urlparse
+from google import genai # 2026 GenAI SDK
 
 
 # ──────────────────────────────────────────────────────────
@@ -44,57 +45,66 @@ def fetch_pagespeed(website_url: str) -> dict:
     if not website_url.startswith("http"):
         website_url = f"https://{website_url}"
 
-    # Use API key to avoid 429 rate limits (same key works for PageSpeed + Places)
-    api_key = os.environ.get("GOOGLE_PLACES_API_KEY", "")
-    if not api_key or api_key == "AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY":
-        api_key = "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc"  # Fallback
+    # Use API key rotation to avoid 429 rate limits
+    import random
+    api_keys = [
+        os.environ.get("GOOGLE_PLACES_API_KEY"),
+        os.environ.get("GOOGLE_API_KEY"),
+        "AIzaSyCtDhszpASBGBrW7A7tuX3N8txDflx_i4o", # Empire-Email-Integration
+        "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc", # Fallback Key
+        "AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY"  # Secondary Fallback
+    ]
+    api_keys = [k for k in api_keys if k and k != "AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY" or k] # Clean list
     
-    api_url = (
-        f"https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
-        f"?url={website_url}&strategy=mobile&category=performance&key={api_key}"
-    )
+    # Shuffle or rotate
+    random.shuffle(api_keys)
+    
+    last_error = None
+    for api_key in api_keys:
+        api_url = (
+            f"https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
+            f"?url={website_url}&strategy=mobile&category=performance&key={api_key}"
+        )
+        try:
+            r = requests.get(api_url, timeout=45)
+            if r.status_code == 200:
+                data = r.json()
+                lighthouse = data.get("lighthouseResult", {})
+                categories = lighthouse.get("categories", {})
+                perf = categories.get("performance", {})
+                score = perf.get("score")  # 0.0 to 1.0
 
-    try:
-        r = requests.get(api_url, timeout=30)
-        if r.status_code != 200:
-            print(f"  PageSpeed API returned {r.status_code}")
-            result["status"] = "error"
-            return result
+                if score is not None:
+                    result["raw_score"] = score
+                    result["score"] = int(score * 100)
 
-        data = r.json()
-        lighthouse = data.get("lighthouseResult", {})
-        categories = lighthouse.get("categories", {})
-        perf = categories.get("performance", {})
-        score = perf.get("score")  # 0.0 to 1.0
+                    if result["score"] >= 90:
+                        result["status"] = "good"
+                    elif result["score"] >= 50:
+                        result["status"] = "warning"
+                    else:
+                        result["status"] = "critical"
 
-        if score is not None:
-            result["raw_score"] = score
-            result["score"] = int(score * 100)
+                # Extract key metrics
+                audits = lighthouse.get("audits", {})
+                result["fcp"] = audits.get("first-contentful-paint", {}).get("displayValue", "N/A")
+                result["lcp"] = audits.get("largest-contentful-paint", {}).get("displayValue", "N/A")
+                result["cls"] = audits.get("cumulative-layout-shift", {}).get("displayValue", "N/A")
+                result["speed_index"] = audits.get("speed-index", {}).get("displayValue", "N/A")
 
-            if result["score"] >= 90:
-                result["status"] = "good"
-            elif result["score"] >= 50:
-                result["status"] = "warning"
+                print(f"  ✅ PageSpeed Success ({api_key[:8]}...): {result['score']}/100")
+                return result
+            elif r.status_code == 429:
+                print(f"  ⚠️ Key {api_key[:8]}... rate limited (429), rotating...")
+                continue
             else:
-                result["status"] = "critical"
-
-        # Extract key metrics
-        audits = lighthouse.get("audits", {})
-        fcp = audits.get("first-contentful-paint", {})
-        lcp = audits.get("largest-contentful-paint", {})
-        cls_audit = audits.get("cumulative-layout-shift", {})
-        si = audits.get("speed-index", {})
-
-        result["fcp"] = fcp.get("displayValue", "N/A")
-        result["lcp"] = lcp.get("displayValue", "N/A")
-        result["cls"] = cls_audit.get("displayValue", "N/A")
-        result["speed_index"] = si.get("displayValue", "N/A")
-
-        print(f"  PageSpeed: {result['score']}/100 ({result['status']})")
-
-    except Exception as e:
-        print(f"  PageSpeed error: {e}")
-        result["status"] = "error"
+                print(f"  ❌ PageSpeed API {r.status_code} for key {api_key[:8]}...")
+                last_error = f"HTTP {r.status_code}"
+                continue
+        except Exception as e:
+            print(f"  ❌ PageSpeed Connection Error for {api_key[:8]}...: {e}")
+            last_error = str(e)
+            continue
 
     return result
 
@@ -214,6 +224,49 @@ def check_ai_readiness(website_url: str) -> dict:
         print(f"  AI readiness check error: {e}")
 
     return result
+
+
+# ──────────────────────────────────────────────────────────
+#  VEO 3.1 VIDEO TEASER (Cinematic Pattern Interrupt)
+# ──────────────────────────────────────────────────────────
+
+def generate_veo_teaser(company_name: str, pagespeed_score: int) -> str:
+    """
+    Generates a personalized 10-second cinematic video clip using Veo 3.1.
+    This acts as a high-leverage 'Pattern Interrupt' in SMS/Email.
+    """
+    try:
+        # Initialize GenAI Client (requires VEO_PRO_KEY in environment)
+        api_key = os.environ.get("VEO_PRO_KEY") or os.environ.get("GOOGLE_API_KEY")
+        if not api_key:
+            print("  ⚠️ Skipping Veo teaser: No API key found")
+            return None
+            
+        client = genai.Client(api_key=api_key)
+        
+        # Design the cinematic prompt
+        video_prompt = (
+            f"Cinematic 4k drone shot of Lakeland, Florida. "
+            f"Overlay 3D glass text: '{company_name}'. "
+            f"The text transitions to a glowing {'red' if pagespeed_score < 50 else 'orange'} "
+            f"gauge showing {pagespeed_score}/100. "
+            f"End with a digital glitch effect and the words 'We fixed this.'"
+        )
+        
+        print(f"  🎬 Generating Veo Teaser for {company_name}...")
+        
+        # Trigger Generation (Async - but we wait for URL)
+        video_request = client.models.generate_video(
+            model="veo-3.1-ultra",
+            prompt=video_prompt,
+            duration_seconds=10,
+            aspect_ratio="9:16" # Optimized for Mobile (SMS)
+        )
+        
+        return video_request.url
+    except Exception as e:
+        print(f"  ❌ Veo Generation Failed: {e}")
+        return None
 
 
 # ──────────────────────────────────────────────────────────
@@ -520,6 +573,10 @@ def generate_audit_for_lead(lead: dict) -> dict:
     print("  [3/3] Checking AI readiness...")
     ai_readiness = check_ai_readiness(website)
 
+    # 4. Generate Veo Teaser (Phase 12 Turbo)
+    print("  [4/4] Generating Veo 3.1 Video Teaser...")
+    video_url = generate_veo_teaser(company, pagespeed.get("score") or 0)
+
     # 4. Generate PDF
     print("  Generating PDF report...")
     try:
@@ -572,6 +629,13 @@ def generate_audit_for_lead(lead: dict) -> dict:
 <p>Best,<br>Dan<br><span style="color: #666; font-size: 12px;">AI Service Co. | dan@aiserviceco.com</span></p>
 </body></html>"""
 
+    # 6. Trigger Social Multiplier (Phase 13)
+    try:
+        from workers.social_poster import draft_social_multiplier_posts
+        draft_social_multiplier_posts(lead_id=lead.get("id"))
+    except Exception as e:
+        print(f"  Social Multiplier trigger failed: {e}")
+
     return {
         "success": True,
         "pdf_b64": pdf_b64,
@@ -583,5 +647,6 @@ def generate_audit_for_lead(lead: dict) -> dict:
             "privacy": privacy,
             "ai_readiness": ai_readiness,
             "criticals": criticals,
+            "video_teaser_url": video_url,
         }
     }

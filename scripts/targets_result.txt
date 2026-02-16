@@ -1,0 +1,20 @@
+﻿LAST 5 TOUCH PAYLOADS:
+  TO: RedeemedAirAndHVAC@Gmail.com | company: your company | resend: cd72732e-e28e-400b-a05f-1abe3144e51b
+  TO: hvacapplianceguys@gmail.com | company: your company | resend: f880f254-2cc1-4a80-bc34-d28a2c5939a5
+  TO: quotes@dallashvac.com | company: your company | resend: d1db77b9-6b28-4caf-a68e-cd772b67a258
+  TO: RedeemedAirAndHVAC@Gmail.com | company: your company | resend: b8280a24-079b-48b5-8205-1b5950563e19
+  TO: hvacapplianceguys@gmail.com | company: your company | resend: 7ff954df-483f-410b-9753-4a9c0bee78e2
+
+Total outbound_touches: 1449
+
+SAMPLE 'outreach_sent' LEADS:
+   | info@bestpestcfl.com | (407) 679-6808
+    -> Touches found by phone: 1
+   | info@reliablepressurepros.com | (407) 924-7562
+    -> Touches found by phone: 1
+   | info@drakepest.com | (407) 753-7607
+    -> Touches found by phone: 1
+   | dev@monkee-boy.com | (407) 265-0665
+    -> Touches found by phone: 1
+   | greenworkslandscape22@gmail.com | (407) 300-8337
+    -> Touches found by phone: 2
