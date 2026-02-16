@@ -41,6 +41,7 @@ def get_base_image():
         .add_local_dir("modules/vapi", remote_path="/root/modules/vapi")
         .add_local_dir("modules/learning", remote_path="/root/modules/learning")
         .add_local_dir("modules/bridge", remote_path="/root/modules/bridge")
+        .add_local_dir("modules/handlers", remote_path="/root/modules/handlers")
         .add_local_file("modules/outbound_dialer.py", remote_path="/root/modules/outbound_dialer.py")
     )
 

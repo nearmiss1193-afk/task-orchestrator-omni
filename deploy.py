@@ -273,6 +273,25 @@ def track_email_open(request, eid: str = "", recipient: str = "", business: str 
 # ==== SMS INBOUND HANDLER (Sarah AI Reply with Memory) ====
 @app.function(image=image, secrets=[VAULT])
 @modal.fastapi_endpoint(method="POST")
+def ghl_webhook(data: dict = {}):
+    """
+    Consolidated GHL Webhook Listener (Hardened Phase 16)
+    Handles ContactUpdate, OpportunityUpdate, etc.
+    """
+    from modules.handlers.webhooks import ghl_webhook_logic
+    return ghl_webhook_logic(data)
+
+@app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="POST")
+def appointment_webhook(data: dict = {}):
+    """
+    Legacy compatible appointment endpoint
+    """
+    from modules.handlers.webhooks import ghl_webhook_logic
+    # Re-use logic as it handles generic payloads too
+    return ghl_webhook_logic(data)
+
+@modal.fastapi_endpoint(method="POST")
 def sms_inbound(data: dict = {}):
     """
     Receives inbound SMS from GHL webhook, generates Sarah AI reply with persistent memory.

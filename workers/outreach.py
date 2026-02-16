@@ -285,8 +285,19 @@ Dan"""
     tracking_pixel = f'<img src="{tracking_base}?eid={email_uid}&recipient={email}&business={company}" width="1" height="1" style="display:none" />'
     
     # Build HTML body
+    video_html = ""
+    raw_research = json.loads(lead.get('raw_research') or '{}')
+    video_url = raw_research.get('video_teaser_url')
+    if video_url:
+        video_html = f"""<p style="margin-top: 20px; padding: 12px; background: #f8fafc; border-left: 4px solid #ef4444; border-radius: 4px;">
+        <b>🎬 Quick Video Teaser for {company}:</b><br>
+        I made a 10s cinematic preview of your AI visibility audit. Check it out here:<br>
+        <a href="{video_url}" style="color: #2563eb; font-weight: bold; text-decoration: underline;">Watch Video Teaser →</a>
+        </p>"""
+
     html_body = f"""<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.6;">
 {body_text.replace(chr(10), '<br>')}
+{video_html}
 </div>
 {tracking_pixel}"""
     
@@ -444,22 +455,13 @@ def dispatch_audit_email(lead_id: str):
     tracking_pixel = f'<img src="{tracking_base}?eid={email_uid}&recipient={email}&business={company}" width="1" height="1" style="display:none" />'
 
     # Build email body WITH LINK (no attachment)
-    full_name = lead.get('full_name') or ''
-    biz_keywords = ['llc', 'inc', 'co', 'corp', 'hvac', 'plumbing', 'electric', 
-                    'roofing', 'pest', 'air', 'repair', 'service', 'cleaning',
-                    'landscap', 'construction', 'painting', 'restoration', 'guys',
-                    'pros', 'team', 'group', 'academy', 'church', 'society',
-                    'partners', 'solutions', 'systems', 'brand', 'design']
-    name_lower = full_name.lower()
-    is_business_name = any(kw in name_lower for kw in biz_keywords) or len(full_name.split()) > 3
-    owner = 'there' if (is_business_name or not full_name) else full_name.split(' ')[0]
-
-    score_text = f"{ar['pagespeed'].get('score', 'N/A')}/100" if ar['pagespeed'].get("score") else "unavailable"
-    privacy_text = "missing" if ar['privacy']["status"] == "critical" else "found but may need updates"
-
-    privacy_warning = ""
-    if ar['privacy']["status"] == "critical":
-        privacy_warning = f"""<p style='color: #dc3545;'><b>⚠ Important:</b> Your site appears to be missing a compliant privacy policy under Florida's Digital Bill of Rights (FDBR). This could expose {company} to fines of up to $50,000. I'd like to fix this for you — no cost, no catch, just a local business helping another.</p>"""
+    video_html = ""
+    if ar.get("video_teaser_url"):
+        video_html = f"""<p style="margin: 24px 0; padding: 16px; background: #0f172a; color: #f8fafc; border-radius: 12px; border: 1px solid #334155;">
+        <span style="color: #38bdf8;">🎬 <b>Cinematic Pattern Interrupt:</b></span><br>
+        I generated a 10-second 4K preview of what your brand looks like with full AI optimization:<br>
+        <a href="{ar['video_teaser_url']}" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">Watch Cinematic Teaser →</a>
+        </p>"""
 
     html_body = f"""<html><body style="font-family: Arial, sans-serif; color: #333; max-width: 600px; line-height: 1.6;">
 <p>Hi {owner},</p>
@@ -474,6 +476,8 @@ def dispatch_audit_email(lead_id: str):
 </ul>
 
 {privacy_warning}
+
+{video_html}
 
 <p>I put together a full report with detailed results and recommendations:</p>
 
@@ -557,12 +561,17 @@ def dispatch_audit_email(lead_id: str):
         return False
 
 @app.function(image=image, secrets=[VAULT])
-def dispatch_sms_logic(lead_id: str, message: str = None):
-    """Dispatches SMS via GHL webhook. Requires REAL GHL contact ID (not SCRAPED_)."""
-    print(f"📱 SMS DISPATCH: Lead ID {lead_id}")
+def dispatch_sms_logic(lead_id: str, message: str = None, media_url: str = None):
+    """
+    Dispatches SMS/MMS via GHL webhook.
+    Requires REAL GHL contact ID (not SCRAPED_).
+    MMS Pivot: Accepts media_url for cinematic pattern interrupts.
+    """
+    print(f"📱 SMS/MMS DISPATCH: Lead ID {lead_id}")
     from modules.database.supabase_client import get_supabase
     import requests
     import os
+    import json
     import traceback
     
     supabase = get_supabase()
@@ -572,6 +581,13 @@ def dispatch_sms_logic(lead_id: str, message: str = None):
         print(f"❌ SMS: Lead {lead_id} not found")
         return False
     
+    # Check for video teaser if media_url not provided
+    if not media_url:
+        try:
+            raw = json.loads(lead.get('raw_research') or '{}')
+            media_url = raw.get('video_teaser_url')
+        except: pass
+
     hook_url = os.environ.get("GHL_SMS_WEBHOOK_URL")
     if not hook_url:
         print("❌ Error: GHL_SMS_WEBHOOK_URL missing")
@@ -593,8 +609,9 @@ def dispatch_sms_logic(lead_id: str, message: str = None):
         "phone": phone,
         "contact_id": ghl_id,
         "first_name": lead.get('full_name', '').split(' ')[0],
-        "message": message or "hey, saw your site. had a quick question. you around?",
-        "type": "SMS"
+        "message": message or "hey, saw your site. had a quick question. i made a 10s video scan of your mobile presence, thought you'd want to see it. you around?",
+        "media_url": media_url,
+        "type": "SMS" if not media_url else "MMS"
     }
     
     try:
