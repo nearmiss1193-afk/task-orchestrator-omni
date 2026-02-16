@@ -16,15 +16,16 @@
 | PageSpeed Key Rotation | ✅ LIVE | 4x Hot-Swap Resiliency |
 | Manus Strike v1 | ✅ LIVE | Recruitment Persona active | - |
 | Social Multiplier (Image) | ✅ LIVE | Automated 2x/day Image+Text updates | - |
-| Sunday Safety Protocol | ✅ VERIFIED | 0 outbound noise on Sundays | - |
+| Auto-Newsletter | ✅ LIVE | `weekly_newsletter` (Mondays) |
+| System Save Protocol v2 | ✅ LIVE | Memory + Gaps Email reporting |
 
 ## Known Gaps 🔴
 
 | Capability | Status | Location | Notes |
 |-----------|--------|----------|-------|
-| Veo 3 Video Ops | ✅ BLOCKED | Code 172 | Ayrshare Plan Upgrade Required |
-| AI Dispatch Flow | ✅ LIVE | Trade-specific dispatching (HVAC, Plumbing) | Persona active |
-| Auto-Newsletter | No automated weekly digest to clients | LOW | Resend API exists |
+| Veo 3 Video Ops | ✅ BLOCKED | Code 172 | Ayrshare Plan Upgrade Required ($) |
+| Sovereign Command Center | 🔴 PLANNED | Vercel Dashboard | Phase 15 - Real-time monitoring |
+| GHL CRM Deep Sync | 🟡 PARTIAL | PIT Token Limited | Seeking workaround for full API access |
 
 ## Cron Budget
 

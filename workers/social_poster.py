@@ -140,7 +140,22 @@ def publish_social_multiplier_posts():
                         print(f"  ❌ Fallback Webhook failed: {e}")
                 
                 if success:
-                    # Update status only on success
+                    # Log to high-availability conversation_logs for dashboard
+                    try:
+                        supabase.table("conversation_logs").insert({
+                            "channel": "social",
+                            "direction": "outbound",
+                            "content": f"Broadcast to {draft['platform']}: {draft['content']}",
+                            "metadata": {
+                                "platform": draft['platform'],
+                                "source": "Sovereign Social Multiplier",
+                                "video_url": draft.get("video_url")
+                            }
+                        }).execute()
+                    except Exception as log_err:
+                        print(f"  ⚠️ Log to conversation_logs failed (continuing): {log_err}")
+
+                    # Update status in contacts_master
                     draft["status"] = "published"
                     draft["published_at"] = datetime.now(timezone.utc).isoformat()
                     updated = True

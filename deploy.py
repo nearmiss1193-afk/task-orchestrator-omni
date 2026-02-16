@@ -22,7 +22,8 @@ def get_base_image():
             "psycopg2-binary",
             "reportlab",
             "google-genai",
-            "social-post-api"
+            "social-post-api",
+            "resend"
         )
         .run_commands("playwright install --with-deps chromium")
         .add_local_dir("utils", remote_path="/root/utils")
@@ -889,8 +890,21 @@ def vapi_webhook(data: dict = None):
 
 
 
-# ==== SYSTEM HEARTBEAT + CALL MONITOR (2-CRON app: heartbeat+outreach, zombie apps hold 2) ====
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+# ==== SYSTEM ORCHESTRATOR (Option 1: Consolidated Heartbeat + Outreach) ====
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"), timeout=600)
+def system_orchestrator():
+    """Consolidated 5-minute cron: health, triggers, and outreach."""
+    print("🚀 ORCHESTRATOR: Starting cycle...")
+    
+    # 1. Run Heartbeat Logic (Health + Cloud Triggers)
+    system_heartbeat()
+    
+    # 2. Run Outreach Logic (Recycling + Execution)
+    auto_outreach_loop()
+    
+    print("✅ ORCHESTRATOR: Cycle complete.")
+
+@app.function(image=image, secrets=[VAULT])
 def system_heartbeat():
     """Health check + Vapi call monitor (polls for completed calls, notifies Dan)."""
     import os, json
@@ -1344,7 +1358,7 @@ def trigger_cinematic_strike():
     from scripts.trigger_cinematic_strike import run_phase12_strike
     return run_phase12_strike()
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+@app.function(image=image, secrets=[VAULT])
 def auto_outreach_loop():
     """Triggers autonomous outreach engine with lead recycling."""
     from datetime import datetime, timezone, timedelta
@@ -2242,6 +2256,15 @@ def trigger_video_verification():
     with open("video_verification_results.json", "w") as f:
         json.dump(data, f, indent=2)
     print("\n✅ VIDEO VERIFICATION COMPLETED. Results in: video_verification_results.json")
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 14 * * 1"), timeout=600)
+def weekly_newsletter():
+    """Weekly content loop — Phase 14 Value Retention (Mondays at 9 AM EST)."""
+    from scripts.weekly_digest import run_weekly_digest
+    print("📧 NEWSLETTER: Starting weekly run...")
+    run_weekly_digest(dry_run=False)
+    print("✅ NEWSLETTER: Run complete.")
+
 
 if __name__ == "__main__":
     print("⚫ ANTIGRAVITY v5.0 - SOVEREIGN DEPLOY")

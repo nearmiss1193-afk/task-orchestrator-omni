@@ -8,12 +8,12 @@ sb = create_client(url, key)
 
 # Critical config to store
 configs = [
-    {'key': 'ghl_form_id', 'status': '7TTJ1CUAFjhON69ZsOZK', 'notes': 'CORRECT form ID - links.aiserviceco.com'},
-    {'key': 'ghl_calendar_id', 'status': 'YWQcHuXXznQEQa7LAWeB', 'notes': 'CORRECT calendar ID - links.aiserviceco.com'},
-    {'key': 'ghl_embed_domain', 'status': 'links.aiserviceco.com', 'notes': 'NOT api.leadconnectorhq.com or link.msgsndr.com'},
-    {'key': 'vapi_public_key', 'status': '3b065ff0-a721-4b66-8255-30b6b8d6daab', 'notes': 'Vapi widget API key'},
-    {'key': 'vapi_assistant_id', 'status': '1a797f12-e2dd-4f7f-b2c5-08c38c74859a', 'notes': 'Sarah assistant ID'},
-    {'key': 'vapi_widget_style', 'status': 'pill', 'notes': 'Talk to Sales, Ask anything, mic icon, #f59e0b yellow'},
+    {'key': 'ghl_form_id', 'status': 'idle', 'value': {'id': '7TTJ1CUAFjhON69ZsOZK', 'notes': 'CORRECT form ID - links.aiserviceco.com'}},
+    {'key': 'ghl_calendar_id', 'status': 'idle', 'value': {'id': 'YWQcHuXXznQEQa7LAWeB', 'notes': 'CORRECT calendar ID - links.aiserviceco.com'}},
+    {'key': 'ghl_embed_domain', 'status': 'idle', 'value': {'domain': 'links.aiserviceco.com', 'notes': 'NOT api.leadconnectorhq.com or link.msgsndr.com'}},
+    {'key': 'vapi_public_key', 'status': 'idle', 'value': {'id': '3b065ff0-a721-4b66-8255-30b6b8d6daab', 'notes': 'Vapi widget API key'}},
+    {'key': 'vapi_assistant_id', 'status': 'idle', 'value': {'id': '1a797f12-e2dd-4f7f-b2c5-08c38c74859a', 'notes': 'Sarah assistant ID'}},
+    {'key': 'vapi_widget_style', 'status': 'idle', 'value': {'style': 'pill', 'notes': 'Talk to Sales, Ask anything, mic icon, #f59e0b yellow'}},
 ]
 
 for cfg in configs:

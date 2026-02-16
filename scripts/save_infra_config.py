@@ -7,12 +7,12 @@ sb = create_client(url, key)
 
 # CRITICAL INFRASTRUCTURE - NEVER ASK USER AGAIN
 configs = [
-    {'key': 'HOSTING_PROVIDER', 'status': 'Vercel', 'notes': 'User confirmed Feb 4 2026: Has been on Vercel forever'},
-    {'key': 'DOMAIN_REGISTRAR', 'status': 'Squarespace', 'notes': 'Domain hosted by Squarespace, DNS points to Vercel'},
-    {'key': 'PRODUCTION_DOMAIN', 'status': 'aiserviceco.com', 'notes': 'THE ONLY DOMAIN TO VERIFY - NOT netlify subdomain'},
-    {'key': 'DEPLOY_COMMAND', 'status': 'vercel --prod --yes', 'notes': 'Run from public/ directory'},
-    {'key': 'STAGING_DOMAIN', 'status': 'aiserviceco-empire.netlify.app', 'notes': 'STAGING ONLY - do not verify as production'},
-    {'key': 'HARD_RULE_verify_prod', 'status': 'ALWAYS verify aiserviceco.com NOT netlify subdomain', 'notes': 'HARD RULE - Feb 4 2026'},
+    {'key': 'HOSTING_PROVIDER', 'status': 'idle', 'value': {'provider': 'Vercel', 'notes': 'User confirmed Feb 4 2026: Has been on Vercel forever'}},
+    {'key': 'DOMAIN_REGISTRAR', 'status': 'idle', 'value': {'registrar': 'Squarespace', 'notes': 'Domain hosted by Squarespace, DNS points to Vercel'}},
+    {'key': 'PRODUCTION_DOMAIN', 'status': 'idle', 'value': {'domain': 'aiserviceco.com', 'notes': 'THE ONLY DOMAIN TO VERIFY - NOT netlify subdomain'}},
+    {'key': 'DEPLOY_COMMAND', 'status': 'idle', 'value': {'command': 'vercel --prod --yes', 'notes': 'Run from public/ directory'}},
+    {'key': 'STAGING_DOMAIN', 'status': 'idle', 'value': {'domain': 'aiserviceco-empire.netlify.app', 'notes': 'STAGING ONLY - do not verify as production'}},
+    {'key': 'HARD_RULE_verify_prod', 'status': 'idle', 'value': {'rule': 'ALWAYS verify aiserviceco.com NOT netlify subdomain', 'notes': 'HARD RULE - Feb 4 2026'}},
 ]
 
 for cfg in configs:
