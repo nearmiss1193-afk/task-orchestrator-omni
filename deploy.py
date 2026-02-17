@@ -1,21 +1,16 @@
 import sys
 import os
 import modal
+import json
+import requests
+import traceback
+from datetime import datetime, timezone, timedelta
 from core.apps import engine_app as app
 
 # IMAGE CONFIGURATION
-from core.image_config import get_base_image
+from core.image_config import get_base_image, VAULT
 
 image = get_base_image()
-# THE SOVEREIGN STEALTH (Feb 15): Mapping bit-perfect working anon key to all slots.
-VAULT = modal.Secret.from_dict({
-    "SUPABASE_URL": "https://rzcpfwkygdvoshtwxncs.supabase.co",
-    "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo",
-    "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo",
-    "SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo",
-    "DATABASE_URL": "postgresql://postgres:Inez11752990@db.rzcpfwkygdvoshtwxncs.supabase.co:5432/postgres",
-    "AYRSHARE_API_KEY": "57FCF9E6-1B534A66-9F05E51C-9ADE2CA5"
-})
 
 # Diagnostic function 1: Environment Verify
 @app.function(image=image, secrets=[VAULT])
@@ -924,26 +919,89 @@ def vapi_webhook(data: dict = None):
 
 
 
-# ==== SYSTEM ORCHESTRATOR (Option 1: Consolidated Heartbeat + Outreach) ====
 @app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"), timeout=600)
 def system_orchestrator():
-    """Consolidated 5-minute cron: health, triggers, and outreach."""
-    print("🚀 ORCHESTRATOR: Starting cycle...")
+    """Master Orchestrator: Health, Outreach, and Time-based Strikes (Sovereign Consolidation)."""
+    import os
+    from datetime import datetime, timezone
     
-    # 1. Run Heartbeat Logic (Health + Cloud Triggers)
+    now_utc = datetime.now(timezone.utc)
+    hour = now_utc.hour
+    minute = now_utc.minute
+    weekday = now_utc.weekday() # 0=Mon, 6=Sun
+    
+    print(f"🚀 MASTER ORCHESTRATOR: Pulse at {now_utc.isoformat()}")
+    
+    # 1. Health & Pulse (Every 5 min)
     system_heartbeat()
     
-    # 2. Run Outreach Logic (Recycling + Execution)
+    # 2. Outreach Loop (Every 5 min)
     auto_outreach_loop()
     
-    print("✅ ORCHESTRATOR: Cycle complete.")
+    # --- TIME-BASED TRIGGERS (Consolidated Crons) ---
+    
+    # A. Sunbiz Delta Watch (8 AM Mon-Sat -> hour 8 UTC if EST as per original cron)
+    # Original cron: 0 8 * * 1-6
+    if hour == 8 and minute < 5 and weekday < 6:
+        print("🚀 TRIGGER: Sunbiz Delta Watch (Consolidated)")
+        scheduled_sunbiz_delta_watch.spawn()
+
+    # B. Social Multiplier (9 AM and 4 PM EST -> 14 and 21 UTC per original cron)
+    # Original cron: 0 14,21 * * *
+    if hour in [14, 21] and minute < 5:
+        print("🚀 TRIGGER: Social Multiplier (Consolidated)")
+        schedule_social_multiplier.spawn()
+
+    # C. Weekly Newsletter (Mondays at 9 AM EST -> 14 UTC per original cron)
+    # Original cron: 0 14 * * 1
+    if weekday == 0 and hour == 14 and minute < 5:
+        print("🚀 TRIGGER: Weekly Newsletter (Consolidated)")
+        weekly_newsletter.spawn()
+    
+    # D. Lakeland Background Ingestion (Hourly at minute 12)
+    if minute >= 12 and minute < 17: # Capture the window around minute 12
+        from workers.lakeland_ingestion import run_ingestion_batch
+        # Check system_state to ensure we only run ONCE per hour
+        try:
+            from modules.database.supabase_client import get_supabase
+            supabase = get_supabase()
+            last_ingest = supabase.table("system_state").select("status").eq("key", "last_ingestion_hour").execute()
+            current_hour_key = f"{now_utc.date()}_{hour}"
+            
+            if not last_ingest.data or last_ingest.data[0].get("status") != current_hour_key:
+                print(f"🚀 TRIGGER: Lakeland Ingestion (Hourly: {current_hour_key})")
+                supabase.table("system_state").upsert({
+                    "key": "last_ingestion_hour",
+                    "status": current_hour_key
+                }, on_conflict="key").execute()
+                run_ingestion_batch.spawn(batch_size=50)
+        except Exception as e:
+            print(f"⚠️ Ingestion trigger failed: {e}")
+
+    # E. Lakeland AI Enrichment (Hourly at minute 42)
+    if minute >= 42 and minute < 47:
+        from workers.lakeland_enricher import run_enrichment_loop
+        try:
+            from modules.database.supabase_client import get_supabase
+            supabase = get_supabase()
+            last_enrich = supabase.table("system_state").select("status").eq("key", "last_enrichment_hour").execute()
+            current_hour_key = f"{now_utc.date()}_{hour}"
+            
+            if not last_enrich.data or last_enrich.data[0].get("status") != current_hour_key:
+                print(f"🚀 TRIGGER: Lakeland Enrichment (Hourly: {current_hour_key})")
+                supabase.table("system_state").upsert({
+                    "key": "last_enrichment_hour",
+                    "status": current_hour_key
+                }, on_conflict="key").execute()
+                run_enrichment_loop.spawn(limit=15)
+        except Exception as e:
+            print(f"⚠️ Enrichment trigger failed: {e}")
+
+    print("✅ MASTER ORCHESTRATOR: Pulse complete.")
 
 @app.function(image=image, secrets=[VAULT])
 def system_heartbeat():
     """Health check + Vapi call monitor (polls for completed calls, notifies Dan)."""
-    import os, json
-    import requests as req
-    from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
     
     print(f"HEARTBEAT: Running at {datetime.now(timezone.utc).isoformat()}")
@@ -1324,9 +1382,9 @@ from workers.sunbiz_prospector import run_sunbiz_sync as sunbiz_logic
 from scripts.ingest_manus import ingest_manus_leads as manus_logic
 from workers.sunbiz_delta import run_sunbiz_delta_watch as delta_logic
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 8 * * 1-6"))
+@app.function(image=image, secrets=[VAULT])
 def scheduled_sunbiz_delta_watch():
-    """8 AM Mon-Sat strike for brand-new Sunbiz registrations (Phase 12 Turbo)."""
+    """8 AM Mon-Sat strike for brand-new Sunbiz registrations (Consolidated)."""
     return delta_logic()
 
 def run_social_migration():
@@ -1357,6 +1415,8 @@ def verify_strike_results():
             
     print(f"\n📈 FINAL RESULT: {verified}/{len(leads)} leads processed with strike assets.")
     return verified
+
+def debug_image_install():
     """Debug what exactly is installed on the Modal image."""
     import subprocess
     import sys
@@ -1364,19 +1424,11 @@ def verify_strike_results():
     print("\n--- Pip List ---")
     print(subprocess.check_output([sys.executable, "-m", "pip", "list"]).decode())
     try:
-        from google import genai
-        print("\n✅ from google import genai SUCCESS")
-    except Exception as e:
-        print(f"\n❌ from google import genai FAIL: {e}")
-        
-    try:
         import genai
-        print("\n✅ import genai SUCCESS")
+        print("✅ import genai SUCCESS")
     except Exception as e:
         print(f"\n❌ import genai FAIL: {e}")
     return True
-    """Manual trigger for Sunbiz sync."""
-    return sunbiz_logic()
 
 def trigger_manus_ingest(leads_json: str):
     """Manual trigger for Manus ingestion."""
@@ -1976,9 +2028,9 @@ def trigger_self_learning_loop():
     learning_logic()
 
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 14,21 * * *"))
+@app.function(image=image, secrets=[VAULT])
 def schedule_social_multiplier():
-    """Publishes social drafts 2x/day (9 AM and 4 PM EST)."""
+    """Publishes social drafts 2x/day (Consolidated)."""
     from workers.social_poster import publish_social_multiplier_posts
     return publish_social_multiplier_posts()
 
@@ -2279,9 +2331,10 @@ def trigger_video_verification():
         json.dump(data, f, indent=2)
     print("\n✅ VIDEO VERIFICATION COMPLETED. Results in: video_verification_results.json")
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 14 * * 1"), timeout=600)
+# Weekly Newsletter moved to consolidated trigger in system_orchestrator
+@app.function(image=image, secrets=[VAULT], timeout=600)
 def weekly_newsletter():
-    """Weekly content loop — Phase 14 Value Retention (Mondays at 9 AM EST)."""
+    """Weekly content loop — Phase 14 Value Retention (Consolidated)."""
     from scripts.weekly_digest import run_weekly_digest
     print("📧 NEWSLETTER: Starting weekly run...")
     run_weekly_digest(dry_run=False)

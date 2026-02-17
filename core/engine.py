@@ -36,4 +36,4 @@ image = (
     .add_local_dir("scripts", "/root/scripts")
 )
 
-app = modal.App(name=APP_NAME)
+from core.apps import engine_app as app

@@ -651,3 +651,50 @@ def generate_audit_for_lead(lead: dict) -> dict:
             "video_teaser_url": video_url,
         }
     }
+
+
+def lookup_business_google(name: str):
+    """
+    Search Google Places for a business by name and return its vitals.
+    Used by Maya to give real-time advice during calls.
+    """
+    import os
+    import requests
+    
+    api_base = os.environ.get("GOOGLE_PLACES_API_KEY") or "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc"
+    
+    url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+    params = {"query": name, "key": api_base}
+    
+    try:
+        resp = requests.get(url, params=params, timeout=10)
+        data = resp.json()
+        
+        if data.get("status") != "OK":
+            return {"error": f"No business found for '{name}'."}
+            
+        results = data.get("results", [])
+        if not results:
+            return {"error": "No results found."}
+            
+        place = results[0]
+        business_name = place.get("name")
+        rating = place.get("rating", "No rating")
+        reviews = place.get("user_ratings_total", 0)
+        address = place.get("formatted_address", "Unknown address")
+        
+        # Standing Analysis
+        standing = "Strong" if rating and float(rating) >= 4.2 else "Vulnerable"
+        velocity_hook = "Healthy" if reviews > 150 else "Stagnant (Great opportunity for automation)"
+        
+        return {
+            "business_name": business_name,
+            "google_rating": rating,
+            "review_count": reviews,
+            "address": address,
+            "standing_analysis": standing,
+            "review_velocity": velocity_hook,
+            "advice": f"They have {reviews} reviews. If their top local competitor has more, they are losing ground every day. This is the 'Review Velocity' gap we fixed for other clients."
+        }
+    except Exception as e:
+        return {"error": f"Search execution failed: {str(e)}"}
