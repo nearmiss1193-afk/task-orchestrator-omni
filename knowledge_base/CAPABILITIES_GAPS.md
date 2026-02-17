@@ -26,6 +26,7 @@
 |-----------|--------|----------|-------|
 | Command Center | ✅ LIVE | Vercel Dashboard | Phase 15.1 - Hot Lead Triage Active |
 | Automated Video Teasers | ✅ LIVE | `teaser_worker.py` | Mobile capture + watermark pattern interrupt |
+| Modular Sovereign Platform | ✅ LIVE | `deploy_sovereign.py` | Package-based architecture (core/workers/handlers) |
 
 ## Cron Budget
 

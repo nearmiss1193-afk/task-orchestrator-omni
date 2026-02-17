@@ -14,6 +14,16 @@
 
 ---
 
+## 🏛️ SECTION 17: Feb 17, 2026 — Modular Sovereign Migration (Reliability Upgrade)
+
+- **Incident:** Monolithic `deploy_unified.py` (2,400+ lines) caused "phantom" serialization errors, `ModuleNotFoundError` in cloud workers, and slow deployment cycles.
+- **Root Cause:** Inefficient local directory mounting and heavy global scope causing Modal worker instability.
+- **Fix Applied:** Refactored into a package architecture (`core/`, `workers/`, `handlers/`). Standardized on `deploy_sovereign.py` as the entry switchboard. Bit-perfect `service_role` keys synchronized across the `VAULT` secret.
+- **Sovereign Law:** "Thou shalt not deploy monolithic scripts > 1,500 lines. Use package-based entry points (`deploy_sovereign.py`) and explicit `add_local_dir` mounts for core/workers/handlers to ensure cloud worker reliability."
+- **Diagnostic Scripts:** `income_pipeline_check`, `count_manus_leads`, `run_system_heartbeat`.
+
+---
+
 ## 🚨 CRITICAL RULE: EMAIL OUTREACH WORKFLOW (Feb 5, 2026)
 
 > [!CAUTION]
