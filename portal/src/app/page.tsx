@@ -35,6 +35,8 @@ interface LogEntry {
   timestamp: string;
   status: string;
   content?: string;
+  video_watched?: boolean;
+  intent_score?: number;
   metadata?: any;
 }
 
@@ -83,7 +85,9 @@ export default function Dashboard() {
         subtitle: `${t.channel.toUpperCase()}: ${t.status}`,
         timestamp: t.ts,
         status: t.status,
-        content: t.payload?.content || ''
+        content: t.payload?.content || '',
+        video_watched: t.payload?.video_watched || false,
+        intent_score: t.payload?.intent_score || 0
       }));
 
       setLogs(formatted);
@@ -101,7 +105,9 @@ export default function Dashboard() {
           title: payload.new.company || 'New Outreach',
           subtitle: `${payload.new.channel.toUpperCase()}: ${payload.new.status}`,
           timestamp: payload.new.ts,
-          status: payload.new.status
+          status: payload.new.status,
+          video_watched: payload.new.payload?.video_watched || false,
+          intent_score: payload.new.payload?.intent_score || 0
         };
         setLogs(prev => [newEntry, ...prev].slice(0, 20));
 
@@ -241,15 +247,25 @@ export default function Dashboard() {
                   className={`flex items-center justify-between p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-blue-500/30 transition-all cursor-pointer group`}
                 >
                   <div className="flex items-center space-x-4">
-                    <div className={`p-2.5 rounded-xl bg-white/5 group-hover:scale-110 transition-transform`}>
+                    <div className={`p-2.5 rounded-xl bg-white/5 group-hover:scale-110 transition-transform relative`}>
                       {log.type === 'sms' && <MessageSquare className="w-4 h-4 text-green-400" />}
                       {log.type === 'email' && <Mail className="w-4 h-4 text-blue-400" />}
                       {log.type === 'call' && <Phone className="w-4 h-4 text-purple-400" />}
                       {log.type === 'social' && <Share2 className="w-4 h-4 text-pink-400" />}
+                      {log.video_watched && (
+                        <div className="absolute -top-1 -right-1 p-1 bg-red-500 rounded-full animate-ping" />
+                      )}
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-gray-200 group-hover:text-white">{log.title}</h4>
-                      <p className="text-[10px] text-gray-500 font-medium uppercase tracking-widest">{log.subtitle}</p>
+                      <div className="flex items-center space-x-2">
+                        <h4 className="text-sm font-bold text-gray-200 group-hover:text-white">{log.title}</h4>
+                        {log.video_watched && (
+                          <span className="bg-red-500/10 text-red-500 text-[8px] font-black px-1.5 py-0.5 rounded border border-red-500/20 uppercase tracking-tighter">HOT INTENT (VIDEO)</span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-gray-500 font-medium uppercase tracking-widest">
+                        {log.subtitle} {log.intent_score ? `• SCORE: ${log.intent_score}` : ''}
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">

@@ -289,10 +289,12 @@ Dan"""
     raw_research = json.loads(lead.get('raw_research') or '{}')
     video_url = raw_research.get('video_teaser_url')
     if video_url:
+        # WRAP VIDEO IN TRACKING REDIRECTOR (Conversion Sprint)
+        tracking_url = f"https://nearmiss1193-afk--ghl-omni-automation-track-video-view.modal.run?lid={lead_id}&vid_url={video_url}"
         video_html = f"""<p style="margin-top: 20px; padding: 12px; background: #f8fafc; border-left: 4px solid #ef4444; border-radius: 4px;">
         <b>🎬 Quick Video Teaser for {company}:</b><br>
         I made a 10s cinematic preview of your AI visibility audit. Check it out here:<br>
-        <a href="{video_url}" style="color: #2563eb; font-weight: bold; text-decoration: underline;">Watch Video Teaser →</a>
+        <a href="{tracking_url}" style="color: #2563eb; font-weight: bold; text-decoration: underline;">Watch Video Teaser →</a>
         </p>"""
 
     html_body = f"""<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.6;">
@@ -457,10 +459,12 @@ def dispatch_audit_email(lead_id: str):
     # Build email body WITH LINK (no attachment)
     video_html = ""
     if ar.get("video_teaser_url"):
+        # WRAP VIDEO IN TRACKING REDIRECTOR (Conversion Sprint)
+        tracking_url = f"https://nearmiss1193-afk--ghl-omni-automation-track-video-view.modal.run?lid={lead_id}&vid_url={ar['video_teaser_url']}"
         video_html = f"""<p style="margin: 24px 0; padding: 16px; background: #0f172a; color: #f8fafc; border-radius: 12px; border: 1px solid #334155;">
         <span style="color: #38bdf8;">🎬 <b>Cinematic Pattern Interrupt:</b></span><br>
         I generated a 10-second 4K preview of what your brand looks like with full AI optimization:<br>
-        <a href="{ar['video_teaser_url']}" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">Watch Cinematic Teaser →</a>
+        <a href="{tracking_url}" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">Watch Cinematic Teaser →</a>
         </p>"""
 
     html_body = f"""<html><body style="font-family: Arial, sans-serif; color: #333; max-width: 600px; line-height: 1.6;">
@@ -604,13 +608,18 @@ def dispatch_sms_logic(lead_id: str, message: str = None, media_url: str = None)
     if phone and not phone.startswith('+'):
         phone = f"+1{phone.replace('-', '').replace('(', '').replace(')', '').replace(' ', '')}"
     
+    # MMS Pivot: Wrap video in tracking (Conversion Sprint)
+    final_media_url = media_url
+    if media_url:
+        final_media_url = f"https://nearmiss1193-afk--ghl-omni-automation-track-video-view.modal.run?lid={lead_id}&vid_url={media_url}"
+
     # Standardized Webhook Bridge Payload
     payload = {
         "phone": phone,
         "contact_id": ghl_id,
         "first_name": lead.get('full_name', '').split(' ')[0],
         "message": message or "hey, saw your site. had a quick question. i made a 10s video scan of your mobile presence, thought you'd want to see it. you around?",
-        "media_url": media_url,
+        "media_url": final_media_url,
         "type": "SMS" if not media_url else "MMS"
     }
     

@@ -14,8 +14,9 @@
 | Voice Calls via Vapi | ✅ LIVE | Personas aligned |
 | Sunbiz Lakeland Strike | ✅ LIVE | SCRAPER + SUPABASE SYNC |
 | PageSpeed Key Rotation | ✅ LIVE | 4x Hot-Swap Resiliency |
-| Manus Strike v1 | ✅ LIVE | Recruitment Persona active | - |
-| Social Multiplier (Image) | ✅ LIVE | Automated 2x/day Image+Text updates | - |
+| Manus Strike v1 | ✅ LIVE | Recruitment Persona active |
+| GHL CRM Deep Sync | ✅ LIVE | Hardened Webhook Deep Sync |
+| Social Multiplier (Image) | ✅ LIVE | Automated 2x/day Image+Text updates |
 | Auto-Newsletter | ✅ LIVE | `weekly_newsletter` (Mondays) |
 | System Save Protocol v2 | ✅ LIVE | Memory + Gaps Email reporting |
 
@@ -23,9 +24,8 @@
 
 | Capability | Status | Location | Notes |
 |-----------|--------|----------|-------|
-| Veo 3 Video Ops | ✅ BLOCKED | Code 172 | Ayrshare Plan Upgrade Required ($) |
-| Sovereign Command Center | 🔴 PLANNED | Vercel Dashboard | Phase 15 - Real-time monitoring |
-| GHL CRM Deep Sync | 🟡 PARTIAL | PIT Token Limited | Seeking workaround for full API access |
+| Command Center | ✅ LIVE | Vercel Dashboard | Phase 15.1 - Hot Lead Triage Active |
+| Automated Video Teasers | ✅ LIVE | `teaser_worker.py` | Mobile capture + watermark pattern interrupt |
 
 ## Cron Budget
 

@@ -13,6 +13,7 @@ This is the emotional trigger that gets replies.
 Sovereign Law: "The audit sells the service. The email delivers the audit."
 """
 
+import os
 import io
 import base64
 import requests

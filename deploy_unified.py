@@ -1,10 +1,49 @@
-import sys
-import os
 import modal
+import os
+import sys
+import time
 from core.apps import engine_app as app
 
-# IMAGE CONFIGURATION
-from core.image_config import get_base_image
+# IMAGE CONFIGURATION (Flattened for Reliability)
+def get_base_image():
+    return (
+        modal.Image.debian_slim(python_version="3.11")
+        .pip_install(
+            "playwright",
+            "python-dotenv",
+            "requests",
+            "supabase",
+            "fastapi",
+            "stripe",
+            "google-generativeai",
+            "google-genai",
+            "dnspython",
+            "pytz",
+            "python-dateutil",
+            "psycopg2-binary",
+            "reportlab",
+            "social-post-api",
+            "resend"
+        )
+        .run_commands(
+            "playwright install --with-deps chromium",
+            "apt-get update && apt-get install -y ffmpeg"
+        )
+        .add_local_dir("utils", "/root/utils")
+        .add_local_dir("scripts", "/root/scripts")
+        .add_local_dir("workers", "/root/workers")
+        .add_local_dir("core", "/root/core")
+        .add_local_dir("api", "/root/api")
+        .add_local_file("__init__.py", "/root/__init__.py")
+        .add_local_file("modules/__init__.py", "/root/modules/__init__.py")
+        .add_local_dir("modules/database", "/root/modules/database")
+        .add_local_dir("modules/ai", "/root/modules/ai")
+        .add_local_dir("modules/analytics", "/root/modules/analytics")
+        .add_local_dir("modules/dispatch", "/root/modules/dispatch")
+        .add_local_file("modules/outbound_dialer.py", "/root/modules/outbound_dialer.py")
+        .add_local_dir("modules/voice", "/root/modules/voice")
+        .add_local_dir("modules/handlers", "/root/modules/handlers")
+    )
 
 image = get_base_image()
 # THE SOVEREIGN STEALTH (Feb 15): Mapping bit-perfect working anon key to all slots.
@@ -1694,7 +1733,7 @@ def resend_webhook(data: dict):
 # ────────────────────────────────────────────────────────────
 #  RESEARCH STRIKE WORKER (Cloud Autonomy Engine)
 # ────────────────────────────────────────────────────────────
-@app.function(image=image, secrets=[VAULT], timeout=60)
+@app.function(image=image, secrets=[VAULT], timeout=300)
 def research_strike_worker(lead_id: str):
     """
     Enriches a single lead with PageSpeed and FDBR data asynchronously.
@@ -1703,6 +1742,8 @@ def research_strike_worker(lead_id: str):
     import os, json, uuid, requests
     from datetime import datetime, timezone
     from workers.audit_generator import fetch_pagespeed, check_privacy_policy, check_ai_readiness
+    from workers.teaser_worker import capture_mobile_teaser, upload_teaser_to_supabase
+    import asyncio
     
     lead_id = lead_id.strip()
     print(f"🕵️ RESEARCH: Auditing Lead {lead_id}...")
@@ -1750,7 +1791,6 @@ def research_strike_worker(lead_id: str):
 
         if not is_cached:
             # 1. Run PageSpeed
-            import time
             print(f"  [1/3] PageSpeed Insights for {website} (Politeness delay 5s)...")
             time.sleep(5) # Board Approved: Mitigation for 429 errors
             ps_data = fetch_pagespeed(website)
@@ -1783,6 +1823,27 @@ def research_strike_worker(lead_id: str):
             "ai_readiness": ai_data,
             "audited_at": datetime.now(timezone.utc).isoformat()
         })
+        
+        # --- PHASE 16: AUTOMATED TEASER (Turbo Mode) ---
+        try:
+            if website and not raw_research.get("video_teaser_url"):
+                print(f"  🎬 [PHASE 16] Capturing mobile teaser for {website}...")
+                company_name = lead.get("company_name", "your business")
+                video_path = f"/tmp/teaser_{lead_id}.webm"
+                
+                # Run async capture in sync worker
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                video_file = loop.run_until_complete(capture_mobile_teaser(website, company_name, video_path))
+                loop.close()
+                
+                if video_file:
+                    video_url = upload_teaser_to_supabase(video_file, lead_id)
+                    if video_url:
+                        raw_research["video_teaser_url"] = video_url
+                        print(f"  🎬 Teaser LIVE: {video_url}")
+        except Exception as teaser_err:
+            print(f"  ⚠️ Teaser generation failed: {teaser_err}")
         
         # 5. Update Lead Status
         update_r = requests.patch(
@@ -2270,14 +2331,6 @@ def fire_video_verification():
         
     return final_results
 
-@app.local_entrypoint()
-def trigger_video_verification():
-    """Trigger the video verification and save results locally."""
-    import json
-    data = fire_video_verification.remote()
-    with open("video_verification_results.json", "w") as f:
-        json.dump(data, f, indent=2)
-    print("\n✅ VIDEO VERIFICATION COMPLETED. Results in: video_verification_results.json")
 
 @app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 14 * * 1"), timeout=600)
 def weekly_newsletter():
