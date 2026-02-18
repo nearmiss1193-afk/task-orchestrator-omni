@@ -1,0 +1,7 @@
+EXPANSION RESULTS:
+New businesses found: 1056
+With phone numbers: 968
+Voice drop CSV: 500 leads
+API calls: 1206
+Original: 3321
+New total: 4377

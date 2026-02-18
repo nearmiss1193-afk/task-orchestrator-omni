@@ -1,0 +1,115 @@
+OWNER ID RESULT: Processed 2539, H/W teams found 0, Errors 0
+OWNER IDENTIFICATION ENGINE - Starting
+Fetching unprocessed lakeland_finds leads...
+Total lakeland_finds leads: 2539
+Already processed: 0
+To process: 2539
+  Progress: 25/2539 | H/W teams: 0 | With principals: 0
+  Progress: 50/2539 | H/W teams: 0 | With principals: 0
+  Progress: 75/2539 | H/W teams: 0 | With principals: 0
+  Progress: 100/2539 | H/W teams: 0 | With principals: 0
+  Progress: 125/2539 | H/W teams: 0 | With principals: 0
+  Progress: 150/2539 | H/W teams: 0 | With principals: 0
+  Progress: 175/2539 | H/W teams: 0 | With principals: 0
+  Progress: 200/2539 | H/W teams: 0 | With principals: 0
+  Progress: 225/2539 | H/W teams: 0 | With principals: 0
+  Progress: 250/2539 | H/W teams: 0 | With principals: 0
+  Progress: 275/2539 | H/W teams: 0 | With principals: 0
+  Progress: 300/2539 | H/W teams: 0 | With principals: 0
+  Progress: 325/2539 | H/W teams: 0 | With principals: 0
+  Progress: 350/2539 | H/W teams: 0 | With principals: 0
+  Progress: 375/2539 | H/W teams: 0 | With principals: 0
+  Progress: 400/2539 | H/W teams: 0 | With principals: 0
+  Progress: 425/2539 | H/W teams: 0 | With principals: 0
+  Progress: 450/2539 | H/W teams: 0 | With principals: 0
+  Progress: 475/2539 | H/W teams: 0 | With principals: 0
+  Progress: 500/2539 | H/W teams: 0 | With principals: 0
+  Progress: 525/2539 | H/W teams: 0 | With principals: 0
+  Progress: 550/2539 | H/W teams: 0 | With principals: 0
+  Progress: 575/2539 | H/W teams: 0 | With principals: 0
+  Progress: 600/2539 | H/W teams: 0 | With principals: 0
+  Progress: 625/2539 | H/W teams: 0 | With principals: 0
+  Progress: 650/2539 | H/W teams: 0 | With principals: 0
+  Progress: 675/2539 | H/W teams: 0 | With principals: 0
+  Progress: 700/2539 | H/W teams: 0 | With principals: 0
+  Progress: 725/2539 | H/W teams: 0 | With principals: 0
+  Progress: 750/2539 | H/W teams: 0 | With principals: 0
+  Progress: 775/2539 | H/W teams: 0 | With principals: 0
+  Progress: 800/2539 | H/W teams: 0 | With principals: 0
+  Progress: 825/2539 | H/W teams: 0 | With principals: 0
+  Progress: 850/2539 | H/W teams: 0 | With principals: 0
+  Progress: 875/2539 | H/W teams: 0 | With principals: 0
+  Progress: 900/2539 | H/W teams: 0 | With principals: 0
+  Search error: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+  Progress: 925/2539 | H/W teams: 0 | With principals: 0
+  Progress: 950/2539 | H/W teams: 0 | With principals: 0
+  Progress: 975/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1000/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1025/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1050/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1075/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1100/2539 | H/W teams: 0 | With principals: 0
+  Search error: HTTPSConnectionPool(host='search.sunbiz.org', port=443): Max retries exceeded with url: /Inquiry/CorporationSearch/SearchResults/EntityName/MEDI-WEIGHTLOSS%20LAKELAND/Page1 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1032)')))
+  Progress: 1125/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1150/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1175/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1200/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1225/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1250/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1275/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1300/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1325/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1350/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1375/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1400/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1425/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1450/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1475/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1500/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1525/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1550/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1575/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1600/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1625/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1650/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1675/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1700/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1725/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1750/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1775/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1800/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1825/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1850/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1875/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1900/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1925/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1950/2539 | H/W teams: 0 | With principals: 0
+  Progress: 1975/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2000/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2025/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2050/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2075/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2100/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2125/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2150/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2175/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2200/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2225/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2250/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2275/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2300/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2325/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2350/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2375/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2400/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2425/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2450/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2475/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2500/2539 | H/W teams: 0 | With principals: 0
+  Progress: 2525/2539 | H/W teams: 0 | With principals: 0
+
+OWNER ID COMPLETE:
+  Processed: 2539
+  Found principals: 0
+  Husband/Wife teams: 0
+  Errors: 0

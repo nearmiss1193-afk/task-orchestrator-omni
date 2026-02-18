@@ -1,0 +1,4 @@
+IMPORT COMPLETE:
+New inserted: 2442
+Errors: 0
+Total in DB: 5763

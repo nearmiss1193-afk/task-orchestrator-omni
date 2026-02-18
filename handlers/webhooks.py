@@ -127,6 +127,20 @@ def vapi_webhook(data: dict = None):
             if caller_phone:
                 try:
                     supabase = get_supabase()
+                    
+                    # Permanent Transcription Storage (User Requirement: Phase 29)
+                    try:
+                        supabase.table("call_transcripts").insert({
+                            "call_id": call.get("id"),
+                            "phone_number": caller_phone,
+                            "direction": direction,
+                            "summary": summary,
+                            "transcript": transcript,
+                            "created_at": datetime.now(timezone.utc).isoformat()
+                        }).execute()
+                    except Exception as trans_err:
+                        print(f"⚠️ [TRANSCRIPT] Permanent save failed: {trans_err}")
+
                     # Name extraction from transcript
                     name_match = re.search(r"(?:name is|i'm|this is|call me)\s+([A-Z][a-z]+)", transcript, re.I)
                     extracted_name = name_match.group(1).title() if name_match else ""

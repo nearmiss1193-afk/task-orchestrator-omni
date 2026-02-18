@@ -1009,6 +1009,16 @@ def system_orchestrator():
         print("🚀 TRIGGER: Daily Executive Pulse (Phase 21)")
         send_executive_pulse.spawn()
 
+    # G. Tiffaney Hayes Onboarding Reminder (2:00 PM EST -> 19:00 UTC) - Feb 18 only
+    if now_utc.date().isoformat() == "2026-02-18" and hour == 19 and minute < 5:
+        print("🚀 TRIGGER: Tiffaney Hayes Onboarding Reminder")
+        send_tiffaney_reminder.spawn()
+
+    # H. Tiffaney Hayes Onboarding Call (2:30 PM EST -> 19:30 UTC) - Feb 18 only
+    if now_utc.date().isoformat() == "2026-02-18" and hour == 19 and minute >= 30 and minute < 35:
+        print("🚀 TRIGGER: Tiffaney Hayes Onboarding Call")
+        trigger_tiffaney_onboarding_call.spawn()
+
     print("✅ MASTER ORCHESTRATOR: Pulse complete.")
 
 @app.function(image=image, secrets=[VAULT])
@@ -1081,6 +1091,20 @@ def system_heartbeat():
                 ADD COLUMN IF NOT EXISTS opened BOOLEAN DEFAULT FALSE,
                 ADD COLUMN IF NOT EXISTS opened_at TIMESTAMPTZ,
                 ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}'::jsonb;
+            """)
+            
+            # 3. call_transcripts table (User Requirement: Phase 29)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS call_transcripts (
+                    id BIGSERIAL PRIMARY KEY,
+                    call_id TEXT UNIQUE,
+                    phone_number TEXT,
+                    direction TEXT,
+                    summary TEXT,
+                    transcript TEXT,
+                    created_at TIMESTAMPTZ DEFAULT NOW(),
+                    metadata JSONB DEFAULT '{}'::jsonb
+                );
             """)
             
             conn.commit()
@@ -2372,6 +2396,69 @@ def trigger_principal_matcher(limit=200):
     from workers.principal_matcher import run_principal_matching_strike
     count = run_principal_matching_strike(limit=limit)
     return {"status": "complete", "matched_count": count}
+
+@app.function(image=image, secrets=[VAULT])
+def send_tiffaney_reminder():
+    """Sends a 30-minute reminder SMS to Tiffaney Hayes."""
+    import requests
+    ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+    payload = {
+        "phone": "+13524349704",
+        "message": "Hey Tiffaney! This is Maya from AI Service Co. Just a quick reminder about our onboarding call at 2:30 PM today. I'm looking forward to helping you customize your new Home Health agent! See you soon."
+    }
+    r = requests.post(ghl_webhook, json=payload, timeout=10)
+    print(f"Reminder sent to Tiffaney: {r.status_code}")
+    return {"status": "sent", "code": r.status_code}
+
+@app.function(image=image, secrets=[VAULT])
+def trigger_tiffaney_onboarding_call():
+    """Manually triggered onboarding call for Tiffaney Hayes (Maya persona)."""
+    import os, json, requests
+    from modules.outbound_dialer import dial_prospect, SARAH_ASSISTANT_ID
+    from modules.voice.sales_persona import get_persona_prompt
+    
+    # Target info
+    phone = "+13524349704"
+    name = "Tiffaney Hayes"
+    
+    # Build the prompt
+    system_prompt = get_persona_prompt(
+        call_mode="onboarding", 
+        service_knowledge="AI Service Co provides automated voice answering, scheduling, and reputation management."
+    )
+    
+    # Specialized call with prompt override
+    payload = {
+        "type": "outboundPhoneCall",
+        "phoneNumberId": os.environ.get("VAPI_PHONE_NUMBER_ID", "86f73243-8916-4897-b840-b20c8afdd7a8339f"),
+        "assistantOverrides": {
+            "model": {
+                "messages": [
+                    {"role": "system", "content": system_prompt}
+                ]
+            }
+        },
+        "customer": {
+            "number": phone,
+            "name": name
+        },
+        "metadata": {
+            "call_type": "onboarding_tiffaney",
+            "business_type": "home_health"
+        }
+    }
+    
+    vapi_key = os.environ.get("VAPI_PRIVATE_KEY")
+    if not vapi_key:
+        return {"error": "Missing VAPI_PRIVATE_KEY"}
+        
+    r = requests.post(
+        "https://api.vapi.ai/call",
+        headers={"Authorization": f"Bearer {vapi_key}", "Content-Type": "application/json"},
+        json=payload
+    )
+    
+    return r.json()
 
 if __name__ == "__main__":
     print("⚫ ANTIGRAVITY v5.0 - SOVEREIGN DEPLOY")
