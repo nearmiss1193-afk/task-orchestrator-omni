@@ -1,0 +1,8 @@
+
+FOLLOW-UP CAMPAIGN COMPLETE
+============================
+Total targets: 1200
+SMS sent: 18
+SMS failed: 1182
+Emails sent: 1
+Finished: 2026-02-18 16:52:20.821086

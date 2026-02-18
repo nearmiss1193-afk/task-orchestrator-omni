@@ -1,0 +1,55 @@
+{
+  "id": "019c723f-1e4d-7dd0-ac4f-f15b59166486",
+  "status": "ended",
+  "endedReason": "call.in-progress.error-providerfault-outbound-sip-503-service-unavailable",
+  "duration": null,
+  "customer": "+13524349704",
+  "createdAt": "2026-02-18T19:34:25.101Z",
+  "transcript": "none",
+  "summary": ""
+}
+---
+{
+  "id": "019c71e1-f521-7441-9678-669ad3622be0",
+  "status": "ended",
+  "endedReason": "customer-ended-call",
+  "duration": null,
+  "customer": "+13529368152",
+  "createdAt": "2026-02-18T17:52:39.713Z",
+  "transcript": "AI: Hi there. This is Rachel from AI service company. Congratulations on signing up. I am your dedicated setup specialist, and I am going to walk you through every thing to get your AI Office agent live and working for your business. Do you have a couple minutes right now?\nUser: Sure.\nAI: Great. Could you start by telling me a little about your business? What type is it? How many employees do you have, and what services do you offer?\n",
+  "summary": "Rachel from AI Service Company introduced herself as a dedicated setup specialist to a new customer, offering to guide them through getting their AI Office agent live. She then asked the customer to provide details about their business, including its type, number of employees, and services offered. The call ended shortly after this initial information gathering."
+}
+---
+{
+  "id": "019c714c-8cf7-788b-9166-0d6a91e6435a",
+  "status": "ended",
+  "endedReason": "customer-ended-call",
+  "duration": null,
+  "customer": "+13529368152",
+  "createdAt": "2026-02-18T15:09:28.183Z",
+  "transcript": "AI: Hey there. Thanks for calling AI service co. This is Rachel. How's it going? What can I help you with today?\nUser: Hey, Rachel. Uh, are you set up to onboard clients?\nAI: Hey. Absolutely. We are ready to onboard clients. Tell me a little about your business. What kind of services do you offer? HVAC? Plumbing, roofing, something else? I'd love to hear more.\n",
+  "summary": "The user called AI service co. and spoke with Rachel, inquiring if they were set up to onboard clients. Rachel confirmed their capability and then asked the user for more details about their business and the services they offer. The call ended shortly after this exchange."
+}
+---
+{
+  "id": "019c6d19-8ee9-722e-b3cd-ebc42ec8ee30",
+  "status": "ended",
+  "endedReason": "customer-ended-call",
+  "duration": null,
+  "customer": null,
+  "createdAt": "2026-02-17T19:35:17.481Z",
+  "transcript": "AI: Hi. I'm your Lakeland Finds assistant. I can help you find local businesses in Lakeland FL. What are you looking for?\nUser: Looking for a doctor.\nAI: Sure. I'd be happy to help you find a doctor in Lakeland. For the best options, including family physicians, specialists, and urgent care, head over to Lakeland Finds dot com and search doctors or medical clinics. You'll get verified local listings with contact info and\n",
+  "summary": "The user requested to find a doctor in Lakeland, FL. The AI assistant directed them to Lakeland Finds dot com, suggesting they search for \"doctors\" or \"medical clinics\" to find verified local listings with contact information. The call ended after the AI provided this guidance."
+}
+---
+{
+  "id": "019c658e-f925-7661-bf8e-37c62cbc6e44",
+  "status": "ended",
+  "endedReason": "call.in-progress.error-assistant-did-not-receive-customer-audio",
+  "duration": null,
+  "customer": null,
+  "createdAt": "2026-02-16T08:26:34.661Z",
+  "transcript": "You are Sarah, AI voice & SMS assistant for AI Service Co (also operating as \"Lakeland Local Finds\" for local businesses). You're warm, genuine, and confident \u2014 like a friendly sales pro who genuinely wants to help.\n\n\u2550\u2550\u2550 YOUR MISSION \u2550\u2550\u2550\nTurn conversations into booked calls with Dan. Every interaction should move toward scheduling.\n\n\u2550\u2550\u2550 PERSONALITY \u2550\u2550\u2550\n- Casual but professional. Use \"totally\", \"honestly\", \"absolutely\"\n- Keep responses SHORT (2-3 sentences max)\n- Sound like a real person, not a r",
+  "summary": ""
+}
+---
