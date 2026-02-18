@@ -5,6 +5,19 @@ import json
 import requests
 import traceback
 from datetime import datetime, timezone, timedelta
+
+# --- HARDENED MODULE RESOLUTION ---
+import sys
+import os
+ROOT = "/root"
+if ROOT not in sys.path:
+    sys.path.append(ROOT)
+if os.getcwd() not in sys.path:
+    sys.path.append(os.getcwd())
+
+# Standardize path for local module discovery
+# Removed duplicate sys.path append
+
 from core.apps import engine_app as app
 
 # IMAGE CONFIGURATION
@@ -16,10 +29,105 @@ image = get_base_image()
 @app.function(image=image, secrets=[VAULT])
 def income_pipeline_check():
     """Run the empirical Revenue Waterfall diagnostic (Section 12)"""
-    from scripts.revenue_waterfall import run_waterfall
-    summary = run_waterfall()
+    from scripts.revenue_waterfall import get_waterfall_summary
+    summary = get_waterfall_summary()
     print(summary)
     return summary
+
+@app.function(image=image, secrets=[VAULT])
+def check_lead_pool():
+    """REST based query for contactable leads"""
+    import os
+    import requests
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    headers = {"apikey": key, "Authorization": f"Bearer {key}"}
+    
+    # Query for 'new' or 'research_done' leads
+    query_url = f"{url}/rest/v1/contacts_master?status=in.(new,research_done)"
+    r = requests.get(query_url, headers=headers, params={"select": "count"})
+    
+    if r.status_code == 200:
+        data = r.json()
+        count = data[0]['count'] if isinstance(data, list) and data and 'count' in data[0] else 0
+        print(f"🎯 LEAD POOL: {count} contactable leads available.")
+        return count
+    else:
+        print(f"❌ API Error: {r.status_code}")
+        return 0
+
+@app.function(image=image, secrets=[VAULT])
+def check_recent_outreach(hours: int = 6):
+    """REST based query for recent outreach count"""
+    import os
+    import requests
+    from datetime import datetime, timedelta, timezone
+    
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    
+    if not url or not key:
+        print("❌ Error: SUPABASE_URL or KEY missing in Vault")
+        return 0
+        
+    headers = {
+        "apikey": key,
+        "Authorization": f"Bearer {key}",
+        "Content-Type": "application/json"
+    }
+    
+    # Calculate timestamp
+    target_time = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat().replace('+00:00', 'Z')
+    
+    # Supabase REST count
+    query_url = f"{url}/rest/v1/outbound_touches?ts=gt.{target_time}"
+    
+    try:
+        r = requests.get(query_url, headers=headers, params={"select": "count"})
+        if r.status_code == 200:
+            # PostgREST returns a count header or a small JSON depending on configuration
+            # If nothing returned, check the content-range header or just get the len of a limited query
+            data = r.json()
+            # If using select=count, it usually returns [{'count': X}]
+            if isinstance(data, list) and len(data) > 0 and 'count' in data[0]:
+                count = data[0]['count']
+            else:
+                # Fallback: get indices
+                r2 = requests.get(query_url, headers=headers, params={"select": "id"})
+                count = len(r2.json()) if r2.status_code == 200 else 0
+                
+            print(f"📊 OUTREACH (last {hours}h): {count} prospects")
+            return count
+        else:
+            print(f"❌ API Error: {r.status_code} - {r.text}")
+            return 0
+    except Exception as e:
+        print(f"❌ Request failed: {e}")
+        return 0
+
+@app.function(image=image, secrets=[VAULT])
+def check_15m_outreach():
+    """Hyper-specific audit for the last 15 minutes of activity"""
+    import os
+    import requests
+    from datetime import datetime, timedelta, timezone
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    headers = {"apikey": key, "Authorization": f"Bearer {key}"}
+    
+    target_time = (datetime.now(timezone.utc) - timedelta(minutes=15)).isoformat().replace('+00:00', 'Z')
+    query_url = f"{url}/rest/v1/outbound_touches?ts=gt.{target_time}&select=ts,channel,status,company"
+    r = requests.get(query_url, headers=headers)
+    
+    if r.status_code == 200:
+        data = r.json()
+        print(f"🔥 FRESH OUTREACH (Last 15m): {len(data)} events")
+        for item in data:
+            print(f" - {item['ts']} | {item['channel']} | {item['status']} | {item['company']}")
+        return len(data)
+    else:
+        print(f"❌ API Error: {r.status_code}")
+        return 0
 
 def print_env_diagnostics():
     """Print cloud environment vars for verification"""
@@ -96,198 +204,67 @@ def test_db_psycopg2():
     except Exception as e:
         print(f"❌ RAW PSQL FAIL: {e}")
 
-# ==== SOVEREIGN STATE API (External AI Audit Endpoint) ====
-@app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="GET")
-def sovereign_state(token: str = ""):
-    """Public endpoint for external AI audits (ChatGPT, Gemini, Grok)."""
-    import os
-    from datetime import datetime
-    from supabase import create_client
-    
-    SOVEREIGN_TOKEN = "sov-audit-2026-ghost"
-    if token != SOVEREIGN_TOKEN:
-        return {"error": "Unauthorized. Pass ?token=sov-audit-2026-ghost"}
-    
-    # Direct initialization with fallbacks
-    url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or "https://rzcpfwkygdvoshtwxncs.supabase.co"
-    key = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SERVICE_ROLE_KEY")
-    
-    if not key:
-        return {"error": "SUPABASE_KEY not found in Modal vault", "audit_timestamp": datetime.now().isoformat()}
-    
-    try:
-        sb = create_client(url, key)
-        
-        # Get campaign mode
-        campaign_mode = sb.table("system_state").select("status").eq("key", "campaign_mode").execute()
-        mode = campaign_mode.data[0].get("status") if campaign_mode.data else "unknown"
-        
-        # Get embeds
-        embeds = sb.table("embeds").select("type,code").execute()
-        locked_embeds = {e.get("type"): (e.get("code") or "")[:50] + "..." for e in embeds.data} if embeds.data else {}
-        
-        # Get last outreach
-        touch = sb.table("outbound_touches").select("ts").order("ts", desc=True).limit(1).execute()
-        last_outreach = touch.data[0].get("ts") if touch.data else None
-        
-        # Get lead count
-        leads = sb.table("contacts_master").select("id", count="exact").limit(1).execute()
-        
-        return {
-            "system_mode": mode,
-            "sarah_status": "minimalist_icon_v4",
-            "embed_source": "supabase_locked",
-            "last_outreach": last_outreach,
-            "health": {"supabase": "✅" if leads.count else "❌", "api": "✅"},
-            "locked_embeds": locked_embeds,
-            "audit_timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        return {"error": str(e), "audit_timestamp": datetime.now().isoformat()}
+# sovereign_state legacy endpoint removed to stay under plan limits.
 
-# ==== EMAIL TRACKING PIXEL ENDPOINT ====
+# ==== UNIFIED ENGAGEMENT TRACKER (RLS-Free) ====
 @app.function(image=image, secrets=[VAULT])
 @modal.fastapi_endpoint(method="GET")
-def track_email_open(request, eid: str = "", recipient: str = "", business: str = ""):
-    """Track email opens via 1x1 pixel - Enhanced for Sovereign Revenue Strike (Bot Bypass)"""
+def track_engagement(request, type: str = "email", eid: str = "", lid: str = "", vid_url: str = "", recipient: str = "", business: str = ""):
+    """Unified Engagement Tracker (Pixel + Video) to stay under plan limits.
+    Usage:
+      - Email Pixel: /track_engagement?type=email&eid={uid}&recipient={email}...
+      - Video Click: /track_engagement?type=video&lid={lid}&vid_url={url}
+    """
     import os, requests
     from datetime import datetime, timezone
     from fastapi import Response, Request
-    
-    # 1. Bot Bypass (Pixel Filter)
-    ua = request.headers.get("user-agent", "").lower()
-    bot_keywords = [
-        "bot", "spider", "crawl", "slurp", "phantomjs", "headless",
-        "barracuda", "trend micro", "mimecast", "microsoft", "google-http-client",
-        "python-requests", "go-http-client"
-    ]
-    is_bot = any(keyword in ua for keyword in bot_keywords)
-    
-    # 1x1 transparent GIF
-    TRANSPARENT_GIF = bytes([
-        0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00,
-        0x01, 0x00, 0x80, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
-        0x00, 0x00, 0x00, 0x21, 0xF9, 0x04, 0x01, 0x00,
-        0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00,
-        0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x02, 0x44,
-        0x01, 0x00, 0x3B
-    ])
-    
-    if is_bot:
-        print(f"👻 BOT SCAVENGER BLOCKED: {ua[:50]}...")
-        return Response(content=TRANSPARENT_GIF, media_type="image/gif")
-
-    if eid:
-        try:
-            url = os.environ.get("SUPABASE_URL")
-            key = os.environ.get("SUPABASE_KEY")
-            headers = {
-                "apikey": key,
-                "Authorization": f"Bearer {key}",
-                "Content-Type": "application/json"
-            }
-            
-            ts = datetime.now(timezone.utc).isoformat()
-            
-            # 2. Update outbound_touches dashboard (Direct Sync into Payload)
-            r_get = requests.get(
-                f"{url}/rest/v1/outbound_touches?payload->>email_uid=eq.{eid}",
-                headers=headers
-            )
-            if r_get.status_code == 200 and r_get.json():
-                touch = r_get.json()[0]
-                new_payload = touch.get("payload") or {}
-                new_payload["opened"] = True
-                new_payload["opened_at"] = ts
-                new_payload["human_intent"] = True  # High-fidelity signal
-                
-                requests.patch(
-                    f"{url}/rest/v1/outbound_touches?id=eq.{touch['id']}",
-                    headers=headers,
-                    json={"payload": new_payload, "status": "opened"}
-                )
-                print(f"🔥 HUMAN INTENT DETECTED: {recipient or 'unknown'} opened audit.")
-            
-            # 3. Log to email_opens (Redundant Archive)
-            requests.post(
-                f"{url}/rest/v1/email_opens",
-                headers=headers,
-                json={
-                    "email_id": eid,
-                    "recipient_email": recipient or None,
-                    "business_name": business or None,
-                    "opened_at": ts,
-                    "metadata": {"ua": ua, "type": "human"}
-                }
-            )
-        except Exception as e:
-            print(f"Sync error: {e}")
-    
-    return Response(content=TRANSPARENT_GIF, media_type="image/gif")
-
-# ==== VIDEO ENGAGEMENT TRACKING (High-Intensity Intent) ====
-@app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="GET")
-def track_video_view(request, lid: str = "", vid_url: str = ""):
-    """Track video audit views - Signals 10x higher intent than an email open."""
-    import os, requests, json
-    from datetime import datetime, timezone
     from fastapi.responses import RedirectResponse
     
-    if lid and vid_url:
-        try:
-            url = os.environ.get("SUPABASE_URL")
-            key = os.environ.get("SUPABASE_KEY")
-            headers = {
-                "apikey": key,
-                "Authorization": f"Bearer {key}",
-                "Content-Type": "application/json"
-            }
-            
-            ts = datetime.now(timezone.utc).isoformat()
-            ua = request.headers.get("user-agent", "").lower()
-            
-            # 1. Update outbound_touches (Video Flag)
-            # Find the most recent touch for this lead
-            r_get = requests.get(
-                f"{url}/rest/v1/outbound_touches?lead_id=eq.{lid}&order=ts.desc&limit=1",
-                headers=headers
-            )
-            
+    # Common Setup
+    ua = request.headers.get("user-agent", "").lower()
+    bot_keywords = ["bot", "spider", "crawl", "slurp", "headless", "phantomjs", "barracuda", "trend micro", "mimecast", "microsoft", "google-http-client"]
+    is_bot = any(keyword in ua for keyword in bot_keywords)
+    
+    TRANSPARENT_GIF = bytes([0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x21, 0xF9, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x02, 0x44, 0x01, 0x00, 0x3B])
+    ts = datetime.now(timezone.utc).isoformat()
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_KEY")
+    headers = {"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+
+    if is_bot:
+        return Response(content=TRANSPARENT_GIF, media_type="image/gif") if type == "email" else RedirectResponse(url=vid_url or "https://aiserviceco.com")
+
+    try:
+        if type == "email" and eid:
+            # Update outbound_touches dashboard
+            r_get = requests.get(f"{url}/rest/v1/outbound_touches?payload->>email_uid=eq.{eid}", headers=headers)
             if r_get.status_code == 200 and r_get.json():
                 touch = r_get.json()[0]
                 payload = touch.get("payload") or {}
-                payload["video_watched"] = True
-                payload["video_watched_at"] = ts
-                payload["intent_score"] = (payload.get("intent_score") or 0) + 50 # massive boost
-                
-                requests.patch(
-                    f"{url}/rest/v1/outbound_touches?id=eq.{touch['id']}",
-                    headers=headers,
-                    json={"payload": payload, "status": "engaged"}
-                )
+                payload.update({"opened": True, "opened_at": ts, "human_intent": True})
+                requests.patch(f"{url}/rest/v1/outbound_touches?id=eq.{touch['id']}", headers=headers, json={"payload": payload, "status": "opened"})
             
-            # 2. Log to system_health_log (Real-time alert signal)
-            requests.post(
-                f"{url}/rest/v1/system_health_log",
-                headers=headers,
-                json={
-                    "check_name": "video_engagement",
-                    "status": "watching",
-                    "message": f"Lead {lid} is watching video audit. High intent detected.",
-                    "metadata": {"ua": ua, "vid": vid_url}
-                }
-            )
+            # Log to email_opens
+            requests.post(f"{url}/rest/v1/email_opens", headers=headers, json={"email_id": eid, "recipient_email": recipient or None, "business_name": business or None, "opened_at": ts, "metadata": {"ua": ua, "type": "human"}})
+            return Response(content=TRANSPARENT_GIF, media_type="image/gif")
             
-            print(f"🎬 VIDEO ENGAGEMENT: {lid} is watching {vid_url}")
+        elif type == "video" and lid:
+            # Update outbound_touches (Video Flag)
+            r_get = requests.get(f"{url}/rest/v1/outbound_touches?lead_id=eq.{lid}&order=ts.desc&limit=1", headers=headers)
+            if r_get.status_code == 200 and r_get.json():
+                touch = r_get.json()[0]
+                payload = touch.get("payload") or {}
+                payload.update({"video_watched": True, "video_watched_at": ts, "intent_score": (payload.get("intent_score") or 0) + 50})
+                requests.patch(f"{url}/rest/v1/outbound_touches?id=eq.{touch['id']}", headers=headers, json={"payload": payload, "status": "engaged"})
             
-        except Exception as e:
-            print(f"Video track error: {e}")
+            # Log to system_health_log
+            requests.post(f"{url}/rest/v1/system_health_log", headers=headers, json={"check_name": "video_engagement", "status": "watching", "message": f"Lead {lid} is watching video audit.", "metadata": {"ua": ua, "vid": vid_url}})
+            return RedirectResponse(url=vid_url or "https://aiserviceco.com")
             
-    # Always redirect to the actual video URL or a fallback
-    fallback = "https://aiserviceco.com"
-    return RedirectResponse(url=vid_url or fallback)
+    except Exception as e:
+        print(f"Engagement tracking error: {e}")
+        
+    return Response(content=TRANSPARENT_GIF, media_type="image/gif") if type == "email" else RedirectResponse(url=vid_url or "https://aiserviceco.com")
 
 # ==== SMS INBOUND HANDLER (Sarah AI Reply with Memory) ====
 @app.function(image=image, secrets=[VAULT])
@@ -919,6 +896,36 @@ def vapi_webhook(data: dict = None):
 
 
 
+@app.function(image=image, secrets=[VAULT], timeout=60)
+def send_executive_pulse():
+    """Aggregates Revenue Waterfall and sends SMS Pulse to Dan and Wife (Phase 21)."""
+    import os, json, requests
+    from datetime import datetime, timezone
+    from scripts.revenue_waterfall import get_waterfall_summary
+    
+    print("📱 EXECUTIVE PULSE: Generating daily report...")
+    
+    # Run the verified waterfall diagnostic
+    summary = get_waterfall_summary()
+    
+    # Format SMS content (clean, high-signal)
+    now = datetime.now(timezone.utc)
+    report = f"⚫ SOVEREIGN PULSE [{now.strftime('%m/%d')}]\n\n{summary}"
+    report += "\n🚀 View Full Dashboard: https://aiserviceco.com/dashboard"
+    
+    # Recipients
+    recipients = ["+13529368152", "+18638129362"]
+    
+    # GHL Notify Webhook
+    ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+    
+    for phone in recipients:
+        try:
+            requests.post(ghl_webhook, json={"phone": phone, "message": report}, timeout=10)
+            print(f"✅ Pulse sent to {phone}")
+        except Exception as e:
+            print(f"❌ Failed to send pulse to {phone}: {e}")
+
 @app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"), timeout=600)
 def system_orchestrator():
     """Master Orchestrator: Health, Outreach, and Time-based Strikes (Sovereign Consolidation)."""
@@ -996,6 +1003,11 @@ def system_orchestrator():
                 run_enrichment_loop.spawn(limit=15)
         except Exception as e:
             print(f"⚠️ Enrichment trigger failed: {e}")
+
+    # F. Daily Executive Pulse (8 AM EST -> 13 UTC)
+    if hour == 13 and minute < 5:
+        print("🚀 TRIGGER: Daily Executive Pulse (Phase 21)")
+        send_executive_pulse.spawn()
 
     print("✅ MASTER ORCHESTRATOR: Pulse complete.")
 
@@ -1440,7 +1452,69 @@ def trigger_cinematic_strike():
     from scripts.trigger_cinematic_strike import run_phase12_strike
     return run_phase12_strike()
 
+from workers.social_content import generate_weekly_content as social_gen_logic
+from workers.social_poster import publish_social_multiplier_posts as social_post_logic
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 */6 * * *"))
+def auto_social_content_cycle():
+    """Generates a fresh week of social content every 6 hours."""
+    print("📈 SOCIAL: Refreshing content calendar...")
+    return social_gen_logic(1)
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("0 9,16 * * *"))
+def auto_social_publisher():
+    """Publishes social drafts twice daily (9AM & 4PM EST)."""
+    print("🚀 SOCIAL: Triggering publication cycle...")
+    return social_post_logic()
+
 @app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="GET")
+def sovereign_stats():
+    """Consolidated endpoint for Dashboard stats + System Health. RLS Bypass Proxy."""
+    import os, requests
+    from datetime import datetime, timezone, timedelta
+    from modules.database.supabase_client import get_supabase
+    
+    try:
+        sb = get_supabase()
+        now = datetime.now(timezone.utc)
+        
+        # 1. Real Lead Count (Verified 330+)
+        leads = sb.table("contacts_master").select("id", count="exact").in_("status", ["new", "research_done"]).execute()
+        pool_count = leads.count if leads.count is not None else len(leads.data)
+        
+        # 2. Recent Social Broadcasts
+        social = sb.table("outbound_touches").select("ts,company,status").eq("channel", "social").order("ts", desc=True).limit(5).execute()
+        
+        # 3. Outreach (24h)
+        yesterday = (now - timedelta(hours=24)).isoformat()
+        touches = sb.table("outbound_touches").select("id", count="exact").gt("ts", yesterday).execute()
+        outbound_24h = touches.count if touches.count is not None else len(touches.data)
+
+        # 4. Health Check (Heartbeat last 15m)
+        hb = sb.table("system_health_log").select("checked_at").order("checked_at", desc=True).limit(1).execute()
+        last_hb = hb.data[0]["checked_at"] if hb.data else None
+        hb_ok = False
+        if last_hb:
+            hb_time = datetime.fromisoformat(last_hb.replace("Z", "+00:00"))
+            hb_ok = (now - hb_time).total_seconds() < 900
+        
+        return {
+            "total_leads": pool_count,
+            "outbound_24h": outbound_24h,
+            "social_logs": social.data,
+            "health": {
+                "status": "healthy" if hb_ok else "degraded",
+                "heartbeat_ok": hb_ok,
+                "last_heartbeat": last_hb
+            },
+            "status": "synchronized",
+            "checked_at": now.isoformat()
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
 def auto_outreach_loop():
     """Triggers autonomous outreach engine with lead recycling."""
     from datetime import datetime, timezone, timedelta
@@ -1496,55 +1570,7 @@ def auto_outreach_loop():
     
     outreach_logic()
 
-
-# ────────────────────────────────────────────────────────────
-#  HEALTH CHECK ENDPOINT (for UptimeRobot / external watchdog)
-# ────────────────────────────────────────────────────────────
-@app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="GET")
-def health_check():
-    """Returns system health status for external monitoring (UptimeRobot)."""
-    import os, json
-    from datetime import datetime, timezone, timedelta
-    from modules.database.supabase_client import get_supabase
-    
-    try:
-        supabase = get_supabase()
-        now = datetime.now(timezone.utc)
-        
-        # Check 1: Heartbeat (last 15 min)
-        hb = supabase.table("system_health_log").select("checked_at").order(
-            "checked_at", desc=True
-        ).limit(1).execute()
-        last_hb = hb.data[0]["checked_at"] if hb.data else None
-        hb_ok = False
-        if last_hb:
-            hb_time = datetime.fromisoformat(last_hb.replace("Z", "+00:00"))
-            hb_ok = (now - hb_time).total_seconds() < 900  # 15 min
-        
-        # Check 2: Outreach (last 30 min)
-        touches = supabase.table("outbound_touches").select("ts", count="exact").gt(
-            "ts", (now - timedelta(minutes=30)).isoformat()
-        ).execute()
-        outreach_count = touches.count if touches.count is not None else len(touches.data)
-        
-        # Check 3: Lead pool
-        pool = supabase.table("contacts_master").select("id", count="exact").in_(
-            "status", ["new", "research_done"]
-        ).execute()
-        pool_count = pool.count if pool.count is not None else len(pool.data)
-        
-        healthy = hb_ok and pool_count > 0
-        
-        return {
-            "status": "healthy" if healthy else "degraded",
-            "heartbeat": {"ok": hb_ok, "last": last_hb},
-            "outreach_30m": outreach_count,
-            "lead_pool": pool_count,
-            "checked_at": now.isoformat(),
-        }
-    except Exception as e:
-        return {"status": "error", "error": str(e)}
+# Health check consolidated into sovereign_stats
 
 
 # ────────────────────────────────────────────────────────────
@@ -2340,6 +2366,12 @@ def weekly_newsletter():
     run_weekly_digest(dry_run=False)
     print("✅ NEWSLETTER: Run complete.")
 
+
+@app.function(image=image, secrets=[VAULT])
+def trigger_principal_matcher(limit=200):
+    from workers.principal_matcher import run_principal_matching_strike
+    count = run_principal_matching_strike(limit=limit)
+    return {"status": "complete", "matched_count": count}
 
 if __name__ == "__main__":
     print("⚫ ANTIGRAVITY v5.0 - SOVEREIGN DEPLOY")

@@ -62,13 +62,35 @@ NICHES = [
     "florist",
     "fitness center",
     "auto detailing",
-    "window cleaning"
+    "window cleaning",
+    "locksmith",
+    "handyman service",
+    "carpet cleaning",
+    "hvac repair",
+    "roof repair",
+    "physiotherapist",
+    "massage therapist",
+    "dance studio",
+    "preschool",
+    "pet grooming",
+    "barber shop",
+    "hair salon",
+    "nails salon",
+    "tattoo shop",
+    "coffee shop",
+    "bakery",
+    "pizza delivery",
+    "sandwich shop",
+    "storage facility",
+    "junk removal",
+    "appliance repair"
 ]
 
 CITIES = [
-    # Lakeland Zip Code Deep Scan
+# Lakeland Zip Code Deep Scan (ALL Zips)
     "33801", "33803", "33805", "33809", "33810", 
-    "33811", "33812", "33813", "33815", "Lakeland FL",
+    "33811", "33812", "33813", "33815", "33860", 
+    "33823", "33830", "Lakeland FL",
     # Target Growth Markets
     "Winter Haven FL",
     "Plant City FL",
@@ -76,10 +98,10 @@ CITIES = [
     "Orlando FL",
 ]
 
-# How many search combos to run per cycle (rate limit / cost control)
-SEARCHES_PER_CYCLE = 10
-# Max leads to insert per cycle
-MAX_INSERTS_PER_CYCLE = 50
+# How many search combos to run per cycle (SAturation Mode: High)
+SEARCHES_PER_CYCLE = 200
+# Max leads to insert per cycle (Saturation Mode: Lifted)
+MAX_INSERTS_PER_CYCLE = 5000
 
 
 # ============================================================

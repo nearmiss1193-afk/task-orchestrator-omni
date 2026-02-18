@@ -1,69 +1,118 @@
-"""
-REVENUE WATERFALL DIAGNOSTIC v6.0
-=================================
-Empirical verification of the income pipeline.
-"""
 import os
-import json
-from datetime import datetime, timezone, timedelta
-from modules.database.supabase_client import get_supabase
+import psycopg2
+from datetime import datetime, timezone
+from dotenv import load_dotenv
 
-def run_waterfall():
-    supabase = get_supabase()
-    now = datetime.now(timezone.utc)
-    day_ago = (now - timedelta(days=1)).isoformat()
-    week_ago = (now - timedelta(days=7)).isoformat()
-    
-    print(f"\n--- INCOME PIPELINE CHECK [{now.strftime('%Y-%m-%d')}] ---")
-    
-    # Step 1: SENDING?
-    sending = supabase.table("outbound_touches").select("id", count="exact").gte("ts", day_ago).execute()
-    print(f"Step 1: SENDING?    → {sending.count or 0} emails in last 24h")
-    
-    # Step 2: OPENING?
-    # Note: Using the human_intent filter from Phase 6
-    opening = supabase.table("outbound_touches").select("id", count="exact").eq("payload->>opened", "true").gte("ts", week_ago).execute()
-    print(f"Step 2: OPENING?    → {opening.count or 0} human opens in last 7d")
-    
-    # Step 3: REPLYING?
-    replying = supabase.table("outbound_touches").select("id", count="exact").eq("status", "replied").gte("ts", week_ago).execute()
-    print(f"Step 3: REPLYING?   → {replying.count or 0} replies in last 7d")
-    
-    # Step 4: BOOKING?
-    # Checking for status changes to 'appointment' or similar in contacts_master
-    booking = supabase.table("contacts_master").select("id", count="exact").eq("status", "appointment").execute()
-    print(f"Step 4: BOOKING?    → {booking.count or 0} appointments booked")
-    
-    # Step 5: PAYING?
-    paying = supabase.table("contacts_master").select("id", count="exact").eq("status", "customer").execute()
-    print(f"Step 5: PAYING?     → {paying.count or 0} payments/customers total")
-    
-    # Step 6: PIPELINE?
-    pipeline = supabase.table("contacts_master").select("id", count="exact").in_("status", ["new", "research_done"]).execute()
-    print(f"Step 6: PIPELINE?   → {pipeline.count or 0} contactable leads remain")
-    
-    # SOURCE BREAKDOWN
-    print("\n--- SOURCE BREAKDOWN ---")
-    sources = supabase.table("contacts_master").select("source").execute()
-    s_map = {}
-    for r in sources.data:
-        s = r.get("source", "unknown")
-        s_map[s] = s_map.get(s, 0) + 1
-    summary = (
-        f"--- INCOME PIPELINE CHECK [{now.strftime('%Y-%m-%d')}] ---\n"
-        f"Step 1: SENDING?    → {sending.count or 0} emails in last 24h\n"
-        f"Step 2: OPENING?    → {opening.count or 0} human opens in last 7d\n"
-        f"Step 3: REPLYING?   → {replying.count or 0} replies in last 7d\n"
-        f"Step 4: BOOKING?    → {booking.count or 0} appointments booked\n"
-        f"Step 5: PAYING?     → {paying.count or 0} payments/customers total\n"
-        f"Step 6: PIPELINE?   → {pipeline.count or 0} contactable leads remain\n"
-        f"\n--- SOURCE BREAKDOWN ---\n"
-    )
-    for s, c in sorted(s_map.items(), key=lambda x: x[1], reverse=True):
-        summary += f" - {s}: {c} leads\n"
+# Load credentials
+load_dotenv()
+load_dotenv('.env.local')
+
+db_url = os.environ.get("DATABASE_URL")
+
+if not db_url:
+    print("❌ Error: Missing DATABASE_URL in environment")
+    exit(1)
+
+def get_waterfall_summary():
+    """Returns a clean summary string for SMS/Executive Pulse."""
+    conn = None
+    try:
+        conn = psycopg2.connect(db_url)
+        cur = conn.cursor()
         
-    return summary
+        cur.execute("SELECT COUNT(*) FROM outbound_touches WHERE ts > NOW() - INTERVAL '24 hours';")
+        outreach_24h = cur.fetchone()[0]
+        
+        cur.execute("SELECT MAX(checked_at) FROM system_health_log;")
+        last_hb = cur.fetchone()[0]
+        
+        hb_str = "N/A"
+        if last_hb and hasattr(last_hb, 'strftime'):
+            hb_str = f"{last_hb.strftime('%H:%M')} UTC"
+        elif last_hb:
+            hb_str = str(last_hb)[:16]
+            
+        cur.execute("SELECT status FROM system_state WHERE key = 'campaign_mode';")
+        res_mode = cur.fetchone()
+        campaign_status = res_mode[0] if res_mode else "UNKNOWN"
+        
+        cur.execute("SELECT COUNT(*) FROM contacts_master WHERE status IN ('new', 'research_done');")
+        leads_count = cur.fetchone()[0]
+        
+        summary = (
+            f"📈 Outreach (24h): {outreach_24h}\n"
+            f"💓 Last Pulse: {hb_str}\n"
+            f"🔄 Mode: {campaign_status}\n"
+            f"🎯 Pool: {leads_count} leads"
+        )
+        cur.close()
+        return summary
+    except Exception as e:
+        return f"❌ Waterfall Error: {str(e)}"
+    finally:
+        if conn:
+            conn.close()
+
+def check_revenue_waterfall():
+    print("═══════════════════════════════════════════════════════════════")
+    print("REVENUE WATERFALL CHECK (Direct SQL)")
+    print("═══════════════════════════════════════════════════════════════")
+    print(get_waterfall_summary())
+    print("═══════════════════════════════════════════════════════════════")
+    
+    conn = None
+    try:
+        conn = psycopg2.connect(db_url)
+        cur = conn.cursor()
+
+        # 1. Outreach Happening? (Last 30 min)
+        cur.execute("SELECT COUNT(*) FROM outbound_touches WHERE ts > NOW() - INTERVAL '30 minutes';")
+        outreach_30m = cur.fetchone()[0]
+        
+        # 1b. Outreach (Last 24h)
+        cur.execute("SELECT COUNT(*) FROM outbound_touches WHERE ts > NOW() - INTERVAL '24 hours';")
+        outreach_24h = cur.fetchone()[0]
+        
+        status_outreach = "✅" if outreach_30m > 0 else "❌"
+        print(f"{status_outreach} Outreach (30m): {outreach_30m} sent")
+        print(f"✅ Outreach (24h): {outreach_24h} sent")
+
+        # 2. Heartbeat Working? (Last 15 min)
+        cur.execute("SELECT checked_at FROM system_health_log ORDER BY checked_at DESC LIMIT 1;")
+        res_hb = cur.fetchone()
+        if res_hb:
+            last_hb = res_hb[0]
+            # Check if it's within last 15 mins manually in script if needed, but display it
+            print(f"✅ Last Heartbeat: {last_hb}")
+        else:
+            print("❌ No Heartbeats found")
+
+        # 3. Campaign Mode
+        cur.execute("SELECT status FROM system_state WHERE key = 'campaign_mode';")
+        res_mode = cur.fetchone()
+        campaign_status = res_mode[0] if res_mode else "UNKNOWN"
+        status_mode = "✅" if campaign_status == "working" else "❌"
+        print(f"{status_mode} Campaign Mode: {campaign_status}")
+        
+        # 4. Ingestion Pulse (New leads)
+        cur.execute("SELECT COUNT(*) FROM contacts_master WHERE status IN ('new', 'research_done');")
+        leads_count = cur.fetchone()[0]
+        print(f"✅ Available Leads: {leads_count}")
+
+        print("═══════════════════════════════════════════════════════════════")
+        if status_outreach == "✅" and status_mode == "✅":
+            print("VERIFIED WORKING: System is operational.")
+        elif status_mode == "✅":
+            print("VERIFICATION PENDING: System is 'working' but no outreach in last 30m. (Check hours?)")
+        else:
+            print("VERIFICATION FAILED: System is NOT 'working'.")
+            
+        cur.close()
+    except Exception as e:
+        print(f"❌ Error during verification: {e}")
+    finally:
+        if conn:
+            conn.close()
 
 if __name__ == "__main__":
-    rep = run_waterfall()
-    print(rep)
+    check_revenue_waterfall()

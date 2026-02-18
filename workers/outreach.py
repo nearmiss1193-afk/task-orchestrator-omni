@@ -783,11 +783,13 @@ def auto_outreach_loop():
             if website:
                 print(f"📊 Route -> AUDIT Email (Step 1): {email} | site: {website}")
                 try:
-                    dispatch_audit_email.local(lead_id)
+                    res = dispatch_audit_email.local(lead_id)
+                    print(f"DEBUG: dispatch_audit_email result: {res}")
                 except Exception as e:
                     print(f"❌ Audit Email Failed for {lead_id}: {e}")
                     # Fallback to generic email if audit fails
                     try:
+                        print(f"📧 Fallback -> Generic Email for {lead_id}")
                         dispatch_email_logic.local(lead_id)
                     except Exception as e2:
                         print(f"❌ Generic Email also failed for {lead_id}: {e2}")

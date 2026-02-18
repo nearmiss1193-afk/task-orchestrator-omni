@@ -197,15 +197,17 @@ def send_newsletter(supabase, edition: int = 0, dry_run: bool = True):
         return newsletter
     
     sent = 0
+    import time
     for r in recipients:
         try:
             resend.Emails.send({
-                "from": "Dan Coffman <dan@aiserviceco.com>",
+                "from": "Dan Coffman <owner@aiserviceco.com>",
                 "to": [r["email"]],
                 "subject": newsletter["subject"],
                 "html": newsletter["html"],
             })
             sent += 1
+            time.sleep(0.6) # Rate limit: 2 emails/sec max
         except Exception as e:
             print(f"  Error sending to {r['email']}: {e}")
     
