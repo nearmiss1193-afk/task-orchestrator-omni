@@ -1533,7 +1533,7 @@ def generate_ghl_csv():
     
     while True:
         res = supabase.table("contacts_master").select(
-            "id,full_name,email,phone,company_name,niche,city,state,status,lead_source,website_url"
+            "id,full_name,email,phone,company_name,niche,status,lead_source,website_url"
         ).in_("status", ["new", "research_done", "outreach_sent", "sequence_complete"]).range(
             offset, offset + batch - 1
         ).execute()
@@ -1548,7 +1548,7 @@ def generate_ghl_csv():
     
     output = io.StringIO()
     w = csv.writer(output)
-    w.writerow(["First Name", "Last Name", "Email", "Phone", "Company Name", "Tags", "City", "State", "Website", "Source"])
+    w.writerow(["First Name", "Last Name", "Email", "Phone", "Company Name", "Tags", "Website", "Source"])
     
     for lead in contactable:
         name = (lead.get("full_name") or "").strip()
@@ -1572,8 +1572,6 @@ def generate_ghl_csv():
             phone,
             lead.get("company_name") or "",
             ", ".join(tags),
-            lead.get("city") or "",
-            lead.get("state") or "",
             lead.get("website_url") or "",
             lead.get("lead_source") or "supabase"
         ])

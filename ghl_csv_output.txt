@@ -1,0 +1,126 @@
+✓ Initialized. View run at 
+https://modal.com/apps/nearmiss1193-afk/main/ap-T8xUvkUY8LHl7hFKiv0KAy
+✓ Created objects.
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\deploy.py
+├── 🔨 Created mount modules\outbound_dialer.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\dispatch
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\handlers
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\learning
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\bridge
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\vapi
+├── 🔨 Created mount modules\__init__.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\ai
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\database
+├── 🔨 Created mount PythonPackage:workers
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\modules\analytics
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\handlers
+├── 🔨 Created mount workers\instant_response.py
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\api
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\core
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\utils
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\workers
+├── 🔨 Created mount 
+│   C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\scripts
+├── 🔨 Created function log_consent.
+├── 🔨 Created function dispatch_email_logic.
+├── 🔨 Created function dispatch_audit_email.
+├── 🔨 Created function dispatch_sms_logic.
+├── 🔨 Created function dispatch_call_logic.
+├── 🔨 Created function income_pipeline_check.
+├── 🔨 Created function check_lead_pool.
+├── 🔨 Created function check_recent_outreach.
+├── 🔨 Created function check_15m_outreach.
+├── 🔨 Created web function track_engagement => 
+│   https://nearmiss1193-afk--ghl-omni-automation-track-engagement-dev.modal.ru
+│   n
+├── 🔨 Created web function ghl_webhook => 
+│   https://nearmiss1193-afk--ghl-omni-automation-ghl-webhook-dev.modal.run
+├── 🔨 Created web function sms_inbound => 
+│   https://nearmiss1193-afk--ghl-omni-automation-sms-inbound-dev.modal.run
+├── 🔨 Created web function vapi_webhook => 
+│   https://nearmiss1193-afk--ghl-omni-automation-vapi-webhook-dev.modal.run
+├── 🔨 Created function send_executive_pulse.
+├── 🔨 Created function system_orchestrator.
+├── 🔨 Created function system_heartbeat.
+├── 🔨 Created function scheduled_sunbiz_delta_watch.
+├── 🔨 Created function run_prospector.
+├── 🔨 Created function generate_ghl_csv.
+├── 🔨 Created function auto_social_content_cycle.
+├── 🔨 Created function auto_social_publisher.
+├── 🔨 Created web function sovereign_stats => 
+│   https://nearmiss1193-afk--ghl-omni-automation-sovereign-stats-dev.modal.run
+├── 🔨 Created function auto_outreach_loop.
+├── 🔨 Created web function resend_webhook => 
+│   https://nearmiss1193-afk--ghl-omni-automation-resend-webhook-dev.modal.run
+├── 🔨 Created function research_strike_worker.
+├── 🔨 Created function daily_digest.
+├── 🔨 Created function auto_prospecting.
+├── 🔨 Created function schedule_social_multiplier.
+├── 🔨 Created function trigger_social_publish.
+├── 🔨 Created function get_latest_social_video.
+├── 🔨 Created function weekly_newsletter.
+├── 🔨 Created function trigger_principal_matcher.
+├── 🔨 Created function send_tiffaney_reminder.
+└── 🔨 Created function trigger_tiffaney_onboarding_call.
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 947, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 172, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 225, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/deploy.py", line 1539, in generate_ghl_csv
+    ).execute()
+      ^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'column contacts_master.city does not exist', 'code': '42703', 'hint': None, 'details': None}
+Stopping app - uncaught exception raised locally: ExecutionError('Could not deserialize remote exception due to local error:\nDeserialization failed with an AttributeError, \'str\' object has no attribute \'get\'. This is probably because you have different versions of a library in your local and remote environments.\nThis can happen if your local environment does not have the remote exception definitions.\nHere is the remote traceback:\nTraceback (most recent call last):\n  File "/pkg/modal/_runtime/container_io_manager.py", line 947, in handle_input_exception\n    yield\n  File "/pkg/modal/_container_entrypoint.py", line 172, in run_input_sync\n    values = io_context.call_function_sync()\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/pkg/modal/_runtime/container_io_manager.py", line 225, in call_function_sync\n    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)\n                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/root/deploy.py", line 1539, in generate_ghl.
+┌─ Error ─────────────────────────────────────────────────────────────────────┐
+│ Could not deserialize remote exception due to local error:                  │
+│ Deserialization failed with an AttributeError, 'str' object has no          │
+│ attribute 'get'. This is probably because you have different versions of a  │
+│ library in your local and remote environments.                              │
+│ This can happen if your local environment does not have the remote          │
+│ exception definitions.                                                      │
+│ Here is the remote traceback:                                               │
+│ Traceback (most recent call last):                                          │
+│   File "/pkg/modal/_runtime/container_io_manager.py", line 947, in          │
+│ handle_input_exception                                                      │
+│     yield                                                                   │
+│   File "/pkg/modal/_container_entrypoint.py", line 172, in run_input_sync   │
+│     values = io_context.call_function_sync()                                │
+│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                │
+│   File "/pkg/modal/_runtime/container_io_manager.py", line 225, in          │
+│ call_function_sync                                                          │
+│     expected_value_or_values = self.finalized_function.callable(*args,      │
+│ **kwargs)                                                                   │
+│                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ │
+│ ^^^^^                                                                       │
+│   File "/root/deploy.py", line 1539, in generate_ghl_csv                    │
+│     ).execute()                                                             │
+│       ^^^^^^^^^                                                             │
+│   File                                                                      │
+│ "/usr/local/lib/python3.11/site-packages/postgrest/_sync/request_builder.py │
+│ ", line 53, in execute                                                      │
+│     raise APIError(dict(json_obj))                                          │
+│ postgrest.exceptions.APIError: {'message': 'column contacts_master.city     │
+│ does not exist', 'code': '42703', 'hint': None, 'details': None}            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
