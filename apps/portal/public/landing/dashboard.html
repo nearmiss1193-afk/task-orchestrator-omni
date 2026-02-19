@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Service Co — Command Center</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing: border-box
         }
 
         :root {
@@ -29,8 +32,17 @@
             --accent-rose: #f43f5e;
             --accent-purple: #a855f7;
             --accent-cyan: #06b6d4;
-            --glow-blue: rgba(99, 102, 241, 0.15);
-            --glow-green: rgba(16, 185, 129, 0.15);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f9;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-card-hover: rgba(245, 245, 250, 0.95);
+            --border: rgba(0, 0, 0, 0.08);
+            --border-active: rgba(99, 102, 241, 0.4);
+            --text-primary: #1a1a2e;
+            --text-secondary: #64648a;
+            --text-muted: #9999aa;
         }
 
         body {
@@ -39,88 +51,90 @@
             font-family: 'Inter', -apple-system, sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
+            transition: background .3s, color .3s
         }
 
-        /* Ambient background */
         body::before {
             content: '';
             position: fixed;
-            top: -50%;
-            left: -50%;
+            inset: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.04) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
+            background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, .04) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, .03) 0%, transparent 50%);
             z-index: 0;
-            pointer-events: none;
+            pointer-events: none
         }
 
         .app {
             position: relative;
-            z-index: 1;
+            z-index: 1
         }
 
-        /* Top Bar */
+        /* Topbar */
         .topbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 32px;
+            padding: 14px 28px;
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(20px);
             position: sticky;
             top: 0;
             z-index: 50;
-            background: rgba(10, 10, 15, 0.85);
+            background: rgba(10, 10, 15, .85);
+            transition: background .3s
+        }
+
+        [data-theme="light"] .topbar {
+            background: rgba(245, 245, 249, .9)
         }
 
         .topbar-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 12px
         }
 
         .topbar-logo {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: 10px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 16px;
+            font-size: 15px
         }
 
         .topbar-title {
             font-weight: 700;
-            font-size: 18px;
-            letter-spacing: -0.3px;
+            font-size: 17px;
+            letter-spacing: -.3px
         }
 
         .topbar-subtitle {
-            font-size: 12px;
-            color: var(--text-muted);
+            font-size: 11px;
+            color: var(--text-muted)
         }
 
         .topbar-right {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px
         }
 
         .status-pill {
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 14px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 5px 12px;
+            background: rgba(16, 185, 129, .1);
+            border: 1px solid rgba(16, 185, 129, .2);
             border-radius: 999px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            color: var(--accent-green);
+            color: var(--accent-green)
         }
 
         .status-pill .dot {
@@ -128,60 +142,76 @@
             height: 7px;
             background: var(--accent-green);
             border-radius: 50%;
-            animation: pulse-dot 2s infinite;
+            animation: pulse-dot 2s infinite
         }
 
         .status-pill.degraded {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: rgba(245, 158, 11, 0.2);
-            color: var(--accent-amber);
+            background: rgba(245, 158, 11, .1);
+            border-color: rgba(245, 158, 11, .2);
+            color: var(--accent-amber)
         }
 
         .status-pill.degraded .dot {
-            background: var(--accent-amber);
+            background: var(--accent-amber)
         }
 
         @keyframes pulse-dot {
 
             0%,
             100% {
-                opacity: 1;
+                opacity: 1
             }
 
             50% {
-                opacity: 0.4;
+                opacity: .4
             }
         }
 
         .time-display {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            font-variant-numeric: tabular-nums;
+            font-variant-numeric: tabular-nums
         }
 
-        /* Main Layout */
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all .2s;
+            color: var(--text-primary)
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--border-active);
+            background: rgba(99, 102, 241, .08)
+        }
+
+        /* Main */
         .main {
-            padding: 24px 32px;
+            padding: 20px 28px;
             max-width: 1440px;
-            margin: 0 auto;
+            margin: 0 auto
         }
 
-        /* Metric Cards Row */
+        /* Metrics */
         .metrics-row {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: 14px;
+            margin-bottom: 20px
         }
 
         .metric-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            transition: all 0.3s ease;
+            border-radius: 14px;
+            padding: 18px;
+            transition: all .3s;
             position: relative;
-            overflow: hidden;
+            overflow: hidden
         }
 
         .metric-card::before {
@@ -193,165 +223,195 @@
             height: 2px;
             background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity .3s
         }
 
         .metric-card:hover {
-            border-color: var(--border-active);
+            border-color: var(--border-active)
         }
 
         .metric-card:hover::before {
-            opacity: 1;
+            opacity: 1
         }
 
         .metric-label {
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted);
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px
         }
 
         .metric-value {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
             letter-spacing: -1px;
-            line-height: 1;
+            line-height: 1
         }
 
         .metric-sub {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-secondary);
-            margin-top: 6px;
+            margin-top: 4px
         }
 
         .metric-icon {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 20px;
-            opacity: 0.5;
+            top: 14px;
+            right: 14px;
+            font-size: 18px;
+            opacity: .4
         }
 
-        /* Live Feed + Panels */
+        .sparkline {
+            margin-top: 8px;
+            height: 28px
+        }
+
+        .sparkline svg {
+            width: 100%;
+            height: 28px
+        }
+
+        .sparkline path {
+            fill: none;
+            stroke: var(--accent-blue);
+            stroke-width: 1.5;
+            stroke-linecap: round
+        }
+
+        .sparkline .area {
+            fill: url(#sparkGrad);
+            stroke: none
+        }
+
+        /* Grid layouts */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: 14px;
+            margin-bottom: 20px
         }
 
         .grid-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: 14px;
+            margin-bottom: 20px
         }
 
+        /* Panel */
         .panel {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            transition: background .3s, border .3s
         }
 
         .panel-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border)
         }
 
         .panel-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 8px
         }
 
         .panel-badge {
             font-size: 10px;
             font-weight: 700;
-            padding: 2px 8px;
+            padding: 2px 7px;
             border-radius: 999px;
-            background: rgba(99, 102, 241, 0.15);
-            color: var(--accent-blue);
+            background: rgba(99, 102, 241, .15);
+            color: var(--accent-blue)
         }
 
         .panel-body {
-            padding: 16px 20px;
+            padding: 14px 18px;
             flex: 1;
             overflow-y: auto;
-            max-height: 400px;
+            max-height: 380px
         }
 
-        /* Feed Items */
+        /* Feed */
         .feed-item {
             display: flex;
-            gap: 12px;
-            padding: 12px 0;
+            gap: 10px;
+            padding: 10px 0;
             border-bottom: 1px solid var(--border);
-            transition: background 0.2s;
+            transition: background .2s;
+            cursor: pointer;
+            border-radius: 6px
+        }
+
+        .feed-item:hover {
+            background: rgba(255, 255, 255, .02)
         }
 
         .feed-item:last-child {
-            border-bottom: none;
+            border-bottom: none
         }
 
         .feed-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
+            font-size: 15px;
+            flex-shrink: 0
         }
 
         .feed-icon.call {
-            background: rgba(99, 102, 241, 0.15);
+            background: rgba(99, 102, 241, .15)
         }
 
         .feed-icon.sms {
-            background: rgba(16, 185, 129, 0.15);
+            background: rgba(16, 185, 129, .15)
         }
 
         .feed-icon.email {
-            background: rgba(245, 158, 11, 0.15);
+            background: rgba(245, 158, 11, .15)
         }
 
         .feed-icon.alert {
-            background: rgba(244, 63, 94, 0.15);
+            background: rgba(244, 63, 94, .15)
         }
 
         .feed-icon.system {
-            background: rgba(168, 85, 247, 0.15);
+            background: rgba(168, 85, 247, .15)
         }
 
         .feed-content {
             flex: 1;
-            min-width: 0;
+            min-width: 0
         }
 
         .feed-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 1px
         }
 
         .feed-desc {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
             line-height: 1.4;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
+            white-space: nowrap
         }
 
         .feed-time {
@@ -359,311 +419,503 @@
             color: var(--text-muted);
             font-variant-numeric: tabular-nums;
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: 2px
         }
 
-        /* Status Grid */
+        /* Transcript expand */
+        .feed-transcript {
+            display: none;
+            margin-top: 8px;
+            padding: 10px;
+            background: rgba(0, 0, 0, .2);
+            border-radius: 8px;
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            border: 1px solid var(--border)
+        }
+
+        .feed-item.expanded .feed-transcript {
+            display: block
+        }
+
+        .feed-item.expanded .feed-desc {
+            white-space: normal
+        }
+
+        /* Audio player */
+        .feed-audio {
+            margin-top: 6px
+        }
+
+        .feed-audio audio {
+            width: 100%;
+            height: 28px;
+            border-radius: 6px
+        }
+
+        /* Lead actions */
+        .lead-actions {
+            display: flex;
+            gap: 4px
+        }
+
+        .lead-action-btn {
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap
+        }
+
+        .lead-action-btn:hover {
+            border-color: var(--border-active);
+            color: var(--accent-blue);
+            background: rgba(99, 102, 241, .08)
+        }
+
+        .lead-action-btn.sms {
+            color: var(--accent-green)
+        }
+
+        .lead-action-btn.sms:hover {
+            border-color: rgba(16, 185, 129, .4);
+            background: rgba(16, 185, 129, .08)
+        }
+
+        .lead-action-btn.email {
+            color: var(--accent-amber)
+        }
+
+        .lead-action-btn.email:hover {
+            border-color: rgba(245, 158, 11, .4);
+            background: rgba(245, 158, 11, .08)
+        }
+
+        /* Integration */
         .integration-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px
         }
 
         .integration-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px;
-            border: 1px solid var(--border);
+            gap: 8px;
+            padding: 10px;
+            background: rgba(255, 255, 255, .02);
+            border-radius: 9px;
+            border: 1px solid var(--border)
         }
 
         .integration-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            flex-shrink: 0;
+            flex-shrink: 0
         }
 
         .integration-dot.green {
             background: var(--accent-green);
-            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 8px rgba(16, 185, 129, .4)
         }
 
         .integration-dot.amber {
             background: var(--accent-amber);
-            box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 8px rgba(245, 158, 11, .4)
         }
 
         .integration-dot.red {
             background: var(--accent-rose);
-            box-shadow: 0 0 8px rgba(244, 63, 94, 0.4);
+            box-shadow: 0 0 8px rgba(244, 63, 94, .4)
         }
 
         .integration-name {
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 600
         }
 
         .integration-status {
-            font-size: 11px;
-            color: var(--text-muted);
+            font-size: 10px;
+            color: var(--text-muted)
         }
 
-        /* Quick Action Buttons */
+        /* Action buttons */
         .action-btn {
             display: flex;
             align-items: center;
             gap: 10px;
             width: 100%;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, .03);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 10px;
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            text-align: left;
+            transition: all .2s;
+            text-align: left
         }
 
         .action-btn:hover {
-            background: rgba(99, 102, 241, 0.08);
+            background: rgba(99, 102, 241, .08);
             border-color: var(--border-active);
-            transform: translateY(-1px);
+            transform: translateY(-1px)
         }
 
         .action-btn .icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
+            font-size: 15px;
+            flex-shrink: 0
         }
 
         .action-btn .label-sub {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
-            font-weight: 400;
+            font-weight: 400
         }
 
-        /* Leads Table */
+        /* Campaign control */
+        .campaign-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .campaign-row:last-child {
+            border-bottom: none
+        }
+
+        .campaign-toggle {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 11px;
+            cursor: pointer;
+            transition: background .2s;
+            border: none
+        }
+
+        .campaign-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform .2s
+        }
+
+        .campaign-toggle.active {
+            background: var(--accent-green)
+        }
+
+        .campaign-toggle.active::after {
+            transform: translateX(18px)
+        }
+
+        /* Table */
         .leads-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: collapse
         }
 
         .leads-table thead th {
             text-align: left;
             font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: .8px;
             color: var(--text-muted);
             font-weight: 600;
-            padding: 10px 16px;
-            border-bottom: 1px solid var(--border);
+            padding: 8px 14px;
+            border-bottom: 1px solid var(--border)
         }
 
         .leads-table tbody tr {
             border-bottom: 1px solid var(--border);
-            transition: background 0.2s;
+            transition: background .2s
         }
 
         .leads-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, .02)
         }
 
         .leads-table td {
-            padding: 12px 16px;
-            font-size: 13px;
+            padding: 10px 14px;
+            font-size: 12px
         }
 
-        .leads-table .lead-name {
-            font-weight: 600;
+        .lead-name {
+            font-weight: 600
         }
 
-        .leads-table .lead-contact {
+        .lead-contact {
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 11px
         }
 
         .tag {
             display: inline-block;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .4px
         }
 
         .tag-blue {
-            background: rgba(99, 102, 241, 0.15);
-            color: #818cf8;
+            background: rgba(99, 102, 241, .15);
+            color: #818cf8
         }
 
         .tag-green {
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
+            background: rgba(16, 185, 129, .15);
+            color: #34d399
         }
 
         .tag-amber {
-            background: rgba(245, 158, 11, 0.15);
-            color: #fbbf24;
+            background: rgba(245, 158, 11, .15);
+            color: #fbbf24
         }
 
         .tag-rose {
-            background: rgba(244, 63, 94, 0.15);
-            color: #fb7185;
+            background: rgba(244, 63, 94, .15);
+            color: #fb7185
         }
 
         .tag-purple {
-            background: rgba(168, 85, 247, 0.15);
-            color: #c084fc;
+            background: rgba(168, 85, 247, .15);
+            color: #c084fc
         }
 
-        /* Auth Gate */
+        /* Revenue card */
+        .revenue-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .revenue-row:last-child {
+            border-bottom: none
+        }
+
+        .revenue-label {
+            font-size: 12px;
+            color: var(--text-secondary)
+        }
+
+        .revenue-val {
+            font-size: 14px;
+            font-weight: 700
+        }
+
+        /* Map */
+        .heatmap-container {
+            width: 100%;
+            height: 200px;
+            background: rgba(255, 255, 255, .02);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border)
+        }
+
+        .map-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            opacity: .6;
+            animation: map-pulse 3s infinite
+        }
+
+        @keyframes map-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: .6
+            }
+
+            50% {
+                transform: scale(1.8);
+                opacity: .2
+            }
+        }
+
+        /* Auth */
         .auth-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(10, 10, 15, 0.95);
+            background: rgba(10, 10, 15, .95);
             backdrop-filter: blur(30px);
             z-index: 100;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: center
         }
 
         .auth-box {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 380px;
+            border-radius: 18px;
+            padding: 36px;
+            max-width: 360px;
             width: 100%;
-            text-align: center;
+            text-align: center
         }
 
         .auth-box h2 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 4px
         }
 
         .auth-box p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
-            margin-bottom: 24px;
+            margin-bottom: 20px
         }
 
         .auth-input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, .04);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: 10px;
+            padding: 12px;
             color: var(--text-primary);
             font-size: 16px;
             text-align: center;
             letter-spacing: 4px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter';
             outline: none;
-            transition: border-color 0.2s;
-            margin-bottom: 16px;
+            transition: border .2s;
+            margin-bottom: 14px
         }
 
         .auth-input:focus {
-            border-color: var(--accent-blue);
+            border-color: var(--accent-blue)
         }
 
         .auth-btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             color: white;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: opacity .2s
         }
 
         .auth-btn:hover {
-            opacity: 0.9;
+            opacity: .9
         }
 
         .auth-error {
             color: var(--accent-rose);
+            font-size: 11px;
+            margin-top: 10px;
+            display: none
+        }
+
+        /* Notif toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 14px 18px;
+            max-width: 360px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .4);
+            transform: translateX(120%);
+            transition: transform .4s cubic-bezier(.2, 1, .3, 1);
+            backdrop-filter: blur(20px)
+        }
+
+        .toast.show {
+            transform: translateX(0)
+        }
+
+        .toast-title {
             font-size: 12px;
-            margin-top: 12px;
-            display: none;
+            font-weight: 700;
+            margin-bottom: 2px
+        }
+
+        .toast-body {
+            font-size: 11px;
+            color: var(--text-secondary)
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
+        @media(max-width:1024px) {
             .metrics-row {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(3, 1fr)
             }
 
             .grid-2,
             .grid-3 {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr
             }
 
-            .topbar {
-                padding: 12px 16px;
-            }
-
+            .topbar,
             .main {
-                padding: 16px;
+                padding-left: 16px;
+                padding-right: 16px
             }
         }
 
-        @media (max-width: 640px) {
+        @media(max-width:640px) {
             .metrics-row {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr)
             }
 
             .integration-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr)
             }
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 4px;
+            width: 4px
         }
 
         ::-webkit-scrollbar-track {
-            background: transparent;
+            background: transparent
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        /* Shimmer loading */
-        .shimmer {
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.03) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
+            background: rgba(255, 255, 255, .1);
+            border-radius: 4px
         }
 
         .refresh-btn {
@@ -671,26 +923,32 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            transition: all 0.2s;
+            font-size: 11px;
+            padding: 3px 7px;
+            border-radius: 5px;
+            transition: all .2s
         }
 
         .refresh-btn:hover {
             color: var(--accent-blue);
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(99, 102, 241, .1)
         }
     </style>
 </head>
 
 <body>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast">
+        <div class="toast-title" id="toastTitle"></div>
+        <div class="toast-body" id="toastBody"></div>
+    </div>
+
     <!-- AUTH GATE -->
     <div id="authGate" class="auth-overlay">
         <div class="auth-box">
-            <div style="font-size: 32px; margin-bottom: 16px;">⚡</div>
+            <div style="font-size:28px;margin-bottom:14px">⚡</div>
             <h2>Command Center</h2>
-            <p>Enter access code to continue</p>
+            <p>Enter access code</p>
             <input type="password" id="authInput" class="auth-input" placeholder="••••••" autofocus>
             <button onclick="authenticate()" class="auth-btn">Authenticate</button>
             <div id="authError" class="auth-error">Access denied</div>
@@ -698,117 +956,116 @@
     </div>
 
     <div class="app">
-        <!-- TOP BAR -->
         <header class="topbar">
             <div class="topbar-left">
                 <div class="topbar-logo">A</div>
                 <div>
                     <div class="topbar-title">AI Service Co</div>
-                    <div class="topbar-subtitle">Command Center</div>
+                    <div class="topbar-subtitle">Command Center v3</div>
                 </div>
             </div>
             <div class="topbar-right">
-                <div class="time-display" id="clockDisplay">--:--:-- PM</div>
+                <div class="time-display" id="clockDisplay">--:--</div>
                 <div class="status-pill" id="systemStatus">
-                    <div class="dot"></div>
-                    <span id="systemStatusText">Connecting...</span>
+                    <div class="dot"></div><span id="systemStatusText">Connecting...</span>
                 </div>
-                <button class="refresh-btn" onclick="refreshAll()" title="Refresh all data">↻ Refresh</button>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">🌙</button>
+                <button class="refresh-btn" onclick="refreshAll()">↻ Refresh</button>
             </div>
         </header>
 
         <main class="main">
-            <!-- METRIC CARDS -->
+            <!-- SVG gradient def for sparklines -->
+            <svg width="0" height="0">
+                <defs>
+                    <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(99,102,241,0.3)" />
+                        <stop offset="100%" stop-color="rgba(99,102,241,0)" />
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <!-- METRICS -->
             <div class="metrics-row">
                 <div class="metric-card">
                     <div class="metric-icon">👥</div>
                     <div class="metric-label">Total Leads</div>
-                    <div class="metric-value" id="metricLeads">—</div>
-                    <div class="metric-sub" id="metricLeadsSub">Loading...</div>
+                    <div class="metric-value" id="mLeads">—</div>
+                    <div class="metric-sub" id="mLeadsSub">Loading...</div>
+                    <div class="sparkline" id="sparkLeads"></div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-icon">📤</div>
-                    <div class="metric-label">Outreach (24h)</div>
-                    <div class="metric-value" id="metricOutreach">—</div>
-                    <div class="metric-sub" id="metricOutreachSub">Loading...</div>
+                    <div class="metric-label">Outreach 24h</div>
+                    <div class="metric-value" id="mOutreach">—</div>
+                    <div class="metric-sub" id="mOutreachSub">Loading...</div>
+                    <div class="sparkline" id="sparkOutreach"></div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-icon">📞</div>
                     <div class="metric-label">AI Calls</div>
-                    <div class="metric-value" id="metricCalls">—</div>
-                    <div class="metric-sub" id="metricCallsSub">Loading...</div>
+                    <div class="metric-value" id="mCalls">—</div>
+                    <div class="metric-sub" id="mCallsSub">Loading...</div>
+                    <div class="sparkline" id="sparkCalls"></div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-icon">💰</div>
-                    <div class="metric-label">Pipeline Value</div>
-                    <div class="metric-value" id="metricPipeline">—</div>
-                    <div class="metric-sub" id="metricPipelineSub">$49-99/mo per client</div>
+                    <div class="metric-label">Pipeline</div>
+                    <div class="metric-value" id="mPipeline">—</div>
+                    <div class="metric-sub">$49-99/mo per client</div>
+                    <div class="sparkline" id="sparkRevenue"></div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-icon">🔔</div>
                     <div class="metric-label">Alerts Today</div>
-                    <div class="metric-value" id="metricAlerts">—</div>
-                    <div class="metric-sub" id="metricAlertsSub">Loading...</div>
+                    <div class="metric-value" id="mAlerts">—</div>
+                    <div class="metric-sub" id="mAlertsSub">Loading...</div>
                 </div>
             </div>
 
-            <!-- LIVE FEED + RECENT CALLS -->
+            <!-- LIVE FEED + CALLS -->
             <div class="grid-2">
-                <!-- Live Activity Feed -->
                 <div class="panel">
                     <div class="panel-header">
-                        <div class="panel-title">
-                            <span>📡</span> Live Activity
-                            <span class="panel-badge" id="feedCount">0</span>
-                        </div>
-                        <button class="refresh-btn" onclick="fetchActivity()">↻</button>
+                        <div class="panel-title"><span>📡</span> Live Activity <span class="panel-badge"
+                                id="feedCount">0</span></div><button class="refresh-btn"
+                            onclick="fetchActivity()">↻</button>
                     </div>
                     <div class="panel-body" id="activityFeed">
-                        <div class="feed-item">
-                            <div class="feed-content">
-                                <div class="feed-desc" style="color: var(--text-muted)">Loading activity feed...</div>
-                            </div>
+                        <div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">Loading...
                         </div>
                     </div>
                 </div>
-
-                <!-- Recent Calls -->
                 <div class="panel">
                     <div class="panel-header">
-                        <div class="panel-title">
-                            <span>📞</span> Recent Calls
-                            <span class="panel-badge" id="callCount">0</span>
-                        </div>
-                        <button class="refresh-btn" onclick="fetchCalls()">↻</button>
+                        <div class="panel-title"><span>📞</span> Recent Calls <span class="panel-badge"
+                                id="callCount">0</span></div><button class="refresh-btn"
+                            onclick="fetchCalls()">↻</button>
                     </div>
                     <div class="panel-body" id="callsFeed">
-                        <div class="feed-item">
-                            <div class="feed-content">
-                                <div class="feed-desc" style="color: var(--text-muted)">Loading calls...</div>
-                            </div>
+                        <div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">Loading...
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- INTEGRATIONS + QUICK ACTIONS + NOTIFICATIONS -->
+            <!-- INTEGRATIONS + CAMPAIGNS + NOTIFICATIONS -->
             <div class="grid-3">
-                <!-- Integration Status -->
                 <div class="panel">
                     <div class="panel-header">
                         <div class="panel-title"><span>🔗</span> Integrations</div>
                     </div>
                     <div class="panel-body">
-                        <div class="integration-grid" id="integrationGrid">
+                        <div class="integration-grid">
                             <div class="integration-item">
                                 <div class="integration-dot green" id="intModal"></div>
                                 <div>
                                     <div class="integration-name">Modal</div>
-                                    <div class="integration-status" id="intModalStatus">Checking...</div>
+                                    <div class="integration-status" id="intModalSt">Checking...</div>
                                 </div>
                             </div>
                             <div class="integration-item">
-                                <div class="integration-dot green" id="intVapi"></div>
+                                <div class="integration-dot green"></div>
                                 <div>
                                     <div class="integration-name">Vapi</div>
                                     <div class="integration-status">Sarah Online</div>
@@ -818,109 +1075,147 @@
                                 <div class="integration-dot green" id="intGHL"></div>
                                 <div>
                                     <div class="integration-name">GHL</div>
-                                    <div class="integration-status" id="intGHLStatus">Connected</div>
+                                    <div class="integration-status" id="intGHLSt">Connected</div>
                                 </div>
                             </div>
                             <div class="integration-item">
-                                <div class="integration-dot green" id="intResend"></div>
+                                <div class="integration-dot green"></div>
                                 <div>
                                     <div class="integration-name">Resend</div>
                                     <div class="integration-status">Email Ready</div>
                                 </div>
                             </div>
                             <div class="integration-item">
-                                <div class="integration-dot green" id="intSupabase"></div>
+                                <div class="integration-dot green" id="intDB"></div>
                                 <div>
                                     <div class="integration-name">Supabase</div>
-                                    <div class="integration-status" id="intSupabaseStatus">Connected</div>
+                                    <div class="integration-status" id="intDBSt">Connected</div>
                                 </div>
                             </div>
                             <div class="integration-item">
-                                <div class="integration-dot green" id="intHeartbeat"></div>
+                                <div class="integration-dot green" id="intHB"></div>
                                 <div>
                                     <div class="integration-name">Heartbeat</div>
-                                    <div class="integration-status" id="intHeartbeatStatus">Checking...</div>
+                                    <div class="integration-status" id="intHBSt">Checking...</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
+                <!-- Campaign Control -->
                 <div class="panel">
                     <div class="panel-header">
-                        <div class="panel-title"><span>⚡</span> Quick Actions</div>
+                        <div class="panel-title"><span>🎯</span> Campaigns</div>
                     </div>
-                    <div class="panel-body" style="display: flex; flex-direction: column; gap: 8px;">
-                        <button class="action-btn" onclick="triggerAction('call_sarah')">
-                            <div class="icon" style="background: rgba(99,102,241,0.15);">📞</div>
+                    <div class="panel-body">
+                        <div class="campaign-row">
                             <div>
-                                <div>Call Sarah</div>
-                                <div class="label-sub">Test voice AI inbound</div>
-                            </div>
-                        </button>
-                        <button class="action-btn" onclick="triggerAction('system_health')">
-                            <div class="icon" style="background: rgba(16,185,129,0.15);">🏥</div>
+                                <div style="font-size:12px;font-weight:600">Email Outreach</div>
+                                <div style="font-size:10px;color:var(--text-muted)">Auto campaign processor</div>
+                            </div><button class="campaign-toggle active" id="togEmail"
+                                onclick="toggleCampaign(this)"></button>
+                        </div>
+                        <div class="campaign-row">
                             <div>
-                                <div>System Health Check</div>
-                                <div class="label-sub">Full diagnostics report</div>
-                            </div>
-                        </button>
-                        <button class="action-btn" onclick="triggerAction('view_logs')">
-                            <div class="icon" style="background: rgba(245,158,11,0.15);">📋</div>
+                                <div style="font-size:12px;font-weight:600">Voice Drops</div>
+                                <div style="font-size:10px;color:var(--text-muted)">Slybroadcast blasts</div>
+                            </div><button class="campaign-toggle" id="togVoice" onclick="toggleCampaign(this)"></button>
+                        </div>
+                        <div class="campaign-row">
                             <div>
-                                <div>View Modal Logs</div>
-                                <div class="label-sub">Recent function executions</div>
-                            </div>
-                        </button>
-                        <button class="action-btn" onclick="window.open('https://app.gohighlevel.com','_blank')">
-                            <div class="icon" style="background: rgba(244,63,94,0.15);">🔗</div>
+                                <div style="font-size:12px;font-weight:600">SMS Follow-up</div>
+                                <div style="font-size:10px;color:var(--text-muted)">GHL auto-reply</div>
+                            </div><button class="campaign-toggle" id="togSMS" onclick="toggleCampaign(this)"></button>
+                        </div>
+                        <div class="campaign-row">
                             <div>
-                                <div>Open GHL</div>
-                                <div class="label-sub">CRM & workflows</div>
-                            </div>
-                        </button>
+                                <div style="font-size:12px;font-weight:600">Sarah Inbound</div>
+                                <div style="font-size:10px;color:var(--text-muted)">AI receptionist</div>
+                            </div><button class="campaign-toggle active" id="togSarah"
+                                onclick="toggleCampaign(this)"></button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Notification Log -->
+                <!-- Notifications -->
                 <div class="panel">
                     <div class="panel-header">
-                        <div class="panel-title"><span>🔔</span> Notification Log</div>
-                        <button class="refresh-btn" onclick="fetchNotifications()">↻</button>
+                        <div class="panel-title"><span>🔔</span> Notifications</div><button class="refresh-btn"
+                            onclick="fetchNotifications()">↻</button>
                     </div>
                     <div class="panel-body" id="notifFeed">
-                        <div class="feed-item">
-                            <div class="feed-content">
-                                <div class="feed-desc" style="color: var(--text-muted)">Loading notifications...</div>
-                            </div>
+                        <div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">Loading...
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- RECENT LEADS TABLE -->
+            <!-- REVENUE + MAP -->
+            <div class="grid-2">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><span>💰</span> Revenue Tracker</div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="revenue-row">
+                            <div class="revenue-label">Trial Signups</div>
+                            <div class="revenue-val" id="revTrials">—</div>
+                        </div>
+                        <div class="revenue-row">
+                            <div class="revenue-label">Active Subscribers</div>
+                            <div class="revenue-val" id="revActive" style="color:var(--accent-green)">—</div>
+                        </div>
+                        <div class="revenue-row">
+                            <div class="revenue-label">Monthly Recurring</div>
+                            <div class="revenue-val" id="revMRR" style="color:var(--accent-blue)">—</div>
+                        </div>
+                        <div class="revenue-row">
+                            <div class="revenue-label">Grandfathered ($49)</div>
+                            <div class="revenue-val" id="revGrand">—</div>
+                        </div>
+                        <div class="revenue-row">
+                            <div class="revenue-label">Full Price ($99)</div>
+                            <div class="revenue-val" id="revFull">—</div>
+                        </div>
+                        <div class="revenue-row">
+                            <div class="revenue-label">Churn Rate</div>
+                            <div class="revenue-val" id="revChurn" style="color:var(--accent-rose)">—</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><span>🗺️</span> Lead Heatmap — Florida</div>
+                    </div>
+                    <div class="panel-body" style="padding:10px">
+                        <div class="heatmap-container" id="heatmapContainer"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEADS TABLE -->
             <div class="panel">
                 <div class="panel-header">
-                    <div class="panel-title"><span>👥</span> Lead Pipeline</div>
-                    <button class="refresh-btn" onclick="fetchLeads()">↻</button>
+                    <div class="panel-title"><span>👥</span> Lead Pipeline</div><button class="refresh-btn"
+                        onclick="fetchLeads()">↻</button>
                 </div>
-                <div style="overflow-x: auto;">
+                <div style="overflow-x:auto">
                     <table class="leads-table">
                         <thead>
                             <tr>
-                                <th>Name / Business</th>
+                                <th>Business</th>
                                 <th>Contact</th>
                                 <th>Status</th>
                                 <th>Source</th>
                                 <th>Last Touch</th>
-                                <th>Added</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="leadsTableBody">
+                        <tbody id="leadsBody">
                             <tr>
-                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 32px;">
-                                    Loading leads...</td>
+                                <td colspan="6" style="text-align:center;color:var(--text-muted);padding:28px">
+                                    Loading...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -930,323 +1225,135 @@
     </div>
 
     <script>
-        // ========== CONFIG ==========
         const MODAL_URL = 'https://nearmiss1193-afk--ghl-omni-automation';
         const STATS_URL = `${MODAL_URL}-sovereign-stats.modal.run`;
-        const VAPI_WEBHOOK_URL = `${MODAL_URL}-vapi-webhook.modal.run`;
-        const SUPABASE_URL = 'https://rzcpfwkygdvoshtwxncs.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTA0MjQsImV4cCI6MjA4MjE2NjQyNH0.tWtGxrb4mZxjJggwKTkLpLk2GBi4d_zyUUq1nJMFnkk';
-        const SESSION_CODE = 'SOVEREIGN';
-        const GATE_KEY = 'EMPIRE_ACCESS_V2';
+        const SB_URL = 'https://rzcpfwkygdvoshtwxncs.supabase.co';
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTA0MjQsImV4cCI6MjA4MjE2NjQyNH0.tWtGxrb4mZxjJggwKTkLpLk2GBi4d_zyUUq1nJMFnkk';
+        const GATE_KEY = 'CMD_V3'; const SESSION_CODE = 'SOVEREIGN';
+        const DAN_PHONE = '+13529368152'; const SARAH_PHONE = '+18632132505';
+        const GHL_WEBHOOK = 'https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd';
 
-        // ========== AUTH ==========
-        function checkSession() {
-            if (localStorage.getItem(GATE_KEY) === 'AUTHORIZED') {
-                document.getElementById('authGate').style.display = 'none';
-                init();
-            }
-        }
-        function authenticate() {
-            const input = document.getElementById('authInput');
-            if (input.value === SESSION_CODE) {
-                localStorage.setItem(GATE_KEY, 'AUTHORIZED');
-                document.getElementById('authGate').style.display = 'none';
-                init();
-            } else {
-                document.getElementById('authError').style.display = 'block';
-                input.value = '';
-                input.style.borderColor = 'var(--accent-rose)';
-                setTimeout(() => { input.style.borderColor = ''; }, 2000);
-            }
-        }
-        document.getElementById('authInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') authenticate();
-        });
+        // AUTH
+        function checkSession() { if (localStorage.getItem(GATE_KEY) === 'OK') { document.getElementById('authGate').style.display = 'none'; init() } }
+        function authenticate() { const i = document.getElementById('authInput'); if (i.value === SESSION_CODE) { localStorage.setItem(GATE_KEY, 'OK'); document.getElementById('authGate').style.display = 'none'; init() } else { document.getElementById('authError').style.display = 'block'; i.value = ''; i.style.borderColor = 'var(--accent-rose)'; setTimeout(() => i.style.borderColor = '', 2000) } }
+        document.getElementById('authInput').addEventListener('keypress', e => { if (e.key === 'Enter') authenticate() });
 
-        // ========== CLOCK ==========
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clockDisplay').textContent = now.toLocaleString('en-US', {
-                hour: 'numeric', minute: '2-digit', second: '2-digit',
-                hour12: true, timeZone: 'America/New_York'
-            }) + ' ET';
-        }
+        // CLOCK
+        function updateClock() { document.getElementById('clockDisplay').textContent = new Date().toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true, timeZone: 'America/New_York' }) + ' ET' }
 
-        // ========== SUPABASE HELPER ==========
-        async function supabaseQuery(table, select = '*', params = {}) {
-            let url = `${SUPABASE_URL}/rest/v1/${table}?select=${encodeURIComponent(select)}`;
-            for (const [k, v] of Object.entries(params)) {
-                url += `&${k}=${encodeURIComponent(v)}`;
-            }
-            const res = await fetch(url, {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                    'Prefer': params._count ? 'count=exact' : ''
-                }
-            });
-            if (params._count) {
-                const count = res.headers.get('content-range');
-                return count ? parseInt(count.split('/')[1]) : 0;
-            }
-            return await res.json();
-        }
+        // THEME
+        function toggleTheme() { const h = document.documentElement; const dark = h.dataset.theme === 'dark'; h.dataset.theme = dark ? 'light' : 'dark'; document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙'; localStorage.setItem('theme', h.dataset.theme) }
+        if (localStorage.getItem('theme') === 'light') { document.documentElement.dataset.theme = 'light'; document.getElementById('themeBtn').textContent = '☀️' }
 
-        // ========== FETCH STATS (Modal) ==========
+        // PUSH NOTIFICATIONS
+        let pushEnabled = false;
+        async function enablePush() { if (!('Notification' in window)) return; const p = await Notification.requestPermission(); pushEnabled = p === 'granted'; if (pushEnabled) showToast('🔔 Push Enabled', 'You will receive browser alerts for incoming calls') }
+        function sendPush(title, body) { if (!pushEnabled) return; try { new Notification(title, { body, icon: '⚡', badge: '📞' }) } catch (e) { console.warn('Push failed:', e) } }
+
+        // TOAST
+        function showToast(title, body) { const t = document.getElementById('toast'); document.getElementById('toastTitle').textContent = title; document.getElementById('toastBody').textContent = body; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 5000) }
+
+        // SPARKLINE
+        function renderSparkline(containerId, data) { const el = document.getElementById(containerId); if (!el || !data.length) return; const w = el.clientWidth || 120, h = 28; const max = Math.max(...data), min = Math.min(...data); const range = max - min || 1; const pts = data.map((v, i) => [i * (w / (data.length - 1)), h - (((v - min) / range) * h * .8 + h * .1)]); const line = pts.map((p, i) => i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`).join(' '); const area = line + ` L${w},${h} L0,${h} Z`; el.innerHTML = `<svg viewBox="0 0 ${w} ${h}"><path class="area" d="${area}"/><path d="${line}"/></svg>` }
+
+        // SUPABASE QUERY
+        async function sbQuery(table, select = '*', params = {}) { let url = `${SB_URL}/rest/v1/${table}?select=${encodeURIComponent(select)}`; for (const [k, v] of Object.entries(params)) if (k[0] !== '_') url += `&${k}=${encodeURIComponent(v)}`; const res = await fetch(url, { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` } }); return res.json() }
+
+        // HELPERS
+        function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML }
+        function ago(d) { if (!d) return ''; const m = Math.floor((Date.now() - new Date(d).getTime()) / 60000); if (m < 1) return 'now'; if (m < 60) return m + 'm'; const h = Math.floor(m / 60); if (h < 24) return h + 'h'; return Math.floor(h / 24) + 'd' }
+
+        // FETCH STATS
         async function fetchStats() {
             try {
-                const res = await fetch(STATS_URL, { signal: AbortSignal.timeout(8000) });
-                const data = await res.json();
-
-                document.getElementById('metricLeads').textContent = (data.total_leads || 0).toLocaleString();
-                document.getElementById('metricLeadsSub').textContent = 'Contactable pool';
-                document.getElementById('metricOutreach').textContent = (data.outbound_24h || 0).toLocaleString();
-                document.getElementById('metricOutreachSub').textContent = 'Emails, SMS, calls';
-
-                const pipeline = (data.total_leads || 0) * 49;
-                document.getElementById('metricPipeline').textContent = '$' + pipeline.toLocaleString();
-
-                // Health
-                const health = data.health || {};
-                const isHealthy = health.status === 'healthy';
-                const statusEl = document.getElementById('systemStatus');
-                const statusText = document.getElementById('systemStatusText');
-                statusText.textContent = isHealthy ? 'All Systems Online' : 'Degraded';
-                statusEl.className = isHealthy ? 'status-pill' : 'status-pill degraded';
-
-                // Heartbeat
-                const hbDot = document.getElementById('intHeartbeat');
-                const hbStatus = document.getElementById('intHeartbeatStatus');
-                hbDot.className = `integration-dot ${isHealthy ? 'green' : 'amber'}`;
-                if (health.last_heartbeat) {
-                    const ago = Math.round((Date.now() - new Date(health.last_heartbeat).getTime()) / 60000);
-                    hbStatus.textContent = `${ago}m ago`;
-                } else {
-                    hbStatus.textContent = 'No data';
-                }
-
-                // Modal status
-                document.getElementById('intModalStatus').textContent = 'Deployed';
-
-            } catch (e) {
-                console.warn('Stats fetch failed:', e);
-                document.getElementById('systemStatusText').textContent = 'API Offline';
-                document.getElementById('systemStatus').className = 'status-pill degraded';
-                document.getElementById('intModalStatus').textContent = 'Offline';
-                document.getElementById('intModal').className = 'integration-dot red';
-            }
+                const r = await fetch(STATS_URL, { signal: AbortSignal.timeout(8000) }); const d = await r.json();
+                document.getElementById('mLeads').textContent = (d.total_leads || 0).toLocaleString(); document.getElementById('mLeadsSub').textContent = 'Contactable pool';
+                document.getElementById('mOutreach').textContent = (d.outbound_24h || 0).toLocaleString(); document.getElementById('mOutreachSub').textContent = 'Emails, SMS, calls';
+                document.getElementById('mPipeline').textContent = '$' + ((d.total_leads || 0) * 49).toLocaleString();
+                const ok = d.health?.status === 'healthy'; document.getElementById('systemStatusText').textContent = ok ? 'All Systems Online' : 'Degraded';
+                document.getElementById('systemStatus').className = ok ? 'status-pill' : 'status-pill degraded';
+                document.getElementById('intModalSt').textContent = 'Deployed'; document.getElementById('intHB').className = `integration-dot ${ok ? 'green' : 'amber'}`;
+                if (d.health?.last_heartbeat) { const a = Math.round((Date.now() - new Date(d.health.last_heartbeat).getTime()) / 60000); document.getElementById('intHBSt').textContent = a + 'm ago' }
+                // Mock sparklines (real data would come from 7-day history)
+                renderSparkline('sparkLeads', [280, 295, 310, 305, 320, 335, d.total_leads || 340]);
+                renderSparkline('sparkOutreach', [12, 8, 15, 22, 18, 25, d.outbound_24h || 20]);
+                renderSparkline('sparkRevenue', [8000, 9200, 10500, 11000, 12800, 14200, (d.total_leads || 0) * 49]);
+            } catch (e) { document.getElementById('systemStatusText').textContent = 'API Offline'; document.getElementById('systemStatus').className = 'status-pill degraded'; document.getElementById('intModal').className = 'integration-dot red'; document.getElementById('intModalSt').textContent = 'Offline' }
         }
 
-        // ========== FETCH CALLS (Vapi via Supabase) ==========
+        // FETCH CALLS
+        let prevCallCount = 0;
         async function fetchCalls() {
             try {
-                const calls = await supabaseQuery('customer_memory', 'phone_number,context_summary,updated_at', {
-                    'order': 'updated_at.desc',
-                    'limit': 10
-                });
-
-                const container = document.getElementById('callsFeed');
-                document.getElementById('callCount').textContent = calls.length;
-
-                if (!calls.length) {
-                    container.innerHTML = '<div class="feed-item"><div class="feed-content"><div class="feed-desc" style="color: var(--text-muted)">No recent calls</div></div></div>';
-                    return;
+                const calls = await sbQuery('customer_memory', 'phone_number,context_summary,updated_at', { order: 'updated_at.desc', limit: 10 });
+                const c = document.getElementById('callsFeed'); document.getElementById('callCount').textContent = calls.length; document.getElementById('mCalls').textContent = calls.length; document.getElementById('mCallsSub').textContent = 'In memory bank';
+                if (!calls.length) { c.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No calls</div>'; return }
+                // Push notification for new calls
+                if (calls.length > prevCallCount && prevCallCount > 0) {
+                    const newest = calls[0]; const ctx = typeof newest.context_summary === 'string' ? { history: newest.context_summary } : (newest.context_summary || {});
+                    sendPush('📞 New Call!', `${ctx.contact_name || 'Unknown'} — ${newest.phone_number}`); showToast('📞 Incoming Call', `${ctx.contact_name || 'Unknown'} from ${newest.phone_number}`)
                 }
-
-                container.innerHTML = calls.map(c => {
-                    const ctx = typeof c.context_summary === 'string' ? { history: c.context_summary } : (c.context_summary || {});
-                    const name = ctx.contact_name || 'Unknown';
-                    const history = (ctx.history || '').split('\n').filter(Boolean);
-                    const lastEntry = history[history.length - 1] || 'No details';
-                    const ago = timeAgo(c.updated_at);
-
-                    return `<div class="feed-item">
-                        <div class="feed-icon call">📞</div>
-                        <div class="feed-content">
-                            <div class="feed-title">${escHtml(name)} — ${escHtml(c.phone_number)}</div>
-                            <div class="feed-desc">${escHtml(lastEntry.substring(0, 120))}</div>
-                        </div>
-                        <div class="feed-time">${ago}</div>
-                    </div>`;
-                }).join('');
-
-                document.getElementById('metricCalls').textContent = calls.length;
-                document.getElementById('metricCallsSub').textContent = 'In memory bank';
-
-            } catch (e) {
-                console.warn('Calls fetch failed:', e);
-            }
+                prevCallCount = calls.length;
+                renderSparkline('sparkCalls', [3, 5, 4, 7, 6, 8, calls.length]);
+                c.innerHTML = calls.map(cl => {
+                    const ctx = typeof cl.context_summary === 'string' ? { history: cl.context_summary } : (cl.context_summary || {}); const name = ctx.contact_name || 'Unknown'; const hist = (ctx.history || '').split('\n').filter(Boolean); const last = hist[hist.length - 1] || 'No details'; const full = hist.join('\n');
+                    return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon call">📞</div><div class="feed-content"><div class="feed-title">${esc(name)} — ${esc(cl.phone_number)}</div><div class="feed-desc">${esc(last.substring(0, 120))}</div><div class="feed-transcript">${esc(full)}</div></div><div class="feed-time">${ago(cl.updated_at)}</div></div>`
+                }).join('')
+            } catch (e) { console.warn('Calls:', e) }
         }
 
-        // ========== FETCH ACTIVITY ==========
+        // FETCH ACTIVITY
         async function fetchActivity() {
             try {
-                const touches = await supabaseQuery('outbound_touches', 'company,channel,status,ts', {
-                    'order': 'ts.desc',
-                    'limit': 15
-                });
-
-                const container = document.getElementById('activityFeed');
-                document.getElementById('feedCount').textContent = touches.length;
-
-                if (!touches.length) {
-                    container.innerHTML = '<div class="feed-item"><div class="feed-content"><div class="feed-desc" style="color: var(--text-muted)">No recent activity</div></div></div>';
-                    return;
-                }
-
-                container.innerHTML = touches.map(t => {
-                    const icons = { email: '📧', sms: '💬', call: '📞', social: '🌐', voice_drop: '🔊' };
-                    const classes = { email: 'email', sms: 'sms', call: 'call', social: 'system', voice_drop: 'alert' };
-                    const icon = icons[t.channel] || '📤';
-                    const cls = classes[t.channel] || 'system';
-
-                    return `<div class="feed-item">
-                        <div class="feed-icon ${cls}">${icon}</div>
-                        <div class="feed-content">
-                            <div class="feed-title">${escHtml(t.company || 'Unknown')}</div>
-                            <div class="feed-desc">${escHtml(t.channel || '')} — ${escHtml(t.status || '')}</div>
-                        </div>
-                        <div class="feed-time">${timeAgo(t.ts)}</div>
-                    </div>`;
-                }).join('');
-
-            } catch (e) {
-                console.warn('Activity fetch failed:', e);
-            }
+                const t = await sbQuery('outbound_touches', 'company,channel,status,ts', { order: 'ts.desc', limit: 15 });
+                const c = document.getElementById('activityFeed'); document.getElementById('feedCount').textContent = t.length;
+                if (!t.length) { c.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No activity</div>'; return }
+                const icons = { email: '📧', sms: '💬', call: '📞', social: '🌐', voice_drop: '🔊' }; const cls = { email: 'email', sms: 'sms', call: 'call', social: 'system', voice_drop: 'alert' };
+                c.innerHTML = t.map(x => `<div class="feed-item"><div class="feed-icon ${cls[x.channel] || 'system'}">${icons[x.channel] || '📤'}</div><div class="feed-content"><div class="feed-title">${esc(x.company || 'Unknown')}</div><div class="feed-desc">${esc(x.channel || '')} — ${esc(x.status || '')}</div></div><div class="feed-time">${ago(x.ts)}</div></div>`).join('')
+            } catch (e) { console.warn('Activity:', e) }
         }
 
-        // ========== FETCH NOTIFICATIONS ==========
+        // FETCH NOTIFICATIONS
         async function fetchNotifications() {
             try {
-                const alerts = await supabaseQuery('system_health_log', 'check_name,status,message,checked_at,metadata', {
-                    'check_name': 'eq.call_alert',
-                    'order': 'checked_at.desc',
-                    'limit': 10
-                });
-
-                const container = document.getElementById('notifFeed');
-                document.getElementById('metricAlerts').textContent = alerts.length;
-                document.getElementById('metricAlertsSub').textContent = alerts.length > 0 ? 'Call alerts' : 'No alerts yet';
-
-                if (!alerts.length) {
-                    container.innerHTML = '<div class="feed-item"><div class="feed-content"><div class="feed-desc" style="color: var(--text-muted)">No notifications yet</div></div></div>';
-                    return;
-                }
-
-                container.innerHTML = alerts.map(a => {
-                    const meta = a.metadata || {};
-                    const caller = meta.caller_name || 'Unknown';
-                    const phone = meta.caller_phone || '';
-                    const summary = (meta.summary || a.message || '').substring(0, 100);
-
-                    return `<div class="feed-item">
-                        <div class="feed-icon alert">🔔</div>
-                        <div class="feed-content">
-                            <div class="feed-title">${escHtml(caller)} ${escHtml(phone)}</div>
-                            <div class="feed-desc">${escHtml(summary)}</div>
-                        </div>
-                        <div class="feed-time">${timeAgo(a.checked_at)}</div>
-                    </div>`;
-                }).join('');
-
-            } catch (e) {
-                console.warn('Notifications fetch failed:', e);
-            }
+                const a = await sbQuery('system_health_log', 'check_name,status,message,checked_at,metadata', { check_name: 'eq.call_alert', order: 'checked_at.desc', limit: 10 });
+                const c = document.getElementById('notifFeed'); document.getElementById('mAlerts').textContent = a.length; document.getElementById('mAlertsSub').textContent = a.length ? 'Call alerts' : 'No alerts';
+                if (!a.length) { c.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No notifications</div>'; return }
+                c.innerHTML = a.map(n => { const m = n.metadata || {}; return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon alert">🔔</div><div class="feed-content"><div class="feed-title">${esc(m.caller_name || 'Unknown')} ${esc(m.caller_phone || '')}</div><div class="feed-desc">${esc((m.summary || n.message || '').substring(0, 100))}</div><div class="feed-transcript">${esc(m.transcript || m.summary || 'No details')}</div></div><div class="feed-time">${ago(n.checked_at)}</div></div>` }).join('')
+            } catch (e) { console.warn('Notif:', e) }
         }
 
-        // ========== FETCH LEADS ==========
+        // FETCH LEADS
         async function fetchLeads() {
             try {
-                const leads = await supabaseQuery('contacts_master',
-                    'id,company,email,phone,status,lead_source,last_contacted_at,created_at', {
-                    'order': 'created_at.desc',
-                    'limit': 20
-                });
-
-                const tbody = document.getElementById('leadsTableBody');
-                if (!leads.length) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 32px;">No leads found</td></tr>';
-                    return;
-                }
-
-                const statusColors = {
-                    new: 'tag-blue', research_done: 'tag-purple', outreach_sent: 'tag-amber',
-                    responded: 'tag-green', customer: 'tag-green', bounced: 'tag-rose'
-                };
-
-                tbody.innerHTML = leads.map(l => `
-                    <tr>
-                        <td>
-                            <div class="lead-name">${escHtml(l.company || 'Unknown')}</div>
-                        </td>
-                        <td>
-                            <div class="lead-contact">${escHtml(l.email || '')}</div>
-                            <div class="lead-contact">${escHtml(l.phone || '')}</div>
-                        </td>
-                        <td><span class="tag ${statusColors[l.status] || 'tag-blue'}">${escHtml(l.status || 'new')}</span></td>
-                        <td style="color: var(--text-secondary); font-size: 12px;">${escHtml(l.lead_source || '—')}</td>
-                        <td style="color: var(--text-secondary); font-size: 12px;">${l.last_contacted_at ? timeAgo(l.last_contacted_at) : '—'}</td>
-                        <td style="color: var(--text-muted); font-size: 12px;">${l.created_at ? new Date(l.created_at).toLocaleDateString() : '—'}</td>
-                    </tr>
-                `).join('');
-
-            } catch (e) {
-                console.warn('Leads fetch failed:', e);
-            }
+                const leads = await sbQuery('contacts_master', 'id,company,email,phone,status,lead_source,last_contacted_at,created_at', { order: 'created_at.desc', limit: 50 });
+                const tb = document.getElementById('leadsBody'); if (!leads.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:28px">No leads</td></tr>'; return }
+                const sc = { new: 'tag-blue', research_done: 'tag-purple', outreach_sent: 'tag-amber', responded: 'tag-green', customer: 'tag-green', bounced: 'tag-rose' };
+                tb.innerHTML = leads.map(l => `<tr><td><div class="lead-name">${esc(l.company || 'Unknown')}</div></td><td><div class="lead-contact">${esc(l.email || '')}</div><div class="lead-contact">${esc(l.phone || '')}</div></td><td><span class="tag ${sc[l.status] || 'tag-blue'}">${esc(l.status || 'new')}</span></td><td style="color:var(--text-secondary);font-size:11px">${esc(l.lead_source || '—')}</td><td style="color:var(--text-secondary);font-size:11px">${l.last_contacted_at ? ago(l.last_contacted_at) : '—'}</td><td><div class="lead-actions"><button class="lead-action-btn" onclick="event.stopPropagation();window.open('tel:${l.phone || ''}')">📞</button><button class="lead-action-btn sms" onclick="event.stopPropagation();sendQuickSMS('${l.phone || ''}','${esc(l.company || '')}')">💬</button><button class="lead-action-btn email" onclick="event.stopPropagation();window.open('mailto:${l.email || ''}')">📧</button></div></td></tr>`).join('')
+            } catch (e) { console.warn('Leads:', e) }
         }
 
-        // ========== ACTIONS ==========
-        function triggerAction(action) {
-            switch (action) {
-                case 'call_sarah':
-                    window.open('tel:+18632132505', '_self');
-                    break;
-                case 'system_health':
-                    fetchStats();
-                    alert('Health check triggered — see dashboard for results.');
-                    break;
-                case 'view_logs':
-                    window.open('https://modal.com/apps/nearmiss1193-afk/ghl-omni-automation', '_blank');
-                    break;
-            }
+        // REVENUE (mock until Stripe connected)
+        function updateRevenue() { document.getElementById('revTrials').textContent = '2'; document.getElementById('revActive').textContent = '0'; document.getElementById('revMRR').textContent = '$0'; document.getElementById('revGrand').textContent = '0'; document.getElementById('revFull').textContent = '0'; document.getElementById('revChurn').textContent = '0%' }
+
+        // HEATMAP
+        function renderHeatmap() {
+            const c = document.getElementById('heatmapContainer'); const cities = [{ name: 'Tampa', x: 42, y: 52 }, { name: 'Orlando', x: 55, y: 48 }, { name: 'Lakeland', x: 48, y: 50 }, { name: 'Jacksonville', x: 52, y: 18 }, { name: 'Miami', x: 62, y: 88 }, { name: 'Daytona', x: 60, y: 35 }, { name: 'Clearwater', x: 38, y: 54 }, { name: 'St Pete', x: 38, y: 58 }];
+            c.innerHTML = cities.map(ct => `<div class="map-dot" style="left:${ct.x}%;top:${ct.y}%;animation-delay:${Math.random() * 2}s" title="${ct.name}"></div><div style="position:absolute;left:${ct.x + 2}%;top:${ct.y - 2}%;font-size:9px;color:var(--text-muted)">${ct.name}</div>`).join('') + '<div style="position:absolute;bottom:6px;right:10px;font-size:9px;color:var(--text-muted)">Florida Service Area</div>'
         }
 
-        // ========== HELPERS ==========
-        function escHtml(str) {
-            if (!str) return '';
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
+        // QUICK SMS
+        async function sendQuickSMS(phone, company) { const msg = prompt(`SMS to ${company} (${phone}):`); if (!msg) return; try { await fetch(GHL_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, message: msg }) }); showToast('💬 SMS Sent', `Message sent to ${company}`) } catch (e) { showToast('❌ Failed', e.message) } }
 
-        function timeAgo(dateStr) {
-            if (!dateStr) return '';
-            const diff = Date.now() - new Date(dateStr).getTime();
-            const mins = Math.floor(diff / 60000);
-            if (mins < 1) return 'now';
-            if (mins < 60) return `${mins}m`;
-            const hrs = Math.floor(mins / 60);
-            if (hrs < 24) return `${hrs}h`;
-            const days = Math.floor(hrs / 24);
-            return `${days}d`;
-        }
+        // CAMPAIGN TOGGLE
+        function toggleCampaign(btn) { btn.classList.toggle('active'); const name = btn.parentElement.querySelector('div div').textContent; showToast(btn.classList.contains('active') ? '✅ Enabled' : '⏸️ Paused', name) }
 
-        // ========== INIT ==========
-        function refreshAll() {
-            fetchStats();
-            fetchCalls();
-            fetchActivity();
-            fetchNotifications();
-            fetchLeads();
-        }
+        // TRIGGER ACTIONS
+        function triggerAction(a) { switch (a) { case 'call_sarah': window.open(`tel:${SARAH_PHONE}`); break; case 'system_health': fetchStats(); showToast('🏥 Health Check', 'Running diagnostics...'); break; case 'view_logs': window.open('https://modal.com/apps/nearmiss1193-afk/ghl-omni-automation', '_blank'); break } }
 
-        function init() {
-            updateClock();
-            setInterval(updateClock, 1000);
-            refreshAll();
-            setInterval(refreshAll, 30000); // Refresh every 30s
-        }
-
+        // INIT
+        function refreshAll() { fetchStats(); fetchCalls(); fetchActivity(); fetchNotifications(); fetchLeads(); updateRevenue(); renderHeatmap() }
+        function init() { updateClock(); setInterval(updateClock, 1000); enablePush(); refreshAll(); setInterval(refreshAll, 30000) }
         checkSession();
     </script>
 </body>
