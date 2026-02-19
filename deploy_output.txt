@@ -1,0 +1,31 @@
+﻿python : +- Error --------
+--------------------------
+--------------------------
+---------+
+At line:1 char:1
++ python -m modal deploy 
+deploy.py 2>&1 | Out-File 
+-FilePath deploy_out ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (+  
+  - Error ------...----   
+ ----------+:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+| 'charmap' codec can't 
+encode character '\u2713' 
+in position 0: character  
+  |
+| maps to <undefined>     
+                          
+                          
+|
++-------------------------
+--------------------------
+--------------------------
++

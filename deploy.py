@@ -1518,15 +1518,13 @@ def run_prospector():
     print("🔍 PROSPECTOR: Starting discovery cycle...")
     return prospector_logic()
 
-@app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="GET")
-def export_ghl_csv():
-    """Export all contactable leads as a GHL-compatible CSV for bulk import.
-    Hit this endpoint to download the CSV file."""
+@app.function(image=image, secrets=[VAULT], timeout=120)
+def generate_ghl_csv():
+    """Generate GHL-compatible CSV of all contacts. Run via: modal run deploy.py::generate_ghl_csv
+    Saves CSV text to system_state for retrieval."""
     import csv
     import io
     from modules.database.supabase_client import get_supabase
-    from fastapi.responses import StreamingResponse
     
     supabase = get_supabase()
     all_leads = []
@@ -1546,10 +1544,8 @@ def export_ghl_csv():
             break
         offset += batch
     
-    # Filter contactable
     contactable = [l for l in all_leads if l.get("phone") or l.get("email")]
     
-    # Build CSV in memory
     output = io.StringIO()
     w = csv.writer(output)
     w.writerow(["First Name", "Last Name", "Email", "Phone", "Company Name", "Tags", "City", "State", "Website", "Source"])
@@ -1582,12 +1578,12 @@ def export_ghl_csv():
             lead.get("lead_source") or "supabase"
         ])
     
-    output.seek(0)
-    return StreamingResponse(
-        iter([output.getvalue()]),
-        media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=ghl_contact_import.csv"}
-    )
+    csv_text = output.getvalue()
+    print(f"Generated CSV: {len(contactable)} contacts, {len(csv_text)} bytes")
+    print("--- CSV START ---")
+    print(csv_text)
+    print("--- CSV END ---")
+    return {"contacts": len(contactable), "csv_bytes": len(csv_text)}
 
 def run_social_migration():
     """Create the social_drafts table via psycopg2."""
