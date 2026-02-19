@@ -4,842 +4,1251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sovereign Command Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>AI Service Co — Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: rgba(18, 18, 28, 0.8);
+            --bg-card-hover: rgba(25, 25, 40, 0.9);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-active: rgba(99, 102, 241, 0.4);
+            --text-primary: #f0f0f5;
+            --text-secondary: #8b8b9e;
+            --text-muted: #55556a;
+            --accent-blue: #6366f1;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --glow-blue: rgba(99, 102, 241, 0.15);
+            --glow-green: rgba(16, 185, 129, 0.15);
+        }
+
         body {
-            background-color: #020617;
-            color: #f8fafc;
-            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .glass {
-            background: rgba(30, 41, 59, 0.7);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* Ambient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
         }
 
-        .system-status-container {
+        .app {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Top Bar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 32px;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(10, 10, 15, 0.85);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .topbar-title {
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.3px;
+        }
+
+        .topbar-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .status-pill .dot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        .status-pill.degraded {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.2);
+            color: var(--accent-amber);
+        }
+
+        .status-pill.degraded .dot {
+            background: var(--accent-amber);
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .time-display {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Main Layout */
+        .main {
+            padding: 24px 32px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        /* Metric Cards Row */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .metric-card:hover {
+            border-color: var(--border-active);
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .metric-sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .metric-icon {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 20px;
+            opacity: 0.5;
+        }
+
+        /* Live Feed + Panels */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .panel-body {
+            padding: 16px 20px;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        /* Feed Items */
+        .feed-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+
+        .feed-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .feed-icon.call {
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .feed-icon.sms {
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .feed-icon.email {
+            background: rgba(245, 158, 11, 0.15);
+        }
+
+        .feed-icon.alert {
+            background: rgba(244, 63, 94, 0.15);
+        }
+
+        .feed-icon.system {
+            background: rgba(168, 85, 247, 0.15);
+        }
+
+        .feed-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .feed-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .feed-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .feed-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Status Grid */
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .integration-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .integration-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .integration-dot.green {
+            background: var(--accent-green);
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        }
+
+        .integration-dot.amber {
+            background: var(--accent-amber);
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+        }
+
+        .integration-dot.red {
+            background: var(--accent-rose);
+            box-shadow: 0 0 8px rgba(244, 63, 94, 0.4);
+        }
+
+        .integration-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .integration-status {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Quick Action Buttons */
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .action-btn:hover {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: var(--border-active);
+            transform: translateY(-1px);
+        }
+
+        .action-btn .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .action-btn .label-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Leads Table */
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leads-table thead th {
+            text-align: left;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .leads-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .leads-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .leads-table td {
+            padding: 12px 16px;
+            font-size: 13px;
+        }
+
+        .leads-table .lead-name {
+            font-weight: 600;
+        }
+
+        .leads-table .lead-contact {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-blue {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+        }
+
+        .tag-green {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+
+        .tag-amber {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
+
+        .tag-rose {
+            background: rgba(244, 63, 94, 0.15);
+            color: #fb7185;
+        }
+
+        .tag-purple {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+        }
+
+        /* Auth Gate */
+        .auth-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(2, 6, 23, 0.9);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-            z-index: 50;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(30px);
+            z-index: 100;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 6px;
+        .auth-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
         }
 
-        .status-captured {
-            background: #22c55e;
+        .auth-box h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
 
-        .status-call {
-            background: #3b82f6;
+        .auth-box p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .auth-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--text-primary);
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 4px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .auth-input:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .auth-btn:hover {
+            opacity: 0.9;
+        }
+
+        .auth-error {
+            color: var(--accent-rose);
+            font-size: 12px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .metrics-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 12px 16px;
+            }
+
+            .main {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .metrics-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .integration-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        /* Shimmer loading */
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.03) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .refresh-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            color: var(--accent-blue);
+            background: rgba(99, 102, 241, 0.1);
         }
     </style>
 </head>
 
-<body class="p-8 relative overflow-x-hidden">
-    <canvas id="neuralCanvas" class="fixed inset-0 z-0 pointer-events-none opacity-40"></canvas>
-
-    <!-- SOVEREIGN ACCESS GATE -->
-    <div id="accessGate" class="system-status-container">
-        <div class="bg-slate-900 border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
-            <div class="mb-6 text-4xl">🛡️</div>
-            <h2 class="text-xl font-bold mb-2">Restricted Access</h2>
-            <p class="text-slate-400 text-sm mb-6">Enter protocol authorization code.</p>
-
-            <input type="password" id="gateInput" placeholder="ACCESS CODE"
-                class="w-full bg-black/50 border border-slate-700 rounded-lg px-4 py-3 text-center tracking-widest text-lg focus:border-blue-500 focus:outline-none mb-4">
-
-            <button onclick="checkAccess()"
-                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition">
-                AUTHENTICATE
-            </button>
-            <p id="gateError" class="text-red-500 text-xs mt-4 hidden">Scale Authorization Failed.</p>
+<body>
+    <!-- AUTH GATE -->
+    <div id="authGate" class="auth-overlay">
+        <div class="auth-box">
+            <div style="font-size: 32px; margin-bottom: 16px;">⚡</div>
+            <h2>Command Center</h2>
+            <p>Enter access code to continue</p>
+            <input type="password" id="authInput" class="auth-input" placeholder="••••••" autofocus>
+            <button onclick="authenticate()" class="auth-btn">Authenticate</button>
+            <div id="authError" class="auth-error">Access denied</div>
         </div>
     </div>
+
+    <div class="app">
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="topbar-logo">A</div>
+                <div>
+                    <div class="topbar-title">AI Service Co</div>
+                    <div class="topbar-subtitle">Command Center</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="time-display" id="clockDisplay">--:--:-- PM</div>
+                <div class="status-pill" id="systemStatus">
+                    <div class="dot"></div>
+                    <span id="systemStatusText">Connecting...</span>
+                </div>
+                <button class="refresh-btn" onclick="refreshAll()" title="Refresh all data">↻ Refresh</button>
+            </div>
+        </header>
+
+        <main class="main">
+            <!-- METRIC CARDS -->
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <div class="metric-icon">👥</div>
+                    <div class="metric-label">Total Leads</div>
+                    <div class="metric-value" id="metricLeads">—</div>
+                    <div class="metric-sub" id="metricLeadsSub">Loading...</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">📤</div>
+                    <div class="metric-label">Outreach (24h)</div>
+                    <div class="metric-value" id="metricOutreach">—</div>
+                    <div class="metric-sub" id="metricOutreachSub">Loading...</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">📞</div>
+                    <div class="metric-label">AI Calls</div>
+                    <div class="metric-value" id="metricCalls">—</div>
+                    <div class="metric-sub" id="metricCallsSub">Loading...</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-label">Pipeline Value</div>
+                    <div class="metric-value" id="metricPipeline">—</div>
+                    <div class="metric-sub" id="metricPipelineSub">$49-99/mo per client</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">🔔</div>
+                    <div class="metric-label">Alerts Today</div>
+                    <div class="metric-value" id="metricAlerts">—</div>
+                    <div class="metric-sub" id="metricAlertsSub">Loading...</div>
+                </div>
+            </div>
+
+            <!-- LIVE FEED + RECENT CALLS -->
+            <div class="grid-2">
+                <!-- Live Activity Feed -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>📡</span> Live Activity
+                            <span class="panel-badge" id="feedCount">0</span>
+                        </div>
+                        <button class="refresh-btn" onclick="fetchActivity()">↻</button>
+                    </div>
+                    <div class="panel-body" id="activityFeed">
+                        <div class="feed-item">
+                            <div class="feed-content">
+                                <div class="feed-desc" style="color: var(--text-muted)">Loading activity feed...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Calls -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>📞</span> Recent Calls
+                            <span class="panel-badge" id="callCount">0</span>
+                        </div>
+                        <button class="refresh-btn" onclick="fetchCalls()">↻</button>
+                    </div>
+                    <div class="panel-body" id="callsFeed">
+                        <div class="feed-item">
+                            <div class="feed-content">
+                                <div class="feed-desc" style="color: var(--text-muted)">Loading calls...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTEGRATIONS + QUICK ACTIONS + NOTIFICATIONS -->
+            <div class="grid-3">
+                <!-- Integration Status -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><span>🔗</span> Integrations</div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="integration-grid" id="integrationGrid">
+                            <div class="integration-item">
+                                <div class="integration-dot green" id="intModal"></div>
+                                <div>
+                                    <div class="integration-name">Modal</div>
+                                    <div class="integration-status" id="intModalStatus">Checking...</div>
+                                </div>
+                            </div>
+                            <div class="integration-item">
+                                <div class="integration-dot green" id="intVapi"></div>
+                                <div>
+                                    <div class="integration-name">Vapi</div>
+                                    <div class="integration-status">Sarah Online</div>
+                                </div>
+                            </div>
+                            <div class="integration-item">
+                                <div class="integration-dot green" id="intGHL"></div>
+                                <div>
+                                    <div class="integration-name">GHL</div>
+                                    <div class="integration-status" id="intGHLStatus">Connected</div>
+                                </div>
+                            </div>
+                            <div class="integration-item">
+                                <div class="integration-dot green" id="intResend"></div>
+                                <div>
+                                    <div class="integration-name">Resend</div>
+                                    <div class="integration-status">Email Ready</div>
+                                </div>
+                            </div>
+                            <div class="integration-item">
+                                <div class="integration-dot green" id="intSupabase"></div>
+                                <div>
+                                    <div class="integration-name">Supabase</div>
+                                    <div class="integration-status" id="intSupabaseStatus">Connected</div>
+                                </div>
+                            </div>
+                            <div class="integration-item">
+                                <div class="integration-dot green" id="intHeartbeat"></div>
+                                <div>
+                                    <div class="integration-name">Heartbeat</div>
+                                    <div class="integration-status" id="intHeartbeatStatus">Checking...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><span>⚡</span> Quick Actions</div>
+                    </div>
+                    <div class="panel-body" style="display: flex; flex-direction: column; gap: 8px;">
+                        <button class="action-btn" onclick="triggerAction('call_sarah')">
+                            <div class="icon" style="background: rgba(99,102,241,0.15);">📞</div>
+                            <div>
+                                <div>Call Sarah</div>
+                                <div class="label-sub">Test voice AI inbound</div>
+                            </div>
+                        </button>
+                        <button class="action-btn" onclick="triggerAction('system_health')">
+                            <div class="icon" style="background: rgba(16,185,129,0.15);">🏥</div>
+                            <div>
+                                <div>System Health Check</div>
+                                <div class="label-sub">Full diagnostics report</div>
+                            </div>
+                        </button>
+                        <button class="action-btn" onclick="triggerAction('view_logs')">
+                            <div class="icon" style="background: rgba(245,158,11,0.15);">📋</div>
+                            <div>
+                                <div>View Modal Logs</div>
+                                <div class="label-sub">Recent function executions</div>
+                            </div>
+                        </button>
+                        <button class="action-btn" onclick="window.open('https://app.gohighlevel.com','_blank')">
+                            <div class="icon" style="background: rgba(244,63,94,0.15);">🔗</div>
+                            <div>
+                                <div>Open GHL</div>
+                                <div class="label-sub">CRM & workflows</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notification Log -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><span>🔔</span> Notification Log</div>
+                        <button class="refresh-btn" onclick="fetchNotifications()">↻</button>
+                    </div>
+                    <div class="panel-body" id="notifFeed">
+                        <div class="feed-item">
+                            <div class="feed-content">
+                                <div class="feed-desc" style="color: var(--text-muted)">Loading notifications...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECENT LEADS TABLE -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title"><span>👥</span> Lead Pipeline</div>
+                    <button class="refresh-btn" onclick="fetchLeads()">↻</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="leads-table">
+                        <thead>
+                            <tr>
+                                <th>Name / Business</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Source</th>
+                                <th>Last Touch</th>
+                                <th>Added</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadsTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 32px;">
+                                    Loading leads...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
     <script>
-        const GATE_KEY = "EMPIRE_ACCESS_TOKEN_V1";
-        const SESSION_CODE = "SOVEREIGN"; // User can change this later
+        // ========== CONFIG ==========
+        const MODAL_URL = 'https://nearmiss1193-afk--ghl-omni-automation';
+        const STATS_URL = `${MODAL_URL}-sovereign-stats.modal.run`;
+        const VAPI_WEBHOOK_URL = `${MODAL_URL}-vapi-webhook.modal.run`;
+        const SUPABASE_URL = 'https://rzcpfwkygdvoshtwxncs.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTA0MjQsImV4cCI6MjA4MjE2NjQyNH0.tWtGxrb4mZxjJggwKTkLpLk2GBi4d_zyUUq1nJMFnkk';
+        const SESSION_CODE = 'SOVEREIGN';
+        const GATE_KEY = 'EMPIRE_ACCESS_V2';
 
+        // ========== AUTH ==========
         function checkSession() {
-            if (localStorage.getItem(GATE_KEY) === "AUTHORIZED") {
-                document.getElementById('accessGate').style.display = 'none';
+            if (localStorage.getItem(GATE_KEY) === 'AUTHORIZED') {
+                document.getElementById('authGate').style.display = 'none';
+                init();
             }
         }
-
-        function checkAccess() {
-            const input = document.getElementById('gateInput');
+        function authenticate() {
+            const input = document.getElementById('authInput');
             if (input.value === SESSION_CODE) {
-                localStorage.setItem(GATE_KEY, "AUTHORIZED");
-                document.getElementById('accessGate').style.display = 'none';
+                localStorage.setItem(GATE_KEY, 'AUTHORIZED');
+                document.getElementById('authGate').style.display = 'none';
+                init();
             } else {
-                const err = document.getElementById('gateError');
-                err.classList.remove('hidden');
-                err.innerText = "ACCESS DENIED.";
-                input.value = "";
-                input.classList.add('border-red-500');
+                document.getElementById('authError').style.display = 'block';
+                input.value = '';
+                input.style.borderColor = 'var(--accent-rose)';
+                setTimeout(() => { input.style.borderColor = ''; }, 2000);
+            }
+        }
+        document.getElementById('authInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') authenticate();
+        });
+
+        // ========== CLOCK ==========
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clockDisplay').textContent = now.toLocaleString('en-US', {
+                hour: 'numeric', minute: '2-digit', second: '2-digit',
+                hour12: true, timeZone: 'America/New_York'
+            }) + ' ET';
+        }
+
+        // ========== SUPABASE HELPER ==========
+        async function supabaseQuery(table, select = '*', params = {}) {
+            let url = `${SUPABASE_URL}/rest/v1/${table}?select=${encodeURIComponent(select)}`;
+            for (const [k, v] of Object.entries(params)) {
+                url += `&${k}=${encodeURIComponent(v)}`;
+            }
+            const res = await fetch(url, {
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Prefer': params._count ? 'count=exact' : ''
+                }
+            });
+            if (params._count) {
+                const count = res.headers.get('content-range');
+                return count ? parseInt(count.split('/')[1]) : 0;
+            }
+            return await res.json();
+        }
+
+        // ========== FETCH STATS (Modal) ==========
+        async function fetchStats() {
+            try {
+                const res = await fetch(STATS_URL, { signal: AbortSignal.timeout(8000) });
+                const data = await res.json();
+
+                document.getElementById('metricLeads').textContent = (data.total_leads || 0).toLocaleString();
+                document.getElementById('metricLeadsSub').textContent = 'Contactable pool';
+                document.getElementById('metricOutreach').textContent = (data.outbound_24h || 0).toLocaleString();
+                document.getElementById('metricOutreachSub').textContent = 'Emails, SMS, calls';
+
+                const pipeline = (data.total_leads || 0) * 49;
+                document.getElementById('metricPipeline').textContent = '$' + pipeline.toLocaleString();
+
+                // Health
+                const health = data.health || {};
+                const isHealthy = health.status === 'healthy';
+                const statusEl = document.getElementById('systemStatus');
+                const statusText = document.getElementById('systemStatusText');
+                statusText.textContent = isHealthy ? 'All Systems Online' : 'Degraded';
+                statusEl.className = isHealthy ? 'status-pill' : 'status-pill degraded';
+
+                // Heartbeat
+                const hbDot = document.getElementById('intHeartbeat');
+                const hbStatus = document.getElementById('intHeartbeatStatus');
+                hbDot.className = `integration-dot ${isHealthy ? 'green' : 'amber'}`;
+                if (health.last_heartbeat) {
+                    const ago = Math.round((Date.now() - new Date(health.last_heartbeat).getTime()) / 60000);
+                    hbStatus.textContent = `${ago}m ago`;
+                } else {
+                    hbStatus.textContent = 'No data';
+                }
+
+                // Modal status
+                document.getElementById('intModalStatus').textContent = 'Deployed';
+
+            } catch (e) {
+                console.warn('Stats fetch failed:', e);
+                document.getElementById('systemStatusText').textContent = 'API Offline';
+                document.getElementById('systemStatus').className = 'status-pill degraded';
+                document.getElementById('intModalStatus').textContent = 'Offline';
+                document.getElementById('intModal').className = 'integration-dot red';
             }
         }
 
-        // Bind Enter
-        document.getElementById('gateInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkAccess();
-        });
+        // ========== FETCH CALLS (Vapi via Supabase) ==========
+        async function fetchCalls() {
+            try {
+                const calls = await supabaseQuery('customer_memory', 'phone_number,context_summary,updated_at', {
+                    'order': 'updated_at.desc',
+                    'limit': 10
+                });
+
+                const container = document.getElementById('callsFeed');
+                document.getElementById('callCount').textContent = calls.length;
+
+                if (!calls.length) {
+                    container.innerHTML = '<div class="feed-item"><div class="feed-content"><div class="feed-desc" style="color: var(--text-muted)">No recent calls</div></div></div>';
+                    return;
+                }
+
+                container.innerHTML = calls.map(c => {
+                    const ctx = typeof c.context_summary === 'string' ? { history: c.context_summary } : (c.context_summary || {});
+                    const name = ctx.contact_name || 'Unknown';
+                    const history = (ctx.history || '').split('\n').filter(Boolean);
+                    const lastEntry = history[history.length - 1] || 'No details';
+                    const ago = timeAgo(c.updated_at);
+
+                    return `<div class="feed-item">
+                        <div class="feed-icon call">📞</div>
+                        <div class="feed-content">
+                            <div class="feed-title">${escHtml(name)} — ${escHtml(c.phone_number)}</div>
+                            <div class="feed-desc">${escHtml(lastEntry.substring(0, 120))}</div>
+                        </div>
+                        <div class="feed-time">${ago}</div>
+                    </div>`;
+                }).join('');
+
+                document.getElementById('metricCalls').textContent = calls.length;
+                document.getElementById('metricCallsSub').textContent = 'In memory bank';
+
+            } catch (e) {
+                console.warn('Calls fetch failed:', e);
+            }
+        }
+
+        // ========== FETCH ACTIVITY ==========
+        async function fetchActivity() {
+            try {
+                const touches = await supabaseQuery('outbound_touches', 'company,channel,status,ts', {
+                    'order': 'ts.desc',
+                    'limit': 15
+                });
+
+                const container = document.getElementById('activityFeed');
+                document.getElementById('feedCount').textContent = touches.length;
+
+                if (!touches.length) {
+                    container.innerHTML = '<div class="feed-item"><div class="feed-content"><div class="feed-desc" style="color: var(--text-muted)">No recent activity</div></div></div>';
+                    return;
+                }
+
+                container.innerHTML = touches.map(t => {
+                    const icons = { email: '📧', sms: '💬', call: '📞', social: '🌐', voice_drop: '🔊' };
+                    const classes = { email: 'email', sms: 'sms', call: 'call', social: 'system', voice_drop: 'alert' };
+                    const icon = icons[t.channel] || '📤';
+                    const cls = classes[t.channel] || 'system';
+
+                    return `<div class="feed-item">
+                        <div class="feed-icon ${cls}">${icon}</div>
+                        <div class="feed-content">
+                            <div class="feed-title">${escHtml(t.company || 'Unknown')}</div>
+                            <div class="feed-desc">${escHtml(t.channel || '')} — ${escHtml(t.status || '')}</div>
+                        </div>
+                        <div class="feed-time">${timeAgo(t.ts)}</div>
+                    </div>`;
+                }).join('');
+
+            } catch (e) {
+                console.warn('Activity fetch failed:', e);
+            }
+        }
+
+        // ========== FETCH NOTIFICATIONS ==========
+        async function fetchNotifications() {
+            try {
+                const alerts = await supabaseQuery('system_health_log', 'check_name,status,message,checked_at,metadata', {
+                    'check_name': 'eq.call_alert',
+                    'order': 'checked_at.desc',
+                    'limit': 10
+                });
+
+                const container = document.getElementById('notifFeed');
+                document.getElementById('metricAlerts').textContent = alerts.length;
+                document.getElementById('metricAlertsSub').textContent = alerts.length > 0 ? 'Call alerts' : 'No alerts yet';
+
+                if (!alerts.length) {
+                    container.innerHTML = '<div class="feed-item"><div class="feed-content"><div class="feed-desc" style="color: var(--text-muted)">No notifications yet</div></div></div>';
+                    return;
+                }
+
+                container.innerHTML = alerts.map(a => {
+                    const meta = a.metadata || {};
+                    const caller = meta.caller_name || 'Unknown';
+                    const phone = meta.caller_phone || '';
+                    const summary = (meta.summary || a.message || '').substring(0, 100);
+
+                    return `<div class="feed-item">
+                        <div class="feed-icon alert">🔔</div>
+                        <div class="feed-content">
+                            <div class="feed-title">${escHtml(caller)} ${escHtml(phone)}</div>
+                            <div class="feed-desc">${escHtml(summary)}</div>
+                        </div>
+                        <div class="feed-time">${timeAgo(a.checked_at)}</div>
+                    </div>`;
+                }).join('');
+
+            } catch (e) {
+                console.warn('Notifications fetch failed:', e);
+            }
+        }
+
+        // ========== FETCH LEADS ==========
+        async function fetchLeads() {
+            try {
+                const leads = await supabaseQuery('contacts_master',
+                    'id,company,email,phone,status,lead_source,last_contacted_at,created_at', {
+                    'order': 'created_at.desc',
+                    'limit': 20
+                });
+
+                const tbody = document.getElementById('leadsTableBody');
+                if (!leads.length) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 32px;">No leads found</td></tr>';
+                    return;
+                }
+
+                const statusColors = {
+                    new: 'tag-blue', research_done: 'tag-purple', outreach_sent: 'tag-amber',
+                    responded: 'tag-green', customer: 'tag-green', bounced: 'tag-rose'
+                };
+
+                tbody.innerHTML = leads.map(l => `
+                    <tr>
+                        <td>
+                            <div class="lead-name">${escHtml(l.company || 'Unknown')}</div>
+                        </td>
+                        <td>
+                            <div class="lead-contact">${escHtml(l.email || '')}</div>
+                            <div class="lead-contact">${escHtml(l.phone || '')}</div>
+                        </td>
+                        <td><span class="tag ${statusColors[l.status] || 'tag-blue'}">${escHtml(l.status || 'new')}</span></td>
+                        <td style="color: var(--text-secondary); font-size: 12px;">${escHtml(l.lead_source || '—')}</td>
+                        <td style="color: var(--text-secondary); font-size: 12px;">${l.last_contacted_at ? timeAgo(l.last_contacted_at) : '—'}</td>
+                        <td style="color: var(--text-muted); font-size: 12px;">${l.created_at ? new Date(l.created_at).toLocaleDateString() : '—'}</td>
+                    </tr>
+                `).join('');
+
+            } catch (e) {
+                console.warn('Leads fetch failed:', e);
+            }
+        }
+
+        // ========== ACTIONS ==========
+        function triggerAction(action) {
+            switch (action) {
+                case 'call_sarah':
+                    window.open('tel:+18632132505', '_self');
+                    break;
+                case 'system_health':
+                    fetchStats();
+                    alert('Health check triggered — see dashboard for results.');
+                    break;
+                case 'view_logs':
+                    window.open('https://modal.com/apps/nearmiss1193-afk/ghl-omni-automation', '_blank');
+                    break;
+            }
+        }
+
+        // ========== HELPERS ==========
+        function escHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function timeAgo(dateStr) {
+            if (!dateStr) return '';
+            const diff = Date.now() - new Date(dateStr).getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'now';
+            if (mins < 60) return `${mins}m`;
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return `${hrs}h`;
+            const days = Math.floor(hrs / 24);
+            return `${days}d`;
+        }
+
+        // ========== INIT ==========
+        function refreshAll() {
+            fetchStats();
+            fetchCalls();
+            fetchActivity();
+            fetchNotifications();
+            fetchLeads();
+        }
+
+        function init() {
+            updateClock();
+            setInterval(updateClock, 1000);
+            refreshAll();
+            setInterval(refreshAll, 30000); // Refresh every 30s
+        }
 
         checkSession();
     </script>
-
-    <div class="max-w-7xl mx-auto relative z-10">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-xl">⚡</div>
-                <div>
-                    <h1 class="text-2xl font-bold">Sovereign Command</h1>
-                    <p class="text-slate-400 text-sm">Local Server Status: <span class="text-green-400">● Online</span>
-                    </p>
-                </div>
-            </div>
-            <a href="https://empire-hvac-demo-sovereign.surge.sh/hvac.html" target="_blank" rel="noopener"
-                class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 transition">View Live Site ↗</a>
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-slate-400 text-xs font-semibold uppercase">Total Leads</h3>
-                <div class="text-3xl font-bold mt-2" id="statLeads">...</div>
-            </div>
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-slate-400 text-xs font-semibold uppercase">Est. Pipeline</h3>
-                <div class="text-3xl font-bold mt-2 text-green-400" id="statRevenue">...</div>
-            </div>
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-slate-400 text-xs font-semibold uppercase">AI Calls</h3>
-                <div class="text-3xl font-bold mt-2 text-blue-400" id="statCalls">...</div>
-            </div>
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-slate-400 text-xs font-semibold uppercase">Reservations</h3>
-                <div class="text-3xl font-bold mt-2 text-purple-400" id="statReservations">...</div>
-            </div>
-
-            <!-- Command Center -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- Voice Uplink -->
-                <div class="glass p-6 rounded-2xl flex flex-col items-center justify-center text-center">
-                    <div
-                        class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 animate-pulse">
-                        <span class="text-3xl">🎙️</span>
-                    </div>
-                    <h3 class="text-lg font-bold">Orchestrator Uplink (Level 5)</h3>
-                    <p class="text-slate-400 text-sm mb-4">Direct Neural Link to Antigravity.</p>
-                    <button onclick="startVoiceUplink()" title="Initiate Voice Uplink"
-                        class="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg font-semibold transition w-full">
-                        Initiate Voice Uplink
-                    </button>
-                    <div id="vapi-status" class="mt-2 text-xs text-slate-400">Status: Standby</div>
-                </div>
-
-                <!-- Chat Interface -->
-                <div class="glass p-6 rounded-2xl col-span-2 flex flex-col h-[300px]">
-                    <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
-                        <h3 class="font-bold">Mission Control Chat</h3>
-                        <span class="text-xs text-green-400">● AI Online</span>
-                    </div>
-                    <div class="flex-1 overflow-y-auto mb-4 space-y-3" id="chatHistory">
-                        <div class="bg-white/5 p-3 rounded-lg text-sm rounded-tl-none">
-                            <span class="text-blue-400 font-bold text-xs block mb-1">SYSTEM</span>
-                            Welcome back, Commander. Usage is nominal. 7 active leads pursuing.
-                        </div>
-                    </div>
-                    <div class="flex gap-2">
-                        <input type="text" id="cmdInput" placeholder="Issue a command..."
-                            class="flex-1 bg-black/30 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500">
-                        <button onclick="sendChatCommand()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg"
-                            title="Send Command" aria-label="Send Command">↵</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Leads Table -->
-        <div class="glass rounded-2xl overflow-hidden">
-            <div class="p-6 border-b border-slate-700 flex justify-between items-center">
-                <h2 class="text-lg font-semibold">Recent Activity</h2>
-                <button onclick="fetchData()" class="text-sm text-blue-400 hover:text-blue-300">↻ Refresh</button>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-slate-800/50 text-slate-400 text-xs uppercase">
-                        <tr>
-                            <th class="p-4">Name</th>
-                            <th class="p-4">Contact</th>
-                            <th class="p-4">Source</th>
-                            <th class="p-4">Plan / Meta</th>
-                            <th class="p-4">Intel Dossier</th>
-                            <th class="p-4">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm divide-y divide-slate-700" id="leadsTable">
-                        <tr>
-                            <td colspan="5" class="p-8 text-center text-slate-500">Loading data...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- NEW: Quick Links & Resources -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            <!-- Website & Pages -->
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                    <span class="text-2xl">🌐</span> Websites & Pages
-                </h3>
-                <div class="space-y-3">
-                    <a href="https://aiserviceco.com" target="_blank" rel="noopener"
-                        class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
-                        <div>
-                            <div class="font-semibold text-sm">AI Service Co (Main)</div>
-                            <div class="text-slate-400 text-xs">aiserviceco.com</div>
-                        </div>
-                        <span class="text-green-400">↗</span>
-                    </a>
-                    <a href="https://empire-hvac-demo-sovereign.surge.sh/hvac.html" target="_blank" rel="noopener"
-                        class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
-                        <div>
-                            <div class="font-semibold text-sm">HVAC Demo Funnel</div>
-                            <div class="text-slate-400 text-xs">HVAC Landing Page</div>
-                        </div>
-                        <span class="text-blue-400">↗</span>
-                    </a>
-                    <a href="https://app.gohighlevel.com" target="_blank" rel="noopener"
-                        class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
-                        <div>
-                            <div class="font-semibold text-sm">GoHighLevel</div>
-                            <div class="text-slate-400 text-xs">CRM & Automation</div>
-                        </div>
-                        <span class="text-orange-400">↗</span>
-                    </a>
-                    <a href="https://dashboard.vapi.ai" target="_blank" rel="noopener"
-                        class="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
-                        <div>
-                            <div class="font-semibold text-sm">Vapi Dashboard</div>
-                            <div class="text-slate-400 text-xs">Voice AI Management</div>
-                        </div>
-                        <span class="text-purple-400">↗</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Campaign Templates -->
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                    <span class="text-2xl">📋</span> Campaign Templates
-                </h3>
-                <div class="space-y-3">
-                    <div class="p-3 bg-white/5 rounded-lg border-l-2 border-blue-500">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="font-semibold text-sm">Spartan Outreach</div>
-                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Active</span>
-                        </div>
-                        <div class="text-slate-400 text-xs">SMS → Email → Voice Call (3-day sequence)</div>
-                    </div>
-                    <div class="p-3 bg-white/5 rounded-lg border-l-2 border-green-500">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="font-semibold text-sm">Quick Demo Invite</div>
-                            <span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">Ready</span>
-                        </div>
-                        <div class="text-slate-400 text-xs">Instant SMS with calendar link</div>
-                    </div>
-                    <div class="p-3 bg-white/5 rounded-lg border-l-2 border-purple-500">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="font-semibold text-sm">Re-Engagement</div>
-                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded">Ready</span>
-                        </div>
-                        <div class="text-slate-400 text-xs">Cold leads revival (Email + Call)</div>
-                    </div>
-                    <div class="p-3 bg-white/5 rounded-lg border-l-2 border-orange-500">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="font-semibold text-sm">Sarah Intro Call</div>
-                            <span class="text-xs bg-orange-500/20 text-orange-400 px-2 py-1 rounded">Ready</span>
-                        </div>
-                        <div class="text-slate-400 text-xs">Voice AI qualification call</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                    <span class="text-2xl">⚡</span> Quick Actions
-                </h3>
-                <div class="space-y-3">
-                    <button onclick="triggerAction('sms_blast')"
-                        class="w-full p-3 bg-blue-600 hover:bg-blue-500 rounded-lg text-left transition flex items-center gap-3">
-                        <span class="text-xl">💬</span>
-                        <div>
-                            <div class="font-semibold text-sm">Send SMS Blast</div>
-                            <div class="text-blue-200 text-xs">To all active leads</div>
-                        </div>
-                    </button>
-                    <button onclick="triggerAction('sarah_call')"
-                        class="w-full p-3 bg-purple-600 hover:bg-purple-500 rounded-lg text-left transition flex items-center gap-3">
-                        <span class="text-xl">📞</span>
-                        <div>
-                            <div class="font-semibold text-sm">Have Sarah Call Me</div>
-                            <div class="text-purple-200 text-xs">Test voice AI</div>
-                        </div>
-                    </button>
-                    <button onclick="triggerAction('email_campaign')"
-                        class="w-full p-3 bg-green-600 hover:bg-green-500 rounded-lg text-left transition flex items-center gap-3">
-                        <span class="text-xl">📧</span>
-                        <div>
-                            <div class="font-semibold text-sm">Launch Email Campaign</div>
-                            <div class="text-green-200 text-xs">Prospect outreach</div>
-                        </div>
-                    </button>
-                    <button onclick="triggerAction('intelligence')"
-                        class="w-full p-3 bg-slate-700 hover:bg-slate-600 rounded-lg text-left transition flex items-center gap-3">
-                        <span class="text-xl">🔍</span>
-                        <div>
-                            <div class="font-semibold text-sm">Find New Prospects</div>
-                            <div class="text-slate-300 text-xs">Intel Predator scan</div>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- NEW: System Integrations Status -->
-        <div class="glass p-6 rounded-2xl mt-8">
-            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                <span class="text-2xl">🔗</span> Integration Status
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="p-4 bg-white/5 rounded-lg text-center">
-                    <div class="text-2xl mb-2">🟢</div>
-                    <div class="font-semibold text-sm">GHL</div>
-                    <div class="text-green-400 text-xs">Connected</div>
-                </div>
-                <div class="p-4 bg-white/5 rounded-lg text-center">
-                    <div class="text-2xl mb-2">🟢</div>
-                    <div class="font-semibold text-sm">Vapi</div>
-                    <div class="text-green-400 text-xs">Sarah Online</div>
-                </div>
-                <div class="p-4 bg-white/5 rounded-lg text-center">
-                    <div class="text-2xl mb-2">🟢</div>
-                    <div class="font-semibold text-sm">Claude AI</div>
-                    <div class="text-green-400 text-xs">Active</div>
-                </div>
-                <div class="p-4 bg-white/5 rounded-lg text-center">
-                    <div class="text-2xl mb-2">🟢</div>
-                    <div class="font-semibold text-sm">Resend</div>
-                    <div class="text-green-400 text-xs">Email Ready</div>
-                </div>
-                <div class="p-4 bg-white/5 rounded-lg text-center">
-                    <div class="text-2xl mb-2">🟢</div>
-                    <div class="font-semibold text-sm">Uplink</div>
-                    <div class="text-green-400 text-xs">Bridge Active</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- NEW: Campaign Performance -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                    <span class="text-2xl">📊</span> Campaign Performance
-                </h3>
-                <div class="space-y-4">
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>SMS Open Rate</span>
-                            <span class="text-green-400">94%</span>
-                        </div>
-                        <div class="bg-slate-700 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 94%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Email Open Rate</span>
-                            <span class="text-blue-400">42%</span>
-                        </div>
-                        <div class="bg-slate-700 rounded-full h-2">
-                            <div class="bg-blue-500 h-2 rounded-full" style="width: 42%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Call Connect Rate</span>
-                            <span class="text-purple-400">68%</span>
-                        </div>
-                        <div class="bg-slate-700 rounded-full h-2">
-                            <div class="bg-purple-500 h-2 rounded-full" style="width: 68%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Demo Conversion</span>
-                            <span class="text-orange-400">23%</span>
-                        </div>
-                        <div class="bg-slate-700 rounded-full h-2">
-                            <div class="bg-orange-500 h-2 rounded-full" style="width: 23%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                    <span class="text-2xl">🎯</span> Today's Targets
-                </h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                        <div>
-                            <div class="font-semibold text-sm">Outreach Calls</div>
-                            <div class="text-slate-400 text-xs">Sarah AI calling prospects</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-bold text-blue-400">12/25</div>
-                            <div class="text-xs text-slate-400">48%</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                        <div>
-                            <div class="font-semibold text-sm">Demos Booked</div>
-                            <div class="text-slate-400 text-xs">Calendar appointments</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-bold text-green-400">3/5</div>
-                            <div class="text-xs text-slate-400">60%</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                        <div>
-                            <div class="font-semibold text-sm">New Leads</div>
-                            <div class="text-slate-400 text-xs">Intel Predator findings</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-bold text-purple-400">7</div>
-                            <div class="text-xs text-slate-400">Today</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // CONFIG
-        const API_URL = 'https://empire-unified-backup-production-6d15.up.railway.app';
-
-        // ORCHESTRATOR ID (New Level 5 Agent: Antigravity)
-        const VAPI_PUBLIC_KEY = "3b065ff0-a721-4b66-8255-30b6b8d6daab"; // Keep existing key
-        const ORCHESTRATOR_ASSISTANT_ID = "a3e439a2-4560-4625-99c8-222678bf130d"; // NEW ID
-        const COMMANDER_PHONE = "+13529368152";
-
-        // Quick Action Handler
-        async function triggerAction(action) {
-            const actions = {
-                'sms_blast': 'Send SMS blast to all active leads with our prospect template',
-                'sarah_call': `Have Sarah call ${COMMANDER_PHONE}`,
-                'email_campaign': 'Launch email campaign to all prospects',
-                'intelligence': 'Find 10 new HVAC prospects in Tampa FL'
-            };
-
-            const command = actions[action] || action;
-
-            // Add to chat and send
-            const input = document.getElementById('cmdInput');
-            input.value = command;
-            await sendChatCommand();
-        }
-        async function startVoiceUplink() {
-            const btn = document.querySelector('button[onclick="startVoiceUplink()"]');
-
-            // Check if Vapi SDK is loaded
-            if (!window.vapiSDK) {
-                // Load it dynamically if missing
-                console.log("Loading Vapi SDK...");
-                var script = document.createElement('script');
-                script.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-                script.defer = true;
-                script.async = true;
-                script.onload = function () {
-                    startVoiceUplink(); // Retry after load
-                };
-                document.head.appendChild(script);
-                btn.innerText = "Loading Secure Protocol...";
-                return;
-            }
-
-            btn.innerText = "Connecting Neural Link...";
-            btn.classList.add("animate-pulse");
-
-            try {
-                window.vapiSDK.run({
-                    apiKey: VAPI_PUBLIC_KEY,
-                    assistant: ORCHESTRATOR_ASSISTANT_ID,
-                    config: {
-                        position: "bottom-right",
-                    }
-                });
-
-                btn.innerText = "🛑 End Uplink";
-                btn.onclick = () => window.location.reload();
-                document.getElementById('vapi-status').innerText = "Status: NEURAL LINK ACTIVE (Level 5)";
-                document.getElementById('vapi-status').className = "mt-2 text-xs text-green-400 font-bold";
-
-            } catch (e) {
-                console.warn("Voice Error:", e);
-                alert("Connection Refused: " + e.message);
-                btn.innerText = "Initiate Voice Uplink";
-                btn.classList.remove("animate-pulse");
-            }
-        }
-
-        async function simulateTyping(containerId, text) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            // Cursor
-            container.innerHTML = '<span class="animate-pulse">_</span>';
-
-            let i = 0;
-            const speed = 20; // ms per char
-
-            return new Promise(resolve => {
-                function type() {
-                    if (i < text.length) {
-                        container.innerHTML = text.substring(0, i + 1) + '<span class="animate-pulse text-blue-400">_</span>';
-                        i++;
-                        setTimeout(type, speed);
-                    } else {
-                        container.innerHTML = text; // Finalize
-                        resolve();
-                    }
-                }
-                type();
-            });
-        }
-
-        async function sendChatCommand() {
-            const input = document.getElementById('cmdInput');
-            const history = document.getElementById('chatHistory');
-            const cmd = input.value;
-            if (!cmd) return;
-
-            // 1. User Message
-            history.innerHTML += `
-                <div class="bg-blue-500/10 p-3 rounded-lg text-sm rounded-tr-none text-right border border-blue-500/20 mb-2">
-                    <span class="text-white font-bold text-xs block mb-1">COMMANDER</span>
-                    ${cmd}
-                </div>`;
-
-            input.value = '';
-            history.scrollTop = history.scrollHeight;
-
-            // 2. Sending State (Loading Bubble)
-            const loadingId = "loader-" + Date.now();
-            history.innerHTML += `
-                <div id="${loadingId}" class="bg-white/5 p-3 rounded-lg text-sm rounded-tl-none animate-pulse mb-2 border-l-2 border-green-500">
-                    <span class="text-blue-400 font-bold text-xs block mb-1">ORCHESTRATOR</span>
-                    <span class="text-xs">Processing Neural Link...</span>
-                </div>`;
-            history.scrollTop = history.scrollHeight;
-
-            try {
-                // Determine API URL (handle dev vs prod)
-                const apiUrl = '/api/chat';
-
-                const res = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ command: cmd })
-                });
-
-                if (!res.ok) throw new Error("Uplink Unstable");
-                const data = await res.json();
-
-                // Remove Loading
-                document.getElementById(loadingId).remove();
-
-                // 3. Response Container
-                const responseId = "resp-" + Date.now();
-                history.innerHTML += `
-                <div class="bg-white/5 p-3 rounded-lg text-sm rounded-tl-none border-l-2 border-green-500 mb-2">
-                    <span class="text-blue-400 font-bold text-xs block mb-1">ORCHESTRATOR</span>
-                    <span id="${responseId}"></span>
-                </div>`;
-
-                await simulateTyping(responseId, data.response || "Command Executed.");
-
-            } catch (err) {
-                if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-
-                // STATIC CACHE SIMULATION (Failover)
-                console.warn("Chat Offline -> Static Response", err);
-
-                const failId = "fail-" + Date.now();
-                history.innerHTML += `
-                <div class="bg-white/5 p-3 rounded-lg text-sm rounded-tl-none border-l-2 border-yellow-500 mb-2">
-                    <span class="text-blue-400 font-bold text-xs block mb-1">ORCHESTRATOR (CACHE)</span>
-                    <span id="${failId}"></span>
-                </div>`;
-
-                await simulateTyping(failId, "I am here, Commander. The backend is re-calibrating, but I am monitoring operations locally.");
-            }
-            history.scrollTop = history.scrollHeight;
-        }
-
-        // Bind Enter Key
-        const cmdInput = document.getElementById('cmdInput');
-        if (cmdInput) {
-            cmdInput.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') sendChatCommand();
-            });
-        }
-
-        // MOCK DATA FOR DEMO / FALLBACK
-        // MOCK DATA (High-Speed Static Cache) - Updated for Verification V4
-        const MOCK_STATS = {
-            leads: 5,
-            revenue: 495,
-            calls: 142,
-            reservations: 5
-        };
-
-        const MOCK_LEADS = [
-            { name: "System Test", phone: "555-0100", email: "admin@sovereign.ai", source: "SYSTEM_INIT", metadata: '{"plan":"Enterprise"}', created_at: new Date().toISOString() },
-            { name: "Vapi Voice Agent", phone: "555-0199", email: "voice@vapi.ai", source: "VOICE_INBOUND", metadata: '{"plan":"Growth"}', created_at: new Date().toISOString() },
-            { name: "Stripe Monitor", phone: "555-0200", email: "billing@stripe.com", source: "BILLING_CHECK", metadata: '{"plan":"Lite"}', created_at: new Date().toISOString() },
-            { name: "Backup Bot", phone: "555-0300", email: "backup@empire.ai", source: "BACKUP_LOG", metadata: '{"plan":"Starter"}', created_at: new Date().toISOString() },
-            { name: "Recovery Agent", phone: "555-0400", email: "recovery@empire.ai", source: "RECOVERY_LOG", metadata: '{"plan":"Enterprise"}', created_at: new Date().toISOString() }
-        ];
-
-        async function fetchData() {
-            try {
-                // Get Stats
-                const statsRes = await fetch(`${API_URL}/api/stats`);
-                if (!statsRes.ok) throw new Error("API Offline");
-                const stats = await statsRes.json();
-
-                document.getElementById('statLeads').textContent = stats.leads;
-                document.getElementById('statRevenue').textContent = '$' + stats.revenue.toLocaleString();
-                document.getElementById('statCalls').textContent = stats.calls;
-                document.getElementById('statReservations').textContent = stats.reservations;
-
-                // Get Leads
-                const leadsRes = await fetch(`${API_URL}/api/leads`);
-                const leads = await leadsRes.json();
-
-                const tbody = document.getElementById('leadsTable');
-                tbody.innerHTML = '';
-
-                if (leads.length === 0) {
-                    // Empty DB? Show mock leads so user sees something
-                    throw new Error("No Data (Force Mock)");
-                }
-
-                leads.forEach(lead => {
-                    const meta = JSON.parse(lead.metadata || '{}');
-                    const plan = meta.plan ? `<span class="px-2 py-1 bg-purple-500/10 text-purple-400 rounded-md text-xs uppercase font-bold">${meta.plan}</span>` : '-';
-
-                    const row = `
-                        <tr class="hover:bg-slate-800/30 transition">
-                            <td class="p-4 font-medium text-white">${lead.name || 'Unknown'}</td>
-                            <td class="p-4">
-                                <div class="text-white">${lead.phone}</div>
-                                <div class="text-slate-500 text-xs">${lead.email || ''}</div>
-                            </td>
-                            <td class="p-4"><span class="px-2 py-1 bg-blue-500/10 text-blue-400 rounded-md text-xs uppercase font-bold">${lead.source}</span></td>
-                            <td class="p-4">${plan}</td>
-                            <td class="p-4">
-                                <button onclick="alert('Intel Dossier: \\n- Industry: HVAC\\n- Est. Revenue: $1.2M\\n- Tech Stack: WordPress\\n- Pain Point: Missed Calls')" 
-                                    class="px-3 py-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded text-xs hover:bg-cyan-500/20 transition">
-                                    📄 VIEW INTEL
-                                </button>
-                            </td>
-                            <td class="p-4 text-slate-400">${new Date(lead.created_at).toLocaleString()}</td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-
-            } catch (err) {
-                console.warn("API Error - Switching to Mock Data", err);
-
-                // FALLBACK TO MOCK DATA (Command Center Simulation)
-                document.getElementById('statLeads').textContent = MOCK_STATS.leads;
-                document.getElementById('statRevenue').textContent = '$' + MOCK_STATS.revenue.toLocaleString();
-                document.getElementById('statCalls').textContent = MOCK_STATS.calls;
-                document.getElementById('statReservations').textContent = MOCK_STATS.reservations;
-
-                const tbody = document.getElementById('leadsTable');
-                tbody.innerHTML = '';
-                MOCK_LEADS.forEach(lead => {
-                    const meta = JSON.parse(lead.metadata || '{}');
-                    const plan = meta.plan ? `<span class="px-2 py-1 bg-purple-500/10 text-purple-400 rounded-md text-xs uppercase font-bold">${meta.plan}</span>` : '-';
-                    const row = `
-                        <tr class="hover:bg-slate-800/30 transition">
-                            <td class="p-4 font-medium text-white">${lead.name || 'Unknown'}</td>
-                            <td class="p-4">
-                                <div class="text-white">${lead.phone}</div>
-                                <div class="text-slate-500 text-xs">${lead.email || ''}</div>
-                            </td>
-                            <td class="p-4"><span class="px-2 py-1 bg-blue-500/10 text-blue-400 rounded-md text-xs uppercase font-bold">${lead.source}</span></td>
-                            <td class="p-4">${plan}</td>
-                            <td class="p-4">
-                                <button onclick="alert('Intel Dossier: \\n- Industry: HVAC\\n- Est. Revenue: $1.2M\\n- Tech Stack: WordPress\\n- Pain Point: Missed Calls')" 
-                                    class="px-3 py-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded text-xs hover:bg-cyan-500/20 transition">
-                                    📄 VIEW INTEL
-                                </button>
-                            </td>
-                            <td class="p-4 text-slate-400">${new Date(lead.created_at).toLocaleString()}</td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-
-                // Add Simulation Warning (SUPPRESSED FOR STATIC CACHE MODE)
-                console.log("Using Static Cache");
-                const warningRow = ``;
-                tbody.innerHTML = warningRow + tbody.innerHTML;
-            }
-        }
-
-        // Auto Load
-        fetchData();
-        // Refresh every 5s
-        setInterval(fetchData, 5000);
-    </script>
-
-    <!-- NEURAL NETWORK VISUALIZER -->
-    <script>
-        const canvas = document.getElementById('neuralCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-
-        // Configuration
-        const PARTICLE_COUNT = 60;
-        const LINK_DISTANCE = 150;
-        const MOUSE_DISTANCE = 200;
-
-        // Resize Handling
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        // Mouse Tracking
-        const mouse = { x: null, y: null };
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-
-        // Particle Class
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Bounce off edges
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-
-                // Mouse Repulsion
-                if (mouse.x != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < MOUSE_DISTANCE) {
-                        const forceDirectionX = dx / distance;
-                        const forceDirectionY = dy / distance;
-                        const force = (MOUSE_DISTANCE - distance) / MOUSE_DISTANCE;
-                        const directionX = forceDirectionX * force * 0.6;
-                        const directionY = forceDirectionY * force * 0.6;
-                        this.vx -= directionX;
-                        this.vy -= directionY;
-                    }
-                }
-            }
-
-            draw() {
-                ctx.fillStyle = 'rgba(59, 130, 246, 0.5)'; // Blue-500
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        // Init Particles
-        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
-
-        // Animation Loop
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-
-            particles.forEach((p, index) => {
-                p.update();
-                p.draw();
-
-                // Draw Links
-                for (let j = index; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    const dx = p.x - p2.x;
-                    const dy = p.y - p2.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < LINK_DISTANCE) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(59, 130, 246, ${1 - distance / LINK_DISTANCE})`;
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                }
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    </script>
-    <!-- V50.0 VISUAL FACTORY: Local Asset Injection -->
-    <div id="visual-factory-layer" class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
-        <video autoplay loop muted playsinline class="w-full h-full object-cover">
-            <source src="../../../../modules/media/assets/video/truck_lake_morton.mp4" type="video/mp4">
-        </video>
-    </div>
-
 </body>
 
 </html>
-```
