@@ -1259,10 +1259,10 @@ def system_heartbeat():
     # Check C: Has prospector run in last 12 hours?
     try:
         supabase = get_supabase()
-        last_run = supabase.table("system_state").select("status").eq("key", "prospector_last_run").execute()
+        last_run = supabase.table("system_state").select("last_error").eq("key", "prospector_last_run").execute()
         
-        if last_run.data and last_run.data[0].get("status"):
-            last_ts = datetime.fromisoformat(last_run.data[0]["status"])
+        if last_run.data and last_run.data[0].get("last_error"):
+            last_ts = datetime.fromisoformat(last_run.data[0]["last_error"])
             hours_since = (datetime.now(timezone.utc) - last_ts).total_seconds() / 3600
             if hours_since > 12:
                 issues.append(f"PROSPECTOR STALLED: {hours_since:.1f}h since last run")
@@ -1344,10 +1344,10 @@ def system_heartbeat():
         supabase = get_supabase()
         
         should_prospect = False
-        last_run = supabase.table("system_state").select("status").eq("key", "prospector_last_run").execute()
+        last_run = supabase.table("system_state").select("last_error").eq("key", "prospector_last_run").execute()
         
-        if last_run.data and last_run.data[0].get("status"):
-            last_ts = datetime.fromisoformat(last_run.data[0]["status"])
+        if last_run.data and last_run.data[0].get("last_error"):
+            last_ts = datetime.fromisoformat(last_run.data[0]["last_error"])
             hours_since = (datetime.now(timezone.utc) - last_ts).total_seconds() / 3600
             if hours_since >= 2:
                 should_prospect = True
@@ -1360,7 +1360,8 @@ def system_heartbeat():
             # Update the timestamp FIRST (prevents double-runs)
             supabase.table("system_state").upsert({
                 "key": "prospector_last_run",
-                "status": datetime.now(timezone.utc).isoformat(),
+                "status": "working",
+                "last_error": datetime.now(timezone.utc).isoformat(),
             }, on_conflict="key").execute()
             
             # Spawn async so heartbeat doesn't wait
@@ -1922,9 +1923,9 @@ def sovereign_stats():
         # === SYSTEM VITALS (for live dashboard panel) ===
         system_vitals = {}
         try:
-            # Prospector status
-            prosp = sb.table("system_state").select("status").eq("key", "prospector_last_run").execute()
-            prosp_ts = prosp.data[0]["status"] if prosp.data else None
+            # Prospector status (timestamp stored in last_error due to status check constraint)
+            prosp = sb.table("system_state").select("last_error").eq("key", "prospector_last_run").execute()
+            prosp_ts = prosp.data[0]["last_error"] if prosp.data else None
             prosp_age_min = None
             if prosp_ts:
                 try:
