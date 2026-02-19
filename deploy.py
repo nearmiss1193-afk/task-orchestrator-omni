@@ -1598,8 +1598,8 @@ def sovereign_stats():
         
         # === RECENT CALLS (customer_memory, last 15) ===
         calls = sb.table("customer_memory").select(
-            "phone_number,context_summary,updated_at"
-        ).order("updated_at", desc=True).limit(15).execute()
+            "phone_number,context_summary"
+        ).limit(15).execute()
         
         # === NOTIFICATIONS (call_alert entries) ===
         notifs = sb.table("system_health_log").select(
