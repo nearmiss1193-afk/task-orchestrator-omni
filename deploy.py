@@ -1001,87 +1001,94 @@ def system_orchestrator():
     
     print(f"🚀 MASTER ORCHESTRATOR: Pulse at {now_utc.isoformat()}")
     
-    # 1. Health & Pulse (Every 5 min)
-    system_heartbeat()
-    
-    # 2. Outreach Loop (Every 5 min)
-    auto_outreach_loop()
-    
-    # --- TIME-BASED TRIGGERS (Consolidated Crons) ---
-    
-    # A. Sunbiz Delta Watch (8 AM Mon-Sat -> hour 8 UTC if EST as per original cron)
-    # Original cron: 0 8 * * 1-6
-    if hour == 8 and minute < 5 and weekday < 6:
-        print("🚀 TRIGGER: Sunbiz Delta Watch (Consolidated)")
-        scheduled_sunbiz_delta_watch.spawn()
+    try:
+        # 1. Health & Pulse (Every 5 min)
+        system_heartbeat()
+        
+        # 2. Outreach Loop (Every 5 min)
+        auto_outreach_loop()
+        
+        # --- TIME-BASED TRIGGERS (Consolidated Crons) ---
+        
+        # A. Sunbiz Delta Watch (8 AM Mon-Sat -> hour 8 UTC if EST as per original cron)
+        if hour == 8 and minute < 5 and weekday < 6:
+            print("🚀 TRIGGER: Sunbiz Delta Watch (Consolidated)")
+            scheduled_sunbiz_delta_watch.spawn()
 
-    # B. Social Multiplier (9 AM and 4 PM EST -> 14 and 21 UTC per original cron)
-    # Original cron: 0 14,21 * * *
-    if hour in [14, 21] and minute < 5:
-        print("🚀 TRIGGER: Social Multiplier (Consolidated)")
-        schedule_social_multiplier.spawn()
+        # B. Social Multiplier (9 AM and 4 PM EST -> 14 and 21 UTC per original cron)
+        if hour in [14, 21] and minute < 5:
+            print("🚀 TRIGGER: Social Multiplier (Consolidated)")
+            schedule_social_multiplier.spawn()
 
-    # C. Weekly Newsletter (Mondays at 9 AM EST -> 14 UTC per original cron)
-    # Original cron: 0 14 * * 1
-    if weekday == 0 and hour == 14 and minute < 5:
-        print("🚀 TRIGGER: Weekly Newsletter (Consolidated)")
-        weekly_newsletter.spawn()
+        # C. Weekly Newsletter (Mondays at 9 AM EST -> 14 UTC per original cron)
+        if weekday == 0 and hour == 14 and minute < 5:
+            print("🚀 TRIGGER: Weekly Newsletter (Consolidated)")
+            weekly_newsletter.spawn()
+        
+        # D. Lakeland Background Ingestion (Hourly at minute 12)
+        if minute >= 12 and minute < 17:
+            from workers.lakeland_ingestion import run_ingestion_batch
+            try:
+                from modules.database.supabase_client import get_supabase
+                supabase = get_supabase()
+                last_ingest = supabase.table("system_state").select("status").eq("key", "last_ingestion_hour").execute()
+                current_hour_key = f"{now_utc.date()}_{hour}"
+                
+                if not last_ingest.data or last_ingest.data[0].get("status") != current_hour_key:
+                    print(f"🚀 TRIGGER: Lakeland Ingestion (Hourly: {current_hour_key})")
+                    supabase.table("system_state").upsert({
+                        "key": "last_ingestion_hour",
+                        "status": current_hour_key
+                    }, on_conflict="key").execute()
+                    run_ingestion_batch.spawn(batch_size=50)
+            except Exception as e:
+                print(f"⚠️ Ingestion trigger failed: {e}")
+
+        # E. Lakeland AI Enrichment (Hourly at minute 42)
+        if minute >= 42 and minute < 47:
+            from workers.lakeland_enricher import run_enrichment_loop
+            try:
+                from modules.database.supabase_client import get_supabase
+                supabase = get_supabase()
+                last_enrich = supabase.table("system_state").select("status").eq("key", "last_enrichment_hour").execute()
+                current_hour_key = f"{now_utc.date()}_{hour}"
+                
+                if not last_enrich.data or last_enrich.data[0].get("status") != current_hour_key:
+                    print(f"🚀 TRIGGER: Lakeland Enrichment (Hourly: {current_hour_key})")
+                    supabase.table("system_state").upsert({
+                        "key": "last_enrichment_hour",
+                        "status": current_hour_key
+                    }, on_conflict="key").execute()
+                    run_enrichment_loop.spawn(limit=15)
+            except Exception as e:
+                print(f"⚠️ Enrichment trigger failed: {e}")
+
+        # F. Daily Executive Pulse (8 AM EST -> 13 UTC)
+        if hour == 13 and minute < 5:
+            print("🚀 TRIGGER: Daily Executive Pulse (Phase 21)")
+            send_executive_pulse.spawn()
+
+        print("✅ MASTER ORCHESTRATOR: Pulse complete.")
     
-    # D. Lakeland Background Ingestion (Hourly at minute 12)
-    if minute >= 12 and minute < 17: # Capture the window around minute 12
-        from workers.lakeland_ingestion import run_ingestion_batch
-        # Check system_state to ensure we only run ONCE per hour
+    except Exception as orch_err:
+        # ── CRITICAL FAILURE ALERT — SMS Dan ──
+        print(f"🚨 ORCHESTRATOR CRASH: {orch_err}")
+        import traceback
+        traceback.print_exc()
         try:
-            from modules.database.supabase_client import get_supabase
-            supabase = get_supabase()
-            last_ingest = supabase.table("system_state").select("status").eq("key", "last_ingestion_hour").execute()
-            current_hour_key = f"{now_utc.date()}_{hour}"
-            
-            if not last_ingest.data or last_ingest.data[0].get("status") != current_hour_key:
-                print(f"🚀 TRIGGER: Lakeland Ingestion (Hourly: {current_hour_key})")
-                supabase.table("system_state").upsert({
-                    "key": "last_ingestion_hour",
-                    "status": current_hour_key
-                }, on_conflict="key").execute()
-                run_ingestion_batch.spawn(batch_size=50)
-        except Exception as e:
-            print(f"⚠️ Ingestion trigger failed: {e}")
-
-    # E. Lakeland AI Enrichment (Hourly at minute 42)
-    if minute >= 42 and minute < 47:
-        from workers.lakeland_enricher import run_enrichment_loop
-        try:
-            from modules.database.supabase_client import get_supabase
-            supabase = get_supabase()
-            last_enrich = supabase.table("system_state").select("status").eq("key", "last_enrichment_hour").execute()
-            current_hour_key = f"{now_utc.date()}_{hour}"
-            
-            if not last_enrich.data or last_enrich.data[0].get("status") != current_hour_key:
-                print(f"🚀 TRIGGER: Lakeland Enrichment (Hourly: {current_hour_key})")
-                supabase.table("system_state").upsert({
-                    "key": "last_enrichment_hour",
-                    "status": current_hour_key
-                }, on_conflict="key").execute()
-                run_enrichment_loop.spawn(limit=15)
-        except Exception as e:
-            print(f"⚠️ Enrichment trigger failed: {e}")
-
-    # F. Daily Executive Pulse (8 AM EST -> 13 UTC)
-    if hour == 13 and minute < 5:
-        print("🚀 TRIGGER: Daily Executive Pulse (Phase 21)")
-        send_executive_pulse.spawn()
-
-    # G. Tiffaney Hayes Onboarding Reminder (2:00 PM EST -> 19:00 UTC) - Feb 18 only
-    if now_utc.date().isoformat() == "2026-02-18" and hour == 19 and minute < 5:
-        print("🚀 TRIGGER: Tiffaney Hayes Onboarding Reminder")
-        send_tiffaney_reminder.spawn()
-
-    # H. Tiffaney Hayes Onboarding Call (2:30 PM EST -> 19:30 UTC) - Feb 18 only
-    if now_utc.date().isoformat() == "2026-02-18" and hour == 19 and minute >= 30 and minute < 35:
-        print("🚀 TRIGGER: Tiffaney Hayes Onboarding Call")
-        trigger_tiffaney_onboarding_call.spawn()
-
-    print("✅ MASTER ORCHESTRATOR: Pulse complete.")
+            err_msg = str(orch_err)[:200]
+            requests.post(
+                "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd",
+                json={
+                    "phone": "+13529368152",
+                    "message": f"🚨 SYSTEM ALERT: Orchestrator crashed!\n\nError: {err_msg}\n\nTime: {now_utc.strftime('%I:%M %p')} UTC\n\nCheck Modal logs ASAP.",
+                    "type": "system_alert"
+                },
+                timeout=10
+            )
+            print("📱 Alert SMS sent to Dan")
+        except Exception as sms_err:
+            print(f"❌ Failed to send alert SMS: {sms_err}")
 
 @app.function(image=image, secrets=[VAULT])
 def system_heartbeat():
@@ -1776,8 +1783,7 @@ def auto_outreach_loop():
             for lead in to_recycle.data:
                 try:
                     supabase.table("contacts_master").update({
-                        "status": "new",
-                        "total_touches": 0
+                        "status": "research_done",
                     }).eq("id", lead["id"]).execute()
                     recycled += 1
                 except:
@@ -1982,12 +1988,11 @@ def resend_webhook(data: dict):
                 except Exception as ne:
                     print(f"  ⚠️ Dan notification error: {ne}")
                 
-                # ACTION 3: Upgrade lead status to 'replied'
                 try:
                     supabase.table("contacts_master").update(
-                        {"status": "replied"}
+                        {"status": "responded"}
                     ).eq("email", recipient).execute()
-                    print(f"  ✅ Lead {recipient} status → replied")
+                    print(f"  ✅ Lead {recipient} status → responded")
                 except Exception as se:
                     print(f"  ⚠️ Status update error: {se}")
         
@@ -2137,17 +2142,6 @@ def research_strike_worker(lead_id: str):
         print(f"❌ RESEARCH ERROR [Lead {lead_id}]: {e}")
         import traceback
         traceback.print_exc()
-        
-    except Exception as e:
-        print(f"❌ RESEARCH ERROR [Lead {lead_id}]: {e}")
-        import traceback
-        traceback.print_exc()
-        
-    except Exception as e:
-        print(f"❌ RESEARCH ERROR [Lead {lead_id}]: {e}")
-        # If it fails, maybe mark it so we don't keep trying? 
-        # For now, just log and let it retry next heartbeat if it stays 'new'.
-        pass
 
 # ────────────────────────────────────────────────────────────
 #  DAILY DIGEST (Cron #3 — emails Dan a morning summary)
