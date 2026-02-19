@@ -1003,10 +1003,10 @@ def system_orchestrator():
     
     try:
         # 1. Health & Pulse (Every 5 min)
-        system_heartbeat()
+        system_heartbeat.local()
         
         # 2. Outreach Loop (Every 5 min)
-        auto_outreach_loop()
+        auto_outreach_loop.local()
         
         # --- TIME-BASED TRIGGERS (Consolidated Crons) ---
         
