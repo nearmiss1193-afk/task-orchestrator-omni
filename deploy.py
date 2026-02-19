@@ -258,7 +258,7 @@ def track_engagement(request, type: str = "email", eid: str = "", lid: str = "",
                 requests.patch(f"{url}/rest/v1/outbound_touches?id=eq.{touch['id']}", headers=headers, json={"payload": payload, "status": "engaged"})
             
             # Log to system_health_log
-            requests.post(f"{url}/rest/v1/system_health_log", headers=headers, json={"check_type": "video_engagement", "status": "watching", "message": f"Lead {lid} is watching video audit.", "metadata": {"ua": ua, "vid": vid_url}})
+            requests.post(f"{url}/rest/v1/system_health_log", headers=headers, json={"check_type": "video_engagement", "status": "watching", "details": {"lead_id": lid, "ua": ua, "vid": vid_url}})
             return RedirectResponse(url=vid_url or "https://aiserviceco.com")
             
     except Exception as e:
@@ -919,8 +919,8 @@ def vapi_webhook(data: dict = None):
                             sb.table("system_health_log").insert({
                                 "check_type": "call_alert",
                                 "status": "alert",
-                                "message": notify_msg,
-                                "metadata": {
+                                "details": {
+                                    "message": notify_msg,
                                     "caller_phone": caller_phone,
                                     "caller_name": extracted_name,
                                     "direction": direction,
@@ -1603,7 +1603,7 @@ def sovereign_stats():
         
         # === NOTIFICATIONS (call_alert entries) ===
         notifs = sb.table("system_health_log").select(
-            "check_type,status,message,checked_at,metadata"
+            "check_type,status,details,checked_at"
         ).eq("check_type", "call_alert").order("checked_at", desc=True).limit(10).execute()
         
         # === LEAD PIPELINE (top 50) ===
