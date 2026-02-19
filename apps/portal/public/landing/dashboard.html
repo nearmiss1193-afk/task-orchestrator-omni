@@ -933,10 +933,35 @@
             color: var(--accent-blue);
             background: rgba(99, 102, 241, .1)
         }
+
+        /* Command Bar */
+        .cmd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:150;display:none;align-items:flex-start;justify-content:center;padding-top:20vh}
+        .cmd-overlay.open{display:flex}
+        .cmd-box{background:var(--bg-card);border:1px solid var(--border-active);border-radius:16px;width:100%;max-width:520px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+        .cmd-input-wrap{display:flex;align-items:center;padding:14px 18px;gap:10px;border-bottom:1px solid var(--border)}
+        .cmd-input-wrap .icon{font-size:16px;color:var(--text-muted)}
+        .cmd-input{flex:1;background:none;border:none;color:var(--text-primary);font-size:14px;font-family:'Inter';outline:none}
+        .cmd-input::placeholder{color:var(--text-muted)}
+        .cmd-kbd{font-size:10px;color:var(--text-muted);background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px;font-family:'Inter'}
+        .cmd-results{max-height:300px;overflow-y:auto;padding:6px}
+        .cmd-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .15s;font-size:13px}
+        .cmd-item:hover,.cmd-item.active{background:rgba(99,102,241,.1)}
+        .cmd-item .ci-icon{font-size:16px;width:28px;text-align:center}
+        .cmd-item .ci-label{flex:1;font-weight:500}
+        .cmd-item .ci-hint{font-size:10px;color:var(--text-muted)}
+        .cmd-empty{padding:20px;text-align:center;color:var(--text-muted);font-size:12px}
     </style>
 </head>
 
 <body>
+    <!-- COMMAND BAR -->
+    <div id="cmdOverlay" class="cmd-overlay" onclick="if(event.target===this)closeCmd()">
+        <div class="cmd-box">
+            <div class="cmd-input-wrap"><span class="icon">🔍</span><input type="text" id="cmdInput" class="cmd-input" placeholder="Search leads, run commands..." oninput="filterCmd()"><span class="cmd-kbd">ESC</span></div>
+            <div class="cmd-results" id="cmdResults"></div>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATION -->
     <div id="toast" class="toast">
         <div class="toast-title" id="toastTitle"></div>
@@ -1368,8 +1393,56 @@
 
         // INIT
         function refreshAll() { fetchAll(); updateRevenue(); renderHeatmap() }
-        function init() { updateClock(); setInterval(updateClock, 1000); enablePush(); refreshAll(); setInterval(refreshAll, 30000) }
+        function init() { updateClock(); setInterval(updateClock, 1000); enablePush(); refreshAll(); setInterval(refreshAll, 30000); registerSW(); }
         checkSession();
+
+        // === CMD+K COMMAND BAR ===
+        const CMD_ACTIONS = [
+            { icon: '🏥', label: 'Run Health Check', hint: 'System diagnostics', action: () => { fetchAll(); showToast('🏥 Health Check', 'Running...'); } },
+            { icon: '📊', label: 'Open Modal Logs', hint: 'View cloud logs', action: () => window.open('https://modal.com/apps/nearmiss1193-afk/ghl-omni-automation', '_blank') },
+            { icon: '📞', label: 'Call Sarah', hint: SARAH_PHONE, action: () => window.open(`tel:${SARAH_PHONE}`) },
+            { icon: '↻', label: 'Force Refresh', hint: 'Reload all data', action: () => { refreshAll(); showToast('↻ Refreshed', 'All panels updated'); } },
+            { icon: '🌙', label: 'Toggle Theme', hint: 'Dark/Light mode', action: () => toggleTheme() },
+            { icon: '👥', label: 'Client Portal', hint: 'Open client view', action: () => window.open('client-dashboard.html', '_blank') },
+        ];
+
+        function openCmd() { document.getElementById('cmdOverlay').classList.add('open'); document.getElementById('cmdInput').value = ''; document.getElementById('cmdInput').focus(); filterCmd(); }
+        function closeCmd() { document.getElementById('cmdOverlay').classList.remove('open'); }
+
+        function filterCmd() {
+            const q = document.getElementById('cmdInput').value.toLowerCase();
+            const res = document.getElementById('cmdResults');
+            let items = [];
+
+            // Built-in actions
+            CMD_ACTIONS.forEach(a => { if (!q || a.label.toLowerCase().includes(q)) items.push(a); });
+
+            // Search leads from cached data
+            if (dashData && dashData.leads && q.length > 1) {
+                dashData.leads.filter(l => (l.company || '').toLowerCase().includes(q) || (l.email || '').toLowerCase().includes(q)).slice(0, 5).forEach(l => {
+                    items.push({ icon: '👤', label: esc(l.company || 'Unknown'), hint: esc(l.email || l.phone || ''), action: () => { if (l.phone) sendQuickSMS(l.phone, l.company); else if (l.email) window.open(`mailto:${l.email}`); } });
+                });
+            }
+
+            if (!items.length) { res.innerHTML = '<div class="cmd-empty">No results</div>'; return; }
+            res.innerHTML = items.map((it, i) => `<div class="cmd-item${i === 0 ? ' active' : ''}" onclick="cmdRun(${i})" data-idx="${i}"><span class="ci-icon">${it.icon}</span><span class="ci-label">${it.label}</span><span class="ci-hint">${it.hint || ''}</span></div>`).join('');
+            window._cmdItems = items;
+        }
+
+        function cmdRun(idx) { if (window._cmdItems && window._cmdItems[idx]) { window._cmdItems[idx].action(); closeCmd(); } }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openCmd(); }
+            if (e.key === 'Escape') closeCmd();
+            if (document.getElementById('cmdOverlay').classList.contains('open') && e.key === 'Enter') {
+                const active = document.querySelector('.cmd-item.active');
+                if (active) cmdRun(parseInt(active.dataset.idx));
+            }
+        });
+
+        // === PWA SERVICE WORKER ===
+        function registerSW() { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').then(r => console.log('SW registered:', r.scope)).catch(e => console.warn('SW failed:', e)); }
     </script>
 </body>
 
