@@ -1556,44 +1556,66 @@ def auto_social_publisher():
 @app.function(image=image, secrets=[VAULT])
 @modal.fastapi_endpoint(method="GET")
 def sovereign_stats():
-    """Consolidated endpoint for Dashboard stats + System Health. RLS Bypass Proxy."""
-    import os, requests
+    """Full Dashboard Data Proxy — bypasses RLS with service_role key.
+    Returns: stats, activity feed, calls, leads, notifications."""
+    import os
     from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
     
     try:
         sb = get_supabase()
         now = datetime.now(timezone.utc)
-        
-        # 1. Real Lead Count (Verified 330+)
-        leads = sb.table("contacts_master").select("id", count="exact").in_("status", ["new", "research_done"]).execute()
-        pool_count = leads.count if leads.count is not None else len(leads.data)
-        
-        # 2. Recent Social Broadcasts
-        social = sb.table("outbound_touches").select("ts,company,status").eq("channel", "social").order("ts", desc=True).limit(5).execute()
-        
-        # 3. Outreach (24h)
         yesterday = (now - timedelta(hours=24)).isoformat()
-        touches = sb.table("outbound_touches").select("id", count="exact").gt("ts", yesterday).execute()
-        outbound_24h = touches.count if touches.count is not None else len(touches.data)
+        
+        # === STATS ===
+        leads_q = sb.table("contacts_master").select("id", count="exact").in_("status", ["new", "research_done"]).execute()
+        pool_count = leads_q.count if leads_q.count is not None else len(leads_q.data)
+        
+        touches_q = sb.table("outbound_touches").select("id", count="exact").gt("ts", yesterday).execute()
+        outbound_24h = touches_q.count if touches_q.count is not None else len(touches_q.data)
 
-        # 4. Health Check (Heartbeat last 15m)
+        # === HEALTH ===
         hb = sb.table("system_health_log").select("checked_at").order("checked_at", desc=True).limit(1).execute()
         last_hb = hb.data[0]["checked_at"] if hb.data else None
         hb_ok = False
         if last_hb:
-            hb_time = datetime.fromisoformat(last_hb.replace("Z", "+00:00"))
-            hb_ok = (now - hb_time).total_seconds() < 900
+            try:
+                hb_time = datetime.fromisoformat(last_hb.replace("Z", "+00:00"))
+                hb_ok = (now - hb_time).total_seconds() < 900
+            except: pass
+        
+        # === ACTIVITY FEED (outbound_touches, last 20) ===
+        activity = sb.table("outbound_touches").select(
+            "company,channel,status,ts"
+        ).order("ts", desc=True).limit(20).execute()
+        
+        # === RECENT CALLS (customer_memory, last 15) ===
+        calls = sb.table("customer_memory").select(
+            "phone_number,context_summary,updated_at"
+        ).order("updated_at", desc=True).limit(15).execute()
+        
+        # === NOTIFICATIONS (call_alert entries) ===
+        notifs = sb.table("system_health_log").select(
+            "check_name,status,message,checked_at,metadata"
+        ).eq("check_name", "call_alert").order("checked_at", desc=True).limit(10).execute()
+        
+        # === LEAD PIPELINE (top 50) ===
+        pipeline = sb.table("contacts_master").select(
+            "id,company,email,phone,status,lead_source,last_contacted_at,created_at"
+        ).order("created_at", desc=True).limit(50).execute()
         
         return {
             "total_leads": pool_count,
             "outbound_24h": outbound_24h,
-            "social_logs": social.data,
             "health": {
                 "status": "healthy" if hb_ok else "degraded",
                 "heartbeat_ok": hb_ok,
                 "last_heartbeat": last_hb
             },
+            "activity": activity.data,
+            "calls": calls.data,
+            "notifications": notifs.data,
+            "leads": pipeline.data,
             "status": "synchronized",
             "checked_at": now.isoformat()
         }

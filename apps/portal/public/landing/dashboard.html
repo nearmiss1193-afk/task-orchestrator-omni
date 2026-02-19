@@ -1263,96 +1263,111 @@
         function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML }
         function ago(d) { if (!d) return ''; const m = Math.floor((Date.now() - new Date(d).getTime()) / 60000); if (m < 1) return 'now'; if (m < 60) return m + 'm'; const h = Math.floor(m / 60); if (h < 24) return h + 'h'; return Math.floor(h / 24) + 'd' }
 
-        // FETCH STATS
-        async function fetchStats() {
-            try {
-                const r = await fetch(STATS_URL, { signal: AbortSignal.timeout(8000) }); const d = await r.json();
-                document.getElementById('mLeads').textContent = (d.total_leads || 0).toLocaleString(); document.getElementById('mLeadsSub').textContent = 'Contactable pool';
-                document.getElementById('mOutreach').textContent = (d.outbound_24h || 0).toLocaleString(); document.getElementById('mOutreachSub').textContent = 'Emails, SMS, calls';
-                document.getElementById('mPipeline').textContent = '$' + ((d.total_leads || 0) * 49).toLocaleString();
-                const ok = d.health?.status === 'healthy'; document.getElementById('systemStatusText').textContent = ok ? 'All Systems Online' : 'Degraded';
-                document.getElementById('systemStatus').className = ok ? 'status-pill' : 'status-pill degraded';
-                document.getElementById('intModalSt').textContent = 'Deployed'; document.getElementById('intHB').className = `integration-dot ${ok ? 'green' : 'amber'}`;
-                if (d.health?.last_heartbeat) { const a = Math.round((Date.now() - new Date(d.health.last_heartbeat).getTime()) / 60000); document.getElementById('intHBSt').textContent = a + 'm ago' }
-                // Mock sparklines (real data would come from 7-day history)
-                renderSparkline('sparkLeads', [280, 295, 310, 305, 320, 335, d.total_leads || 340]);
-                renderSparkline('sparkOutreach', [12, 8, 15, 22, 18, 25, d.outbound_24h || 20]);
-                renderSparkline('sparkRevenue', [8000, 9200, 10500, 11000, 12800, 14200, (d.total_leads || 0) * 49]);
-            } catch (e) { document.getElementById('systemStatusText').textContent = 'API Offline'; document.getElementById('systemStatus').className = 'status-pill degraded'; document.getElementById('intModal').className = 'integration-dot red'; document.getElementById('intModalSt').textContent = 'Offline' }
-        }
-
-        // FETCH CALLS
+        // UNIFIED FETCH — single Modal API call, bypasses RLS
         let prevCallCount = 0;
-        async function fetchCalls() {
+        let dashData = null;
+
+        async function fetchAll() {
             try {
-                const calls = await sbQuery('customer_memory', 'phone_number,context_summary,updated_at', { order: 'updated_at.desc', limit: 10 });
-                const c = document.getElementById('callsFeed'); document.getElementById('callCount').textContent = calls.length; document.getElementById('mCalls').textContent = calls.length; document.getElementById('mCallsSub').textContent = 'In memory bank';
-                if (!calls.length) { c.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No calls</div>'; return }
-                // Push notification for new calls
+                const r = await fetch(STATS_URL, { signal: AbortSignal.timeout(12000) });
+                dashData = await r.json();
+                if (dashData.error) throw new Error(dashData.error);
+
+                // === METRICS ===
+                document.getElementById('mLeads').textContent = (dashData.total_leads || 0).toLocaleString();
+                document.getElementById('mLeadsSub').textContent = 'Contactable pool';
+                document.getElementById('mOutreach').textContent = (dashData.outbound_24h || 0).toLocaleString();
+                document.getElementById('mOutreachSub').textContent = 'Emails, SMS, calls';
+                document.getElementById('mPipeline').textContent = '$' + ((dashData.total_leads || 0) * 49).toLocaleString();
+                const ok = dashData.health?.status === 'healthy';
+                document.getElementById('systemStatusText').textContent = ok ? 'All Systems Online' : 'Degraded';
+                document.getElementById('systemStatus').className = ok ? 'status-pill' : 'status-pill degraded';
+                document.getElementById('intModalSt').textContent = 'Deployed';
+                document.getElementById('intHB').className = `integration-dot ${ok ? 'green' : 'amber'}`;
+                if (dashData.health?.last_heartbeat) {
+                    const a = Math.round((Date.now() - new Date(dashData.health.last_heartbeat).getTime()) / 60000);
+                    document.getElementById('intHBSt').textContent = a + 'm ago';
+                }
+                renderSparkline('sparkLeads', [280, 295, 310, 305, 320, 335, dashData.total_leads || 340]);
+                renderSparkline('sparkOutreach', [12, 8, 15, 22, 18, 25, dashData.outbound_24h || 20]);
+                renderSparkline('sparkRevenue', [8000, 9200, 10500, 11000, 12800, 14200, (dashData.total_leads || 0) * 49]);
+
+                // === ACTIVITY FEED ===
+                const activity = dashData.activity || [];
+                const actEl = document.getElementById('activityFeed');
+                document.getElementById('feedCount').textContent = activity.length;
+                if (!activity.length) { actEl.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No activity</div>'; }
+                else {
+                    const icons = { email: '📧', sms: '💬', call: '📞', social: '🌐', voice_drop: '🔊' };
+                    const clsMap = { email: 'email', sms: 'sms', call: 'call', social: 'system', voice_drop: 'alert' };
+                    actEl.innerHTML = activity.map(x => `<div class="feed-item"><div class="feed-icon ${clsMap[x.channel] || 'system'}">${icons[x.channel] || '📤'}</div><div class="feed-content"><div class="feed-title">${esc(x.company || 'Unknown')}</div><div class="feed-desc">${esc(x.channel || '')} — ${esc(x.status || '')}</div></div><div class="feed-time">${ago(x.ts)}</div></div>`).join('');
+                }
+
+                // === CALLS ===
+                const calls = dashData.calls || [];
+                const callEl = document.getElementById('callsFeed');
+                document.getElementById('callCount').textContent = calls.length;
+                document.getElementById('mCalls').textContent = calls.length;
+                document.getElementById('mCallsSub').textContent = 'In memory bank';
                 if (calls.length > prevCallCount && prevCallCount > 0) {
-                    const newest = calls[0]; const ctx = typeof newest.context_summary === 'string' ? { history: newest.context_summary } : (newest.context_summary || {});
-                    sendPush('📞 New Call!', `${ctx.contact_name || 'Unknown'} — ${newest.phone_number}`); showToast('📞 Incoming Call', `${ctx.contact_name || 'Unknown'} from ${newest.phone_number}`)
+                    const n = calls[0]; const ctx = typeof n.context_summary === 'string' ? { history: n.context_summary } : (n.context_summary || {});
+                    sendPush('📞 New Call!', `${ctx.contact_name || 'Unknown'} — ${n.phone_number}`);
+                    showToast('📞 Incoming Call', `${ctx.contact_name || 'Unknown'} from ${n.phone_number}`);
                 }
                 prevCallCount = calls.length;
                 renderSparkline('sparkCalls', [3, 5, 4, 7, 6, 8, calls.length]);
-                c.innerHTML = calls.map(cl => {
-                    const ctx = typeof cl.context_summary === 'string' ? { history: cl.context_summary } : (cl.context_summary || {}); const name = ctx.contact_name || 'Unknown'; const hist = (ctx.history || '').split('\n').filter(Boolean); const last = hist[hist.length - 1] || 'No details'; const full = hist.join('\n');
-                    return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon call">📞</div><div class="feed-content"><div class="feed-title">${esc(name)} — ${esc(cl.phone_number)}</div><div class="feed-desc">${esc(last.substring(0, 120))}</div><div class="feed-transcript">${esc(full)}</div></div><div class="feed-time">${ago(cl.updated_at)}</div></div>`
-                }).join('')
-            } catch (e) { console.warn('Calls:', e) }
+                if (!calls.length) { callEl.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No calls</div>'; }
+                else {
+                    callEl.innerHTML = calls.map(cl => {
+                        const ctx = typeof cl.context_summary === 'string' ? { history: cl.context_summary } : (cl.context_summary || {});
+                        const name = ctx.contact_name || 'Unknown';
+                        const hist = (ctx.history || '').split('\n').filter(Boolean);
+                        const last = hist[hist.length - 1] || 'No details';
+                        const full = hist.join('\n');
+                        return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon call">📞</div><div class="feed-content"><div class="feed-title">${esc(name)} — ${esc(cl.phone_number)}</div><div class="feed-desc">${esc(last.substring(0, 120))}</div><div class="feed-transcript">${esc(full)}</div></div><div class="feed-time">${ago(cl.updated_at)}</div></div>`;
+                    }).join('');
+                }
+
+                // === NOTIFICATIONS ===
+                const notifs = dashData.notifications || [];
+                const notifEl = document.getElementById('notifFeed');
+                document.getElementById('mAlerts').textContent = notifs.length;
+                document.getElementById('mAlertsSub').textContent = notifs.length ? 'Call alerts' : 'No alerts';
+                if (!notifs.length) { notifEl.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No notifications</div>'; }
+                else {
+                    notifEl.innerHTML = notifs.map(n => {
+                        const m = n.metadata || {};
+                        return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon alert">🔔</div><div class="feed-content"><div class="feed-title">${esc(m.caller_name || 'Unknown')} ${esc(m.caller_phone || '')}</div><div class="feed-desc">${esc((m.summary || n.message || '').substring(0, 100))}</div><div class="feed-transcript">${esc(m.transcript || m.summary || 'No details')}</div></div><div class="feed-time">${ago(n.checked_at)}</div></div>`;
+                    }).join('');
+                }
+
+                // === LEADS TABLE ===
+                const leads = dashData.leads || [];
+                const tb = document.getElementById('leadsBody');
+                if (!leads.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:28px">No leads</td></tr>'; }
+                else {
+                    const sc = { new: 'tag-blue', research_done: 'tag-purple', outreach_sent: 'tag-amber', responded: 'tag-green', customer: 'tag-green', bounced: 'tag-rose' };
+                    tb.innerHTML = leads.map(l => `<tr><td><div class="lead-name">${esc(l.company || 'Unknown')}</div></td><td><div class="lead-contact">${esc(l.email || '')}</div><div class="lead-contact">${esc(l.phone || '')}</div></td><td><span class="tag ${sc[l.status] || 'tag-blue'}">${esc(l.status || 'new')}</span></td><td style="color:var(--text-secondary);font-size:11px">${esc(l.lead_source || '—')}</td><td style="color:var(--text-secondary);font-size:11px">${l.last_contacted_at ? ago(l.last_contacted_at) : '—'}</td><td><div class="lead-actions"><button class="lead-action-btn" title="Call" onclick="event.stopPropagation();window.open('tel:${l.phone || ''}')">📞</button><button class="lead-action-btn sms" title="SMS" onclick="event.stopPropagation();sendQuickSMS('${l.phone || ''}','${esc(l.company || '')}')">💬</button><button class="lead-action-btn email" title="Email" onclick="event.stopPropagation();window.open('mailto:${l.email || ''}')">📧</button></div></td></tr>`).join('');
+                }
+
+            } catch (e) {
+                console.warn('API Error:', e);
+                document.getElementById('systemStatusText').textContent = 'API Offline';
+                document.getElementById('systemStatus').className = 'status-pill degraded';
+                document.getElementById('intModal').className = 'integration-dot red';
+                document.getElementById('intModalSt').textContent = 'Offline';
+            }
         }
 
-        // FETCH ACTIVITY
-        async function fetchActivity() {
-            try {
-                const t = await sbQuery('outbound_touches', 'company,channel,status,ts', { order: 'ts.desc', limit: 15 });
-                const c = document.getElementById('activityFeed'); document.getElementById('feedCount').textContent = t.length;
-                if (!t.length) { c.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No activity</div>'; return }
-                const icons = { email: '📧', sms: '💬', call: '📞', social: '🌐', voice_drop: '🔊' }; const cls = { email: 'email', sms: 'sms', call: 'call', social: 'system', voice_drop: 'alert' };
-                c.innerHTML = t.map(x => `<div class="feed-item"><div class="feed-icon ${cls[x.channel] || 'system'}">${icons[x.channel] || '📤'}</div><div class="feed-content"><div class="feed-title">${esc(x.company || 'Unknown')}</div><div class="feed-desc">${esc(x.channel || '')} — ${esc(x.status || '')}</div></div><div class="feed-time">${ago(x.ts)}</div></div>`).join('')
-            } catch (e) { console.warn('Activity:', e) }
-        }
-
-        // FETCH NOTIFICATIONS
-        async function fetchNotifications() {
-            try {
-                const a = await sbQuery('system_health_log', 'check_name,status,message,checked_at,metadata', { check_name: 'eq.call_alert', order: 'checked_at.desc', limit: 10 });
-                const c = document.getElementById('notifFeed'); document.getElementById('mAlerts').textContent = a.length; document.getElementById('mAlertsSub').textContent = a.length ? 'Call alerts' : 'No alerts';
-                if (!a.length) { c.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No notifications</div>'; return }
-                c.innerHTML = a.map(n => { const m = n.metadata || {}; return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon alert">🔔</div><div class="feed-content"><div class="feed-title">${esc(m.caller_name || 'Unknown')} ${esc(m.caller_phone || '')}</div><div class="feed-desc">${esc((m.summary || n.message || '').substring(0, 100))}</div><div class="feed-transcript">${esc(m.transcript || m.summary || 'No details')}</div></div><div class="feed-time">${ago(n.checked_at)}</div></div>` }).join('')
-            } catch (e) { console.warn('Notif:', e) }
-        }
-
-        // FETCH LEADS
-        async function fetchLeads() {
-            try {
-                const leads = await sbQuery('contacts_master', 'id,company,email,phone,status,lead_source,last_contacted_at,created_at', { order: 'created_at.desc', limit: 50 });
-                const tb = document.getElementById('leadsBody'); if (!leads.length) { tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:28px">No leads</td></tr>'; return }
-                const sc = { new: 'tag-blue', research_done: 'tag-purple', outreach_sent: 'tag-amber', responded: 'tag-green', customer: 'tag-green', bounced: 'tag-rose' };
-                tb.innerHTML = leads.map(l => `<tr><td><div class="lead-name">${esc(l.company || 'Unknown')}</div></td><td><div class="lead-contact">${esc(l.email || '')}</div><div class="lead-contact">${esc(l.phone || '')}</div></td><td><span class="tag ${sc[l.status] || 'tag-blue'}">${esc(l.status || 'new')}</span></td><td style="color:var(--text-secondary);font-size:11px">${esc(l.lead_source || '—')}</td><td style="color:var(--text-secondary);font-size:11px">${l.last_contacted_at ? ago(l.last_contacted_at) : '—'}</td><td><div class="lead-actions"><button class="lead-action-btn" onclick="event.stopPropagation();window.open('tel:${l.phone || ''}')">📞</button><button class="lead-action-btn sms" onclick="event.stopPropagation();sendQuickSMS('${l.phone || ''}','${esc(l.company || '')}')">💬</button><button class="lead-action-btn email" onclick="event.stopPropagation();window.open('mailto:${l.email || ''}')">📧</button></div></td></tr>`).join('')
-            } catch (e) { console.warn('Leads:', e) }
-        }
-
-        // REVENUE (mock until Stripe connected)
-        function updateRevenue() { document.getElementById('revTrials').textContent = '2'; document.getElementById('revActive').textContent = '0'; document.getElementById('revMRR').textContent = '$0'; document.getElementById('revGrand').textContent = '0'; document.getElementById('revFull').textContent = '0'; document.getElementById('revChurn').textContent = '0%' }
-
-        // HEATMAP
-        function renderHeatmap() {
-            const c = document.getElementById('heatmapContainer'); const cities = [{ name: 'Tampa', x: 42, y: 52 }, { name: 'Orlando', x: 55, y: 48 }, { name: 'Lakeland', x: 48, y: 50 }, { name: 'Jacksonville', x: 52, y: 18 }, { name: 'Miami', x: 62, y: 88 }, { name: 'Daytona', x: 60, y: 35 }, { name: 'Clearwater', x: 38, y: 54 }, { name: 'St Pete', x: 38, y: 58 }];
-            c.innerHTML = cities.map(ct => `<div class="map-dot" style="left:${ct.x}%;top:${ct.y}%;animation-delay:${Math.random() * 2}s" title="${ct.name}"></div><div style="position:absolute;left:${ct.x + 2}%;top:${ct.y - 2}%;font-size:9px;color:var(--text-muted)">${ct.name}</div>`).join('') + '<div style="position:absolute;bottom:6px;right:10px;font-size:9px;color:var(--text-muted)">Florida Service Area</div>'
-        }
-
-        // QUICK SMS
-        async function sendQuickSMS(phone, company) { const msg = prompt(`SMS to ${company} (${phone}):`); if (!msg) return; try { await fetch(GHL_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, message: msg }) }); showToast('💬 SMS Sent', `Message sent to ${company}`) } catch (e) { showToast('❌ Failed', e.message) } }
-
-        // CAMPAIGN TOGGLE
-        function toggleCampaign(btn) { btn.classList.toggle('active'); const name = btn.parentElement.querySelector('div div').textContent; showToast(btn.classList.contains('active') ? '✅ Enabled' : '⏸️ Paused', name) }
-
-        // TRIGGER ACTIONS
-        function triggerAction(a) { switch (a) { case 'call_sarah': window.open(`tel:${SARAH_PHONE}`); break; case 'system_health': fetchStats(); showToast('🏥 Health Check', 'Running diagnostics...'); break; case 'view_logs': window.open('https://modal.com/apps/nearmiss1193-afk/ghl-omni-automation', '_blank'); break } }
+        // Individual refresh proxies (all call fetchAll)
+        function fetchStats() { fetchAll(); }
+        function fetchCalls() { fetchAll(); }
+        function fetchActivity() { fetchAll(); }
+        function fetchNotifications() { fetchAll(); }
+        function fetchLeads() { fetchAll(); }
 
         // INIT
-        function refreshAll() { fetchStats(); fetchCalls(); fetchActivity(); fetchNotifications(); fetchLeads(); updateRevenue(); renderHeatmap() }
+        function refreshAll() { fetchAll(); updateRevenue(); renderHeatmap() }
         function init() { updateClock(); setInterval(updateClock, 1000); enablePush(); refreshAll(); setInterval(refreshAll, 30000) }
         checkSession();
     </script>
