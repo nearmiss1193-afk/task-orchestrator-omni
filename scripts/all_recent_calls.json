@@ -1,0 +1,137 @@
+[
+  {
+    "id": "019c72e8-2809-733c-a6e9-c929bc1ee5f0",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+18632041322",
+    "createdAt": "2026-02-18T22:39:03.177Z",
+    "transcript": "AI: Hi there, this is Sarah from AI Service Company. Thanks for connecting.\n",
+    "summary": "The call was initiated by Sarah from AI Service Company. No customer name, business type, pain points, or objections were discussed as the customer ended the call immediately."
+  },
+  {
+    "id": "019c72d3-5ee4-7112-a494-a95780115ac5",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+18638129362",
+    "createdAt": "2026-02-18T22:16:20.964Z",
+    "transcript": "AI: Hi there, this is Sarah from AI Service Company. Thanks for connecting.\nUser: Connect me with Dan.\nAI: Absolutely I can help with that. Can I get your name and the name of your business first? Also, what's the best number for Dan to reach you at?\nUser: Can you transfer me to Dan?\nAI: Totally. Dan's not available for direct transfers, but I can have him reach out to you ASAP. What's your name and the name of your business so I can let him know?\nUser: Christina at Call Me Now.\nAI: Great to meet you, Christina, from Call Me Now. Make sure he gets in touch.\nUser: At this number,\nAI: Perfect, C",
+    "summary": "Christina from Call Me Now called to connect with Dan, repeatedly requesting a direct transfer. The AI explained that direct transfers to Dan are not possible. The outcome is that Dan will follow up with Christina at her provided number."
+  },
+  {
+    "id": "019c72d2-f101-744c-8b2c-22dd1cebd93a",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+18638129362",
+    "createdAt": "2026-02-18T22:15:52.833Z",
+    "transcript": "AI: Hi there, this is Sarah from AI Service Company. Thanks\nUser: Hello? Hello?\nAI: Hey, thanks for calling. This is Sarah. Who am I speaking with?\n",
+    "summary": "Sarah from AI Service Company initiated the call, but the customer did not identify themselves or their business type. No pain points or objections were discussed as the customer ended the call abruptly, resulting in a \"customer-ended-call\" outcome."
+  },
+  {
+    "id": "019c728e-8ff3-7bb7-884b-df8a7e1362ff",
+    "status": "ended",
+    "endedReason": "call.in-progress.error-sip-outbound-call-failed-to-connect",
+    "customer": "+18635832461",
+    "createdAt": "2026-02-18T21:01:11.539Z",
+    "transcript": "",
+    "summary": ""
+  },
+  {
+    "id": "019c7245-b225-7aa9-8e34-2ae4af2f15d5",
+    "status": "ended",
+    "endedReason": "call.in-progress.error-providerfault-outbound-sip-503-service-unavailable",
+    "customer": "+13524349704",
+    "createdAt": "2026-02-18T19:41:36.165Z",
+    "transcript": "",
+    "summary": ""
+  },
+  {
+    "id": "019c723f-1e4d-7dd0-ac4f-f15b59166486",
+    "status": "ended",
+    "endedReason": "call.in-progress.error-providerfault-outbound-sip-503-service-unavailable",
+    "customer": "+13524349704",
+    "createdAt": "2026-02-18T19:34:25.101Z",
+    "transcript": "",
+    "summary": ""
+  },
+  {
+    "id": "019c71e1-f521-7441-9678-669ad3622be0",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+13529368152",
+    "createdAt": "2026-02-18T17:52:39.713Z",
+    "transcript": "AI: Hi there. This is Rachel from AI service company. Congratulations on signing up. I am your dedicated setup specialist, and I am going to walk you through every thing to get your AI Office agent live and working for your business. Do you have a couple minutes right now?\nUser: Sure.\nAI: Great. Could you start by telling me a little about your business? What type is it? How many employees do you have, and what services do you offer?\n",
+    "summary": "Rachel from AI Service Company introduced herself as a dedicated setup specialist to a new customer, offering to guide them through getting their AI Office agent live. She then asked the customer to provide details about their business, including its type, number of employees, and services offered. "
+  },
+  {
+    "id": "019c714c-8cf7-788b-9166-0d6a91e6435a",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+13529368152",
+    "createdAt": "2026-02-18T15:09:28.183Z",
+    "transcript": "AI: Hey there. Thanks for calling AI service co. This is Rachel. How's it going? What can I help you with today?\nUser: Hey, Rachel. Uh, are you set up to onboard clients?\nAI: Hey. Absolutely. We are ready to onboard clients. Tell me a little about your business. What kind of services do you offer? HVAC? Plumbing, roofing, something else? I'd love to hear more.\n",
+    "summary": "The user called AI service co. and spoke with Rachel, inquiring if they were set up to onboard clients. Rachel confirmed their capability and then asked the user for more details about their business and the services they offer. The call ended shortly after this exchange."
+  },
+  {
+    "id": "019c6d19-8ee9-722e-b3cd-ebc42ec8ee30",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "inbound",
+    "createdAt": "2026-02-17T19:35:17.481Z",
+    "transcript": "AI: Hi. I'm your Lakeland Finds assistant. I can help you find local businesses in Lakeland FL. What are you looking for?\nUser: Looking for a doctor.\nAI: Sure. I'd be happy to help you find a doctor in Lakeland. For the best options, including family physicians, specialists, and urgent care, head over to Lakeland Finds dot com and search doctors or medical clinics. You'll get verified local listings with contact info and\n",
+    "summary": "The user requested to find a doctor in Lakeland, FL. The AI assistant directed them to Lakeland Finds dot com, suggesting they search for \"doctors\" or \"medical clinics\" to find verified local listings with contact information. The call ended after the AI provided this guidance."
+  },
+  {
+    "id": "019c658e-f925-7661-bf8e-37c62cbc6e44",
+    "status": "ended",
+    "endedReason": "call.in-progress.error-assistant-did-not-receive-customer-audio",
+    "customer": "inbound",
+    "createdAt": "2026-02-16T08:26:34.661Z",
+    "transcript": "",
+    "summary": ""
+  },
+  {
+    "id": "019c58c3-f7bb-7ee5-b261-5dff78d1a549",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+13529368152",
+    "createdAt": "2026-02-13T20:49:23.899Z",
+    "transcript": "AI: Welcome back, boss. Systems are online. What do you need?\nUser: Yeah. I'm standing outside of Project Dose dentist office here in Lakeland, Florida. I'm about to walk inside.\nAI: Got it. Heading into the dentist at Project Dose in Lakeland, Florida. Do you need any information or reminders before going in? Good luck.\nUser: Yeah. I wanted to give them an unbelievable offer. What do we what do we offer?\nAI: Absolutely. To craft an unbelievable offer for a dentist's office like Project Dose, I'd need to know a bit about what kind of service or product you're offering. For example, are you sel",
+    "summary": ""
+  },
+  {
+    "id": "019c58ab-a991-7bb6-9530-72ae983756cb",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+13529368152",
+    "createdAt": "2026-02-13T20:22:51.025Z",
+    "transcript": "AI: Welcome back, boss. Systems are online. What do you need?\nUser: just felt very much alone. That's scary for a teenage teenage year old to be saying that. That's scary.\nAI: I'm really sorry you're feeling this way. Teen years can be tough, and feeling alone can make it harder. It's important to talk to someone you\n",
+    "summary": ""
+  },
+  {
+    "id": "019c589f-fb64-7aab-9958-47e40019be3f",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+13529368152",
+    "createdAt": "2026-02-13T20:10:05.540Z",
+    "transcript": "AI: Welcome back, boss. Systems are online. What do you need?\nUser: Wanna know what you can do for dog baby business.\nAI: Sure thing. Starting a dog related business can be incredibly rewarding and fun. Here are some ideas and tips to consider. business ideas. Sure thing. Starting a dog related business can be incredibly rewarding and fun. Here are some ideas and tips to consider. I'm\n",
+    "summary": ""
+  },
+  {
+    "id": "019c588e-dd7e-7eef-932e-b0b0f3cbf108",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+13529368152",
+    "createdAt": "2026-02-13T19:51:23.774Z",
+    "transcript": "AI: Welcome back, boss. Systems are online. What do you need?\nUser: I just wanted to know what you'd be able to do for this restaurant here.\nAI: I can assist in a variety of ways. Here are some things I might help with at the restaurant. One, menu development, provide ideas for dishes or help with recipe optimization and cost analysis. Two, customer engagement, suggest strategies for improving customer service and enhancing customer experience both in person and online. Three, marketing, recommend marketing strategies ranging from social media campaigns to promotions and partnerships to increa",
+    "summary": ""
+  },
+  {
+    "id": "019c587d-a2ca-7554-91a2-fbd52b0131e8",
+    "status": "ended",
+    "endedReason": "customer-ended-call",
+    "customer": "+13529368152",
+    "createdAt": "2026-02-13T19:32:34.634Z",
+    "transcript": "User: Hello?\nAI: Hello. How can I assist you today?\nUser: Who are you?\nAI: I'm an AI assistant created to help with your questions, provide information, and assist with various tasks. How can I help you today?\nUser: Okay. The test can you assist me with?\nAI: Sure. What type of test or assistance do you need? For example, Academic test preparation. math, science, history, etcetera. practice questions, or mock exams. test taking strategies. Assistance with projects or assignments. Let me know how I can help.\n",
+    "summary": ""
+  }
+]

@@ -1,0 +1,20 @@
+                                            Apps                               
++------------------------------------------------------------------------------
+| App ID                    | Description   | State    | Tasks | Created at   |
+|---------------------------+---------------+----------+-------+--------------+
+| ap-kWcSUezMryiQ46SVENpJoz | ghl-mini-ag   | deployed | 0     | 2026-02-16   |
+|                           |               |          |       | 21:30        |
+|                           |               |          |       | Eastern      |
+|                           |               |          |       | Standard     |
+|                           |               |          |       | Time         |
+| ap-ulslqZSEDuQ0sYZbWeF5Cp | ghl-omni-aut… | deployed | 0     | 2026-02-17   |
+|                           |               |          |       | 09:37        |
+|                           |               |          |       | Eastern      |
+|                           |               |          |       | Standard     |
+|                           |               |          |       | Time         |
+| ap-5dZhdHQTwNtgH0WYNUXNxq | test-app-dia… | deployed | 0     | 2026-02-17   |
+|                           |               |          |       | 11:56        |
+|                           |               |          |       | Eastern      |
+|                           |               |          |       | Standard     |
+|                           |               |          |       | Time         |
++------------------------------------------------------------------------------

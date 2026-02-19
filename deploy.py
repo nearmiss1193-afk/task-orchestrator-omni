@@ -658,9 +658,19 @@ def vapi_webhook(data: dict = None):
             from supabase import create_client
             print("✅ [VAPI] Imports successful")
         except Exception as imp_err:
-            print(f"⚠️ [VAPI] Import failure: {imp_err}")
+            print(f"⚠️ [VAPI] Import failure (non-fatal): {imp_err}")
             traceback.print_exc()
-            return {"status": "import_error", "event": event_type, "error": str(imp_err)}
+            # DON'T RETURN - end-of-call-report doesn't need these imports!
+            # Only assistant-request and tool-calls need sales_persona
+            get_persona_prompt = None
+            SALES_SARAH_PROMPT = None
+            if event_type in ["tool-calls", "assistant-request"]:
+                return {"status": "import_error", "event": event_type, "error": str(imp_err)}
+            # For end-of-call-report: import supabase separately
+            try:
+                from supabase import create_client
+            except:
+                return {"status": "import_error", "event": event_type, "error": "supabase import failed"}
 
         # 3. Shared Context Initialization
         direction = call.get("direction") or call.get("type") or call.get("callType", "unknown")
@@ -873,14 +883,66 @@ def vapi_webhook(data: dict = None):
                         
                         sb.table("customer_memory").upsert({"phone_number": caller_phone, "context_summary": ctx}, on_conflict="phone_number").execute()
                         
-                        # Dan Notification
-                        import urllib.request
+                        # === DAN NOTIFICATION (Multi-Method: Email + DB + GHL fallback) ===
                         notify_msg = f"📞 Call Summary: {caller_phone}\nName: {extracted_name or 'Unknown'}\nDir: {direction}\nSum: {(summary or 'No summary')[:200]}"
-                        urllib.request.urlopen(urllib.request.Request(
-                            "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd",
-                            data=json.dumps({"phone": "+13529368152", "message": notify_msg}).encode(),
-                            headers={"Content-Type": "application/json"}
-                        ), timeout=10)
+                        print(f"📱 [NOTIFY] Sending alert to Dan: {notify_msg[:80]}...")
+                        
+                        # METHOD 1: Resend Email (most reliable)
+                        try:
+                            resend_key = os.environ.get("RESEND_API_KEY")
+                            if resend_key:
+                                import requests as req
+                                email_body = f"""<div style="font-family: Arial; padding: 20px;">
+                                <h2>📞 Call Alert</h2>
+                                <p><strong>Caller:</strong> {caller_phone}</p>
+                                <p><strong>Name:</strong> {extracted_name or 'Unknown'}</p>
+                                <p><strong>Direction:</strong> {direction}</p>
+                                <p><strong>Summary:</strong> {(summary or 'No summary')[:500]}</p>
+                                <p><strong>Transcript:</strong><br>{(transcript or 'No transcript')[:1000]}</p>
+                                <hr><p style="color:#666">Sent by Sarah AI at {datetime.utcnow().strftime('%I:%M %p UTC')}</p>
+                                </div>"""
+                                er = req.post("https://api.resend.com/emails", headers={
+                                    "Authorization": f"Bearer {resend_key}",
+                                    "Content-Type": "application/json"
+                                }, json={
+                                    "from": "Sarah AI <owner@aiserviceco.com>",
+                                    "to": ["owner@aiserviceco.com"],
+                                    "subject": f"📞 Call Alert: {extracted_name or caller_phone} ({direction})",
+                                    "html": email_body
+                                }, timeout=10)
+                                print(f"📱 [NOTIFY] Resend email: {er.status_code}")
+                        except Exception as email_err:
+                            print(f"📱 [NOTIFY] Email failed: {email_err}")
+                        
+                        # METHOD 2: Supabase call_alerts table (always works)
+                        try:
+                            sb.table("system_health_log").insert({
+                                "check_name": "call_alert",
+                                "status": "alert",
+                                "message": notify_msg,
+                                "metadata": {
+                                    "caller_phone": caller_phone,
+                                    "caller_name": extracted_name,
+                                    "direction": direction,
+                                    "summary": (summary or "")[:500],
+                                    "transcript": (transcript or "")[:1000]
+                                }
+                            }).execute()
+                            print(f"📱 [NOTIFY] Supabase alert logged")
+                        except Exception as db_err:
+                            print(f"📱 [NOTIFY] DB log failed: {db_err}")
+                        
+                        # METHOD 3: GHL webhook (may fail if Dan not a contact)
+                        try:
+                            import urllib.request
+                            urllib.request.urlopen(urllib.request.Request(
+                                "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd",
+                                data=json.dumps({"phone": "+13529368152", "message": notify_msg}).encode(),
+                                headers={"Content-Type": "application/json"}
+                            ), timeout=10)
+                            print(f"📱 [NOTIFY] GHL webhook sent")
+                        except Exception as ghl_err:
+                            print(f"📱 [NOTIFY] GHL webhook failed (422 = Dan not in GHL): {ghl_err}")
                 except Exception as e:
                     print(f"⚠️ [REPORT] End of call processing failed: {e}")
             
