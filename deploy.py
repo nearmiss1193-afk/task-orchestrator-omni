@@ -1660,6 +1660,73 @@ def sovereign_stats():
         except Exception as stripe_err:
             stripe_data["error"] = str(stripe_err)
         
+        # === CONVERSION FUNNEL (lead status breakdown) ===
+        try:
+            all_leads = sb.table("contacts_master").select("status", count="exact").execute()
+            status_counts = {}
+            for lead in all_leads.data:
+                s = lead.get("status", "unknown")
+                status_counts[s] = status_counts.get(s, 0) + 1
+            funnel = {
+                "total": all_leads.count if all_leads.count is not None else len(all_leads.data),
+                "new": status_counts.get("new", 0),
+                "research_done": status_counts.get("research_done", 0),
+                "outreach_sent": status_counts.get("outreach_sent", 0),
+                "responded": status_counts.get("responded", 0),
+                "customer": status_counts.get("customer", 0),
+                "bounced": status_counts.get("bounced", 0),
+                "bad_email": status_counts.get("bad_email", 0),
+            }
+        except:
+            funnel = {}
+        
+        # === A/B EMAIL PERFORMANCE (variant breakdown, last 7 days) ===
+        try:
+            week_ago = (now - timedelta(days=7)).isoformat()
+            ab_raw = sb.table("outbound_touches").select(
+                "variant_id,status"
+            ).gt("ts", week_ago).execute()
+            
+            variants = {}
+            for t in ab_raw.data:
+                vid = t.get("variant_id") or "DEFAULT"
+                if vid not in variants:
+                    variants[vid] = {"sent": 0, "delivered": 0, "opened": 0, "bounced": 0, "replied": 0}
+                variants[vid]["sent"] += 1
+                st = t.get("status", "")
+                if st in variants[vid]:
+                    variants[vid][st] += 1
+            
+            ab_performance = []
+            for vid, counts in variants.items():
+                total = counts["sent"]
+                ab_performance.append({
+                    "variant": vid,
+                    "sent": total,
+                    "delivered": counts["delivered"],
+                    "opened": counts["opened"],
+                    "bounced": counts["bounced"],
+                    "replied": counts["replied"],
+                    "open_rate": round(counts["opened"] / total * 100, 1) if total > 0 else 0,
+                    "reply_rate": round(counts["replied"] / total * 100, 1) if total > 0 else 0,
+                })
+        except:
+            ab_performance = []
+        
+        # === LEAD GEO (city breakdown for heatmap) ===
+        try:
+            geo_raw = sb.table("contacts_master").select("city").not_.is_("city", "null").execute()
+            city_counts = {}
+            for r in geo_raw.data:
+                c = (r.get("city") or "").strip().title()
+                if c:
+                    city_counts[c] = city_counts.get(c, 0) + 1
+            # Sort by count, top 15
+            lead_geo = sorted(city_counts.items(), key=lambda x: x[1], reverse=True)[:15]
+            lead_geo = [{"city": c, "count": n} for c, n in lead_geo]
+        except:
+            lead_geo = []
+        
         return {
             "total_leads": pool_count,
             "outbound_24h": outbound_24h,
@@ -1673,6 +1740,9 @@ def sovereign_stats():
             "notifications": notifs.data,
             "leads": pipeline.data,
             "stripe": stripe_data,
+            "funnel": funnel,
+            "ab_performance": ab_performance,
+            "lead_geo": lead_geo,
             "status": "synchronized",
             "checked_at": now.isoformat()
         }
