@@ -1,0 +1,41 @@
+============================================================
+OUTREACH STATUS CHECK
+============================================================
+Outbound last 24h: 155
+
+LAST 5 OUTBOUND TOUCHES:
+  2026-02-19T12:00:15  email     delivered
+  2026-02-18T23:30:20  email     delivered
+  2026-02-18T23:30:18  email     delivered
+  2026-02-18T23:25:09  email     delivered
+  2026-02-18T23:25:09  email     delivered
+
+LEAD FUNNEL:
+  total               : 3589
+  new                 : 579
+  research_done       : 0
+  outreach_sent       : 19
+  responded           : 0
+  customer            : 0
+  bounced             : 0
+  bad_email           : 47
+
+SYSTEM HEALTH:
+  Status:          degraded
+  Heartbeat OK:    False
+  Last heartbeat:  2026-02-17T17:44:34
+
+A/B EMAIL PERFORMANCE (7d):
+  A: sent=253 opened=0 replied=0 open_rate=0.0%
+  B: sent=283 opened=0 replied=0 open_rate=0.0%
+  C: sent=263 opened=0 replied=0 open_rate=0.0%
+  D: sent=240 opened=0 replied=0 open_rate=0.0%
+  DEFAULT: sent=45 opened=0 replied=0 open_rate=0.0%
+
+STRIPE:
+  MRR: $0
+  Active subs: 0
+  Revenue 30d: $0
+  Error: Expired API Key provided: sk_live_*********************************************************************************************Ipbp0F
+
+LEAD GEO (top 5):

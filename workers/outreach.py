@@ -700,8 +700,12 @@ def auto_outreach_loop():
     from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
     
-    print("🚀 ENGINE v4.2: Starting autonomous outreach cycle...")
+    print("🚀 ENGINE v5.0: Starting autonomous outreach cycle (EMAIL + CALLS)...")
     supabase = get_supabase()
+    
+    # Call budget: max 3 outbound calls per 5-min cycle to control VAPI costs
+    calls_this_cycle = 0
+    MAX_CALLS_PER_CYCLE = 3
     
     # 1. Fetch FRESH leads first (priority) → Step 1 initial email
     leads = []
@@ -799,12 +803,32 @@ def auto_outreach_loop():
                     dispatch_email_logic.local(lead_id)
                 except Exception as e:
                     print(f"❌ Email Failed for {lead_id}: {e}")
+            
+            # Priority 3: OUTBOUND CALL via VAPI (business hours, if phone exists)
+            # Call AFTER email — multi-touch: email + call in same cycle
+            if phone and is_sms_hours and calls_this_cycle < MAX_CALLS_PER_CYCLE:
+                print(f"📞 Route -> OUTBOUND CALL: {phone} (Sarah AI via VAPI)")
+                try:
+                    call_result = dispatch_call_logic.local(lead_id)
+                    if call_result:
+                        calls_this_cycle += 1
+                        print(f"✅ Call initiated ({calls_this_cycle}/{MAX_CALLS_PER_CYCLE} this cycle)")
+                    else:
+                        print(f"⚠️ Call returned False for {lead_id}")
+                except Exception as e:
+                    print(f"❌ Call Failed for {lead_id}: {e}")
+            
             continue
             
         print(f"⚠️ Skipping Lead {lead_id}: No contact path.")
         supabase.table("contacts_master").update({"status": "no_contact_info"}).eq("id", lead_id).execute()
 
     # --- PROCESS FOLLOW-UP LEADS (Step 2 or 3) ---
+    # Compute business hours once for follow-up call routing
+    est = timezone(timedelta(hours=-5))
+    now_est = datetime.now(est)
+    is_sms_hours = 8 <= now_est.hour < 18 and now_est.weekday() < 6
+    
     for lead in followup_leads:
         lead_id = lead['id']
         email = lead.get('email')
@@ -864,8 +888,23 @@ def auto_outreach_loop():
                 print(f"⏳ Lead {lead_id} not ready for Step 3 yet (needs 7 days since last touch)")
                 continue
         
-        # Route follow-up: audit PDF for Step 2 if has website, generic otherwise
+        # Route follow-up: Step 2 tries CALL first (business hours), then email
         website = lead.get('website_url')
+        phone = lead.get('phone')
+        
+        # Step 2 follow-up: Try call first during business hours
+        if step == 2 and phone and is_sms_hours and calls_this_cycle < MAX_CALLS_PER_CYCLE:
+            print(f"📞 Route -> FOLLOW-UP CALL (Step 2): {phone} (Sarah AI)")
+            try:
+                call_result = dispatch_call_logic.local(lead_id)
+                if call_result:
+                    calls_this_cycle += 1
+                    print(f"✅ Follow-up call initiated ({calls_this_cycle}/{MAX_CALLS_PER_CYCLE})")
+                    continue  # Call sent, skip email follow-up
+            except Exception as e:
+                print(f"❌ Follow-up Call Failed for {lead_id}: {e}")
+                # Fall through to email follow-up
+        
         if step == 2 and website:
             print(f"📊 Route -> AUDIT Follow-up (Step 2): {email} | site: {website}")
             try:
