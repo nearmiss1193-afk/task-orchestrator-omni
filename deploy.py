@@ -1592,9 +1592,12 @@ def sovereign_stats():
             except: pass
         
         # === ACTIVITY FEED (outbound_touches, last 20) ===
-        activity = sb.table("outbound_touches").select(
-            "company,channel,status,ts"
-        ).order("ts", desc=True).limit(20).execute()
+        try:
+            activity = sb.table("outbound_touches").select(
+                "channel,status,ts"
+            ).order("ts", desc=True).limit(20).execute()
+        except:
+            activity = type('obj', (object,), {'data': []})()  # empty fallback
         
         # === RECENT CALLS (customer_memory, last 15) ===
         try:
@@ -1613,9 +1616,12 @@ def sovereign_stats():
             notifs = type('obj', (object,), {'data': []})()  # empty fallback
         
         # === LEAD PIPELINE (top 50) ===
-        pipeline = sb.table("contacts_master").select(
-            "id,company,email,phone,status,lead_source,last_contacted_at,created_at"
-        ).order("created_at", desc=True).limit(50).execute()
+        try:
+            pipeline = sb.table("contacts_master").select(
+                "id,company_name,email,phone,status,lead_source,last_contacted_at,created_at"
+            ).order("created_at", desc=True).limit(50).execute()
+        except:
+            pipeline = type('obj', (object,), {'data': []})()  # empty fallback
         
         # === STRIPE REVENUE (live API) ===
         stripe_data = {"mrr": 0, "active_subs": 0, "recent_payments": [], "total_revenue": 0, "error": None}
