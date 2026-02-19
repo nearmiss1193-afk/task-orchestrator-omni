@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Service Co — Command Center</title>
+    <title>SOVEREIGN COMMAND — AI Service Co</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='white'>A</text></svg>">
     <meta name="theme-color" content="#0a0a0f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -935,21 +936,113 @@
         }
 
         /* Command Bar */
-        .cmd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:150;display:none;align-items:flex-start;justify-content:center;padding-top:20vh}
-        .cmd-overlay.open{display:flex}
-        .cmd-box{background:var(--bg-card);border:1px solid var(--border-active);border-radius:16px;width:100%;max-width:520px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-        .cmd-input-wrap{display:flex;align-items:center;padding:14px 18px;gap:10px;border-bottom:1px solid var(--border)}
-        .cmd-input-wrap .icon{font-size:16px;color:var(--text-muted)}
-        .cmd-input{flex:1;background:none;border:none;color:var(--text-primary);font-size:14px;font-family:'Inter';outline:none}
-        .cmd-input::placeholder{color:var(--text-muted)}
-        .cmd-kbd{font-size:10px;color:var(--text-muted);background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px;font-family:'Inter'}
-        .cmd-results{max-height:300px;overflow-y:auto;padding:6px}
-        .cmd-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .15s;font-size:13px}
-        .cmd-item:hover,.cmd-item.active{background:rgba(99,102,241,.1)}
-        .cmd-item .ci-icon{font-size:16px;width:28px;text-align:center}
-        .cmd-item .ci-label{flex:1;font-weight:500}
-        .cmd-item .ci-hint{font-size:10px;color:var(--text-muted)}
-        .cmd-empty{padding:20px;text-align:center;color:var(--text-muted);font-size:12px}
+        .cmd-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 150;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 20vh
+        }
+
+        .cmd-overlay.open {
+            display: flex
+        }
+
+        .cmd-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-active);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 520px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .5)
+        }
+
+        .cmd-input-wrap {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            gap: 10px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .cmd-input-wrap .icon {
+            font-size: 16px;
+            color: var(--text-muted)
+        }
+
+        .cmd-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'Inter';
+            outline: none
+        }
+
+        .cmd-input::placeholder {
+            color: var(--text-muted)
+        }
+
+        .cmd-kbd {
+            font-size: 10px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, .06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Inter'
+        }
+
+        .cmd-results {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 6px
+        }
+
+        .cmd-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background .15s;
+            font-size: 13px
+        }
+
+        .cmd-item:hover,
+        .cmd-item.active {
+            background: rgba(99, 102, 241, .1)
+        }
+
+        .cmd-item .ci-icon {
+            font-size: 16px;
+            width: 28px;
+            text-align: center
+        }
+
+        .cmd-item .ci-label {
+            flex: 1;
+            font-weight: 500
+        }
+
+        .cmd-item .ci-hint {
+            font-size: 10px;
+            color: var(--text-muted)
+        }
+
+        .cmd-empty {
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px
+        }
     </style>
 </head>
 
@@ -957,7 +1050,9 @@
     <!-- COMMAND BAR -->
     <div id="cmdOverlay" class="cmd-overlay" onclick="if(event.target===this)closeCmd()">
         <div class="cmd-box">
-            <div class="cmd-input-wrap"><span class="icon">🔍</span><input type="text" id="cmdInput" class="cmd-input" placeholder="Search leads, run commands..." oninput="filterCmd()"><span class="cmd-kbd">ESC</span></div>
+            <div class="cmd-input-wrap"><span class="icon">🔍</span><input type="text" id="cmdInput" class="cmd-input"
+                    placeholder="Search leads, run commands..." oninput="filterCmd()"><span class="cmd-kbd">ESC</span>
+            </div>
             <div class="cmd-results" id="cmdResults"></div>
         </div>
     </div>
@@ -1219,6 +1314,28 @@
                 </div>
             </div>
 
+            <!-- ALERT RULES -->
+            <div class="panel" style="margin-bottom:20px">
+                <div class="panel-header">
+                    <div class="panel-title"><span>⚡</span> Alert Rules</div>
+                    <button class="refresh-btn" onclick="addAlertRule()" title="Add Rule">+ Add</button>
+                </div>
+                <div class="panel-body" id="alertRulesBody">
+                    <div style="color:var(--text-muted);font-size:11px;text-align:center;padding:12px">No rules set —
+                        click + Add</div>
+                </div>
+            </div>
+
+            <!-- AI INSIGHTS -->
+            <div class="panel" style="margin-bottom:20px">
+                <div class="panel-header">
+                    <div class="panel-title"><span>🧠</span> AI Insights</div>
+                </div>
+                <div class="panel-body" id="aiInsightsBody" style="font-size:12px;color:var(--text-secondary);line-height:1.6">
+                    <div style="text-align:center;color:var(--text-muted);padding:12px">Analyzing data...</div>
+                </div>
+            </div>
+
             <!-- LEADS TABLE -->
             <div class="panel">
                 <div class="panel-header">
@@ -1349,7 +1466,9 @@
                         const hist = (ctx.history || '').split('\n').filter(Boolean);
                         const last = hist[hist.length - 1] || 'No details';
                         const full = hist.join('\n');
-                        return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon call">📞</div><div class="feed-content"><div class="feed-title">${esc(name)} — ${esc(cl.phone_number)}</div><div class="feed-desc">${esc(last.substring(0, 120))}</div><div class="feed-transcript">${esc(full)}</div></div><div class="feed-time">${ago(cl.updated_at)}</div></div>`;
+                        const recUrl = ctx.recording_url || cl.recording_url || '';
+                        const audioHtml = recUrl ? `<audio controls preload="none" style="width:100%;margin-top:6px;height:28px" src="${esc(recUrl)}"></audio>` : '';
+                        return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon call">📞</div><div class="feed-content"><div class="feed-title">${esc(name)} — ${esc(cl.phone_number)}</div><div class="feed-desc">${esc(last.substring(0, 120))}</div><div class="feed-transcript">${esc(full)}${audioHtml}</div></div><div class="feed-time">${ago(cl.updated_at)}</div></div>`;
                     }).join('');
                 }
 
@@ -1392,7 +1511,7 @@
         function fetchLeads() { fetchAll(); }
 
         // INIT
-        function refreshAll() { fetchAll(); updateRevenue(); renderHeatmap() }
+        function refreshAll() { fetchAll().then(() => evaluateRules()); updateRevenue(); renderHeatmap() }
         function init() { updateClock(); setInterval(updateClock, 1000); enablePush(); refreshAll(); setInterval(refreshAll, 30000); registerSW(); }
         checkSession();
 
@@ -1404,6 +1523,7 @@
             { icon: '↻', label: 'Force Refresh', hint: 'Reload all data', action: () => { refreshAll(); showToast('↻ Refreshed', 'All panels updated'); } },
             { icon: '🌙', label: 'Toggle Theme', hint: 'Dark/Light mode', action: () => toggleTheme() },
             { icon: '👥', label: 'Client Portal', hint: 'Open client view', action: () => window.open('client-dashboard.html', '_blank') },
+            { icon: '📋', label: 'Trigger Daily Digest', hint: 'Send email report now', action: () => { fetch(MODAL_URL + '-daily-digest.modal.run').then(() => showToast('📋 Digest', 'Sending...')).catch(() => showToast('⚠️ Digest', 'Failed — deploy first')); } },
         ];
 
         function openCmd() { document.getElementById('cmdOverlay').classList.add('open'); document.getElementById('cmdInput').value = ''; document.getElementById('cmdInput').focus(); filterCmd(); }
@@ -1440,9 +1560,105 @@
                 if (active) cmdRun(parseInt(active.dataset.idx));
             }
         });
+        // === ALERT RULES ENGINE ===
+        const RULE_TYPES = [
+            { id: 'outreach_low', label: 'Outreach drops below', metric: 'outbound_24h', op: '<', default: 10 },
+            { id: 'heartbeat_down', label: 'Heartbeat is degraded', metric: 'health.status', op: '==', default: 'degraded' },
+            { id: 'pipeline_low', label: 'Lead pipeline below', metric: 'total_leads', op: '<', default: 50 },
+        ];
+
+        function loadRules() { try { return JSON.parse(localStorage.getItem('alert_rules') || '[]'); } catch { return []; } }
+        function saveRules(rules) { localStorage.setItem('alert_rules', JSON.stringify(rules)); }
+
+        function addAlertRule() {
+            const rules = loadRules();
+            const type = RULE_TYPES[rules.length % RULE_TYPES.length];
+            rules.push({ id: Date.now(), type: type.id, label: type.label, metric: type.metric, op: type.op, threshold: type.default, enabled: true });
+            saveRules(rules);
+            renderRules();
+        }
+
+        function removeRule(id) { saveRules(loadRules().filter(r => r.id !== id)); renderRules(); }
+        function toggleRule(id) { const rules = loadRules(); const r = rules.find(x => x.id === id); if (r) r.enabled = !r.enabled; saveRules(rules); renderRules(); }
+
+        function renderRules() {
+            const rules = loadRules();
+            const el = document.getElementById('alertRulesBody');
+            if (!rules.length) { el.innerHTML = '<div style="color:var(--text-muted);font-size:11px;text-align:center;padding:12px">No rules set — click + Add</div>'; return; }
+            el.innerHTML = rules.map(r => {
+                const typeInfo = RULE_TYPES.find(t => t.id === r.type) || {};
+                return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
+                    <span style="cursor:pointer;opacity:${r.enabled ? 1 : 0.4}" onclick="toggleRule(${r.id})" title="${r.enabled ? 'Disable' : 'Enable'}">${r.enabled ? '🟢' : '⚪'}</span>
+                    <span style="flex:1;${r.enabled ? '' : 'opacity:.5'}">${esc(r.label)} <strong>${r.threshold}</strong></span>
+                    <span style="cursor:pointer;opacity:.5;font-size:10px" onclick="removeRule(${r.id})" title="Delete">✕</span>
+                </div>`;
+            }).join('');
+        }
+
+        function evaluateRules() {
+            if (!dashData) return;
+            const rules = loadRules().filter(r => r.enabled);
+            rules.forEach(r => {
+                let val;
+                if (r.metric === 'health.status') val = dashData.health?.status;
+                else val = dashData[r.metric];
+                let triggered = false;
+                if (r.op === '<' && typeof val === 'number') triggered = val < r.threshold;
+                else if (r.op === '==' && typeof val === 'string') triggered = val === r.threshold;
+                if (triggered) {
+                    showToast(`⚡ Alert: ${r.label}`, `Current value: ${val}`);
+                    if (Notification.permission === 'granted') new Notification(`⚡ ${r.label}`, { body: `Value: ${val}` });
+                }
+            });
+        }
+
+        renderRules();
 
         // === PWA SERVICE WORKER ===
         function registerSW() { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').then(r => console.log('SW registered:', r.scope)).catch(e => console.warn('SW failed:', e)); }
+
+        // === AI INSIGHTS ===
+        function generateInsights() {
+            if (!dashData) return;
+            const insights = [];
+            const o = dashData.outbound_24h || 0;
+            const l = dashData.total_leads || 0;
+            const h = dashData.health?.status;
+            const calls = (dashData.calls || []).length;
+            const activity = dashData.activity || [];
+
+            // Outreach velocity
+            if (o === 0) insights.push('🔴 <strong>No outreach in 24h</strong> — check campaign status or deploy.');
+            else if (o < 10) insights.push(`🟡 <strong>Low outreach (${o})</strong> — consider increasing send rate.`);
+            else insights.push(`🟢 <strong>${o} outreach touchpoints</strong> in the last 24h — on track.`);
+
+            // Pipeline health
+            if (l < 20) insights.push('⚠️ Pipeline is thin — consider prospecting for new leads.');
+            else insights.push(`📊 ${l} contactable leads in pipeline — $${(l * 49).toLocaleString()} potential value.`);
+
+            // Call activity
+            if (calls > 0) insights.push(`📞 ${calls} calls in memory bank — Sarah is actively engaging.`);
+
+            // System health
+            if (h === 'degraded') insights.push('🏥 System health is <strong>degraded</strong> — check Modal logs.');
+
+            // Channel breakdown
+            const channels = {};
+            activity.forEach(a => { channels[a.channel] = (channels[a.channel] || 0) + 1; });
+            const chStr = Object.entries(channels).map(([k, v]) => `${k}: ${v}`).join(', ');
+            if (chStr) insights.push(`📡 Channel mix: ${chStr}`);
+
+            // Stale leads
+            const staleDays = 7;
+            const stale = (dashData.leads || []).filter(l => !l.last_contacted_at || (Date.now() - new Date(l.last_contacted_at).getTime()) > staleDays * 86400000).length;
+            if (stale > 5) insights.push(`⏳ <strong>${stale} leads</strong> not contacted in ${staleDays}+ days.`);
+
+            document.getElementById('aiInsightsBody').innerHTML = insights.map(i => `<div style="padding:4px 0;border-bottom:1px solid var(--border)">${i}</div>`).join('');
+        }
+
+        // Run insights after each fetch
+        const _origRefresh = refreshAll;
+        refreshAll = function() { fetchAll().then(() => { evaluateRules(); generateInsights(); }); updateRevenue(); renderHeatmap(); };
     </script>
 </body>
 
