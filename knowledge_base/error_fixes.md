@@ -827,3 +827,39 @@ else:
 **Table schema**: `customer_memory` has `phone_number` (PK), `context_summary` (JSONB with history, contact_name, business_type, etc.)
 
 ---
+
+## Manus AI Hallucinated Lead Data (CRITICAL — Feb 19, 2026)
+
+**Error**: Imported 1000 "Jacksonville business leads" from Manus AI share link. Only ~60 were real businesses. **940 were hallucinated** — fake company names, fake phone numbers, fake emails generated to pad the list to 1000.
+
+**Impact**: System attempted to call/email fake businesses, burning Vapi credits on invalid numbers and damaging sender reputation with bounced emails to non-existent addresses.
+
+**Signs the data was fake (in hindsight)**:
+
+- Business names followed a pattern: `[LastName] [Category] [Suffix]` (e.g., "Smith Gutter Installer Services", "Rodriguez Tree Trimmer Pros", "Jackson Pool Cleaner Experts")
+- Emails all followed `info@[businessname].com` pattern — too uniform for real scraped data
+- Phone numbers were all 904 area code but many didn't connect
+- All calls returned FAILED status immediately
+
+**Fix Applied**:
+
+1. All 476 imported leads marked `status='bad_data'` — removed from outreach queue
+2. Outbound calls gated behind `has_real_ghl` check — scraped leads can't trigger Vapi calls
+3. SMS already required real GHL ID — was already protected
+
+**MANDATORY: Lead Import Validation Checklist (before ANY future import)**:
+
+| Check | How | Pass/Fail |
+| ----- | --- | --------- |
+| Source credibility | Is this from a verified scraper (Google Places, Yelp) or an AI? | AI-generated = REJECT |
+| Name diversity | Do names follow a pattern or look natural? | Pattern = suspect |
+| Email domain check | Do email domains resolve (MX record lookup)? | No MX = fake |
+| Phone spot-check | Call 5 random numbers manually before bulk import | 0/5 connect = fake |
+| Dedup ratio | If >50% already in DB, list may be recycled junk | High overlap = suspect |
+| Business verification | Google 5 random company names from the list | Not found = fake |
+
+**Root Cause**: Manus AI (like all LLMs) will hallucinate data to fulfill a request. When asked for "1000 Jacksonville businesses," it found ~60 real ones and fabricated 940 to meet the target. **Never trust AI-generated lead lists without validation.**
+
+**Confidence**: 100%
+
+---
