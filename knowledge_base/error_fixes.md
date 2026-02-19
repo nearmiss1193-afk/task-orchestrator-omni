@@ -752,3 +752,78 @@ Also added `reply_to: owner@aiserviceco.com` to all 3 email payloads in `outreac
 **Confidence**: 100%
 
 ---
+
+## Maya Prompt Hallucination: "Supplies for a Dentist" (FIXED — Feb 19, 2026)
+
+**Error Message**: Maya told a dental prospect she could help with "getting supplies" — a service AI Service Co doesn't offer.
+
+**Location**: `modules/voice/sales_persona.py` (MAYA_EXPLAINER_PROMPT v4) and `deploy.py` Vapi webhook `assistant-request` handler
+
+**Root Cause**: The old Maya v4 prompt said "You are Maya, a Business Consultant for AI Service Company" with NO product list or grounding. When a dentist called, Maya had no anchor for what she actually sells, so she confabulated based on conversational context — inventing capabilities that don't exist.
+
+**Critical lesson**: **AI prompts without explicit product boundaries will hallucinate capabilities.** A vague role like "Business Consultant" gives the LLM permission to make up any service.
+
+**Fix (Maya v5)**:
+
+1. Replaced vague "Business Consultant" with explicit: "AI Sales Rep for AI Service Co — builds AI receptionists, automated review systems, and lead generation tools"
+2. Added hard product list with need-matching table: missed calls → AI Receptionist, bad reviews → Review Automation, hiring pain → AI Screener, no leads → Lead Gen
+3. Added explicit rule: "PRICING: NEVER quote a dollar amount. Dan handles ALL pricing."
+4. Added Dan recognition: +13529368152 triggers "Hey boss!" greeting
+5. Updated `firstMessage` in Vapi handler to say "I'm Maya with AI Service Co" (was generic)
+
+**Key Rule**: Every AI persona prompt MUST include:
+
+- Explicit company name and what it sells
+- A bounded product list (so it can't invent services)
+- Clear handoff rules (who closes, what NOT to discuss)
+- Boss/owner recognition by phone number
+
+**Prevention**: When updating persona prompts, always ask: "If a random business calls, does the prompt tell Maya EXACTLY what she sells and what she doesn't?" If not, she will confabulate.
+
+**Confidence**: 100% (root cause confirmed — v4 had zero product grounding)
+
+---
+
+## Vapi firstMessage Ignored Dynamic Context (FIXED — Feb 19, 2026)
+
+**Error**: Maya's opening greeting was always the same generic "Thank you for connecting, I'm Maya..." regardless of who called — even Dan.
+
+**Location**: `deploy.py` line 827 (assistant-request handler)
+
+**Root Cause**: The `firstMessage` was a static string with a ternary check (`if is_maya_call else None`). It never checked the caller's phone number or name, so Dan and strangers got the same greeting.
+
+**Fix**: Made `firstMessage` dynamic based on caller identity:
+
+```python
+DAN_PHONE = "+13529368152"
+if caller_phone == DAN_PHONE:
+    maya_first = "Hey boss! What's going on? Who are we impressing today?"
+elif customer_name:
+    maya_first = f"Hey {customer_name}! Thanks for calling, I'm Maya with AI Service Co."
+else:
+    maya_first = "Hey! Thanks for calling, I'm Maya with AI Service Co."
+```
+
+**Key Rule**: `firstMessage` in Vapi is the FIRST thing the user hears — it sets the entire tone. Always make it contextual (returning customer vs. new, boss vs. stranger).
+
+**Confidence**: 100%
+
+---
+
+## Maya Memory Architecture (Reference — Feb 19, 2026)
+
+**How Maya remembers callers across calls:**
+
+| Phase | What happens | Code location |
+|-------|-------------|---------------|
+| Call starts | Vapi sends `assistant-request` event | `deploy.py` line 752 |
+| Memory lookup | Queries `customer_memory` by caller phone | `deploy.py` lines 754-777 |
+| Context injection | Loads `contact_name`, `business_type`, `history`, `questions_asked` into prompt | `deploy.py` lines 790-795 |
+| Call ends | Vapi sends `end-of-call-report` | `deploy.py` (later in function) |
+| Memory save | Upserts transcript + extracted context back to `customer_memory` | `deploy.py` end-of-call handler |
+
+**Limitation**: History capped at last 1000 chars (line 794). Memory is per-phone-number only — same person calling from different number = new stranger.
+
+**Table schema**: `customer_memory` has `phone_number` (PK), `context_summary` (JSONB with history, contact_name, business_type, etc.)
+
+---
