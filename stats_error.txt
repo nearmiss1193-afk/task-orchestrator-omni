@@ -1,0 +1,1 @@
+﻿{"error":"{'message': 'column system_health_log.check_name does not exist', 'code': '42703', 'hint': 'Perhaps you meant to reference the column \"system_health_log.check_type\".', 'details': None}"}

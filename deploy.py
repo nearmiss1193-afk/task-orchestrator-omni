@@ -258,7 +258,7 @@ def track_engagement(request, type: str = "email", eid: str = "", lid: str = "",
                 requests.patch(f"{url}/rest/v1/outbound_touches?id=eq.{touch['id']}", headers=headers, json={"payload": payload, "status": "engaged"})
             
             # Log to system_health_log
-            requests.post(f"{url}/rest/v1/system_health_log", headers=headers, json={"check_name": "video_engagement", "status": "watching", "message": f"Lead {lid} is watching video audit.", "metadata": {"ua": ua, "vid": vid_url}})
+            requests.post(f"{url}/rest/v1/system_health_log", headers=headers, json={"check_type": "video_engagement", "status": "watching", "message": f"Lead {lid} is watching video audit.", "metadata": {"ua": ua, "vid": vid_url}})
             return RedirectResponse(url=vid_url or "https://aiserviceco.com")
             
     except Exception as e:
@@ -917,7 +917,7 @@ def vapi_webhook(data: dict = None):
                         # METHOD 2: Supabase call_alerts table (always works)
                         try:
                             sb.table("system_health_log").insert({
-                                "check_name": "call_alert",
+                                "check_type": "call_alert",
                                 "status": "alert",
                                 "message": notify_msg,
                                 "metadata": {
@@ -1603,8 +1603,8 @@ def sovereign_stats():
         
         # === NOTIFICATIONS (call_alert entries) ===
         notifs = sb.table("system_health_log").select(
-            "check_name,status,message,checked_at,metadata"
-        ).eq("check_name", "call_alert").order("checked_at", desc=True).limit(10).execute()
+            "check_type,status,message,checked_at,metadata"
+        ).eq("check_type", "call_alert").order("checked_at", desc=True).limit(10).execute()
         
         # === LEAD PIPELINE (top 50) ===
         pipeline = sb.table("contacts_master").select(
