@@ -49,6 +49,7 @@ def get_base_image():
         .add_local_dir("modules/handlers", remote_path="/root/modules/handlers")
         .add_local_dir("modules/dispatch", remote_path="/root/modules/dispatch")
         .add_local_file("modules/outbound_dialer.py", remote_path="/root/modules/outbound_dialer.py")
+        .add_local_file("modules/autonomous_inspector.py", remote_path="/root/modules/autonomous_inspector.py")
     )
 
 image = get_base_image()
