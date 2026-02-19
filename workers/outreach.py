@@ -231,7 +231,7 @@ While you look for the right person, I wanted to see if you'd be open to a faste
 
 We've been helping Lakeland businesses handle 100% of their missed calls and appointment booking using a specialized AI Receptionist (her name is Maya). She never misses a call, speaks perfect English, and integrates directly with your calendar.
 
-She's usually about 1/10th the cost of a full-time hire and she's ready to start today.
+She's ready to start today — and Dan can walk you through how it would work for {company} specifically.
 
 Would you be open to a 2-minute demo? Just reply here or pick a time:
 {BOOKING_LINK}
@@ -804,9 +804,10 @@ def auto_outreach_loop():
                 except Exception as e:
                     print(f"❌ Email Failed for {lead_id}: {e}")
             
-            # Priority 3: OUTBOUND CALL via VAPI (business hours, if phone exists)
+            # Priority 3: OUTBOUND CALL via VAPI (business hours, if phone exists + real GHL ID)
             # Call AFTER email — multi-touch: email + call in same cycle
-            if phone and is_sms_hours and calls_this_cycle < MAX_CALLS_PER_CYCLE:
+            # SCRAPED leads get email only — don't burn Vapi credits on unverified numbers
+            if phone and is_sms_hours and has_real_ghl and calls_this_cycle < MAX_CALLS_PER_CYCLE:
                 print(f"📞 Route -> OUTBOUND CALL: {phone} (Sarah AI via VAPI)")
                 try:
                     call_result = dispatch_call_logic.local(lead_id)
@@ -892,8 +893,10 @@ def auto_outreach_loop():
         website = lead.get('website_url')
         phone = lead.get('phone')
         
-        # Step 2 follow-up: Try call first during business hours
-        if step == 2 and phone and is_sms_hours and calls_this_cycle < MAX_CALLS_PER_CYCLE:
+        # Step 2 follow-up: Try call first during business hours (only for verified GHL leads)
+        ghl_id = lead.get('ghl_contact_id') or lead.get('ghl_id', '')
+        has_real_ghl = ghl_id and not ghl_id.startswith('SCRAPED_')
+        if step == 2 and phone and is_sms_hours and has_real_ghl and calls_this_cycle < MAX_CALLS_PER_CYCLE:
             print(f"📞 Route -> FOLLOW-UP CALL (Step 2): {phone} (Sarah AI)")
             try:
                 call_result = dispatch_call_logic.local(lead_id)
