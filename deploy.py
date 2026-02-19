@@ -1604,6 +1604,62 @@ def sovereign_stats():
             "id,company,email,phone,status,lead_source,last_contacted_at,created_at"
         ).order("created_at", desc=True).limit(50).execute()
         
+        # === STRIPE REVENUE (live API) ===
+        stripe_data = {"mrr": 0, "active_subs": 0, "recent_payments": [], "total_revenue": 0, "error": None}
+        try:
+            import stripe
+            stripe.api_key = os.environ.get("STRIPE_SECRET_KEY", "")
+            if stripe.api_key and stripe.api_key.startswith("sk_"):
+                # Active subscriptions
+                subs = stripe.Subscription.list(status="active", limit=100)
+                active_subs = len(subs.data)
+                mrr = 0
+                for sub in subs.data:
+                    for item in sub["items"]["data"]:
+                        price = item.get("price", {})
+                        amount = price.get("unit_amount", 0) or 0
+                        interval = price.get("recurring", {}).get("interval", "month")
+                        qty = item.get("quantity", 1)
+                        if interval == "year":
+                            mrr += (amount * qty) / 12
+                        elif interval == "week":
+                            mrr += (amount * qty) * 4.33
+                        else:
+                            mrr += amount * qty
+                
+                # Recent successful payments (last 30 days)
+                thirty_days_ago = int((now - timedelta(days=30)).timestamp())
+                charges = stripe.Charge.list(limit=20, created={"gte": thirty_days_ago})
+                recent_payments = []
+                total_revenue_30d = 0
+                for ch in charges.data:
+                    if ch.status == "succeeded":
+                        total_revenue_30d += ch.amount
+                        recent_payments.append({
+                            "amount": ch.amount / 100,
+                            "currency": ch.currency,
+                            "description": ch.description or ch.billing_details.get("name", "Payment"),
+                            "date": datetime.fromtimestamp(ch.created, tz=timezone.utc).isoformat(),
+                            "status": ch.status
+                        })
+                
+                # Balance (total all-time from balance transactions)
+                balance = stripe.Balance.retrieve()
+                available = sum(b.get("amount", 0) for b in balance.get("available", []))
+                pending = sum(b.get("amount", 0) for b in balance.get("pending", []))
+                
+                stripe_data = {
+                    "mrr": round(mrr / 100, 2),
+                    "active_subs": active_subs,
+                    "recent_payments": recent_payments[:10],
+                    "total_revenue_30d": round(total_revenue_30d / 100, 2),
+                    "balance_available": round(available / 100, 2),
+                    "balance_pending": round(pending / 100, 2),
+                    "error": None
+                }
+        except Exception as stripe_err:
+            stripe_data["error"] = str(stripe_err)
+        
         return {
             "total_leads": pool_count,
             "outbound_24h": outbound_24h,
@@ -1616,6 +1672,7 @@ def sovereign_stats():
             "calls": calls.data,
             "notifications": notifs.data,
             "leads": pipeline.data,
+            "stripe": stripe_data,
             "status": "synchronized",
             "checked_at": now.isoformat()
         }
