@@ -1068,6 +1068,25 @@ def system_orchestrator():
             print("🚀 TRIGGER: Daily Executive Pulse (Phase 21)")
             send_executive_pulse.spawn()
 
+        # G. PROSPECTOR ENGINE (Every 30 min — minute 0-4 and 30-34)
+        if minute < 5 or (minute >= 30 and minute < 35):
+            try:
+                from modules.database.supabase_client import get_supabase
+                supabase = get_supabase()
+                last_prospect = supabase.table("system_state").select("status").eq("key", "last_prospect_half_hour").execute()
+                half_hour_key = f"{now_utc.date()}_{hour}_{minute // 30}"
+                
+                if not last_prospect.data or last_prospect.data[0].get("status") != half_hour_key:
+                    print(f"🚀 TRIGGER: Prospector Engine (Every 30 min: {half_hour_key})")
+                    supabase.table("system_state").upsert({
+                        "key": "last_prospect_half_hour",
+                        "status": half_hour_key
+                    }, on_conflict="key").execute()
+                    # Spawn as async to not block orchestrator
+                    run_prospector.spawn()
+            except Exception as e:
+                print(f"⚠️ Prospector trigger failed: {e}")
+
         print("✅ MASTER ORCHESTRATOR: Pulse complete.")
     
     except Exception as orch_err:
@@ -1491,6 +1510,84 @@ from workers.sunbiz_delta import run_sunbiz_delta_watch as delta_logic
 def scheduled_sunbiz_delta_watch():
     """8 AM Mon-Sat strike for brand-new Sunbiz registrations (Consolidated)."""
     return delta_logic()
+
+@app.function(image=image, secrets=[VAULT], timeout=300)
+def run_prospector():
+    """Prospector Engine — discovers + enriches new leads every 30 min.
+    Uses Google Places + Hunter.io to find businesses and extract emails."""
+    print("🔍 PROSPECTOR: Starting discovery cycle...")
+    return prospector_logic()
+
+@app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="GET")
+def export_ghl_csv():
+    """Export all contactable leads as a GHL-compatible CSV for bulk import.
+    Hit this endpoint to download the CSV file."""
+    import csv
+    import io
+    from modules.database.supabase_client import get_supabase
+    from fastapi.responses import StreamingResponse
+    
+    supabase = get_supabase()
+    all_leads = []
+    offset = 0
+    batch = 1000
+    
+    while True:
+        res = supabase.table("contacts_master").select(
+            "id,full_name,email,phone,company_name,niche,city,state,status,lead_source,website_url"
+        ).in_("status", ["new", "research_done", "outreach_sent", "sequence_complete"]).range(
+            offset, offset + batch - 1
+        ).execute()
+        if not res.data:
+            break
+        all_leads.extend(res.data)
+        if len(res.data) < batch:
+            break
+        offset += batch
+    
+    # Filter contactable
+    contactable = [l for l in all_leads if l.get("phone") or l.get("email")]
+    
+    # Build CSV in memory
+    output = io.StringIO()
+    w = csv.writer(output)
+    w.writerow(["First Name", "Last Name", "Email", "Phone", "Company Name", "Tags", "City", "State", "Website", "Source"])
+    
+    for lead in contactable:
+        name = (lead.get("full_name") or "").strip()
+        parts = name.split(" ", 1)
+        first = parts[0] if parts else ""
+        last = parts[1] if len(parts) > 1 else ""
+        
+        phone = (lead.get("phone") or "").replace("-","").replace("(","").replace(")","").replace(" ","")
+        if phone and not phone.startswith("+"):
+            phone = f"+1{phone}"
+        
+        tags = ["import:supabase"]
+        if lead.get("status"):
+            tags.append(f"status:{lead['status']}")
+        if lead.get("niche"):
+            tags.append(f"niche:{lead['niche']}")
+        
+        w.writerow([
+            first, last,
+            lead.get("email") or "",
+            phone,
+            lead.get("company_name") or "",
+            ", ".join(tags),
+            lead.get("city") or "",
+            lead.get("state") or "",
+            lead.get("website_url") or "",
+            lead.get("lead_source") or "supabase"
+        ])
+    
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=ghl_contact_import.csv"}
+    )
 
 def run_social_migration():
     """Create the social_drafts table via psycopg2."""
