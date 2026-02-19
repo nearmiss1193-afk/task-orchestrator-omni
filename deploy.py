@@ -1597,14 +1597,20 @@ def sovereign_stats():
         ).order("ts", desc=True).limit(20).execute()
         
         # === RECENT CALLS (customer_memory, last 15) ===
-        calls = sb.table("customer_memory").select(
-            "phone_number,context_summary"
-        ).limit(15).execute()
+        try:
+            calls = sb.table("customer_memory").select(
+                "phone_number,context_summary"
+            ).limit(15).execute()
+        except:
+            calls = type('obj', (object,), {'data': []})()  # empty fallback
         
         # === NOTIFICATIONS (call_alert entries) ===
-        notifs = sb.table("system_health_log").select(
-            "check_type,status,details,checked_at"
-        ).eq("check_type", "call_alert").order("checked_at", desc=True).limit(10).execute()
+        try:
+            notifs = sb.table("system_health_log").select(
+                "check_type,status,details,checked_at"
+            ).eq("check_type", "call_alert").order("checked_at", desc=True).limit(10).execute()
+        except:
+            notifs = type('obj', (object,), {'data': []})()  # empty fallback
         
         # === LEAD PIPELINE (top 50) ===
         pipeline = sb.table("contacts_master").select(
