@@ -1105,6 +1105,29 @@
                 </defs>
             </svg>
             <style>
+                /* Channel filter tabs */
+                .channel-filters { display:flex; gap:4px; padding:8px 14px; border-bottom:1px solid var(--border); overflow-x:auto }
+                .ch-filter { background:none; border:1px solid var(--border); color:var(--text-secondary); padding:4px 10px; border-radius:16px; font-size:10px; font-weight:600; cursor:pointer; white-space:nowrap; transition:all .2s; font-family:'Inter',sans-serif }
+                .ch-filter:hover { border-color:var(--border-active); color:var(--accent-blue) }
+                .ch-filter.active { background:rgba(99,102,241,.15); border-color:var(--accent-blue); color:var(--accent-blue) }
+                /* Status badges */
+                .status-badge { display:inline-block; padding:2px 7px; border-radius:8px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.3px }
+                .status-badge.sent,.status-badge.dispatched { background:rgba(99,102,241,.12); color:var(--accent-blue) }
+                .status-badge.delivered { background:rgba(16,185,129,.12); color:var(--accent-green) }
+                .status-badge.opened { background:rgba(168,85,247,.12); color:var(--accent-purple) }
+                .status-badge.replied { background:rgba(245,158,11,.12); color:var(--accent-amber) }
+                .status-badge.failed,.status-badge.bounced { background:rgba(244,63,94,.12); color:var(--accent-rose) }
+                /* Expandable activity detail */
+                .feed-detail { display:none; margin-top:6px; padding:8px 10px; background:rgba(0,0,0,.15); border-radius:8px; font-size:11px; line-height:1.5; color:var(--text-secondary); border:1px solid var(--border) }
+                .feed-item.expanded .feed-detail { display:block }
+                .feed-detail-row { display:flex; gap:6px; padding:2px 0 }
+                .feed-detail-label { color:var(--text-muted); font-weight:600; font-size:10px; min-width:50px; text-transform:uppercase }
+                .feed-detail-value { color:var(--text-primary); word-break:break-all }
+                .feed-preview { font-size:10px; color:var(--text-muted); margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:280px }
+                .feed-direction { font-size:9px; font-weight:700; padding:1px 5px; border-radius:4px; margin-left:4px }
+                .feed-direction.outbound { background:rgba(99,102,241,.1); color:var(--accent-blue) }
+                .feed-direction.inbound { background:rgba(6,182,212,.1); color:var(--accent-cyan) }
+
                 .funnel-stage { display:flex; align-items:center; gap:10px; padding:6px 0; font-size:12px }
                 .funnel-label { width:110px; text-align:right; color:var(--text-secondary); font-weight:500; white-space:nowrap }
                 .funnel-bar-wrap { flex:1; height:24px; background:var(--bg-card); border-radius:6px; overflow:hidden; position:relative }
@@ -1124,6 +1147,38 @@
                 .ab-rate.good { color:var(--accent-green) }
                 .ab-rate.ok { color:var(--accent-amber) }
                 .ab-rate.bad { color:var(--accent-rose) }
+
+                /* System Vitals Panel */
+                .vitals-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:12px }
+                .vitals-engine { display:flex; flex-direction:column; align-items:center; padding:8px 4px; border-radius:8px; background:rgba(0,0,0,.2); border:1px solid var(--border); gap:4px }
+                .vitals-engine .ve-icon { font-size:16px }
+                .vitals-engine .ve-label { font-size:9px; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px; text-align:center }
+                .vitals-engine .ve-status { font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px }
+                .vitals-engine.running .ve-status { background:rgba(16,185,129,.15); color:var(--accent-green) }
+                .vitals-engine.stopped .ve-status { background:rgba(244,63,94,.15); color:var(--accent-rose) }
+                .vitals-engine.running { border-color:rgba(16,185,129,.3) }
+                .vitals-engine.stopped { border-color:rgba(244,63,94,.3) }
+                .vitals-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:11px; border-bottom:1px solid var(--border) }
+                .vitals-row:last-child { border-bottom:none }
+                .vitals-row .vr-label { color:var(--text-secondary); font-weight:500 }
+                .vitals-row .vr-value { font-weight:700; color:var(--text-primary) }
+                .vitals-row .vr-value.green { color:var(--accent-green) }
+                .vitals-row .vr-value.amber { color:var(--accent-amber) }
+                .vitals-row .vr-value.rose { color:var(--accent-rose) }
+                .channel-bar { display:flex; height:16px; border-radius:4px; overflow:hidden; margin-top:4px; margin-bottom:4px; gap:1px }
+                .channel-bar .cb-seg { transition:width 0.6s ease }
+                .channel-bar .cb-email { background:var(--accent-blue) }
+                .channel-bar .cb-sms { background:var(--accent-green) }
+                .channel-bar .cb-call { background:var(--accent-purple) }
+                .channel-legend { display:flex; gap:10px; font-size:9px; color:var(--text-muted); margin-bottom:6px }
+                .channel-legend span::before { content:''; display:inline-block; width:7px; height:7px; border-radius:2px; margin-right:3px; vertical-align:middle }
+                .channel-legend .cl-email::before { background:var(--accent-blue) }
+                .channel-legend .cl-sms::before { background:var(--accent-green) }
+                .channel-legend .cl-call::before { background:var(--accent-purple) }
+                .vitals-errors { font-size:10px; color:var(--text-muted); margin-top:6px }
+                .vitals-errors .ve-item { display:flex; justify-content:space-between; padding:3px 0 }
+                .vitals-errors .ve-source { color:var(--accent-amber); font-weight:600 }
+                .vitals-errors .ve-time { color:var(--text-muted) }
             </style>
 
             <!-- METRICS -->
@@ -1153,7 +1208,7 @@
                     <div class="metric-icon">💰</div>
                     <div class="metric-label">Pipeline</div>
                     <div class="metric-value" id="mPipeline">—</div>
-                    <div class="metric-sub">$49-99/mo per client</div>
+                    <div class="metric-sub" id="mPipelineSub">Revenue tracking</div>
                     <div class="sparkline" id="sparkRevenue"></div>
                 </div>
                 <div class="metric-card">
@@ -1170,7 +1225,13 @@
                     <div class="panel-header">
                         <div class="panel-title"><span>📡</span> Live Activity <span class="panel-badge"
                                 id="feedCount">0</span></div><button class="refresh-btn"
-                            onclick="fetchActivity()">↻</button>
+                            onclick="refreshAll()">↻</button>
+                    </div>
+                    <div class="channel-filters" id="channelFilters">
+                        <button class="ch-filter active" data-ch="all" onclick="filterChannel('all',this)">All</button>
+                        <button class="ch-filter" data-ch="email" onclick="filterChannel('email',this)">📧 Email</button>
+                        <button class="ch-filter" data-ch="sms" onclick="filterChannel('sms',this)">💬 SMS</button>
+                        <button class="ch-filter" data-ch="call" onclick="filterChannel('call',this)">📞 Calls</button>
                     </div>
                     <div class="panel-body" id="activityFeed">
                         <div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">Loading...
@@ -1279,15 +1340,30 @@
                     </div>
                 </div>
 
-                <!-- Notifications -->
+                <!-- System Vitals -->
                 <div class="panel">
                     <div class="panel-header">
-                        <div class="panel-title"><span>🔔</span> Notifications</div><button class="refresh-btn"
-                            onclick="fetchNotifications()">↻</button>
+                        <div class="panel-title"><span>🔋</span> System Vitals</div><button class="refresh-btn"
+                            onclick="refreshAll()" title="Refresh">↻</button>
                     </div>
-                    <div class="panel-body" id="notifFeed">
-                        <div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">Loading...
+                    <div class="panel-body" id="vitalsBody">
+                        <div id="vitalsEngines" class="vitals-grid">
+                            <div class="vitals-engine stopped"><div class="ve-icon">📤</div><div class="ve-label">Outreach</div><div class="ve-status">...</div></div>
+                            <div class="vitals-engine stopped"><div class="ve-icon">🔍</div><div class="ve-label">Prospect</div><div class="ve-status">...</div></div>
+                            <div class="vitals-engine stopped"><div class="ve-icon">💓</div><div class="ve-label">Heartbeat</div><div class="ve-status">...</div></div>
+                            <div class="vitals-engine stopped"><div class="ve-icon">🎯</div><div class="ve-label">Campaign</div><div class="ve-status">...</div></div>
+                            <div class="vitals-engine stopped"><div class="ve-icon">🛡️</div><div class="ve-label">Inspector</div><div class="ve-status">...</div></div>
                         </div>
+                        <div id="vitalsDetails">
+                            <div class="vitals-row"><span class="vr-label">Velocity (1h)</span><span class="vr-value" id="vVelocity">—</span></div>
+                            <div class="vitals-row"><span class="vr-label">Last Outreach</span><span class="vr-value" id="vLastTouch">—</span></div>
+                            <div class="vitals-row"><span class="vr-label">Channels (24h)</span><span class="vr-value" id="vChannelLabel">—</span></div>
+                            <div id="vChannelBar" class="channel-bar"></div>
+                            <div id="vChannelLegend" class="channel-legend"></div>
+                            <div class="vitals-row"><span class="vr-label">Inspector Errors (1h)</span><span class="vr-value" id="vErrors">—</span></div>
+                            <div class="vitals-row"><span class="vr-label">Prospector Age</span><span class="vr-value" id="vProspAge">—</span></div>
+                        </div>
+                        <div id="vitalsErrorList" class="vitals-errors"></div>
                     </div>
                 </div>
             </div>
@@ -1443,6 +1519,80 @@
         function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML }
         function ago(d) { if (!d) return ''; const m = Math.floor((Date.now() - new Date(d).getTime()) / 60000); if (m < 1) return 'now'; if (m < 60) return m + 'm'; const h = Math.floor(m / 60); if (h < 24) return h + 'h'; return Math.floor(h / 24) + 'd' }
 
+        // ACTIVITY FEED RENDERER (Enriched expandable cards)
+        function renderActivityFeed(items, container) {
+            if (!items.length) {
+                container.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No activity</div>';
+                return;
+            }
+            const icons = { email: '📧', sms: '💬', call: '📞', social: '🌐', voice_drop: '🔊' };
+            const clsMap = { email: 'email', sms: 'sms', call: 'call', social: 'system', voice_drop: 'alert' };
+
+            container.innerHTML = items.map(x => {
+                const ch = x.channel || 'email';
+                const icon = icons[ch] || '📤';
+                const cls = clsMap[ch] || 'system';
+                const name = x.contact_name || '';
+                const company = x.company || 'Unknown';
+                const title = name ? `${esc(name)} — ${esc(company)}` : esc(company);
+                const status = x.status || 'sent';
+                const statusCls = status.toLowerCase().replace(/[^a-z]/g, '');
+                const phone = x.phone || '';
+                const emailTo = x.email_to || x.contact_email || '';
+                const emailFrom = x.email_from || '';
+                const variant = x.variant_name || '';
+
+                // Build preview line
+                let preview = '';
+                if (ch === 'email' && emailTo) preview = `→ ${emailTo}`;
+                else if (ch === 'sms' && phone) preview = `→ ${phone}`;
+                else if (ch === 'call' && phone) preview = `→ ${phone}`;
+                else if (phone) preview = phone;
+
+                // Build expandable detail rows
+                let detailRows = '';
+                if (phone) detailRows += `<div class="feed-detail-row"><span class="feed-detail-label">Phone</span><span class="feed-detail-value">${esc(phone)}</span></div>`;
+                if (emailTo) detailRows += `<div class="feed-detail-row"><span class="feed-detail-label">To</span><span class="feed-detail-value">${esc(emailTo)}</span></div>`;
+                if (emailFrom) detailRows += `<div class="feed-detail-row"><span class="feed-detail-label">From</span><span class="feed-detail-value">${esc(emailFrom)}</span></div>`;
+                if (variant) detailRows += `<div class="feed-detail-row"><span class="feed-detail-label">Variant</span><span class="feed-detail-value">${esc(variant)}</span></div>`;
+                detailRows += `<div class="feed-detail-row"><span class="feed-detail-label">Channel</span><span class="feed-detail-value">${icon} ${esc(ch.toUpperCase())}</span></div>`;
+                detailRows += `<div class="feed-detail-row"><span class="feed-detail-label">Status</span><span class="feed-detail-value">${esc(status)}</span></div>`;
+                if (x.ts) detailRows += `<div class="feed-detail-row"><span class="feed-detail-label">Time</span><span class="feed-detail-value">${new Date(x.ts).toLocaleString()}</span></div>`;
+
+                return `<div class="feed-item" data-channel="${esc(ch)}" onclick="this.classList.toggle('expanded')">
+                    <div class="feed-icon ${cls}">${icon}</div>
+                    <div class="feed-content">
+                        <div class="feed-title">${title} <span class="status-badge ${statusCls}">${esc(status)}</span></div>
+                        ${preview ? `<div class="feed-preview">${esc(preview)}</div>` : ''}
+                        <div class="feed-detail">${detailRows}</div>
+                    </div>
+                    <div class="feed-time">${ago(x.ts)}</div>
+                </div>`;
+            }).join('');
+        }
+
+        // CHANNEL FILTER
+        function filterChannel(ch, btn) {
+            // Update active state
+            document.querySelectorAll('.ch-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Filter feed items
+            const items = document.querySelectorAll('#activityFeed .feed-item');
+            let visCount = 0;
+            items.forEach(item => {
+                if (ch === 'all' || item.dataset.channel === ch) {
+                    item.style.display = '';
+                    visCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            document.getElementById('feedCount').textContent = ch === 'all' 
+                ? (window._activityData || []).length 
+                : visCount;
+        }
+
         // UNIFIED FETCH — single Modal API call, bypasses RLS
         let prevCallCount = 0;
         let dashData = null;
@@ -1472,15 +1622,16 @@
                 renderSparkline('sparkOutreach', [12, 8, 15, 22, 18, 25, dashData.outbound_24h || 20]);
                 renderSparkline('sparkRevenue', [8000, 9200, 10500, 11000, 12800, 14200, dashData.stripe?.mrr ? dashData.stripe.mrr * 100 : (dashData.total_leads || 0) * 49]);
 
-                // === ACTIVITY FEED ===
+                // === ACTIVITY FEED (Enriched with expandable cards) ===
                 const activity = dashData.activity || [];
+                window._activityData = activity; // store for filtering
                 const actEl = document.getElementById('activityFeed');
                 document.getElementById('feedCount').textContent = activity.length;
-                if (!activity.length) { actEl.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No activity</div>'; }
-                else {
-                    const icons = { email: '📧', sms: '💬', call: '📞', social: '🌐', voice_drop: '🔊' };
-                    const clsMap = { email: 'email', sms: 'sms', call: 'call', social: 'system', voice_drop: 'alert' };
-                    actEl.innerHTML = activity.map(x => `<div class="feed-item"><div class="feed-icon ${clsMap[x.channel] || 'system'}">${icons[x.channel] || '📤'}</div><div class="feed-content"><div class="feed-title">${esc(x.company || 'Unknown')}</div><div class="feed-desc">${esc(x.channel || '')} — ${esc(x.status || '')}</div></div><div class="feed-time">${ago(x.ts)}</div></div>`).join('');
+                renderActivityFeed(activity, actEl);
+                // Apply current filter
+                const activeFilter = document.querySelector('.ch-filter.active');
+                if (activeFilter && activeFilter.dataset.ch !== 'all') {
+                    filterChannel(activeFilter.dataset.ch, activeFilter);
                 }
 
                 // === CALLS ===
@@ -1510,18 +1661,83 @@
                     }).join('');
                 }
 
-                // === NOTIFICATIONS ===
-                const notifs = dashData.notifications || [];
-                const notifEl = document.getElementById('notifFeed');
-                document.getElementById('mAlerts').textContent = notifs.length;
-                document.getElementById('mAlertsSub').textContent = notifs.length ? 'Call alerts' : 'No alerts';
-                if (!notifs.length) { notifEl.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px 0;text-align:center">No notifications</div>'; }
-                else {
-                    notifEl.innerHTML = notifs.map(n => {
-                        const m = n.metadata || {};
-                        return `<div class="feed-item" onclick="this.classList.toggle('expanded')"><div class="feed-icon alert">🔔</div><div class="feed-content"><div class="feed-title">${esc(m.caller_name || 'Unknown')} ${esc(m.caller_phone || '')}</div><div class="feed-desc">${esc((m.summary || n.message || '').substring(0, 100))}</div><div class="feed-transcript">${esc(m.transcript || m.summary || 'No details')}</div></div><div class="feed-time">${ago(n.checked_at)}</div></div>`;
-                    }).join('');
+                // === SYSTEM VITALS ===
+                const vitals = dashData.system_vitals || {};
+                const engines = vitals.engines || {};
+                const engineDefs = [
+                    { key: 'outreach', icon: '📧', label: 'Outreach' },
+                    { key: 'prospecting', icon: '🔎', label: 'Prospect' },
+                    { key: 'heartbeat', icon: '💗', label: 'Heartbeat' },
+                    { key: 'campaign', icon: '🎯', label: 'Campaign' },
+                    { key: 'inspector', icon: '🛡️', label: 'Inspector' }
+                ];
+                const engEl = document.getElementById('vitalsEngines');
+                engEl.innerHTML = engineDefs.map(e => {
+                    const on = engines[e.key];
+                    return `<div class="vitals-engine ${on ? 'running' : 'stopped'}"><div class="ve-icon">${e.icon}</div><div class="ve-label">${e.label}</div><div class="ve-status">${on ? 'ON' : 'OFF'}</div></div>`;
+                }).join('');
+
+                // Velocity
+                const vel = vitals.outreach_1h || 0;
+                const velEl = document.getElementById('vVelocity');
+                velEl.textContent = vel + ' touches/hr';
+                velEl.className = 'vr-value ' + (vel > 5 ? 'green' : vel > 0 ? 'amber' : 'rose');
+
+                // Last outreach
+                const lastEl = document.getElementById('vLastTouch');
+                if (vitals.last_outreach_ts) {
+                    lastEl.textContent = ago(vitals.last_outreach_ts) + ' (' + (vitals.last_outreach_channel || '?') + ')';
+                    const mins = Math.floor((Date.now() - new Date(vitals.last_outreach_ts).getTime()) / 60000);
+                    lastEl.className = 'vr-value ' + (mins < 30 ? 'green' : mins < 120 ? 'amber' : 'rose');
+                } else {
+                    lastEl.textContent = 'Never';
+                    lastEl.className = 'vr-value rose';
                 }
+
+                // Channel breakdown
+                const ch = vitals.channel_breakdown || { email: 0, sms: 0, call: 0 };
+                const total = ch.email + ch.sms + ch.call;
+                document.getElementById('vChannelLabel').textContent = total > 0 ? total + ' total' : 'None';
+                if (total > 0) {
+                    const pEmail = Math.round(ch.email / total * 100);
+                    const pSms = Math.round(ch.sms / total * 100);
+                    const pCall = 100 - pEmail - pSms;
+                    document.getElementById('vChannelBar').innerHTML = `<div class="cb-seg cb-email" style="width:${pEmail}%"></div><div class="cb-seg cb-sms" style="width:${pSms}%"></div><div class="cb-seg cb-call" style="width:${pCall}%"></div>`;
+                    document.getElementById('vChannelLegend').innerHTML = `<span class="cl-email">Email ${ch.email}</span><span class="cl-sms">SMS ${ch.sms}</span><span class="cl-call">Call ${ch.call}</span>`;
+                } else {
+                    document.getElementById('vChannelBar').innerHTML = '';
+                    document.getElementById('vChannelLegend').innerHTML = '';
+                }
+
+                // Inspector errors
+                const errEl = document.getElementById('vErrors');
+                const errCount = vitals.error_count_1h || 0;
+                errEl.textContent = errCount;
+                errEl.className = 'vr-value ' + (errCount === 0 ? 'green' : errCount < 5 ? 'amber' : 'rose');
+
+                // Prospector age
+                const prospEl = document.getElementById('vProspAge');
+                if (vitals.prospector_age_min != null) {
+                    const pm = vitals.prospector_age_min;
+                    prospEl.textContent = pm < 60 ? pm + 'm ago' : Math.floor(pm / 60) + 'h ' + (pm % 60) + 'm ago';
+                    prospEl.className = 'vr-value ' + (pm < 120 ? 'green' : pm < 360 ? 'amber' : 'rose');
+                } else {
+                    prospEl.textContent = 'Never';
+                    prospEl.className = 'vr-value rose';
+                }
+
+                // Recent errors list
+                const errList = vitals.inspector_errors || [];
+                const errListEl = document.getElementById('vitalsErrorList');
+                if (errList.length) {
+                    errListEl.innerHTML = '<div style="font-size:9px;color:var(--text-muted);margin-bottom:4px;font-weight:600">RECENT ERRORS</div>' + errList.map(e => `<div class="ve-item"><span class="ve-source">${esc(e.source || '?')}</span><span class="ve-time">${ago(e.created_at)}</span></div>`).join('');
+                } else {
+                    errListEl.innerHTML = '';
+                }
+
+                // Alerts metric — use inspector errors instead of notifications
+                document.getElementById('mAlerts').textContent = errCount;
+                document.getElementById('mAlertsSub').textContent = errCount ? 'Inspector errors (1h)' : 'All clear';
 
                 // === LEADS TABLE ===
                 const leads = dashData.leads || [];

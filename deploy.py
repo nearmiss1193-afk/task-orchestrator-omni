@@ -822,11 +822,24 @@ def vapi_webhook(data: dict = None):
                 # Support Sarah (BANT)
                 system_prompt = f"You are Sarah, AI phone assistant for AI Service Co. Warm, casual. {greeting_instruction} {context_injection} {SERVICE_KNOWLEDGE} MISSION: BANT qualification."
 
+            # Maya's first message depends on who's calling
+            DAN_PHONE = "+13529368152"
+            if is_maya_call:
+                if caller_phone == DAN_PHONE:
+                    maya_first = "Hey boss! What's going on? Who are we impressing today?"
+                elif customer_name:
+                    maya_first = f"Hey {customer_name}! Thanks for calling, I'm Maya with AI Service Co. How's your day going?"
+                else:
+                    maya_first = "Hey! Thanks for calling, I'm Maya with AI Service Co. How's your day going?"
+            else:
+                maya_first = None
+
             assistant_overrides = {
                 "variableValues": {"customerPhone": caller_phone, "customerName": customer_name, "callMode": call_mode},
-                "firstMessage": "Thank you for connecting, I'm Maya, I hope you're having a fantastic day! How can I help you today?" if is_maya_call else None,
+                "firstMessage": maya_first,
                 "systemPrompt": system_prompt
             }
+
 
             # Independent Logging Block
             try:
@@ -993,7 +1006,9 @@ def system_orchestrator():
     """Master Orchestrator: Health, Outreach, and Time-based Strikes (Sovereign Consolidation)."""
     import os
     from datetime import datetime, timezone
+    from modules.autonomous_inspector import Inspector, safe_spawn, safe_local
     
+    inspector = Inspector()
     now_utc = datetime.now(timezone.utc)
     hour = now_utc.hour
     minute = now_utc.minute
@@ -1003,27 +1018,27 @@ def system_orchestrator():
     
     try:
         # 1. Health & Pulse (Every 5 min)
-        system_heartbeat.local()
+        safe_local(system_heartbeat, "system_heartbeat")
         
         # 2. Outreach Loop (Every 5 min)
-        auto_outreach_loop.local()
+        safe_local(auto_outreach_loop, "auto_outreach_loop")
         
         # --- TIME-BASED TRIGGERS (Consolidated Crons) ---
         
         # A. Sunbiz Delta Watch (8 AM Mon-Sat -> hour 8 UTC if EST as per original cron)
         if hour == 8 and minute < 5 and weekday < 6:
             print("🚀 TRIGGER: Sunbiz Delta Watch (Consolidated)")
-            scheduled_sunbiz_delta_watch.spawn()
+            safe_spawn(scheduled_sunbiz_delta_watch, "scheduled_sunbiz_delta_watch")
 
         # B. Social Multiplier (9 AM and 4 PM EST -> 14 and 21 UTC per original cron)
         if hour in [14, 21] and minute < 5:
             print("🚀 TRIGGER: Social Multiplier (Consolidated)")
-            schedule_social_multiplier.spawn()
+            safe_spawn(schedule_social_multiplier, "schedule_social_multiplier")
 
         # C. Weekly Newsletter (Mondays at 9 AM EST -> 14 UTC per original cron)
         if weekday == 0 and hour == 14 and minute < 5:
             print("🚀 TRIGGER: Weekly Newsletter (Consolidated)")
-            weekly_newsletter.spawn()
+            safe_spawn(weekly_newsletter, "weekly_newsletter")
         
         # D. Lakeland Background Ingestion (Hourly at minute 12)
         if minute >= 12 and minute < 17:
@@ -1040,7 +1055,7 @@ def system_orchestrator():
                         "key": "last_ingestion_hour",
                         "status": current_hour_key
                     }, on_conflict="key").execute()
-                    run_ingestion_batch.spawn(batch_size=50)
+                    safe_spawn(run_ingestion_batch, "run_ingestion_batch", batch_size=50)
             except Exception as e:
                 print(f"⚠️ Ingestion trigger failed: {e}")
 
@@ -1059,14 +1074,14 @@ def system_orchestrator():
                         "key": "last_enrichment_hour",
                         "status": current_hour_key
                     }, on_conflict="key").execute()
-                    run_enrichment_loop.spawn(limit=15)
+                    safe_spawn(run_enrichment_loop, "run_enrichment_loop", limit=15)
             except Exception as e:
                 print(f"⚠️ Enrichment trigger failed: {e}")
 
         # F. Daily Executive Pulse (8 AM EST -> 13 UTC)
         if hour == 13 and minute < 5:
             print("🚀 TRIGGER: Daily Executive Pulse (Phase 21)")
-            send_executive_pulse.spawn()
+            safe_spawn(send_executive_pulse, "send_executive_pulse")
 
         # G. PROSPECTOR ENGINE (Every 30 min — minute 0-4 and 30-34)
         if minute < 5 or (minute >= 30 and minute < 35):
@@ -1083,35 +1098,35 @@ def system_orchestrator():
                         "status": half_hour_key
                     }, on_conflict="key").execute()
                     # Spawn as async to not block orchestrator
-                    run_prospector.spawn()
+                    safe_spawn(run_prospector, "run_prospector")
             except Exception as e:
                 print(f"⚠️ Prospector trigger failed: {e}")
 
         print("✅ MASTER ORCHESTRATOR: Pulse complete.")
     
     except Exception as orch_err:
-        # ── CRITICAL FAILURE ALERT — SMS Dan ──
+        # ── AUTONOMOUS INSPECTOR — Detect, Diagnose, Repair ──
         print(f"🚨 ORCHESTRATOR CRASH: {orch_err}")
         import traceback
         traceback.print_exc()
         try:
-            err_msg = str(orch_err)[:200]
-            requests.post(
-                "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd",
-                json={
-                    "phone": "+13529368152",
-                    "message": f"🚨 SYSTEM ALERT: Orchestrator crashed!\n\nError: {err_msg}\n\nTime: {now_utc.strftime('%I:%M %p')} UTC\n\nCheck Modal logs ASAP.",
-                    "type": "system_alert"
-                },
-                timeout=10
-            )
-            print("📱 Alert SMS sent to Dan")
-        except Exception as sms_err:
-            print(f"❌ Failed to send alert SMS: {sms_err}")
+            inspector.handle_crash("system_orchestrator", orch_err)
+        except Exception as inspect_err:
+            print(f"❌ Inspector itself failed: {inspect_err}")
+            # Fallback: raw SMS alert
+            try:
+                requests.post(
+                    "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd",
+                    json={"phone": "+13529368152", "message": f"🚨 ORCHESTRATOR + INSPECTOR BOTH CRASHED: {str(orch_err)[:200]}", "type": "system_alert"},
+                    timeout=10
+                )
+            except Exception:
+                pass
 
 @app.function(image=image, secrets=[VAULT])
 def system_heartbeat():
     """Health check + Vapi call monitor (polls for completed calls, notifies Dan)."""
+    from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
     
     print(f"HEARTBEAT: Running at {datetime.now(timezone.utc).isoformat()}")
@@ -1193,6 +1208,23 @@ def system_heartbeat():
                     created_at TIMESTAMPTZ DEFAULT NOW(),
                     metadata JSONB DEFAULT '{}'::jsonb
                 );
+            """)
+            
+            # 4. system_error_log table (Inspector: Phase 31)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS system_error_log (
+                    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+                    source TEXT NOT NULL,
+                    error_type TEXT,
+                    error_message TEXT,
+                    traceback TEXT,
+                    context JSONB DEFAULT '{}',
+                    status TEXT DEFAULT 'new',
+                    retry_count INT DEFAULT 0,
+                    created_at TIMESTAMPTZ DEFAULT NOW()
+                );
+                CREATE INDEX IF NOT EXISTS idx_error_log_source ON system_error_log(source);
+                CREATE INDEX IF NOT EXISTS idx_error_log_created ON system_error_log(created_at DESC);
             """)
             
             conn.commit()
@@ -1308,7 +1340,6 @@ def system_heartbeat():
     
     # ---- AUTO-PROSPECTOR TRIGGER (every ~6 hours, piggybacked on heartbeat) ----
     try:
-        from datetime import datetime, timezone, timedelta
         from modules.database.supabase_client import get_supabase
         supabase = get_supabase()
         
@@ -1376,7 +1407,7 @@ def system_heartbeat():
         dan_phone = "+13529368152"
         ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
         
-        r = req.get('https://api.vapi.ai/call?limit=5', headers=headers, timeout=15)
+        r = requests.get('https://api.vapi.ai/call?limit=5', headers=headers, timeout=15)
         calls = r.json()
         notified = 0
         
@@ -1445,6 +1476,17 @@ def system_heartbeat():
         
     except Exception as e:
         print(f"CALL MONITOR ERROR: {e}")
+
+    # ---- AUTONOMOUS INSPECTOR CYCLE (error pattern analysis) ----
+    try:
+        from modules.autonomous_inspector import Inspector
+        inspector = Inspector()
+        inspection = inspector.run_inspection_cycle()
+        print(f"🔍 INSPECTOR: {inspection.get('status', 'unknown')} | "
+              f"{inspection.get('errors_1h', 0)} errors in last hour | "
+              f"{inspection.get('circuit_broken', 0)} circuit-broken")
+    except Exception as e:
+        print(f"Inspector cycle error (non-fatal): {e}")
 
 # ────────────────────────────────────────────────────────────
 #  VOICE AGENT TOOLS (Maya v2 Actions)
@@ -1682,11 +1724,51 @@ def sovereign_stats():
                 hb_ok = (now - hb_time).total_seconds() < 900
             except: pass
         
-        # === ACTIVITY FEED (outbound_touches, last 20) ===
+        # === ACTIVITY FEED (outbound_touches, last 30 — enriched) ===
         try:
             activity = sb.table("outbound_touches").select(
-                "channel,status,ts"
-            ).order("ts", desc=True).limit(20).execute()
+                "channel,status,ts,company,phone,payload,variant_name"
+            ).order("ts", desc=True).limit(30).execute()
+            
+            # Build phone → contact_name lookup for activity items
+            activity_phones = list(set(
+                r.get("phone", "") for r in activity.data if r.get("phone")
+            ))
+            contact_lookup = {}
+            if activity_phones:
+                # Batch lookup in chunks of 20
+                for i in range(0, len(activity_phones), 20):
+                    chunk = activity_phones[i:i+20]
+                    try:
+                        cl = sb.table("contacts_master").select(
+                            "phone,first_name,company_name,email"
+                        ).in_("phone", chunk).execute()
+                        for c in cl.data:
+                            p = c.get("phone", "")
+                            contact_lookup[p] = {
+                                "name": c.get("first_name", ""),
+                                "company": c.get("company_name", ""),
+                                "email": c.get("email", "")
+                            }
+                    except: pass
+            
+            # Enrich activity data with contact info
+            for item in activity.data:
+                phone = item.get("phone", "")
+                if phone in contact_lookup:
+                    item["contact_name"] = contact_lookup[phone].get("name", "")
+                    item["contact_email"] = contact_lookup[phone].get("email", "")
+                    if not item.get("company"):
+                        item["company"] = contact_lookup[phone].get("company", "")
+                # Extract email 'to' from payload if available
+                payload = item.get("payload") or {}
+                if isinstance(payload, dict):
+                    if payload.get("to"):
+                        item["email_to"] = payload["to"]
+                    if payload.get("from"):
+                        item["email_from"] = payload["from"]
+                    if payload.get("subject"):
+                        item["email_subject"] = payload["subject"]
         except:
             activity = type('obj', (object,), {'data': []})()  # empty fallback
         
@@ -1837,6 +1919,84 @@ def sovereign_stats():
         except:
             lead_geo = []
         
+        # === SYSTEM VITALS (for live dashboard panel) ===
+        system_vitals = {}
+        try:
+            # Prospector status
+            prosp = sb.table("system_state").select("status").eq("key", "prospector_last_run").execute()
+            prosp_ts = prosp.data[0]["status"] if prosp.data else None
+            prosp_age_min = None
+            if prosp_ts:
+                try:
+                    prosp_time = datetime.fromisoformat(prosp_ts.replace("Z", "+00:00"))
+                    prosp_age_min = round((now - prosp_time).total_seconds() / 60)
+                except: pass
+            
+            # Campaign mode
+            cm = sb.table("system_state").select("status").eq("key", "campaign_mode").execute()
+            campaign_mode = cm.data[0]["status"] if cm.data else "unknown"
+            
+            # Outreach breakdown by channel (24h)
+            channel_breakdown = {"email": 0, "sms": 0, "call": 0}
+            try:
+                ch_raw = sb.table("outbound_touches").select("channel").gt("ts", yesterday).execute()
+                for row in ch_raw.data:
+                    ch = (row.get("channel") or "email").lower()
+                    if ch in channel_breakdown:
+                        channel_breakdown[ch] += 1
+                    else:
+                        channel_breakdown["email"] += 1  # fallback
+            except: pass
+            
+            # Last outreach timestamp
+            last_touch = sb.table("outbound_touches").select("ts,channel").order("ts", desc=True).limit(1).execute()
+            last_outreach_ts = last_touch.data[0]["ts"] if last_touch.data else None
+            last_outreach_ch = last_touch.data[0].get("channel", "?") if last_touch.data else None
+            
+            # Inspector recent errors (last 3)
+            inspector_errors = []
+            try:
+                err_q = sb.table("system_error_log").select("source,error_type,status,created_at").order("created_at", desc=True).limit(3).execute()
+                inspector_errors = err_q.data
+            except: pass  # table may not exist yet
+            
+            # Inspector error count (1h)
+            error_count_1h = 0
+            try:
+                one_hour_ago = (now - timedelta(hours=1)).isoformat()
+                err_count_q = sb.table("system_error_log").select("id", count="exact").gt("created_at", one_hour_ago).execute()
+                error_count_1h = err_count_q.count if err_count_q.count is not None else len(err_count_q.data)
+            except: pass
+            
+            # Outreach velocity (touches in last 1h vs last 24h)
+            outreach_1h = 0
+            try:
+                one_hour_ago = (now - timedelta(hours=1)).isoformat()
+                q1h = sb.table("outbound_touches").select("id", count="exact").gt("ts", one_hour_ago).execute()
+                outreach_1h = q1h.count if q1h.count is not None else len(q1h.data)
+            except: pass
+            
+            system_vitals = {
+                "prospector_last_run": prosp_ts,
+                "prospector_age_min": prosp_age_min,
+                "campaign_mode": campaign_mode,
+                "channel_breakdown": channel_breakdown,
+                "last_outreach_ts": last_outreach_ts,
+                "last_outreach_channel": last_outreach_ch,
+                "outreach_1h": outreach_1h,
+                "inspector_errors": inspector_errors,
+                "error_count_1h": error_count_1h,
+                "engines": {
+                    "outreach": outbound_24h > 0,
+                    "prospecting": prosp_age_min is not None and prosp_age_min < 180,
+                    "heartbeat": hb_ok,
+                    "campaign": campaign_mode == "working",
+                    "inspector": True  # always on now
+                }
+            }
+        except Exception as vex:
+            system_vitals = {"error": str(vex)}
+        
         return {
             "total_leads": pool_count,
             "outbound_24h": outbound_24h,
@@ -1853,6 +2013,7 @@ def sovereign_stats():
             "funnel": funnel,
             "ab_performance": ab_performance,
             "lead_geo": lead_geo,
+            "system_vitals": system_vitals,
             "status": "synchronized",
             "checked_at": now.isoformat()
         }
