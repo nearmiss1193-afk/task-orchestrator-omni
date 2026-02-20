@@ -301,6 +301,47 @@ def sms_inbound(data: dict = {}):
     
     print(f"[{datetime.now().strftime('%I:%M %p')}] SMS from {phone}: {message[:50]}...")
     
+    # ══════ SMART ROUTING (Dispatch / Review / Opt-Out) ══════
+    import re as _re
+    upper_msg = message.strip().upper()
+    
+    # Route 1: DISPATCH responses (ACCEPT / PASS / DONE)
+    if upper_msg in ("ACCEPT", "PASS", "DONE"):
+        try:
+            from modules.database.supabase_client import get_supabase
+            from workers.dispatch import handle_tech_response
+            sb = get_supabase()
+            result = handle_tech_response(phone, upper_msg, sb)
+            return {"routed_to": "dispatch", "result": result}
+        except Exception as dr_err:
+            print(f"  ⚠️ Dispatch routing error: {dr_err}")
+    
+    # Route 2: REVIEW ratings (single digit 1-5)
+    if _re.match(r'^[1-5]$', message.strip()):
+        try:
+            from modules.database.supabase_client import get_supabase
+            from workers.review_optimizer import handle_rating
+            sb = get_supabase()
+            rating = int(message.strip())
+            result = handle_rating(phone, rating, sb)
+            return {"routed_to": "review_optimizer", "result": result}
+        except Exception as rv_err:
+            print(f"  ⚠️ Review routing error: {rv_err}")
+    
+    # Route 3: OPT-OUT keywords
+    _opt_words = {"STOP", "UNSUBSCRIBE", "REMOVE", "CANCEL", "QUIT", "OPT OUT", "OPTOUT"}
+    if upper_msg in _opt_words or any(w in upper_msg for w in _opt_words):
+        try:
+            from modules.database.supabase_client import get_supabase
+            sb = get_supabase()
+            sb.table("contacts_master").update({"status": "opted_out"}).eq("phone", phone).execute()
+            print(f"  🚫 Opted out: {phone}")
+        except Exception as oo_err:
+            print(f"  ⚠️ Opt-out error: {oo_err}")
+        return {"sarah_reply": "You've been unsubscribed. Reply START to re-subscribe.", "opted_out": True}
+    
+    # ══════ Fall through to Sarah AI for all other messages ══════
+    
     # --- MEMORY LOOKUP ---
     context_summary = {}
     customer_id = None
@@ -2280,6 +2321,65 @@ def resend_webhook(data: dict):
         traceback.print_exc()
     
     return {"received": True}
+
+
+
+
+# ────────────────────────────────────────────────────────────
+#  DISPATCH & REVIEW API — Dashboard actions
+# ────────────────────────────────────────────────────────────
+@app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="POST")
+def dispatch_review_api(data: dict):
+    """
+    Unified API for dispatch and review actions from dashboard.
+    
+    Actions:
+    - create_job: Create a new dispatch job
+    - send_review: Send review request SMS
+    - get_board: Get dispatch board
+    - get_stats: Get review stats
+    """
+    import json
+    from modules.database.supabase_client import get_supabase
+    
+    action = data.get("action", "")
+    supabase = get_supabase()
+    
+    if action == "create_job":
+        from workers.dispatch import create_job
+        return create_job(
+            service_type=data.get("service_type", "general"),
+            address=data.get("address", ""),
+            customer_name=data.get("customer_name", ""),
+            customer_phone=data.get("customer_phone", ""),
+            company_name=data.get("company_name", ""),
+            supabase=supabase,
+            urgency=data.get("urgency", "standard"),
+            notes=data.get("notes", ""),
+        )
+    
+    elif action == "send_review":
+        from workers.review_optimizer import send_review_request
+        return send_review_request(
+            contact_id=data.get("contact_id", ""),
+            customer_name=data.get("customer_name", ""),
+            customer_phone=data.get("customer_phone", ""),
+            company_name=data.get("company_name", ""),
+            supabase=supabase,
+        )
+    
+    elif action == "get_board":
+        from workers.dispatch import get_dispatch_board
+        return get_dispatch_board(supabase)
+    
+    elif action == "get_stats":
+        from workers.review_optimizer import get_review_stats
+        return get_review_stats(supabase)
+    
+    else:
+        return {"error": f"Unknown action: {action}",
+                "valid_actions": ["create_job", "send_review", "get_board", "get_stats"]}
 
 
 # ────────────────────────────────────────────────────────────
