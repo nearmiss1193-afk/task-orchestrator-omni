@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOVEREIGN COMMAND — Sarah AI</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='white'>A</text></svg>">
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='white'>A</text></svg>">
     <meta name="theme-color" content="#0a0a0f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -19,18 +20,24 @@
         }
 
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-card: rgba(18, 18, 28, 0.8);
-            --bg-card-hover: rgba(25, 25, 40, 0.9);
-            --border: rgba(255, 255, 255, 0.06);
-            --border-active: rgba(99, 102, 241, 0.4);
-            --text-primary: #f0f0f5;
-            --text-secondary: #8b8b9e;
-            --text-muted: #55556a;
-            --accent-blue: #6366f1;
+            --primary: #f43f5e;
+            /* Sarah Rose 500 */
+            --primary-hover: #e11d48;
+            --primary-glow: rgba(244, 63, 94, 0.4);
+            --accent-blue: #3b82f6;
             --accent-green: #10b981;
-            --accent-amber: #f59e0b;
             --accent-rose: #f43f5e;
+            --bg-dark: #020617;
+            /* Slate 950 */
+            --bg-card: #0f172a;
+            --bg-side: #020617;
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(255, 255, 255, 0.08);
+            --font-main: 'Inter', sans-serif;
+            --font-hdr: 'Outfit', sans-serif;
+            --accent-amber: #f59e0b;
             --accent-purple: #a855f7;
             --accent-cyan: #06b6d4;
         }
@@ -1077,20 +1084,23 @@
 
     <div class="app">
         <header class="topbar">
-            <div class="topbar-left">
-                <div class="topbar-logo">A</div>
+            <div class="top-logo">
+                <div class="logo-icon">⚡</div>
                 <div>
-                    <div class="topbar-title">Sarah AI</div>
-                    <div class="topbar-subtitle">Command Center v3</div>
+                    <div class="logo-text">Sarah AI <span>Command</span></div>
+                    <div class="logo-subtext">The Employee That Never Sleeps</div>
                 </div>
             </div>
-            <div class="topbar-right">
-                <div class="time-display" id="clockDisplay">--:--</div>
+            <div class="top-status">
+                <div class="slogan-pill">Ensuring you're always first pick</div>
                 <div class="status-pill" id="systemStatus">
-                    <div class="dot"></div><span id="systemStatusText">Sarah Active</span>
+                    <div class="dot"></div>
+                    <span id="systemStatusText">Uplink Active</span>
                 </div>
-                <div class="status-pill" id="dispatchStatus" style="background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.2);color:var(--accent-rose)">
-                    <div class="dot" style="background:var(--accent-rose)"></div><span id="dispatchStatusText">Dispatch: Live</span>
+                <div class="status-pill" id="dispatchStatus"
+                    style="background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.2);color:var(--accent-rose)">
+                    <div class="dot" style="background:var(--accent-rose)"></div><span id="dispatchStatusText">Dispatch:
+                        Live</span>
                 </div>
                 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">🌙</button>
                 <button class="refresh-btn" onclick="refreshAll()">↻ Refresh</button>
@@ -1109,79 +1119,436 @@
             </svg>
             <style>
                 /* Channel filter tabs */
-                .channel-filters { display:flex; gap:4px; padding:8px 14px; border-bottom:1px solid var(--border); overflow-x:auto }
-                .ch-filter { background:none; border:1px solid var(--border); color:var(--text-secondary); padding:4px 10px; border-radius:16px; font-size:10px; font-weight:600; cursor:pointer; white-space:nowrap; transition:all .2s; font-family:'Inter',sans-serif }
-                .ch-filter:hover { border-color:var(--border-active); color:var(--accent-blue) }
-                .ch-filter.active { background:rgba(99,102,241,.15); border-color:var(--accent-blue); color:var(--accent-blue) }
-                /* Status badges */
-                .status-badge { display:inline-block; padding:2px 7px; border-radius:8px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.3px }
-                .status-badge.sent,.status-badge.dispatched { background:rgba(99,102,241,.12); color:var(--accent-blue) }
-                .status-badge.delivered { background:rgba(16,185,129,.12); color:var(--accent-green) }
-                .status-badge.opened { background:rgba(168,85,247,.12); color:var(--accent-purple) }
-                .status-badge.replied { background:rgba(245,158,11,.12); color:var(--accent-amber) }
-                .status-badge.failed,.status-badge.bounced { background:rgba(244,63,94,.12); color:var(--accent-rose) }
-                /* Expandable activity detail */
-                .feed-detail { display:none; margin-top:6px; padding:8px 10px; background:rgba(0,0,0,.15); border-radius:8px; font-size:11px; line-height:1.5; color:var(--text-secondary); border:1px solid var(--border) }
-                .feed-item.expanded .feed-detail { display:block }
-                .feed-detail-row { display:flex; gap:6px; padding:2px 0 }
-                .feed-detail-label { color:var(--text-muted); font-weight:600; font-size:10px; min-width:50px; text-transform:uppercase }
-                .feed-detail-value { color:var(--text-primary); word-break:break-all }
-                .feed-preview { font-size:10px; color:var(--text-muted); margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:280px }
-                .feed-direction { font-size:9px; font-weight:700; padding:1px 5px; border-radius:4px; margin-left:4px }
-                .feed-direction.outbound { background:rgba(99,102,241,.1); color:var(--accent-blue) }
-                .feed-direction.inbound { background:rgba(6,182,212,.1); color:var(--accent-cyan) }
+                .channel-filters {
+                    display: flex;
+                    gap: 4px;
+                    padding: 8px 14px;
+                    border-bottom: 1px solid var(--border);
+                    overflow-x: auto
+                }
 
-                .funnel-stage { display:flex; align-items:center; gap:10px; padding:6px 0; font-size:12px }
-                .funnel-label { width:110px; text-align:right; color:var(--text-secondary); font-weight:500; white-space:nowrap }
-                .funnel-bar-wrap { flex:1; height:24px; background:var(--bg-card); border-radius:6px; overflow:hidden; position:relative }
-                .funnel-bar { height:100%; border-radius:6px; transition:width 0.8s ease; min-width:2px }
-                .funnel-count { width:50px; font-weight:700; color:var(--text-primary); font-size:13px }
-                .funnel-pct { font-size:10px; color:var(--text-muted); width:40px; text-align:right }
-                .heatmap-bar { display:flex; align-items:center; gap:8px; padding:4px 0; font-size:11px }
-                .heatmap-city { width:90px; text-align:right; color:var(--text-secondary); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
-                .heatmap-bar-wrap { flex:1; height:18px; background:var(--bg-card); border-radius:4px; overflow:hidden }
-                .heatmap-bar-fill { height:100%; border-radius:4px; transition:width 0.6s ease }
-                .heatmap-count { width:40px; font-weight:600; color:var(--text-primary); font-size:11px }
-                .ab-table { width:100%; border-collapse:collapse; font-size:11px }
-                .ab-table th { text-align:left; padding:8px 6px; color:var(--text-muted); font-weight:600; text-transform:uppercase; font-size:10px; border-bottom:1px solid var(--border) }
-                .ab-table td { padding:6px; border-bottom:1px solid var(--border); color:var(--text-secondary) }
-                .ab-table .winner { background:rgba(52,211,153,0.08) }
-                .ab-rate { font-weight:700 }
-                .ab-rate.good { color:var(--accent-green) }
-                .ab-rate.ok { color:var(--accent-amber) }
-                .ab-rate.bad { color:var(--accent-rose) }
+                .ch-filter {
+                    background: none;
+                    border: 1px solid var(--border);
+                    color: var(--text-secondary);
+                    padding: 4px 10px;
+                    border-radius: 16px;
+                    font-size: 10px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    transition: all .2s;
+                    font-family: 'Inter', sans-serif
+                }
+
+                .ch-filter:hover {
+                    border-color: var(--border-active);
+                    color: var(--accent-blue)
+                }
+
+                .ch-filter.active {
+                    background: rgba(99, 102, 241, .15);
+                    border-color: var(--accent-blue);
+                    color: var(--accent-blue)
+                }
+
+                /* Status badges */
+                .status-badge {
+                    display: inline-block;
+                    padding: 2px 7px;
+                    border-radius: 8px;
+                    font-size: 9px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: .3px
+                }
+
+                .status-badge.sent,
+                .status-badge.dispatched {
+                    background: rgba(99, 102, 241, .12);
+                    color: var(--accent-blue)
+                }
+
+                .status-badge.delivered {
+                    background: rgba(16, 185, 129, .12);
+                    color: var(--accent-green)
+                }
+
+                .status-badge.opened {
+                    background: rgba(168, 85, 247, .12);
+                    color: var(--accent-purple)
+                }
+
+                .status-badge.replied {
+                    background: rgba(245, 158, 11, .12);
+                    color: var(--accent-amber)
+                }
+
+                .status-badge.failed,
+                .status-badge.bounced {
+                    background: rgba(244, 63, 94, .12);
+                    color: var(--accent-rose)
+                }
+
+                /* Expandable activity detail */
+                .feed-detail {
+                    display: none;
+                    margin-top: 6px;
+                    padding: 8px 10px;
+                    background: rgba(0, 0, 0, .15);
+                    border-radius: 8px;
+                    font-size: 11px;
+                    line-height: 1.5;
+                    color: var(--text-secondary);
+                    border: 1px solid var(--border)
+                }
+
+                .feed-item.expanded .feed-detail {
+                    display: block
+                }
+
+                .feed-detail-row {
+                    display: flex;
+                    gap: 6px;
+                    padding: 2px 0
+                }
+
+                .feed-detail-label {
+                    color: var(--text-muted);
+                    font-weight: 600;
+                    font-size: 10px;
+                    min-width: 50px;
+                    text-transform: uppercase
+                }
+
+                .feed-detail-value {
+                    color: var(--text-primary);
+                    word-break: break-all
+                }
+
+                .feed-preview {
+                    font-size: 10px;
+                    color: var(--text-muted);
+                    margin-top: 2px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    max-width: 280px
+                }
+
+                .feed-direction {
+                    font-size: 9px;
+                    font-weight: 700;
+                    padding: 1px 5px;
+                    border-radius: 4px;
+                    margin-left: 4px
+                }
+
+                .feed-direction.outbound {
+                    background: rgba(99, 102, 241, .1);
+                    color: var(--accent-blue)
+                }
+
+                .feed-direction.inbound {
+                    background: rgba(6, 182, 212, .1);
+                    color: var(--accent-cyan)
+                }
+
+                .funnel-stage {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 6px 0;
+                    font-size: 12px
+                }
+
+                .funnel-label {
+                    width: 110px;
+                    text-align: right;
+                    color: var(--text-secondary);
+                    font-weight: 500;
+                    white-space: nowrap
+                }
+
+                .funnel-bar-wrap {
+                    flex: 1;
+                    height: 24px;
+                    background: var(--bg-card);
+                    border-radius: 6px;
+                    overflow: hidden;
+                    position: relative
+                }
+
+                .funnel-bar {
+                    height: 100%;
+                    border-radius: 6px;
+                    transition: width 0.8s ease;
+                    min-width: 2px
+                }
+
+                .funnel-count {
+                    width: 50px;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    font-size: 13px
+                }
+
+                .funnel-pct {
+                    font-size: 10px;
+                    color: var(--text-muted);
+                    width: 40px;
+                    text-align: right
+                }
+
+                .heatmap-bar {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 4px 0;
+                    font-size: 11px
+                }
+
+                .heatmap-city {
+                    width: 90px;
+                    text-align: right;
+                    color: var(--text-secondary);
+                    font-weight: 500;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis
+                }
+
+                .heatmap-bar-wrap {
+                    flex: 1;
+                    height: 18px;
+                    background: var(--bg-card);
+                    border-radius: 4px;
+                    overflow: hidden
+                }
+
+                .heatmap-bar-fill {
+                    height: 100%;
+                    border-radius: 4px;
+                    transition: width 0.6s ease
+                }
+
+                .heatmap-count {
+                    width: 40px;
+                    font-weight: 600;
+                    color: var(--text-primary);
+                    font-size: 11px
+                }
+
+                .ab-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 11px
+                }
+
+                .ab-table th {
+                    text-align: left;
+                    padding: 8px 6px;
+                    color: var(--text-muted);
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    font-size: 10px;
+                    border-bottom: 1px solid var(--border)
+                }
+
+                .ab-table td {
+                    padding: 6px;
+                    border-bottom: 1px solid var(--border);
+                    color: var(--text-secondary)
+                }
+
+                .ab-table .winner {
+                    background: rgba(52, 211, 153, 0.08)
+                }
+
+                .ab-rate {
+                    font-weight: 700
+                }
+
+                .ab-rate.good {
+                    color: var(--accent-green)
+                }
+
+                .ab-rate.ok {
+                    color: var(--accent-amber)
+                }
+
+                .ab-rate.bad {
+                    color: var(--accent-rose)
+                }
 
                 /* System Vitals Panel */
-                .vitals-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:12px }
-                .vitals-engine { display:flex; flex-direction:column; align-items:center; padding:8px 4px; border-radius:8px; background:rgba(0,0,0,.2); border:1px solid var(--border); gap:4px }
-                .vitals-engine .ve-icon { font-size:16px }
-                .vitals-engine .ve-label { font-size:9px; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px; text-align:center }
-                .vitals-engine .ve-status { font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px }
-                .vitals-engine.running .ve-status { background:rgba(16,185,129,.15); color:var(--accent-green) }
-                .vitals-engine.stopped .ve-status { background:rgba(244,63,94,.15); color:var(--accent-rose) }
-                .vitals-engine.running { border-color:rgba(16,185,129,.3) }
-                .vitals-engine.stopped { border-color:rgba(244,63,94,.3) }
-                .vitals-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:11px; border-bottom:1px solid var(--border) }
-                .vitals-row:last-child { border-bottom:none }
-                .vitals-row .vr-label { color:var(--text-secondary); font-weight:500 }
-                .vitals-row .vr-value { font-weight:700; color:var(--text-primary) }
-                .vitals-row .vr-value.green { color:var(--accent-green) }
-                .vitals-row .vr-value.amber { color:var(--accent-amber) }
-                .vitals-row .vr-value.rose { color:var(--accent-rose) }
-                .channel-bar { display:flex; height:16px; border-radius:4px; overflow:hidden; margin-top:4px; margin-bottom:4px; gap:1px }
-                .channel-bar .cb-seg { transition:width 0.6s ease }
-                .channel-bar .cb-email { background:var(--accent-blue) }
-                .channel-bar .cb-sms { background:var(--accent-green) }
-                .channel-bar .cb-call { background:var(--accent-purple) }
-                .channel-legend { display:flex; gap:10px; font-size:9px; color:var(--text-muted); margin-bottom:6px }
-                .channel-legend span::before { content:''; display:inline-block; width:7px; height:7px; border-radius:2px; margin-right:3px; vertical-align:middle }
-                .channel-legend .cl-email::before { background:var(--accent-blue) }
-                .channel-legend .cl-sms::before { background:var(--accent-green) }
-                .channel-legend .cl-call::before { background:var(--accent-purple) }
-                .vitals-errors { font-size:10px; color:var(--text-muted); margin-top:6px }
-                .vitals-errors .ve-item { display:flex; justify-content:space-between; padding:3px 0 }
-                .vitals-errors .ve-source { color:var(--accent-amber); font-weight:600 }
-                .vitals-errors .ve-time { color:var(--text-muted) }
+                .vitals-grid {
+                    display: grid;
+                    grid-template-columns: repeat(5, 1fr);
+                    gap: 6px;
+                    margin-bottom: 12px
+                }
+
+                .vitals-engine {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 8px 4px;
+                    border-radius: 8px;
+                    background: rgba(0, 0, 0, .2);
+                    border: 1px solid var(--border);
+                    gap: 4px
+                }
+
+                .vitals-engine .ve-icon {
+                    font-size: 16px
+                }
+
+                .vitals-engine .ve-label {
+                    font-size: 9px;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    letter-spacing: 0.5px;
+                    text-align: center
+                }
+
+                .vitals-engine .ve-status {
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 2px 6px;
+                    border-radius: 4px
+                }
+
+                .vitals-engine.running .ve-status {
+                    background: rgba(16, 185, 129, .15);
+                    color: var(--accent-green)
+                }
+
+                .vitals-engine.stopped .ve-status {
+                    background: rgba(244, 63, 94, .15);
+                    color: var(--accent-rose)
+                }
+
+                .vitals-engine.running {
+                    border-color: rgba(16, 185, 129, .3)
+                }
+
+                .vitals-engine.stopped {
+                    border-color: rgba(244, 63, 94, .3)
+                }
+
+                .vitals-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 6px 0;
+                    font-size: 11px;
+                    border-bottom: 1px solid var(--border)
+                }
+
+                .vitals-row:last-child {
+                    border-bottom: none
+                }
+
+                .vitals-row .vr-label {
+                    color: var(--text-secondary);
+                    font-weight: 500
+                }
+
+                .vitals-row .vr-value {
+                    font-weight: 700;
+                    color: var(--text-primary)
+                }
+
+                .vitals-row .vr-value.green {
+                    color: var(--accent-green)
+                }
+
+                .vitals-row .vr-value.amber {
+                    color: var(--accent-amber)
+                }
+
+                .vitals-row .vr-value.rose {
+                    color: var(--accent-rose)
+                }
+
+                .channel-bar {
+                    display: flex;
+                    height: 16px;
+                    border-radius: 4px;
+                    overflow: hidden;
+                    margin-top: 4px;
+                    margin-bottom: 4px;
+                    gap: 1px
+                }
+
+                .channel-bar .cb-seg {
+                    transition: width 0.6s ease
+                }
+
+                .channel-bar .cb-email {
+                    background: var(--accent-blue)
+                }
+
+                .channel-bar .cb-sms {
+                    background: var(--accent-green)
+                }
+
+                .channel-bar .cb-call {
+                    background: var(--accent-purple)
+                }
+
+                .channel-legend {
+                    display: flex;
+                    gap: 10px;
+                    font-size: 9px;
+                    color: var(--text-muted);
+                    margin-bottom: 6px
+                }
+
+                .channel-legend span::before {
+                    content: '';
+                    display: inline-block;
+                    width: 7px;
+                    height: 7px;
+                    border-radius: 2px;
+                    margin-right: 3px;
+                    vertical-align: middle
+                }
+
+                .channel-legend .cl-email::before {
+                    background: var(--accent-blue)
+                }
+
+                .channel-legend .cl-sms::before {
+                    background: var(--accent-green)
+                }
+
+                .channel-legend .cl-call::before {
+                    background: var(--accent-purple)
+                }
+
+                .vitals-errors {
+                    font-size: 10px;
+                    color: var(--text-muted);
+                    margin-top: 6px
+                }
+
+                .vitals-errors .ve-item {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 3px 0
+                }
+
+                .vitals-errors .ve-source {
+                    color: var(--accent-amber);
+                    font-weight: 600
+                }
+
+                .vitals-errors .ve-time {
+                    color: var(--text-muted)
+                }
             </style>
 
             <!-- METRICS -->
@@ -1231,7 +1598,8 @@
                     </div>
                     <div class="channel-filters" id="channelFilters">
                         <button class="ch-filter active" data-ch="all" onclick="filterChannel('all',this)">All</button>
-                        <button class="ch-filter" data-ch="email" onclick="filterChannel('email',this)">📧 Email</button>
+                        <button class="ch-filter" data-ch="email" onclick="filterChannel('email',this)">📧
+                            Email</button>
                         <button class="ch-filter" data-ch="sms" onclick="filterChannel('sms',this)">💬 SMS</button>
                         <button class="ch-filter" data-ch="call" onclick="filterChannel('call',this)">📞 Calls</button>
                     </div>
@@ -1350,20 +1718,45 @@
                     </div>
                     <div class="panel-body" id="vitalsBody">
                         <div id="vitalsEngines" class="vitals-grid">
-                            <div class="vitals-engine stopped"><div class="ve-icon">📤</div><div class="ve-label">Outreach</div><div class="ve-status">...</div></div>
-                            <div class="vitals-engine stopped"><div class="ve-icon">🔍</div><div class="ve-label">Prospect</div><div class="ve-status">...</div></div>
-                            <div class="vitals-engine stopped"><div class="ve-icon">💓</div><div class="ve-label">Heartbeat</div><div class="ve-status">...</div></div>
-                            <div class="vitals-engine stopped"><div class="ve-icon">🎯</div><div class="ve-label">Campaign</div><div class="ve-status">...</div></div>
-                            <div class="vitals-engine stopped"><div class="ve-icon">🛡️</div><div class="ve-label">Inspector</div><div class="ve-status">...</div></div>
+                            <div class="vitals-engine stopped">
+                                <div class="ve-icon">📤</div>
+                                <div class="ve-label">Outreach</div>
+                                <div class="ve-status">...</div>
+                            </div>
+                            <div class="vitals-engine stopped">
+                                <div class="ve-icon">🔍</div>
+                                <div class="ve-label">Prospect</div>
+                                <div class="ve-status">...</div>
+                            </div>
+                            <div class="vitals-engine stopped">
+                                <div class="ve-icon">💓</div>
+                                <div class="ve-label">Heartbeat</div>
+                                <div class="ve-status">...</div>
+                            </div>
+                            <div class="vitals-engine stopped">
+                                <div class="ve-icon">🎯</div>
+                                <div class="ve-label">Campaign</div>
+                                <div class="ve-status">...</div>
+                            </div>
+                            <div class="vitals-engine stopped">
+                                <div class="ve-icon">🛡️</div>
+                                <div class="ve-label">Inspector</div>
+                                <div class="ve-status">...</div>
+                            </div>
                         </div>
                         <div id="vitalsDetails">
-                            <div class="vitals-row"><span class="vr-label">Velocity (1h)</span><span class="vr-value" id="vVelocity">—</span></div>
-                            <div class="vitals-row"><span class="vr-label">Last Outreach</span><span class="vr-value" id="vLastTouch">—</span></div>
-                            <div class="vitals-row"><span class="vr-label">Channels (24h)</span><span class="vr-value" id="vChannelLabel">—</span></div>
+                            <div class="vitals-row"><span class="vr-label">Velocity (1h)</span><span class="vr-value"
+                                    id="vVelocity">—</span></div>
+                            <div class="vitals-row"><span class="vr-label">Last Outreach</span><span class="vr-value"
+                                    id="vLastTouch">—</span></div>
+                            <div class="vitals-row"><span class="vr-label">Channels (24h)</span><span class="vr-value"
+                                    id="vChannelLabel">—</span></div>
                             <div id="vChannelBar" class="channel-bar"></div>
                             <div id="vChannelLegend" class="channel-legend"></div>
-                            <div class="vitals-row"><span class="vr-label">Inspector Errors (1h)</span><span class="vr-value" id="vErrors">—</span></div>
-                            <div class="vitals-row"><span class="vr-label">Prospector Age</span><span class="vr-value" id="vProspAge">—</span></div>
+                            <div class="vitals-row"><span class="vr-label">Inspector Errors (1h)</span><span
+                                    class="vr-value" id="vErrors">—</span></div>
+                            <div class="vitals-row"><span class="vr-label">Prospector Age</span><span class="vr-value"
+                                    id="vProspAge">—</span></div>
                         </div>
                         <div id="vitalsErrorList" class="vitals-errors"></div>
                     </div>
@@ -1379,7 +1772,8 @@
                     <div class="panel-body">
                         <div class="revenue-row">
                             <div class="revenue-label">Monthly Recurring (MRR)</div>
-                            <div class="revenue-val" id="revMRR" style="color:var(--accent-green);font-weight:700">—</div>
+                            <div class="revenue-val" id="revMRR" style="color:var(--accent-green);font-weight:700">—
+                            </div>
                         </div>
                         <div class="revenue-row">
                             <div class="revenue-label">Active Subscriptions</div>
@@ -1397,7 +1791,8 @@
                             <div class="revenue-label">Balance Pending</div>
                             <div class="revenue-val" id="revPending" style="color:var(--accent-amber)">—</div>
                         </div>
-                        <div id="recentPayments" style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px"></div>
+                        <div id="recentPayments"
+                            style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px"></div>
                     </div>
                 </div>
                 <div class="panel">
@@ -1405,7 +1800,10 @@
                         <div class="panel-title"><span>🗺️</span> Lead Heatmap — Florida</div>
                     </div>
                     <div class="panel-body" style="padding:10px">
-                        <div id="heatmapContainer"><div style="color:var(--text-muted);font-size:11px;text-align:center;padding:20px">Loading geo data...</div></div>
+                        <div id="heatmapContainer">
+                            <div style="color:var(--text-muted);font-size:11px;text-align:center;padding:20px">Loading
+                                geo data...</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1414,20 +1812,24 @@
             <div class="grid-2">
                 <div class="panel">
                     <div class="panel-header">
-                        <div class="panel-title"><span>⚡</span> Live Dispatch Board <span class="panel-badge" id="boardCount">0</span></div>
+                        <div class="panel-title"><span>⚡</span> Live Dispatch Board <span class="panel-badge"
+                                id="boardCount">0</span></div>
                         <button class="refresh-btn" onclick="fetchBoard()">↻</button>
                     </div>
                     <div class="panel-body" id="boardBody">
-                        <div style="color:var(--text-muted);font-size:11px;text-align:center;padding:20px">Loading dispatch board...</div>
+                        <div style="color:var(--text-muted);font-size:11px;text-align:center;padding:20px">Loading
+                            dispatch board...</div>
                     </div>
                 </div>
                 <div class="panel">
                     <div class="panel-header">
-                        <div class="panel-title"><span>🛡️</span> Review Rescue Stats <span class="panel-badge" id="reviewRate">0%</span></div>
+                        <div class="panel-title"><span>🛡️</span> Review Rescue Stats <span class="panel-badge"
+                                id="reviewRate">0%</span></div>
                         <button class="refresh-btn" onclick="fetchReviewStats()">↻</button>
                     </div>
                     <div class="panel-body" id="reviewStatsBody">
-                        <div style="color:var(--text-muted);font-size:11px;text-align:center;padding:20px">Loading review stats...</div>
+                        <div style="color:var(--text-muted);font-size:11px;text-align:center;padding:20px">Loading
+                            review stats...</div>
                     </div>
                 </div>
             </div>
@@ -1449,7 +1851,8 @@
                 <div class="panel-header">
                     <div class="panel-title"><span>🧠</span> AI Insights</div>
                 </div>
-                <div class="panel-body" id="aiInsightsBody" style="font-size:12px;color:var(--text-secondary);line-height:1.6">
+                <div class="panel-body" id="aiInsightsBody"
+                    style="font-size:12px;color:var(--text-secondary);line-height:1.6">
                     <div style="text-align:center;color:var(--text-muted);padding:12px">Analyzing data...</div>
                 </div>
             </div>
@@ -1485,8 +1888,14 @@
     </div>
 
     <script>
+        // CONFIG
+        const GATE_KEY = 'sov_access_v5';
+        const SESSION_CODE = 'empire_2026';
         const MODAL_URL = 'https://nearmiss1193-afk--ghl-omni-automation';
         const STATS_URL = `${MODAL_URL}-sovereign-stats.modal.run`;
+        const SB_URL = 'https://rzcpfwkygdvoshtwxncs.supabase.co';
+        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjU5MDQyNCwiZXhwIjoyMDgyMTY2NDI0fQ.wiyr_YDDkgtTZfv6sv0FCAmlfGhug81xdX8D6jHpTYo';
+        const SARAH_PHONE = '(863) 213-2505';
 
         // AUTH
         function checkSession() { if (localStorage.getItem(GATE_KEY) === 'OK') { document.getElementById('authGate').style.display = 'none'; init() } }
@@ -1587,8 +1996,8 @@
                     item.style.display = 'none';
                 }
             });
-            document.getElementById('feedCount').textContent = ch === 'all' 
-                ? (window._activityData || []).length 
+            document.getElementById('feedCount').textContent = ch === 'all'
+                ? (window._activityData || []).length
                 : visCount;
         }
 
@@ -1796,7 +2205,7 @@
             const data = dashData.review_stats;
             document.getElementById('mRescued').textContent = data.issues_caught || 0;
             document.getElementById('reviewRate').textContent = data.response_rate || '0%';
-            
+
             const el = document.getElementById('reviewStatsBody');
             const pos = data.positive_ratings || 0;
             const neg = data.negative_ratings || 0;
@@ -1811,12 +2220,12 @@
                 </div>
                 <div class="funnel-stage">
                     <div class="funnel-label">Positive (Google)</div>
-                    <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${(pos/total*100)||0}%;background:var(--accent-green)"></div></div>
+                    <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${(pos / total * 100) || 0}%;background:var(--accent-green)"></div></div>
                     <div class="funnel-count">${pos}</div>
                 </div>
                 <div class="funnel-stage">
                     <div class="funnel-label">Rescued (Alert)</div>
-                    <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${(neg/total*100)||0}%;background:var(--accent-rose)"></div></div>
+                    <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${(neg / total * 100) || 0}%;background:var(--accent-rose)"></div></div>
                     <div class="funnel-count">${neg}</div>
                 </div>
                 <div style="margin-top:20px; font-size:11px; color:var(--text-muted); text-align:center">
@@ -1986,11 +2395,11 @@
                 document.getElementById('revMRR').textContent = 'API Error';
                 return;
             }
-            document.getElementById('revMRR').textContent = '$' + (s.mrr || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('revMRR').textContent = '$' + (s.mrr || 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
             document.getElementById('revActive').textContent = (s.active_subs || 0).toString();
-            document.getElementById('revMonth').textContent = '$' + (s.total_revenue_30d || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
-            document.getElementById('revBalance').textContent = '$' + (s.balance_available || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
-            document.getElementById('revPending').textContent = '$' + (s.balance_pending || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('revMonth').textContent = '$' + (s.total_revenue_30d || 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
+            document.getElementById('revBalance').textContent = '$' + (s.balance_available || 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
+            document.getElementById('revPending').textContent = '$' + (s.balance_pending || 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
 
             // Recent payments list
             const pmts = s.recent_payments || [];
@@ -2077,17 +2486,17 @@
 
         // Run all after each fetch
         const _origRefresh = refreshAll;
-        refreshAll = function() { 
-            fetchAll().then(() => { 
-                evaluateRules(); 
-                generateInsights(); 
-                updateRevenue(); 
-                renderFunnel(); 
-                renderAB(); 
-                renderHeatmap(); 
+        refreshAll = function () {
+            fetchAll().then(() => {
+                evaluateRules();
+                generateInsights();
+                updateRevenue();
+                renderFunnel();
+                renderAB();
+                renderHeatmap();
                 fetchBoard();
                 fetchReviewStats();
-            }); 
+            });
         };
     </script>
 </body>

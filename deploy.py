@@ -19,6 +19,7 @@ if os.getcwd() not in sys.path:
 # Removed duplicate sys.path append
 
 from core.apps import engine_app as app
+from fastapi import Request, Response, HTTPException
 
 # IMAGE CONFIGURATION
 from core.image_config import get_base_image, VAULT
@@ -1745,14 +1746,27 @@ def auto_social_publisher():
     print("🚀 SOCIAL: Triggering publication cycle...")
     return social_post_logic()
 
+from fastapi import Request, Response
+import json
+
 @app.function(image=image, secrets=[VAULT])
 @modal.fastapi_endpoint(method="GET")
-def sovereign_stats():
+def sovereign_stats(request: Request):
     """Full Dashboard Data Proxy — bypasses RLS with service_role key.
     Returns: stats, activity feed, calls, leads, notifications."""
     import os
     from datetime import datetime, timezone, timedelta
     from modules.database.supabase_client import get_supabase
+    
+    # === AUTHENTICATION ===
+    # Use the header injected by dashboard.html
+    code = request.headers.get("X-Dashboard-Code")
+    # Fallback to empire_2026 if secret is missing to prevent lockout during transition
+    valid_code = os.getenv("DASHBOARD_ACCESS_CODE", "empire_2026")
+    
+    if code != valid_code:
+        print(f"🚫 AUTH: Unauthorized access attempt to sovereign_stats (Code: {code})")
+        return Response(content=json.dumps({"error": "Unauthorized"}), status_code=403, media_type="application/json")
     
     try:
         sb = get_supabase()
