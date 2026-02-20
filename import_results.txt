@@ -1,0 +1,18 @@
+Total contacts_master: 4065
+Jacksonville leads:    476
+Contactable (new):     3579
+
+Sample Jacksonville leads:
+  Jackson Pool Cleaner Experts | info@jacksonpoolcleanerexperts.com | +19046212753 | Pool Cleaner | Patricia Jackson
+  Jackson Tree Trimmer Co. | info@jacksontreetrimmerco.com | +19049564552 | Tree Trimmer | Joseph Jackson
+  Smith Tree Trimmer LLC | info@smithtreetrimmerllc.com | +19043598315 | Tree Trimmer | William Smith
+  Jackson Lawn Care Specialists | info@jacksonlawncarespecialists.com | +19047305889 | Lawn Care | Barbara Jackson
+  Johnson Lawn Care Co. | info@johnsonlawncareco.com | +19048423883 | Lawn Care | Mary Johnson
+
+By category:
+  Gutter Installer: 120
+  Tree Trimmer: 108
+  Lawn Care: 108
+  Pool Cleaner: 96
+  Dentist: 22
+  Chiropractor: 22

@@ -1,0 +1,1 @@
+﻿['id', 'ts', 'phone', 'channel', 'variant_id', 'variant_name', 'run_id', 'status', 'payload', 'vertical', 'company', 'correlation_id']

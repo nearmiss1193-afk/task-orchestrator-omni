@@ -1,0 +1,27 @@
+﻿=== LEAD STATUS DISTRIBUTION ===
+  new: 518
+  no_contact_info: 197
+  bad_email: 74
+  outreach_dispatched: 70
+  new_testing: 56
+  calling_initiated: 36
+  skipped_no_contact: 20
+  outreach_sent: 19
+  bad_data: 5
+  skipped_no_url: 3
+  sequence_complete: 1
+  interested: 1
+
+Total: 1000
+
+=== LATEST 10 OUTREACH TOUCHES ===
+  2026-02-19T20:05:13.64935+00:00 | call | failed
+  2026-02-19T20:05:13.112057+00:00 | call | failed
+  2026-02-19T20:05:12.223745+00:00 | call | failed
+  2026-02-19T20:00:10.774521+00:00 | call | failed
+  2026-02-19T20:00:10.102767+00:00 | call | failed
+  2026-02-19T20:00:09.502081+00:00 | call | failed
+  2026-02-19T19:55:14.784551+00:00 | call | failed
+  2026-02-19T19:55:13.994794+00:00 | call | failed
+  2026-02-19T19:55:13.440802+00:00 | call | failed
+  2026-02-19T19:35:10.182725+00:00 | call | failed

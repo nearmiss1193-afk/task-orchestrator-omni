@@ -1,0 +1,24 @@
+ai_strategy: 'saw your site, had a quick question'
+company_name: 'Reliable Pressure PROS'
+created_at: '2026-02-12T03:56:40.322752+00:00'
+deal_value: None
+email: 'info@reliablepressurepros.com'
+full_name: ''
+funnel_stage: 'new'
+ghl_contact_id: 'prospector-02c2d72438b2'
+id: 'cf63b9ac-f21a-41a0-ba2c-ac027897e6dd'
+last_contacted_at: '2026-02-12T03:56:40.322752+00:00'
+lead_score: 0
+lead_source: 'google_places'
+niche: 'pressure washing service'
+phone: '(407) 924-7562'
+raw_research: '{"google_rating": 5, "google_reviews": 167, "email_source": "website_scrape", "place_id": "ChIJUdkH
+responded: False
+sentiment: None
+source: 'google_places'
+stage_entered_at: '2026-02-12T03:56:40.322752+00:00'
+status: 'bad_email'
+total_touches: 0
+website_url: 'https://www.reliablepressurepros.com/?utm_source=google&utm_medium=organic&utm_campaign=google_busi
+
+Total columns: 22

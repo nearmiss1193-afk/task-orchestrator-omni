@@ -1,0 +1,17 @@
+﻿=== PROSPECTOR STATUS ===
+  Status: working
+  Last error/timestamp: 2026-02-20T09:20:08.901762+00:00
+
+=== RECENT HEARTBEATS ===
+  2026-02-20T10:30:06.631478+00:00 | ok | 0 min ago
+  2026-02-20T10:25:07.95055+00:00 | ok | 5 min ago
+  2026-02-20T10:20:06.363665+00:00 | ok | 10 min ago
+
+=== NEW LEADS (last 12h) ===
+  5 leads added since 2026-02-19T22:30
+  Total leads now: 4070
+
+=== REGIONAL BREAKDOWN ===
+  Mountain leads: 0
+  West Coast leads: 0
+  Florida (everything else): 4070

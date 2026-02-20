@@ -1,0 +1,24 @@
+﻿{
+  "channel": "call",
+  "status": "failed",
+  "company": null,
+  "phone": "602-975-2306",
+  "payload": {
+    "call_id": null,
+    "metadata_injected": true
+  }
+}
+{
+  "channel": "sms",
+  "status": "dispatched",
+  "company": "Graham Heating & Air Conditioning - Lakeland",
+  "phone": "+18633296770",
+  "payload": {}
+}
+{
+  "channel": "sms",
+  "status": "dispatched",
+  "company": "Five Points Roofing",
+  "phone": "+18636605834",
+  "payload": {}
+}

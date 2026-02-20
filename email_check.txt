@@ -1,0 +1,44 @@
+﻿{
+  "channel": "email",
+  "status": "delivered",
+  "company": "HVAC & Appliance Repair Guys",
+  "phone": "(503) 512-5900",
+  "payload": {
+    "to": "hvacapplianceguys@gmail.com",
+    "from": "Dan <owner@aiserviceco.com>",
+    "events": [
+      {
+        "ts": "2026-02-19T12:00:33.142486+00:00",
+        "raw": {
+          "to": [
+            "hvacapplianceguys@gmail.com"
+          ],
+          "from": "Dan <owner@aiserviceco.com>",
+          "tags": {
+            "lead_id": "03fd93cb-570e-4d10-a140-61693501e654",
+            "variant": "A",
+            "email_uid": "ca1c4dcb"
+          },
+     
+{
+  "channel": "email",
+  "status": "delivered",
+  "company": "HVAC & Appliance Repair Guys",
+  "phone": "(503) 512-5900",
+  "payload": {
+    "to": "hvacapplianceguys@gmail.com",
+    "from": "Dan <owner@aiserviceco.com>",
+    "events": [
+      {
+        "ts": "2026-02-18T23:30:22.053124+00:00",
+        "raw": {
+          "to": [
+            "hvacapplianceguys@gmail.com"
+          ],
+          "from": "Dan <owner@aiserviceco.com>",
+          "tags": {
+            "lead_id": "03fd93cb-570e-4d10-a140-61693501e654",
+            "variant": "B",
+            "email_uid": "fd297b0f"
+          },
+     

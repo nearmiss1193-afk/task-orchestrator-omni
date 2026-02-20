@@ -22,7 +22,7 @@ from supabase import create_client
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 ALERT_EMAIL = os.getenv("OWNER_EMAIL", "nearmiss1193@gmail.com")
 SUPABASE_URL = os.getenv("SUPABASE_URL", "https://rzcpfwkygdvoshtwxncs.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY") or "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6Y3Bmd2t5Z2R2b3NodHd4bmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1OTA0MjQsImV4cCI6MjA4MjE2NjQyNH0.dluuiK-jr-3Z_oksYHS4saSthpkppLHQGnl6YtploPU"
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_KEY") or os.getenv("SUPABASE_KEY")
 
 # Thresholds for alerting
 ERROR_THRESHOLD_HOUR = 10  # Alert if >10 errors in 1 hour

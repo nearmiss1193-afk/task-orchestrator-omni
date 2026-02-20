@@ -1,0 +1,19 @@
+﻿=== PROSPECTOR STATUS ===
+  No prospector_last_run record found!
+
+=== CAMPAIGN MODE ===
+  Mode: working
+
+=== RECENT OUTREACH (last 24h) ===
+  Error: 'NoneType' object is not subscriptable
+
+=== LEAD POOL ===
+  new: 3110
+  calling_initiated: 33
+
+=== HEARTBEATS (last 3) ===
+  2026-02-19T19:11:12 | alert | {'message': '≡ƒô₧ Call Summary: +13529368152\nName: Alex\nDir: inbound\nSum: No summary', 'summary': '', 'direction': 'inbound', 'transcript': "AI: Welcome back, boss. Systems are online. What do you need?\nUser: I was just sitting here in the store in the in the... there's a taco store here or a taco shop here, and I was wondering if you could speak with the owner and tell him what you could offer.\nAI: I can simulate a conversation with the owner of the taco shop. I'll play the role of a representative of a company that can offer various services or products to the taco shop. Let's start with a greeting. Hello. Is this the owner of the taco shop? My name is Alex. I'm reaching out from a company that specializes in helping businesses like yours grow and succeed. We...\nUser: I don't need... I don't simulate that. What I need to do is make sure that when I go to the taco shop and I put you on the phone that you are going to be able to talk to that business.\nAI: You want me to be ready to have a real conversation with the owner of the taco shop when you put me on the phone? I'll be prepared to discuss potential services or product", 'caller_name': 'Alex', 'caller_phone': '+13529368152'}
+  2026-02-17T17:44:34 | ok | {'issues': [], 'cron_limit': 2}
+  2026-02-17T16:55:09 | ok | {'issues': [], 'cron_limit': 2}
+
+Done.

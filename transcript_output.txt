@@ -1,0 +1,45 @@
+================================================================================
+CALL 1
+Phone: +13529368152
+Created: 2026-02-19T19:11:12.659269+00:00
+{
+  "history": "\n[INBOUND 02/19 19:11]: Ended\n[INBOUND 02/19 19:21]: Ended\n[INBOUND 02/19 19:22]: Ended\n[INBOUND 02/19 19:23]: Ended\n[INBOUND 02/19 19:34]: Ended",
+  "contact_name": "Just"
+}
+
+================================================================================
+CALL 2
+Phone: +18634300507
+Created: 2026-02-19T14:56:06.220611+00:00
+{
+  "history": "\n[INBOUND 02/19 14:56]: The call was initiated by Sarah from AI Service Company. No customer name, business type, pain points, or objections were discussed as the customer ended the call immediately after Sarah's introduction. The outcome was an immediate customer-ended call.",
+  "contact_name": "Sarah"
+}
+
+================================================================================
+CALL 3
+Phone: +18888063326
+Created: 2026-02-19T13:03:08.5678+00:00
+{
+  "history": "\n[INBOUND 02/19 13:03]: Andres abruptly ended the call after identifying himself and mentioning \"Kalu,\" instructing Sarah from AI Service Company to check and reply to a text he had just sent. No business type, pain points, or objections were discussed, and the call concluded with the customer hanging up.",
+  "contact_name": "Sarah"
+}
+
+================================================================================
+CALL 4
+Phone: +14072891784
+Created: 2026-02-19T02:49:49.347228+00:00
+{
+  "history": "\n[INBOUND 02/19 02:49]: The call was initiated by Sarah from AI Service Company, but no information about the customer, their business type, pain points, or objections was exchanged. The call ended abruptly with the customer hanging up.",
+  "contact_name": "Sarah"
+}
+
+================================================================================
+CALL 5
+Phone: +18638129362
+Created: 2026-02-19T02:07:11.845843+00:00
+{
+  "history": "\n[INBOUND 02/19 02:07]: Christina from Call Me Now called to connect with Dan. She left her number for a callback.\n[INBOUND 02/19 02:35]: The customer's speech was nonsensical and incoherent, making it impossible to identify their name, business type, or any specific pain points or objections. The call ended abruptly with the customer hanging up before any meaningful conversation could occur.\n[INBOUND 02/19 02:41]: Christina from Call Me Now called asking for Dan. She wants to discuss the AI answering service. Call her back at this number.",
+  "contact_name": "Christina"
+}
+

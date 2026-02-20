@@ -1,0 +1,11 @@
+Last run: NOT RECORDED
+Cycle index: 0
+Total matrix: 57 niches x 17 cities = 969 combos
+
+Recent prospecting runs: 0
+
+Total google_places leads in DB: 432
+  status='new': 364
+  status='outreach_sent': 21
+  status='sequence_complete': 0
+  status='bad_data': 0

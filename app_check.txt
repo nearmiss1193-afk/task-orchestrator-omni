@@ -1,0 +1,35 @@
+﻿python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python -c "import 
+modal; client = 
+modal.Client.from_env(); 
+apps = lis ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (T  
+  raceback (most recent   
+  call last)::String)     
+[], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+  File "<string>", line 
+1, in <module>
+    import modal; client 
+= 
+modal.Client.from_env(); 
+apps = 
+list(modal.App.list()); 
+[print(f'{a.app_id} | 
+{a.name} | {a.state}') 
+for a in apps]
+                          
+                          
+            ^^^^^^^^^^^^^^
+AttributeError: type 
+object 'App' has no 
+attribute 'list'
