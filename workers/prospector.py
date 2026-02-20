@@ -545,14 +545,16 @@ def run_prospecting_cycle():
     print(f"{'='*60}")
 
     supabase = get_supabase()
-    google_key = os.environ.get("GOOGLE_PLACES_API_KEY", "")
-    if not google_key or google_key == "AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY":
-        # Fallback: Dan's Places-enabled key (Jan 2026)
-        google_key = "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc"
+    api_keys = [os.environ.get("GOOGLE_API_KEY"), os.environ.get("GOOGLE_PLACES_API_KEY")]
+    api_keys = [k for k in api_keys if k]
+    if not api_keys:
+        print("  ⚠️ Missing GOOGLE_API_KEY or GOOGLE_PLACES_API_KEY environment variable")
+        # Ensure we don't proceed with an empty or old key
+        return None
     hunter_key = os.environ.get("HUNTER_API_KEY", "")
     
     # Debug: show which key is being used
-    print(f"🔑 Google Places key: {google_key[:12]}...")
+    print(f"🔑 Google Places key: {api_keys[0][:12]}...")
 
     # Build search matrix
     search_combos = [(niche, city) for city in CITIES for niche in NICHES]

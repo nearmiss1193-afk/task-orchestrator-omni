@@ -1052,7 +1052,7 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 
 ### Google Places API Key
 
-- **Key**: `AIzaSyABzZ31Qqw91JbI1cDWRhU8AxvnJPhIErY`
+- **Key**: `[REDACTED_SECURE_VAULT]`
 - **Issue**: Initially got `REQUEST_DENIED` because billing wasn't enabled on the GCP project
 - **Fix**: Dan enabled billing in Google Cloud Console → API started returning results
 - **Cost**: ~$78 for 4,000 businesses (within $200/mo free tier)
@@ -1130,7 +1130,7 @@ Added `modules/expanse/**` to prevent `voice_concierge.py` from conflicting with
 
 | Bug | Root Cause | Fix |
 |-----|-----------|-----|
-| 🔑 API Key | Modal env var `GOOGLE_API_KEY` pointed to old key without Places API enabled. `GOOGLE_PLACES_API_KEY` not propagating in Modal dev runs | Hardcoded Dan's working key `AIzaSyDVL4v...` as fallback in `prospector.py` |
+| 🔑 API Key | Modal env var `GOOGLE_API_KEY` pointed to old key without Places API enabled. `GOOGLE_PLACES_API_KEY` not propagating in Modal dev runs | Use environment variables only. [REDACTED] |
 | 📋 Column Mapping | Code used `business_name`, `location`, `industry`, `first_name`, `last_name`, `metadata` — NONE exist in `contacts_master` | Mapped to: `company_name`, `niche`, `full_name`, `lead_source`, `raw_research` |
 | 🔒 NOT NULL Constraint | `ghl_contact_id` is NOT NULL in `contacts_master`; prospector wasn't providing it | Added `ghl_contact_id: "prospector-{uuid12}"` placeholder |
 
@@ -1153,9 +1153,9 @@ last_contacted_at, total_touches, responded, lead_source, company_name
 
 | Key | Purpose | Status |
 |-----|---------|--------|
-| `AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc` | **Prospector** (Places API enabled) | ✅ Working |
-| `AIzaSyABzZ31Qqw91JbI1cDWRhU8AxvnJPhIErY` | **LakelandFinds** directory scraping | ✅ Working |
-| `AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY` | **OLD key** (Places API NOT enabled) | ❌ REQUEST_DENIED |
+| `[REDACTED]` | **Prospector** (Places API enabled) | ✅ Working |
+| `[REDACTED]` | **LakelandFinds** directory scraping | ✅ Working |
+| `[REDACTED]` | **OLD key** (Places API NOT enabled) | ❌ REQUEST_DENIED |
 
 #### Modal Cron Inventory (ACCURATE — Feb 11, 2026)
 

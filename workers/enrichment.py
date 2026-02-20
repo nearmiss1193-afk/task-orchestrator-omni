@@ -24,11 +24,7 @@ def fetch_pagespeed(website_url: str) -> dict:
     if not website_url.startswith("http"):
         website_url = f"https://{website_url}"
 
-    api_keys = [
-        os.environ.get("GOOGLE_API_KEY"),
-        "AIzaSyCtDhszpASBGBrW7A7tuX3N8txDflx_i4o",
-        "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc"
-    ]
+    api_keys = [os.environ.get("GOOGLE_API_KEY"), os.environ.get("GOOGLE_PLACES_API_KEY")]
     api_keys = [k for k in api_keys if k]
     random.shuffle(api_keys)
     

@@ -50,12 +50,9 @@ def fetch_pagespeed(website_url: str) -> dict:
     import random
     api_keys = [
         os.environ.get("GOOGLE_PLACES_API_KEY"),
-        os.environ.get("GOOGLE_API_KEY"),
-        "AIzaSyCtDhszpASBGBrW7A7tuX3N8txDflx_i4o", # Empire-Email-Integration
-        "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc", # Fallback Key
-        "AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY"  # Secondary Fallback
+        os.environ.get("GOOGLE_API_KEY")
     ]
-    api_keys = [k for k in api_keys if k and k != "AIzaSyALaxJstr7hiyyC52zTZOd2ymow5v1-PKY" or k] # Clean list
+    api_keys = [k for k in api_keys if k]
     
     # Shuffle or rotate
     random.shuffle(api_keys)
@@ -661,7 +658,9 @@ def lookup_business_google(name: str):
     import os
     import requests
     
-    api_base = os.environ.get("GOOGLE_PLACES_API_KEY") or "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc"
+    api_base = os.environ.get("GOOGLE_PLACES_API_KEY")
+    if not api_base:
+        return {"error": "Missing GOOGLE_PLACES_API_KEY environment variable."}
     
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
     params = {"query": name, "key": api_base}

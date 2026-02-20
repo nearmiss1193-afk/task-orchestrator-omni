@@ -13,8 +13,10 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env'))
 
 # Use the unrestricted API key 2 from Google Cloud Console
-GOOGLE_KEY = "AIzaSyBGk4aUs49p5D7OoB4Sn0AoYMqGL9VcP7A"
-print(f"Google API Key: {GOOGLE_KEY[:15]}...")
+GOOGLE_KEY = os.getenv("GEMINI_API_KEY")
+if not GOOGLE_KEY:
+    print("❌ ERROR: GEMINI_API_KEY not found in environment")
+print(f"Google API Key: {str(GOOGLE_KEY)[:5]}...[SECURE]")
 
 # Load already-contacted phone numbers (to exclude from voice drop CSV)
 ALREADY_CONTACTED_PHONES = set()

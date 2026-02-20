@@ -1550,7 +1550,9 @@ def lookup_business_google(name: str):
     import os
     import requests
     
-    api_base = os.environ.get("GOOGLE_PLACES_API_KEY") or "AIzaSyDVL4vfogtIKRLqOFNPMcKOg1LEAb9dipc"
+    api_base = os.environ.get("GOOGLE_PLACES_API_KEY")
+    if not api_base:
+        return {"error": "Missing GOOGLE_PLACES_API_KEY environment variable."}
     
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
     params = {"query": name, "key": api_base}
