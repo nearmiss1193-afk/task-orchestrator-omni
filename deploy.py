@@ -1023,6 +1023,14 @@ def system_orchestrator():
         # 2. Outreach Loop (Every 5 min)
         safe_local(auto_outreach_loop, "auto_outreach_loop")
         
+        # 3. Nurture Drip + Newsletter (Every 5 min — timezone-aware)
+        try:
+            from workers.nurture import run_nurture_cycle
+            nurture_result = run_nurture_cycle(max_actions=10)
+            print(f"📬 Nurture: {nurture_result.get('total_actions', 0)} actions")
+        except Exception as e:
+            print(f"⚠️ Nurture engine error: {e}")
+        
         # --- TIME-BASED TRIGGERS (Consolidated Crons) ---
         
         # A. Sunbiz Delta Watch (8 AM Mon-Sat -> hour 8 UTC if EST as per original cron)
@@ -2900,7 +2908,7 @@ def trigger_tiffaney_onboarding_call():
     # Specialized call with prompt override
     payload = {
         "type": "outboundPhoneCall",
-        "phoneNumberId": os.environ.get("VAPI_PHONE_NUMBER_ID", "86f73243-8916-4897-b840-b20c8afdd7a8339f"),
+        "phoneNumberId": os.environ.get("VAPI_PHONE_NUMBER_ID", "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"),
         "assistantOverrides": {
             "model": {
                 "messages": [

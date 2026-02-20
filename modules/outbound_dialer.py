@@ -21,7 +21,7 @@ load_dotenv()
 
 # Vapi configuration
 VAPI_PRIVATE_KEY = os.getenv("VAPI_PRIVATE_KEY")
-VAPI_PHONE_NUMBER_ID = os.getenv("VAPI_PHONE_NUMBER_ID") or "86f73243-8916-4897-b840-b20c8afdd7a8339f"
+VAPI_PHONE_NUMBER_ID = os.getenv("VAPI_PHONE_NUMBER_ID") or "8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e"
 
 # Your Vapi assistant IDs
 SARAH_ASSISTANT_ID = "1a797f12-e2dd-4f7f-b2c5-08c38c74859a"  # Sarah 3.0 (Official)
@@ -49,9 +49,17 @@ def dial_prospect(phone_number: str, company_name: str = "", city: str = "",
     if not VAPI_PHONE_NUMBER_ID:
         return {"error": "VAPI_PHONE_NUMBER_ID not configured"}
     
-    # Clean phone number
-    if not phone_number.startswith("+"):
-        phone_number = "+1" + phone_number.replace("-", "").replace(" ", "")
+    # Clean phone number — strip ALL non-digit chars (dots, parens, dashes, spaces)
+    import re
+    digits_only = re.sub(r'[^\d+]', '', phone_number)
+    if not digits_only.startswith("+"):
+        # Strip leading 1 if already 11 digits (US number with country code)
+        if len(digits_only) == 11 and digits_only.startswith("1"):
+            phone_number = "+" + digits_only
+        else:
+            phone_number = "+1" + digits_only
+    else:
+        phone_number = digits_only
     
     # Build payload - MUST include type for outbound calls
     payload = {
