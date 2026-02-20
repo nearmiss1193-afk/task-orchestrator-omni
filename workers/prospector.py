@@ -128,53 +128,114 @@ NICHES = [
 ]
 
 CITIES = [
-    # === RING 0: Lakeland Core (0-10 mi) ===
+    # === FLORIDA: Central FL (Home Market) ===
+    # Ring 0: Lakeland Core
     "Lakeland FL",
     "33801", "33803", "33805", "33809", "33810",
     "33811", "33812", "33813", "33815",
-    # === RING 1: Polk County (10-25 mi) ===
-    "Winter Haven FL",
-    "Bartow FL",
-    "Auburndale FL",
-    "Lake Wales FL",
-    "Haines City FL",
-    "Davenport FL",
-    "Mulberry FL",
-    "Eagle Lake FL",
-    # === RING 2: Adjacent Counties (25-50 mi) ===
-    "Plant City FL",
-    "Brandon FL",
-    "Riverview FL",
-    "Kissimmee FL",
-    "St Cloud FL",
-    "Poinciana FL",
-    "Sebring FL",
-    "Avon Park FL",
-    "Wauchula FL",
-    "Zephyrhills FL",
-    "Dade City FL",
-    # === RING 3: Metro Areas (50-75 mi) ===
-    "Tampa FL",
-    "St Petersburg FL",
-    "Clearwater FL",
-    "Orlando FL",
-    "Sanford FL",
-    "Clermont FL",
-    "Leesburg FL",
-    "Ocala FL",
-    "Bradenton FL",
-    "Sarasota FL",
-    # === RING 4: Extended (75-100 mi) ===
-    "Daytona Beach FL",
-    "Melbourne FL",
-    "Fort Myers FL",
-    "Naples FL",
-    "Gainesville FL",
-    "The Villages FL",
+    # Ring 1: Polk County
+    "Winter Haven FL", "Bartow FL", "Auburndale FL",
+    "Lake Wales FL", "Haines City FL", "Davenport FL",
+    "Mulberry FL", "Eagle Lake FL",
+    # Ring 2: Adjacent Counties
+    "Plant City FL", "Brandon FL", "Riverview FL",
+    "Kissimmee FL", "St Cloud FL", "Poinciana FL",
+    "Sebring FL", "Avon Park FL", "Wauchula FL",
+    "Zephyrhills FL", "Dade City FL",
+    # Ring 3: Metro Areas
+    "Tampa FL", "St Petersburg FL", "Clearwater FL",
+    "Orlando FL", "Sanford FL", "Clermont FL",
+    "Leesburg FL", "Ocala FL", "Bradenton FL", "Sarasota FL",
+    # Ring 4: Extended
+    "Daytona Beach FL", "Melbourne FL", "Fort Myers FL",
+    "Naples FL", "Gainesville FL", "The Villages FL",
+
+    # === MOUNTAIN: Denver / Phoenix / Vegas / SLC ===
+    # Denver Metro
+    "Denver CO", "Aurora CO", "Lakewood CO", "Arvada CO",
+    "Westminster CO", "Thornton CO", "Boulder CO",
+    "Fort Collins CO", "Colorado Springs CO",
+    # Phoenix Metro
+    "Phoenix AZ", "Scottsdale AZ", "Mesa AZ", "Tempe AZ",
+    "Chandler AZ", "Gilbert AZ", "Glendale AZ", "Peoria AZ",
+    "Tucson AZ",
+    # Las Vegas Metro
+    "Las Vegas NV", "Henderson NV", "North Las Vegas NV", "Reno NV",
+    # Salt Lake City Metro
+    "Salt Lake City UT", "Provo UT", "Ogden UT", "Sandy UT",
+    # Other Mountain
+    "Albuquerque NM", "Santa Fe NM", "Boise ID",
+
+    # === WEST COAST: LA / SF / San Diego / Portland / Seattle ===
+    # Los Angeles Metro
+    "Los Angeles CA", "Long Beach CA", "Pasadena CA",
+    "Burbank CA", "Santa Monica CA", "Torrance CA",
+    "Irvine CA", "Anaheim CA", "Riverside CA",
+    "Ontario CA", "San Bernardino CA",
+    # San Diego Metro
+    "San Diego CA", "Chula Vista CA", "Oceanside CA", "Escondido CA",
+    # San Francisco / Bay Area
+    "San Francisco CA", "Oakland CA", "San Jose CA",
+    "Fremont CA", "Sunnyvale CA", "Santa Rosa CA",
+    "Sacramento CA", "Stockton CA",
+    # Portland Metro
+    "Portland OR", "Beaverton OR", "Salem OR", "Eugene OR",
+    # Seattle Metro
+    "Seattle WA", "Tacoma WA", "Bellevue WA", "Everett WA",
+    "Spokane WA",
 ]
 
-# How many search combos to run per cycle (300 = ~10 min runtime)
-SEARCHES_PER_CYCLE = 300
+# Region lookup for market comparison analytics
+CITY_REGIONS = {}
+_region_map = {
+    "florida": [
+        "Lakeland FL", "33801", "33803", "33805", "33809", "33810",
+        "33811", "33812", "33813", "33815",
+        "Winter Haven FL", "Bartow FL", "Auburndale FL",
+        "Lake Wales FL", "Haines City FL", "Davenport FL",
+        "Mulberry FL", "Eagle Lake FL",
+        "Plant City FL", "Brandon FL", "Riverview FL",
+        "Kissimmee FL", "St Cloud FL", "Poinciana FL",
+        "Sebring FL", "Avon Park FL", "Wauchula FL",
+        "Zephyrhills FL", "Dade City FL",
+        "Tampa FL", "St Petersburg FL", "Clearwater FL",
+        "Orlando FL", "Sanford FL", "Clermont FL",
+        "Leesburg FL", "Ocala FL", "Bradenton FL", "Sarasota FL",
+        "Daytona Beach FL", "Melbourne FL", "Fort Myers FL",
+        "Naples FL", "Gainesville FL", "The Villages FL",
+    ],
+    "mountain": [
+        "Denver CO", "Aurora CO", "Lakewood CO", "Arvada CO",
+        "Westminster CO", "Thornton CO", "Boulder CO",
+        "Fort Collins CO", "Colorado Springs CO",
+        "Phoenix AZ", "Scottsdale AZ", "Mesa AZ", "Tempe AZ",
+        "Chandler AZ", "Gilbert AZ", "Glendale AZ", "Peoria AZ",
+        "Tucson AZ",
+        "Las Vegas NV", "Henderson NV", "North Las Vegas NV", "Reno NV",
+        "Salt Lake City UT", "Provo UT", "Ogden UT", "Sandy UT",
+        "Albuquerque NM", "Santa Fe NM", "Boise ID",
+    ],
+    "west_coast": [
+        "Los Angeles CA", "Long Beach CA", "Pasadena CA",
+        "Burbank CA", "Santa Monica CA", "Torrance CA",
+        "Irvine CA", "Anaheim CA", "Riverside CA",
+        "Ontario CA", "San Bernardino CA",
+        "San Diego CA", "Chula Vista CA", "Oceanside CA", "Escondido CA",
+        "San Francisco CA", "Oakland CA", "San Jose CA",
+        "Fremont CA", "Sunnyvale CA", "Santa Rosa CA",
+        "Sacramento CA", "Stockton CA",
+        "Portland OR", "Beaverton OR", "Salem OR", "Eugene OR",
+        "Seattle WA", "Tacoma WA", "Bellevue WA", "Everett WA",
+        "Spokane WA",
+    ],
+}
+for region, cities in _region_map.items():
+    for city in cities:
+        CITY_REGIONS[city] = region
+
+# How many search combos to run per cycle (400 = ~12 min runtime)
+SEARCHES_PER_CYCLE = 400
+
 # Max leads to insert per cycle
 MAX_INSERTS_PER_CYCLE = 5000
 
@@ -409,6 +470,7 @@ def insert_lead(supabase, lead: dict, niche: str, city: str) -> bool:
     """Insert a new lead into contacts_master."""
     try:
         import uuid
+        region = CITY_REGIONS.get(city, "florida")
         record = {
             "ghl_contact_id": f"prospector-{uuid.uuid4().hex[:12]}",
             "company_name": lead.get("business_name", ""),
@@ -419,13 +481,14 @@ def insert_lead(supabase, lead: dict, niche: str, city: str) -> bool:
             "niche": niche,
             "status": "new",
             "source": lead.get("source", "prospector"),
-            "lead_source": "google_places",
+            "lead_source": f"google_places_{region}",
             "raw_research": json.dumps({
                 "google_rating": lead.get("google_rating"),
                 "google_reviews": lead.get("google_reviews"),
                 "email_source": lead.get("email_source", ""),
                 "place_id": lead.get("place_id", ""),
                 "location": lead.get("location", ""),
+                "region": region,
                 "prospected_at": datetime.now(timezone.utc).isoformat(),
                 "search_query": f"{niche} {city}",
             }),
