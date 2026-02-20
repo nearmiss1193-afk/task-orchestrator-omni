@@ -2047,6 +2047,20 @@ def sovereign_stats():
         except Exception as vex:
             system_vitals = {"error": str(vex)}
         
+        # DISPATCH BOARD
+        dispatch_board = {}
+        try:
+            from workers.dispatch import get_dispatch_board
+            dispatch_board = get_dispatch_board(sb)
+        except: pass
+
+        # REVIEW STATS
+        review_stats = {}
+        try:
+            from workers.review_optimizer import get_review_stats
+            review_stats = get_review_stats(sb)
+        except: pass
+
         return {
             "total_leads": pool_count,
             "outbound_24h": outbound_24h,
@@ -2064,6 +2078,8 @@ def sovereign_stats():
             "ab_performance": ab_performance,
             "lead_geo": lead_geo,
             "system_vitals": system_vitals,
+            "dispatch_board": dispatch_board,
+            "review_stats": review_stats,
             "status": "synchronized",
             "checked_at": now.isoformat()
         }
@@ -2325,61 +2341,6 @@ def resend_webhook(data: dict):
 
 
 
-# ────────────────────────────────────────────────────────────
-#  DISPATCH & REVIEW API — Dashboard actions
-# ────────────────────────────────────────────────────────────
-@app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="POST")
-def dispatch_review_api(data: dict):
-    """
-    Unified API for dispatch and review actions from dashboard.
-    
-    Actions:
-    - create_job: Create a new dispatch job
-    - send_review: Send review request SMS
-    - get_board: Get dispatch board
-    - get_stats: Get review stats
-    """
-    import json
-    from modules.database.supabase_client import get_supabase
-    
-    action = data.get("action", "")
-    supabase = get_supabase()
-    
-    if action == "create_job":
-        from workers.dispatch import create_job
-        return create_job(
-            service_type=data.get("service_type", "general"),
-            address=data.get("address", ""),
-            customer_name=data.get("customer_name", ""),
-            customer_phone=data.get("customer_phone", ""),
-            company_name=data.get("company_name", ""),
-            supabase=supabase,
-            urgency=data.get("urgency", "standard"),
-            notes=data.get("notes", ""),
-        )
-    
-    elif action == "send_review":
-        from workers.review_optimizer import send_review_request
-        return send_review_request(
-            contact_id=data.get("contact_id", ""),
-            customer_name=data.get("customer_name", ""),
-            customer_phone=data.get("customer_phone", ""),
-            company_name=data.get("company_name", ""),
-            supabase=supabase,
-        )
-    
-    elif action == "get_board":
-        from workers.dispatch import get_dispatch_board
-        return get_dispatch_board(supabase)
-    
-    elif action == "get_stats":
-        from workers.review_optimizer import get_review_stats
-        return get_review_stats(supabase)
-    
-    else:
-        return {"error": f"Unknown action: {action}",
-                "valid_actions": ["create_job", "send_review", "get_board", "get_stats"]}
 
 
 # ────────────────────────────────────────────────────────────

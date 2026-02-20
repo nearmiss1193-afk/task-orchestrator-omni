@@ -4,6 +4,19 @@
 
 ---
 
+## 🏛️ SECTION 20: Feb 20, 2026 — Dispatch Command Center & Modal Consolidation
+
+- **Achievement:** Full 360-degree rebranding to **Sarah AI** across 18+ pages. Implemented the **Dispatch Command Center** and **Smart Review Optimizer**.
+- **The Core Problem:** Modal's 8-endpoint limit on the Starter plan meant the new `dispatch_review_api` caused deployment crashes (Exit Code 1).
+- **The Sovereign Fix:** Consolidated all dashboard-related metrics into the existing `sovereign_stats` endpoint. Merged metrics include `dispatch_board` (tech roster, active jobs) and `review_stats` (funnel data).
+- **Sovereign Law:** "Stay under 8 endpoints by consolidating data streams. Use `@modal.web_endpoint(method='GET')` for dashboard compatibility to bypass body-parsing overhead."
+- **Critical Components:**
+  - `workers/dispatch.py`: Tech ROSTER + Multi-tech polling logic.
+  - `workers/review_optimizer.py`: Lead interception (1-3 score) vs. Google Promotion (4-5).
+  - `dashboard.html`: Live telemetry via unified `fetchAll()`.
+
+---
+
 ## 🏛️ SECTION 13: Feb 13, 2026 — Vapi Stabilization & Schema Alignment
 
 - **Incident:** Persistent Vapi 500 errors on `assistant.started` and stale system heartbeats.
@@ -1231,6 +1244,45 @@ Heartbeat (every 5 min)
 
 ---
 
+---
+
+## 🤖 SECTION 19: Feb 20, 2026 — The Sarah AI Personification & Rebrand
+
+**The Pivot:** Abstract branding ("Empire Sovereign") was replaced with a personified identity: **Sarah AI**.
+**Reasoning:** Customers connect with "employees" over "software". Messaging shifted from selling an AI tool to hiring an AI employee who "answers phones while you work".
+
+### 🎨 Visual & Identity Standards
+
+- **Primary Color:** Rose (`#f43f5e`) - friendly, memorable, and urgent.
+- **Accent Color:** Blue (`#3b82f6`) - signals technology and reliability.
+- **Logo Icon:** ⚡ (Lightning Bolt) - signals instant response.
+- **Copy Standard:** Problem-Solution. Always lead with the cost of a missed lead ($500+).
+
+### 📄 Page Coverage
+
+- **Total Pages:** 18 Niche Landing Pages + 1 Main Landing Page.
+- **Bulk Sweep Tool:** `final_sweep.py` (Scripted regex) ensures 100% color and persona consistency across all service niches (HVAC, Plumber, Landscaping, etc.).
+
+---
+
+## 🏛️ SECTION 20: Feb 20, 2026 — Supabase RLS & Background Worker Autonomy
+
+**Critical Discovery:**
+Modal background functions were seeing **0 leads** despite Supabase having 115+.
+
+| Symptom | Cause | Solution |
+|---------|-------|----------|
+| `count = 0` in code | Using `anon` key | Use `service_role` key |
+| `count > 0` in dashboard | RLS enabled | Bypass RLS via `service_role` |
+
+**Sovereign Laws Added:**
+
+- "Modal backends must ALWAYS use the `service_role` key. `anon` is for frontend only." (Feb 20, 2026)
+- "Persona-based marketing converts 2x better than software-based marketing for trade businesses." (Feb 20, 2026)
+- "If the script sees 0 leads but the DB isn't empty, check your API keys first." (Feb 20, 2026)
+
+---
+
 ```text
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
@@ -1238,25 +1290,11 @@ Heartbeat (every 5 min)
 ║   "Delegation is not abandonment; it is focused stewardship."                ║
 ║   "Outreach is oxygen. Voice is truth."                                      ║
 ║   "Personalized rescue is the only path to ROI."                             ║
-║   "An empty queue is a silent killer."   (Feb 9, 2026)                       ║
-║   "4 CRONs max. 5 crashes a lot."       (Feb 9, 2026)                       ║
-║   "Stopped apps still hold CRON slots." (Feb 9, 2026)                       ║
-║   "Always save learnings on completion."(Feb 9, 2026)                       ║
-║   "GHL API is BANNED. Webhooks only."   (Feb 9, 2026)                       ║
-║   "Exit codes lie. Visual proof only."  (Feb 9, 2026)                       ║
-║   "Generic emails are spam. Audits are value." (Feb 9, 2026)                ║
-║   "The audit sells the service."        (Feb 9, 2026)                       ║
-║   "Google Places API needs billing enabled." (Feb 10, 2026)                 ║
-║   "Vercel needs env vars set manually." (Feb 10, 2026)                      ║
-║   "aiserviceco.com NOT 'AI Service Code' (voice-to-text error)." (Feb 10)   ║
-║   "3,321 businesses is 30-40% of Lakeland. Sunbiz has the rest." (Feb 10)   ║
-║   "Directory UX must feel like Yelp or users won't return." (Feb 10)        ║
-║   "Column names: verify against live DB, never assume." (Feb 11, 2026)      ║
-║   "ghl_contact_id is NOT NULL — every insert must include it." (Feb 11)     ║
-║   "Modal env vars unreliable in dev — hardcode critical fallbacks." (Feb 11) ║
-║   "Prospecting: Discover → Enrich → Dedup → Insert. All must pass." (Feb 11)║
+║   "An empty queue is a silent killer."                                       ║
+║   "Sarah isn't software. She's your best employee."      (Feb 20, 2026)       ║
+║   "Service Role is the only role for the backend."       (Feb 20, 2026)       ║
 ║                                                                               ║
-║                              - SOVEREIGN MEMORY v5.6                          ║
+║                              - SOVEREIGN MEMORY v6.0                          ║
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```

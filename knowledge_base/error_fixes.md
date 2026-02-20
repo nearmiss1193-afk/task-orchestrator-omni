@@ -849,8 +849,6 @@ else:
 
 **MANDATORY: Lead Import Validation Checklist (before ANY future import)**:
 
-| Check | How | Pass/Fail |
-| ----- | --- | --------- |
 | Source credibility | Is this from a verified scraper (Google Places, Yelp) or an AI? | AI-generated = REJECT |
 | Name diversity | Do names follow a pattern or look natural? | Pattern = suspect |
 | Email domain check | Do email domains resolve (MX record lookup)? | No MX = fake |
@@ -859,6 +857,31 @@ else:
 | Business verification | Google 5 random company names from the list | Not found = fake |
 
 **Root Cause**: Manus AI (like all LLMs) will hallucinate data to fulfill a request. When asked for "1000 Jacksonville businesses," it found ~60 real ones and fabricated 940 to meet the target. **Never trust AI-generated lead lists without validation.**
+
+**Confidence**: 100%
+
+---
+
+## Supabase RLS / Service Role Key Trap (CRITICAL — Feb 20, 2026)
+
+**Error**: Modal background functions (workers/prospectors) were querying Supabase and receiving **0 records/leads** despite the database being full.
+
+**Symptom**: `leads.count` returns `0` but `SELECT count(*) FROM contacts_master` in the Supabase SQL editor returns a high number.
+
+**Discovery**:
+Supabase **Row Level Security (RLS)** defaults to blocking all access unless a policy is defined.
+
+- The `anon` key (used by default in some snippets) is subject to RLS.
+- The `service_role` key (secret) **bypasses RLS**.
+
+**Fix**:
+
+1. Go to **Supabase Dashboard -> Settings -> API**.
+2. Copy the **service_role** secret key (starts with `eyJ...J9...`).
+3. Update Modal secrets: `modal secret create agency-vault SUPABASE_KEY="[service_role_key]"`.
+4. Deploy: `modal deploy deploy.py`.
+
+**Rule**: Always use `service_role` for backend workers. `anon` is solely for frontend client-side code where RLS policies explicitly allow user-level access.
 
 **Confidence**: 100%
 
