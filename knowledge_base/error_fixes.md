@@ -886,3 +886,21 @@ Supabase **Row Level Security (RLS)** defaults to blocking all access unless a p
 **Confidence**: 100%
 
 ---
+
+## DeploymentError: Modal Endpoint Limit Exceeded (Feb 20, 2026)
+
+**Error Message**: `Deployment failed: reached limit of 8 endpoints` (Exit code: 1)
+
+**Location**: Modal CLI during `modal deploy deploy.py`
+
+**Root Cause**: The Modal Starter plan allows a maximum of 8 web endpoints. Adding the `dispatch_review_api` pushed the count to 9, causing the deploy to reject.
+
+**Fix**:
+
+1. Consolidated the new dashboard functionality into the existing `sovereign_stats` endpoint.
+2. Modified `sovereign_stats` to return a unified JSON object containing `stats`, `dispatch_board`, and `review_stats`.
+3. Updated `dashboard.html` to fetch all data from this single source.
+
+**Prevention**: Keep a running count of `@app.function()` methods with `@modal.web_endpoint` or `@modal.asgi_app`. If approaching 8, consolidate data into unified "stats" or "management" endpoints using action parameters or unified return objects.
+
+**Confidence**: 100% (Verified deploy success after consolidation)
