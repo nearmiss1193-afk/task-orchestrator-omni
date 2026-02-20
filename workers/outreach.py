@@ -713,7 +713,7 @@ def auto_outreach_loop():
         res = supabase.table("contacts_master") \
             .select("*") \
             .in_("status", ["new", "research_done"]) \
-            .limit(5) \
+            .limit(15) \
             .execute()
         leads = res.data or []
         print(f"📊 Fresh leads found: {len(leads)}")
@@ -730,7 +730,7 @@ def auto_outreach_loop():
             recycled = supabase.table("contacts_master") \
                 .select("*") \
                 .eq("status", "outreach_sent") \
-                .limit(5) \
+                .limit(15) \
                 .execute()
             followup_leads = recycled.data or []
             if followup_leads:
