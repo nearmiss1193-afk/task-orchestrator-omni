@@ -514,8 +514,26 @@ class Inspector:
         print(f"  Error: {type(exception).__name__}: {str(exception)[:200]}")
         print(f"{'='*60}")
 
-        # Stage 1: DETECT
+        # Stage 1: DETECT & ROUTE TO ABACUS (Phase 5 Auto-Patching)
         self.log_error(source, exception)
+        
+        try:
+            import requests
+            requests.post(
+                "https://sovereign-empire-api-908fw2.abacusai.app/webhook/system-error",
+                json={
+                    "source": "modal",
+                    "error_type": type(exception).__name__,
+                    "error_message": str(exception)[:500],
+                    "stack_trace": traceback.format_exc(),
+                    "severity": "critical"
+                },
+                headers={"Authorization": "Bearer sovereign_abacus_webhook_2026_xyz99", "Content-Type": "application/json"},
+                timeout=10
+            )
+            print(f"  🤖 INSPECTOR: Crash telemetry successfully routed to Abacus AI Engineer.")
+        except Exception as abacus_err:
+            print(f"  ⚠️ INSPECTOR: Failed to route crash to Abacus: {abacus_err}")
 
         # Stage 2: DIAGNOSE
         diagnosis = self.diagnose(exception)
