@@ -1,11 +1,8 @@
 import React from 'react';
+import Dashboard from '@/components/Dashboard';
 
 export default function DashboardRootPage() {
     return (
-        <iframe
-            src="/landing/dashboard.html"
-            style={{ width: '100%', height: '100vh', border: 'none' }}
-            title="Dashboard Root"
-        />
+        <Dashboard />
     );
 }

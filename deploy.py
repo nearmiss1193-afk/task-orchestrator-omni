@@ -1184,23 +1184,8 @@ def system_orchestrator():
                 print(f"⚠️ Ingestion trigger failed: {e}")
 
         # E. Lakeland AI Enrichment (Hourly at minute 42)
-        if minute >= 42 and minute < 47:
-            from workers.lakeland_enricher import run_enrichment_loop
-            try:
-                from modules.database.supabase_client import get_supabase
-                supabase = get_supabase()
-                last_enrich = supabase.table("system_state").select("status").eq("key", "last_enrichment_hour").execute()
-                current_hour_key = f"{now_utc.date()}_{hour}"
-                
-                if not last_enrich.data or last_enrich.data[0].get("status") != current_hour_key:
-                    print(f"🚀 TRIGGER: Lakeland Enrichment (Hourly: {current_hour_key})")
-                    supabase.table("system_state").upsert({
-                        "key": "last_enrichment_hour",
-                        "status": current_hour_key
-                    }, on_conflict="key").execute()
-                    safe_spawn(run_enrichment_loop, "run_enrichment_loop", limit=15)
-            except Exception as e:
-                print(f"⚠️ Enrichment trigger failed: {e}")
+        # [DEPRECATED] Migrated to Abacus.AI Nightly Daemons (Phase 2)
+        # Freed up Modal compute resources.
 
         # F. Daily Executive Pulse (8 AM EST -> 13 UTC)
         if hour == 13 and minute < 5:
@@ -1233,6 +1218,25 @@ def system_orchestrator():
         print(f"🚨 ORCHESTRATOR CRASH: {orch_err}")
         import traceback
         traceback.print_exc()
+        
+        # Phase 1: Route crash telemetry to Abacus.AI
+        try:
+            import requests
+            requests.post(
+                "https://sovereign-empire-api-908fw2.abacusai.app/webhook/system-error",
+                json={
+                    "source": "modal",
+                    "error_type": type(orch_err).__name__,
+                    "error_message": str(orch_err)[:500],
+                    "stack_trace": traceback.format_exc(),
+                    "severity": "critical"
+                },
+                headers={"Authorization": "Bearer sovereign_abacus_webhook_2026_xyz99", "Content-Type": "application/json"},
+                timeout=10
+            )
+        except Exception as abacus_err:
+            print(f"⚠️ Failed to log error to Abacus: {abacus_err}")
+
         try:
             inspector.handle_crash("system_orchestrator", orch_err)
         except Exception as inspect_err:
