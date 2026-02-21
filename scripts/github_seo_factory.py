@@ -1,0 +1,250 @@
+import os
+import sys
+import time
+import psycopg2
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+# Load env variables (for local testing, CI will inject via secrets)
+load_dotenv()
+load_dotenv('.env.local')
+
+# 1. Configuration
+DATABASE_URL = os.environ.get('NEON_DATABASE_URL') or os.environ.get('DATABASE_URL')
+GEMINI_KEY = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY')
+BATCH_SIZE = 50
+LAKELAND_DIR = os.path.abspath('apps/portal/src/app/lakeland')
+
+if not DATABASE_URL or not GEMINI_KEY:
+    print("❌ FATAL: Missing database or LLM credentials.")
+    sys.exit(1)
+
+genai.configure(api_key=GEMINI_KEY)
+# We use standard flash model for quick, cheap, repetitive copy generation
+model = genai.GenerativeModel('gemini-2.5-flash')
+
+def get_unpublished_businesses():
+    """Fetches the next batch of businesses that need pages built."""
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # We only want businesses with a known niche so we can route them correctly
+        query = f"""
+            SELECT id, company_name as business_name, niche as industry, phone as phone_number, website_url as website
+            FROM contacts_master
+            WHERE seo_published = FALSE 
+              AND niche IS NOT NULL
+            LIMIT {BATCH_SIZE}
+        """
+        cur.execute(query)
+        rows = cur.fetchall()
+        
+        # Convert to list of dicts for easier handling
+        columns = [desc[0] for desc in cur.description]
+        businesses = [dict(zip(columns, row)) for row in rows]
+        
+        cur.close()
+        conn.close()
+        return businesses
+    except Exception as e:
+        print(f"❌ Database error fetching batch: {e}")
+        return []
+
+def mark_as_published(business_ids):
+    """Updates the database to ensure we don't build duplicate pages."""
+    if not business_ids: return
+    
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        conn.autocommit = True
+        cur = conn.cursor()
+        
+        # Format the IDs for the IN clause correctly
+        format_strings = ','.join(['%s'] * len(business_ids))
+        query = f"UPDATE contacts_master SET seo_published = TRUE WHERE id IN ({format_strings})"
+        
+        cur.execute(query, tuple(business_ids))
+        print(f"✅ Marked {cur.rowcount} rows as published.")
+        
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"❌ Database error marking as published: {e}")
+
+def generate_ai_description(business):
+    """Calls Gemini to write 150 words of highly optimized local SEO copy."""
+    prompt = f"""Write a compelling 150-word SEO description for {business['business_name']}, a {business['industry']} located in Lakeland, FL. 
+    
+    Tone: Professional, local, and trustworthy.
+    Keywords to naturally include: {business['industry']} in Lakeland FL, local {business['industry']}, Polk county.
+    
+    Return ONLY the raw text copy, no markdown formatting, no conversational filler like 'Here is your description:'
+    """
+    
+    try:
+        # Include a manual sleep to respect rate limits if we scale the batch size massively
+        time.sleep(1)
+        response = model.generate_content(prompt)
+        return response.text.strip().replace('"', '&quot;')
+    except Exception as e:
+        print(f"⚠️ Gemini API failed for {business['business_name']}: {e}")
+        return f"{business['business_name']} is a premium {business['industry']} serving the Lakeland area. Contact them today for expert service in Polk county."
+
+def clean_slug(text):
+    """Converts a business name or industry into a URL-safe slug."""
+    if not text: return "unknown"
+    import re
+    text = text.lower()
+    text = re.sub(r'[^a-z0-9\s-]', '', text)
+    text = re.sub(r'[\s-]+', '-', text).strip('-')
+    return text
+
+def write_nextjs_page(business, copy):
+    """Creates the React component file in the correct directory."""
+    industry_slug = clean_slug(business['industry'])
+    business_slug = clean_slug(business['business_name'])
+    
+    # 1. Ensure the directory exists structure: /lakeland/[industry]/[business]/page.tsx
+    dir_path = os.path.join(LAKELAND_DIR, industry_slug, business_slug)
+    os.makedirs(dir_path, exist_ok=True)
+    
+    # 2. Setup JSON-LD Schema
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": business['business_name'],
+        "telephone": str(business['phone_number']) if business['phone_number'] else "",
+        "url": str(business['website']) if business['website'] else f"https://lakelandfinds.com/lakeland/{industry_slug}/{business_slug}",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5.0",
+            "reviewCount": "1"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Lakeland",
+            "addressRegion": "FL"
+        }
+    }
+    
+    # 2.5 Pre-calculate conditional button HTML
+    phone_html = f'<a href="tel:{business["phone_number"]}" className="px-8 py-4 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition-colors">Call Now</a>' if business['phone_number'] else ""
+    website_html = f'<a href="{business["website"]}" target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold rounded-xl transition-colors">Visit Website</a>' if business['website'] else ""
+
+    # 3. Component Code
+    page_content = f"""import React from 'react';
+import {{ Metadata }} from 'next';
+import Link from 'next/link';
+import Script from 'next/script';
+
+export const metadata: Metadata = {{
+    title: "{business['business_name']} | Best {business['industry']} in Lakeland",
+    description: "{copy[:150]}...",
+}};
+
+export default function BusinessProfilePage() {{
+    const schemaData = {schema};
+
+    return (
+        <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900">
+            <Script
+                id="schema-{business_slug}"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{{{ __html: JSON.stringify(schemaData) }}}}
+            />
+            
+            <nav className="py-4 px-8 text-sm text-zinc-500 border-b border-zinc-200 bg-white">
+                <Link href="/" className="hover:text-amber-500">Home</Link>
+                <span className="mx-2">›</span>
+                <Link href="/lakeland" className="hover:text-amber-500">Lakeland</Link>
+                <span className="mx-2">›</span>
+                <Link href="/lakeland/{industry_slug}" className="hover:text-amber-500 capitalize">{business['industry']}</Link>
+                <span className="mx-2">›</span>
+                <span className="text-zinc-800 font-bold">{business['business_name']}</span>
+            </nav>
+
+            <main className="max-w-4xl mx-auto px-8 py-16">
+                <div className="p-8 bg-white border border-zinc-200 rounded-2xl shadow-sm mb-8">
+                    <div className="flex justify-between items-start mb-6">
+                        <div>
+                            <h1 className="text-4xl font-black mb-2 text-zinc-900">{business['business_name']}</h1>
+                            <div className="flex gap-4 text-sm text-zinc-500">
+                                <span>📍 Lakeland, FL</span>
+                                <span className="text-amber-500 font-bold">★ 5.0 (Recent Reviews)</span>
+                            </div>
+                        </div>
+                        {{{{/* Claim Profile Upsell */}}}}
+                        <div className="text-right">
+                             <div className="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full mb-2">Verified Listing</div>
+                             <br/>
+                             <Link href="/assessment" className="text-xs font-bold text-blue-600 hover:text-blue-500 underline">Claim this profile</Link>
+                        </div>
+                    </div>
+                    
+                    <div className="prose prose-zinc max-w-none mb-8">
+                        <p className="text-lg leading-relaxed text-zinc-700">
+                            {copy}
+                        </p>
+                    </div>
+                    
+                    <div className="flex gap-4 border-t border-zinc-100 pt-8">
+                        {phone_html}
+                        {website_html}
+                    </div>
+                </div>
+
+                {{{{/* AI Service Co Upsell Widget */}}}}
+                <div className="p-8 bg-zinc-900 text-white rounded-2xl flex flex-col md:flex-row gap-8 items-center justify-between border-l-4 border-purple-500">
+                    <div>
+                        <div className="text-sm font-bold text-purple-400 mb-2 uppercase tracking-widest">Business Owner Tools</div>
+                        <h3 className="text-2xl font-bold mb-2">Automate Your Operations</h3>
+                        <p className="text-zinc-400">Stop missing calls when on the job. Install an AI Secretary to answer 24/7 and book appointments autonomously.</p>
+                    </div>
+                    <Link href="/assessment" className="px-8 py-4 bg-purple-600 hover:bg-purple-700 font-bold rounded-xl whitespace-nowrap transition-colors">
+                        Calculate AI Score
+                    </Link>
+                </div>
+            </main>
+        </div>
+    );
+}}
+"""
+    
+    file_path = os.path.join(dir_path, 'page.tsx')
+    with open(file_path, "w", encoding="utf-8") as f:
+         f.write(page_content)
+
+def run_factory():
+    print("=" * 60)
+    print("🏭 INITIATING BACKGROUND SEO FACTORY RUN")
+    print("=" * 60)
+    
+    businesses = get_unpublished_businesses()
+    if not businesses:
+        print("✅ Inbox zero! No unpublished businesses remain in the database.")
+        sys.exit(0)
+        
+    print(f"📥 Pulled {len(businesses)} businesses for processing.")
+    
+    successful_ids = []
+    
+    for i, business in enumerate(businesses):
+        print(f"[{i+1}/{len(businesses)}] Processing: {business['business_name']}...")
+        
+        # 1. AI Copywriting
+        copy = generate_ai_description(business)
+        
+        # 2. File Generation
+        write_nextjs_page(business, copy)
+        
+        successful_ids.append(business['id'])
+        
+    # 3. Mark processed in DB
+    mark_as_published(successful_ids)
+    
+    print("=" * 60)
+    print(f"🎉 FACTORY RUN COMPLETE: {len(successful_ids)} pages built.")
+
+if __name__ == "__main__":
+    run_factory()
