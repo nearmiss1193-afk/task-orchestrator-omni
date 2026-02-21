@@ -174,7 +174,7 @@ export default function BusinessProfilePage() {{
                                 <span className="text-amber-500 font-bold">★ 5.0 (Recent Reviews)</span>
                             </div>
                         </div>
-                        {{{{/* Claim Profile Upsell */}}}}
+                        {/* Claim Profile Upsell */}
                         <div className="text-right">
                              <div className="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full mb-2">Verified Listing</div>
                              <br/>
@@ -194,7 +194,7 @@ export default function BusinessProfilePage() {{
                     </div>
                 </div>
 
-                {{{{/* AI Service Co Upsell Widget */}}}}
+                {/* AI Service Co Upsell Widget */}
                 <div className="p-8 bg-zinc-900 text-white rounded-2xl flex flex-col md:flex-row gap-8 items-center justify-between border-l-4 border-purple-500">
                     <div>
                         <div className="text-sm font-bold text-purple-400 mb-2 uppercase tracking-widest">Business Owner Tools</div>
