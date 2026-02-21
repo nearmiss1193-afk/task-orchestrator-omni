@@ -1,0 +1,18 @@
+﻿[
+  {
+    "App ID": "ap-kWcSUezMryiQ46SVENpJoz",
+    "Description": "ghl-mini-ag",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2026-02-16 21:30:30-05:00",
+    "Stopped at": null
+  },
+  {
+    "App ID": "ap-5dZhdHQTwNtgH0WYNUXNxq",
+    "Description": "test-app-diagnostic",
+    "State": "deployed",
+    "Tasks": "0",
+    "Created at": "2026-02-17 11:56:35-05:00",
+    "Stopped at": null
+  }
+]

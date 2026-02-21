@@ -28,7 +28,12 @@ if "/root" not in sys.path:
 # ============================================================
 
 NICHES = [
-    # === TIER 1: HIGH NEED (miss calls, need AI receptionist) ===
+    # === TIER 1: "BLEEDING LEADS" (High Missed-Call Cost, Low Response) ===
+    "tree removal service",
+    "gutter installation",
+    "pool service company",
+    "lawn care service",
+    "landscaping company",
     "HVAC contractor",
     "plumbing company",
     "roofing contractor",
@@ -428,6 +433,45 @@ def _scrape_website_for_email(url: str) -> str:
 
 
 # ============================================================
+#  STAGE 2.5: SCORE — Calculate vulnerability score
+# ============================================================
+
+def calculate_lead_score(lead: dict) -> int:
+    """
+    Calculates the 'Bleeding Lead' score (0-10).
+    +3: Review count < 50 (Identity gap)
+    +2: Rating < 4.5 (Reputation gap)
+    +3: No website (Digital gap)
+    +2: Tier 1 Vertical (High-stakes gap)
+    """
+    score = 0
+    
+    # Review Count Gap
+    reviews = lead.get("google_reviews") or 0
+    if reviews < 50:
+        score += 3
+    elif reviews < 100:
+        score += 1
+        
+    # Rating Gap
+    rating = lead.get("google_rating") or 5.0
+    if rating < 4.5:
+        score += 2
+        
+    # Digital Gap
+    if not lead.get("website_url"):
+        score += 3
+        
+    # Vertical Priority
+    tier1 = ["tree", "gutter", "pool", "lawn", "hvac", "plumbing", "roofing"]
+    name_low = lead.get("business_name", "").lower()
+    if any(v in name_low for v in tier1):
+        score += 2
+        
+    return min(score, 10)
+
+
+# ============================================================
 #  STAGE 3: DEDUPLICATE + INSERT
 # ============================================================
 
@@ -594,6 +638,9 @@ def run_prospecting_cycle():
 
             # Stage 2: Enrich
             lead = enrich_with_email(lead, hunter_key)
+
+            # Stage 2.5: Score
+            lead["score"] = calculate_lead_score(lead)
 
             has_email = bool(lead.get("email"))
             has_phone = bool(lead.get("phone"))

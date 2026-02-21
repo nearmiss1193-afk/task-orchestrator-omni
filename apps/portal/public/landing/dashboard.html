@@ -1857,6 +1857,35 @@
                 </div>
             </div>
 
+            <!-- PIPELINE HEATMAP — BLEEDING LEADS -->
+            <div class="panel" style="margin-bottom:20px">
+                <div class="panel-header">
+                    <div class="panel-title"><span>🔥</span> Pipeline Heatmap — Bleeding Leads <span class="panel-badge"
+                            id="heatmapCount">0</span></div>
+                    <button class="refresh-btn" onclick="refreshAll()" title="Refresh">↻</button>
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="leads-table" style="font-size:11px">
+                        <thead>
+                            <tr>
+                                <th>Score</th>
+                                <th>Company</th>
+                                <th>Niche</th>
+                                <th>City</th>
+                                <th>Status</th>
+                                <th>Gaps</th>
+                            </tr>
+                        </thead>
+                        <tbody id="heatmapBody">
+                            <tr>
+                                <td colspan="6" style="text-align:center;color:var(--text-muted);padding:28px">Loading
+                                    scored leads...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- LEADS TABLE -->
             <div class="panel">
                 <div class="panel-header">
@@ -2007,7 +2036,9 @@
 
         async function fetchAll() {
             try {
-                const r = await fetch(STATS_URL, { signal: AbortSignal.timeout(12000) });
+                const r = await fetch(`${STATS_URL}?code=${SESSION_CODE}`, {
+                    signal: AbortSignal.timeout(12000)
+                });
                 dashData = await r.json();
                 if (dashData.error) throw new Error(dashData.error);
 
@@ -2162,6 +2193,22 @@
                 document.getElementById('systemStatus').className = 'status-pill degraded';
                 document.getElementById('intModal').className = 'integration-dot red';
                 document.getElementById('intModalSt').textContent = 'Offline';
+                // Clear all Loading... panels so they don't stay stuck
+                const offlineMsg = '<div style="color:var(--accent-rose);font-size:11px;padding:20px 0;text-align:center">⚠️ API Offline — check Modal deployment</div>';
+                const offlineRow = '<tr><td colspan="6" style="text-align:center;color:var(--accent-rose);padding:20px">⚠️ API Offline</td></tr>';
+                try { document.getElementById('activityFeed').innerHTML = offlineMsg; } catch (x) { }
+                try { document.getElementById('callsFeed').innerHTML = offlineMsg; } catch (x) { }
+                try { document.getElementById('heatmapBody').innerHTML = offlineRow; } catch (x) { }
+                try { document.getElementById('leadsBody').innerHTML = offlineRow; } catch (x) { }
+                try { document.getElementById('boardBody').innerHTML = offlineMsg; } catch (x) { }
+                try { document.getElementById('reviewStatsBody').innerHTML = offlineMsg; } catch (x) { }
+                try { document.getElementById('aiInsightsBody').innerHTML = offlineMsg; } catch (x) { }
+                try {
+                    document.querySelectorAll('.vitals-engine').forEach(el => {
+                        el.classList.remove('running'); el.classList.add('stopped');
+                        const st = el.querySelector('.ve-status'); if (st) st.textContent = 'Offline';
+                    });
+                } catch (x) { }
             }
         }
 
@@ -2233,6 +2280,47 @@
                 </div>
             </div>`;
             renderSparkline('sparkReview', [0, 1, 0, 2, 1, neg]);
+        }
+
+
+        // PIPELINE HEATMAP RENDERER
+        function renderHeatmap() {
+            if (!dashData || !dashData.pipeline_heatmap) return;
+            const leads = dashData.pipeline_heatmap;
+            const el = document.getElementById('heatmapBody');
+            const countEl = document.getElementById('heatmapCount');
+            if (!el) return;
+            countEl.textContent = leads.length;
+
+            if (!leads.length || leads[0]?.error) {
+                el.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:28px">No scored leads found</td></tr>';
+                return;
+            }
+
+            el.innerHTML = leads.map(lead => {
+                const score = lead.score || 0;
+                const tier = lead.tier || 'normal';
+                const scoreColor = tier === 'critical' ? '#f43f5e' : (tier === 'high' ? '#f59e0b' : '#10b981');
+                const scoreBg = tier === 'critical' ? 'rgba(244,63,94,0.12)' : (tier === 'high' ? 'rgba(245,158,11,0.12)' : 'rgba(16,185,129,0.12)');
+                const scoreIcon = tier === 'critical' ? '🔴' : (tier === 'high' ? '🟡' : '🟢');
+                const bleedingTag = score >= 8 ? ' <span style="background:rgba(244,63,94,0.15);color:#f43f5e;padding:1px 5px;border-radius:6px;font-size:8px;font-weight:700">BLEEDING</span>' : '';
+
+                // Identify gaps
+                const gaps = [];
+                if (!lead.website) gaps.push('🌐 No Site');
+                if (!lead.email) gaps.push('📧 No Email');
+                if (!lead.phone) gaps.push('📞 No Phone');
+                const gapHtml = gaps.length ? gaps.map(g => `<span style="background:rgba(244,63,94,0.08);color:var(--accent-rose);padding:1px 4px;border-radius:4px;font-size:9px;margin-right:3px">${g}</span>`).join('') : '<span style="color:var(--accent-green);font-size:9px">✅ Complete</span>';
+
+                return `<tr style="border-bottom:1px solid var(--border)">
+                    <td style="padding:8px 6px"><span style="display:inline-flex;align-items:center;gap:4px;background:${scoreBg};color:${scoreColor};padding:2px 8px;border-radius:8px;font-weight:800;font-size:12px">${scoreIcon} ${score}</span>${bleedingTag}</td>
+                    <td style="padding:8px 6px;font-weight:600;color:var(--text-primary)">${esc(lead.company)}</td>
+                    <td style="padding:8px 6px;color:var(--text-secondary)">${esc(lead.niche || '—')}</td>
+                    <td style="padding:8px 6px;color:var(--text-secondary)">${esc(lead.city || '—')}</td>
+                    <td style="padding:8px 6px"><span class="status-badge ${(lead.status || 'new').replace(/[^a-z]/g, '')}">${esc(lead.status || 'new')}</span></td>
+                    <td style="padding:8px 6px">${gapHtml}</td>
+                </tr>`;
+            }).join('');
         }
 
         function fetchStats() { fetchAll(); }

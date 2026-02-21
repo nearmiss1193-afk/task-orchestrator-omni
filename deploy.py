@@ -208,8 +208,9 @@ def test_db_psycopg2():
 # sovereign_state legacy endpoint removed to stay under plan limits.
 
 # ==== UNIFIED ENGAGEMENT TRACKER (RLS-Free) ====
+# NOTE: Web endpoint removed to stay under 8-endpoint plan limit (2 stale apps consume 2 slots).
+# Email pixel tracking can be routed through ghl_webhook or an external redirect.
 @app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="GET")
 def track_engagement(request, type: str = "email", eid: str = "", lid: str = "", vid_url: str = "", recipient: str = "", business: str = ""):
     """Unified Engagement Tracker (Pixel + Video) to stay under plan limits.
     Usage:
@@ -268,6 +269,52 @@ def track_engagement(request, type: str = "email", eid: str = "", lid: str = "",
     return Response(content=TRANSPARENT_GIF, media_type="image/gif") if type == "email" else RedirectResponse(url=vid_url or "https://aiserviceco.com")
 
 # ==== SMS INBOUND HANDLER (Sarah AI Reply with Memory) ====
+@app.function(image=image, secrets=[VAULT])
+@modal.fastapi_endpoint(method="POST")
+def sarah_sms_bridge(data: dict = {}):
+    """
+    Triggered by GHL when a call is missed (no-answer/voicemail).
+    Payload: {phone, contact_name, business_name, call_status}
+    Logic: Send a 'Rose 500' urgency SMS referencing Lakeland Finds.
+    """
+    from modules.database.supabase_client import get_supabase
+    import os, requests
+    
+    phone = data.get("phone", "").strip()
+    name = data.get("contact_name", "there")
+    business = data.get("business_name", "your business")
+    status = data.get("call_status", "missed")
+    
+    if not phone:
+        return {"error": "Missing phone"}
+        
+    # Standardize
+    phone = normalize_phone(phone)
+    
+    script = f"Hey {name}, this is Sarah with AI Service Co. Just tried calling about the missed calls at {business}. We have you listed on Lakeland Finds and I wanted to see when is a good time to connect about recovering that revenue?"
+    
+    # Send via GHL webhook (existing SMS out flow)
+    webhook_url = os.environ.get("GHL_SMS_WEBHOOK_URL")
+    if not webhook_url:
+        return {"error": "GHL_SMS_WEBHOOK_URL missing"}
+        
+    try:
+        resp = requests.post(webhook_url, json={"phone": phone, "message": script})
+        
+        # Log the touch
+        sb = get_supabase()
+        sb.table("outbound_touches").insert({
+            "channel": "sms",
+            "status": "sent",
+            "company": business,
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "payload": {"type": "missed_call_bridge", "script": "sarah_v1_lakeland"}
+        }).execute()
+        
+        return {"status": "triggered", "message": script}
+    except Exception as e:
+        return {"error": str(e)}
+
 @app.function(image=image, secrets=[VAULT])
 @modal.fastapi_endpoint(method="POST")
 def ghl_webhook(data: dict = {}):
@@ -1750,7 +1797,7 @@ from fastapi import Request, Response
 import json
 
 @app.function(image=image, secrets=[VAULT])
-@modal.fastapi_endpoint(method="GET")
+@modal.web_endpoint(method="GET")
 def sovereign_stats(request: Request):
     """Full Dashboard Data Proxy — bypasses RLS with service_role key.
     Returns: stats, activity feed, calls, leads, notifications."""
@@ -1759,14 +1806,19 @@ def sovereign_stats(request: Request):
     from modules.database.supabase_client import get_supabase
     
     # === AUTHENTICATION ===
-    # Use the header injected by dashboard.html
-    code = request.headers.get("X-Dashboard-Code")
+    # Use the header injected by dashboard.html or query params
+    code = request.query_params.get("code") or request.headers.get("X-Dashboard-Code")
     # Fallback to empire_2026 if secret is missing to prevent lockout during transition
     valid_code = os.getenv("DASHBOARD_ACCESS_CODE", "empire_2026")
     
     if code != valid_code:
         print(f"🚫 AUTH: Unauthorized access attempt to sovereign_stats (Code: {code})")
-        return Response(content=json.dumps({"error": "Unauthorized"}), status_code=403, media_type="application/json")
+        return Response(
+            content=json.dumps({"error": "Unauthorized"}), 
+            status_code=403, 
+            media_type="application/json",
+            headers={"Access-Control-Allow-Origin": "*"}
+        )
     
     try:
         sb = get_supabase()
@@ -2077,7 +2129,32 @@ def sovereign_stats(request: Request):
             review_stats = get_review_stats(sb)
         except: pass
 
-        return {
+        # === PIPELINE HEATMAP (Top 25 scored "Bleeding Leads") ===
+        pipeline_heatmap = []
+        try:
+            heatmap_q = sb.table("contacts_master").select(
+                "id,company_name,email,phone,status,niche,lead_source,lead_score,website_url,city"
+            ).not_.is_("lead_score", "null").order("lead_score", desc=True).limit(25).execute()
+            for lead in heatmap_q.data:
+                score = lead.get("lead_score", 0) or 0
+                tier = "critical" if score >= 8 else ("high" if score >= 5 else "normal")
+                pipeline_heatmap.append({
+                    "id": lead.get("id"),
+                    "company": lead.get("company_name", "Unknown"),
+                    "email": lead.get("email", ""),
+                    "phone": lead.get("phone", ""),
+                    "status": lead.get("status", "new"),
+                    "niche": lead.get("niche", ""),
+                    "source": lead.get("lead_source", ""),
+                    "score": score,
+                    "tier": tier,
+                    "website": lead.get("website_url", ""),
+                    "city": lead.get("city", ""),
+                })
+        except Exception as hm_err:
+            pipeline_heatmap = [{"error": str(hm_err)}]
+
+        response_data = {
             "total_leads": pool_count,
             "outbound_24h": outbound_24h,
             "health": {
@@ -2096,13 +2173,24 @@ def sovereign_stats(request: Request):
             "system_vitals": system_vitals,
             "dispatch_board": dispatch_board,
             "review_stats": review_stats,
+            "pipeline_heatmap": pipeline_heatmap,
             "status": "synchronized",
             "checked_at": now.isoformat()
         }
+        return Response(
+            content=json.dumps(response_data),
+            media_type="application/json",
+            headers={"Access-Control-Allow-Origin": "*"}
+        )
     except Exception as e:
-        return {"error": str(e)}
+        return Response(
+            content=json.dumps({"error": str(e)}),
+            status_code=500,
+            media_type="application/json",
+            headers={"Access-Control-Allow-Origin": "*"}
+        )
 
-@app.function(image=image, secrets=[VAULT], schedule=modal.Cron("*/5 * * * *"))
+@app.function(image=image, secrets=[VAULT])
 def auto_outreach_loop():
     """Triggers autonomous outreach engine with lead recycling."""
     from datetime import datetime, timezone, timedelta

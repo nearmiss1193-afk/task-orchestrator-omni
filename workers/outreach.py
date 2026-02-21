@@ -930,6 +930,69 @@ def auto_outreach_loop():
                 print(f"❌ Follow-up Failed for {lead_id} Step {step}: {e}")
                 traceback.print_exc()
 
+    # --- STEP 4: RETARGET CAMPAIGN (Social + Reputation Growth) ---
+    # Additive: sends a repositioned email to leads already in the pipeline.
+    # Only targets leads that have been touched but NOT yet received a retarget email.
+    print("🔄 ENGINE: Step 4 — Retarget Campaign (Social + Reputation Growth)...")
+    retarget_sent = 0
+    MAX_RETARGET_PER_CYCLE = 5
+    
+    try:
+        # Fetch leads that completed original sequence OR are stuck in outreach_sent
+        retarget_pool = supabase.table("contacts_master") \
+            .select("id,email,phone") \
+            .in_("status", ["outreach_sent", "sequence_complete"]) \
+            .limit(20) \
+            .execute()
+        retarget_candidates = retarget_pool.data or []
+        
+        if retarget_candidates:
+            print(f"🎯 RETARGET: {len(retarget_candidates)} candidates found")
+            
+            for candidate in retarget_candidates:
+                if retarget_sent >= MAX_RETARGET_PER_CYCLE:
+                    print(f"⏸️ RETARGET: Hit cycle limit ({MAX_RETARGET_PER_CYCLE})")
+                    break
+                
+                cid = candidate["id"]
+                
+                # Quick check: skip if already retargeted (check outbound_touches)
+                try:
+                    check = supabase.table("outbound_touches") \
+                        .select("id,payload") \
+                        .eq("phone", candidate.get("phone", "")) \
+                        .eq("channel", "email") \
+                        .execute()
+                    already_retargeted = False
+                    for t in (check.data or []):
+                        p = t.get("payload") or {}
+                        if isinstance(p, str):
+                            try:
+                                import json as jmod
+                                p = jmod.loads(p)
+                            except:
+                                p = {}
+                        if p.get("campaign") == "social_reputation":
+                            already_retargeted = True
+                            break
+                    if already_retargeted:
+                        continue
+                except:
+                    pass
+                
+                try:
+                    result = dispatch_retarget_email(cid)
+                    if result:
+                        retarget_sent += 1
+                except Exception as e:
+                    print(f"❌ RETARGET dispatch error for {cid}: {e}")
+            
+            print(f"📊 RETARGET: {retarget_sent} emails sent this cycle")
+        else:
+            print("💤 RETARGET: No candidates ready for retargeting")
+    except Exception as e:
+        print(f"❌ RETARGET STEP ERROR: {e}")
+
 
 def dispatch_followup_email(lead_id: str, step: int):
     """
@@ -1056,5 +1119,195 @@ def dispatch_followup_email(lead_id: str, step: int):
             return False
     except Exception as e:
         print(f"❌ FOLLOW-UP ERROR: {e}")
+        traceback.print_exc()
+        return False
+
+
+# ========================================================================
+# RETARGET CAMPAIGN: SOCIAL PRESENCE + REPUTATION GROWTH
+# Additive campaign — runs alongside existing outreach pipeline.
+# Targets leads already touched by the original campaign with a new angle.
+# ========================================================================
+
+def dispatch_retarget_email(lead_id: str):
+    """
+    Sends a REPOSITIONED email to leads who already received the original
+    AI Receptionist pitch. This email focuses on:
+    - Social Inbox Automation (FB/IG/Google DMs)
+    - Google Review Growth & Protection
+    - Daily Social Posting + Engagement
+    - Reputation Repair / Screening
+
+    Tagged with campaign='social_reputation' in outbound_touches for tracking.
+    """
+    import os, json, random, uuid, traceback, requests
+    from datetime import datetime, timezone
+    from modules.database.supabase_client import get_supabase
+    
+    supabase = get_supabase()
+    resend_key = os.environ.get("RESEND_API_KEY")
+    if not resend_key:
+        print("❌ RETARGET: RESEND_API_KEY missing")
+        return False
+    
+    # Fetch lead
+    try:
+        lead = supabase.table("contacts_master").select("*").eq("id", lead_id).single().execute().data
+    except Exception as e:
+        print(f"❌ RETARGET: Lead fetch error for {lead_id}: {e}")
+        return False
+    
+    if not lead:
+        print(f"❌ RETARGET: Lead {lead_id} not found")
+        return False
+    
+    email = lead.get("email")
+    if not email or not is_valid_email(email):
+        print(f"⚠️ RETARGET: No valid email for {lead_id}")
+        return False
+    
+    # Check: don't send retarget if already sent one
+    try:
+        existing = supabase.table("outbound_touches").select("id").eq("phone", lead.get("phone", "")).eq("channel", "email").execute()
+        for touch in (existing.data or []):
+            # Check payload for campaign tag
+            payload = touch.get("payload") or {}
+            if isinstance(payload, str):
+                try: payload = json.loads(payload)
+                except: payload = {}
+            if payload.get("campaign") == "social_reputation":
+                print(f"⏭️ RETARGET: Already sent to {lead_id}, skipping")
+                return False
+    except:
+        pass  # If check fails, proceed anyway
+    
+    # Parse lead data
+    raw_full_name = lead.get("full_name") or ""
+    company = lead.get("company_name") or raw_full_name or "your business"
+    niche = lead.get("niche") or "local service"
+    city = lead.get("city") or lead.get("location") or ""
+    
+    # Smart greeting
+    biz_keywords = ['llc', 'inc', 'co', 'corp', 'hvac', 'plumbing', 'electric',
+                    'roofing', 'pest', 'air', 'repair', 'service', 'cleaning',
+                    'landscap', 'construction', 'painting', 'restoration', 'solar',
+                    'pros', 'team', 'group', 'solutions', 'systems']
+    name_lower = raw_full_name.lower()
+    is_biz = any(kw in name_lower for kw in biz_keywords) or len(raw_full_name.split()) > 3 or not raw_full_name
+    first_name = "there" if is_biz else raw_full_name.split(" ")[0]
+    
+    # Possessive
+    def sp(name):
+        return f"{name}'" if name.lower().endswith(('s', 'z')) else f"{name}'s"
+    
+    location_line = f" in {city}" if city else ""
+    
+    # --- A/B SUBJECT VARIANTS (RT_ prefix for retarget tracking) ---
+    subject_variants = [
+        {"id": "RT_A", "subject": f"Quick thought about {sp(company)} online presence"},
+        {"id": "RT_B", "subject": f"{first_name}, what customers see when they Google you"},
+        {"id": "RT_C", "subject": f"Are {sp(company)} social messages being answered?"},
+        {"id": "RT_D", "subject": f"The #1 thing {niche} businesses overlook"},
+    ]
+    
+    chosen = random.choice(subject_variants)
+    subject = chosen["subject"]
+    variant_id = chosen["id"]
+    
+    # --- EMAIL BODY: Social + Reputation Growth ---
+    body_text = f"""Hi {first_name},
+
+I reached out before about {company}, and I wanted to share something I noticed while looking at {niche} businesses{location_line}.
+
+The #1 reason customers choose one {niche} company over another isn't price — it's what they see online first.
+
+Here's what I keep finding:
+
+⭐ Google reviews under 4.5 stars = 50% fewer calls
+📱 Social messages (FB/IG/Google) go unanswered for days
+📸 No consistent social posting = invisible to younger buyers
+🛡️ One bad review without a response can cost 30+ customers
+
+We've been helping businesses like {company} with an AI-driven system that handles all of this:
+
+→ Responds to social messages (FB, IG, Google) in seconds  
+→ Automatically requests reviews after every job  
+→ Routes unhappy customers to you BEFORE they post publicly  
+→ Posts daily industry-specific content to keep you visible  
+
+The result? More 5-star reviews, more trust, more inbound leads.
+
+Would 15 minutes be worth exploring this for {company}? Grab a time:
+{BOOKING_LINK}
+
+Or just reply — happy to send an example of what your social presence could look like.
+
+Best,
+Dan"""
+
+    from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
+    
+    # Tracking pixel
+    email_uid = str(uuid.uuid4())[:8]
+    tracking_pixel = f'<img src="https://nearmiss1193-afk--ghl-omni-automation-track-email-open.modal.run?eid={email_uid}&recipient={email}&business={company}" width="1" height="1" style="display:none" />'
+    
+    html_body = f"""<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.6;">
+{body_text.replace(chr(10), '<br>')}
+</div>
+{tracking_pixel}"""
+    
+    payload = {
+        "from": from_email,
+        "reply_to": "owner@aiserviceco.com",
+        "to": [email],
+        "subject": subject,
+        "html": html_body,
+        "tags": [
+            {"name": "lead_id", "value": lead_id},
+            {"name": "variant", "value": variant_id},
+            {"name": "campaign", "value": "social_reputation"},
+            {"name": "email_uid", "value": email_uid}
+        ]
+    }
+    
+    try:
+        r = requests.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            json=payload,
+            timeout=15
+        )
+        
+        if r.status_code in [200, 201]:
+            resend_data = r.json()
+            resend_email_id = resend_data.get("id", "")
+            print(f"✅ RETARGET EMAIL SENT (ID: {resend_email_id}, Variant: {variant_id}) → {email}")
+            
+            # Log to outbound_touches with retarget campaign tag
+            supabase.table("outbound_touches").insert({
+                "phone": lead.get("phone"),
+                "channel": "email",
+                "company": company,
+                "status": "sent",
+                "variant_id": variant_id,
+                "variant_name": subject,
+                "correlation_id": resend_email_id,
+                "payload": {
+                    "resend_email_id": resend_email_id,
+                    "email_uid": email_uid,
+                    "to": email,
+                    "from": from_email,
+                    "variant": variant_id,
+                    "campaign": "social_reputation",
+                    "sequence": "retarget"
+                }
+            }).execute()
+            
+            return True
+        else:
+            print(f"❌ RETARGET RESEND FAILED: HTTP {r.status_code} - {r.text[:200]}")
+            return False
+    except Exception as e:
+        print(f"❌ RETARGET ERROR: {e}")
         traceback.print_exc()
         return False

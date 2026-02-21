@@ -1,6 +1,6 @@
 # LakelandFinds Directory — Architecture & Deployment
 
-## Last Updated: 2026-02-10
+## Last Updated: 2026-02-20
 
 ## Project Overview
 
@@ -9,9 +9,18 @@ Yelp-style local business directory for Lakeland, FL. Server-side rendered Next.
 ## Live URLs
 
 - **Production**: <https://lakeland-local-prod.vercel.app>
-- **Custom Domain**: lakelandfinds.com (Squarespace DNS → Vercel)
+- **Custom Domain**: lakelandfinds.com / <www.lakelandfinds.com> (Squarespace DNS → Vercel)
 - **GitHub**: <https://github.com/nearmiss1193-afk/lakeland-local-prod>
 - **Vercel Account**: nearmiss1193-9477
+
+## Google Analytics
+
+| Property | Measurement ID |
+|----------|---------------|
+| Primary (new Feb 20) | `G-QBGRPDW65K` |
+| Secondary (existing) | `G-SZWJKJNSZ9` |
+
+Both configured in `app/layout.tsx` with `strategy="beforeInteractive"` for Google tag detection compatibility.
 
 ## Tech Stack
 
@@ -24,6 +33,7 @@ Yelp-style local business directory for Lakeland, FL. Server-side rendered Next.
 | Styling | Tailwind CSS (warm coral #E85D3A) |
 | Icons | lucide-react |
 | Voice AI | VAPI Web SDK (`@vapi-ai/web`) |
+| Analytics | Google Analytics GA4 (dual property) |
 
 ## Key Files
 
@@ -84,6 +94,11 @@ git push origin master
 6. **DistanceBadge (client component)** works fine in server pages — `'use client'` boundary handles it
 7. **Lazy-init DB** — `lib/db/index.ts` uses Proxy to defer `neon()` call until runtime, preventing build-time crashes when `DATABASE_URL` isn't available locally
 8. **VAPI Web SDK** needs a **public** key (not the private key stored in Modal secrets)
+9. **Tailwind `@apply` arbitrary values** — never use `rgba()` or CSS functions with parentheses inside arbitrary values. They break PostCSS parsing. Use standard Tailwind classes instead.
+10. **Vercel build cache** — use `--force` flag when CSS/config changes aren't being picked up. Vercel caches aggressively.
+11. **Next.js `<Script strategy>`** — use `beforeInteractive` for GA tags so Google's static tag checker can detect them. `afterInteractive` loads via JS which bots can't see.
+12. **GA tag ID B vs 8 typo** — ALWAYS copy-paste measurement IDs, never type manually. `G-QBGRPDW65K` ≠ `G-Q8GRPDW65K`.
+13. **Pre-existing ESLint/TS errors blocking deploy** — add `eslint.ignoreDuringBuilds` and `typescript.ignoreBuildErrors` to `next.config.mjs` for quick unblocking.
 
 ## Revenue Model
 

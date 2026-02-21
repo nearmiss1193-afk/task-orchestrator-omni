@@ -33,7 +33,6 @@ def get_base_image():
 #        .run_commands("playwright install --with-deps chromium")
         .add_local_dir("utils", remote_path="/root/utils")
         .add_local_dir("workers", remote_path="/root/workers")
-        .add_local_file("workers/instant_response.py", remote_path="/root/workers/instant_response.py")
         .add_local_dir("core", remote_path="/root/core")
         .add_local_dir("api", remote_path="/root/api")
         .add_local_dir("scripts", remote_path="/root/scripts")
