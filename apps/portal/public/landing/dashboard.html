@@ -2042,20 +2042,23 @@
                 dashData = await r.json();
                 if (dashData.error) throw new Error(dashData.error);
 
+                const setTxt = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = t; };
+                const setCls = (id, c) => { const e = document.getElementById(id); if (e) e.className = c; };
+
                 // === METRICS ===
-                document.getElementById('mLeads').textContent = (dashData.total_leads || 0).toLocaleString();
-                document.getElementById('mLeadsSub').textContent = 'Contactable pool';
-                document.getElementById('mOutreach').textContent = (dashData.outbound_24h || 0).toLocaleString();
-                document.getElementById('mOutreachSub').textContent = 'Emails, SMS, calls';
-                document.getElementById('mPipeline').textContent = dashData.stripe?.mrr ? '$' + dashData.stripe.mrr.toLocaleString() + '/mo' : '$' + ((dashData.total_leads || 0) * 49).toLocaleString();
+                setTxt('mLeads', (dashData.total_leads || 0).toLocaleString());
+                setTxt('mLeadsSub', 'Contactable pool');
+                setTxt('mOutreach', (dashData.outbound_24h || 0).toLocaleString());
+                setTxt('mOutreachSub', 'Emails, SMS, calls');
+                setTxt('mPipeline', dashData.stripe?.mrr ? '$' + dashData.stripe.mrr.toLocaleString() + '/mo' : '$' + ((dashData.total_leads || 0) * 49).toLocaleString());
                 const ok = dashData.health?.status === 'healthy';
-                document.getElementById('systemStatusText').textContent = ok ? 'All Systems Online' : 'Degraded';
-                document.getElementById('systemStatus').className = ok ? 'status-pill' : 'status-pill degraded';
-                document.getElementById('intModalSt').textContent = 'Deployed';
-                document.getElementById('intHB').className = `integration-dot ${ok ? 'green' : 'amber'}`;
+                setTxt('systemStatusText', ok ? 'All Systems Online' : 'Degraded');
+                setCls('systemStatus', ok ? 'status-pill' : 'status-pill degraded');
+                setTxt('intModalSt', 'Deployed');
+                setCls('intHB', `integration-dot ${ok ? 'green' : 'amber'}`);
                 if (dashData.health?.last_heartbeat) {
                     const a = Math.round((Date.now() - new Date(dashData.health.last_heartbeat).getTime()) / 60000);
-                    document.getElementById('intHBSt').textContent = a + 'm ago';
+                    setTxt('intHBSt', a + 'm ago');
                 }
                 renderSparkline('sparkLeads', [280, 295, 310, 305, 320, 335, dashData.total_leads || 340]);
                 renderSparkline('sparkOutreach', [12, 8, 15, 22, 18, 25, dashData.outbound_24h || 20]);
@@ -2076,9 +2079,11 @@
                 // === CALLS ===
                 const calls = dashData.calls || [];
                 const callEl = document.getElementById('callsFeed');
-                document.getElementById('callCount').textContent = calls.length;
-                document.getElementById('mCalls').textContent = calls.length;
-                document.getElementById('mCallsSub').textContent = 'In memory bank';
+                if (callEl) {
+                    setTxt('callCount', calls.length);
+                    setTxt('mCalls', calls.length);
+                    setTxt('mCallsSub', 'In memory bank');
+                }
                 if (calls.length > prevCallCount && prevCallCount > 0) {
                     const n = calls[0]; const ctx = typeof n.context_summary === 'string' ? { history: n.context_summary } : (n.context_summary || {});
                     sendPush('📞 New Call!', `${ctx.contact_name || 'Unknown'} — ${n.phone_number}`);
@@ -2119,64 +2124,78 @@
                 // Velocity
                 const vel = vitals.outreach_1h || 0;
                 const velEl = document.getElementById('vVelocity');
-                velEl.textContent = vel + ' touches/hr';
-                velEl.className = 'vr-value ' + (vel > 5 ? 'green' : vel > 0 ? 'amber' : 'rose');
+                if (velEl) {
+                    velEl.textContent = vel + ' touches/hr';
+                    velEl.className = 'vr-value ' + (vel > 5 ? 'green' : vel > 0 ? 'amber' : 'rose');
+                }
 
                 // Last outreach
                 const lastEl = document.getElementById('vLastTouch');
-                if (vitals.last_outreach_ts) {
-                    lastEl.textContent = ago(vitals.last_outreach_ts) + ' (' + (vitals.last_outreach_channel || '?') + ')';
-                    const mins = Math.floor((Date.now() - new Date(vitals.last_outreach_ts).getTime()) / 60000);
-                    lastEl.className = 'vr-value ' + (mins < 30 ? 'green' : mins < 120 ? 'amber' : 'rose');
-                } else {
-                    lastEl.textContent = 'Never';
-                    lastEl.className = 'vr-value rose';
+                if (lastEl) {
+                    if (vitals.last_outreach_ts) {
+                        lastEl.textContent = ago(vitals.last_outreach_ts) + ' (' + (vitals.last_outreach_channel || '?') + ')';
+                        const mins = Math.floor((Date.now() - new Date(vitals.last_outreach_ts).getTime()) / 60000);
+                        lastEl.className = 'vr-value ' + (mins < 30 ? 'green' : mins < 120 ? 'amber' : 'rose');
+                    } else {
+                        lastEl.textContent = 'Never';
+                        lastEl.className = 'vr-value rose';
+                    }
                 }
 
                 // Channel breakdown
                 const ch = vitals.channel_breakdown || { email: 0, sms: 0, call: 0 };
                 const total = ch.email + ch.sms + ch.call;
-                document.getElementById('vChannelLabel').textContent = total > 0 ? total + ' total' : 'None';
-                if (total > 0) {
-                    const pEmail = Math.round(ch.email / total * 100);
-                    const pSms = Math.round(ch.sms / total * 100);
-                    const pCall = 100 - pEmail - pSms;
-                    document.getElementById('vChannelBar').innerHTML = `<div class="cb-seg cb-email" style="width:${pEmail}%"></div><div class="cb-seg cb-sms" style="width:${pSms}%"></div><div class="cb-seg cb-call" style="width:${pCall}%"></div>`;
-                    document.getElementById('vChannelLegend').innerHTML = `<span class="cl-email">Email ${ch.email}</span><span class="cl-sms">SMS ${ch.sms}</span><span class="cl-call">Call ${ch.call}</span>`;
-                } else {
-                    document.getElementById('vChannelBar').innerHTML = '';
-                    document.getElementById('vChannelLegend').innerHTML = '';
+                setTxt('vChannelLabel', total > 0 ? total + ' total' : 'None');
+                const cb = document.getElementById('vChannelBar');
+                const cl = document.getElementById('vChannelLegend');
+                if (cb && cl) {
+                    if (total > 0) {
+                        const pEmail = Math.round(ch.email / total * 100);
+                        const pSms = Math.round(ch.sms / total * 100);
+                        const pCall = 100 - pEmail - pSms;
+                        cb.innerHTML = `<div class="cb-seg cb-email" style="width:${pEmail}%"></div><div class="cb-seg cb-sms" style="width:${pSms}%"></div><div class="cb-seg cb-call" style="width:${pCall}%"></div>`;
+                        cl.innerHTML = `<span class="cl-email">Email ${ch.email}</span><span class="cl-sms">SMS ${ch.sms}</span><span class="cl-call">Call ${ch.call}</span>`;
+                    } else {
+                        cb.innerHTML = '';
+                        cl.innerHTML = '';
+                    }
                 }
 
                 // Inspector errors
                 const errEl = document.getElementById('vErrors');
                 const errCount = vitals.error_count_1h || 0;
-                errEl.textContent = errCount;
-                errEl.className = 'vr-value ' + (errCount === 0 ? 'green' : errCount < 5 ? 'amber' : 'rose');
+                if (errEl) {
+                    errEl.textContent = errCount;
+                    errEl.className = 'vr-value ' + (errCount === 0 ? 'green' : errCount < 5 ? 'amber' : 'rose');
+                }
 
                 // Prospector age
                 const prospEl = document.getElementById('vProspAge');
-                if (vitals.prospector_age_min != null) {
-                    const pm = vitals.prospector_age_min;
-                    prospEl.textContent = pm < 60 ? pm + 'm ago' : Math.floor(pm / 60) + 'h ' + (pm % 60) + 'm ago';
-                    prospEl.className = 'vr-value ' + (pm < 120 ? 'green' : pm < 360 ? 'amber' : 'rose');
-                } else {
-                    prospEl.textContent = 'Never';
-                    prospEl.className = 'vr-value rose';
+                if (prospEl) {
+                    if (vitals.prospector_age_min != null) {
+                        const pm = vitals.prospector_age_min;
+                        prospEl.textContent = pm < 60 ? pm + 'm ago' : Math.floor(pm / 60) + 'h ' + (pm % 60) + 'm ago';
+                        prospEl.className = 'vr-value ' + (pm < 120 ? 'green' : pm < 360 ? 'amber' : 'rose');
+                    } else {
+                        prospEl.textContent = 'Never';
+                        prospEl.className = 'vr-value rose';
+                    }
                 }
 
                 // Recent errors list
                 const errList = vitals.inspector_errors || [];
                 const errListEl = document.getElementById('vitalsErrorList');
-                if (errList.length) {
-                    errListEl.innerHTML = '<div style="font-size:9px;color:var(--text-muted);margin-bottom:4px;font-weight:600">RECENT ERRORS</div>' + errList.map(e => `<div class="ve-item"><span class="ve-source">${esc(e.source || '?')}</span><span class="ve-time">${ago(e.created_at)}</span></div>`).join('');
-                } else {
-                    errListEl.innerHTML = '';
+                if (errListEl) {
+                    if (errList.length) {
+                        errListEl.innerHTML = '<div style="font-size:9px;color:var(--text-muted);margin-bottom:4px;font-weight:600">RECENT ERRORS</div>' + errList.map(e => `<div class="ve-item"><span class="ve-source">${esc(e.source || '?')}</span><span class="ve-time">${ago(e.created_at)}</span></div>`).join('');
+                    } else {
+                        errListEl.innerHTML = '';
+                    }
                 }
 
                 // Alerts metric — use inspector errors instead of notifications
-                document.getElementById('mAlerts').textContent = errCount;
-                document.getElementById('mAlertsSub').textContent = errCount ? 'Inspector errors (1h)' : 'All clear';
+                setTxt('mAlerts', errCount);
+                setTxt('mAlertsSub', errCount ? 'Inspector errors (1h)' : 'All clear');
 
                 // === LEADS TABLE ===
                 const leads = dashData.leads || [];
@@ -2217,11 +2236,14 @@
             const data = dashData.dispatch_board;
             const board = data.active_jobs || [];
             const el = document.getElementById('boardBody');
-            document.getElementById('boardCount').textContent = board.length;
-            document.getElementById('mActiveJobs').textContent = board.length;
-            document.getElementById('mTechs').textContent = data.available_techs || 0;
-            document.getElementById('mTechsSub').textContent = `${data.total_techs || 0} Total Techs`;
 
+            const setTxt = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = t; };
+            setTxt('boardCount', board.length);
+            setTxt('mActiveJobs', board.length);
+            setTxt('mTechs', data.available_techs || 0);
+            setTxt('mTechsSub', `${data.total_techs || 0} Total Techs`);
+
+            if (!el) return;
             if (!board.length) {
                 el.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:20px;text-align:center">No active dispatch jobs</div>';
             } else {
