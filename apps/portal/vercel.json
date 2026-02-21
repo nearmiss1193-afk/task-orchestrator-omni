@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+        {
+            "source": "/landing/dashboard",
+            "destination": "/landing/dashboard.html"
+        }
+    ],
+    "cleanUrls": true
+}
