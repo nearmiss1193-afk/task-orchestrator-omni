@@ -349,6 +349,11 @@ def sms_inbound(data: dict = {}):
     
     print(f"[{datetime.now().strftime('%I:%M %p')}] SMS from {phone}: {message[:50]}...")
     
+    # --- HOTFIX: Prevent Sarah from replying to System Alerts ---
+    if "[HIGH]" in message or "Unknown error" in message or "🚨" in message or "System Alert" in message or "Autonomous Inspector" in message:
+        print(f"  🚫 Ignored system alert from hitting Sarah queue.")
+        return {"status": "ignored_system_alert", "sarah_reply": ""}
+        
     # ══════ SMART ROUTING (Dispatch / Review / Opt-Out) ══════
     import re as _re
     upper_msg = message.strip().upper()
