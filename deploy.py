@@ -1068,17 +1068,44 @@ def send_executive_pulse():
     from scripts.revenue_waterfall import get_waterfall_summary
     
     print("📱 EXECUTIVE PULSE: Generating daily report...")
-    
-    # Run the verified waterfall diagnostic
-    summary = get_waterfall_summary()
+    # Run the verified waterfall diagnostic using HTTP REST to prevent tcp/ip socket errors
+    try:
+        from modules.database.supabase_client import get_supabase
+        sb = get_supabase()
+        
+        # Outreach
+        res = sb.table('outbound_touches').select('id', count='exact').gte('ts', (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()).execute()
+        outreach_24h = getattr(res, 'count', len(getattr(res, 'data', [])))
+        
+        # Heartbeat
+        hb = sb.table('system_health_log').select('checked_at').order('checked_at', desc=True).limit(1).execute()
+        last_hb = getattr(hb, 'data', [{}])[0].get('checked_at', 'NONE')
+        if type(last_hb) == str and len(last_hb) > 16:
+            last_hb = last_hb[11:16] + " UTC"
+            
+        # Campaign Mode
+        cm = sb.table('system_state').select('status').eq('key', 'campaign_mode').execute()
+        campaign_status = getattr(cm, 'data', [{}])[0].get('status', 'UNKNOWN')
+        
+        # Eligible Leads
+        leads = sb.table('contacts_master').select('id', count='exact').in_('status', ['new', 'research_done']).execute()
+        leads_count = getattr(leads, 'count', len(getattr(leads, 'data', [])))
+        
+        summary = (
+            f"📈 Outreach (24h): {outreach_24h}\n"
+            f"💓 Last Pulse: {last_hb}\n"
+            f"🔄 Mode: {campaign_status}\n"
+            f"🎯 Pool: {leads_count} leads"
+        )
+    except Exception as e:
+        summary = f"❌ Waterfall Rest Error: {str(e)}"
     
     # Format SMS content (clean, high-signal)
-    now = datetime.now(timezone.utc)
     report = f"⚫ SOVEREIGN PULSE [{now.strftime('%m/%d')}]\n\n{summary}"
     report += "\n🚀 View Full Dashboard: https://aiserviceco.com/dashboard"
     
-    # Recipients
-    recipients = ["+13529368152", "+18638129362"]
+    # Recipients (Owner Only - Removed Wife/GF number)
+    recipients = ["+13529368152"]
     
     # GHL Notify Webhook
     ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"

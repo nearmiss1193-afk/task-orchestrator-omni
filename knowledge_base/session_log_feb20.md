@@ -29,3 +29,11 @@
 - **Sarah Control Panel:** Real-time visibility into Dispatch/Review boards on the dashboard.
 - **Sales Closer Prompts:** Upgrade Vapi to actively pitch the technician dispatch.
 - **Revenue Dashboard:** Link Stripe payments to Sarah's bookings for ROI proof.
+
+
+##  Dashboard Deployment Routing
+
+- **Host Platform:** Vercel (Project Name: `portal`, located in `apps/portal`)
+- **Production Domains:** `datamarketinglab.com`, `aiserviceco.com`
+- **Not Hosted On:** `lakelandfinds.com` (This is a separate Next.js project compiled differently)
+- **Build Errors:** The Vercel build can occasionally fail if Javascript attempts to strictly modify DOM elements that are no longer present in the updated HTML layout. Safe `null` checks (e.g., `if (el) el.textContent(...)`) are mandatory for all DOM manipulation functions like `fetchAll()`.

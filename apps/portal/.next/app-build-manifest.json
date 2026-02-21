@@ -15,6 +15,13 @@
       "static/css/bb2c8dbb3ef2b4b6.css",
       "static/chunks/app/layout-1ccbd4a778acf96a.js"
     ],
+    "/dashboard/page": [
+      "static/chunks/webpack-c2206fc24a580d89.js",
+      "static/chunks/fd9d1056-00bb33a35b5f8051.js",
+      "static/chunks/23-509d2c9a3fbd8547.js",
+      "static/chunks/main-app-08ba94ac8adc4638.js",
+      "static/chunks/app/dashboard/page-dda93ce4c08e6ccc.js"
+    ],
     "/page": [
       "static/chunks/webpack-c2206fc24a580d89.js",
       "static/chunks/fd9d1056-00bb33a35b5f8051.js",

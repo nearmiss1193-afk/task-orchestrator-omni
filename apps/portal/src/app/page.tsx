@@ -1,9 +1,9 @@
 "use client";
-
 import { ChatInterface } from "@/components/chat-interface";
 import { CRMView } from "@/components/crm-view";
 import { Shield, Radio, LayoutDashboard, Settings, UserCircle } from "lucide-react";
 import React from "react";
+import Link from "next/link";
 
 export default function Home() {
     const [currentView, setCurrentView] = React.useState('command');
@@ -99,7 +99,39 @@ export default function Home() {
                     <NavItem icon={<LayoutDashboard />} label="Command" active={currentView === 'command'} onClick={() => setCurrentView('command')} />
                     <NavItem icon={<Radio />} label="Communications" active={currentView === 'communications'} onClick={() => setCurrentView('communications')} />
                     <NavItem icon={<UserCircle />} label="Personnel" active={currentView === 'personnel'} onClick={() => setCurrentView('personnel')} />
-                    <NavItem icon={<Settings />} label="Settings" active={currentView === 'settings'} onClick={() => setCurrentView('settings')} />
+
+                    <div className="mt-4 pt-4 border-t border-white/10 px-2 flex flex-col gap-2">
+                        <span className="text-xs text-zinc-500 font-bold px-2 uppercase tracking-wider mb-1">AI Services</span>
+                        <Link href="/ai-secretary" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                            🤖 AI Secretary
+                        </Link>
+                        <Link href="/automation-workflows" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                            ⚡ Workflows
+                        </Link>
+                        <Link href="/custom-ai-solutions" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
+                            ⚙️ Custom AI
+                        </Link>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-white/10 px-2 flex flex-col gap-2">
+                        <span className="text-xs text-zinc-500 font-bold px-2 uppercase tracking-wider mb-1">Local Directory</span>
+                        <Link href="/lakeland/plumbers" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-amber-500 hover:text-amber-400 hover:bg-white/5 transition-colors bg-amber-900/10 border border-amber-500/20">
+                            🌴 Lakeland Finds
+                        </Link>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-white/10 px-2 flex flex-col gap-2">
+                        <span className="text-xs text-zinc-500 font-bold px-2 uppercase tracking-wider mb-1">Growth</span>
+                        <Link href="/assessment" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-bold text-blue-400 bg-blue-900/10 border border-blue-500/20 hover:bg-blue-900/30 transition-colors">
+                            <div className="flex items-center gap-3">
+                                📈 AI Readiness Score
+                            </div>
+                        </Link>
+                    </div>
+
+                    <div className="mt-auto">
+                        <NavItem icon={<Settings />} label="Settings" active={currentView === 'settings'} onClick={() => setCurrentView('settings')} />
+                    </div>
                 </nav>
 
                 <div className="px-4 py-4 border-t border-white/10">

@@ -19,18 +19,26 @@ Setup:
 
 import os
 import json
+import requests
 from datetime import datetime, timedelta
-from social_post_api import SocialPost
 
 # ─── Config ───
 # ⚠️ LAKELANDFINDS.COM ONLY — This API key belongs to danc@lakelandfinds.com
 # DO NOT replace with any other Ayrshare key. Each brand gets its own script.
 AYRSHARE_API_KEY = os.environ.get("AYRSHARE_LAKELANDFINDS_KEY", "E8C18282-ED4F4FB3-AD1EF40B-76D7872A")
-PLATFORMS = ["facebook", "instagram"]  # LakelandFinds accounts ONLY
+
+# Complete Omnichannel Roster
+TEXT_PLATFORMS = ["facebook", "instagram", "linkedin", "twitter"]
+VIDEO_PLATFORMS = ["tiktok", "snapchat"]
+PLATFORMS = TEXT_PLATFORMS + VIDEO_PLATFORMS
+
 BASE_URL = "https://www.lakelandfinds.com"  # DO NOT change
 BRAND = "LakelandFinds"  # Safety check — used in runtime guard
 
-social = SocialPost(AYRSHARE_API_KEY)
+AYRSHARE_HEADERS = {
+    "Authorization": f"Bearer {AYRSHARE_API_KEY}",
+    "Content-Type": "application/json"
+}
 
 
 def _brand_guard():
@@ -182,16 +190,26 @@ def schedule_all_posts(start_date=None):
         # Truncate display text
         preview = post["text"][:80].replace("\n", " ") + "..."
 
+        # Smart Platform Routing: TikTok & Snapchat REQUIRE media.
+        has_media = bool(post.get("mediaUrls"))
+        target_platforms = PLATFORMS if has_media else TEXT_PLATFORMS
+
         print(f"\n[{i+1}/{len(POSTS)}] Day {post['day']+1} @ {post['hour']}:00 ET")
         print(f"  📝 {preview}")
+        print(f"  📱 Routing to: {', '.join(target_platforms)}")
         print(f"  🕐 Scheduled: {schedule_iso}")
 
         try:
-            response = social.post({
+            payload = {
                 "post": post["text"],
-                "platforms": PLATFORMS,
+                "platforms": target_platforms,
                 "scheduleDate": schedule_iso,
-            })
+            }
+            if has_media:
+                payload["mediaUrls"] = post["mediaUrls"]
+                
+            res = requests.post("https://app.ayrshare.com/api/post", headers=AYRSHARE_HEADERS, json=payload)
+            response = res.json()
 
             if response.get("status") == "success":
                 print(f"  ✅ Scheduled! ID: {response.get('id', 'N/A')}")
@@ -220,10 +238,14 @@ def post_now(index=0):
     post = POSTS[index]
     print(f"📤 Posting NOW: {post['text'][:80]}...")
 
-    response = social.post({
+    payload = {
         "post": post["text"],
         "platforms": PLATFORMS,
-    })
+        "profileKeys": [] # If multiple brands are used on one key, specify here
+    }
+    
+    res = requests.post("https://app.ayrshare.com/api/post", headers=AYRSHARE_HEADERS, json=payload)
+    response = res.json()
 
     print(f"Response: {json.dumps(response, indent=2)}")
     return response

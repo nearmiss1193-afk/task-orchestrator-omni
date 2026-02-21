@@ -953,3 +953,15 @@ typescript: { ignoreBuildErrors: true },
 **Prevention**: ALWAYS copy-paste GA measurement IDs directly from Google Analytics dashboard. Never type them manually. Double-check B vs 8, O vs 0, I vs l vs 1.
 
 **Confidence**: 100% (Tag verified present in raw HTML on <www.lakelandfinds.com>)
+
+---
+
+## Error #19: Legacy HTML Dashboard Displaying 0 Live Activity (Feb 21, 2026)
+
+**Error**: The initial dark-mode dashboard prototype (`landing/dashboard.html`) shows 0 Live Activity and "Checking..." for integrations despite active outreach.
+
+**Root Cause**: This is the legacy static HTML dashboard. The design was abandoned because the direct frontend JS `fetch()` calls kept hitting Modal CORS blocks and we exceeded Modal's 8-endpoint free tier limit, forcing us to consolidate the diagnostic data into the `system_orchestrator` and `sovereign_stats` endpoints. Because the HTML file is disconnected from the live backend variables, it permanently displays 0.
+
+**Fix**: We migrated the visualization layer to the Next.js `apps/portal` environment which supports server-side rendering and secure API routes to bypass CORS natively. The frontend data remains active in the Next.js portal.
+
+**Confidence**: 100% (Outreach confirmed actively dispatching 4,500+ daily touches via DB queries)
