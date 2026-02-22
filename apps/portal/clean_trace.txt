@@ -1,0 +1,9 @@
+> [debug] [2026-02-22T05:21:31.315Z] Found config in file "C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal\vercel.json"
+Vercel CLI 50.14.0
+> [debug] [2026-02-22T05:21:31.319Z] user supplied known subcommand: "build"
+> [debug] [2026-02-22T05:21:31.384Z] Arrived at home directory
+> [debug] [2026-02-22T05:21:31.542Z] Found git root via "git rev-parse --show-toplevel" - detected "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified" as repo root
+? No Project Settings found locally. Run `vercel pull` for retrieving them?
+(Y/n)[1A[83G[1B
+[?25h> [debug] [2026-02-22T05:46:13.854Z] Valid access token, skipping token refresh.
+> [debug] [2026-02-22T05:46:13.966Z] #1 → GET https://api.vercel.com/v2/user

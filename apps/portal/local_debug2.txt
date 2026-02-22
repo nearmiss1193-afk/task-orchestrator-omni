@@ -1,0 +1,138 @@
+> [debug] [2026-02-22T04:54:55.303Z] Found config in file "C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal\vercel.json"
+Vercel CLI 50.14.0
+> [debug] [2026-02-22T04:54:55.309Z] user supplied known subcommand: "build"
+> [debug] [2026-02-22T04:54:55.373Z] Arrived at home directory
+> [debug] [2026-02-22T04:54:55.507Z] Found git root via "git rev-parse --show-toplevel" - detected "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified" as repo root
+WARN! Build not running on Vercel. System environment variables will not be available.
+> [debug] [2026-02-22T04:54:55.519Z] Failed loading environment variables: Error: ENOENT: no such file or directory, open 'C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal\.vercel\.env.preview.local'
+> [debug] [2026-02-22T04:54:55.539Z] Locating files C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal
+> [debug] [2026-02-22T04:54:55.541Z] Ignoring C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal\.gitignore
+> [debug] [2026-02-22T04:54:55.541Z] Ignoring C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal\.next
+> [debug] [2026-02-22T04:54:55.541Z] Ignoring C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal\.vercel
+> [debug] [2026-02-22T04:54:55.542Z] Ignoring C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal\node_modules
+> [debug] [2026-02-22T04:54:55.544Z] Locating files C:\Users\nearm\.gemini\antigravity\scratch\empire-unified\apps\portal [4ms]
+> [debug] [2026-02-22T04:54:55.706Z] Imported Builder "@vercel/next" from "C:\Users\nearm\AppData\Roaming\npm\node_modules\vercel\node_modules\@vercel\next"
+> [debug] [2026-02-22T04:54:55.720Z] Setting env VERCEL_PROJECT_SETTINGS_NODE_VERSION to "24.x"
+> [debug] [2026-02-22T04:54:55.720Z] Building entrypoint "package.json" with "@vercel/next"
+Warning: Due to "engines": { "node": "20.x" } in your `package.json` file, the Node.js Version defined in your Project Settings ("24.x") will not apply, Node.js Version "20.x" will be used instead. Learn More: https://vercel.link/node-version
+WARNING: You should not upload the `.next` directory.
+Installing dependencies...
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: 'empire-client-portal@0.1.0',
+npm warn EBADENGINE   required: { node: '20.x' },
+npm warn EBADENGINE   current: { node: 'v22.18.0', npm: '10.9.3' }
+npm warn EBADENGINE }
+
+up to date in 831ms
+
+154 packages are looking for funding
+  run `npm fund` for details
+Detected Next.js version: 14.2.14
+Running "npm run build"
+
+> empire-client-portal@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.14
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/39) ...
+   Generating static pages (9/39) 
+   Generating static pages (19/39) 
+   Generating static pages (29/39) 
+ ✓ Generating static pages (39/39)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                        Size     First Load JS
+┌ ○ /                                              125 kB          219 kB
+├ ○ /_not-found                                    873 B          88.1 kB
+├ ○ /ai-secretary                                  189 B          94.2 kB
+├ ● /ai-secretary/[industry]                       188 B          94.2 kB
+├   ├ /ai-secretary/plumbers
+├   ├ /ai-secretary/hvac
+├   ├ /ai-secretary/med-spas
+├   └ [+7 more paths]
+├ ƒ /api/chat                                      0 B                0 B
+├ ƒ /api/create-checkout-session                   0 B                0 B
+├ ƒ /api/crm/clients                               0 B                0 B
+├ ƒ /api/grade-assessment                          0 B                0 B
+├ ƒ /api/leads                                     0 B                0 B
+├ ƒ /api/memory                                    0 B                0 B
+├ ƒ /api/reserve                                   0 B                0 B
+├ ƒ /api/stats                                     0 B                0 B
+├ ƒ /api/status                                    0 B                0 B
+├ ƒ /api/stripe-webhook                            0 B                0 B
+├ ƒ /api/vapi/webhook                              0 B                0 B
+├ ○ /assessment                                    2.15 kB        96.1 kB
+├ ○ /automation-workflows                          189 B          94.2 kB
+├ ● /automation-workflows/[workflow]               189 B          94.2 kB
+├   ├ /automation-workflows/speed-to-lead
+├   ├ /automation-workflows/database-reactivation
+├   ├ /automation-workflows/review-generation
+├   └ [+3 more paths]
+├ ○ /custom-ai-solutions                           189 B          94.2 kB
+├ ● /custom-ai-solutions/[solution]                189 B          94.2 kB
+├   ├ /custom-ai-solutions/internal-dashboards
+├   ├ /custom-ai-solutions/quote-calculators
+├   ├ /custom-ai-solutions/support-chatbots
+├   └ [+3 more paths]
+└ ○ /dashboard                                     7.08 kB        94.3 kB
++ First Load JS shared by all                      87.2 kB
+  ├ chunks/117-7b23d193a711fee8.js                 31.6 kB
+  ├ chunks/fd9d1056-8fef90fb5a0b2194.js            53.6 kB
+  └ other shared chunks (total)                    1.95 kB
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses getStaticProps)
+ƒ  (Dynamic)  server-rendered on demand
+
+Traced Next.js server files in: 301.311ms
+Tracing entries due to missing build traces:
+[
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/_not-found/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/dashboard/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/ai-secretary/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/ai-secretary/[industry]/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/automation-workflows/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/assessment/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/automation-workflows/[workflow]/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/custom-ai-solutions/[solution]/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/custom-ai-solutions/page.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/create-checkout-session/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/grade-assessment/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/memory/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/reserve/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/leads/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/vapi/webhook/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/stripe-webhook/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/stats/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/crm/clients/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/chat/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/status/route.js"
+]: 725.941ms
+Created all serverless functions in: 794.159ms
+Error: Unable to find lambda for route: /automation-workflows/appointment-reminders
+> [debug] [2026-02-22T04:55:13.673Z] Vercel CLI 50.14.0
+
+> [debug] [2026-02-22T04:55:13.975Z] Telemetry event tracked
+> [debug] [2026-02-22T04:55:14.054Z] Telemetry subprocess exited with code 0
+> [debug] [2026-02-22T04:55:14.055Z] Spawning C:\Users\nearm\AppData\Roaming\npm\node_modules\vercel\dist\get-latest-worker.cjs
+> '[debug] [2026-02-22T04:55:14.110Z] Notifying parent we're ready
+> '[debug] [2026-02-22T04:55:14.113Z] Received message from parent: {
+  cacheFile: 'C:\\Users\\nearm\\AppData\\Local\\com.vercel.cli\\Cache\\package-updates\\vercel-latest.json',
+  distTag: 'latest',
+  name: 'vercel',
+  updateCheckInterval: 86400000
+}
+> '[debug] [2026-02-22T04:55:14.113Z] Disconnecting from parent
+> '[debug] [2026-02-22T04:55:14.114Z] Checking lock file: C:\Users\nearm\AppData\Local\com.vercel.cli\Cache\package-updates\vercel-latest.lock
+> '[debug] [2026-02-22T04:55:14.115Z] Found lock file with pid: 66584
+> '[debug] [2026-02-22T04:55:14.116Z] Resetting lock file: Error: kill ESRCH
+> '[debug] [2026-02-22T04:55:14.116Z] Initializing lock file with pid 7020
+> '[debug] [2026-02-22T04:55:14.117Z] Fetching https://registry.npmjs.org/-/package/vercel/dist-tags
