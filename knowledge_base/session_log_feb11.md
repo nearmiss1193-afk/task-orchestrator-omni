@@ -35,3 +35,32 @@ Full system resurrection and income-priority hardening in one session:
 - Self-healing heartbeat detects stalls within 30 min
 - NULL `last_contacted_at` auto-fixed by recycler (50/cycle)
 - All new checks are crash-safe (independent try/except)
+
+***
+
+# Session Learnings — Feb 22, 2026 (Phase 10: Human-in-the-Loop Architecture)
+
+## What Happened
+
+Replaced the conceptual "Hard Killswitch" with a precision-engineered **Sovereign Override Matrix** and **Anti-Hallucination Queue** on the Vercel Command Center Dashboard.
+
+1. **Anti-Hallucination Queue Installed:** Built the `VerificationQueue` React component. It instantly polls Neon for pending Ayrshare drafts (`social_drafts`) and unverified inbound replies (`contacts_master`).
+2. **Global Override Commlink Built:** Built the `OverrideConsole` chat module and the `/api/c2-override` Next.js Edge route.
+3. **Zero-Trust PIN Auth:** The Override Edge API strictly demands the `1175` PIN prefix to authenticate execution payloads.
+4. **React Client Fatal Exception Fixed:** Patched a severe React crash across `/inbox` and `/campaigns` caused by leftover Python API syntax (`supabase.table()` converted correctly to `.from()`).
+
+## What We Learned
+
+| # | Lesson | Sovereign Law |
+| - | ------ | ------------- |
+| 1 | AI Hallucinations require physical interception before execution | "Never automate calendar booking without human sentiment verification" |
+| 2 | Hard shut-offs damage pipeline integrity | "Graceful component overrides > total system termination" |
+| 3 | Python Supabase syntax (`.table`) is fatal inside Next.js Hooks | "Strictly audit JS SDK `.from()` methodology on the Edge" |
+
+## Action Taken
+
+- Deployed the `VerificationQueue` checklist to `page.tsx`.
+- Deployed the `OverrideConsole` terminal to `page.tsx`.
+- Pushed Edge API `/api/c2-override` to Vercel production to process the `1175` PIN.
+- Purged legacy Python Database calls from `campaigns` and `inbox` React schemas.
+- Triggered Vercel `--prod --force` deployment to bake in the Phase 10 matrices.

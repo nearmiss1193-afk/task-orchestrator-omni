@@ -97,8 +97,8 @@ export function OverrideConsole() {
                             <span className="uppercase">{log.sender}</span>
                         </div>
                         <div className={`break-words ${log.sender === 'user' ? 'text-zinc-300'
-                                : log.isError ? 'text-red-400 font-bold'
-                                    : 'text-emerald-400'
+                            : log.isError ? 'text-red-400 font-bold'
+                                : 'text-emerald-400'
                             }`}>
                             {log.sender === 'user' ? '> ' + log.text : log.text}
                         </div>
@@ -128,6 +128,7 @@ export function OverrideConsole() {
                 </div>
                 <button
                     type="submit"
+                    title="Execute Override"
                     disabled={isLoading || !input.trim()}
                     className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded font-mono font-bold text-xs uppercase tracking-wider transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shrink-0"
                 >
