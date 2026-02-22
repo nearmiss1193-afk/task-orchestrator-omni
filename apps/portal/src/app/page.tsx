@@ -1,6 +1,8 @@
 "use client";
 import { ChatInterface } from "@/components/chat-interface";
 import { CRMView } from "@/components/crm-view";
+import { VerificationQueue } from "@/components/verification-queue";
+import { OverrideConsole } from "@/components/override-console";
 import { Shield, Radio, LayoutDashboard, Settings, UserCircle, Mail, PieChart, Mic, Share2 } from "lucide-react";
 import React from "react";
 import Link from "next/link";
@@ -80,6 +82,12 @@ export default function Home() {
                             <StatusCard label="System Load" value={stats.system_load} />
                             <StatusCard label="Network" value={stats.network} />
                             <StatusCard label="Notifications" value={stats.notifications} />
+                        </div>
+
+                        {/* Phase 10 matrices */}
+                        <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <VerificationQueue />
+                            <OverrideConsole />
                         </div>
                     </div>
                 );
