@@ -77,6 +77,15 @@ def ghl_webhook_logic(payload: dict):
                     "pipeline_stage": stage_id
                 }).eq("ghl_contact_id", contact_id).execute()
                 
+                # Zero-Touch Onboarding Trigger
+                if sb_status == "customer":
+                    try:
+                        from deploy import zero_touch_onboarding
+                        print(f"🚀 GHL Webhook: Spawning Zero-Touch Onboarding for {contact_id}")
+                        zero_touch_onboarding.spawn(contact_id)
+                    except Exception as ze:
+                        print(f"⚠️ Failed to spawn Zero-Touch Onboarding: {ze}")
+                
             return {"status": "opportunity_synced", "contact_id": contact_id, "stage": stage_id}
 
         return {"status": "ignored", "type": event_type}

@@ -1,0 +1,35 @@
+{
+  "total": 3,
+  "patches": [
+    {
+      "id": 3,
+      "error_type": "ImportError",
+      "file_path": "unknown",
+      "status": "failed",
+      "commit_sha": null,
+      "commit_url": null,
+      "created_at": "2026-02-22T00:58:24.647Z",
+      "ai_reasoning": "Failed to prepare repository: Command failed: git clone https://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@github.com/nearmiss1193-afk/empire-unified-backup.git /tmp/empire-unified-backup\n/bin/sh: 1: gi..."
+    },
+    {
+      "id": 2,
+      "error_type": "ModuleNotFoundError",
+      "file_path": "unknown",
+      "status": "failed",
+      "commit_sha": null,
+      "commit_url": null,
+      "created_at": "2026-02-22T00:55:58.492Z",
+      "ai_reasoning": "Failed to prepare repository: Command failed: git clone https://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@github.com/nearmiss1193-afk/empire-unified-backup.git /tmp/empire-unified-backup\n/bin/sh: 1: gi..."
+    },
+    {
+      "id": 1,
+      "error_type": "KeyError",
+      "file_path": "unknown",
+      "status": "failed",
+      "commit_sha": null,
+      "commit_url": null,
+      "created_at": "2026-02-22T00:51:46.791Z",
+      "ai_reasoning": "Failed to prepare repository: Command failed: git clone https://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@github.com/nearmiss1193-afk/empire-unified-backup.git /tmp/empire-unified-backup\n/bin/sh: 1: gi..."
+    }
+  ]
+}

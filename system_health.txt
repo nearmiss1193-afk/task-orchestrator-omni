@@ -1,20 +1,20 @@
 === HEARTBEAT ===
-  2026-02-19T19:43:08.348709+00:00 | alert
-  2026-02-19T19:34:16.350078+00:00 | alert
-  2026-02-19T19:23:43.957821+00:00 | alert
-  2026-02-19T19:22:43.122695+00:00 | alert
-  2026-02-19T19:21:51.194744+00:00 | alert
+  2026-02-22T01:20:07.514432+00:00 | ok
+  2026-02-22T01:20:05.306758+00:00 | ok
+  2026-02-22T01:15:07.390412+00:00 | ok
+  2026-02-22T01:15:05.75573+00:00 | ok
+  2026-02-22T01:10:09.822872+00:00 | ok
 
 === PROSPECTOR ===
-  Last run: NOT RECORDED
+  Last run: working
 
 === CAMPAIGN ===
   Mode: working
 
 === RECENT OUTREACH ===
-  2026-02-19T20:05:13.64935+00:00 | call | failed | Martin Gutter Installer Specialists
-  2026-02-19T20:05:13.112057+00:00 | call | failed | Rodriguez Chiropractor Clinic
-  2026-02-19T20:05:12.223745+00:00 | call | failed | Rodriguez Tree Trimmer Pros
+  2026-02-21T13:05:23.620685+00:00 | sms | dispatched | Head of the Class Learning Center- private Prek,K-8
+  2026-02-21T13:00:22.628499+00:00 | sms | dispatched | Northside Christian Preschool
+  2026-02-21T13:00:20.242107+00:00 | sms | dispatched | John Locke Painting, Inc
 
 === PIPELINE ===
-  New leads ready: 3103
+  New leads ready: 3067

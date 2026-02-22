@@ -1683,6 +1683,12 @@ from workers.prospector import run_prospecting_cycle as prospector_logic
 from workers.sunbiz_prospector import run_sunbiz_sync as sunbiz_logic
 from scripts.ingest_manus import ingest_manus_leads as manus_logic
 from workers.sunbiz_delta import run_sunbiz_delta_watch as delta_logic
+from workers.zero_touch_onboarding import trigger_zero_touch
+
+@app.function(image=image, secrets=[VAULT], timeout=600)
+def zero_touch_onboarding(contact_id: str):
+    """Zero-Touch Fulfillment Engine triggered by GHL Opportunity Won events."""
+    return trigger_zero_touch(contact_id)
 
 @app.function(image=image, secrets=[VAULT])
 def scheduled_sunbiz_delta_watch():

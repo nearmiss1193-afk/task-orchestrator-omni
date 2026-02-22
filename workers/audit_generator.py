@@ -19,8 +19,6 @@ import base64
 import requests
 import traceback
 from urllib.parse import urlparse
-from google import genai # 2026 GenAI SDK
-
 
 # ──────────────────────────────────────────────────────────
 #  PAGESPEED INSIGHTS (Free, no key required for basic use)
@@ -234,6 +232,7 @@ def generate_veo_teaser(company_name: str, pagespeed_score: int) -> str:
     This acts as a high-leverage 'Pattern Interrupt' in SMS/Email.
     """
     try:
+        from google import genai
         # Initialize GenAI Client (requires VEO_PRO_KEY in environment)
         api_key = os.environ.get("VEO_PRO_KEY") or os.environ.get("GOOGLE_API_KEY")
         if not api_key:
