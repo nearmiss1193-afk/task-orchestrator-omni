@@ -1,3 +1,4 @@
+" use client;
 
 import React, { useEffect, useState } from 'react';
 import { Loader2, RefreshCw, Send, MessageSquare } from 'lucide-react';

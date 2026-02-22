@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fai-secretary\u002F[industry]","\u002Fautomation-workflows\u002F[workflow]","\u002Fcustom-ai-solutions\u002F[solution]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
