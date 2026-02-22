@@ -1,7 +1,8 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req: Request) {
+    const _url = new URL(req.url);
     try {
         // Fallback for Vercel deployment where server_state.json is not accessible
         const statusData = {

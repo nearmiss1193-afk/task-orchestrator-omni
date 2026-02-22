@@ -8,7 +8,8 @@ function getSupabase(): SupabaseClient | null {
     return createClient(url, key);
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+    const _url = new URL(req.url);
     const supabase = getSupabase();
 
     // Return mock data if Supabase not configured
