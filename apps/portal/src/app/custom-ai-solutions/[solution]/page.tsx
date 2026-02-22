@@ -1,4 +1,3 @@
-export const dynamicParams = false;
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -10,17 +9,6 @@ export async function generateMetadata({ params }: { params: { solution: string 
         title: `${formattedSolution} Development | Custom AI Service Co`,
         description: `We design, train, and deploy enterprise-grade ${formattedSolution} specifically adapted to your proprietary business data and operational workflows.`,
     };
-}
-
-export function generateStaticParams() {
-    return [
-        { solution: 'internal-dashboards' },
-        { solution: 'quote-calculators' },
-        { solution: 'support-chatbots' },
-        { solution: 'crm-integrations' },
-        { solution: 'lead-scoring' },
-        { solution: 'voice-synthesis' }
-    ];
 }
 
 export default function CustomAISolutionDetailPage({ params }: { params: { solution: string } }) {

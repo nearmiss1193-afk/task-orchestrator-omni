@@ -1,4 +1,3 @@
-export const dynamicParams = false;
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -10,17 +9,6 @@ export async function generateMetadata({ params }: { params: { workflow: string 
         title: `${formattedWorkflow} Automation Strategy | AI Service Co`,
         description: `Learn how installing the ${formattedWorkflow} workflow creates autonomous revenue for your local service business without hiring additional staff.`,
     };
-}
-
-export function generateStaticParams() {
-    return [
-        { workflow: 'speed-to-lead' },
-        { workflow: 'database-reactivation' },
-        { workflow: 'review-generation' },
-        { workflow: 'missed-call-text-back' },
-        { workflow: 'appointment-reminders' },
-        { workflow: 'invoice-chasing' }
-    ];
 }
 
 export default function AutomationWorkflowDetailPage({ params }: { params: { workflow: string } }) {
