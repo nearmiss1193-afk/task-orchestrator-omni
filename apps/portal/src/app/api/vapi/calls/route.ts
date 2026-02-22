@@ -10,7 +10,10 @@ export async function GET() {
             return NextResponse.json({ error: 'Missing VAPI_PRIVATE_KEY in Edge Environment.' }, { status: 500 });
         }
 
-        const response = await fetch('https://api.vapi.ai/call?limit=50', {
+        // Specifically filter to the outbound Sovereign Assistant (ignoring Rachael inbound)
+        const sovereignPhoneId = process.env.VAPI_PHONE_NUMBER_ID || '8a7f18bf-8c1e-4eaf-8fb9-53d308f54a0e';
+
+        const response = await fetch(`https://api.vapi.ai/call?limit=50&phoneNumberId=${sovereignPhoneId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${vapiKey}`
