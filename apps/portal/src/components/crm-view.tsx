@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Loader2, RefreshCw, Send, MessageSquare } from 'lucide-react';
+import { supabase } from '@/lib/supabaseClient';
 
 interface Client {
     name: string;
@@ -19,17 +20,27 @@ export function CRMView() {
     const fetchClients = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/crm/clients');
-            const data = await res.json();
-            setClients(data.clients || []);
+            const { data, error } = await supabase
+                .table('contacts_master')
+                .select('id, company_name, phone, industry, status, created_at')
+                .in('status', ['new', 'research_done', 'contacted', 'replied'])
+                .order('created_at', { ascending: false })
+                .limit(20);
+
+            if (error) throw error;
+
+            const formatted = (data || []).map((d: any) => ({
+                name: d.company_name || d.id.substring(0, 8),
+                phone: d.phone || 'N/A',
+                industry: d.industry || 'General',
+                status: d.status || 'New',
+                created_at: d.created_at
+            }));
+
+            setClients(formatted);
         } catch (e) {
-            console.error("API Fetch Failed, using Fallback Data", e);
-            // Fallback Seed Data for Display
-            setClients([
-                { name: "David Miller", phone: "555-0123", industry: "HVAC", status: "New", created_at: new Date().toISOString() },
-                { name: "Sarah Connor", phone: "555-0999", industry: "Plumbing", status: "Qualified", created_at: new Date(Date.now() - 86400000).toISOString() },
-                { name: "Mike Ross", phone: "555-0777", industry: "Legal", status: "Closed", created_at: new Date(Date.now() - 172800000).toISOString() }
-            ]);
+            console.error("Supabase Database Telemetry Failed", e);
+            setClients([]);
         } finally {
             setLoading(false);
         }
