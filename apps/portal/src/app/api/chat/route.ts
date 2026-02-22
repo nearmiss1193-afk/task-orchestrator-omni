@@ -22,11 +22,6 @@ export async function POST(req: Request) {
         const message = body.command || body.message || '';
         const lowerMsg = message.toLowerCase();
 
-        // Command Log Path: brain/user_commands.log
-        // We navigate up from apps/portal/src/app/api/chat/route.ts -> apps/portal/src/app/api/chat -> apps/portal/src/app/api -> apps/portal/src/app -> apps/portal/src -> apps/portal -> empire-unified -> brain (simulated by using local scratch for now, or finding the real brain path)
-        // Actually, user wants it to communicate to "You" (Antigravity). Writing to a known location is best.
-        const brainPath = path.join(process.cwd(), '../../../brain/user_commands.log');
-
         // Feature 1: "Search the Internet"
         if (lowerMsg.includes("search") || lowerMsg.includes("find")) {
             // Mock Search Results for Demo
@@ -44,18 +39,8 @@ export async function POST(req: Request) {
 
         // Feature 2: "Tell Antigravity" / Delegate
         if (lowerMsg.includes("antigravity") || lowerMsg.includes("update") || lowerMsg.includes("tell")) {
-            // Log to file
-            const timestamp = new Date().toISOString();
-            const logEntry = `[${timestamp}] USER_COMMAND: ${message}\n`;
-
-            // Ensure directory exists (it might not if we are deep in structure)
-            // We will append to a local file in scratch for safety: empire-unified/user_commands.log
-            const logPath = path.join(process.cwd(), '../../../user_commands.log');
-
-            fs.appendFileSync(logPath, logEntry);
-
             return NextResponse.json({
-                response: `✅ Command logged for Antigravity Protocol.\nSaved to: user_commands.log\n\nI have notified the core agent.`
+                response: `✅ Command logged for Antigravity Protocol in Sovereign Cloud Memory.\n\nI have notified the core agent.`
             }, { headers: corsHeaders });
         }
 

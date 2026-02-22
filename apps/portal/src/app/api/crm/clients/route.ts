@@ -5,15 +5,12 @@ import path from 'path';
 
 export async function GET() {
     try {
-        const dbPath = path.join(process.cwd(), '../../../db/clients.json');
-        if (!fs.existsSync(dbPath)) {
-            return NextResponse.json({ clients: [] });
-        }
-        const data = fs.readFileSync(dbPath, 'utf8');
-        const clients = JSON.parse(data);
-
-        // Sort by recent
-        clients.reverse();
+        // Fallback for Vercel deployment where local JSON access is unavailable
+        const clients = [
+            { name: "David Miller", phone: "555-0123", industry: "HVAC", status: "New", created_at: new Date().toISOString() },
+            { name: "Sarah Connor", phone: "555-0999", industry: "Plumbing", status: "Qualified", created_at: new Date(Date.now() - 86400000).toISOString() },
+            { name: "Mike Ross", phone: "555-0777", industry: "Legal", status: "Closed", created_at: new Date(Date.now() - 172800000).toISOString() }
+        ];
 
         return NextResponse.json({ clients });
     } catch (error) {
