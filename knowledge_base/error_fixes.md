@@ -965,3 +965,41 @@ typescript: { ignoreBuildErrors: true },
 **Fix**: We migrated the visualization layer to the Next.js `apps/portal` environment which supports server-side rendering and secure API routes to bypass CORS natively. The frontend data remains active in the Next.js portal.
 
 **Confidence**: 100% (Outreach confirmed actively dispatching 4,500+ daily touches via DB queries)
+
+---
+
+## Vercel Build Exit 1: Missing Lambda (Feb 22, 2026)
+
+**Error Message**: `Unable to find lambda... for /custom-ai-solutions/[solution]/page.tsx`
+
+**Location**: Vercel Cloud Build (Node 20.x Edge)
+
+**Root Cause**: A severe conflict within Next.js SSG rendering on Vercel. Dynamic routes utilizing `generateStaticParams` were attempting to be pre-compiled into static HTML, while the enclosing `layout.tsx` or API interfaces were forcing SSR dynamic execution. Vercel's bundler became confused and simply dropped the Serverless Function build entirely, resulting in 404s for entire dynamic sub-directories.
+
+**Fix**:
+1. Remove `export async function generateStaticParams()` entirely from the dynamic page files.
+2. Remove any static directives like `export const dynamicParams = false;` from the dynamic page files.
+3. Allow the Next.js compiler to completely default back to dynamic SSR (Server-Side Rendering) for the routes.
+
+**Prevention**: When building complex dynamic directory trees in Next.js Monorepos on Vercel, do not attempt to force static HTML compilation on routes that rely on dynamic routing parameters or database fetches. Rely on SSR or ISR instead.
+
+**Confidence**: 100%
+
+---
+
+## Vercel Build Exit 1: ENOENT routes-manifest.json (Feb 22, 2026)
+
+**Error Message**: `Error: ENOENT: no such file or directory... .next/routes-manifest.json`
+
+**Location**: Vercel Cloud Build 
+
+**Root Cause**: Attempting to fix the "Missing Lambda" bug by indiscriminately downgrading `next` from `14.2.14` to `14.2.3` in the `package.json` caused a fatal desync between the Turborepo workspace lockfile and the Vercel `@vercel/nft` trace compiler. The `npm ci` phase succeeded, but the underlying Vercel Edge parser crashed because it was looking for a `routes-manifest` file that the downgraded Next.js compiler failed to generate or inappropriately purged.
+
+**Fix**:
+1. Restore `next` and `eslint-config-next` back to `^14.2.14` in `package.json`.
+2. Do NOT attempt to fix Vercel compilation bugs by downgrading minor versions of Next 14.
+3. Crucially: Always run `npm install` after modifying `package.json` to synchronize the `package-lock.json` workspace tree. Vercel relies strictly on the lockfile during `npm ci`, and altering the `package.json` without updating the lockfile guarantees an Edge crash.
+
+**Prevention**: Never downgrade core framework dependencies purely as a debugging step without fully syncing lockfiles throughout the entire monorepo workspace.
+
+**Confidence**: 100%

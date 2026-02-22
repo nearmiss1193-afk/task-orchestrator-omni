@@ -1,0 +1,2 @@
+Vercel CLI 50.14.0
+Error: The provided argument "empire-client-portal" is not a valid project name
