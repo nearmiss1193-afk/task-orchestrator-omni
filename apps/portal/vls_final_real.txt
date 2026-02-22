@@ -1,0 +1,47 @@
+Vercel CLI 50.14.0
+Fetching deployments in nearmiss1193-9477s-projects
+> Deployments for nearmiss1193-9477s-projects/portal [168ms]
+
+  Age     Deployment                                                          Status      Environment     Duration     Username              
+  9h      https://portal-daebcy1w4-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      29s          nearmiss1193-9477     
+  9h      https://portal-2n9etfooo-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  10h     https://portal-7i5eh36rn-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      29s          nearmiss1193-9477     
+  11h     https://portal-esmfkdg6m-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-447hze164-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      29s          nearmiss1193-9477     
+  11h     https://portal-5si7ry6n3-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-4yzqnbocy-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-p2lu6g0ts-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      31s          nearmiss1193-9477     
+  11h     https://portal-6xcakkx7i-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-94yxgrks1-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-q4n5d7ktp-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-3as09v9tc-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      29s          nearmiss1193-9477     
+  11h     https://portal-4b7uzcue1-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-fzwhxpric-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-ipzc4jy9b-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-g6nsz9528-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  11h     https://portal-n460zyh2w-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      30s          nearmiss1193-9477     
+  12h     https://portal-992ldpm7l-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      29s          nearmiss1193-9477     
+  12h     https://portal-l19cneghb-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      27s          nearmiss1193-9477     
+  12h     https://portal-jyg0tyuxg-nearmiss1193-9477s-projects.vercel.app     ● Error     Production      32s          nearmiss1193-9477     
+
+https://portal-daebcy1w4-nearmiss1193-9477s-projects.vercel.app
+https://portal-2n9etfooo-nearmiss1193-9477s-projects.vercel.app
+https://portal-7i5eh36rn-nearmiss1193-9477s-projects.vercel.app
+https://portal-esmfkdg6m-nearmiss1193-9477s-projects.vercel.app
+https://portal-447hze164-nearmiss1193-9477s-projects.vercel.app
+https://portal-5si7ry6n3-nearmiss1193-9477s-projects.vercel.app
+https://portal-4yzqnbocy-nearmiss1193-9477s-projects.vercel.app
+https://portal-p2lu6g0ts-nearmiss1193-9477s-projects.vercel.app
+https://portal-6xcakkx7i-nearmiss1193-9477s-projects.vercel.app
+https://portal-94yxgrks1-nearmiss1193-9477s-projects.vercel.app
+https://portal-q4n5d7ktp-nearmiss1193-9477s-projects.vercel.app
+https://portal-3as09v9tc-nearmiss1193-9477s-projects.vercel.app
+https://portal-4b7uzcue1-nearmiss1193-9477s-projects.vercel.app
+https://portal-fzwhxpric-nearmiss1193-9477s-projects.vercel.app
+https://portal-ipzc4jy9b-nearmiss1193-9477s-projects.vercel.app
+https://portal-g6nsz9528-nearmiss1193-9477s-projects.vercel.app
+https://portal-n460zyh2w-nearmiss1193-9477s-projects.vercel.app
+https://portal-992ldpm7l-nearmiss1193-9477s-projects.vercel.app
+https://portal-l19cneghb-nearmiss1193-9477s-projects.vercel.app
+https://portal-jyg0tyuxg-nearmiss1193-9477s-projects.vercel.app
+> To display the next page, run `vercel ls portal --next 1771732882114`

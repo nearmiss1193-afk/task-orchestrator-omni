@@ -1,0 +1,25 @@
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/crm/clients/route.js",
+  "C:/Users/nearm/.gemini/antigravity/scratch/empire-unified/apps/portal/.next/server/app/api/status/route.js"
+]: 825.632ms
+Created all serverless functions in: 918.372ms
+Collected static files (public/, static/, .next/static): 7.058ms
+Error: EPERM: 
+operation not 
+permitted, symlink 
+'..\_not-found.func' 
+-> 'C:\Users\nearm\.ge
+mini\antigravity\scrat
+ch\empire-unified\apps
+\portal\.vercel\output
+\functions\custom-ai-s
+olutions\[solution].fu
+nc'
+> [debug] [2026-02-22T
+15:44:40.680Z] Vercel 
+CLI 50.14.0
+
+> [debug] [2026-02-22T
+15:44:40.943Z] 
+Telemetry event 
+tracked
+> [debug] [2026-02-22T

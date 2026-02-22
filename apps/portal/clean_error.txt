@@ -1,0 +1,25 @@
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+
+Traced Next.js server files in: 219.252ms
+Error: ENOENT: no 
+such file or 
+directory, lstat 'C:\U
+sers\nearm\.gemini\ant
+igravity\scratch\empir
+e-unified\apps\portal\
+apps\portal\.next\rout
+es-manifest.json'
+> [debug] [2026-02-22T
+14:39:22.718Z] Vercel 
+CLI 50.14.0
+
+> [debug] [2026-02-22T
+14:39:23.592Z] 
+Telemetry event 
+tracked
+> [debug] [2026-02-22T
+14:39:23.669Z] 
+Telemetry subprocess 
+exited with code 0

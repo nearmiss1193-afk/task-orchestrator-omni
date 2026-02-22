@@ -1,7 +1,7 @@
 "use client";
 import { ChatInterface } from "@/components/chat-interface";
 import { CRMView } from "@/components/crm-view";
-import { Shield, Radio, LayoutDashboard, Settings, UserCircle } from "lucide-react";
+import { Shield, Radio, LayoutDashboard, Settings, UserCircle, Mail, PieChart, Mic, Share2 } from "lucide-react";
 import React from "react";
 import Link from "next/link";
 
@@ -98,6 +98,22 @@ export default function Home() {
                 <nav className="flex-1 flex flex-col gap-2 px-2">
                     <NavItem icon={<LayoutDashboard />} label="Command" active={currentView === 'command'} onClick={() => setCurrentView('command')} />
                     <NavItem icon={<Radio />} label="Communications" active={currentView === 'communications'} onClick={() => setCurrentView('communications')} />
+                    <Link href="/inbox" className={`flex items-center gap-3 p-3 rounded-xl transition-all text-indigo-400 hover:bg-white/5 hover:text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 mt-1`}>
+                        <Mail className="w-6 h-6" />
+                        <span className="hidden lg:block font-medium">Omni-Channel Inbox</span>
+                    </Link>
+                    <Link href="/campaigns" className={`flex items-center gap-3 p-3 rounded-xl transition-all text-emerald-400 hover:bg-white/5 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 mt-1`}>
+                        <PieChart className="w-6 h-6" />
+                        <span className="hidden lg:block font-medium">Campaign Triage</span>
+                    </Link>
+                    <Link href="/voice" className={`flex items-center gap-3 p-3 rounded-xl transition-all text-fuchsia-400 hover:bg-white/5 hover:text-fuchsia-300 bg-fuchsia-500/10 border border-fuchsia-500/20 mt-1`}>
+                        <Mic className="w-6 h-6" />
+                        <span className="hidden lg:block font-medium">Voice Transcripts</span>
+                    </Link>
+                    <Link href="/social" className={`flex items-center gap-3 p-3 rounded-xl transition-all text-sky-400 hover:bg-white/5 hover:text-sky-300 bg-sky-500/10 border border-sky-500/20 mt-1`}>
+                        <Share2 className="w-6 h-6" />
+                        <span className="hidden lg:block font-medium">Social Queue</span>
+                    </Link>
                     <NavItem icon={<UserCircle />} label="Personnel" active={currentView === 'personnel'} onClick={() => setCurrentView('personnel')} />
 
                     <div className="mt-4 pt-4 border-t border-white/10 px-2 flex flex-col gap-2">

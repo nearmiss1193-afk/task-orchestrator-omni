@@ -1,0 +1,7 @@
+Vercel CLI 50.14.0
+Retrieving project…
+Resolving deployment "portal-daebcy1w4-nearmiss1193-9477s-projects.vercel.app"
+Streaming logs for deployment dpl_3pqpEY8ecHgrFbYxxiqZqSqt1SUq starting from 10:29:23.30
+
+waiting for new logs...
+Terminate batch job (Y/N)? 
