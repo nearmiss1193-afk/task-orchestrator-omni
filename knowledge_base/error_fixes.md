@@ -977,6 +977,7 @@ typescript: { ignoreBuildErrors: true },
 **Root Cause**: A severe conflict within Next.js SSG rendering on Vercel. Dynamic routes utilizing `generateStaticParams` were attempting to be pre-compiled into static HTML, while the enclosing `layout.tsx` or API interfaces were forcing SSR dynamic execution. Vercel's bundler became confused and simply dropped the Serverless Function build entirely, resulting in 404s for entire dynamic sub-directories.
 
 **Fix**:
+
 1. Remove `export async function generateStaticParams()` entirely from the dynamic page files.
 2. Remove any static directives like `export const dynamicParams = false;` from the dynamic page files.
 3. Allow the Next.js compiler to completely default back to dynamic SSR (Server-Side Rendering) for the routes.
@@ -991,15 +992,36 @@ typescript: { ignoreBuildErrors: true },
 
 **Error Message**: `Error: ENOENT: no such file or directory... .next/routes-manifest.json`
 
-**Location**: Vercel Cloud Build 
+**Location**: Vercel Cloud Build
 
 **Root Cause**: Attempting to fix the "Missing Lambda" bug by indiscriminately downgrading `next` from `14.2.14` to `14.2.3` in the `package.json` caused a fatal desync between the Turborepo workspace lockfile and the Vercel `@vercel/nft` trace compiler. The `npm ci` phase succeeded, but the underlying Vercel Edge parser crashed because it was looking for a `routes-manifest` file that the downgraded Next.js compiler failed to generate or inappropriately purged.
 
 **Fix**:
+
 1. Restore `next` and `eslint-config-next` back to `^14.2.14` in `package.json`.
 2. Do NOT attempt to fix Vercel compilation bugs by downgrading minor versions of Next 14.
 3. Crucially: Always run `npm install` after modifying `package.json` to synchronize the `package-lock.json` workspace tree. Vercel relies strictly on the lockfile during `npm ci`, and altering the `package.json` without updating the lockfile guarantees an Edge crash.
 
 **Prevention**: Never downgrade core framework dependencies purely as a debugging step without fully syncing lockfiles throughout the entire monorepo workspace.
+
+**Confidence**: 100%
+
+---
+
+## Vercel Build Exit 1: Module Not Found (Feb 22, 2026)
+
+**Error Message**: `Module not found: Can't resolve 'node-fetch'` / `Can't resolve 'resend'`
+
+**Location**: Vercel Cloud Build (`src/app/api/stripe-webhook/route.ts`)
+
+**Root Cause**: While local Turborepo builds often loosely resolve hoisted dependencies if they exist anywhere in the monorepo or global cache, Vercel's strictly isolated Edge deployment containers require exact dependency specifications in the `package.json` for the specific application being built. The Stripe webhook route imported `node-fetch` and `resend`, but they were not declared in `apps/portal/package.json`.
+
+**Fix**:
+
+1. Run `npm install node-fetch resend` specifically inside the `apps/portal` directory.
+2. Crucially, navigate to the `empire-unified` monorepo root and execute `npm install` to regenerate the workspace `package-lock.json` file.
+3. Commit both the `package.json` and the synchronized `package-lock.json` lockfile to Github to trigger a flawless cloud rebuild.
+
+**Prevention**: If you import a third-party non-standard library into a Next.js API route (like Stripe, Resend, or specific fetch polyfills), explicitly `npm install` them into the exact workspace folder housing that application.
 
 **Confidence**: 100%
