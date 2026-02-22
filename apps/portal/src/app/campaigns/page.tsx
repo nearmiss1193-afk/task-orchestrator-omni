@@ -16,7 +16,7 @@ export default function CampaignsPage() {
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
             const { data, error } = await supabase
-                .table('outbound_touches')
+                .from('outbound_touches')
                 .select('template_name, channel, status, ts, direction')
                 .gte('ts', thirtyDaysAgo.toISOString())
                 .eq('direction', 'outbound');

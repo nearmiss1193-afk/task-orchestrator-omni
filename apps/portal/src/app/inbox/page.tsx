@@ -14,7 +14,7 @@ export default function InboxPage() {
         const fetchInitialLogs = async () => {
             setLoading(true);
             const { data, error } = await supabase
-                .table('outbound_touches')
+                .from('outbound_touches')
                 .select('*')
                 .order('ts', { ascending: false })
                 .limit(100);
