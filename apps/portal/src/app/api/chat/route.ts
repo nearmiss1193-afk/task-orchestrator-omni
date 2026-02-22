@@ -1,7 +1,5 @@
 
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
 // CORS headers to allow cross-origin requests from dashboard
 const corsHeaders = {
