@@ -220,3 +220,42 @@ def stripe_webhook(data: dict = None):
     # Note: request body would normally be passed as bytes for signature verification, 
     # but for this port we match the existing JSON-based logic.
     return stripe_webhook_logic(json.dumps(data).encode(), "")
+
+# ──────────────────────────────────────────────────────────
+#  RESEND EMAIL WEBHOOK (Email Triage)
+# ──────────────────────────────────────────────────────────
+
+@app.function(image=os.environ.get("MODAL_IMAGE_NAME"), secrets=[os.environ.get("MODAL_VAULT_NAME")])
+@modal.fastapi_endpoint(method="POST")
+def email_inbound(data: dict = None):
+    """Handles inbound emails routed via Resend Webhooks."""
+    if data is None: data = {}
+    
+    from workers.email_triage import handle_inbound_email
+    
+    # Resend webhook payload structure
+    try:
+        sender = data.get("from", "")
+        if not sender:
+            # Check nested structure if it's sent via a specific Resend integration
+            payload = data.get("payload", {})
+            sender = payload.get("from", "")
+            subject = payload.get("subject", "No Subject")
+            text = payload.get("text", "")
+            if not text:
+                text = payload.get("html", "") # Fallback to HTML if text is missing
+        else:
+            subject = data.get("subject", "No Subject")
+            text = data.get("text", "")
+            
+        print(f"📧 Inbound Email Received from {sender}: {subject}")
+        
+        # Ignore our own auto-replies
+        if "owner@aiserviceco.com" in sender.lower() or "dan@aiserviceco.com" in sender.lower():
+            return {"status": "ignored_internal"}
+            
+        result = handle_inbound_email(sender, subject, text)
+        return result
+    except Exception as e:
+        print(f"❌ EMAIL WEBHOOK ERROR: {e}")
+        return {"status": "error", "error": str(e)}

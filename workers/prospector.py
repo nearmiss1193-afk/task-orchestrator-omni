@@ -27,13 +27,13 @@ if "/root" not in sys.path:
 #  CONFIGURATION: Niches × Cities = Search Matrix
 # ============================================================
 
-NICHES = [
-    # === TIER 1: "BLEEDING LEADS" (High Missed-Call Cost, Low Response) ===
+# Fallback list if DB is empty
+DEFAULT_NICHES = [
+    # === TIER 1: "BLEEDING LEADS" ===
     "tree removal service",
     "gutter installation",
     "pool service company",
     "lawn care service",
-    "landscaping company",
     "HVAC contractor",
     "plumbing company",
     "roofing contractor",
@@ -41,95 +41,7 @@ NICHES = [
     "pest control company",
     "locksmith",
     "towing service",
-    "auto repair shop",
-    "garage door repair",
-    # === TIER 2: APPOINTMENT-BASED (need booking automation) ===
-    "dental clinic",
-    "chiropractic clinic",
-    "veterinary clinic",
-    "medical spa",
-    "optometrist",
-    "physiotherapist",
-    "massage therapist",
-    "counseling center",
-    # === TIER 3: ALL TRADES (small shops that don't answer) ===
-    "sign shop",
-    "mechanic",
-    "welding shop",
-    "concrete contractor",
-    "paving company",
-    "glass repair",
-    "gutter installation",
-    "fence company",
-    "flooring company",
-    "cabinet maker",
-    "tile installer",
-    "drywall contractor",
-    "stucco contractor",
-    "waterproofing company",
-    "screen enclosure",
-    "window installation",
-    "door repair",
-    "septic tank service",
-    "well drilling",
-    "irrigation company",
-    "landscaping company",
-    "pool service company",
-    "tree removal service",
-    "pressure washing service",
-    "lawn care service",
-    "painting contractor",
-    "remodeler",
-    "general contractor",
-    "handyman service",
-    "solar panel installation",
-    "home security company",
-    # === TIER 4: VOLUME (high call volume, low staff) ===
-    "hair salon",
-    "barber shop",
-    "nails salon",
-    "pet grooming",
-    "dog grooming",
-    "cleaning service",
-    "carpet cleaning",
-    "window cleaning",
-    "junk removal",
-    "moving company",
-    "storage facility",
-    "auto detailing",
-    "car wash",
-    "tire shop",
-    "transmission shop",
-    "body shop",
-    "tint shop",
-    # === TIER 5: SERVICE BUSINESSES ===
-    "tattoo shop",
-    "fitness center",
-    "martial arts school",
-    "dance studio",
-    "daycare center",
-    "preschool",
-    "tutoring center",
-    "driving school",
-    "music lessons",
-    "yoga studio",
-    "florist",
-    "bakery",
-    "catering service",
-    "food truck",
-    "print shop",
-    "embroidery shop",
-    "trophy shop",
-    "appliance repair",
-    # === TIER 6: PROFESSIONAL (higher value) ===
-    "law firm",
-    "accounting firm",
-    "insurance agency",
-    "real estate agency",
-    "mortgage broker",
-    "financial advisor",
-    "staffing agency",
-    "IT support company",
+    # === OVERRIDES WILL BE INJECTED BY AUTONOMOUS TUNING ===
 ]
 
 CITIES = [
@@ -600,10 +512,22 @@ def run_prospecting_cycle():
     # Debug: show which key is being used
     print(f"🔑 Google Places key: {api_keys[0][:12]}...")
 
+    # Fetch Dynamic Niches (Phase 6 Tuning)
+    active_niches = DEFAULT_NICHES
+    try:
+        db_niches = supabase.table("system_state").select("last_error").eq("key", "prospector_dynamic_niches").execute()
+        if db_niches.data and db_niches.data[0].get("last_error"):
+            parsed = json.loads(db_niches.data[0]["last_error"])
+            if isinstance(parsed, list) and len(parsed) > 0:
+                print(f"🧠 AI Tuning Active: Loaded {len(parsed)} dynamic niches from database")
+                active_niches = parsed
+    except Exception as e:
+        print(f"  ⚠️ Failed to load dynamic niches, falling back to defaults: {e}")
+
     # Build search matrix
-    search_combos = [(niche, city) for city in CITIES for niche in NICHES]
+    search_combos = [(niche, city) for city in CITIES for niche in active_niches]
     total_combos = len(search_combos)
-    print(f"📊 Search matrix: {len(NICHES)} niches × {len(CITIES)} cities = {total_combos} combos")
+    print(f"📊 Search matrix: {len(active_niches)} niches × {len(CITIES)} cities = {total_combos} combos")
 
     # Resume from last position
     cycle_index = get_cycle_index(supabase)
@@ -683,7 +607,10 @@ def run_prospecting_cycle():
 
     # Log to system_health
     try:
+        import uuid
         supabase.table("system_health_log").insert({
+            "id": str(uuid.uuid4()),
+            "check_type": "prospector",
             "status": "prospecting_complete",
             "details": json.dumps({
                 "discovered": total_discovered,

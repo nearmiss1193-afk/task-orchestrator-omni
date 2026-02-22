@@ -1578,13 +1578,34 @@
                     <div class="metric-icon">💰</div>
                     <div class="metric-label">Pipeline</div>
                     <div class="metric-value" id="mPipeline">—</div>
-                    <div class="metric-sub" id="mPipelineSub">Revenue tracking</div>
+                    <div class="metric-sub" id="mPipelineSub">Active revenue</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-icon">👥</div>
-                    <div class="metric-label">Techs Online</div>
-                    <div class="metric-value" id="mTechs">0</div>
-                    <div class="metric-sub" id="mTechsSub">Available for dispatch</div>
+                <!-- AI REVENUE FORECAST WIDGET -->
+                <div class="metric-card"
+                    style="grid-column: span 1; background: linear-gradient(145deg, rgba(88, 28, 135, 0.2), rgba(17, 24, 39, 0.8)); border: 1px solid rgba(139, 92, 246, 0.3);">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div class="metric-icon" style="background: rgba(139, 92, 246, 0.2); color: #a78bfa;">🧠</div>
+                        <div
+                            style="font-size:8px; text-transform:uppercase; letter-spacing:1px; color:#a78bfa; font-weight:700;">
+                            Abacus Model</div>
+                    </div>
+                    <div class="metric-label" style="color:#d8b4fe">Projected 7-Day Revenue</div>
+                    <div class="metric-value" id="aiForecastValue"
+                        style="color:#f3e8ff; font-size:20px; margin: 4px 0;">Calculating...</div>
+                    <div class="metric-sub" id="aiForecastSub" style="color:#a78bfa; font-size:10px;">Based on
+                        historical conversion</div>
+                    <div
+                        style="margin-top:8px; height: 18px; border-radius: 4px; background: rgba(0,0,0,0.3); overflow:hidden; display:flex; font-size:9px; font-weight:700; color:#fff;">
+                        <div id="aiForeBarHigh"
+                            style="width:0%; background:var(--accent-green); display:flex; align-items:center; padding-left:4px; transition:width 1s;">
+                            High</div>
+                        <div id="aiForeBarMed"
+                            style="width:0%; background:var(--accent-amber); display:flex; align-items:center; padding-left:4px; transition:width 1s;">
+                            Med</div>
+                        <div id="aiForeBarLow"
+                            style="width:0%; background:var(--accent-rose); display:flex; align-items:center; padding-left:4px; transition:width 1s;">
+                            Low</div>
+                    </div>
                 </div>
             </div>
 
@@ -2140,6 +2161,52 @@
                         lastEl.textContent = 'Never';
                         lastEl.className = 'vr-value rose';
                     }
+                }
+
+                // Prospector age
+                const prospEl = document.getElementById('vProspAge');
+                if (prospEl) {
+                    if (vitals.prospector_age_min != null) {
+                        const pm = vitals.prospector_age_min;
+                        prospEl.textContent = pm < 60 ? pm + 'm ago' : Math.floor(pm / 60) + 'h ' + (pm % 60) + 'm ago';
+                        prospEl.className = 'vr-value ' + (pm < 120 ? 'green' : pm < 360 ? 'amber' : 'rose');
+                    } else {
+                        prospEl.textContent = 'Unknown';
+                        prospEl.className = 'vr-value rose';
+                    }
+                }
+
+                // === AI REVENUE FORECAST (Phase 6) ===
+                const rFore = vitals.revenue_forecast;
+                if (rFore && document.getElementById('aiForecastValue')) {
+                    const h = rFore.high || 0;
+                    const m = rFore.med || 0;
+                    const l = rFore.low || 0;
+                    const fmt = (v) => v >= 1000 ? '$' + (v / 1000).toFixed(1) + 'k' : '$' + v;
+
+                    document.getElementById('aiForecastValue').textContent = fmt(m);
+
+                    const total = h || 1; // avoid /0
+                    document.getElementById('aiForeBarHigh').style.width = (h / total * 100) + '%';
+                    document.getElementById('aiForeBarHigh').textContent = fmt(h);
+
+                    document.getElementById('aiForeBarMed').style.width = (m / total * 100) + '%';
+                    document.getElementById('aiForeBarMed').textContent = fmt(m);
+
+                    document.getElementById('aiForeBarLow').style.width = (l / total * 100) + '%';
+                    document.getElementById('aiForeBarLow').textContent = fmt(l);
+
+                    if (rFore.confidence) {
+                        document.getElementById('aiForecastSub').innerHTML = `Based on historical conversion <span style="color:#10b981;font-weight:bold;">${rFore.confidence}% confidence</span>`;
+                    }
+                } else if (document.getElementById('aiForecastValue')) {
+                    document.getElementById('aiForecastValue').textContent = "Model Pending";
+                    document.getElementById('aiForeBarHigh').style.width = "0%";
+                    document.getElementById('aiForeBarHigh').textContent = "";
+                    document.getElementById('aiForeBarMed').style.width = "0%";
+                    document.getElementById('aiForeBarMed').textContent = "";
+                    document.getElementById('aiForeBarLow').style.width = "0%";
+                    document.getElementById('aiForeBarLow').textContent = "";
                 }
 
                 // Channel breakdown

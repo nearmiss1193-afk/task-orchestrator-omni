@@ -2136,6 +2136,18 @@ def sovereign_stats(request: Request):
                 outreach_1h = q1h.count if q1h.count is not None else len(q1h.data)
             except: pass
             
+            # --- PHASE 6: PREDICTIVE REVENUE FORECAST (From Abacus cron) ---
+            revenue_forecast = None
+            try:
+                rf_query = sb.table("system_state").select("payload").eq("key", "revenue_forecast").execute()
+                if rf_query.data and rf_query.data[0].get("payload"):
+                    # We expect payload to be structured JSON from Abacus
+                    rf_raw = rf_query.data[0]["payload"]
+                    revenue_forecast = json.loads(rf_raw) if isinstance(rf_raw, str) else rf_raw
+            except Exception as e:
+                print(f"⚠️ Forecast fetch error: {e}")
+                pass
+            
             system_vitals = {
                 "prospector_last_run": prosp_ts,
                 "prospector_age_min": prosp_age_min,
@@ -2146,6 +2158,7 @@ def sovereign_stats(request: Request):
                 "outreach_1h": outreach_1h,
                 "inspector_errors": inspector_errors,
                 "error_count_1h": error_count_1h,
+                "revenue_forecast": revenue_forecast,
                 "engines": {
                     "outreach": outbound_24h > 0,
                     "prospecting": prosp_age_min is not None and prosp_age_min < 180,

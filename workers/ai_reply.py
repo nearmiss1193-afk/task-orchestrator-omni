@@ -11,6 +11,10 @@ def generate_sarah_reply(phone: str, message: str, contact_name: str = "there"):
     """
     Receives inbound SMS, generates Sarah AI reply with persistent memory.
     """
+    if not os.environ.get("GROK_API_KEY"):
+        from dotenv import load_dotenv
+        load_dotenv()
+        
     phone = normalize_phone(phone)
     supabase = get_supabase()
     
@@ -55,6 +59,7 @@ def generate_sarah_reply(phone: str, message: str, contact_name: str = "there"):
         except: pass
     except Exception as e:
         print(f"⚠️ Memory lookup failed: {e}")
+        research_context = ""
     
     # --- PROMPT CONSTRUCTION ---
     SARAH_PROMPT = f"""You are Sarah, AI assistant for AI Service Co.
@@ -70,17 +75,27 @@ def generate_sarah_reply(phone: str, message: str, contact_name: str = "there"):
     {SERVICE_KNOWLEDGE}
     
     {research_context}
+    
+    OUTPUT FORMAT:
+    You must respond in valid JSON format ONLY with two keys:
+    {{"reply": "Your actual text message to the user", "intent": "general" | "booking" | "support"}}
+    
+    Use 'booking' intent if they agree to a call, ask for a link, or show high interest.
     """
     
     # --- LLM CALL (Grok) ---
+    from core.constants import BOOKING_LINK
     api_key = os.environ.get("GROK_API_KEY") or os.environ.get("XAI_API_KEY")
     if not api_key:
         return "Hey! I'll have Dan reach out shortly. -Sarah"
     
+    reply = "Hey! Let me have Dan follow up with you. -Sarah"
+    intent = "general"
+    
     try:
         messages = [
             {"role": "system", "content": SARAH_PROMPT},
-            {"role": "user", "content": f"Incoming SMS from {contact_name}: \"{message}\". Reply as Sarah:"}
+            {"role": "user", "content": f"Incoming SMS from {contact_name}: \"{message}\". Reply as JSON:"}
         ]
         
         resp = requests.post(
@@ -90,12 +105,30 @@ def generate_sarah_reply(phone: str, message: str, contact_name: str = "there"):
                 "messages": messages,
                 "model": "grok-3",
                 "temperature": 0.7,
-                "max_tokens": 100
+                # Force JSON object output if supported, or rely on prompt
+                "response_format": {"type": "json_object"}
             },
             timeout=30
         )
-        reply = resp.json()['choices'][0]['message']['content'].strip() if resp.status_code == 200 else "Hey! Dan will follow up soon."
-    except:
+        
+        if resp.status_code == 200:
+            content = resp.json()['choices'][0]['message']['content'].strip()
+            # Clean possible markdown formatting
+            if content.startswith("```json"):
+                content = content[7:-3].strip()
+            
+            try:
+                parsed = json.loads(content)
+                reply = parsed.get("reply", reply)
+                intent = parsed.get("intent", "general")
+            except json.JSONDecodeError:
+                reply = content # Fallback to raw text if parsing fails
+                
+        if intent == "booking":
+            reply += f"\n\nHere is Dan's calendar link: {BOOKING_LINK}"
+            
+    except Exception as e:
+        print(f"⚠️ Grok API Error: {e}")
         reply = "Hey! Let me have Dan follow up with you. -Sarah"
     
     # --- LOGGING & NOTIFICATION ---
