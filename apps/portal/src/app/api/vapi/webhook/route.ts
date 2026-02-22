@@ -69,28 +69,3 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
-
-                    else {
-    result = `Function ${func.name} is not implemented.`;
-}
-
-                } catch (err) {
-    console.error(err);
-    result = `Error executing ${func.name}: ${err}`;
-}
-
-results.push({
-    toolCallId: id,
-    result: result
-});
-            }
-
-return NextResponse.json({ results });
-        }
-
-return NextResponse.json({ status: 'ok', info: 'Not a tool-call message' });
-    } catch (error) {
-    console.error("Vapi Webhook Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-}
-}

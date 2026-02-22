@@ -7,7 +7,7 @@
     },
     "scripts": {
         "dev": "next dev",
-        "build": "next build > vercel_build.log 2>&1 || (cat vercel_build.log && exit 1)",
+        "build": "next build",
         "start": "next start",
         "lint": "next lint"
     },
