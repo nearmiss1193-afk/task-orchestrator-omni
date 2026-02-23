@@ -132,7 +132,7 @@ def check_privacy_policy(website_url: str) -> dict:
     for path in paths:
         try:
             check_url = f"{website_url.rstrip('/')}{path}"
-            r = requests.get(check_url, timeout=10, allow_redirects=True)
+            r = requests.get(check_url, timeout=4, allow_redirects=True)
             if r.status_code == 200 and len(r.text) > 500:
                 # Check if it actually mentions privacy
                 text_lower = r.text.lower()
@@ -148,7 +148,7 @@ def check_privacy_policy(website_url: str) -> dict:
 
     # Also check the homepage for a privacy link
     try:
-        r = requests.get(website_url, timeout=10, allow_redirects=True)
+        r = requests.get(website_url, timeout=4, allow_redirects=True)
         if r.status_code == 200:
             text_lower = r.text.lower()
             if "privacy policy" in text_lower or "privacy-policy" in text_lower:
@@ -184,7 +184,7 @@ def check_ai_readiness(website_url: str) -> dict:
         website_url = f"https://{website_url}"
 
     try:
-        r = requests.get(website_url, timeout=10, allow_redirects=True)
+        r = requests.get(website_url, timeout=4, allow_redirects=True)
         if r.status_code != 200:
             return result
 
