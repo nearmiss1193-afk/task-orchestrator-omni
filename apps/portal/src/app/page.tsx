@@ -142,6 +142,16 @@ export default function Home() {
                         <Link href="/lakeland/plumbers" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-amber-500 hover:text-amber-400 hover:bg-white/5 transition-colors bg-amber-900/10 border border-amber-500/20">
                             🌴 Lakeland Finds
                         </Link>
+                        <Link href="/bids" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-bold text-emerald-400 bg-emerald-900/10 border border-emerald-500/20 hover:bg-emerald-900/30 transition-colors">
+                            <div className="flex items-center gap-3">
+                                🏛️ Lakeland Bid-Bot
+                            </div>
+                        </Link>
+                        <Link href="/intents" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-bold text-violet-400 bg-violet-900/10 border border-violet-500/20 hover:bg-violet-900/30 transition-colors mt-1">
+                            <div className="flex items-center gap-3">
+                                🎯 Intent Engine
+                            </div>
+                        </Link>
                     </div>
 
                     <div className="mt-4 pt-4 border-t border-white/10 px-2 flex flex-col gap-2">
