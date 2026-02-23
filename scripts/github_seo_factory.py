@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-import psycopg2
+import requests
 import google.generativeai as genai
 from github import Github, InputGitTreeElement
 from dotenv import load_dotenv
@@ -11,14 +11,15 @@ load_dotenv()
 load_dotenv('.env.local')
 
 # 1. Configuration
-DATABASE_URL = os.environ.get('NEON_DATABASE_URL') or os.environ.get('DATABASE_URL')
+SUPABASE_URL = os.environ.get('SUPABASE_URL')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
 GEMINI_KEY = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY')
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
 GITHUB_REPO = os.environ.get('GITHUB_REPO', 'nearmiss1193/empire-unified')
 BATCH_SIZE = 50
 LAKELAND_DIR = os.path.abspath('apps/portal/src/app/lakeland')
 
-if not DATABASE_URL or not GEMINI_KEY:
+if not SUPABASE_URL or not SUPABASE_KEY or not GEMINI_KEY:
     print("❌ FATAL: Missing database or LLM credentials.")
     sys.exit(1)
 
@@ -29,26 +30,31 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 def get_unpublished_businesses():
     """Fetches the next batch of businesses that need pages built."""
     try:
-        conn = psycopg2.connect(DATABASE_URL)
-        cur = conn.cursor()
+        url = f"{SUPABASE_URL}/rest/v1/contacts_master"
+        headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}",
+            "Content-Type": "application/json"
+        }
+        params = {
+            "seo_published": "eq.false",
+            "niche": "not.is.null",
+            "select": "id,company_name,niche,phone,website_url",
+            "limit": BATCH_SIZE
+        }
+        r = requests.get(url, headers=headers, params=params)
+        r.raise_for_status()
+        rows = r.json()
         
-        # We only want businesses with a known niche so we can route them correctly
-        query = f"""
-            SELECT id, company_name as business_name, niche as industry, phone as phone_number, website_url as website
-            FROM contacts_master
-            WHERE seo_published = FALSE 
-              AND niche IS NOT NULL
-            LIMIT {BATCH_SIZE}
-        """
-        cur.execute(query)
-        rows = cur.fetchall()
-        
-        # Convert to list of dicts for easier handling
-        columns = [desc[0] for desc in cur.description]
-        businesses = [dict(zip(columns, row)) for row in rows]
-        
-        cur.close()
-        conn.close()
+        businesses = []
+        for row in rows:
+            businesses.append({
+                "id": row["id"],
+                "business_name": row.get("company_name"),
+                "industry": row.get("niche"),
+                "phone_number": row.get("phone"),
+                "website": row.get("website_url")
+            })
         return businesses
     except Exception as e:
         print(f"❌ Database error fetching batch: {e}")
@@ -59,19 +65,23 @@ def mark_as_published(business_ids):
     if not business_ids: return
     
     try:
-        conn = psycopg2.connect(DATABASE_URL)
-        conn.autocommit = True
-        cur = conn.cursor()
+        url = f"{SUPABASE_URL}/rest/v1/contacts_master"
+        headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+        }
+        ids_str = ",".join(map(str, business_ids))
+        params = {
+            "id": f"in.({ids_str})"
+        }
+        payload = {"seo_published": True}
         
-        # Format the IDs for the IN clause correctly
-        format_strings = ','.join(['%s'] * len(business_ids))
-        query = f"UPDATE contacts_master SET seo_published = TRUE WHERE id IN ({format_strings})"
+        r = requests.patch(url, headers=headers, params=params, json=payload)
+        r.raise_for_status()
         
-        cur.execute(query, tuple(business_ids))
-        print(f"✅ Marked {cur.rowcount} rows as published.")
-        
-        cur.close()
-        conn.close()
+        print(f"✅ Marked {len(business_ids)} rows as published.")
     except Exception as e:
         print(f"❌ Database error marking as published: {e}")
 
