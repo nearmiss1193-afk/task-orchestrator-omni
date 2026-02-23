@@ -3,6 +3,7 @@ import sys
 import time
 import psycopg2
 import google.generativeai as genai
+from github import Github, InputGitTreeElement
 from dotenv import load_dotenv
 
 # Load env variables (for local testing, CI will inject via secrets)
@@ -12,6 +13,8 @@ load_dotenv('.env.local')
 # 1. Configuration
 DATABASE_URL = os.environ.get('NEON_DATABASE_URL') or os.environ.get('DATABASE_URL')
 GEMINI_KEY = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY')
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+GITHUB_REPO = os.environ.get('GITHUB_REPO', 'nearmiss1193/empire-unified')
 BATCH_SIZE = 50
 LAKELAND_DIR = os.path.abspath('apps/portal/src/app/lakeland')
 
@@ -100,15 +103,31 @@ def clean_slug(text):
     text = re.sub(r'[\s-]+', '-', text).strip('-')
     return text
 
-def write_nextjs_page(business, copy):
-    """Creates the React component file in the correct directory."""
-    industry_slug = clean_slug(business['industry'])
-    business_slug = clean_slug(business['business_name'])
-    
-    # 1. Ensure the directory exists structure: /lakeland/[industry]/[business]/page.tsx
-    dir_path = os.path.join(LAKELAND_DIR, industry_slug, business_slug)
-    os.makedirs(dir_path, exist_ok=True)
-    
+def batch_commit_to_github(files_dict, commit_message):
+    """Commits multiple files in a single git commit transaction to trigger exactly 1 Vercel build."""
+    try:
+        gh = Github(GITHUB_TOKEN)
+        repo = gh.get_repo(GITHUB_REPO)
+        
+        master_ref = repo.get_git_ref('heads/main')
+        master_sha = master_ref.object.sha
+        base_tree = repo.get_git_tree(master_sha)
+        
+        element_list = list()
+        for file_path, content in files_dict.items():
+            element = InputGitTreeElement(file_path, '100644', 'blob', content)
+            element_list.append(element)
+            
+        tree = repo.create_git_tree(element_list, base_tree)
+        parent = repo.get_git_commit(master_sha)
+        commit = repo.create_git_commit(commit_message, tree, [parent])
+        master_ref.edit(commit.sha)
+        print(f"✅ Successfully committed {len(files_dict)} files to GitHub via API.")
+    except Exception as e:
+        print(f"❌ GitHub API Error: {e}")
+
+def build_nextjs_page_content(business, copy, industry_slug, business_slug):
+    """Constructs the React component code."""
     # 2. Setup JSON-LD Schema
     schema = {
         "@context": "https://schema.org",
@@ -174,7 +193,7 @@ export default function BusinessProfilePage() {{
                                 <span className="text-amber-500 font-bold">★ 5.0 (Recent Reviews)</span>
                             </div>
                         </div>
-                        {/* Claim Profile Upsell */}
+                        {{/* Claim Profile Upsell */}}
                         <div className="text-right">
                              <div className="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full mb-2">Verified Listing</div>
                              <br/>
@@ -194,7 +213,7 @@ export default function BusinessProfilePage() {{
                     </div>
                 </div>
 
-                {/* AI Service Co Upsell Widget */}
+                {{/* AI Service Co Upsell Widget */}}
                 <div className="p-8 bg-zinc-900 text-white rounded-2xl flex flex-col md:flex-row gap-8 items-center justify-between border-l-4 border-purple-500">
                     <div>
                         <div className="text-sm font-bold text-purple-400 mb-2 uppercase tracking-widest">Business Owner Tools</div>
@@ -210,10 +229,7 @@ export default function BusinessProfilePage() {{
     );
 }}
 """
-    
-    file_path = os.path.join(dir_path, 'page.tsx')
-    with open(file_path, "w", encoding="utf-8") as f:
-         f.write(page_content)
+    return page_content
 
 def run_factory():
     print("=" * 60)
@@ -228,6 +244,7 @@ def run_factory():
     print(f"📥 Pulled {len(businesses)} businesses for processing.")
     
     successful_ids = []
+    files_to_commit = {}
     
     for i, business in enumerate(businesses):
         print(f"[{i+1}/{len(businesses)}] Processing: {business['business_name']}...")
@@ -236,9 +253,26 @@ def run_factory():
         copy = generate_ai_description(business)
         
         # 2. File Generation
-        write_nextjs_page(business, copy)
+        industry_slug = clean_slug(business['industry'])
+        business_slug = clean_slug(business['business_name'])
+        
+        file_path = f"apps/portal/src/app/lakeland/{industry_slug}/{business_slug}/page.tsx"
+        page_content = build_nextjs_page_content(business, copy, industry_slug, business_slug)
+        files_to_commit[file_path] = page_content
         
         successful_ids.append(business['id'])
+        
+    # 2.5 Commit files to repository 
+    if files_to_commit and GITHUB_TOKEN:
+        print(f"🚀 Pushing {len(files_to_commit)} files to GitHub repository...")
+        batch_commit_to_github(files_to_commit, f"🚀 Autonomous SEO Factory Batch: {len(successful_ids)} Pages")
+    elif files_to_commit:
+        print("⚠️ GITHUB_TOKEN not found. Saving files locally instead (Legacy Mode).")
+        for path, content in files_to_commit.items():
+            dir_path = os.path.dirname(os.path.abspath(path))
+            os.makedirs(dir_path, exist_ok=True)
+            with open(os.path.abspath(path), "w", encoding="utf-8") as f:
+                f.write(content)
         
     # 3. Mark processed in DB
     mark_as_published(successful_ids)
