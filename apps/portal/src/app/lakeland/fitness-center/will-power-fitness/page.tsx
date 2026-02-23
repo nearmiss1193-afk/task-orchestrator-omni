@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Will Power Fitness | Best fitness center in Lakeland",
-    description: "Will Power Fitness stands as Lakeland, FL's top choice for comprehensive health and wellness. As a dedicated fitness center in Lakeland FL, we pride o...",
+    description: "Will Power Fitness is your premier fitness center in Lakeland FL, dedicated to empowering our Polk County community. As a trusted local fitness center...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Will Power Fitness stands as Lakeland, FL's top choice for comprehensive health and wellness. As a dedicated fitness center in Lakeland FL, we pride ourselves on being more than just a gym – we're a supportive community committed to your success. Our professional, certified trainers offer personalized coaching, ensuring a safe and effective path toward your goals. We're the trusted local fitness center for residents across Polk County, providing state-of-the-art equipment, a variety of energizing group classes, and tailored programs for every fitness level and interest. We understand the importance of a welcoming environment, fostering motivation and respect for all members. Whether you're kickstarting your fitness journey, enhancing performance, or maintaining a healthy lifestyle, Will Power Fitness empowers you with the tools and expertise needed. Experience the difference a truly local, professional fitness center makes. Achieve your strength, endurance, and wellness aspirations with us in Lakeland.
+                            Will Power Fitness is your premier fitness center in Lakeland FL, dedicated to empowering our Polk County community. As a trusted local fitness center, we offer a professional and supportive environment where individuals of all fitness levels can thrive. Our state-of-the-art facility features modern equipment, expert certified trainers, and a diverse range of programs including personalized coaching, invigorating group classes, and specialized wellness workshops. We believe in fostering a strong, healthy community right here in Lakeland. Discover a personalized path to strength, endurance, and overall well-being with us. Start your journey to a healthier you at Will Power Fitness.
                         </p>
                     </div>
                     

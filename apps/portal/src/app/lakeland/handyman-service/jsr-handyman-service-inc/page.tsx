@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "JSR Handyman Service, INC. | Best handyman service in Lakeland",
-    description: "JSR Handyman Service, INC. is your premier choice for a reliable handyman service in Lakeland FL. As a truly local handyman service, we pride ourselve...",
+    description: "Looking for a reliable handyman service in Lakeland FL? JSR Handyman Service, INC. is your trusted local handyman service, dedicated to providing top-...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            JSR Handyman Service, INC. is your premier choice for a reliable handyman service in Lakeland FL. As a truly local handyman service, we pride ourselves on delivering professional, high-quality workmanship with a commitment to integrity and unparalleled customer satisfaction throughout Polk County. Homeowners and businesses in Lakeland consistently trust JSR Handyman Service for everything from minor repairs and installations to comprehensive home maintenance projects. From fixing leaky faucets and repairing drywall to hanging shelves and assembling furniture, we handle those essential tasks you don't have time for, ensuring your property remains in top condition. Our skilled technicians are background-checked, insured, and dedicated to providing efficient, trustworthy service every time. Experience peace of mind knowing your home improvement needs are in expert hands. Choose JSR Handyman Service, INC. for dependable, local expertise that values your time and investment, making your home a better place.
+                            Looking for a reliable handyman service in Lakeland FL? JSR Handyman Service, INC. is your trusted local handyman service, dedicated to providing top-quality repairs and improvements for homes and businesses across Polk county. From minor fixes to major renovations, our skilled professionals deliver exceptional craftsmanship and dependable service. We understand the importance of having a trustworthy partner for your property maintenance needs. That's why we focus on clear communication, punctuality, and meticulous attention to detail on every job, ensuring lasting results. Whether you need help with plumbing leaks, electrical repairs, intricate carpentry, fresh painting, or general property upkeep, we’re committed to exceeding your expectations. Experience peace of mind knowing your project is in capable hands with JSR Handyman Service, INC. in Lakeland, FL. We pride ourselves on transparent pricing and a customer-first approach. Your satisfaction is our priority, making us the premier choice for all your home repair solutions.
                         </p>
                     </div>
                     

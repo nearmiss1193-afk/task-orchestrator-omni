@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Protect Preserve Roofing | Best roofing contractor in Lakeland",
-    description: "Protect Preserve Roofing is your premier roofing contractor in Lakeland FL, committed to safeguarding your home with integrity and expertise. As a tru...",
+    description: "Protect Preserve Roofing is your premier roofing contractor in Lakeland FL, dedicated to delivering superior craftsmanship and lasting protection for ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Protect Preserve Roofing is your premier roofing contractor in Lakeland FL, committed to safeguarding your home with integrity and expertise. As a trusted local roofing contractor, we understand the unique challenges Florida weather presents, offering durable, high-quality solutions for repairs, replacements, and new installations. Serving homeowners and businesses across Lakeland and the wider Polk county area, our team delivers professional service and unparalleled craftsmanship on every project. We prioritize clear communication, transparent pricing, and meticulous attention to detail, ensuring your complete satisfaction from start to finish. When you choose Protect Preserve Roofing, you're partnering with a team dedicated to long-lasting protection and peace of mind for your property. Experience the difference of a truly reliable, local roofing expert. Contact us today for a free estimate and discover why we're the preferred choice for roofing services.
+                            Protect Preserve Roofing is your premier roofing contractor in Lakeland FL, dedicated to delivering superior craftsmanship and lasting protection for your home or business. As a trusted local roofing contractor, we understand the unique challenges Florida weather presents, offering tailored solutions from expert repairs to complete roof replacements. Our commitment to quality, transparent communication, and unparalleled customer service has made us the go-to choice throughout Lakeland and the wider Polk county area. We pride ourselves on using durable materials and proven techniques, ensuring every roof we touch is built to withstand the test of time. Choose Protect Preserve Roofing for reliable, professional service that truly protects and preserves your investment. Experience the peace of mind that comes with hiring a local team you can trust. Contact us today for a free, no-obligation estimate and discover why our clients consistently recommend us. Your roof deserves the best – and we deliver it.
                         </p>
                     </div>
                     

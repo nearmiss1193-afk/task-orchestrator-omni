@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "May Flower Chinese Restaurant | Best Chinese Restaurant in Lakeland",
-    description: "Discover May Flower Chinese Restaurant, the leading Chinese Restaurant in Lakeland, FL, offering an exceptional culinary journey. As a proud local Chi...",
+    description: "Discover the authentic taste of China right here in Lakeland, FL at May Flower Chinese Restaurant. For years, we've been a cherished local Chinese Res...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Discover May Flower Chinese Restaurant, the leading Chinese Restaurant in Lakeland, FL, offering an exceptional culinary journey. As a proud local Chinese Restaurant, we are committed to delivering authentic, flavorful dishes prepared with the freshest ingredients and time-honored recipes. Our diverse menu spans from classic General Tso's Chicken and savory Lo Mein to exquisite chef specials and delightful vegetarian options, ensuring there's something to please every member of your family or group. May Flower has become a trusted dining destination throughout Polk County, recognized for its consistent quality, impeccable service, and inviting atmosphere. Whether you're seeking a relaxed dine-in experience, convenient takeout, or even catering for your next event, we guarantee a satisfying and memorable meal. Taste the difference at May Flower, where traditional Chinese cuisine meets local trust and excellence right here in Lakeland.
+                            Discover the authentic taste of China right here in Lakeland, FL at May Flower Chinese Restaurant. For years, we've been a cherished local Chinese Restaurant, proudly serving the vibrant community of Polk County with exceptional culinary experiences. Our commitment to quality shines through in every dish, prepared daily with the freshest ingredients and time-honored recipes. Indulge in our expansive menu featuring beloved classics like General Tso's Chicken, savory Lo Mein, crispy Egg Rolls, and aromatic Fried Rice, alongside exquisite chef specialties. We strive to create a professional yet warm and inviting atmosphere, perfect for family dinners, quick lunches, or a delightful evening out. Trust May Flower Chinese Restaurant for a consistently delicious and satisfying meal, making us your premier choice for Chinese cuisine in Lakeland, FL.
                         </p>
                     </div>
                     

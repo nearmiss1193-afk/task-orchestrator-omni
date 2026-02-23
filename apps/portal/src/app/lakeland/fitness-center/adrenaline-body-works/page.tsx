@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Adrenaline Body Works | Best fitness center in Lakeland",
-    description: "Adrenaline Body Works is your premier fitness center in Lakeland FL, dedicated to helping you achieve your health and wellness goals. As a local fitne...",
+    description: "Achieve your ultimate health and fitness goals with confidence at Adrenaline Body Works, your premier fitness center in Lakeland FL. We are proud to b...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Adrenaline Body Works is your premier fitness center in Lakeland FL, dedicated to helping you achieve your health and wellness goals. As a local fitness center, we pride ourselves on fostering a supportive, professional, and trustworthy environment for every member of our Polk county community. Our expert trainers offer personalized workout plans, cutting-edge equipment, and dynamic group classes designed to energize and empower you. Whether you're a beginner or an experienced athlete, we provide the guidance and resources needed to transform your body and mind effectively. We understand the unique needs of our Lakeland residents and are committed to delivering exceptional service and lasting results. Join the Adrenaline Body Works family today and experience the difference of a fitness partner truly invested in your success. Start your journey to a stronger, healthier you right here in Lakeland.
+                            Achieve your ultimate health and fitness goals with confidence at Adrenaline Body Works, your premier fitness center in Lakeland FL. We are proud to be a trusted local fitness center, deeply rooted in the community and dedicated to empowering residents across Polk County. At Adrenaline Body Works, you'll discover a professional, clean, and incredibly supportive environment designed to help you succeed, regardless of your current fitness level. Our facility boasts state-of-the-art equipment, a wide array of dynamic group fitness classes, and expertly tailored personal training programs. Our certified trainers bring years of experience and a genuine passion for guiding you safely and effectively towards your aspirations. We believe in fostering a trustworthy atmosphere where every member feels valued and motivated. Join the Adrenaline Body Works family and experience the difference a truly local, professional fitness center can make in your well-being. Start your journey to a stronger, healthier you with us today!
                         </p>
                     </div>
                     

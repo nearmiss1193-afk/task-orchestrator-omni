@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Kirkland's Concrete, LLC | Best Concrete Contractor in Lakeland",
-    description: "For reliable and high-quality concrete solutions, trust Kirkland's Concrete, LLC. As a premier Concrete Contractor in Lakeland FL, we are committed to...",
+    description: "Kirkland's Concrete, LLC is your trusted Concrete Contractor in Lakeland FL, dedicated to delivering exceptional results for homeowners and businesses...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            For reliable and high-quality concrete solutions, trust Kirkland's Concrete, LLC. As a premier Concrete Contractor in Lakeland FL, we are committed to serving our community with integrity and expert craftsmanship. Homeowners and businesses across Polk county rely on our experienced team for durable and aesthetically pleasing results. We specialize in a full range of concrete services, including driveways, patios, foundations, decorative concrete, and repairs. Choosing a local Concrete Contractor like us means partnering with professionals who understand the specific needs and building codes of the Lakeland area. We pride ourselves on transparent communication, timely project completion, and exceptional customer satisfaction. From initial consultation to the final pour, Kirkland's Concrete, LLC delivers professionalism and lasting value on every project. Experience the difference of working with a local, trusted concrete expert dedicated to excellence.
+                            Kirkland's Concrete, LLC is your trusted Concrete Contractor in Lakeland FL, dedicated to delivering exceptional results for homeowners and businesses across Polk County. As a leading local Concrete Contractor, we pride ourselves on professionalism, reliability, and superior craftsmanship for every project. From durable foundations, elegant patios, and custom driveways to expert repairs and decorative concrete solutions, our experienced team ensures lasting quality. We understand the unique demands of the Florida climate, providing durable and aesthetically pleasing concrete work that enhances your property's value and longevity. When you choose Kirkland's Concrete, LLC, you're partnering with a team committed to meticulous attention to detail and unparalleled customer satisfaction. Contact us today for a free estimate and experience the difference of working with Lakeland's premier concrete specialists.
                         </p>
                     </div>
                     

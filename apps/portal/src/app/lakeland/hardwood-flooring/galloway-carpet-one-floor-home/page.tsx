@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Galloway Carpet One Floor & Home | Best Hardwood Flooring in Lakeland",
-    description: "Galloway Carpet One Floor & Home is your trusted source for exquisite Hardwood Flooring in Lakeland FL. As a premier local Hardwood Flooring expert, w...",
+    description: "Transform your home with stunning Hardwood Flooring in Lakeland FL from Galloway Carpet One Floor & Home. As your trusted local Hardwood Flooring expe...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Galloway Carpet One Floor & Home is your trusted source for exquisite Hardwood Flooring in Lakeland FL. As a premier local Hardwood Flooring expert, we offer a vast selection of beautiful, durable hardwood options designed to elevate any home's style and value. Our professional team provides personalized service, guiding you through every step from choosing the perfect finish to expert installation. We understand the unique needs of homes throughout Lakeland and the wider Polk county area, delivering craftsmanship you can depend on. For generations, homeowners have relied on us for quality products, honest advice, and a commitment to customer satisfaction. Invest in the timeless elegance and lasting beauty of hardwood floors with a company that stands behind its work. Visit Galloway Carpet One Floor & Home today and experience the difference of a truly local, trustworthy partner for your next home renovation.
+                            Transform your home with stunning Hardwood Flooring in Lakeland FL from Galloway Carpet One Floor & Home. As your trusted local Hardwood Flooring experts, we've proudly served Lakeland and the wider Polk county area for years, providing unparalleled quality and service. We understand the unique style and needs of our community, offering a vast selection of beautiful, durable hardwood options to elevate any space. Our professional team is dedicated to guiding you through every step, ensuring a seamless experience from selection to expert installation. Choosing hardwood flooring is an investment in your home's beauty and value, and you can trust our reliable, experienced professionals to deliver exceptional results. Discover why so many in Polk county choose us for their flooring needs. Visit Galloway Carpet One Floor & Home today and experience the difference of true local expertise and trustworthy service.
                         </p>
                     </div>
                     

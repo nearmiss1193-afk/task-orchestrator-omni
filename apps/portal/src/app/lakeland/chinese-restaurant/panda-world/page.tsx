@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Panda World | Best Chinese Restaurant in Lakeland",
-    description: "Panda World invites you to discover the premier Chinese Restaurant in Lakeland FL, where authentic flavors meet exceptional service. As a beloved loca...",
+    description: "Discover Panda World, your premier Chinese Restaurant in Lakeland FL, renowned for authentic flavors and a warm, inviting atmosphere. Proudly serving ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Panda World invites you to discover the premier Chinese Restaurant in Lakeland FL, where authentic flavors meet exceptional service. As a beloved local Chinese Restaurant, we pride ourselves on crafting delectable dishes using only the freshest ingredients and time-honored recipes. Whether you're craving classic General T'so's Chicken, savory Lo Mein, or exploring our unique chef specials, every meal is prepared with passion and precision. We’re dedicated to serving our cherished community across Polk County, offering a welcoming dining experience perfect for family dinners, quick lunches, or a relaxing evening out. Trust Panda World for consistently delicious Chinese cuisine and a professional, friendly atmosphere. Experience the difference quality makes. Visit us today and find your new favorite local spot for exquisite Chinese food.
+                            Discover Panda World, your premier Chinese Restaurant in Lakeland FL, renowned for authentic flavors and a warm, inviting atmosphere. Proudly serving residents and visitors across Polk County, we are your trusted local Chinese Restaurant, committed to culinary excellence and customer satisfaction. Our extensive menu features a wide array of meticulously prepared dishes, from classic Kung Pao Chicken and flavorful Dim Sum to savory Moo Shu Pork and fresh seafood options, all crafted with the finest ingredients and traditional techniques. At Panda World, we believe in providing not just a meal, but a memorable dining experience characterized by professional, friendly service and a clean, welcoming environment for all ages. Whether you're planning a family dinner, a quick lunch, or convenient takeout, trust Panda World to deliver exceptional Chinese cuisine that satisfies every craving. Experience the difference a truly dedicated local restaurant makes.
                         </p>
                     </div>
                     

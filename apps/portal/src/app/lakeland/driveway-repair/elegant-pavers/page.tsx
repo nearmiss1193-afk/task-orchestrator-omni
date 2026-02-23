@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Elegant Pavers | Best Driveway Repair in Lakeland",
-    description: "Elegant Pavers stands as your premier choice for exceptional Driveway Repair in Lakeland FL. As a trusted local Driveway Repair specialist, we deeply ...",
+    description: "Elegant Pavers provides expert Driveway Repair in Lakeland FL, restoring your home's curb appeal and functionality. As your trusted local Driveway Rep...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Elegant Pavers stands as your premier choice for exceptional Driveway Repair in Lakeland FL. As a trusted local Driveway Repair specialist, we deeply understand the unique challenges faced by homeowners across Polk County. Our dedicated team excels in comprehensive driveway solutions, addressing everything from unsightly cracks and dangerous potholes to uneven surfaces and drainage problems. We commit to restoring not just the appearance but also the structural integrity and safety of your driveway. With Elegant Pavers, you receive professional, high-quality craftsmanship, reliable service, and durable results designed to enhance your property's curb appeal for years to come. We pride ourselves on transparent communication and unwavering customer satisfaction. For any driveway issue, big or small, choose the experienced local experts who truly care. Contact us today for a free, no-obligation estimate and discover why we're the preferred choice for Driveway Repair in Lakeland FL and throughout Polk County.
+                            Elegant Pavers provides expert Driveway Repair in Lakeland FL, restoring your home's curb appeal and functionality. As your trusted local Driveway Repair specialists, we understand the unique challenges driveways face across Polk county. Our professional team offers durable, high-quality solutions for cracks, potholes, and worn surfaces, ensuring a safe and aesthetically pleasing entrance for years to come. We are committed to transparency, reliability, and superior craftsmanship, earning the trust of homeowners throughout Lakeland. Don't let a damaged driveway diminish your property's value or create hazards. Choose Elegant Pavers for efficient, long-lasting repairs delivered with integrity. We're dedicated to enhancing homes in Lakeland and the wider Polk county area. Contact us for a free estimate and experience the difference of working with a truly local and dependable team.
                         </p>
                     </div>
                     

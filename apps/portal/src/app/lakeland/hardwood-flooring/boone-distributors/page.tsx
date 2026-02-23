@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Boone Distributors | Best Hardwood Flooring in Lakeland",
-    description: "For premium Hardwood Flooring in Lakeland FL, trust Boone Distributors. We are your local Hardwood Flooring experts, proudly serving homeowners and bu...",
+    description: "Elevate your home with the timeless beauty of Hardwood Flooring in Lakeland FL, courtesy of Boone Distributors. As your trusted local Hardwood Floorin...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            For premium Hardwood Flooring in Lakeland FL, trust Boone Distributors. We are your local Hardwood Flooring experts, proudly serving homeowners and businesses across Polk County with unmatched quality and service. Our professional team provides expert guidance from an extensive selection of stunning hardwoods to precise, flawless installation. We ensure a seamless experience, delivering beautiful, durable floors that enhance your property's value and aesthetic. Committed to exceptional craftsmanship and customer satisfaction, Boone Distributors offers tailored solutions for every style and budget. Choose our local team to transform your space with the timeless elegance of hardwood. Experience the Boone Distributors difference.
+                            Elevate your home with the timeless beauty of Hardwood Flooring in Lakeland FL, courtesy of Boone Distributors. As your trusted local Hardwood Flooring specialists, we bring decades of experience and a commitment to excellence right to your doorstep. Serving homeowners and businesses across Polk county, we pride ourselves on offering an unmatched selection of premium hardwood species, finishes, and styles. Our professional team is dedicated to guiding you through every step, from expert consultation and precise measurements to flawless installation. We prioritize transparency, quality, and customer satisfaction, ensuring your investment in new flooring adds lasting value and elegance. Choose Boone Distributors for a reliable, local partner that delivers stunning results and a truly trustworthy experience. Discover why so many in Lakeland rely on us for their hardwood needs.
                         </p>
                     </div>
                     

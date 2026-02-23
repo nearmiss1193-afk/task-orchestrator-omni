@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Southside Barbell | Best fitness center in Lakeland",
-    description: "Southside Barbell is your premier fitness center in Lakeland FL, dedicated to empowering individuals of all levels to achieve their strength and fitne...",
+    description: "Southside Barbell is the leading fitness center in Lakeland FL, dedicated to helping you achieve strength and wellness. As a trusted local fitness cen...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Southside Barbell is your premier fitness center in Lakeland FL, dedicated to empowering individuals of all levels to achieve their strength and fitness goals. As a leading local fitness center, we provide a professional, supportive environment with top-tier equipment and expert coaching tailored to your success. Whether you're a seasoned lifter or just starting your fitness journey, our community-focused gym offers personalized programming and a motivating atmosphere designed for consistent progress. We pride ourselves on creating a space where members feel challenged, supported, and part of a true fitness family. Proudly serving the entire Polk county area, Southside Barbell is built on a foundation of results, expertise, and genuine care for our community. Experience the difference of a truly dedicated fitness center focused on helping you build strength, improve conditioning, and reach your full potential. Discover your strongest self with us – your health and performance are our priority.
+                            Southside Barbell is the leading fitness center in Lakeland FL, dedicated to helping you achieve strength and wellness. As a trusted local fitness center, we provide a professional, supportive environment for all levels. Our state-of-the-art facility in Polk county offers top-tier equipment and expert coaching, designed to build muscle, increase strength, and improve overall wellness safely. We foster a strong community where members feel empowered and supported. Whether you're a seasoned powerlifter or beginning your strength journey, our dedicated team guides you every step. Discover a professional atmosphere focused on your progress. Join Southside Barbell and experience the difference a truly local, community-focused fitness center makes. Visit us today for a stronger you.
                         </p>
                     </div>
                     

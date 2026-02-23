@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "MISSION BBQ | Best Bbq Restaurant in Lakeland",
-    description: "Searching for the best Bbq Restaurant in Lakeland FL? MISSION BBQ proudly serves authentic, slow-smoked barbecue and hearty, homemade sides right here...",
+    description: "Experience authentic American BBQ right here in Lakeland, FL. MISSION BBQ is your premier Bbq Restaurant in Lakeland FL, dedicated to serving slow-smo...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Searching for the best Bbq Restaurant in Lakeland FL? MISSION BBQ proudly serves authentic, slow-smoked barbecue and hearty, homemade sides right here in Polk county. As a trusted local Bbq Restaurant, we’re deeply dedicated to honoring our nation’s heroes – active military, veterans, and first responders – every single day through our unwavering mission. Our commitment extends to providing an exceptional dining experience, where every bite of our tender brisket, savory pulled pork, and flavorful chicken is smoked to perfection using time-honored techniques. We believe in great food and a greater mission, making us more than just a restaurant. Experience the true taste of American BBQ, crafted with honor and served with genuine gratitude. Join us in Lakeland for a delicious meal that supports a cause close to our hearts. Taste the difference at your trusted local spot for incredible BBQ.
+                            Experience authentic American BBQ right here in Lakeland, FL. MISSION BBQ is your premier Bbq Restaurant in Lakeland FL, dedicated to serving slow-smoked perfection daily. As a trusted local Bbq Restaurant, we pride ourselves on an unwavering commitment to quality, meticulously preparing premium meats like tender brisket, savory pulled pork, and fall-off-the-bone ribs. Each dish, paired with classic sides, embodies the true spirit of American BBQ. We are proud to be a cornerstone of the Lakeland community, bringing delicious, handcrafted meals to residents and visitors throughout Polk County. Our mission extends beyond great food; it’s about honoring heroes and providing a welcoming, family-friendly atmosphere. When you choose MISSION BBQ, you're choosing a professional, reliable dining experience built on authentic flavors and genuine service. Visit us for a meal that not only satisfies your cravings but also supports a meaningful cause, solidifying our place as a neighborhood favorite.
                         </p>
                     </div>
                     

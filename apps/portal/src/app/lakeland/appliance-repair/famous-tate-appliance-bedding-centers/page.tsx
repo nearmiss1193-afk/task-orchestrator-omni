@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Famous Tate Appliance & Bedding Centers | Best Appliance Repair in Lakeland",
-    description: "Is your essential appliance on the fritz? Don't let a breakdown disrupt your day. Famous Tate Appliance & Bedding Centers offers professional and reli...",
+    description: "Famous Tate Appliance & Bedding Centers has been your trusted partner for expert Appliance Repair in Lakeland FL for decades. When your essential home...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Is your essential appliance on the fritz? Don't let a breakdown disrupt your day. Famous Tate Appliance & Bedding Centers offers professional and reliable Appliance Repair in Lakeland FL. For years, we've been the trusted local Appliance Repair experts, serving homes and businesses throughout Polk County with unmatched dedication. Our highly skilled technicians specialize in diagnosing and fixing a wide range of appliance issues, from refrigerators and ovens to washers and dryers, for all major brands. We understand the inconvenience of a faulty appliance, which is why we provide prompt, efficient service with transparent pricing. When you choose Famous Tate, you're partnering with a local team committed to restoring your appliance's functionality quickly and effectively. Experience the peace of mind that comes with expert, trustworthy repairs. Contact us today for dependable service you can count on.
+                            Famous Tate Appliance & Bedding Centers has been your trusted partner for expert Appliance Repair in Lakeland FL for decades. When your essential home appliances falter, you need reliable solutions fast. Our professional, factory-trained technicians provide prompt, efficient, and trustworthy local Appliance Repair services across Lakeland and the wider Polk county area. We service all major brands, from refrigerators and ovens to washers, dryers, and dishwashers, ensuring your household runs smoothly. We understand the inconvenience of a broken appliance, and we're committed to restoring its performance with precision and genuine parts. As a local, family-owned business, we pride ourselves on exceptional customer service, transparent pricing, and lasting repairs. Choose Famous Tate for peace of mind and quality service you can depend on. Experience the difference of a reputable local expert dedicated to our community.
                         </p>
                     </div>
                     

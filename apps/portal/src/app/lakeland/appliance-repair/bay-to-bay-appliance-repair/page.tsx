@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Bay To Bay Appliance Repair | Best Appliance Repair in Lakeland",
-    description: "Dealing with a broken appliance in Lakeland, FL? Bay To Bay Appliance Repair is your premier local Appliance Repair partner, dedicated to restoring co...",
+    description: "Bay To Bay Appliance Repair is your trusted local partner for expert Appliance Repair in Lakeland FL. We understand how disruptive a broken appliance ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Dealing with a broken appliance in Lakeland, FL? Bay To Bay Appliance Repair is your premier local Appliance Repair partner, dedicated to restoring convenience to your home. We understand the frustration and disruption a faulty refrigerator, oven, dishwasher, or washing machine can cause. As a trusted local Appliance Repair service, we proudly serve homeowners throughout Lakeland and the wider Polk county area. Our team of certified and professional technicians brings extensive experience to every job, offering prompt, efficient, and trustworthy solutions for all major appliance brands. We prioritize clear communication, fair pricing, and lasting repairs. For reliable Appliance Repair in Lakeland FL, choose the experts who care. Don't let appliance troubles slow you down – contact Bay To Bay Appliance Repair today for exceptional service you can depend on. We're committed to keeping your household running smoothly.
+                            Bay To Bay Appliance Repair is your trusted local partner for expert Appliance Repair in Lakeland FL. We understand how disruptive a broken appliance can be to your daily routine. From refrigerators failing to keep food cold to washers refusing to spin, our highly trained and certified technicians are equipped to diagnose and fix a wide range of issues quickly and effectively. As a truly local Appliance Repair service dedicated to the Polk county community, we prioritize honest assessments, transparent pricing, and lasting solutions. When you choose Bay To Bay, you're choosing reliability, professionalism, and a commitment to restoring convenience to your home. Experience peace of mind with our dependable, high-quality appliance repair services.
                         </p>
                     </div>
                     

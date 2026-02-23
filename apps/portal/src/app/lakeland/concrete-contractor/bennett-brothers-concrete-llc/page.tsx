@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "BENNETT BROTHERS CONCRETE LLC | Best Concrete Contractor in Lakeland",
-    description: "Bennett Brothers Concrete LLC is your premier Concrete Contractor in Lakeland FL, specializing in high-quality concrete solutions for homes and busine...",
+    description: "Bennett Brothers Concrete LLC is your premier Concrete Contractor in Lakeland FL, dedicated to delivering superior concrete solutions for residential ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Bennett Brothers Concrete LLC is your premier Concrete Contractor in Lakeland FL, specializing in high-quality concrete solutions for homes and businesses across Polk county. As a trusted local Concrete Contractor, we bring years of experience and a deep understanding of the area's specific construction needs. Our dedicated team delivers superior craftsmanship and durable results on every project, from expertly poured driveways, custom patios, and sturdy sidewalks to robust foundations and intricate decorative concrete. We pride ourselves on our professionalism, transparent communication, and unwavering commitment to client satisfaction, ensuring a smooth and reliable experience from start to finish. Choosing Bennett Brothers Concrete means partnering with an experienced, reliable local contractor dedicated to enhancing your property with exceptional concrete work designed to last. Experience the difference quality and local expertise make for all your concrete needs in Lakeland, FL, and surrounding Polk county.
+                            Bennett Brothers Concrete LLC is your premier Concrete Contractor in Lakeland FL, dedicated to delivering superior concrete solutions for residential and commercial properties. As a leading local Concrete Contractor, we've built a reputation for exceptional craftsmanship, unwavering reliability, and unparalleled customer service throughout Polk county. Whether you need durable driveways, elegant patios, robust foundations, or custom concrete flatwork, our skilled and experienced team ensures professional results that exceed expectations on every project. We understand the specific demands of the Lakeland community and are deeply committed to providing trustworthy, efficient, and long-lasting concrete services designed to enhance your property's value and appeal. Choose Bennett Brothers Concrete LLC for your next concrete endeavor and experience the profound difference of partnering with a dedicated local expert. Contact us today to discuss your project and receive a complimentary estimate!
                         </p>
                     </div>
                     

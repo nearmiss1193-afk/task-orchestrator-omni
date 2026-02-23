@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Red Bug Solar Solutions | Best Solar Panel Installation in Lakeland",
-    description: "Red Bug Solar Solutions is your trusted partner for Solar Panel Installation in Lakeland FL. As a truly local Solar Panel Installation expert, we unde...",
+    description: "Red Bug Solar Solutions is your premier choice for Solar Panel Installation in Lakeland FL. As a truly local Solar Panel Installation company, we are ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Red Bug Solar Solutions is your trusted partner for Solar Panel Installation in Lakeland FL. As a truly local Solar Panel Installation expert, we understand the unique energy needs of our Polk County neighbors. We're dedicated to helping homeowners and businesses throughout Lakeland and surrounding areas embrace clean, affordable solar power. Our professional team provides seamless, high-quality installations, ensuring maximum efficiency and long-term savings on your energy bills. From initial consultation to final inspection, experience unparalleled service and peace of mind with Red Bug Solar Solutions. Choose the local experts committed to powering your future with reliable, sustainable energy. Get your free solar estimate today and discover why countless Polk County residents trust us.
+                            Red Bug Solar Solutions is your premier choice for Solar Panel Installation in Lakeland FL. As a truly local Solar Panel Installation company, we are dedicated to helping Lakeland residents and businesses harness the power of the sun. We serve all of Polk County with professional, high-quality solar energy solutions you can trust. Our certified experts specialize in custom-designed solar systems that significantly reduce your electricity bills and enhance your property's value, all while contributing to a greener future. With Red Bug Solar Solutions, you gain a reliable, local partner committed to transparency, superior craftsmanship, and unmatched customer service. Experience the peace of mind that comes with a smart, sustainable investment. Choose the trusted name for Solar Panel Installation in Lakeland FL – contact Red Bug Solar Solutions for a free, no-obligation consultation today and start saving!
                         </p>
                     </div>
                     

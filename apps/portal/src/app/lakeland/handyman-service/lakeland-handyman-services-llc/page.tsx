@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Lakeland Handyman Services, LLC | Best handyman service in Lakeland",
-    description: "Lakeland Handyman Services, LLC is your trusted professional handyman service in Lakeland FL, providing reliable and high-quality solutions for all yo...",
+    description: "Looking for a reliable handyman service in Lakeland FL? Lakeland Handyman Services, LLC offers professional, trustworthy solutions for your home or bu...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Lakeland Handyman Services, LLC is your trusted professional handyman service in Lakeland FL, providing reliable and high-quality solutions for all your home repair and improvement needs. As a dedicated local handyman service, we understand the importance of dependable assistance for residents and businesses throughout Polk County. Our experienced team handles a wide range of tasks, from minor fixes and routine maintenance to larger projects like drywall repair, painting, and general home upkeep. We pride ourselves on delivering meticulous workmanship, clear communication, and exceptional customer satisfaction with every job. Choose a local partner committed to integrity and efficiency. For prompt, trustworthy service that keeps your home in top condition, contact Lakeland Handyman Services, LLC today for a free, no-obligation estimate.
+                            Looking for a reliable handyman service in Lakeland FL? Lakeland Handyman Services, LLC offers professional, trustworthy solutions for your home or business. As your trusted local handyman service, we pride ourselves on delivering exceptional craftsmanship and meticulous attention to detail on every project. From minor repairs and routine maintenance to complex installations and comprehensive home improvements, our skilled team handles it all with efficiency and expertise. We understand the unique needs of properties throughout Lakeland and the wider Polk county area. Choosing Lakeland Handyman Services, LLC means opting for peace of mind, knowing your projects are in capable, local hands. Experience the difference of dedicated, professional service that values your satisfaction above all else. Get your to-do list done right, the first time. Contact us today for dependable service you can trust.
                         </p>
                     </div>
                     

@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Kneeland TV & Appliance Service | Best Appliance Repair in Lakeland",
-    description: "Kneeland TV & Appliance Service is your premier choice for expert Appliance Repair in Lakeland FL. As a truly local Appliance Repair company, we’ve bu...",
+    description: "Experiencing appliance trouble in Lakeland, FL? Kneeland TV & Appliance Service is your trusted local Appliance Repair expert. For decades, we've prov...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Kneeland TV & Appliance Service is your premier choice for expert Appliance Repair in Lakeland FL. As a truly local Appliance Repair company, we’ve built a reputation for professional, trustworthy service throughout Polk County. Our certified technicians specialize in fixing all major household appliances, including refrigerators, freezers, ovens, ranges, dishwashers, washers, and dryers. We understand the disruption a broken appliance causes, which is why we prioritize prompt diagnostics and efficient, long-lasting repairs. From minor glitches to major malfunctions, our team is equipped with the knowledge and tools to restore your appliance’s functionality quickly and correctly. We pride ourselves on transparent pricing, reliable workmanship, and clear communication every step of the way. When you need dependable appliance service, trust the local experts at Kneeland TV & Appliance Service. We're dedicated to serving the Lakeland community with integrity and expertise, ensuring your home runs smoothly with minimal hassle.
+                            Experiencing appliance trouble in Lakeland, FL? Kneeland TV & Appliance Service is your trusted local Appliance Repair expert. For decades, we've provided reliable, efficient appliance repair solutions across Polk county, ensuring your home runs smoothly and stress-free. From refrigerators refusing to cool, washers that won't spin, or ovens that won't heat, our certified technicians skillfully diagnose and repair all major brands and models with professionalism and precision. We understand the major inconvenience a broken appliance causes, which is why we prioritize prompt, honest service you can truly depend on. When you need expert Appliance Repair in Lakeland FL, trust our experienced, friendly team to get your household appliances working like new again. We're proud to offer top-tier local Appliance Repair to our neighbors throughout Lakeland and the surrounding Polk county communities, committed to your complete satisfaction. Contact Kneeland TV & Appliance Service today for dependable, professional service you can trust.
                         </p>
                     </div>
                     

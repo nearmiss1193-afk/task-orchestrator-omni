@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Vital Fitness | Best fitness center in Lakeland",
-    description: "Vital Fitness is your premier fitness center in Lakeland FL, committed to empowering your health journey. As a trusted local fitness center in Polk Co...",
+    description: "Vital Fitness is your premier fitness center in Lakeland FL, dedicated to empowering our community through health and wellness. As a trusted local fit...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Vital Fitness is your premier fitness center in Lakeland FL, committed to empowering your health journey. As a trusted local fitness center in Polk County, we offer a modern, impeccably clean facility equipped with state-of-the-art cardio and strength training machinery. Our certified, experienced trainers provide personalized coaching and diverse group fitness classes, ensuring tailored support for every fitness level. We foster a welcoming, supportive community environment where members feel confident and motivated to reach their wellness goals. From high-intensity interval training to relaxing yoga sessions, our comprehensive programs are designed for effective and sustainable results. Choose Vital Fitness and discover a truly professional and dedicated local fitness center focused on your success. Join us and build a healthier you.
+                            Vital Fitness is your premier fitness center in Lakeland FL, dedicated to empowering our community through health and wellness. As a trusted local fitness center, we understand the unique needs of our Polk County neighbors, offering a supportive and professional environment for everyone. Our state-of-the-art facility boasts modern, high-quality equipment, diverse group classes, and expert personal trainers ready to guide you on your journey. Whether you're aiming for weight loss, strength building, or improved overall well-being, we provide tailored solutions and consistent encouragement. We are more than just a gym; we are a community-focused fitness hub where accountability meets genuine care. Discover why Vital Fitness is recognized as a leading fitness center in Lakeland FL, fostering healthier lives across Polk County with integrity and expertise. Join us today to experience the commitment, personalized attention, and lasting results you truly deserve.
                         </p>
                     </div>
                     

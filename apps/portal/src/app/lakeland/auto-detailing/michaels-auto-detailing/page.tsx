@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Michael's Auto Detailing | Best auto detailing in Lakeland",
-    description: "Restore your vehicle's showroom shine with Michael's Auto Detailing, your premier choice for expert auto detailing in Lakeland FL. We understand that ...",
+    description: "Experience the ultimate in professional car care with Michael's Auto Detailing, your trusted source for auto detailing in Lakeland FL. We are proud to...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Restore your vehicle's showroom shine with Michael's Auto Detailing, your premier choice for expert auto detailing in Lakeland FL. We understand that your car is a significant investment, and our professional, trustworthy team is dedicated to providing meticulous care that truly exceeds expectations. From comprehensive interior deep cleaning, sanitization, and conditioning to flawless exterior paint correction, swirl removal, and long-lasting ceramic coatings, we use only premium products and proven techniques to protect and beautify your ride. As a leading local auto detailing service, we pride ourselves on exceptional craftsmanship and a personalized, trustworthy experience right here in Polk County. Discover the remarkable difference professional detailing makes for your vehicle's longevity and appearance. Experience the pride of a perfectly maintained car with Michael's Auto Detailing – where quality and customer satisfaction are always our top priorities. Schedule your appointment today for unparalleled service!
+                            Experience the ultimate in professional car care with Michael's Auto Detailing, your trusted source for auto detailing in Lakeland FL. We are proud to be a locally owned and operated business, deeply committed to serving the Polk county community with integrity and expertise. Your vehicle deserves meticulous attention, and our highly skilled technicians deliver just that, using industry-leading products and techniques for a truly transformative clean. From comprehensive exterior treatments like paint correction and ceramic coatings to deep interior sanitization and conditioning, we restore your car's showroom brilliance. As your local auto detailing specialists, we prioritize transparency, reliability, and unparalleled craftsmanship. Choose Michael's Auto Detailing for a superior clean and lasting protection, ensuring your vehicle always looks its absolute best. Trust the local experts who care.
                         </p>
                     </div>
                     

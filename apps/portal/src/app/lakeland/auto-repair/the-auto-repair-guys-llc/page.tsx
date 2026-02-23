@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "The Auto Repair Guys LLC | Best Auto Repair in Lakeland",
-    description: "For dependable Auto Repair in Lakeland FL, look no further than The Auto Repair Guys LLC. As your trusted local Auto Repair shop, we're dedicated to p...",
+    description: "When you need dependable Auto Repair in Lakeland FL, turn to the trusted professionals at The Auto Repair Guys LLC. As your premier local Auto Repair ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            For dependable Auto Repair in Lakeland FL, look no further than The Auto Repair Guys LLC. As your trusted local Auto Repair shop, we're dedicated to providing honest, high-quality service to drivers across Polk county and beyond. Our experienced, certified technicians handle a comprehensive range of automotive needs, from routine maintenance like precise oil changes, tire rotations, and comprehensive inspections to complex engine diagnostics, transmission repairs, and essential brake services. We understand the critical importance of a reliable vehicle for your daily commute, family safety, and peace of mind. That's why we prioritize transparent communication, fair and upfront pricing, and expert workmanship on every single job. When you choose The Auto Repair Guys LLC, you're choosing professional service from a team deeply committed to our community, ensuring your vehicle runs smoothly and safely. Experience the difference a truly local and trustworthy auto repair shop makes for your vehicle's longevity and your driving confidence.
+                            When you need dependable Auto Repair in Lakeland FL, turn to the trusted professionals at The Auto Repair Guys LLC. As your premier local Auto Repair experts, we deeply understand the unique driving needs of families and businesses across Polk County. Our team of ASE-certified technicians delivers meticulous, honest service for all makes and models, from essential oil changes and tire services to complex engine diagnostics, brake repairs, and advanced vehicle systems. We are committed to earning your trust through transparent communication, competitive pricing, and a steadfast dedication to getting you back on the road safely and efficiently, ensuring your vehicle performs its best. Experience the peace of mind that comes from choosing a professional, local shop where quality craftsmanship and exceptional customer satisfaction are always guaranteed. Let The Auto Repair Guys LLC be your first choice for reliable vehicle care.
                         </p>
                     </div>
                     

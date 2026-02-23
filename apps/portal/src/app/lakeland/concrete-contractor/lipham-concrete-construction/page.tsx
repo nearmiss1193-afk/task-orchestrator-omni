@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Lipham Concrete Construction | Best Concrete Contractor in Lakeland",
-    description: "For superior concrete solutions in Lakeland, FL, trust Lipham Concrete Construction. As your premier Concrete Contractor in Lakeland FL, we bring prof...",
+    description: "Lipham Concrete Construction is your premier Concrete Contractor in Lakeland FL, offering reliable and high-quality concrete services for both residen...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            For superior concrete solutions in Lakeland, FL, trust Lipham Concrete Construction. As your premier Concrete Contractor in Lakeland FL, we bring professionalism, precision, and unwavering reliability to every project. We are proud to be the local Concrete Contractor residents and businesses depend on throughout Lakeland and the wider Polk County area for exceptional quality craftsmanship. Our expertise spans durable driveways, robust foundations, inviting patios, intricate decorative concrete, and expert concrete repair. The experienced team at Lipham Concrete Construction ensures long-lasting, aesthetically pleasing results that stand the test of time. We understand the unique needs of the Lakeland community, delivering honest, transparent service with meticulous attention to detail. Choose Lipham Concrete Construction for all your concrete needs, backed by years of local trust and unparalleled expertise right here in Polk County. Let us build your vision.
+                            Lipham Concrete Construction is your premier Concrete Contractor in Lakeland FL, offering reliable and high-quality concrete services for both residential and commercial projects. As a trusted local Concrete Contractor, we specialize in everything from sturdy foundations and durable driveways to custom patios, decorative concrete, and robust commercial slabs. Our experienced team brings extensive expertise and meticulous craftsmanship to every job, ensuring long-lasting results that exceed expectations. We understand the unique needs of property owners across Polk county, providing personalized solutions tailored to your specific vision and budget. With a steadfast commitment to exceptional service, clear communication, and superior materials, Lipham Concrete Construction stands as the dependable choice for all your concrete needs. Choose us for professionalism, integrity, and durable concrete solutions right here in Central Florida. We're dedicated to enhancing your property with quality concrete construction you can trust, built to last for years to come.
                         </p>
                     </div>
                     

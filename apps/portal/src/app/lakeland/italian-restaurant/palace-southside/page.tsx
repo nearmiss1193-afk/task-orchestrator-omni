@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Palace Southside | Best Italian Restaurant in Lakeland",
-    description: "Experience the true taste of Italy right here in Lakeland, FL at Palace Southside, a beloved local Italian Restaurant. For years, we’ve been serving u...",
+    description: "Palace Southside is your trusted Italian Restaurant in Lakeland FL, offering an authentic taste of Italy right in the heart of Polk County. As a cheri...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Experience the true taste of Italy right here in Lakeland, FL at Palace Southside, a beloved local Italian Restaurant. For years, we’ve been serving up authentic dishes crafted with the freshest ingredients and time-honored family recipes. As a cornerstone Italian Restaurant in Lakeland FL, we pride ourselves on offering a warm, inviting atmosphere where every meal feels like a special occasion. From classic pasta dishes and hand-tossed pizzas to decadent desserts, our menu is designed to delight every palate. We are a trusted establishment within Polk County, committed to culinary excellence and exceptional service. Discover why locals consistently choose Palace Southside for an unforgettable dining experience. Join us and savor the tradition of fine Italian cuisine, prepared with passion and served with a smile.
+                            Palace Southside is your trusted Italian Restaurant in Lakeland FL, offering an authentic taste of Italy right in the heart of Polk County. As a cherished local Italian Restaurant, we are dedicated to serving exquisite dishes crafted from the freshest ingredients and time-honored family recipes. Experience the rich culinary traditions of Italy, from perfectly al dente pasta and artisanal pizzas to succulent seafood and robust meat entrees, all prepared with passion and precision. Our professional team ensures a welcoming and comfortable dining experience, perfect for family dinners, date nights, or celebrating special moments. We pride ourselves on genuine hospitality and consistent quality, making every visit memorable. Discover why Palace Southside is Lakeland's go-to destination for exceptional Italian cuisine. Visit us and savor a truly authentic meal today.
                         </p>
                     </div>
                     

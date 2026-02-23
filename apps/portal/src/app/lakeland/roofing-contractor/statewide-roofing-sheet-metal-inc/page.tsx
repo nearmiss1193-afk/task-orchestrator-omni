@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Statewide Roofing & Sheet Metal Inc. | Best roofing contractor in Lakeland",
-    description: "Statewide Roofing & Sheet Metal Inc. is your trusted and experienced roofing contractor in Lakeland FL, delivering superior roofing solutions for resi...",
+    description: "Statewide Roofing & Sheet Metal Inc. is your premier roofing contractor in Lakeland FL, dedicated to providing exceptional service and lasting solutio...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Statewide Roofing & Sheet Metal Inc. is your trusted and experienced roofing contractor in Lakeland FL, delivering superior roofing solutions for residential and commercial properties across Polk County. As a dedicated local roofing contractor, we understand the unique demands of Florida’s climate, ensuring every roof repair, replacement, or new installation is built for durability and longevity. Our commitment to professionalism and exceptional craftsmanship sets us apart. We prioritize clear communication, transparent pricing, and meticulous attention to detail on every project, earning the trust of homeowners and businesses throughout Lakeland, FL, and the surrounding Polk County area. From asphalt shingles to metal roofing, rely on our licensed and insured experts for reliable service and lasting protection. Experience peace of mind and get a free, no-obligation estimate from Statewide Roofing & Sheet Metal Inc. – your dependable local roofing contractor.
+                            Statewide Roofing & Sheet Metal Inc. is your premier roofing contractor in Lakeland FL, dedicated to providing exceptional service and lasting solutions. As a trusted local roofing contractor, we specialize in comprehensive residential and commercial roofing services across Polk County. From meticulous repairs and routine maintenance to complete roof replacements and new installations, our experienced team ensures superior craftsmanship and durable results designed to withstand Florida's unique climate. Homeowners and businesses throughout Lakeland trust us for our honest assessments, transparent communication, and unwavering commitment to customer satisfaction. We are fully licensed and insured, providing peace of mind with every project. Choose Statewide Roofing & Sheet Metal Inc. for reliable, high-quality roofing you can depend on. Contact us today for a free, no-obligation estimate and experience the difference of working with Lakeland's top roofing experts.
                         </p>
                     </div>
                     

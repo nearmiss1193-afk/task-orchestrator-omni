@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Curry & Co Plumbing Inc | Best plumbing company in Lakeland",
-    description: "Curry & Co Plumbing Inc. is your trusted plumbing company in Lakeland FL, dedicated to providing exceptional service with integrity and professionalis...",
+    description: "Curry & Co Plumbing Inc. stands as your leading plumbing company in Lakeland FL, dedicated to providing unparalleled plumbing solutions for both resid...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Curry & Co Plumbing Inc. is your trusted plumbing company in Lakeland FL, dedicated to providing exceptional service with integrity and professionalism. As a leading local plumbing company, we understand the unique needs of homeowners and businesses across Polk county. From urgent repairs and routine maintenance to water heater installations and drain cleaning, our licensed and experienced plumbers are equipped to handle any plumbing challenge efficiently and reliably. We pride ourselves on transparent pricing, prompt service, and lasting solutions, ensuring your peace of mind. When you choose Curry & Co Plumbing, you're partnering with a team committed to exceeding your expectations. Experience the difference a truly professional and trustworthy local plumber makes for your Lakeland home or business. Your satisfaction is our priority.
+                            Curry & Co Plumbing Inc. stands as your leading plumbing company in Lakeland FL, dedicated to providing unparalleled plumbing solutions for both residential and commercial properties. As a trusted local plumbing company, we are deeply rooted in the community, offering swift, professional, and courteous service throughout Lakeland and across the entire Polk county area. Our experienced and certified plumbers specialize in everything from urgent leak repairs, comprehensive drain cleaning, and efficient water heater installations to general plumbing maintenance and fixture replacements. We are committed to diagnosing issues accurately, offering honest advice, and executing high-quality repairs designed to last. Choosing Curry & Co means selecting a partner you can trust for reliability, exceptional workmanship, and transparent pricing. Experience the peace of mind that comes with expert service from a genuinely local plumbing company. For dependable plumbing solutions in Lakeland FL, reach out to Curry & Co Plumbing Inc. today.
                         </p>
                     </div>
                     

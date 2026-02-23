@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Fire Spot Buffet | Best Chinese Restaurant in Lakeland",
-    description: "Discover an authentic culinary journey at Fire Spot Buffet, the premier Chinese Restaurant in Lakeland FL. We are committed to serving the freshest, m...",
+    description: "Discover Fire Spot Buffet, your top choice for an exceptional Chinese Restaurant in Lakeland FL. We invite you to savor a vibrant array of authentic C...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Discover an authentic culinary journey at Fire Spot Buffet, the premier Chinese Restaurant in Lakeland FL. We are committed to serving the freshest, most flavorful Chinese cuisine, presented in a diverse and constantly replenished buffet. As a trusted local Chinese Restaurant, Fire Spot Buffet proudly caters to the Lakeland community and visitors across Polk county, offering an unmatched dining experience built on quality and value. Our extensive selection ranges from beloved traditional dishes to exciting, innovative chef specials, ensuring every guest finds something to savor. We cultivate a clean, family-friendly, and inviting atmosphere, ideal for any occasion – be it a casual lunch, a lively family dinner, or a special gathering. Experience our dedication to excellence firsthand. Visit Fire Spot Buffet today and enjoy the reliable, delicious Chinese food that makes us a local favorite.
+                            Discover Fire Spot Buffet, your top choice for an exceptional Chinese Restaurant in Lakeland FL. We invite you to savor a vibrant array of authentic Chinese cuisine, meticulously prepared with the freshest ingredients. As a trusted local Chinese Restaurant, Fire Spot Buffet is renowned for its expansive and ever-changing buffet, offering everything from classic General Tso's Chicken and delicious lo mein to crispy spring rolls and savory seafood. We are dedicated to providing a clean, comfortable, and family-friendly dining environment where quality and customer satisfaction are paramount. Perfectly situated for residents across Polk county, we strive to be more than just a restaurant; we are a community hub where delicious food brings people together. Whether you’re stopping by for a quick, satisfying lunch or a leisurely dinner with loved ones, experience the warmth and flavors that make Fire Spot Buffet a cherished local gem. Visit us soon for an unforgettable culinary journey.
                         </p>
                     </div>
                     

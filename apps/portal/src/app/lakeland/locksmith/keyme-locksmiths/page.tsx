@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "KeyMe Locksmiths | Best locksmith in Lakeland",
-    description: "KeyMe Locksmiths is your trusted local locksmith in Lakeland FL, offering professional and reliable services for homes, businesses, and vehicles throu...",
+    description: "KeyMe Locksmiths is your premier local locksmith in Lakeland FL, offering unparalleled security solutions for residents and businesses across Polk Cou...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            KeyMe Locksmiths is your trusted local locksmith in Lakeland FL, offering professional and reliable services for homes, businesses, and vehicles throughout Polk County. Facing a lockout? Need new keys made or advanced security solutions? Our experienced technicians provide prompt, efficient assistance with a focus on your safety and peace of mind. From emergency lockouts and rekeying services to high-security lock installations and key duplication, we are dedicated to delivering top-tier locksmith expertise right here in your community. We understand the unique security needs of Lakeland residents and businesses. Choose KeyMe Locksmiths for trustworthy service, competitive pricing, and unparalleled professionalism. Contact your dependable local locksmith in Lakeland FL today for all your security needs. We're committed to serving Polk County with excellence.
+                            KeyMe Locksmiths is your premier local locksmith in Lakeland FL, offering unparalleled security solutions for residents and businesses across Polk County. We provide fast, reliable, and professional service for all your lock and key needs, ensuring peace of mind. Our experienced technicians are experts in emergency lockouts – whether you're locked out of your home, office, or car – delivering swift assistance when you need it most. Beyond emergencies, we specialize in comprehensive residential lock changes, commercial security upgrades, and precise car key programming and duplication. Trust our team for rekeying services, new lock installations, and advanced access control systems. As your dedicated locksmith in Lakeland FL, we are committed to transparent pricing and dependable, high-quality workmanship. Choose KeyMe Locksmiths for honest advice, expert service, and unwavering support for your property's security.
                         </p>
                     </div>
                     

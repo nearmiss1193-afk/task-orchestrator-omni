@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "ProGrade Handyman Services | Best handyman service in Lakeland",
-    description: "Searching for a reliable handyman service in Lakeland FL? ProGrade Handyman Services is your trusted local partner for all home repair and improvement...",
+    description: "ProGrade Handyman Services offers top-notch, reliable home repair and improvement solutions right here in Lakeland, FL. As a trusted local handyman se...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Searching for a reliable handyman service in Lakeland FL? ProGrade Handyman Services is your trusted local partner for all home repair and improvement needs. We pride ourselves on delivering professional, high-quality workmanship with integrity and a friendly approach. As a dedicated local handyman service, we understand the specific needs of homeowners across Lakeland and throughout Polk County. From minor fixes and routine maintenance to larger projects like drywall repair, painting, or fixture installations, our skilled technicians handle every job with meticulous attention to detail. We are fully licensed and insured, ensuring peace of mind with every service. Choose ProGrade Handyman Services for dependable, efficient solutions that keep your home running smoothly. Experience the difference of a truly professional and trustworthy local team. Contact us today for a free estimate and let us tackle your to-do list with expert care.
+                            ProGrade Handyman Services offers top-notch, reliable home repair and improvement solutions right here in Lakeland, FL. As a trusted local handyman service, we proudly serve homeowners throughout Polk County, ensuring every project is completed with professionalism and precision. Whether you need help with a leaky faucet, drywall repair, painting, carpentry, or general home maintenance, our experienced team delivers quality workmanship you can depend on. We understand the value of a well-maintained home and are dedicated to providing trustworthy, efficient service that fits your schedule and budget. Choose ProGrade for a seamless experience, knowing your property is in expert hands. We are your go-to handyman service in Lakeland FL, committed to excellence and customer satisfaction on every job.
                         </p>
                     </div>
                     

@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "GLASIGauto LLC | Best auto detailing in Lakeland",
-    description: "GLASIGauto LLC provides elite auto detailing in Lakeland FL, dedicated to restoring and protecting your vehicle's pristine condition. As your trusted ...",
+    description: "GLASIGauto LLC is your premier choice for professional auto detailing in Lakeland FL. As a trusted, local auto detailing service, we are dedicated to ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            GLASIGauto LLC provides elite auto detailing in Lakeland FL, dedicated to restoring and protecting your vehicle's pristine condition. As your trusted local auto detailing specialists, we serve the entire Polk county community with integrity and expertise. Our professional technicians are committed to delivering exceptional results, utilizing advanced techniques and premium, eco-friendly products for every service. From comprehensive exterior paint correction and ceramic coatings to thorough interior sanitization and leather conditioning, we meticulously care for every inch of your car. We understand that your vehicle is a significant investment, and our goal is to enhance its appearance, preserve its value, and extend its lifespan. Experience the GLASIGauto LLC commitment to quality and professionalism, ensuring your vehicle always looks its best. Discover why residents choose us for superior auto care right here in Lakeland.
+                            GLASIGauto LLC is your premier choice for professional auto detailing in Lakeland FL. As a trusted, local auto detailing service, we are dedicated to restoring and protecting your vehicle's beauty with meticulous care and high-quality products. Our expert technicians deliver superior results, every time. From thorough interior deep cleaning to advanced paint correction and durable ceramic coatings, GLASIGauto LLC offers a comprehensive range of services tailored to your car's needs. Residents across Polk county trust us for our unwavering commitment to customer satisfaction and exceptional attention to detail. Experience the GLASIGauto LLC difference – where your vehicle receives the professional, reliable care it deserves, right here in Lakeland. We pride ourselves on transparent service and building lasting relationships within our community, ensuring your car looks its absolute best.
                         </p>
                     </div>
                     

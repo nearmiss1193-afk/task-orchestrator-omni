@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "J. Burns' Pizza Shop | Best pizza delivery in Lakeland",
-    description: "Searching for reliable pizza delivery in Lakeland FL? J. Burns' Pizza Shop stands as your premier local choice, dedicated to serving the community wit...",
+    description: "Discover the best pizza delivery in Lakeland FL with J. Burns' Pizza Shop. As your trusted local pizza delivery, we are dedicated to bringing fresh, h...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Searching for reliable pizza delivery in Lakeland FL? J. Burns' Pizza Shop stands as your premier local choice, dedicated to serving the community with exceptional taste and service. We craft each pizza with the freshest, high-quality ingredients, ensuring a culinary experience that satisfies every craving. From classic pepperoni to gourmet vegetarian options, our menu caters to all preferences, baked to perfection and delivered hot to your doorstep. As a trusted local pizza delivery, we understand the importance of promptness and professionalism, making your ordering experience seamless and enjoyable. We're proud to be a staple in the Lakeland community and across Polk County, consistently delivering more than just pizza—we deliver satisfaction. Choose J. Burns' for a dependable, delicious meal from a professional team that genuinely values its customers. Enjoy the convenience and quality that only a truly local establishment can provide.
+                            Discover the best pizza delivery in Lakeland FL with J. Burns' Pizza Shop. As your trusted local pizza delivery, we are dedicated to bringing fresh, hot, and incredibly delicious pizzas right to your doorstep. Proudly serving communities across Polk County, J. Burns' is committed to using only the finest, freshest ingredients to craft every single pie. Whether you're craving a classic pepperoni, a loaded supreme, or a custom creation, our extensive menu offers something to delight every palate. We understand that convenience and quality are key, which is why our reliable delivery service ensures your order arrives promptly and perfectly. Support a genuinely local business that prioritizes exceptional taste and customer satisfaction. For a dependable pizza delivery in Lakeland FL that consistently exceeds expectations, make J. Burns' Pizza Shop your first choice. Order your perfect pizza today!
                         </p>
                     </div>
                     

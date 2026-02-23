@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Coppertop Construction & Roofing | Best roofing contractor in Lakeland",
-    description: "Coppertop Construction & Roofing stands as your trusted roofing contractor in Lakeland FL, proudly serving homeowners and businesses throughout Polk C...",
+    description: "Searching for a reliable roofing contractor in Lakeland FL? Coppertop Construction & Roofing is your trusted local expert. As a premier local roofing ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Coppertop Construction & Roofing stands as your trusted roofing contractor in Lakeland FL, proudly serving homeowners and businesses throughout Polk County with unmatched expertise and integrity. As a truly local roofing contractor, we deeply understand the specific demands of Florida's climate and are committed to delivering robust, long-lasting roofing systems designed to withstand it all. Our highly skilled and certified team specializes in a full spectrum of services, including detailed roof inspections, efficient repairs, and complete roof replacements for various materials, from shingle to metal. We prioritize clear communication, fair pricing, and superior workmanship on every job, ensuring your peace of mind from start to finish. Depend on Coppertop for professional service, exceptional results, and the unwavering reliability you deserve for your most valuable asset. We're dedicated to protecting your investment with quality that lasts. Contact us today for a free, no-obligation estimate and discover why we're Lakeland's preferred choice for roofing excellence.
+                            Searching for a reliable roofing contractor in Lakeland FL? Coppertop Construction & Roofing is your trusted local expert. As a premier local roofing contractor, we are dedicated to providing top-quality roofing solutions for homes and businesses throughout Lakeland and the wider Polk County area. We understand the unique challenges Florida weather presents, offering durable repairs, expert replacements, and thorough inspections designed to protect your investment. Our commitment to professionalism, superior craftsmanship, and customer satisfaction has made us the go-to choice for dependable roofing services. When you choose Coppertop, you’re partnering with a team that prioritizes integrity and delivers lasting results. Experience peace of mind with a roof built to endure. Contact us today for a free estimate.
                         </p>
                     </div>
                     

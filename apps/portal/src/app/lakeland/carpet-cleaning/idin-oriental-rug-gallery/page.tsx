@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Idin Oriental Rug Gallery | Best carpet cleaning in Lakeland",
-    description: "Idin Oriental Rug Gallery provides expert carpet cleaning in Lakeland FL, dedicated to revitalizing your cherished rugs and carpets. As your trusted l...",
+    description: "Idin Oriental Rug Gallery offers unparalleled professional carpet cleaning in Lakeland FL. As a trusted local carpet cleaning service, we proudly serv...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Idin Oriental Rug Gallery provides expert carpet cleaning in Lakeland FL, dedicated to revitalizing your cherished rugs and carpets. As your trusted local carpet cleaning service, we proudly serve homes and businesses throughout Polk county, ensuring every fiber receives the meticulous care it deserves. Our professional team specializes in both delicate oriental rugs and everyday carpeting, using safe, advanced techniques to deeply clean, remove stubborn stains, and eliminate allergens without causing damage. We are committed to extending the life and beauty of your investments, delivering unparalleled results and a refreshingly clean environment. Choose Idin Oriental Rug Gallery for reliable, high-quality carpet cleaning right here in Lakeland. Experience the difference our expertise makes.
+                            Idin Oriental Rug Gallery offers unparalleled professional carpet cleaning in Lakeland FL. As a trusted local carpet cleaning service, we proudly serve homes and businesses throughout Polk County, ensuring every fiber of your carpet receives expert attention. Our seasoned technicians employ state-of-the-art, eco-friendly methods to gently remove deep-seated dirt, stubborn stains, and allergens, restoring your carpets to their original vibrancy and freshness. We specialize in revitalizing all types of carpets, from cherished oriental rugs to everyday broadloom, with meticulous care and precision. Choose Idin Oriental Rug Gallery for reliable, thorough, and trustworthy carpet cleaning. Experience the peace of mind that comes with exceptionally clean carpets, enhancing your home or office environment. We are your local experts dedicated to superior results and complete customer satisfaction, making us the top choice for carpet care in Lakeland and beyond.
                         </p>
                     </div>
                     

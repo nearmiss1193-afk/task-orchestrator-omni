@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "AquaBlu Window Washing | Best window cleaning in Lakeland",
-    description: "AquaBlu Window Washing provides professional window cleaning in Lakeland FL. As your trusted local window cleaning experts, we deliver sparkling, stre...",
+    description: "AquaBlu Window Washing delivers unparalleled window cleaning in Lakeland FL, ensuring your home or business always looks its best. As your premier loc...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,9 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            AquaBlu Window Washing provides professional window cleaning in Lakeland FL. As your trusted local window cleaning experts, we deliver sparkling, streak-free results for homes and businesses throughout Polk County. Our skilled team understands Lakeland's needs, using advanced techniques and eco-friendly solutions to ensure lasting clarity and enhance your property's curb appeal.
-
-Experience the AquaBlu difference: meticulous service and guaranteed satisfaction. Enjoy brighter interiors and perfectly clean windows without the hassle. For reliable, high-quality window cleaning in Lakeland FL, choose the local specialists. We are committed to making your views crystal clear. Contact AquaBlu Window Washing for a free estimate today!
+                            AquaBlu Window Washing delivers unparalleled window cleaning in Lakeland FL, ensuring your home or business always looks its best. As your premier local window cleaning service, we proudly serve residential and commercial properties throughout Polk County, offering a streak-free shine you’ll love. Our professional, experienced team uses advanced techniques and eco-friendly solutions to meticulously clean every pane, removing grime, dust, and smudges to reveal crystal-clear views. We prioritize punctuality, reliability, and exceptional customer satisfaction, building trust with every job. Enhance your property’s curb appeal and let more natural light brighten your interiors with AquaBlu. For dependable, high-quality window care from a trusted local company, choose AquaBlu Window Washing – your clear choice for window brilliance in Lakeland.
                         </p>
                     </div>
                     

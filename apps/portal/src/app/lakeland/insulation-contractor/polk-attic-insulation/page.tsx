@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Polk Attic Insulation | Best Insulation Contractor in Lakeland",
-    description: "Polk Attic Insulation is your trusted Insulation Contractor in Lakeland FL, dedicated to enhancing home comfort and energy efficiency. As a local Insu...",
+    description: "Looking for a reliable Insulation Contractor in Lakeland FL? Polk Attic Insulation is your premier local Insulation Contractor, proudly serving homes ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Polk Attic Insulation is your trusted Insulation Contractor in Lakeland FL, dedicated to enhancing home comfort and energy efficiency. As a local Insulation Contractor, we proudly serve homeowners and businesses across Polk County, offering expert solutions tailored to our unique Florida climate. We specialize in comprehensive insulation services, including attic insulation upgrades, blown-in insulation, and new installations, all designed to improve your indoor air quality and reduce energy consumption. Our professional team delivers superior craftsmanship and reliable service with every project. We understand the importance of a well-insulated home for year-round savings and comfort. Choose Polk Attic Insulation for honest advice, quality materials, and a commitment to your satisfaction, ensuring a more efficient and comfortable living space.
+                            Looking for a reliable Insulation Contractor in Lakeland FL? Polk Attic Insulation is your premier local Insulation Contractor, proudly serving homes and businesses throughout Polk county. We specialize in delivering top-tier attic insulation solutions designed to significantly boost your home’s energy efficiency, slash utility bills, and ensure consistent indoor comfort, even during Florida's warmest months. Our professional, experienced team deeply understands the unique climate demands of central Florida. We offer a comprehensive range of services, from expert new installations and crucial upgrades to safe, efficient insulation removal. Rely on us for high-quality materials and meticulous workmanship, guaranteeing lasting performance and exceptional value. Choose a local, trustworthy company committed to outstanding customer service and a healthier, more energy-efficient living space. Contact Polk Attic Insulation today for a free estimate!
                         </p>
                     </div>
                     

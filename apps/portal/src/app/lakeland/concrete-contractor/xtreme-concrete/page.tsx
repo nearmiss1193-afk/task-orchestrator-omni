@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "XTREME CONCRETE | Best Concrete Contractor in Lakeland",
-    description: "XTREME CONCRETE is your premier Concrete Contractor in Lakeland FL, delivering superior quality and exceptional service for all your residential and c...",
+    description: "XTREME CONCRETE is your premier Concrete Contractor in Lakeland FL, specializing in top-quality concrete solutions for residential and commercial proj...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            XTREME CONCRETE is your premier Concrete Contractor in Lakeland FL, delivering superior quality and exceptional service for all your residential and commercial concrete needs. As a trusted local Concrete Contractor, we specialize in durable driveways, beautiful patios, sturdy foundations, and reliable commercial concrete solutions across Polk County. Our unwavering commitment to professionalism, precision, and customer satisfaction ensures every project, big or small, is completed to the highest standards. We understand the unique demands of our Lakeland community, providing tailored, long-lasting concrete work that enhances your property's value and curb appeal with enduring strength. When you choose XTREME CONCRETE, you're partnering with an experienced, trustworthy team dedicated to delivering excellence and peace of mind. Experience the difference quality craftsmanship makes – contact us today for a free estimate and discover why we're the preferred choice for concrete services in Lakeland and beyond.
+                            XTREME CONCRETE is your premier Concrete Contractor in Lakeland FL, specializing in top-quality concrete solutions for residential and commercial projects across Polk County. As a trusted local Concrete Contractor, we pride ourselves on exceptional craftsmanship, unwavering reliability, and complete customer satisfaction. Whether you need a durable new driveway, an inviting patio, robust foundations, elegant decorative concrete, or expert concrete repair, our experienced team delivers superior results built to last. We understand the unique needs of the Lakeland community, offering personalized service, transparent communication, and efficient project completion from start to finish. Choose XTREME CONCRETE for professional, long-lasting concrete work that significantly enhances your property's value and curb appeal. We are fully committed to exceeding your expectations with every project, big or small, making us the go-to concrete experts you can trust.
                         </p>
                     </div>
                     

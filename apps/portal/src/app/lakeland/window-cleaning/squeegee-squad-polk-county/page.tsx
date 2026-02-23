@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Squeegee Squad - Polk County | Best Window Cleaning in Lakeland",
-    description: "Squeegee Squad - Polk County is your premier choice for professional Window Cleaning in Lakeland FL. As a trusted local Window Cleaning service, we br...",
+    description: "Squeegee Squad - Polk County is your premier choice for professional Window Cleaning in Lakeland FL. As a trusted local Window Cleaning service, we ar...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Squeegee Squad - Polk County is your premier choice for professional Window Cleaning in Lakeland FL. As a trusted local Window Cleaning service, we bring unparalleled expertise and meticulous attention to detail to every residential and commercial property. We understand the importance of clear, sparkling windows for enhancing your home's curb appeal or your business's professional image. Our dedicated team proudly serves all of Polk county, delivering reliable, streak-free results you can truly count on. We utilize advanced techniques and eco-friendly solutions to ensure a pristine finish every time, treating your property with the utmost respect and care. Experience the Squeegee Squad difference – superior quality, exceptional service, and complete customer satisfaction. For a consistently spotless view and a brighter space, choose your friendly neighborhood window cleaning experts. Contact us today for your free estimate and discover why we're the preferred choice for Window Cleaning in Lakeland FL.
+                            Squeegee Squad - Polk County is your premier choice for professional Window Cleaning in Lakeland FL. As a trusted local Window Cleaning service, we are dedicated to bringing unmatched clarity and shine to homes and businesses across Polk County. Our expert technicians use advanced techniques and eco-friendly solutions to ensure streak-free results every time. We understand the importance of a pristine view and enhanced curb appeal for your property. When you choose Squeegee Squad, you're opting for reliability, meticulous attention to detail, and exceptional customer service from a team that truly cares. Experience the difference of truly clean windows without the hassle. Get your free estimate today and let us brighten your Lakeland FL property.
                         </p>
                     </div>
                     

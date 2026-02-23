@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Gleam Window Cleaning | Best window cleaning in Lakeland",
-    description: "Experience brilliant results with Gleam Window Cleaning, your top choice for professional window cleaning in Lakeland FL. As a trusted local window cl...",
+    description: "Gleam Window Cleaning is your premier choice for professional window cleaning in Lakeland FL. As a trusted local window cleaning service, we understan...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Experience brilliant results with Gleam Window Cleaning, your top choice for professional window cleaning in Lakeland FL. As a trusted local window cleaning service, we enhance your home or business with sparkling, streak-free windows. Our dedicated team delivers meticulous attention to detail, ensuring every pane shines. We proudly serve residential and commercial clients across Lakeland and the wider Polk County area, offering reliable, high-quality service you can depend on. Gleam Window Cleaning prioritizes your satisfaction and peace of mind. Choose our experienced, friendly, and fully insured professionals for superior window care. Enjoy clearer views and a brighter property. For exceptional window cleaning that reflects professionalism and local trust, look no further than Gleam Window Cleaning in Lakeland, FL.
+                            Gleam Window Cleaning is your premier choice for professional window cleaning in Lakeland FL. As a trusted local window cleaning service, we understand the importance of sparkling, streak-free windows for your home or business. Our experienced, fully insured team is dedicated to delivering exceptional results, enhancing your property's curb appeal and inviting more natural light into your spaces throughout Lakeland and the wider Polk County area. We pride ourselves on reliability, meticulous attention to detail, and an unwavering commitment to customer satisfaction. From residential homes yearning for crystal-clear views to commercial properties needing to maintain a pristine image, Gleam Window Cleaning ensures every pane shines with remarkable clarity and brilliance. Experience the refreshing difference a truly professional and local window cleaning service makes. Choose Gleam Window Cleaning for unparalleled quality, peace of mind, and a noticeably brighter view, guaranteed. Let us bring the gleam back to your windows!
                         </p>
                     </div>
                     

@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "TASTY’THAI | Best Thai Restaurant in Lakeland",
-    description: "Discover the authentic flavors of Thailand at TASTY’THAI, your premier Thai Restaurant in Lakeland FL. We are proud to be a truly local Thai Restauran...",
+    description: "Experience authentic Thai flavors right here in Lakeland, FL. TASTY’THAI is your premier Thai Restaurant in Lakeland FL, dedicated to bringing the tru...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Discover the authentic flavors of Thailand at TASTY’THAI, your premier Thai Restaurant in Lakeland FL. We are proud to be a truly local Thai Restaurant, dedicated to bringing the rich culinary heritage of Thailand to the vibrant Polk County community. Our commitment to excellence shines through in every dish, meticulously prepared using the freshest ingredients and time-honored recipes. From classic Pad Thai and aromatic curries to savory noodle dishes and vibrant stir-fries, TASTY’THAI offers a professional and trustworthy dining experience in a warm, inviting atmosphere. We prioritize quality and customer satisfaction, ensuring every visit is memorable and delightful. Experience the difference a passionate, local establishment makes. Join us for an authentic taste of Thailand, crafted with care and served with genuine hospitality, becoming your trusted local culinary destination.
+                            Experience authentic Thai flavors right here in Lakeland, FL. TASTY’THAI is your premier Thai Restaurant in Lakeland FL, dedicated to bringing the true taste of Thailand to our community. As a trusted local Thai Restaurant, we pride ourselves on using only the freshest ingredients to craft traditional dishes, from aromatic curries to savory noodle creations. Our professional team ensures an exceptional dining experience, whether you're enjoying a quiet dinner or gathering with friends and family. We're more than just a restaurant; we're a beloved culinary destination for residents throughout Polk County seeking genuine Thai cuisine. Discover why TASTY’THAI is the go-to spot for authentic taste and warm hospitality. Visit us today and savor the difference!
                         </p>
                     </div>
                     

@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Central Florida Exterior Inc. | Best roofing contractor in Lakeland",
-    description: "Central Florida Exterior Inc. is your trusted roofing contractor in Lakeland FL, dedicated to providing top-tier roofing solutions for homes and busin...",
+    description: "Central Florida Exterior Inc. stands as your leading roofing contractor in Lakeland FL, dedicated to providing unparalleled service and durable soluti...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Central Florida Exterior Inc. is your trusted roofing contractor in Lakeland FL, dedicated to providing top-tier roofing solutions for homes and businesses across Polk County. As a local roofing contractor, we understand the unique challenges of Florida weather and are committed to delivering durable, high-quality roofs that protect your investment. Our team of experienced professionals prides itself on exceptional craftsmanship, transparent communication, and unparalleled customer service. From new roof installations and re-roofs to comprehensive repairs and maintenance, we handle projects of all sizes with precision and integrity. We are licensed, insured, and deeply rooted in the community, offering reliable services you can depend on. Choose a local company that prioritizes your peace of mind. Contact Central Florida Exterior Inc. today for a free, no-obligation estimate and experience the difference of working with a truly trustworthy roofing partner.
+                            Central Florida Exterior Inc. stands as your leading roofing contractor in Lakeland FL, dedicated to providing unparalleled service and durable solutions. As a deeply rooted local roofing contractor, we possess extensive knowledge of Central Florida's specific weather challenges, ensuring your roof is built to last. Our professional and trustworthy team specializes in comprehensive roof repair, complete replacements, and new roof installations for residential and commercial clients throughout Lakeland and the wider Polk County area. We pride ourselves on using only premium-grade materials combined with expert craftsmanship, guaranteeing a robust and aesthetically pleasing finish. From initial inspection to project completion, we offer transparent communication, fair pricing, and meticulous attention to every detail. Trust Central Florida Exterior Inc. to safeguard your property with a reliable roofing system and experience peace of mind knowing your home or business is protected by the best.
                         </p>
                     </div>
                     

@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Kelly Recreation Complex | Best fitness center in Lakeland",
-    description: "Elevate your wellness journey at Kelly Recreation Complex, the premier fitness center in Lakeland FL. We provide a full spectrum of amenities designed...",
+    description: "Kelly Recreation Complex is your premier fitness center in Lakeland FL, dedicated to fostering health and wellness for all. As a trusted local fitness...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Elevate your wellness journey at Kelly Recreation Complex, the premier fitness center in Lakeland FL. We provide a full spectrum of amenities designed to meet every fitness need, including state-of-the-art cardio and strength training equipment, a diverse schedule of high-energy group exercise classes, and refreshing aquatic facilities with lap lanes and leisure options. More than just a gym, we're a trusted local fitness center committed to building a supportive, community-focused environment where individuals of all ages and abilities can thrive and feel welcome. Our highly qualified trainers offer personalized guidance and expert support, ensuring you achieve your health goals safely and effectively. Proudly serving the vibrant Polk County area, Kelly Recreation Complex is your accessible, affordable, and professional choice for a healthier lifestyle. Experience the difference of a truly local, comprehensive fitness destination dedicated to empowering your well-being and fostering lasting health improvements.
+                            Kelly Recreation Complex is your premier fitness center in Lakeland FL, dedicated to fostering health and wellness for all. As a trusted local fitness center, we proudly serve the entire Polk County community, providing exceptional facilities and programs. Our modern complex features a fully equipped gym with diverse cardio and strength training equipment, an expansive aquatic center for lap swimming and water fitness, and versatile courts for various sports. We offer an extensive schedule of group exercise classes, certified personal training, and engaging youth programs, ensuring options for every age and fitness goal. Our professional and friendly team is committed to creating a welcoming atmosphere where you can thrive. Experience unparalleled value and community support right here in Lakeland. Achieve your wellness aspirations at Kelly Recreation Complex, your trusted local partner for a vibrant, healthy lifestyle.
                         </p>
                     </div>
                     

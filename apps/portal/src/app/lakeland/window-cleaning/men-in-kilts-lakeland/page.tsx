@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Men In Kilts Lakeland | Best Window Cleaning in Lakeland",
-    description: "Men In Kilts Lakeland sets the standard for professional Window Cleaning in Lakeland FL. Discover the joy of crystal-clear views without the hassle. A...",
+    description: "For crystal-clear views and a pristine property, trust Men In Kilts Lakeland, your premier choice for professional Window Cleaning in Lakeland FL. As ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Men In Kilts Lakeland sets the standard for professional Window Cleaning in Lakeland FL. Discover the joy of crystal-clear views without the hassle. As your trusted local Window Cleaning experts, our uniformed, insured, and thoroughly trained technicians deliver spotless, streak-free results every time. We proudly serve homeowners and businesses throughout Lakeland and the wider Polk county area, dedicated to enhancing your property's appearance with meticulous care. Our commitment to reliability, exceptional service, and complete customer satisfaction makes us the preferred choice. Experience the Men In Kilts difference: a professional service you can trust, delivered with a friendly smile. Stop struggling with ladders and buckets – let our pros handle the dirty work. Get your free estimate today and enjoy brilliantly clean windows from Lakeland's finest.
+                            For crystal-clear views and a pristine property, trust Men In Kilts Lakeland, your premier choice for professional Window Cleaning in Lakeland FL. As a truly local Window Cleaning service, we are dedicated to serving residents and businesses across Polk County with unmatched quality and reliability. Our highly-trained, professional technicians utilize advanced techniques and eco-friendly solutions to deliver streak-free, gleaming windows every time. We understand the specific environmental factors affecting windows in central Florida, ensuring a thorough and lasting clean. Choosing Men In Kilts Lakeland means opting for a trustworthy partner committed to exceptional customer service and sparkling results throughout Lakeland and surrounding areas. We pride ourselves on punctuality, attention to detail, and a commitment to your complete satisfaction. Enhance your home or business's curb appeal today with the best local Window Cleaning experts. Schedule your service for a brighter view and experience the Men In Kilts difference.
                         </p>
                     </div>
                     

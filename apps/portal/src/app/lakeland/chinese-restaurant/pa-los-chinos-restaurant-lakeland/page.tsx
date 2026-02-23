@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Pa' Los Chinos Restaurant Lakeland | Best Chinese Restaurant in Lakeland",
-    description: "Discover the authentic flavors of Asia at Pa' Los Chinos Restaurant, a premier Chinese Restaurant in Lakeland FL. Nestled conveniently in the heart of...",
+    description: "Experience the authentic taste of China right here in the heart of Florida at Pa' Los Chinos Restaurant Lakeland. As the premier Chinese Restaurant in...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Discover the authentic flavors of Asia at Pa' Los Chinos Restaurant, a premier Chinese Restaurant in Lakeland FL. Nestled conveniently in the heart of Polk county, we are proud to be your trusted local Chinese Restaurant, committed to serving delicious, high-quality dishes made with passion. Our professional culinary team uses only the freshest ingredients and time-honored recipes to craft an extensive menu, ensuring every bite is a delightful experience. From our savory General Tso’s Chicken and fragrant Fried Rice to classic Lo Mein and delicate dumplings, we cater to every palate. Whether you're seeking a comfortable dine-in experience, a quick takeout meal, or reliable delivery, Pa' Los Chinos promises exceptional service and exquisite taste. Experience the difference a truly dedicated local establishment makes for your next Chinese food craving.
+                            Experience the authentic taste of China right here in the heart of Florida at Pa' Los Chinos Restaurant Lakeland. As the premier Chinese Restaurant in Lakeland FL, we are dedicated to bringing you a culinary journey filled with traditional flavors and fresh, quality ingredients. We're proud to be a trusted local Chinese Restaurant, deeply rooted in the community and committed to exceptional service. Our extensive menu features a delightful array of classic dishes, from savory Peking Duck and crispy Egg Rolls to comforting noodle bowls and exquisite Stir-Fries, all prepared with meticulous attention to detail. Whether you're dining in with family or picking up a quick, delicious meal, we ensure a memorable experience. Residents and visitors across Polk County consistently choose Pa' Los Chinos for our unwavering commitment to authentic taste, warm hospitality, and a truly satisfying Chinese dining adventure. Come taste the tradition and quality that sets us apart.
                         </p>
                     </div>
                     

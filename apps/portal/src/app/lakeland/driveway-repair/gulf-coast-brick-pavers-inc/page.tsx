@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Gulf Coast Brick Pavers Inc. | Best Driveway Repair in Lakeland",
-    description: "Is your Lakeland, FL driveway showing signs of wear, cracks, or damage? Don't let a deteriorating driveway diminish your home's curb appeal or safety....",
+    description: "Gulf Coast Brick Pavers Inc. is your premier choice for professional driveway repair in Lakeland, FL. As a truly local Driveway Repair specialist, we ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Is your Lakeland, FL driveway showing signs of wear, cracks, or damage? Don't let a deteriorating driveway diminish your home's curb appeal or safety. Gulf Coast Brick Pavers Inc. provides expert Driveway Repair in Lakeland FL, restoring your paved surfaces with precision and durability. As your local Driveway Repair specialists, we bring years of experience and a commitment to quality to every project. We understand the specific needs of Polk county homes and are dedicated to delivering results that last. From minor repairs to complete restorations, our professional team ensures a seamless process and a beautiful, functional driveway. Trust Gulf Coast Brick Pavers Inc. for reliable, high-quality service that enhances your property's value and aesthetic. Contact us today for a free consultation and see why we're the preferred choice for Driveway Repair in Lakeland FL.
+                            Gulf Coast Brick Pavers Inc. is your premier choice for professional driveway repair in Lakeland, FL. As a truly local Driveway Repair specialist, we deeply understand the unique challenges driveways face across Lakeland and the wider Polk County. Whether you're dealing with unsightly cracks, uneven surfaces, drainage issues, or loose pavers, our highly skilled and experienced team delivers durable, lasting solutions. We restore not just the integrity but also the curb appeal of your home, ensuring a safe, beautiful, and long-lasting entrance. We pride ourselves on transparent communication, reliable service, and exceptional quality craftsmanship. Choosing Gulf Coast Brick Pavers Inc. means partnering with a trustworthy, professional, and dedicated local company committed to enhancing your property. Experience the difference of expert driveway repair in Lakeland, FL, from your neighbors in Polk County. Get your free estimate today.
                         </p>
                     </div>
                     

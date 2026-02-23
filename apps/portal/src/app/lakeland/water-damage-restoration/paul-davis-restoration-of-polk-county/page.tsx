@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Paul Davis Restoration of Polk County | Best Water Damage Restoration in Lakeland",
-    description: "When water damage strikes your Lakeland, FL property, prompt action is critical. Paul Davis Restoration of Polk County provides expert Water Damage Re...",
+    description: "Paul Davis Restoration of Polk County offers professional Water Damage Restoration in Lakeland FL. As your local Water Damage Restoration specialists,...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            When water damage strikes your Lakeland, FL property, prompt action is critical. Paul Davis Restoration of Polk County provides expert Water Damage Restoration in Lakeland FL, delivering rapid, reliable service when you need it most. As your trusted local Water Damage Restoration specialists, we are deeply committed to serving our community throughout Polk county. Our certified and experienced professionals are available 24/7 to assess the damage, extract water, thoroughly dry affected areas, and expertly restore your home or business. We handle everything from burst pipes and leaky roofs to severe flood and storm damage with professionalism and meticulous care. Rely on Paul Davis for comprehensive solutions that minimize disruption and bring your property back to its pre-damage condition efficiently and effectively. We prioritize your peace of mind with trustworthy, local expertise and a proven track record.
+                            Paul Davis Restoration of Polk County offers professional Water Damage Restoration in Lakeland FL. As your local Water Damage Restoration specialists, we are dedicated to helping homeowners and businesses across Polk county recover quickly and efficiently from water-related disasters. Our IICRC-certified technicians are available 24/7 to provide immediate response, utilizing advanced equipment for water extraction, drying, and dehumidification. We understand the urgency and stress involved, which is why we act fast to prevent further damage, including mold growth. From burst pipes and flooding to appliance leaks, we meticulously assess the damage and develop a comprehensive plan for complete restoration. Trust our local Water Damage Restoration team to handle everything from initial cleanup to structural repairs, ensuring your property is returned to its pre-damage condition. We pride ourselves on transparent communication and exceptional service throughout Lakeland and the entire Polk county area. Contact Paul Davis Restoration of Polk County for reliable, trustworthy service when you need it most.
                         </p>
                     </div>
                     

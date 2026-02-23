@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Lakeland Auto Studio | Best auto detailing in Lakeland",
-    description: "Lakeland Auto Studio provides premium auto detailing in Lakeland FL, dedicated to restoring and protecting your vehicle's pristine condition. As your ...",
+    description: "Discover exceptional auto detailing in Lakeland FL with Lakeland Auto Studio. We are your premier local auto detailing specialists, dedicated to metic...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Lakeland Auto Studio provides premium auto detailing in Lakeland FL, dedicated to restoring and protecting your vehicle's pristine condition. As your trusted local auto detailing experts, we offer meticulous care designed to make your car look and feel brand new. From comprehensive interior deep cleans to flawless exterior finishes, paint correction, and durable ceramic coatings, our professional team ensures exceptional results every time. We understand the specific needs of vehicles in Polk county and commit to delivering unparalleled craftsmanship and customer satisfaction. Protect your investment and elevate your driving experience with a truly revitalized vehicle. Choose Lakeland Auto Studio for reliable, high-quality auto detailing services that bring back that showroom shine. Trust us to meticulously care for your vehicle.
+                            Discover exceptional auto detailing in Lakeland FL with Lakeland Auto Studio. We are your premier local auto detailing specialists, dedicated to meticulously restoring and protecting your vehicle's beauty. From comprehensive interior deep cleans and exterior paint correction to advanced ceramic coatings, our expert team utilizes industry-leading techniques and premium products. We understand the specific environmental challenges vehicles face in Polk County, and our services are tailored to combat them, preserving your investment. Trustworthy and professional, we pride ourselves on delivering unparalleled results and a personalized experience for every client. Elevate your ride with a showroom finish that truly lasts. Choose Lakeland Auto Studio for a vehicle that looks and feels brand new, reflecting our passion for perfection right here in the heart of Lakeland.
                         </p>
                     </div>
                     

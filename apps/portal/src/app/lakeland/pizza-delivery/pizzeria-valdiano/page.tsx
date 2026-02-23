@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Pizzeria Valdiano | Best pizza delivery in Lakeland",
-    description: "Pizzeria Valdiano is your premier destination for exceptional pizza delivery in Lakeland FL. As a highly trusted local pizza delivery, we pride oursel...",
+    description: "Pizzeria Valdiano offers unparalleled pizza delivery in Lakeland FL, bringing exceptional, handcrafted pizzas directly to your home or office. As your...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,9 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Pizzeria Valdiano is your premier destination for exceptional pizza delivery in Lakeland FL. As a highly trusted local pizza delivery, we pride ourselves on serving the freshest, most delicious pizzas right to your doorstep across Polk County. Our commitment to quality starts with premium ingredients, from our savory sauces to our perfectly melted cheeses and vibrant toppings. Each pizza is crafted with care, ensuring an authentic taste experience every time.
-
-We understand the importance of reliable and prompt service, especially when you're craving hot, fresh pizza. Pizzeria Valdiano makes ordering effortless, providing a professional and friendly experience from start to finish. Support a local business that genuinely cares about its community and customers. For a taste of tradition and convenience, choose Pizzeria Valdiano – your dependable source for an unforgettable pizza experience in Lakeland.
+                            Pizzeria Valdiano offers unparalleled pizza delivery in Lakeland FL, bringing exceptional, handcrafted pizzas directly to your home or office. As your trusted local pizza delivery, we uphold an unwavering commitment to quality, using only the freshest, premium ingredients to create every delicious pie. Our professional team ensures prompt, reliable service, guaranteeing your pizza arrives hot and fresh, ready to enjoy. We proudly serve residents and businesses across Lakeland and the wider Polk county area, dedicated to exceeding your expectations with every order. Discover the authentic flavors and superior convenience that make Pizzeria Valdiano the preferred choice. From classic pepperoni to gourmet vegetarian options, our diverse menu caters to every palate. Experience the difference of a truly dedicated local establishment focused on delivering professional quality and complete customer satisfaction. Choose Pizzeria Valdiano for a consistently delicious and trustworthy pizza experience.
                         </p>
                     </div>
                     

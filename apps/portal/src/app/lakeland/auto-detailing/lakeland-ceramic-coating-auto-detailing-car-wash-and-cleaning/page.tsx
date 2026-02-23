@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Lakeland Ceramic Coating - Auto Detailing, Car Wash and Cleaning | Best auto detailing in Lakeland",
-    description: "Lakeland Ceramic Coating provides premier auto detailing in Lakeland FL, dedicated to restoring and protecting your vehicle's beauty. As your trusted ...",
+    description: "Lakeland Ceramic Coating is your premier destination for exceptional auto detailing in Lakeland FL. As the trusted local auto detailing experts, we sp...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Lakeland Ceramic Coating provides premier auto detailing in Lakeland FL, dedicated to restoring and protecting your vehicle's beauty. As your trusted local auto detailing experts, we offer a comprehensive range of services, from meticulous interior cleaning and exterior washes to advanced ceramic coatings for long-lasting protection. We understand the unique needs of cars in Polk County and pride ourselves on delivering exceptional quality and customer satisfaction with every service. Our professional team uses only the highest-grade products and techniques, ensuring your car receives the care it deserves. Experience the difference a truly dedicated local auto detailing shop can make. Protect your investment and enhance your vehicle's appearance with Lakeland Ceramic Coating – your reliable choice for superior car care in Lakeland, FL.
+                            Lakeland Ceramic Coating is your premier destination for exceptional auto detailing in Lakeland FL. As the trusted local auto detailing experts, we specialize in comprehensive car wash services, meticulous interior and exterior cleaning, and advanced ceramic coating applications. Proudly serving Polk County, our professional technicians are dedicated to restoring and protecting your vehicle with unparalleled care and precision. We use industry-leading products and techniques, from paint correction to long-lasting ceramic protection, ensuring your car achieves a showroom finish that endures. Experience the peace of mind that comes with superior vehicle care, enhancing its appearance, value, and longevity. Choose Lakeland Ceramic Coating for a professional, local service committed to delivering immaculate results every time. Your vehicle deserves the best, and we deliver.
                         </p>
                     </div>
                     

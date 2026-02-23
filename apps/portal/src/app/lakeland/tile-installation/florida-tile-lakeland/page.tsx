@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "Florida Tile Lakeland | Best Tile Installation in Lakeland",
-    description: "Discover premier Tile Installation in Lakeland FL with Florida Tile Lakeland. As your trusted local Tile Installation experts, we bring dedicated, pro...",
+    description: "Florida Tile Lakeland is your premier choice for expert Tile Installation in Lakeland FL. As a trusted local Tile Installation provider, we are dedica...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Discover premier Tile Installation in Lakeland FL with Florida Tile Lakeland. As your trusted local Tile Installation experts, we bring dedicated, professional service to homes and businesses across Lakeland and the surrounding Polk county. We specialize in transforming spaces with high-quality, durable, and beautiful tile solutions, from classic ceramic and versatile porcelain to elegant natural stone. Our experienced team is committed to delivering flawless craftsmanship, meticulous attention to detail, and exceptional customer satisfaction on every project. We understand the unique styles and needs of our local community, ensuring results that perfectly complement your home or business. Whether you're upgrading a kitchen, renovating a bathroom, or revamping an entire floor, choose Florida Tile Lakeland for reliable, top-notch service that truly enhances your property's value and aesthetic appeal. Experience the difference of working with a truly local company committed to excellence. Contact us today for a consultation and bring your vision to life.
+                            Florida Tile Lakeland is your premier choice for expert Tile Installation in Lakeland FL. As a trusted local Tile Installation provider, we are dedicated to transforming your spaces with precision and style throughout Polk county. Our professional team brings years of experience to every project, ensuring impeccable results for residential and commercial clients alike. From elegant ceramic and porcelain to durable natural stone and intricate mosaics, we handle all types of tile installations with meticulous attention to detail. We pride ourselves on transparent communication, reliable scheduling, and a steadfast commitment to customer satisfaction from start to finish. Choosing Florida Tile Lakeland means partnering with a local company deeply rooted in the community, providing tailored solutions that enhance your property's value and aesthetics. Discover why so many in Lakeland trust us for their tiling needs. Contact us today for a personalized quote and experience the difference professional installation makes.
                         </p>
                     </div>
                     

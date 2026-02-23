@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: "The Balance Culture | Best fitness center in Lakeland",
-    description: "Discover The Balance Culture, your premier fitness center in Lakeland FL. We are a trusted local fitness center dedicated to fostering a supportive co...",
+    description: "Discover The Balance Culture, your leading fitness center in Lakeland FL, dedicated to empowering individuals on their wellness journey. As a trusted ...",
 };
 
 export default function BusinessProfilePage() {
@@ -49,7 +49,7 @@ export default function BusinessProfilePage() {
                     
                     <div className="prose prose-zinc max-w-none mb-8">
                         <p className="text-lg leading-relaxed text-zinc-700">
-                            Discover The Balance Culture, your premier fitness center in Lakeland FL. We are a trusted local fitness center dedicated to fostering a supportive community where everyone can achieve their health and wellness goals with confidence. Our professional, certified trainers lead diverse classes, from dynamic strength training to rejuvenating yoga, all designed to build strength, improve flexibility, and boost overall well-being in a safe and encouraging atmosphere. We pride ourselves on creating a welcoming and inclusive environment for all fitness levels, prioritizing your personal progress. As a cornerstone of the Polk county community, The Balance Culture is committed to providing top-tier facilities and personalized guidance. Experience the difference a truly local fitness center makes in your health journey. Join our family today and take the first step towards a stronger, healthier you. Visit us to explore our programs and membership options designed for you.
+                            Discover The Balance Culture, your leading fitness center in Lakeland FL, dedicated to empowering individuals on their wellness journey. As a trusted local fitness center, we proudly serve the Polk County community, offering a professional and supportive environment where your health goals become a reality. Our expert trainers provide personalized programs focusing on strength, endurance, flexibility, and overall well-being, ensuring a balanced approach to fitness. We're more than just a gym; we're a community committed to fostering lasting health transformations. At The Balance Culture, you'll find a welcoming atmosphere and a professional team dedicated to helping you achieve sustainable results. Join your local fitness center in Lakeland today and experience the difference of a truly balanced and supportive fitness experience, built on trust and expertise.
                         </p>
                     </div>
                     
