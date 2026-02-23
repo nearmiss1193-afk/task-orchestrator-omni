@@ -15,7 +15,7 @@ SUPABASE_URL = os.environ.get('SUPABASE_URL')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
 GEMINI_KEY = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY')
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
-GITHUB_REPO = os.environ.get('GITHUB_REPO', 'nearmiss1193/empire-unified')
+GITHUB_REPO = os.environ.get('GITHUB_REPO', 'nearmiss1193-afk/empire-unified-backup')
 BATCH_SIZE = 50
 LAKELAND_DIR = os.path.abspath('apps/portal/src/app/lakeland')
 
