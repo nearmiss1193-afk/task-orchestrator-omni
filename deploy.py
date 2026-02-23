@@ -2391,13 +2391,34 @@ def resend_webhook(data: dict):
                 except Exception as be:
                     print(f"  ⚠️ Bounce mark failed: {be}")
         
-        # ─── REPLY HANDLER: Auto-respond + SMS Dan ───
+        # ─── REPLY HANDLER: Auto-respond + SMS Dan + Log Inbound Touch ───
         if event_type == "email.replied":
             recipient = event_data.get("from", "")  # The lead who replied
-            reply_text = event_data.get("text", "")[:200]  # First 200 chars of reply
+            reply_text = event_data.get("text", "")[:200]  # First 200 chars of reply (for notifications)
+            full_reply_text = event_data.get("text", "") # Full reply explicitly for the Triage Deck
             company = touch_record.get("company", "Unknown") if touch_record else "Unknown"
             
             print(f"  🔥 REPLY from {recipient} ({company}): {reply_text[:80]}")
+            
+            # Log inbound touch explicitly to the database
+            try:
+                supabase.table("outbound_touches").insert({
+                    "phone": touch_record.get("phone") if touch_record else None,
+                    "channel": "email",
+                    "company": company,
+                    "status": "replied", # Indicates they replied
+                    "variant_name": "Inbound Email",
+                    "correlation_id": email_id,
+                    "body": full_reply_text,
+                    "payload": {
+                        "direction": "inbound",
+                        "from": recipient,
+                        "raw_event": event_type
+                    }
+                }).execute()
+                print(f"  📥 Inbound reply explicitly logged to outbound_touches for Triage Deck.")
+            except Exception as e:
+                print(f"  ⚠️ Error logging inbound touch: {e}")
             
             # Skip if it's Dan replying to himself
             if recipient.lower() not in DAN_EMAIL_ADDRS:

@@ -341,6 +341,7 @@ Dan"""
                 "variant_id": variant_id,
                 "variant_name": subject,
                 "correlation_id": resend_email_id,
+                "body": html_body,
                 "payload": {
                     "resend_email_id": resend_email_id,
                     "email_uid": email_uid,
@@ -539,6 +540,7 @@ def dispatch_audit_email(lead_id: str):
                 "variant_id": "AUDIT_LINK",
                 "variant_name": audit["subject"],
                 "correlation_id": resend_email_id,
+                "body": html_body,
                 "payload": {
                     "resend_email_id": resend_email_id,
                     "email_uid": email_uid,
@@ -638,7 +640,8 @@ def dispatch_sms_logic(lead_id: str, message: str = None, media_url: str = None)
         "phone": phone,
         "channel": "sms",
         "company": lead.get("company_name", "Unknown"),
-        "status": status
+        "status": status,
+        "body": payload["message"],
     }).execute()
     
     print(f"✅ SMS {status.upper()}")
