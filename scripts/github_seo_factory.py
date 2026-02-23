@@ -104,13 +104,15 @@ def generate_ai_description(business):
         print(f"⚠️ Gemini API failed for {business['business_name']}: {e}")
         return f"{business['business_name']} is a premium {business['industry']} serving the Lakeland area. Contact them today for expert service in Polk county."
 
-def clean_slug(text):
+def clean_slug(text, fallback_id="unknown"):
     """Converts a business name or industry into a URL-safe slug."""
-    if not text: return "unknown"
+    if not text: return fallback_id
     import re
     text = text.lower()
     text = re.sub(r'[^a-z0-9\s-]', '', text)
     text = re.sub(r'[\s-]+', '-', text).strip('-')
+    if not text:
+        return fallback_id
     return text
 
 def batch_commit_to_github(files_dict, commit_message):
@@ -263,8 +265,8 @@ def run_factory():
         copy = generate_ai_description(business)
         
         # 2. File Generation
-        industry_slug = clean_slug(business['industry'])
-        business_slug = clean_slug(business['business_name'])
+        industry_slug = clean_slug(business['industry'], "unknown-industry")
+        business_slug = clean_slug(business['business_name'], str(business.get('id', 'unknown')))
         
         file_path = f"apps/portal/src/app/lakeland/{industry_slug}/{business_slug}/page.tsx"
         page_content = build_nextjs_page_content(business, copy, industry_slug, business_slug)
