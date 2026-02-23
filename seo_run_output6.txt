@@ -1,0 +1,175 @@
+run-factory	Run Background SEO Factory	∩╗┐2026-02-23T20:39:47.0918869Z ##[group]Run python scripts/github_seo_factory.py
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0919328Z [36;1mpython scripts/github_seo_factory.py[0m
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0953072Z shell: /usr/bin/bash -e {0}
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0953322Z env:
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0953585Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0954028Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib/pkgconfig
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0954444Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0954823Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0955212Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0955593Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0956395Z   NEON_DATABASE_URL: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0956904Z   GEMINI_API_KEY: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0957209Z   GITHUB_TOKEN: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0957495Z   SUPABASE_URL: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0958913Z   SUPABASE_KEY: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.0959141Z ##[endgroup]
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.2495304Z /opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/google/api_core/_python_version_support.py:275: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:47.2500658Z   warnings.warn(message, FutureWarning)
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1373036Z /home/runner/work/empire-unified-backup/empire-unified-backup/scripts/github_seo_factory.py:5: FutureWarning: 
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1374408Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1375149Z All support for the `google.generativeai` package has ended. It will no longer be receiving 
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1376517Z updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1383926Z See README for more details:
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1384271Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1384769Z https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1385398Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T20:39:48.1385589Z   import google.generativeai as genai
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:41.7272556Z /home/runner/work/empire-unified-backup/empire-unified-backup/scripts/github_seo_factory.py:119: DeprecationWarning: Argument login_or_token is deprecated, please use auth=github.Auth.Token(...) instead
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:41.7275403Z   gh = Github(GITHUB_TOKEN)
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1237543Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1239013Z ≡ƒÅ¡ INITIATING BACKGROUND SEO FACTORY RUN
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1243742Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1244402Z ≡ƒôÑ Pulled 50 businesses for processing.
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1244878Z [1/50] Processing: Dawson's Learning Academy...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1245399Z [2/50] Processing: Little Footsteps Academy Center LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1245907Z [3/50] Processing: Local Remedy...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1246363Z [4/50] Processing: Saddle Creek Veterinary Hospital...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1246930Z [5/50] Processing: Privileged Critters Animal Hospital...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1247571Z [6/50] Processing: VETS ER: Veterinary Emergency Triage and Surgery...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1248322Z [7/50] Processing: Karate Beyond...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1248764Z [8/50] Processing: TLC PetSnip, Inc...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1249237Z [9/50] Processing: Sanctify Jiu Jitsu Academy...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1249695Z [10/50] Processing: Care Animal Clinic...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1250168Z [11/50] Processing: Marcum Road Animal Hospital...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1250720Z [12/50] Processing: Pristine Remodeling and Painting...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1251235Z [13/50] Processing: Coyle Chiropractic...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1251706Z [14/50] Processing: Chiromed Wellness Centers...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1252181Z [15/50] Processing: Aligned Life Chiropractic...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1253213Z [16/50] Processing: Maranatha Law...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1253627Z [17/50] Processing: Ronnie's Carpets, Inc....
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1254090Z [18/50] Processing: Finesse By Von Hair Studio...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1254593Z [19/50] Processing: S & F LLC. HANDYMAN SERVICES...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1255063Z [20/50] Processing: The Sanoba Law Firm...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1255564Z [21/50] Processing: Little Tristan Treehouse Preschool...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1256123Z [22/50] Processing: Dr. Bob Irelan's Veterinary Services...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1256664Z [23/50] Processing: Animal Medical Clinic Lakeland...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1257156Z [24/50] Processing: Edgewood Animal Clinic...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1257612Z [25/50] Processing: Highland Square Family Vet...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1263790Z [26/50] Processing: Chiropractic Center of Lakeland...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1264774Z [27/50] Processing: Advanced Spinal Care Medical Spa & Massage...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1265371Z [28/50] Processing: Achieve Chiropractic Care...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1265824Z [29/50] Processing: MY SALON Suite...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1266250Z [30/50] Processing: The Lakeland Chiropractor...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1266790Z [31/50] Processing: Bright Imaginations Learning Centers...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1267350Z [32/50] Processing: JL Cleaning Solutions...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1267819Z [33/50] Processing: Mahoney Chiropractic...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1268525Z [34/50] Processing: A Little Bit of Heavn of Lake...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1269040Z [35/50] Processing: SPCA Florida Veterinary Clinic...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1269548Z [36/50] Processing: Little Wonders Academy...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1270062Z [37/50] Processing: Cleveland Heights Animal Hospital...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1270792Z [38/50] Processing: A Action VanCola Professional Carpet Upholstery and Disaster Cleaning...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1271531Z [39/50] Processing: Essential ChiroCare...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1272030Z [40/50] Processing: Kid's Choice Academy Learning Center...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1272567Z [41/50] Processing: Ace Handyman Services Lakeland...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1273057Z [42/50] Processing: Osteon Injury Center...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1273477Z [43/50] Processing: Atlas Door Repair...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1273904Z [44/50] Processing: Chambers Medical Group...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1274344Z [45/50] Processing: Reed Mawhinney & Link...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1274782Z [46/50] Processing: RHINO Lawyers...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1275239Z [47/50] Processing: Lakeland Real Estate Group, Inc....
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1275718Z [48/50] Processing: The Stohlman Law Firm...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1276137Z [49/50] Processing: R & L Handyman, Inc....
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1276579Z [50/50] Processing: William H. Harrell, PLLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1277186Z ≡ƒÜÇ Pushing 50 files to GitHub repository...
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1278631Z Γ¥î GitHub API Error: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest/repos/repos#get-a-repository", "status": "404"}
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1279680Z Γ£à Marked 50 rows as published.
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1280078Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T20:44:42.1280577Z ≡ƒÄë FACTORY RUN COMPLETE: 50 pages built.

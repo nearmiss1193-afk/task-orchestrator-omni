@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { DashboardData, ScraperHealthStatus, RecentError } from './types';
+import { DashboardData, ScraperHealthStatus, RecentError, RevenueForecast } from './types';
 
 // Heroicons as inline SVG components
 const ChartBarIcon = () => (
@@ -57,26 +57,36 @@ const REFRESH_INTERVAL = 60000; // 60 seconds
 
 const Dashboard: React.FC = () => {
     const [data, setData] = useState<DashboardData | null>(null);
+    const [forecastData, setForecastData] = useState<RevenueForecast | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
     const fetchDashboardData = async () => {
         try {
-            const response = await fetch(API_ENDPOINT, {
-                method: 'GET',
-                headers: {
-                    'Authorization': BEARER_TOKEN,
-                    'Content-Type': 'application/json',
-                },
-            });
+            const [abacusRes, forecastRes] = await Promise.all([
+                fetch(API_ENDPOINT, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': BEARER_TOKEN,
+                        'Content-Type': 'application/json',
+                    },
+                }),
+                fetch('/api/revenue-forecast')
+            ]);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            if (!abacusRes.ok) {
+                throw new Error(`HTTP error! status: ${abacusRes.status}`);
             }
 
-            const jsonData: DashboardData = await response.json();
+            const jsonData: DashboardData = await abacusRes.json();
             setData(jsonData);
+
+            if (forecastRes.ok) {
+                const fData: RevenueForecast = await forecastRes.json();
+                setForecastData(fData);
+            }
+
             setError(null);
             setLastUpdated(new Date());
         } catch (err) {
@@ -205,6 +215,47 @@ const Dashboard: React.FC = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Predictive Revenue Intelligence */}
+                {forecastData && (
+                    <div className="mb-8 border border-indigo-500/30 bg-indigo-950/20 rounded-2xl p-6 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-purple-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
+                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-indigo-100">
+                            <ClockIcon />
+                            Revenue Intelligence (7-Day Forecast)
+                        </h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-800">
+                                <p className="text-sm text-slate-400 font-mono mb-1">Active Pipeline</p>
+                                <p className="text-2xl font-bold text-slate-200">{forecastData.pipeline_size.toLocaleString()}</p>
+                            </div>
+
+                            <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-800">
+                                <p className="text-sm text-slate-400 font-mono mb-1">Reply Velocity (7d)</p>
+                                <p className="text-2xl font-bold text-slate-200">{forecastData.velocity_7d.replies}</p>
+                            </div>
+
+                            <div className="bg-slate-900/50 rounded-xl p-4 border border-indigo-900/50">
+                                <p className="text-sm text-indigo-300 font-mono mb-1">Predicted Bookings</p>
+                                <p className="text-3xl font-bold text-indigo-400">{forecastData.forecast.predicted_weekly_bookings}</p>
+                            </div>
+
+                            <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-800 flex flex-col justify-center">
+                                <div className="flex justify-between text-sm mb-1">
+                                    <span className="text-slate-400">Health Score</span>
+                                    <span className="font-semibold text-emerald-400">{forecastData.forecast.pipeline_health_score}%</span>
+                                </div>
+                                <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-emerald-500 rounded-full"
+                                        style={{ width: `${forecastData.forecast.pipeline_health_score}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Data Quality Metrics */}
                 <div className="mb-8">

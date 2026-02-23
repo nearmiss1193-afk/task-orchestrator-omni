@@ -41,6 +41,7 @@ interface LeadStatus {
     unread: boolean;
     channels: string[];
     latest_message: string;
+    campaign: string;
 }
 
 export default function InboxPage() {
@@ -124,13 +125,15 @@ export default function InboxPage() {
                     status: derivedStatus,
                     unread: unread,
                     channels: [touch.channel],
-                    latest_message: touch.body || (touch.channel === 'call' ? '[Audio Transcript Payload]' : '[Encrypted Payload]')
+                    latest_message: touch.body || (touch.channel === 'call' ? '[Audio Transcript Payload]' : '[Encrypted Payload]'),
+                    campaign: touch.variant_name || 'System / Uncategorized'
                 });
             } else {
                 // Update existing if this touch is newer
                 if (isLatest) {
                     existing.last_contacted = touch.ts;
                     existing.latest_message = touch.body || (touch.channel === 'call' ? '[Audio Transcript Payload]' : '[Encrypted Payload]');
+                    existing.campaign = touch.variant_name || existing.campaign;
                     // Only upgrade status, don't downgrade (e.g., if they replied before, keep them as replied even if we sent another message, until marked otherwise)
                     if (existing.status === 'sent' && derivedStatus !== 'sent') {
                         existing.status = derivedStatus;
@@ -172,6 +175,18 @@ export default function InboxPage() {
         // Sort by recency
         return filtered.sort((a, b) => new Date(b.last_contacted).getTime() - new Date(a.last_contacted).getTime());
     }, [aggregatedLeads, activeTab, searchQuery]);
+
+    // Group filtered leads by Campaign
+    const groupedLeads = useMemo(() => {
+        const groups = new Map<string, LeadStatus[]>();
+        filteredLeads.forEach(lead => {
+            const camp = lead.campaign;
+            if (!groups.has(camp)) groups.set(camp, []);
+            groups.get(camp)!.push(lead);
+        });
+        // Sort campaigns alphabetically
+        return Array.from(groups.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+    }, [filteredLeads]);
 
     // --- Active Thread ---
     const activeThread = useMemo(() => {
@@ -361,61 +376,70 @@ export default function InboxPage() {
                                 <p className="text-xs mt-1 opacity-60">Adjust your filtering parameters to view telemetry.</p>
                             </div>
                         ) : (
-                            <div className="flex flex-col p-2 space-y-1">
-                                {filteredLeads.map(lead => (
-                                    <button
-                                        key={lead.id}
-                                        onClick={() => setSelectedContactId(lead.id)}
-                                        className={clsx(
-                                            "w-full text-left p-3 rounded-lg border transition-all relative overflow-hidden group",
-                                            selectedContactId === lead.id
-                                                ? "bg-slate-800 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.1)]"
-                                                : "bg-slate-900/40 border-slate-800/50 hover:bg-slate-800/60 hover:border-slate-700",
-                                            lead.unread && selectedContactId !== lead.id && "border-amber-500/30 bg-amber-500/5"
-                                        )}
-                                    >
-                                        {/* Unread Indicator Bar */}
-                                        {lead.unread && (
-                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
-                                        )}
-
-                                        <div className="flex justify-between items-start mb-2">
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-sm text-slate-200 truncate pr-2">
-                                                    {lead.company}
-                                                </span>
-                                                <span className="text-[10px] text-slate-500 font-mono truncate">
-                                                    {lead.id}
-                                                </span>
-                                            </div>
-                                            <span className="text-[10px] text-slate-500 font-mono shrink-0 bg-slate-950/50 px-1.5 py-0.5 rounded border border-slate-800">
-                                                {new Date(lead.last_contacted).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                                            </span>
+                            <div className="flex flex-col p-2 space-y-4">
+                                {groupedLeads.map(([campaign, leads]) => (
+                                    <div key={campaign} className="flex flex-col space-y-1">
+                                        <div className="flex items-center gap-2 px-2 pt-1 pb-2">
+                                            <div className="h-px bg-slate-800 flex-1"></div>
+                                            <h3 className="text-[10px] font-bold text-indigo-400/80 uppercase tracking-widest">{campaign} <span className="text-slate-600">({leads.length})</span></h3>
+                                            <div className="h-px bg-slate-800 flex-1"></div>
                                         </div>
+                                        {leads.map(lead => (
+                                            <button
+                                                key={lead.id}
+                                                onClick={() => setSelectedContactId(lead.id)}
+                                                className={clsx(
+                                                    "w-full text-left p-3 rounded-lg border transition-all relative overflow-hidden group",
+                                                    selectedContactId === lead.id
+                                                        ? "bg-slate-800 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.1)]"
+                                                        : "bg-slate-900/40 border-slate-800/50 hover:bg-slate-800/60 hover:border-slate-700",
+                                                    lead.unread && selectedContactId !== lead.id && "border-amber-500/30 bg-amber-500/5"
+                                                )}
+                                            >
+                                                {/* Unread Indicator Bar */}
+                                                {lead.unread && (
+                                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
+                                                )}
 
-                                        <div className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-2 font-mono bg-slate-950/30 p-2 rounded border border-slate-800/50">
-                                            {lead.latest_message || <span className="italic opacity-50">[Encrypted Payload]</span>}
-                                        </div>
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div className="flex flex-col">
+                                                        <span className="font-bold text-sm text-slate-200 truncate pr-2">
+                                                            {lead.company}
+                                                        </span>
+                                                        <span className="text-[10px] text-slate-500 font-mono truncate">
+                                                            {lead.id}
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-[10px] text-slate-500 font-mono shrink-0 bg-slate-950/50 px-1.5 py-0.5 rounded border border-slate-800">
+                                                        {new Date(lead.last_contacted).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                                    </span>
+                                                </div>
 
-                                        <div className="flex items-center justify-between">
-                                            {/* Channel Indicators */}
-                                            <div className="flex gap-1">
-                                                {lead.channels.includes('email') && <div className="p-1 rounded bg-emerald-500/10 border border-emerald-500/20"><Mail className="w-3 h-3 text-emerald-400" /></div>}
-                                                {lead.channels.includes('sms') && <div className="p-1 rounded bg-blue-500/10 border border-blue-500/20"><MessageSquare className="w-3 h-3 text-blue-400" /></div>}
-                                                {lead.channels.includes('call') && <div className="p-1 rounded bg-purple-500/10 border border-purple-500/20"><Phone className="w-3 h-3 text-purple-400" /></div>}
-                                            </div>
+                                                <div className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-2 font-mono bg-slate-950/30 p-2 rounded border border-slate-800/50">
+                                                    {lead.latest_message || <span className="italic opacity-50">[Encrypted Payload]</span>}
+                                                </div>
 
-                                            {/* Status Badge */}
-                                            <span className={clsx(
-                                                "text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border",
-                                                lead.status === 'replied' ? "bg-amber-500/10 text-amber-400 border-amber-500/20" :
-                                                    lead.status === 'booked' ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
-                                                        "bg-slate-800 text-slate-400 border-slate-700"
-                                            )}>
-                                                {lead.status}
-                                            </span>
-                                        </div>
-                                    </button>
+                                                <div className="flex items-center justify-between">
+                                                    {/* Channel Indicators */}
+                                                    <div className="flex gap-1">
+                                                        {lead.channels.includes('email') && <div className="p-1 rounded bg-emerald-500/10 border border-emerald-500/20"><Mail className="w-3 h-3 text-emerald-400" /></div>}
+                                                        {lead.channels.includes('sms') && <div className="p-1 rounded bg-blue-500/10 border border-blue-500/20"><MessageSquare className="w-3 h-3 text-blue-400" /></div>}
+                                                        {lead.channels.includes('call') && <div className="p-1 rounded bg-purple-500/10 border border-purple-500/20"><Phone className="w-3 h-3 text-purple-400" /></div>}
+                                                    </div>
+
+                                                    {/* Status Badge */}
+                                                    <span className={clsx(
+                                                        "text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border",
+                                                        lead.status === 'replied' ? "bg-amber-500/10 text-amber-400 border-amber-500/20" :
+                                                            lead.status === 'booked' ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
+                                                                "bg-slate-800 text-slate-400 border-slate-700"
+                                                    )}>
+                                                        {lead.status}
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
                                 ))}
                             </div>
                         )}
@@ -557,6 +581,17 @@ export default function InboxPage() {
                                             </div>
                                         )
                                     })}
+
+                                    {/* Future Outreach Placeholder */}
+                                    {activeLeadMeta?.status !== 'replied' && activeLeadMeta?.status !== 'booked' && activeLeadMeta?.status !== 'won' && (
+                                        <div className="flex w-full justify-center mt-6 mb-2 opacity-60 hover:opacity-100 transition-opacity">
+                                            <div className="border border-dashed border-indigo-500/50 bg-indigo-500/5 rounded-xl px-6 py-4 flex flex-col items-center max-w-sm text-center shadow-inner">
+                                                <Clock className="w-5 h-5 text-indigo-400 mb-2 animate-pulse" />
+                                                <h4 className="text-xs font-bold text-indigo-300 uppercase tracking-widest mb-1">Awaiting Target Response</h4>
+                                                <p className="text-[10px] text-slate-400 leading-relaxed">Autonomous sequence paused. If no response is detected, the next escalation payload will dispatch per campaign parameters.</p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -642,6 +677,22 @@ export default function InboxPage() {
                                     </button>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* View Past Directives */}
+                        <div className="mb-6 flex flex-col gap-2">
+                            {activeThread.filter(t => t.status === 'directive').map(directive => (
+                                <div key={directive.id} className="bg-slate-950/50 border border-slate-800 rounded p-3 relative overflow-hidden">
+                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500/50"></div>
+                                    <div className="flex justify-between items-start mb-1">
+                                        <span className="text-[9px] uppercase tracking-wider text-indigo-400 font-bold">System Directive</span>
+                                        <span className="text-[9px] text-slate-600 font-mono">{new Date(directive.ts).toLocaleDateString()}</span>
+                                    </div>
+                                    <p className="text-xs text-slate-400 leading-relaxed italic border-l border-slate-800 pl-2 ml-1">
+                                        &quot;{directive.body?.replace('COMMANDER DIRECTIVE: ', '')}&quot;
+                                    </p>
+                                </div>
+                            ))}
                         </div>
 
                         {/* Tactical Target Dossier stub*/}

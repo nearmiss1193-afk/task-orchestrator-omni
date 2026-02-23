@@ -1,0 +1,175 @@
+run-factory	Run Background SEO Factory	∩╗┐2026-02-23T21:03:39.7391080Z ##[group]Run python scripts/github_seo_factory.py
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7391486Z [36;1mpython scripts/github_seo_factory.py[0m
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7425466Z shell: /usr/bin/bash -e {0}
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7425710Z env:
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7426199Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7426698Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib/pkgconfig
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7427148Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7427519Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7427881Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7428240Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7428992Z   NEON_DATABASE_URL: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7429305Z   GEMINI_API_KEY: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7429592Z   GITHUB_TOKEN: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7430119Z   SUPABASE_URL: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7431330Z   SUPABASE_KEY: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.7431560Z ##[endgroup]
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.8809422Z /opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/google/api_core/_python_version_support.py:275: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:39.8812724Z   warnings.warn(message, FutureWarning)
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5230490Z /home/runner/work/empire-unified-backup/empire-unified-backup/scripts/github_seo_factory.py:5: FutureWarning: 
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5231788Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5235578Z All support for the `google.generativeai` package has ended. It will no longer be receiving 
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5236893Z updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5237694Z See README for more details:
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5237985Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5238446Z https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5239083Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T21:03:41.5239273Z   import google.generativeai as genai
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:05.3356432Z /home/runner/work/empire-unified-backup/empire-unified-backup/scripts/github_seo_factory.py:119: DeprecationWarning: Argument login_or_token is deprecated, please use auth=github.Auth.Token(...) instead
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:05.3359309Z   gh = Github(GITHUB_TOKEN)
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4766354Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4768651Z ≡ƒÅ¡ INITIATING BACKGROUND SEO FACTORY RUN
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4769131Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4769712Z ≡ƒôÑ Pulled 50 businesses for processing.
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4770322Z [1/50] Processing: Brightway Insurance - The Charlene Rodriguez Agency...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4770970Z [2/50] Processing: A Insurance Direct...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4771483Z [3/50] Processing: Advanced Fence Contractors, Inc....
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4771984Z [4/50] Processing: Local Garage Door Pros...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4772479Z [5/50] Processing: Overhead Door Company of Polk County...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4773058Z [6/50] Processing: ≡¥Éç≡¥Éó≡¥ÉÑ≡¥ÉÑ≡¥É£≡¥É½≡¥É₧≡¥É¼≡¥É¡ ≡¥Éà≡¥É₧≡¥Éº≡¥É£≡¥É₧≡¥É¼...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4773563Z [7/50] Processing: Wrightlook Pressure Washing Company...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4774072Z [8/50] Processing: Evangelisto Construction...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4774550Z [9/50] Processing: SIMPLY SHINY CLEANING SERVICES...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4774997Z [10/50] Processing: GCS Remodel...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4775442Z [11/50] Processing: Precision Tree and Outdoor Services...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4776173Z [12/50] Processing: The Emporium Lakeland Piercing & Tattoo...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4776694Z [13/50] Processing: Patterson Tattoos Inc....
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4777134Z [14/50] Processing: D & D Garage Doors...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4777666Z [15/50] Processing: Eliteness Cleaning Maid Service of Lakeland...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4778770Z [16/50] Processing: PlugPV LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4779190Z [17/50] Processing: Superior Fence & Rail...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4779612Z [18/50] Processing: INK Flow...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4780050Z [19/50] Processing: Elite Remodeling Contractors Corp....
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4780583Z [20/50] Processing: JL Cleaning Solutions...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4781021Z [21/50] Processing: Lakeland Liquidation...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4781456Z [22/50] Processing: Florida Kitchen And Bath...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4781921Z [23/50] Processing: Lakeland Painting Company...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4782430Z [24/50] Processing: Omar Painting Services LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4783202Z [25/50] Processing: BillΓÇÖs Painting...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4783853Z [26/50] Processing: CertaPro Painters┬« of Lakeland & Winter Haven, FL...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4784466Z [27/50] Processing: Quality Paint Solutions LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4785229Z [28/50] Processing: TrustedBrush Painting Inc...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4785729Z [29/50] Processing: Thompson Pressure Washing LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4786577Z [30/50] Processing: RICHARD'S FENCE COMPANY...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4787110Z [31/50] Processing: MJ Fence and Lawn LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4787528Z [32/50] Processing: JG Pressure Clean...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4787950Z [33/50] Processing: AccuAquatics Pool Care...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4788384Z [34/50] Processing: Aqua ResQ...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4788745Z [35/50] Processing: Black & Brew...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4789146Z [36/50] Processing: Mitchell's Coffee House...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4789569Z [37/50] Processing: Foxtail Coffee...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4789959Z [38/50] Processing: Hillcrest Coffee...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4790360Z [39/50] Processing: Concord Coffee...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4790791Z [40/50] Processing: Quinteassence Kava Bar...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4791261Z [41/50] Processing: JDS Home Solutions, LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4791720Z [42/50] Processing: Pressed Books & Coffee...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4792142Z [43/50] Processing: Operation Paint...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4792526Z [44/50] Processing: Williams Fence Co...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4792978Z [45/50] Processing: A Square Deal Locksmith...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4793421Z [46/50] Processing: Pop-A-Lock of Polk County...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4793853Z [47/50] Processing: Nutri Glow...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4794241Z [48/50] Processing: Portico Coffeehouse...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4794781Z [49/50] Processing: Lakeland Deck, Fence, Dock Builders & Construction...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4795438Z [50/50] Processing: M&K Family Movers...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4796117Z ≡ƒÜÇ Pushing 50 files to GitHub repository...
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4797794Z Γ¥î GitHub API Error: tree.path contains a malformed path component: 422 {"message": "tree.path contains a malformed path component", "documentation_url": "https://docs.github.com/rest/git/trees#create-a-tree", "status": "422"}
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4799277Z Γ£à Marked 50 rows as published.
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4799651Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T21:09:07.4800166Z ≡ƒÄë FACTORY RUN COMPLETE: 50 pages built.

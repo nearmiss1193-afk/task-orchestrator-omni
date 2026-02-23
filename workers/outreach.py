@@ -275,7 +275,24 @@ Dan"""
         
         from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
     
-    chosen = random.choice(subject_variants)
+    # --- CAMPAIGN TRIAGE HALT & ROUTING CHECK ---
+    active_variants = []
+    try:
+        all_states = supabase.table("system_state").select("key, value").like("key", "campaign_%_status").execute()
+        paused_set = {r["key"].replace("campaign_", "").replace("_status", "") for r in (all_states.data or []) if r["value"] == "paused"}
+        
+        for v in subject_variants:
+            if v["id"] not in paused_set:
+                active_variants.append(v)
+    except Exception as e:
+        print(f"⚠️ Warning: Could not verify triage status, defaulting to all variants: {e}")
+        active_variants = subject_variants
+
+    if not active_variants:
+        print(f"⏸️ ABORT EMAIL: All subject variants for this template are HALTED via Campaign Triage Dashboard.")
+        return False
+
+    chosen = random.choice(active_variants)
     subject = chosen["subject"]
     variant_id = chosen["id"]
     

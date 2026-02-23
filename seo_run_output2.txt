@@ -1,0 +1,53 @@
+run-factory	Run Background SEO Factory	∩╗┐2026-02-23T19:37:50.5690984Z ##[group]Run python scripts/github_seo_factory.py
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5691387Z [36;1mpython scripts/github_seo_factory.py[0m
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5724837Z shell: /usr/bin/bash -e {0}
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5725084Z env:
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5725348Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5725779Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib/pkgconfig
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5726188Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5726546Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5726899Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5727264Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5727856Z   NEON_DATABASE_URL: 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5728238Z   GEMINI_API_KEY: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5728578Z   GITHUB_TOKEN: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.5729010Z ##[endgroup]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.6657649Z /opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/google/api_core/_python_version_support.py:275: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:50.6661589Z   warnings.warn(message, FutureWarning)
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1836653Z /home/runner/work/empire-unified-backup/empire-unified-backup/scripts/github_seo_factory.py:5: FutureWarning: 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1838959Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1840497Z All support for the `google.generativeai` package has ended. It will no longer be receiving 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1842691Z updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1844446Z See README for more details:
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1844768Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1845230Z https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1845898Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.1846083Z   import google.generativeai as genai
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.2312735Z Γ¥î FATAL: Missing database or LLM credentials.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:37:51.3018351Z ##[error]Process completed with exit code 1.

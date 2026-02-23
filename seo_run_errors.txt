@@ -1,0 +1,5 @@
+run-factory	Commit and Push New Pages	2026-02-23T21:20:05.7994881Z fatal: pathspec 'apps/portal/src/app/lakeland/' did not match any files
+
+run-factory	Commit and Push New Pages	2026-02-23T21:20:05.8010296Z ##[error]Process completed with exit code 128.
+
+run-factory	Post Checkout Repository	2026-02-23T21:20:05.9590305Z fatal: No url found for submodule path 'modules/research' in .gitmodules

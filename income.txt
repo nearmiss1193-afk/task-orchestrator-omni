@@ -1,0 +1,9 @@
+┌────────────────────────────────────────┐
+│ INCOME PIPELINE — 2026-02-23           │
+│ Sending:   0 touches in last 24h
+│ Opening:   N/A opens in last 7d
+│ Replying:  0 replies in last 7d
+│ Booking:   X appointments this week    │
+│ Paying:    X payments this week        │
+│ Pipeline:  3080 contactable leads remain
+└────────────────────────────────────────┘

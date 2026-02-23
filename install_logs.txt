@@ -1,0 +1,289 @@
+run-factory	Install Dependencies	∩╗┐2026-02-23T19:22:01.3209412Z ##[group]Run python -m pip install --upgrade pip
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3210395Z [36;1mpython -m pip install --upgrade pip[0m
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3210869Z [36;1mpip install psycopg2-binary google-generativeai python-dotenv[0m
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3371576Z shell: /usr/bin/bash -e {0}
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3371887Z env:
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3372166Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3372722Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib/pkgconfig
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3373284Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3373667Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3374164Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3374541Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib
+
+run-factory	Install Dependencies	2026-02-23T19:22:01.3374978Z ##[endgroup]
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.1870678Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages (26.0)
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.3367593Z Collecting pip
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.4901300Z   Downloading pip-26.0.1-py3-none-any.whl.metadata (4.7 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.5329924Z Downloading pip-26.0.1-py3-none-any.whl (1.8 MB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.7152033Z    ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü 1.8/1.8 MB 16.6 MB/s  0:00:00
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.7723162Z Installing collected packages: pip
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.7730326Z   Attempting uninstall: pip
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.7750701Z     Found existing installation: pip 26.0
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.8572506Z     Uninstalling pip-26.0:
+
+run-factory	Install Dependencies	2026-02-23T19:22:04.8668612Z       Successfully uninstalled pip-26.0
+
+run-factory	Install Dependencies	2026-02-23T19:22:05.7130801Z Successfully installed pip-26.0.1
+
+run-factory	Install Dependencies	2026-02-23T19:22:06.8811684Z Collecting psycopg2-binary
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.0126643Z   Downloading psycopg2_binary-2.9.11-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.0366461Z Collecting google-generativeai
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.0660654Z   Downloading google_generativeai-0.8.6-py3-none-any.whl.metadata (3.9 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.0993881Z Collecting python-dotenv
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.1294243Z   Downloading python_dotenv-1.2.1-py3-none-any.whl.metadata (25 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.1707776Z Collecting google-ai-generativelanguage==0.6.15 (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.2016558Z   Downloading google_ai_generativelanguage-0.6.15-py3-none-any.whl.metadata (5.7 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.2538267Z Collecting google-api-core (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.2837370Z   Downloading google_api_core-2.30.0-py3-none-any.whl.metadata (3.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.3661079Z Collecting google-api-python-client (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.4001828Z   Downloading google_api_python_client-2.190.0-py3-none-any.whl.metadata (7.0 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.4540682Z Collecting google-auth>=2.15.0 (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.4841368Z   Downloading google_auth-2.48.0-py3-none-any.whl.metadata (6.2 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.7257647Z Collecting protobuf (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.7552879Z   Downloading protobuf-6.33.5-cp39-abi3-manylinux2014_x86_64.whl.metadata (593 bytes)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.9336424Z Collecting pydantic (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:07.9633827Z   Downloading pydantic-2.12.5-py3-none-any.whl.metadata (90 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:08.2476391Z Collecting tqdm (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:08.2776318Z   Downloading tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.0857029Z Collecting typing-extensions (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.1157029Z   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.1961524Z Collecting google-auth>=2.15.0 (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.2264152Z   Downloading google_auth-2.49.0.dev0-py3-none-any.whl.metadata (6.0 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.2656462Z Collecting proto-plus<2.0.0dev,>=1.22.3 (from google-ai-generativelanguage==0.6.15->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.2954292Z   Downloading proto_plus-1.27.1-py3-none-any.whl.metadata (2.2 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.3336158Z Collecting protobuf (from google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.3639719Z   Downloading protobuf-5.29.6-cp38-abi3-manylinux2014_x86_64.whl.metadata (592 bytes)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.3956164Z Collecting googleapis-common-protos<2.0.0,>=1.56.3 (from google-api-core->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.4252622Z   Downloading googleapis_common_protos-1.72.0-py3-none-any.whl.metadata (9.4 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.5083016Z Collecting requests<3.0.0,>=2.20.0 (from google-api-core->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:09.5379413Z   Downloading requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.2534773Z Collecting grpcio<2.0.0,>=1.33.2 (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.15->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.3174235Z   Downloading grpcio-1.78.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (3.8 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.3771373Z Collecting grpcio-status<2.0.0,>=1.33.2 (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.15->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.4634082Z   Downloading grpcio_status-1.78.1-py3-none-any.whl.metadata (1.3 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.4987596Z Collecting pyasn1-modules>=0.2.1 (from google-auth>=2.15.0->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.5289140Z   Downloading pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.7736049Z Collecting cryptography>=38.0.3 (from google-auth>=2.15.0->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.8034893Z   Downloading cryptography-46.0.5-cp38-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.8335933Z INFO: pip is looking at multiple versions of grpcio-status to determine which version is compatible with other requirements. This could take a while.
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.8343787Z Collecting grpcio-status<2.0.0,>=1.33.2 (from google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.15->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.8651655Z   Downloading grpcio_status-1.78.0-py3-none-any.whl.metadata (1.3 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.8991578Z   Downloading grpcio_status-1.76.0-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.9322462Z   Downloading grpcio_status-1.75.1-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.9662556Z   Downloading grpcio_status-1.75.0-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:10.9993398Z   Downloading grpcio_status-1.74.0-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.0329289Z   Downloading grpcio_status-1.73.1-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.0902103Z   Downloading grpcio_status-1.73.0-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.0984383Z INFO: pip is still looking at multiple versions of grpcio-status to determine which version is compatible with other requirements. This could take a while.
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.1290290Z   Downloading grpcio_status-1.72.2-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.1642080Z   Downloading grpcio_status-1.72.1-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.1982303Z   Downloading grpcio_status-1.71.2-py3-none-any.whl.metadata (1.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.4180836Z Collecting charset_normalizer<4,>=2 (from requests<3.0.0,>=2.20.0->google-api-core->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.4480932Z   Downloading charset_normalizer-3.4.4-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (37 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.4767331Z Collecting idna<4,>=2.5 (from requests<3.0.0,>=2.20.0->google-api-core->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.5064626Z   Downloading idna-3.11-py3-none-any.whl.metadata (8.4 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.5451026Z Collecting urllib3<3,>=1.21.1 (from requests<3.0.0,>=2.20.0->google-api-core->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.5755262Z   Downloading urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.6088542Z Collecting certifi>=2017.4.17 (from requests<3.0.0,>=2.20.0->google-api-core->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.6383609Z   Downloading certifi-2026.1.4-py3-none-any.whl.metadata (2.5 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.7849983Z Collecting cffi>=2.0.0 (from cryptography>=38.0.3->google-auth>=2.15.0->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.8152956Z   Downloading cffi-2.0.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.8410060Z Collecting pycparser (from cffi>=2.0.0->cryptography>=38.0.3->google-auth>=2.15.0->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.8709057Z   Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.9080013Z Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth>=2.15.0->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.9372350Z   Downloading pyasn1-0.6.2-py3-none-any.whl.metadata (8.4 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:11.9701607Z Collecting httplib2<1.0.0,>=0.19.0 (from google-api-python-client->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.0001077Z   Downloading httplib2-0.31.2-py3-none-any.whl.metadata (2.2 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.0371078Z Collecting google-auth-httplib2<1.0.0,>=0.2.0 (from google-api-python-client->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.0668536Z   Downloading google_auth_httplib2-0.3.0-py3-none-any.whl.metadata (3.1 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.0903481Z Collecting uritemplate<5,>=3.0.1 (from google-api-python-client->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.1198646Z   Downloading uritemplate-4.2.0-py3-none-any.whl.metadata (2.6 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.1581658Z Collecting pyparsing<4,>=3.1 (from httplib2<1.0.0,>=0.19.0->google-api-python-client->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.1879660Z   Downloading pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.2125049Z Collecting annotated-types>=0.6.0 (from pydantic->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:12.2425225Z   Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.1904590Z Collecting pydantic-core==2.41.5 (from pydantic->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.2201545Z   Downloading pydantic_core-2.41.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.2452754Z Collecting typing-inspection>=0.4.2 (from pydantic->google-generativeai)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.2748724Z   Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.3131676Z Downloading psycopg2_binary-2.9.11-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.2 MB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.4437010Z    ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü 4.2/4.2 MB 41.0 MB/s  0:00:00
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.4732928Z Downloading google_generativeai-0.8.6-py3-none-any.whl (155 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.5065999Z Downloading google_ai_generativelanguage-0.6.15-py3-none-any.whl (1.3 MB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.5176403Z    ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü 1.3/1.3 MB 149.4 MB/s  0:00:00
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.5477278Z Downloading google_api_core-2.30.0-py3-none-any.whl (173 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.5822055Z Downloading google_auth-2.49.0.dev0-py3-none-any.whl (236 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.6150475Z Downloading googleapis_common_protos-1.72.0-py3-none-any.whl (297 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.6494394Z Downloading grpcio-1.78.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (6.7 MB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.6989015Z    ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü 6.7/6.7 MB 139.8 MB/s  0:00:00
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.7282597Z Downloading grpcio_status-1.71.2-py3-none-any.whl (14 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.7601314Z Downloading proto_plus-1.27.1-py3-none-any.whl (50 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.7924823Z Downloading protobuf-5.29.6-cp38-abi3-manylinux2014_x86_64.whl (320 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.8257032Z Downloading requests-2.32.5-py3-none-any.whl (64 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.8580870Z Downloading charset_normalizer-3.4.4-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (153 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.8901123Z Downloading idna-3.11-py3-none-any.whl (71 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.9223850Z Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.9544387Z Downloading urllib3-2.6.3-py3-none-any.whl (131 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:13.9864300Z Downloading python_dotenv-1.2.1-py3-none-any.whl (21 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.0180930Z Downloading certifi-2026.1.4-py3-none-any.whl (152 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.0513659Z Downloading cryptography-46.0.5-cp38-abi3-manylinux_2_34_x86_64.whl (4.5 MB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.0891283Z    ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü 4.5/4.5 MB 120.3 MB/s  0:00:00
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.1200050Z Downloading cffi-2.0.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (216 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.1527300Z Downloading pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.1854232Z Downloading pyasn1-0.6.2-py3-none-any.whl (83 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.2181418Z Downloading google_api_python_client-2.190.0-py3-none-any.whl (14.7 MB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.3699081Z    ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü 14.7/14.7 MB 97.1 MB/s  0:00:00
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.4001480Z Downloading google_auth_httplib2-0.3.0-py3-none-any.whl (9.5 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.4335764Z Downloading httplib2-0.31.2-py3-none-any.whl (91 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.4662099Z Downloading pyparsing-3.3.2-py3-none-any.whl (122 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.4992548Z Downloading uritemplate-4.2.0-py3-none-any.whl (11 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.5314084Z Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.5638856Z Downloading pydantic-2.12.5-py3-none-any.whl (463 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.5983658Z Downloading pydantic_core-2.41.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.6116925Z    ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü 2.1/2.1 MB 180.1 MB/s  0:00:00
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.6634178Z Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.6951282Z Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.7267813Z Downloading tqdm-4.67.3-py3-none-any.whl (78 kB)
+
+run-factory	Install Dependencies	2026-02-23T19:22:14.8542994Z Installing collected packages: urllib3, uritemplate, typing-extensions, tqdm, python-dotenv, pyparsing, pycparser, pyasn1, psycopg2-binary, protobuf, idna, charset_normalizer, certifi, annotated-types, typing-inspection, requests, pydantic-core, pyasn1-modules, proto-plus, httplib2, grpcio, googleapis-common-protos, cffi, pydantic, grpcio-status, cryptography, google-auth, google-auth-httplib2, google-api-core, google-api-python-client, google-ai-generativelanguage, google-generativeai
+
+run-factory	Install Dependencies	2026-02-23T19:22:17.7932195Z 
+
+run-factory	Install Dependencies	2026-02-23T19:22:17.7988248Z Successfully installed annotated-types-0.7.0 certifi-2026.1.4 cffi-2.0.0 charset_normalizer-3.4.4 cryptography-46.0.5 google-ai-generativelanguage-0.6.15 google-api-core-2.30.0 google-api-python-client-2.190.0 google-auth-2.49.0.dev0 google-auth-httplib2-0.3.0 google-generativeai-0.8.6 googleapis-common-protos-1.72.0 grpcio-1.78.1 grpcio-status-1.71.2 httplib2-0.31.2 idna-3.11 proto-plus-1.27.1 protobuf-5.29.6 psycopg2-binary-2.9.11 pyasn1-0.6.2 pyasn1-modules-0.4.2 pycparser-3.0 pydantic-2.12.5 pydantic-core-2.41.5 pyparsing-3.3.2 python-dotenv-1.2.1 requests-2.32.5 tqdm-4.67.3 typing-extensions-4.15.0 typing-inspection-0.4.2 uritemplate-4.2.0 urllib3-2.6.3

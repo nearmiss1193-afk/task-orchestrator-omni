@@ -62,7 +62,7 @@ def fetch_pagespeed(website_url: str) -> dict:
             f"?url={website_url}&strategy=mobile&category=performance&key={api_key}"
         )
         try:
-            r = requests.get(api_url, timeout=45)
+            r = requests.get(api_url, timeout=10)
             if r.status_code == 200:
                 data = r.json()
                 lighthouse = data.get("lighthouseResult", {})
@@ -571,8 +571,8 @@ def generate_audit_for_lead(lead: dict) -> dict:
     ai_readiness = check_ai_readiness(website)
 
     # 4. Generate Veo Teaser (Phase 12 Turbo)
-    print("  [4/4] Generating Veo 3.1 Video Teaser...")
-    video_url = generate_veo_teaser(company, pagespeed.get("score") or 0)
+    print("  [4/4] Skipping Veo 3.1 Video Teaser (taking too long, blocking outreach loop)")
+    video_url = None # generate_veo_teaser(company, pagespeed.get("score") or 0)
 
     # 4. Generate PDF
     print("  Generating PDF report...")

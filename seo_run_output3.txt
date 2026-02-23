@@ -1,0 +1,63 @@
+run-factory	Run Background SEO Factory	∩╗┐2026-02-23T19:42:23.3132532Z ##[group]Run python scripts/github_seo_factory.py
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3132938Z [36;1mpython scripts/github_seo_factory.py[0m
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3166830Z shell: /usr/bin/bash -e {0}
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3167071Z env:
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3167316Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3167743Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib/pkgconfig
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3168158Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3168530Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3168893Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3169258Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3170025Z   NEON_DATABASE_URL: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3170333Z   GEMINI_API_KEY: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3170627Z   GITHUB_TOKEN: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.3170820Z ##[endgroup]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.4420850Z /opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/google/api_core/_python_version_support.py:275: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:23.4424587Z   warnings.warn(message, FutureWarning)
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8688568Z /home/runner/work/empire-unified-backup/empire-unified-backup/scripts/github_seo_factory.py:5: FutureWarning: 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8689680Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8690203Z All support for the `google.generativeai` package has ended. It will no longer be receiving 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8691262Z updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8691990Z See README for more details:
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8692268Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8692754Z https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8693685Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.8693888Z   import google.generativeai as genai
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.9774710Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.9782629Z ≡ƒÅ¡ INITIATING BACKGROUND SEO FACTORY RUN
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.9784527Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.9786829Z Γ¥î Database error fetching batch: connection to server at "db.rzcpfwkygdvoshtwxncs.supabase.co" (2600:1f13:838:6e13:453e:4229:7ddd:eaf4), port 5432 failed: Network is unreachable
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.9789256Z 	Is the server running on that host and accepting TCP/IP connections?
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.9789727Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:42:24.9790097Z Γ£à Inbox zero! No unpublished businesses remain in the database.

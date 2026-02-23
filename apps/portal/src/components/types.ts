@@ -45,3 +45,16 @@ export interface DashboardData {
     scraper_health: ScraperHealth;
     timestamp: string;
 }
+
+export interface RevenueForecast {
+    pipeline_size: number;
+    velocity_7d: {
+        opens: number;
+        replies: number;
+    };
+    forecast: {
+        predicted_weekly_bookings: number;
+        pipeline_health_score: number;
+        sustainability: string;
+    };
+}

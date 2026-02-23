@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabaseClient';
 
 export default function CampaignsPage() {
     const [campaigns, setCampaigns] = useState<any[]>([]);
+    const [campaignStates, setCampaignStates] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -17,7 +18,7 @@ export default function CampaignsPage() {
 
             const { data, error } = await supabase
                 .from('outbound_touches')
-                .select('template_name, channel, status, ts, direction')
+                .select('variant_id, channel, status, ts, direction')
                 .gte('ts', thirtyDaysAgo.toISOString())
                 .eq('direction', 'outbound');
 
@@ -25,6 +26,23 @@ export default function CampaignsPage() {
                 console.error('Failed to pull campaign telemetry:', error);
                 setLoading(false);
                 return;
+            }
+
+            // Sync with system_state tracker
+            const { data: stateData, error: stateErr } = await supabase
+                .from('system_state')
+                .select('key, value')
+                .like('key', 'campaign_%_status');
+
+            if (!stateErr && stateData) {
+                const stateMap: Record<string, string> = {};
+                stateData.forEach((row: any) => {
+                    const templateNameMatch = row.key.match(/^campaign_(.*)_status$/);
+                    if (templateNameMatch) {
+                        stateMap[templateNameMatch[1]] = row.value;
+                    }
+                });
+                setCampaignStates(stateMap);
             }
 
             // We must independently query replies because they are direction = 'inbound'
@@ -36,7 +54,7 @@ export default function CampaignsPage() {
             const touchLogs: any[] = data || [];
             touchLogs.forEach((touch: any) => {
                 // Normalize null scripts into a "Manual Execution" bucket
-                const templateId = touch.template_name || 'Manual Execution Override';
+                const templateId = touch.variant_id || 'Manual Execution Override';
                 const key = `${touch.channel}_${templateId}`;
 
                 if (!aggregationMap.has(key)) {
@@ -91,6 +109,28 @@ export default function CampaignsPage() {
 
         fetchCampaignTelemetry();
     }, []);
+
+    const toggleCampaignStatus = async (templateName: string, currentStatus: string) => {
+        const newAction = currentStatus === 'live' || !currentStatus ? 'pause' : 'live';
+        const newStateValue = currentStatus === 'live' || !currentStatus ? 'paused' : 'live';
+
+        // Optimistic UI update
+        setCampaignStates(prev => ({ ...prev, [templateName]: newStateValue }));
+
+        try {
+            const res = await fetch('/api/campaign-control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ template_name: templateName, action: newAction })
+            });
+            if (!res.ok) throw new Error('API failed');
+        } catch (err) {
+            console.error("Failed to toggle campaign:", err);
+            // Revert on failure
+            setCampaignStates(prev => ({ ...prev, [templateName]: currentStatus || 'live' }));
+            alert("Failed to update campaign status.");
+        }
+    };
 
     return (
         <div className="min-h-screen bg-slate-950 p-8">
@@ -148,13 +188,17 @@ export default function CampaignsPage() {
                                     const isWinning = parseFloat(replyRate) > 3.0;
                                     const isLosing = parseFloat(replyRate) < 1.0 && camp.totalSent > 50;
 
+                                    const campStatus = campaignStates[camp.template] || 'live';
+                                    const isPaused = campStatus === 'paused';
+
                                     return (
-                                        <tr key={camp.id} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+                                        <tr key={camp.id} className={`border-b border-slate-800/50 transition-colors ${isPaused ? 'bg-slate-900/50 opacity-60' : 'hover:bg-slate-800/30'}`}>
                                             <td className="p-4">
                                                 <div className="font-medium text-slate-200 flex items-center gap-2">
                                                     {camp.template}
-                                                    {isWinning && <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold tracking-widest uppercase">Winner</span>}
-                                                    {isLosing && <span className="px-2 py-0.5 rounded text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 font-bold tracking-widest uppercase">Suboptimal</span>}
+                                                    {isWinning && !isPaused && <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold tracking-widest uppercase">Winner</span>}
+                                                    {isLosing && !isPaused && <span className="px-2 py-0.5 rounded text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 font-bold tracking-widest uppercase">Suboptimal</span>}
+                                                    {isPaused && <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold tracking-widest uppercase">Halted</span>}
                                                 </div>
                                                 <div className="text-xs text-slate-500 mt-1 font-mono">Last Fired: {new Date(camp.lastFired).toLocaleDateString()}</div>
                                             </td>
@@ -183,8 +227,8 @@ export default function CampaignsPage() {
 
                                             <td className="p-4 text-center">
                                                 <span className="flex justify-center items-center gap-2">
-                                                    <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-                                                    <span className="text-xs text-slate-400">Live</span>
+                                                    <div className={`w-2 h-2 rounded-full ${isPaused ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'}`}></div>
+                                                    <span className="text-xs text-slate-400 capitalize">{campStatus}</span>
                                                 </span>
                                             </td>
 
@@ -193,9 +237,21 @@ export default function CampaignsPage() {
                                                     <button className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded transition-colors" title="Edit Template">
                                                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                                     </button>
-                                                    <button className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors" title="Halt Campaign">
-                                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                                    </button>
+                                                    {isPaused ? (
+                                                        <button
+                                                            onClick={() => toggleCampaignStatus(camp.template, campStatus)}
+                                                            className="p-1.5 text-amber-500 hover:text-white hover:bg-emerald-500/30 rounded transition-colors" title="Resume Campaign"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => toggleCampaignStatus(camp.template, campStatus)}
+                                                            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors" title="Halt Campaign"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </td>
 

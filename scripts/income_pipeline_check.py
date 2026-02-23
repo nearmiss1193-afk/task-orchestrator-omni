@@ -1,88 +1,49 @@
-"""
-ANTIGRAVITY v6.0 — Income Pipeline Check
-Run this at the START of every session per the Revenue-Verified Autonomy protocol.
-"""
-import os, json
-from dotenv import load_dotenv
-load_dotenv()
-
+import os
+from datetime import datetime, timedelta, timezone
 from supabase import create_client
+from dotenv import load_dotenv
 
-url = os.environ.get("SUPABASE_URL", "https://rzcpfwkygdvoshtwxncs.supabase.co")
-key = os.environ.get("SUPABASE_KEY", "")
+load_dotenv('apps/portal/.env.local')
+supabase = create_client(os.environ.get('NEXT_PUBLIC_SUPABASE_URL'), os.environ.get('SUPABASE_SERVICE_ROLE_KEY'))
 
-sb = create_client(url, key)
+now = datetime.now(timezone.utc)
+last_24h = (now - timedelta(hours=24)).isoformat()
+last_7d = (now - timedelta(days=7)).isoformat()
 
-print("=" * 50)
-print("INCOME PIPELINE CHECK — v6.0 Protocol")
-print("=" * 50)
+def run_check():
+    try:
+        sent_res = supabase.table('outbound_touches').select('id', count='exact').gt('ts', last_24h).execute()
+        sent_count = sent_res.count if sent_res else 0
+        
+        open_count = "N/A"
+        try:
+            open_res = supabase.table('outbound_touches').select('id', count='exact').eq('opened', True).gt('ts', last_7d).execute()
+            open_count = open_res.count if open_res else 0
+        except: pass
 
-# Step 1: SENDING?
-try:
-    r = sb.rpc('', {}).execute()  # fallback to direct query
-except:
-    pass
+        reply_count = "N/A"
+        try:
+            reply_res = supabase.table('outbound_touches').select('id', count='exact').eq('status', 'replied').gt('ts', last_7d).execute()
+            reply_count = reply_res.count if reply_res else 0
+        except: pass
 
-try:
-    r = sb.table("outbound_touches").select("id", count="exact").gte("ts", "now() - interval '24 hours'").execute()
-    print(f"\n1. SENDING:   {r.count or len(r.data)} touches in last 24h")
-except Exception as e:
-    # Try raw approach
-    r = sb.table("outbound_touches").select("id,ts").order("ts", desc=True).limit(10).execute()
-    recent = r.data if r.data else []
-    print(f"\n1. SENDING:   {len(recent)} most recent touches")
-    if recent:
-        print(f"   Last touch: {recent[0].get('ts', 'unknown')}")
-    else:
-        print(f"   !! ZERO TOUCHES FOUND !!")
+        pipe_res = supabase.table('contacts_master').select('id', count='exact').in_('status', ['new', 'research_done']).execute()
+        pipe_count = pipe_res.count if pipe_res else 0
 
-# Step 2: Check for opens/replies (column may not exist)
-try:
-    r = sb.table("outbound_touches").select("id,channel,ts,status").order("ts", desc=True).limit(20).execute()
-    data = r.data or []
-    channels = {}
-    for d in data:
-        ch = d.get('channel', 'unknown')
-        channels[ch] = channels.get(ch, 0) + 1
-    print(f"\n2. CHANNELS:  {json.dumps(channels)}")
-    if data:
-        print(f"   Latest:    {data[0].get('ts', '?')} via {data[0].get('channel', '?')}")
-except Exception as e:
-    print(f"\n2. CHANNELS:  Error - {e}")
+        with open("income.txt", "w", encoding="utf-8") as f:
+            f.write("┌────────────────────────────────────────┐\n")
+            f.write(f"│ INCOME PIPELINE — {now.strftime('%Y-%m-%d')}           │\n")
+            f.write(f"│ Sending:   {sent_count} touches in last 24h\n")
+            f.write(f"│ Opening:   {open_count} opens in last 7d\n")
+            f.write(f"│ Replying:  {reply_count} replies in last 7d\n")
+            f.write(f"│ Booking:   X appointments this week    │\n")
+            f.write(f"│ Paying:    X payments this week        │\n")
+            f.write(f"│ Pipeline:  {pipe_count} contactable leads remain\n")
+            f.write("└────────────────────────────────────────┘\n")
+            
+    except Exception as e:
+        with open("income.txt", "w") as f:
+            f.write(f"Error: {e}")
 
-# Step 3: Pipeline health
-try:
-    r = sb.table("contacts_master").select("status", count="exact").execute()
-    statuses = {}
-    for row in (r.data or []):
-        s = row.get('status', 'unknown')
-        statuses[s] = statuses.get(s, 0) + 1
-    print(f"\n3. PIPELINE:  {json.dumps(statuses)}")
-    contactable = statuses.get('new', 0) + statuses.get('research_done', 0)
-    print(f"   Contactable leads: {contactable}")
-except Exception as e:
-    print(f"\n3. PIPELINE:  Error - {e}")
-
-# Step 4: Campaign mode
-try:
-    r = sb.table("system_state").select("*").eq("key", "campaign_mode").execute()
-    if r.data:
-        print(f"\n4. CAMPAIGN:  {r.data[0].get('status', 'unknown')}")
-    else:
-        print(f"\n4. CAMPAIGN:  No campaign_mode row found")
-except Exception as e:
-    print(f"\n4. CAMPAIGN:  Error - {e}")
-
-# Step 5: Heartbeat
-try:
-    r = sb.table("system_health_log").select("checked_at,status").order("checked_at", desc=True).limit(1).execute()
-    if r.data:
-        print(f"\n5. HEARTBEAT: {r.data[0].get('checked_at', '?')} — {r.data[0].get('status', '?')}")
-    else:
-        print(f"\n5. HEARTBEAT: No heartbeat found")
-except Exception as e:
-    print(f"\n5. HEARTBEAT: Error - {e}")
-
-print(f"\n{'=' * 50}")
-print("END PIPELINE CHECK")
-print("=" * 50)
+if __name__ == "__main__":
+    run_check()

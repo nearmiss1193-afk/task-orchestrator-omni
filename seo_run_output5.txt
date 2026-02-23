@@ -1,0 +1,3075 @@
+run-factory	Run Background SEO Factory	∩╗┐2026-02-23T19:57:10.2667753Z ##[group]Run python scripts/github_seo_factory.py
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2668154Z [36;1mpython scripts/github_seo_factory.py[0m
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2702037Z shell: /usr/bin/bash -e {0}
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2702288Z env:
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2702558Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2702999Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib/pkgconfig
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2703434Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2703824Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2704195Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2704832Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2705700Z   NEON_DATABASE_URL: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2706241Z   GEMINI_API_KEY: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2706541Z   GITHUB_TOKEN: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2706845Z   SUPABASE_URL: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2708091Z   SUPABASE_KEY: ***
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.2708317Z ##[endgroup]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.4241543Z /opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/google/api_core/_python_version_support.py:275: FutureWarning: You are using a Python version (3.10.19) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:10.4244494Z   warnings.warn(message, FutureWarning)
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2235364Z /home/runner/work/empire-unified-backup/empire-unified-backup/scripts/github_seo_factory.py:5: FutureWarning: 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2237830Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2239586Z All support for the `google.generativeai` package has ended. It will no longer be receiving 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2248085Z updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2248903Z See README for more details:
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2249224Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2249711Z https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2250300Z 
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:11.2250483Z   import google.generativeai as genai
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0168862Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0170103Z ≡ƒÅ¡ INITIATING BACKGROUND SEO FACTORY RUN
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0170577Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0171125Z ≡ƒôÑ Pulled 50 businesses for processing.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0171587Z [1/50] Processing: EBP Landscaping...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0174023Z ΓÜá∩╕Å Gemini API failed for EBP Landscaping: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0176092Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0176334Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0176524Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0176772Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0177075Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0177244Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0177436Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0177672Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0177928Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0178099Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0178286Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0178510Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0178721Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0178888Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0179069Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0179282Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0179529Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0179699Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0179897Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0180456Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0181449Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0181606Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0182864Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0184184Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0184432Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0185172Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0185879Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0186035Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0186221Z [2/50] Processing: Mirtil Electric LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0188054Z ΓÜá∩╕Å Gemini API failed for Mirtil Electric LLC: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0189629Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0189841Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0190012Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0190240Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0190511Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0190669Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0190840Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0191047Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0191277Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0191429Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0191610Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0191808Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0191991Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0192143Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0192311Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0192504Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0192723Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0192876Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0193040Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0193543Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0194083Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0194237Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0195762Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0197112Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0197347Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0197951Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0198493Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0198645Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0198831Z [3/50] Processing: Performance Electric...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0200677Z ΓÜá∩╕Å Gemini API failed for Performance Electric: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0202322Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0202535Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0202705Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0202932Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0203196Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0203349Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0203520Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0203731Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0204175Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0204321Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0204491Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0204836Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0205026Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0205181Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0205356Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0205553Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0205770Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0205922Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0206093Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0206605Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0207142Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0207300Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0208568Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0210046Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0210281Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0210881Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0211410Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0211561Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0211740Z [4/50] Processing: Sharp Cut Tree Service...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0213552Z ΓÜá∩╕Å Gemini API failed for Sharp Cut Tree Service: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0215236Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0215460Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0215629Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0215855Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0216123Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0216270Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0216445Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0216664Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0216894Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0217081Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0217251Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0217453Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0217660Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0217816Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0217983Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0218176Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0218391Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0218547Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0218720Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0219225Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0219768Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0219932Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0221203Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0222520Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0222753Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0223350Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0223885Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0224029Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0224209Z [5/50] Processing: Priority Roofing...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0226094Z ΓÜá∩╕Å Gemini API failed for Priority Roofing: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0227787Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0227995Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0228162Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0228380Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0228638Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0228793Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0228962Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0229176Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0229406Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0229558Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0229724Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0229920Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0230235Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0230392Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0230556Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0230746Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0230964Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0231135Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0231310Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0231815Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0232357Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0232511Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0233770Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0235217Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0235460Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0236068Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0236600Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0236758Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:18.0236934Z [6/50] Processing: Gibbons Auto Service...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.3997718Z ΓÜá∩╕Å Gemini API failed for Gibbons Auto Service: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4000400Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4000750Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4001012Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4001361Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4001779Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4002077Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4002384Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4002754Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4003144Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4003406Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4003775Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4004113Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4004444Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4005056Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4005349Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4005680Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4006048Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4006308Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4006600Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4007486Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4008419Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4008682Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4010616Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4013275Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4013555Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4014195Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4015102Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4015267Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4015480Z [7/50] Processing: Balanced Health and Wellness...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4017433Z ΓÜá∩╕Å Gemini API failed for Balanced Health and Wellness: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4019562Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4019781Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4019955Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4020198Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4020481Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4020641Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4020821Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4021036Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4021267Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4021423Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4021596Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4021794Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4021977Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4022133Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4022299Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4022498Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4022717Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4022868Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4023033Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4023551Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4024111Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4024271Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4025790Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4027128Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4027370Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4027964Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4028503Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4028653Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4028842Z [8/50] Processing: High Class Barber Salon...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4030712Z ΓÜá∩╕Å Gemini API failed for High Class Barber Salon: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4032288Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4032495Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4032659Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4032876Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4033138Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4033291Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4033461Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4033672Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4033898Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4034042Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4034212Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4034407Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4034825Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4034988Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4035155Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4035351Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4035564Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4035715Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4035886Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4036550Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4037083Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4037235Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4038490Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4039793Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4040027Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4040621Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4041265Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4041407Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4041599Z [9/50] Processing: Jose & Jose Landscaping LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4043456Z ΓÜá∩╕Å Gemini API failed for Jose & Jose Landscaping LLC: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4045271Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4045479Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4045649Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4045869Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4046131Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4046277Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4046448Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4046674Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4046900Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4047054Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4047217Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4047417Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4047610Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4047791Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4047955Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4048147Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4048354Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4048501Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4048667Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4049165Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4049702Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4049857Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4051099Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4052403Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4052637Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4053232Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4053760Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4053909Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4054134Z [10/50] Processing: Copeland's Complete Construction LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4056194Z ΓÜá∩╕Å Gemini API failed for Copeland's Complete Construction LLC: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4057808Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4058006Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4058194Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4058419Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4058879Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4059030Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4059192Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4059401Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4059661Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4059810Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4059980Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4060180Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4060367Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4060520Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4060676Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4060867Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4061079Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4061227Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4061396Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4061898Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4062580Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4062732Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4063983Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4065414Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4065645Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4066236Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4066762Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4066909Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:23.4067145Z [11/50] Processing: Venetian Medical Spa and Aesthetic Surgery...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7775955Z ΓÜá∩╕Å Gemini API failed for Venetian Medical Spa and Aesthetic Surgery: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7778194Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7778439Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7778639Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7778896Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7779207Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7779389Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7779586Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7779822Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7780082Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7780263Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7780457Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7780680Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7780867Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7781021Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7781187Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7781392Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7781608Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7781761Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7781924Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7782451Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7783012Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7783170Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7784442Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7786025Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7786271Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7786868Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7787408Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7787562Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7787743Z [12/50] Processing: Market on Kentucky...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7789970Z ΓÜá∩╕Å Gemini API failed for Market on Kentucky: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7791536Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7791746Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7791912Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7792134Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7792401Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7792554Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7792730Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7792947Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7793345Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7793492Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7793660Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7793861Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7794061Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7794211Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7794372Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7794695Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7794913Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7795065Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7795234Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7795745Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7796291Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7796458Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7797722Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7799044Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7799287Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7799900Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7800434Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7800581Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7800781Z [13/50] Processing: Sifu Och Wing Chun Kung Fu...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7802615Z ΓÜá∩╕Å Gemini API failed for Sifu Och Wing Chun Kung Fu: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7804173Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7804394Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7804683Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7804913Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7805185Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7805341Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7805517Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7805732Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7805963Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7806111Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7806273Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7806472Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7806659Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7806811Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7806972Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7807167Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7807384Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7807538Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7807713Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7808233Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7808782Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7808942Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7810201Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7811680Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7811915Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7812509Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7813039Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7813189Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7813381Z [14/50] Processing: Lakeland Pool Services...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7815455Z ΓÜá∩╕Å Gemini API failed for Lakeland Pool Services: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7817206Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7817411Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7817581Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7817806Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7818071Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7818228Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7818396Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7818612Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7818844Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7818998Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7819171Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7819374Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7819558Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7819713Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7819880Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7820078Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7820306Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7820451Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7820624Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7821129Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7821675Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7821828Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7823080Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7824379Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7824721Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7825322Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7825856Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7826014Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7826195Z [15/50] Processing: Goldsmith Pools...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7827982Z ΓÜá∩╕Å Gemini API failed for Goldsmith Pools: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7829517Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7829726Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7829887Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7830111Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7830376Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7830526Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7830698Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7830919Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7831140Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7831295Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7831476Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7831679Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7831866Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7832019Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7832181Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7832514Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7832731Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7832883Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7833050Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7833555Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7834101Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7834258Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7835621Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7837053Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7837290Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7837886Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7856012Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7856284Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:28.7856559Z [16/50] Processing: PSI Pressure Cleaning Service, LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1447082Z ΓÜá∩╕Å Gemini API failed for PSI Pressure Cleaning Service, LLC: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1450041Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1450420Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1450709Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1451105Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1451392Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1451547Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1451728Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1451969Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1452206Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1452367Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1452542Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1452749Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1452946Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1453104Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1453281Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1453484Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1453700Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1453856Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1454029Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1454789Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1455377Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1455541Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1456836Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1458192Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1458435Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1459056Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1459605Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1459767Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1460025Z [17/50] Processing: Dreamers Landscape and Lawn Care Service LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1462087Z ΓÜá∩╕Å Gemini API failed for Dreamers Landscape and Lawn Care Service LLC: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1464125Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1464344Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1464629Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1464863Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1465134Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1465291Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1465467Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1465675Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1465907Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1466067Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1466238Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1466438Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1466632Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1466781Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1466944Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1467141Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1467359Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1467673Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1467839Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1468351Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1468903Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1469058Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1470334Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1471652Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1471893Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1472496Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1473024Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1473176Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1473387Z [18/50] Processing: LawnStarter - Lakeland...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1475380Z ΓÜá∩╕Å Gemini API failed for LawnStarter - Lakeland: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1476992Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1477214Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1477389Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1477611Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1477891Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1478050Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1478225Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1478452Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1478685Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1478837Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1479011Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1479218Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1479403Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1479557Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1479723Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1479931Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1480153Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1480304Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1480488Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1481019Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1481577Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1481734Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1483015Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1484339Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1484687Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1485289Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1485953Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1486100Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1486284Z [19/50] Processing: Evolution barbershop...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1488131Z ΓÜá∩╕Å Gemini API failed for Evolution barbershop: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1489705Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1489912Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1490073Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1490295Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1491118Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1491360Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1491637Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1491979Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1492361Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1492620Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1492924Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1493239Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1493549Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1493798Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1494056Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1494379Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1494961Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1495224Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1495511Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1496326Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1497005Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1497168Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1498447Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1499785Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1500026Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1500638Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1501178Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1501324Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1501507Z [20/50] Processing: Spot On Lawn Care...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1503386Z ΓÜá∩╕Å Gemini API failed for Spot On Lawn Care: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1505255Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1505473Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1505656Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1505889Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1506150Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1506308Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1506482Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1506696Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1506924Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1507075Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1507239Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1507440Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1507627Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1507776Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1507941Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1508129Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1508347Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1508496Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1508665Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1509176Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1509729Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1509881Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1511383Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1513938Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1514385Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1515677Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1516674Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1516947Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:34.1517337Z [21/50] Processing: Lakeland Air Conditioning Company...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5091089Z ΓÜá∩╕Å Gemini API failed for Lakeland Air Conditioning Company: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5093802Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5094054Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5094241Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5094658Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5094978Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5095151Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5095347Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5095588Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5095850Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5096025Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5096221Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5096437Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5096664Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5096836Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5097025Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5097239Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5097479Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5097656Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5097844Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5098416Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5099036Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5099212Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5100671Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5102055Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5102293Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5102924Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5103480Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5103641Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5103836Z [22/50] Processing: Lyons Family Tree Care...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5105841Z ΓÜá∩╕Å Gemini API failed for Lyons Family Tree Care: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5107414Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5107621Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5107798Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5108022Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5108291Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5108482Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5108667Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5108891Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5109125Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5109280Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5109633Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5109835Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5110025Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5110174Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5110350Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5110549Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5110766Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5110919Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5111084Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5111607Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5112159Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5112322Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5113616Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5115188Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5115434Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5116034Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5116573Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5116724Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5116900Z [23/50] Processing: Chop Chop Tree...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5118703Z ΓÜá∩╕Å Gemini API failed for Chop Chop Tree: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5120255Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5120463Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5120631Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5120845Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5121119Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5121269Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5121441Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5121652Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5121876Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5122021Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5122191Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5122387Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5122573Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5122723Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5122879Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5123074Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5123290Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5123441Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5123615Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5124123Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5124774Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5124931Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5126217Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5127557Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5127795Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5128405Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5128940Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5129082Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5129277Z [24/50] Processing: Highland Dental Clinic...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5131126Z ΓÜá∩╕Å Gemini API failed for Highland Dental Clinic: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5132874Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5133083Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5133253Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5133480Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5133745Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5133891Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5134061Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5134271Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5134496Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5134756Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5134921Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5135122Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5135310Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5135461Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5135631Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5136003Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5136215Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5136364Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5136533Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5137047Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5137598Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5137756Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5139013Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5140337Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5140568Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5141169Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5141707Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5141854Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5142027Z [25/50] Processing: Stanley Steemer...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5143809Z ΓÜá∩╕Å Gemini API failed for Stanley Steemer: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5145956Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5146185Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5146364Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5146596Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5146872Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5147030Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5147199Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5147416Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5147653Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5147809Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5147984Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5148182Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5148366Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5148526Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5148689Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5148885Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5149102Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5149247Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5149426Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5149946Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5150507Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5150667Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5151953Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5153282Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5153519Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5154273Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5154931Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5155081Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:39.5155289Z [26/50] Processing: Sell Team Academy of Taekwondo...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8697887Z ΓÜá∩╕Å Gemini API failed for Sell Team Academy of Taekwondo: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8700541Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8701175Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8701370Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8701616Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8701889Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8702050Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8702242Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8702467Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8702699Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8702851Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8703033Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8703241Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8703432Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8703584Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8703751Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8703948Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8704173Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8704324Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8704498Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8705290Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8705844Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8705995Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8707309Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8708652Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8708895Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8709567Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8710110Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8710265Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8710464Z [27/50] Processing: Lakeland Animal Clinic...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8712330Z ΓÜá∩╕Å Gemini API failed for Lakeland Animal Clinic: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8713948Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8714157Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8714333Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8714669Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8714940Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8715092Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8715260Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8715464Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8715693Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8715846Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8716015Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8716212Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8716396Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8716545Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8716706Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8716899Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8717114Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8717272Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8717433Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8717948Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8718665Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8718819Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8720088Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8721417Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8721648Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8722243Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8722778Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8723040Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8723217Z [28/50] Processing: Bella Glam Beauty...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8725141Z ΓÜá∩╕Å Gemini API failed for Bella Glam Beauty: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8726708Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8726914Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8727080Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8727297Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8727563Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8727714Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8727884Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8728093Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8728315Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8728467Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8728646Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8728843Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8729032Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8729184Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8729343Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8729546Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8729767Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8729919Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8730087Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8730595Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8731140Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8731292Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8732552Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8733875Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8734108Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8734808Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8735351Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8735491Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8735676Z [29/50] Processing: Gargus Lawn Care,LLC...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8737490Z ΓÜá∩╕Å Gemini API failed for Gargus Lawn Care,LLC: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8739035Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8739239Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8739404Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8739622Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8739884Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8740033Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8740200Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8740406Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8740763Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8740920Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8741082Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8741276Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8741462Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8741612Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8741774Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8741962Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8742180Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8742329Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8742499Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8743004Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8743546Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8743693Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8745059Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8746517Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8746750Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8747347Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8747881Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8748029Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8748222Z [30/50] Processing: Belle La Vie Salon & Spa...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8750071Z ΓÜá∩╕Å Gemini API failed for Belle La Vie Salon & Spa: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8751664Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8751869Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8752037Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8752257Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8752522Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8752678Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8752838Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8753053Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8753278Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8753424Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8753590Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8753790Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8753972Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8754122Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8754284Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8754478Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8754798Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8754946Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8755115Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8755633Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8756178Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8756334Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8757609Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8758934Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8759157Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8759751Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8760285Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8760432Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:44.8760600Z [31/50] Processing: Car Tech...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2439026Z ΓÜá∩╕Å Gemini API failed for Car Tech: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2441377Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2441616Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2441796Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2442024Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2442301Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2442462Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2442637Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2442851Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2443083Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2443235Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2443407Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2443607Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2443790Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2444101Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2444268Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2444464Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2445015Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2445173Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2445349Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2445866Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2446410Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2446564Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2447846Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2449197Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2449443Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2450057Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2450594Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2450746Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2450974Z [32/50] Processing: Quality Dental Care of Lakeland...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2452908Z ΓÜá∩╕Å Gemini API failed for Quality Dental Care of Lakeland: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2454614Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2454832Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2455000Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2455217Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2455480Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2455630Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2455809Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2456019Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2456248Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2456392Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2456569Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2456770Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2457005Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2457159Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2457324Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2457521Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2457740Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2457891Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2458082Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2458591Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2459129Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2459287Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2460557Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2462053Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2462296Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2462901Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2463436Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2463585Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2463779Z [33/50] Processing: Champions Mixed Martial Arts...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2465763Z ΓÜá∩╕Å Gemini API failed for Champions Mixed Martial Arts: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2467478Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2467685Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2467849Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2468069Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2468341Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2468486Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2468657Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2468868Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2469092Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2469242Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2469408Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2469597Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2469787Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2469941Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2470104Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2470299Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2470510Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2470661Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2470835Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2471340Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2471891Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2472045Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2473303Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2474726Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2474955Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2475552Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2476080Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2476229Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2476432Z [34/50] Processing: Hamiltons Brazilian Jiu-Jitsu...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2478325Z ΓÜá∩╕Å Gemini API failed for Hamiltons Brazilian Jiu-Jitsu: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2479958Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2480161Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2480330Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2480556Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2480826Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2480976Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2481148Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2481355Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2481583Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2481737Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2481913Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2482114Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2482302Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2482453Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2482626Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2482818Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2483034Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2483185Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2483346Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2483988Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2484641Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2484796Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2486070Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2487385Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2487623Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2488217Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2488873Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2489020Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2489252Z [35/50] Processing: TPF TEAM Praise Force Tae Kwon Do & More...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2491199Z ΓÜá∩╕Å Gemini API failed for TPF TEAM Praise Force Tae Kwon Do & More: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2492809Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2493017Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2493183Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2493396Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2493665Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2493816Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2493989Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2494208Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2494433Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2494681Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2494850Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2495052Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2495241Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2495391Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2495548Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2495742Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2495954Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2496104Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2496275Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2496785Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2497324Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2497482Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2498744Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2500069Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2500304Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2500908Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2501445Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2501594Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:50.2501780Z [36/50] Processing: High View Tree Service Inc...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6152830Z ΓÜá∩╕Å Gemini API failed for High View Tree Service Inc: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6155012Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6155253Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6155427Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6155664Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6156322Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6156484Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6156666Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6156886Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6157120Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6157282Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6157459Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6157662Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6157856Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6158007Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6158178Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6158380Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6158612Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6158773Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6158955Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6159493Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6160247Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6160411Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6161771Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6163104Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6163347Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6163954Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6164485Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6164755Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6164954Z [37/50] Processing: Waterlake Family Dentistry...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6166875Z ΓÜá∩╕Å Gemini API failed for Waterlake Family Dentistry: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6168466Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6168676Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6168842Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6169064Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6169325Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6169470Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6169639Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6169848Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6170072Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6170220Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6170386Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6170579Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6170765Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6170920Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6171080Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6171276Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6171493Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6171636Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6171803Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6172306Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6172854Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6173006Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6174250Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6175665Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6175895Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6176490Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6177018Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6177160Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6177353Z [38/50] Processing: Rising Little Stars Academy...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6179188Z ΓÜá∩╕Å Gemini API failed for Rising Little Stars Academy: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6180908Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6181110Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6181268Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6181489Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6181752Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6181900Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6182066Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6182267Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6182622Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6182774Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6183047Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6183305Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6183593Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6184053Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6184320Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6184909Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6185353Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6185604Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6232378Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6233318Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6234180Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6234436Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6236228Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6237625Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6237876Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6238507Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6239042Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6239200Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6239407Z [39/50] Processing: Pro Air Heating and Cooling...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6241444Z ΓÜá∩╕Å Gemini API failed for Pro Air Heating and Cooling: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6243049Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6243271Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6243444Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6243669Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6243927Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6244085Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6244264Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6244483Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6244964Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6245119Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6245293Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6245495Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6245685Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6245839Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6246005Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6246195Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6246415Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6246570Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6246743Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6247251Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6247797Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6247957Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6249239Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6250870Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6251108Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6251713Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6252248Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6252400Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6252568Z [40/50] Processing: Coast Dental...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6254375Z ΓÜá∩╕Å Gemini API failed for Coast Dental: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6256322Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6256545Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6256721Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6256948Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6257219Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6257369Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6257541Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6257755Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6257986Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6258139Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6258311Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6258504Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6258693Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6258848Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6259011Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6259209Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6259420Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6259586Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6259755Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6260268Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6260820Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6260982Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6262250Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6263597Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6263831Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6264439Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6265328Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6265497Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:57:55.6265690Z [41/50] Processing: Paws Plus Veterinary...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9737694Z ΓÜá∩╕Å Gemini API failed for Paws Plus Veterinary: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9740445Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9740695Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9740893Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9741142Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9741441Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9741596Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9741775Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9742000Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9742230Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9742383Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9742577Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9742784Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9742976Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9743130Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9743288Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9743830Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9744046Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9744199Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9744367Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9745153Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9745703Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9745859Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9747133Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9748633Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9748876Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9749486Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9750042Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9750189Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9750360Z [42/50] Processing: UrgentVet...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9752176Z ΓÜá∩╕Å Gemini API failed for UrgentVet: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9753732Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9753940Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9754108Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9754332Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9754743Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9754890Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9755058Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9755268Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9755500Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9755649Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9755812Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9756007Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9756195Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9756346Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9756508Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9756698Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9756905Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9757058Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9757226Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9757734Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9758282Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9758431Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9759699Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9761039Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9761272Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9761870Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9762411Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9762562Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9762792Z [43/50] Processing: Egberts Electric and Air Conditioning...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9764851Z ΓÜá∩╕Å Gemini API failed for Egberts Electric and Air Conditioning: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9766489Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9766828Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9766995Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9767213Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9767475Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9767623Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9767784Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9767992Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9768215Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9768366Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9768534Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9768728Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9768905Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9769054Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9769214Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9769404Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9769616Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9769758Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9769927Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9770555Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9771105Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9771258Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9772570Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9773888Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9774118Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9774815Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9775347Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9775487Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9775673Z [44/50] Processing: Family Martial Arts Center...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9777539Z ΓÜá∩╕Å Gemini API failed for Family Martial Arts Center: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9779166Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9779368Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9779536Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9779754Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9780010Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9780159Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9780324Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9780531Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9780755Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9780921Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9781085Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9781279Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9781471Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9781621Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9781782Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9781967Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9782180Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9782338Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9782504Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9783005Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9783543Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9783691Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9785069Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9786385Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9786612Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9787207Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9787732Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9788010Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9788187Z [45/50] Processing: American Auto Repair...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9789998Z ΓÜá∩╕Å Gemini API failed for American Auto Repair: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9791547Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9791748Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9791910Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9792125Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9792382Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9792664Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9792827Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9793037Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9793262Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9793414Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9793593Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9793783Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9793967Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9794117Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9794281Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9794474Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9794797Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9794942Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9795111Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9795623Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9796159Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9796313Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9797582Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9798910Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9799136Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9799732Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9800262Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9800407Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:00.9800617Z [46/50] Processing: RDS Automotive Lakeland Mechanic...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.2601650Z /home/runner/work/empire-unified-backup/empire-unified-backup/scripts/github_seo_factory.py:119: DeprecationWarning: Argument login_or_token is deprecated, please use auth=github.Auth.Token(...) instead
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.2603666Z   gh = Github(GITHUB_TOKEN)
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6447127Z ΓÜá∩╕Å Gemini API failed for RDS Automotive Lakeland Mechanic: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6450476Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6451137Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6451633Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6452166Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6452787Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6457431Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6457747Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6458093Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6458456Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6458685Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6458957Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6459269Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6459565Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6459808Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6460094Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6460381Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6460713Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6460952Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6461220Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6462498Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6463377Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6463608Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6465835Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6468029Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6468407Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6469378Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6470494Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6470722Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6470990Z [47/50] Processing: Valor Martial Arts...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6474039Z ΓÜá∩╕Å Gemini API failed for Valor Martial Arts: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6476773Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6477099Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6477364Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6477728Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6478143Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6478370Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6478638Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6478966Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6479322Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6479556Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6479812Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6480104Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6480411Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6480649Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6480906Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6481198Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6481535Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6481762Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6482018Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6482827Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6483707Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6483945Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6492066Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6494152Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6494701Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6495625Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6496439Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6496659Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6496980Z [48/50] Processing: Warrior Combat and Fitness Academy...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6500016Z ΓÜá∩╕Å Gemini API failed for Warrior Combat and Fitness Academy: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6502495Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6502833Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6503087Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6503414Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6503811Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6504298Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6504817Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6505145Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6505557Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6505788Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6506054Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6506352Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6506641Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6506859Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6507108Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6507394Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6507718Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6507951Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6508205Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6508983Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6509806Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6510239Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6512198Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6514203Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6514738Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6515667Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6516466Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6516695Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6516963Z [49/50] Processing: Shorin-Bushido Dojo...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6519786Z ΓÜá∩╕Å Gemini API failed for Shorin-Bushido Dojo: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6522218Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6522538Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6522796Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6523136Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6523543Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6523780Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6524051Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6524377Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6524902Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6525148Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6525406Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6525712Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6525999Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6526227Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6526466Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6526758Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6527095Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6527318Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6527575Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6528358Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6529206Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6529444Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6531427Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6533467Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6533818Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6534911Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6535784Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6536007Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6536286Z [50/50] Processing: REDBEARD COMBATIVES...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6539144Z ΓÜá∩╕Å Gemini API failed for REDBEARD COMBATIVES: 403 Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [reason: "SERVICE_DISABLED"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6541794Z domain: "googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6542111Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6542361Z   key: "service"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6542691Z   value: "generativelanguage.googleapis.com"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6543091Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6543324Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6543579Z   key: "serviceTitle"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6543894Z   value: "Generative Language API"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6544244Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6544811Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6545077Z   key: "containerInfo"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6545386Z   value: "712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6545672Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6545902Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6546150Z   key: "consumer"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6546434Z   value: "projects/712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6546767Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6547011Z metadata {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6547272Z   key: "activationUrl"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6548059Z   value: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6548894Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6549127Z , locale: "en-US"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6551073Z message: "Generative Language API has not been used in project 712670783202 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6553114Z , links {
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6553468Z   description: "Google developers console API activation"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6554368Z   url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=712670783202"
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6555360Z }
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6555608Z ]
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6555984Z ≡ƒÜÇ Pushing 50 files to GitHub repository...
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6557069Z Γ¥î GitHub API Error: 404 {"message": "Not Found", "documentation_url": "https://docs.github.com/rest/repos/repos#get-a-repository", "status": "404"}
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6558079Z Γ£à Marked 50 rows as published.
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6558459Z ============================================================
+
+run-factory	Run Background SEO Factory	2026-02-23T19:58:05.6558979Z ≡ƒÄë FACTORY RUN COMPLETE: 50 pages built.
