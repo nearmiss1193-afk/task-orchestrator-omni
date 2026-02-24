@@ -1,0 +1,11 @@
+{
+  "audit_reports_table": "EXISTS (289 rows)",
+  "storage_buckets": [],
+  "audit_pdfs_bucket": false,
+  "RESEND_API_KEY": "SET",
+  "GOOGLE_API_KEY": "SET",
+  "stuck_audit_processing": 3,
+  "fresh_with_website": 1038,
+  "stuck_fixed": true,
+  "bucket_create_error": "{'statusCode': 400, 'error': Error, 'message': body/name must be string}"
+}

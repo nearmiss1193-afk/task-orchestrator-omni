@@ -10,9 +10,9 @@ This session focused on diagnosing and resolving severe infrastructure blockages
 
 A critical flaw was discovered inside the B2B Privacy Policy Scraper (`workers/audit_generator.py`).
 
-- **The Issue:** The subroutines generating the hyper-personalized PDF audits were hanging for 10-15 seconds per lead when attempting to scan local business websites with broken DNS or servers.
-- **The Result:** The primary orchestrator script, which runs every 5 minutes inside Modal Serverless, would aggregate these delays until it breached the strict 600-second Plan Execution Limit. Modal's infrastructure would silently murder the container, dropping the remaining dispatch queue into the void before any emails could be sent via Resend.
-- **The Action:** The `requests.get()` thresholds were aggressively refactored. The scraping timeouts were slashed from 10 seconds to 4 seconds, forcing the engine to gracefully flag the lead as non-compliant and pivot down the pipeline to email dispatch.
+- **The Issue:** The subroutines generating the hyper-personalized PDF audits were hanging synchronously while waiting for Google PageSpeed Insights (due to 45-second timeouts on bad keys) and Google Veo 3.1 cinematic video generation (which takes minutes).
+- **The Result:** The primary orchestrator script, which runs every 5 minutes inside Modal Serverless, would aggregate these delays across 15 leads until it breached the strict 600-second Plan Execution Limit. Modal's infrastructure would silently murder the container, dropping the remaining dispatch queue into the void before any emails could be sent via Resend.
+- **The Action:** The synchronous Veo 3.1 video generation was completely bypassed (commented out) inside `audit_generator.py` to prevent thread hanging. Additionally, the `requests.get()` timeout for PageSpeed Insights was slashed from 45 seconds to 10 seconds, forcing the engine to gracefully report failure and pivot down the pipeline to email dispatch.
 
 ### SEO Factory Dependency Drift (GitHub Actions)
 
@@ -24,6 +24,7 @@ The programmatic page generator (Phase 16) began failing locally on the cloud ru
 ## 3. Verified Metrics
 
 Empirical queries to the database (`outbound_touches`) confirmed the fixes. The pipeline is no longer blocked by infinite loops.
+
 - **Outbound Touches (24h):** Resumed (37 initial recovery dispatches).
 - **System Pulse:** Active.
 - **Campaign Mode:** 'Working'.

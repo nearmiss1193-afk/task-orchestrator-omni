@@ -1,0 +1,40 @@
+{
+  "campaign_mode": "working",
+  "outreach_1h": 86,
+  "outreach_6h": 86,
+  "outreach_24h": 631,
+  "last_3_touches": [
+    {
+      "ts": "2026-02-24T13:20:24.457167+00:00",
+      "channel": "sms",
+      "company": "Lowe's Home Improvement"
+    },
+    {
+      "ts": "2026-02-24T13:20:23.953256+00:00",
+      "channel": "sms",
+      "company": "TagWorks"
+    },
+    {
+      "ts": "2026-02-24T13:20:23.407288+00:00",
+      "channel": "sms",
+      "company": "J & J Tack Shack"
+    }
+  ],
+  "heartbeats_30m": 29,
+  "lead_status_breakdown": {
+    "no_contact_info": 409,
+    "delivery_failed": 203,
+    "bad_email": 191,
+    "outreach_dispatched": 70,
+    "new_testing": 56,
+    "calling_initiated": 39,
+    "skipped_no_contact": 20,
+    "bad_data": 4,
+    "skipped_no_url": 3,
+    "audit_processing": 3,
+    "sequence_complete": 1,
+    "interested": 1
+  },
+  "fresh_leads": 1399,
+  "last_heartbeat": "2026-02-24T13:21:39.610661+00:00"
+}

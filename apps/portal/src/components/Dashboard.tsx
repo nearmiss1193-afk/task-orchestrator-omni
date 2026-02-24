@@ -169,14 +169,20 @@ const Dashboard: React.FC = () => {
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 text-white p-6 md:p-8">
             <div className="max-w-7xl mx-auto">
                 {/* Hero Section */}
-                <div className="mb-8 text-center">
+                <div className="mb-8 text-center flex flex-col items-center">
                     <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent animate-gradient">
                         Sovereign Empire Command Center
                     </h1>
                     <p className="text-gray-400 text-lg">Real-time Business Intelligence & API Monitoring</p>
-                    <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
-                        <ClockIcon />
-                        <span>Last updated: {lastUpdated.toLocaleString()}</span>
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-6">
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <ClockIcon />
+                            <span>Last updated: {lastUpdated.toLocaleString()}</span>
+                        </div>
+                        <a href="/dashboard/seo-audit" className="px-5 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300 transition-all text-sm font-semibold flex items-center gap-2">
+                            <GlobeIcon />
+                            Abacus SEO Audit Deck
+                        </a>
                     </div>
                 </div>
 

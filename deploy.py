@@ -990,6 +990,31 @@ def vapi_webhook(data: dict = None):
                         
                         sb.table("customer_memory").upsert({"phone_number": caller_phone, "context_summary": ctx}, on_conflict="phone_number").execute()
                         
+                        # --- FIX: INJECT TRANSCRIPT INTO OUTBOUND_TOUCHES FOR DASHBOARD ---
+                        if direction == "outbound" and transcript:
+                            try:
+                                # Find the most recent outbound call touch for this phone
+                                latest_touch = sb.table("outbound_touches").select("id").eq("phone", caller_phone).eq("channel", "call").order("ts", desc=True).limit(1).execute()
+                                if latest_touch.data:
+                                    touch_id = latest_touch.data[0]["id"]
+                                    sb.table("outbound_touches").update({
+                                        "body": transcript[-10000:], # Inject full transcript for dashboard
+                                        "status": "completed"
+                                    }).eq("id", touch_id).execute()
+                                    print(f"✅ Dashboard Matrix updated: Transcript injected for {caller_phone}")
+                                else:
+                                    # If no touch exists (vapi standalone call), create one
+                                    sb.table("outbound_touches").insert({
+                                        "phone": caller_phone,
+                                        "channel": "call",
+                                        "company": extracted_name or "Unknown",
+                                        "status": "completed",
+                                        "body": transcript[-10000:],
+                                        "payload": {"source": "vapi_webhook_synthetic"}
+                                    }).execute()
+                            except Exception as touch_err:
+                                print(f"⚠️ Failed to update dashboard touches: {touch_err}")
+                        
                         # === DAN NOTIFICATION (Multi-Method: Email + DB + GHL fallback) ===
                         notify_msg = f"📞 Call Summary: {caller_phone}\nName: {extracted_name or 'Unknown'}\nDir: {direction}\nSum: {(summary or 'No summary')[:200]}"
                         print(f"📱 [NOTIFY] Sending alert to Dan: {notify_msg[:80]}...")
@@ -1197,6 +1222,12 @@ def system_orchestrator():
             print("🚀 TRIGGER: Daily Executive Pulse (Phase 21)")
             safe_spawn(send_executive_pulse, "send_executive_pulse")
 
+        # G. SENTINEL PROTOCOL (8:30 AM EST -> 13:30 UTC)
+        if hour == 13 and (minute >= 30 and minute < 35):
+            print("🚀 TRIGGER: Secret Shopper Sentinel (Phase 26)")
+            from scripts.secret_shopper import run_sentinel_probe
+            safe_spawn(run_sentinel_probe, "run_sentinel_probe")
+
         # G. PROSPECTOR ENGINE (Every 30 min — minute 0-4 and 30-34)
         if minute < 5 or (minute >= 30 and minute < 35):
             try:
@@ -1212,7 +1243,8 @@ def system_orchestrator():
                         "status": half_hour_key
                     }, on_conflict="key").execute()
                     # Spawn as async to not block orchestrator
-                    safe_spawn(run_prospector, "run_prospector")
+                    from scripts.autonomous_prospector import run_autonomous_prospector
+                    safe_spawn(run_autonomous_prospector, "run_autonomous_prospector")
             except Exception as e:
                 print(f"⚠️ Prospector trigger failed: {e}")
 
@@ -3182,3 +3214,4 @@ def trigger_tiffaney_onboarding_call():
 if __name__ == "__main__":
     print("⚫ ANTIGRAVITY v5.0 - SOVEREIGN DEPLOY")
 
+# cache bust modal

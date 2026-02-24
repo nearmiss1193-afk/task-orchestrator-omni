@@ -126,7 +126,16 @@ def generate_sarah_reply(phone: str, message: str, contact_name: str = "there"):
                 
         if intent == "booking":
             reply += f"\n\nHere is Dan's calendar link: {BOOKING_LINK}"
-            
+            if customer_id:
+                try:
+                    # Look up lead ID from customer ID (phone) if possible to advance pipeline
+                    lead_match = supabase.table("contacts_master").select("id").eq("phone", phone).limit(1).execute()
+                    if lead_match.data:
+                        lead_id = lead_match.data[0]["id"]
+                        supabase.table("contacts_master").update({"status": "won"}).eq("id", lead_id).execute()
+                        print(f"🎯 [SMS Triage] High-intent booking detected. Upgraded {lead_id} to status: WON")
+                except Exception as db_e:
+                    print(f"⚠️ Failed to upgrade status to WON: {db_e}")
     except Exception as e:
         print(f"⚠️ Grok API Error: {e}")
         reply = "Hey! Let me have Dan follow up with you. -Sarah"

@@ -440,14 +440,14 @@ ALWAYS verify webhook URLs against GHL dashboard screenshots.
 
 ## 📧 SECTION 12: EMAIL DELIVERY STACK (Updated Feb 9, 2026)
 
-### ⚠️ CRITICAL RULE: Email Delivery Priority
+### ⚠️ CRITICAL RULE: Email Delivery Priority (Updated Feb 23, 2026)
 
-**GHL is for CRM + SMS webhooks ONLY. NOT for sending emails directly.**
+**The Resend API is deprecated due to structural key blockades (401 Unauthorized loops). GHL Webhook is now the primary dispatch mechanism for both SMS and Email.**
 
 ```
-PRIMARY:  Resend API (tracked: opens, clicks, bounces, delivery)
+PRIMARY:  GHL Universal Webhook (handles both SMS and Email via payload mapping)
 BACKUP:   Gmail OAuth/API via gmail_api_sender.py
-SMS ONLY: GHL webhooks (for SMS dispatch to real GHL contacts)
+DEPRECATED: Resend API (DO NOT USE)
 BANNED:   GHL API (PIT token returns 401, $99 plan has no proper scopes)
 ```
 
@@ -1409,3 +1409,23 @@ Based on the current architecture, the following upgrades are recommended to enh
 3. **Automated A/B Subject Line Evolution**
    - **Current State:** Campaign toggles allow manual halting of suboptimal variants.
    - **Upgrade:** Leverage Abacus.AI to auto-generate a *Replacement A/B Variant* every time a human clicks "Halt" on a losing campaign, continuously mutating toward higher open rates without human copywriting.
+
+ - - - 
+ 
+ # #     S E C T I O N   1 6 :   P R O G R A M M A T I C   S E O   &   A B A C U S   A U T O M A T I O N   ( A d d e d   F e b   2 3 ,   2 0 2 6 ) 
+ 
+ # # #     C R I T I C A L   R U L E :   N e x t . j s   D y n a m i c   S E O   S c a l i n g 
+ W h e n   s c a l i n g   l o c a l i z e d   S E O   p a g e s   ( e . g . ,   A I   S e c r e t a r y   f o r   P l u m b e r s   i n   L a k e l a n d ) ,   w e   D O   N O T   r e l y   o n   V e r c e l ' s   d e f a u l t   a u t o - d i s c o v e r y . 
+ 
+ 1 .   * * T h e   G e n e r a t o r : * *   A l w a y s   u s e   P y t h o n   s c r i p t s   ( l i k e   \ s c r i p t s / a g e n c y _ s e o _ f a c t o r y _ v 2 . p y \ )   t o   p r o c e d u r a l l y   g e n e r a t e   R e a c t   \ p a g e . t s x \   f i l e s . 
+ 2 .   * * I n t e r n a l   L i n k i n g : * *   E v e r y   g e n e r a t e d   p a g e   M U S T   c o n t a i n   a   p r o g r a m m a t i c   H T M L   l i s t   o f   a t   l e a s t   1 0   o t h e r   r a n d o m i z e d   r e g i o n a l   p a g e s .   W i t h o u t   t h i s   d e n s e   i n t e r l i n k i n g   s t r u c t u r e ,   G o o g l e   w i l l   c a t e g o r i z e   t h e   p a g e s   a s   ' O r p h a n e d '   a n d   r e f u s e   i n d e x i n g . 
+ 3 .   * * T h e   S i t e m a p   O v e r r i d e : * *   Y o u   M U S T   w r i t e   a   c u s t o m   \ / a p p / s i t e m a p . t s \   t h a t   u s e s   t h e   \  s \   a n d   \ p a t h \   m o d u l e s   t o   p h y s i c a l l y   t r a v e r s e   t h e   f i l e   s y s t e m   a t   b u i l d   t i m e .   T h i s   g u a r a n t e e s   t h a t   e v e r y   s i n g l e   g e n e r a t e d   p r o g r a m m a t i c   c l u s t e r   i s   f o r c e d   i n t o   t h e   X M L   s t r e a m . 
+ 
+ # # #     C R I T I C A L   R U L E :   A b a c u s . A I   B l o g   S t r a t e g y 
+ S t a t i c   p r o g r a m m a t i c   p a g e s   l o s e   r a n k   o v e r   t i m e   w i t h o u t   f r e s h   d o m a i n   c o n t e n t . 
+ -   * * N E V E R * *   u s e   A b a c u s   t o   c o n s t a n t l y   s p i n / r e w r i t e   t h e   s t a t i c   \ p a g e . t s x \   f i l e s .   T h i s   d e s t r o y s   U R L   s t a b i l i t y . 
+ -   * * A L W A Y S * *   d e p l o y   t h e   \  b a c u s _ b l o g _ d a e m o n _ p r o m p t . m d \   s t r a t e g y .   
+ -   * * F r e q u e n c y : * *   S e t   A b a c u s   C R O N s   t o   f i r e   4 x   d a i l y   ( M o r n i n g ,   N o o n ,   A f t e r n o o n ,   E v e n i n g ) .   
+ -   * * M e c h a n i s m : * *   T h e   p r o m p t   m u s t   i n s t r u c t   A b a c u s   t o   u s e   i t s   n a t i v e   e m a i l   i n t e g r a t i o n   t o   d e l i v e r   t h e   M a r k d o w n   a r t i f a c t   d i r e c t l y   t o   t h e   u s e r   ( e . g . ,   o w n e r @ a i s e r v i c e c o . c o m ) ,   f u l l y   b y p a s s i n g   c o m p l e x   i n g e s t i o n   w e b h o o k s . 
+  
+ 

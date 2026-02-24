@@ -1,8 +1,10 @@
 import os
 import json
 import requests
+import importlib
+import requests
 from datetime import datetime
-from core.constants import SERVICE_KNOWLEDGE, GHL_NOTIFY_WEBHOOK, DAN_PHONE, BOOKING_LINK
+from core.constants import SERVICE_KNOWLEDGE, GHL_NOTIFY_WEBHOOK, DAN_PHONE, BOOKING_LINK, GHL_OUTBOUND_EMAIL_WEBHOOK
 from modules.database.supabase_client import get_supabase
 
 def handle_inbound_email(sender_email: str, subject: str, text_body: str):
@@ -101,31 +103,32 @@ def handle_inbound_email(sender_email: str, subject: str, text_body: str):
     
     if intent == "booking":
         final_reply_html += f'<br><p><a href="{BOOKING_LINK}" style="display:inline-block; background:#2563eb; color:#fff; padding:12px 24px; border-radius:6px; text-decoration:none; font-weight:bold;">Book a 15-min call with Dan</a></p>'
+        if customer_id:
+            supabase.table("contacts_master").update({"status": "won"}).eq("id", customer_id).execute()
     elif intent == "opt_out" and customer_id:
         # Mark as DNC in DB
-        supabase.table("contacts_master").update({"status": "no_contact_info"}).eq("id", customer_id).execute()
+        supabase.table("contacts_master").update({"status": "unsubscribed"}).eq("id", customer_id).execute()
         final_reply_html = "" # We don't reply to opt-outs
 
-    # --- DISPATCH EMAIL AUTO-REPLY VIA RESEND ---
+    # --- DISPATCH EMAIL AUTO-REPLY VIA GHL WEBHOOK ---
     if final_reply_html:
-        resend_key = os.environ.get("RESEND_API_KEY")
-        if resend_key:
-            resend_url = "https://api.resend.com/emails"
-            payload = {
-                "from": "Sarah <owner@aiserviceco.com>",
-                "to": [sender_email],
-                "subject": f"Re: {subject}",
-                "html": final_reply_html + "<br><br><small>Sarah<br>AI Executive Assistant<br>AI Service Co.</small>"
-            }
-            try:
-                res = requests.post(
-                    resend_url,
-                    headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
-                    json=payload
-                )
-                print(f"📧 Sent auto-reply to {sender_email}. Status: {res.status_code}")
-            except Exception as e:
-                print(f"⚠️ Failed to send Resend auto-reply: {e}")
+        webhook_url = getattr(importlib.import_module("core.constants"), "GHL_OUTBOUND_EMAIL_WEBHOOK", "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/uKaqY2KaULkCeMHM7wmt")
+        
+        payload = {
+            "email": sender_email,
+            "firstName": contact_name,
+            "subject": f"Re: {subject}",
+            "message": final_reply_html + "<br><br><small>Sarah<br>AI Executive Assistant<br>AI Service Co.</small>"
+        }
+        try:
+            res = requests.post(
+                webhook_url,
+                json=payload,
+                timeout=30
+            )
+            print(f"📧 Sent GHL Webhook auto-reply to {sender_email}. Status: {res.status_code}")
+        except Exception as e:
+            print(f"⚠️ Failed to send GHL auto-reply: {e}")
 
     # --- NOTIFY DAN ---
     try:

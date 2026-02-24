@@ -1,0 +1,11 @@
+Fetching system_health_log for 'heartbeat_v3' errors...
+[2026-02-24T01:45:29.571001+00:00] degraded
+   Trace: ❌ RESEND FAILED for ae1a3c9a-3c4f-430b-8f13-f77ba8cc3e37: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+[2026-02-24T01:45:27.194431+00:00] degraded
+   Trace: ❌ RESEND FAILED for 5154ea5a-6391-4129-8ae7-2d793d6fe4b3: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+[2026-02-24T01:45:26.24605+00:00] degraded
+   Trace: ❌ RESEND FAILED for de819234-3d26-4fbf-bc53-c4d674b09577: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+[2026-02-24T01:45:22.804785+00:00] degraded
+   Trace: ❌ RESEND FAILED for ff379835-e897-4492-9bae-bb0c056abe0a: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+[2026-02-24T01:45:21.054825+00:00] degraded
+   Trace: ❌ RESEND FAILED for 69843019-b3bd-4a09-a340-5f6f5ac60eed: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}

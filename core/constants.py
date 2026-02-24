@@ -22,5 +22,6 @@ DAN_EMAILS = ["owner@aiserviceco.com", "nearmiss1193@gmail.com"]
 
 GHL_LOCATION_ID = "uFYcZA7Zk6EcBze5B4oH"
 GHL_NOTIFY_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/0c38f94b-57ca-4e27-94cf-4d75b55602cd"
+GHL_OUTBOUND_EMAIL_WEBHOOK = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/uKaqY2KaULkCeMHM7wmt"
 
 MAYA_NUMBER = "+19362984339"

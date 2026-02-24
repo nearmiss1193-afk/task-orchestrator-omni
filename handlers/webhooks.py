@@ -156,10 +156,27 @@ def vapi_webhook(data: dict = None):
                     
                     supabase.table("customer_memory").upsert({"phone_number": caller_phone, "context_summary": ctx}, on_conflict="phone_number").execute()
                     
+                    # Phase 25: Omni-Channel Synchronization (Status = WON)
+                    analysis = message.get("analysis", {})
+                    # successEvaluation might be a boolean or a string "true"
+                    success_val = analysis.get("successEvaluation")
+                    is_success = False
+                    if isinstance(success_val, bool):
+                        is_success = success_val
+                    elif isinstance(success_val, str):
+                        is_success = success_val.lower() == "true"
+                        
+                    if is_success:
+                        try:
+                            supabase.table("contacts_master").update({"status": "won"}).eq("phone", caller_phone).execute()
+                            print(f"🎉 [VAPI] Success Evaluation matched! Upgrading {caller_phone} to 'WON' in CRM.")
+                        except Exception as db_err:
+                            print(f"⚠️ [VAPI] Failed to upgrade status to won: {db_err}")
+                    
                     # Notify Dan
                     notify_payload = {
                         "phone": DAN_PHONE,
-                        "message": f"📞 Call Summary: {caller_phone}\nName: {extracted_name or 'Unknown'}\nSum: {(summary or 'No summary')[:150]}"
+                        "message": f"📞 Call{' [BOOKED]' if is_success else ''}: {caller_phone}\nName: {extracted_name or 'Unknown'}\nSum: {(summary or 'No summary')[:130]}"
                     }
                     requests.post(GHL_NOTIFY_WEBHOOK, json=notify_payload, timeout=10)
                 except Exception as e:

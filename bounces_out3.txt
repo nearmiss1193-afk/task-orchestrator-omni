@@ -1,0 +1,17 @@
+CURRENT PIPELINE COUNTS:
+  outreach_dispatched: 70
+  bad_email: 129
+  sequence_complete: 1
+  skipped_no_url: 3
+  no_contact_info: 193
+  calling_initiated: 39
+  skipped_no_contact: 20
+  bad_data: 5
+  delivery_failed: 68
+  new_testing: 56
+  interested: 1
+  audit_processing: 3
+  new: 392
+  research_done: 20
+
+

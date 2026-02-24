@@ -320,31 +320,29 @@ Dan"""
 </div>
 {tracking_pixel}"""
     
+    # GHL Webhook Payload
+    ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/uKaqY2KaULkCeMHM7wmt"
+    
+    first_name = lead.get("owner_name", "") or company.split()[0]
+    
     payload = {
-        "from": from_email,
-        "reply_to": "owner@aiserviceco.com",
-        "to": [email],
+        "email": email,
+        "firstName": first_name,
+        "phone": lead.get("phone", ""),
         "subject": subject,
-        "html": html_body,
-        "tags": [
-            {"name": "lead_id", "value": lead_id},
-            {"name": "variant", "value": variant_id},
-            {"name": "email_uid", "value": email_uid}
-        ]
+        "body": html_body
     }
     
     try:
         r = requests.post(
-            "https://api.resend.com/emails",
-            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            ghl_webhook,
+            headers={"Content-Type": "application/json"},
             json=payload,
             timeout=15
         )
         
         if r.status_code in [200, 201]:
-            resend_data = r.json()
-            resend_email_id = resend_data.get("id", "")
-            print(f"✅ EMAIL SENT via Resend (ID: {resend_email_id}, Variant: {variant_id})")
+            print(f"✅ EMAIL SENT via GHL Webhook (Variant: {variant_id})")
             
             # Update lead status
             supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
@@ -357,28 +355,35 @@ Dan"""
                 "status": "sent",
                 "variant_id": variant_id,
                 "variant_name": subject,
-                "correlation_id": resend_email_id,
+                "correlation_id": "ghl_" + email_uid,
                 "body": html_body,
                 "payload": {
-                    "resend_email_id": resend_email_id,
                     "email_uid": email_uid,
                     "to": email,
-                    "from": from_email,
-                    "variant": variant_id
+                    "variant": variant_id,
+                    "provider": "ghl_webhook"
                 }
             }).execute()
             
             return True
         else:
-            print(f"❌ RESEND FAILED: HTTP {r.status_code} - {r.text[:200]}")
+            err = f"❌ GHL WEBHOOK FAILED for {lead_id}: HTTP {r.status_code} - {r.text[:200]}"
+            print(err)
+            supabase.table("contacts_master").update({"status": "delivery_failed"}).eq("id", lead_id).execute()
+            from datetime import datetime, timezone
+            supabase.table("system_health_log").insert({"checked_at": datetime.now(timezone.utc).isoformat(), "check_type": "heartbeat_v3", "status": "degraded", "details": {"error": err}}).execute()
             return False
             
     except Exception as e:
-        print(f"❌ RESEND ERROR: {e}")
+        err = f"❌ RESEND ERROR for {lead_id}: {e}"
+        print(err)
         traceback.print_exc()
+        supabase.table("contacts_master").update({"status": "delivery_failed"}).eq("id", lead_id).execute()
+        from datetime import datetime, timezone
+        supabase.table("system_health_log").insert({"checked_at": datetime.now(timezone.utc).isoformat(), "check_type": "heartbeat_v3", "status": "error", "details": {"error": err}}).execute()
         return False
 
-@app.function(image=image, secrets=[VAULT], timeout=120)
+@app.function(image=image, secrets=[VAULT], timeout=600)
 def dispatch_audit_email(lead_id: str):
     """
     ENGINE v5: Link-Based Audit Email (Feb 12, 2026)
@@ -485,6 +490,24 @@ def dispatch_audit_email(lead_id: str):
         <a href="{tracking_url}" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">Watch Cinematic Teaser →</a>
         </p>"""
 
+    owner = lead.get('full_name') or 'there'
+    if ' ' in owner and owner != 'there':
+        owner = owner.split(' ')[0]
+        
+    score_val = ar['pagespeed'].get('score')
+    if score_val is None:
+        score_val = 0
+    score_text = f"<span style='color: #ef4444;'>{score_val}/100 (Critical)</span>" if score_val < 50 else f"<span style='color: #f59e0b;'>{score_val}/100 (Needs Work)</span>"
+    
+    privacy_status = ar['privacy']['status']
+    privacy_text = "<span style='color: #ef4444;'>Missing (FDBR Violation Risk)</span>" if privacy_status == "critical" else "Compliant"
+    
+    privacy_warning = ""
+    if privacy_status == "critical":
+        privacy_warning = """<div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 12px; margin: 16px 0;">
+        ⚠️ <b>Compliance Warning:</b> Florida's Digital Bill of Rights (FDBR) requires a visible privacy policy. We did not detect one on your site, which carries potential liabilities.
+        </div>"""
+
     html_body = f"""<html><body style="font-family: Arial, sans-serif; color: #333; max-width: 600px; line-height: 1.6;">
 <p>Hi {owner},</p>
 
@@ -514,28 +537,25 @@ def dispatch_audit_email(lead_id: str):
 
     html_body += tracking_pixel
 
-    # Resend payload — NO attachment (link instead)
+    # GHL Webhook Payload
+    ghl_webhook = "https://services.leadconnectorhq.com/hooks/RnK4OjX0oDcqtWw0VyLr/webhook-trigger/uKaqY2KaULkCeMHM7wmt"
     from_email = os.environ.get("RESEND_FROM_EMAIL", "Dan <owner@aiserviceco.com>")
+    first_name = lead.get("owner_name", "") or company.split()[0]
+    
     payload = {
-        "from": from_email,
-        "reply_to": "owner@aiserviceco.com",
-        "to": [email],
+        "email": email,
+        "firstName": first_name,
+        "phone": lead.get("phone", ""),
         "subject": audit["subject"],
-        "html": html_body,
-        "tags": [
-            {"name": "lead_id", "value": lead_id},
-            {"name": "variant", "value": "AUDIT_LINK"},
-            {"name": "email_uid", "value": email_uid},
-            {"name": "report_id", "value": report_id}
-        ]
+        "body": html_body
     }
 
     try:
         r = requests.post(
-            "https://api.resend.com/emails",
-            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            ghl_webhook,
+            headers={"Content-Type": "application/json"},
             json=payload,
-            timeout=15  # Smaller payload now (no PDF)
+            timeout=15
         )
 
         if r.status_code in [200, 201]:
@@ -545,8 +565,11 @@ def dispatch_audit_email(lead_id: str):
             print(f"   Report: {report_url}")
             print(f"   PageSpeed: {ar['pagespeed'].get('score','N/A')}/100 | Privacy: {ar['privacy']['status']} | Criticals: {ar['criticals']}")
 
-            # Update lead status
-            supabase.table("contacts_master").update({"status": "outreach_sent"}).eq("id", lead_id).execute()
+            # Update lead status and Veo linkage
+            update_data = {"status": "outreach_sent", "veo_status": "complete"}
+            if ar.get("video_teaser_url"):
+                update_data["veo_video_url"] = ar.get("video_teaser_url")
+            supabase.table("contacts_master").update(update_data).eq("id", lead_id).execute()
 
             # Log to outbound_touches with audit details
             supabase.table("outbound_touches").insert({
@@ -576,11 +599,13 @@ def dispatch_audit_email(lead_id: str):
             return True
         else:
             print(f"❌ RESEND FAILED: HTTP {r.status_code} - {r.text[:200]}")
+            supabase.table("contacts_master").update({"status": "delivery_failed"}).eq("id", lead_id).execute()
             return False
 
     except Exception as e:
         print(f"❌ AUDIT EMAIL ERROR: {e}")
         traceback.print_exc()
+        supabase.table("contacts_master").update({"status": "delivery_failed"}).eq("id", lead_id).execute()
         return False
 
 @app.function(image=image, secrets=[VAULT])
@@ -723,9 +748,9 @@ def auto_outreach_loop():
     print("🚀 ENGINE v5.0: Starting autonomous outreach cycle (EMAIL + CALLS)...")
     supabase = get_supabase()
     
-    # Call budget: max 3 outbound calls per 5-min cycle to control VAPI costs
+    # Call budget: max 10 outbound calls per 5-min cycle to allow higher volume
     calls_this_cycle = 0
-    MAX_CALLS_PER_CYCLE = 3
+    MAX_CALLS_PER_CYCLE = 10
     
     # 1. Fetch FRESH leads first (priority) → Step 1 initial email
     leads = []
@@ -806,12 +831,15 @@ def auto_outreach_loop():
             website = lead.get('website_url')
             if website:
                 print(f"📊 Route -> AUDIT Email (Step 1): {email} | site: {website}")
+                # Update status to 'audit_processing' so we don't pick it up again while rendering video
+                supabase.table("contacts_master").update({"status": "audit_processing"}).eq("id", lead_id).execute()
                 try:
-                    res = dispatch_audit_email.local(lead_id)
-                    print(f"DEBUG: dispatch_audit_email result: {res}")
+                    res = dispatch_audit_email.spawn(lead_id)
+                    print(f"DEBUG: dispatch_audit_email spawned in bg mode")
                 except Exception as e:
-                    print(f"❌ Audit Email Failed for {lead_id}: {e}")
-                    # Fallback to generic email if audit fails
+                    print(f"❌ Audit Email Spawn Failed for {lead_id}: {e}")
+                    # Fallback to generic email if spawn fails
+                    supabase.table("contacts_master").update({"status": "new"}).eq("id", lead_id).execute()
                     try:
                         print(f"📧 Fallback -> Generic Email for {lead_id}")
                         dispatch_email_logic.local(lead_id)
@@ -824,10 +852,10 @@ def auto_outreach_loop():
                 except Exception as e:
                     print(f"❌ Email Failed for {lead_id}: {e}")
             
-            # Priority 3: OUTBOUND CALL via VAPI (business hours, if phone exists + real GHL ID)
+            # Priority 3: OUTBOUND CALL via VAPI (business hours, if phone exists)
             # Call AFTER email — multi-touch: email + call in same cycle
-            # SCRAPED leads get email only — don't burn Vapi credits on unverified numbers
-            if phone and is_sms_hours and has_real_ghl and calls_this_cycle < MAX_CALLS_PER_CYCLE:
+            # SCRAPED leads are now ALLOWED to be called via Vapi
+            if phone and is_sms_hours and calls_this_cycle < MAX_CALLS_PER_CYCLE:
                 print(f"📞 Route -> OUTBOUND CALL: {phone} (Sarah AI via VAPI)")
                 try:
                     call_result = dispatch_call_logic.local(lead_id)
@@ -913,10 +941,10 @@ def auto_outreach_loop():
         website = lead.get('website_url')
         phone = lead.get('phone')
         
-        # Step 2 follow-up: Try call first during business hours (only for verified GHL leads)
+        # Step 2 follow-up: Try call first during business hours
         ghl_id = lead.get('ghl_contact_id') or lead.get('ghl_id', '')
         has_real_ghl = ghl_id and not ghl_id.startswith('SCRAPED_')
-        if step == 2 and phone and is_sms_hours and has_real_ghl and calls_this_cycle < MAX_CALLS_PER_CYCLE:
+        if step == 2 and phone and is_sms_hours and calls_this_cycle < MAX_CALLS_PER_CYCLE:
             print(f"📞 Route -> FOLLOW-UP CALL (Step 2): {phone} (Sarah AI)")
             try:
                 call_result = dispatch_call_logic.local(lead_id)

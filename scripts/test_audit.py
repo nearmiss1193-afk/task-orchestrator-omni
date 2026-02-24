@@ -1,51 +1,46 @@
-"""Detailed test - show full audit output without PDF viewer."""
-import sys
+import os, sys, json
 sys.path.insert(0, '.')
 from dotenv import load_dotenv
 load_dotenv('.env')
 load_dotenv('.env.local')
-import os
-from supabase import create_client
-from workers.audit_generator import generate_audit_for_lead
 
+from supabase import create_client
 url = os.getenv('NEXT_PUBLIC_SUPABASE_URL') or os.getenv('SUPABASE_URL')
 key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
-s = create_client(url, key)
+sb = create_client(url, key)
 
-# Get 3 leads with websites to test variety
-leads = s.table('contacts_master').select(
-    'id,company_name,website_url,niche,email,full_name'
-).not_.is_('website_url', 'null').not_.is_('email', 'null').eq('funnel_stage', 'new').limit(3).execute()
-
-print(f"Testing {len(leads.data)} leads\n")
-
-for i, lead in enumerate(leads.data):
-    print(f"\n{'='*60}")
-    print(f"  LEAD #{i+1}: {lead.get('company_name','?')} | {lead.get('website_url','?')}")
-    print(f"{'='*60}")
+# Check bucket
+try:
+    buckets = sb.storage.list_buckets()
+    print('Buckets:', [b.name for b in buckets])
     
-    result = generate_audit_for_lead(lead)
-    
-    if result["success"]:
-        ar = result["audit_results"]
-        print(f"\n  RESULTS:")
-        print(f"    PageSpeed: {ar['pagespeed'].get('score','N/A')}/100 ({ar['pagespeed']['status']})")
-        print(f"    Privacy:   {ar['privacy']['status'].upper()} — {ar['privacy']['details']}")
-        print(f"    AI Ready:  {ar['ai_readiness']['status'].upper()} — {ar['ai_readiness']['details']}")
-        print(f"    Criticals: {ar['criticals']}")
-        print(f"\n  EMAIL:")
-        print(f"    Subject: {result['subject']}")
-        print(f"    PDF: {result['pdf_filename']} ({len(result['pdf_b64'])} chars b64)")
-        
-        # Save first PDF for user inspection
-        if i == 0:
-            import base64
-            pdf_bytes = base64.b64decode(result['pdf_b64'])
-            with open('scripts/test_audit.pdf', 'wb') as f:
-                f.write(pdf_bytes)
-            print(f"\n  >> PDF saved to scripts/test_audit.pdf ({len(pdf_bytes)} bytes)")
-    else:
-        print(f"\n  FAILED: {result.get('error')}")
+    if 'audit-pdfs' not in [b.name for b in buckets]:
+        print("Creating 'audit-pdfs' bucket...")
+        # create_bucket requires name, options
+        sb.storage.create_bucket('audit-pdfs', {'public': True})
+        print("Bucket created!")
+except Exception as e:
+    print('Bucket Error:', e)
+    import traceback
+    traceback.print_exc()
 
-print(f"\n{'='*60}")
-print("TESTS COMPLETE")
+# Find a test lead with a website
+res = sb.table('contacts_master').select('*').neq('website_url', '').in_('status', ['new', 'research_done']).limit(1).execute()
+if not res.data:
+    print('No test lead found')
+    sys.exit(0)
+
+lead = res.data[0]
+print(f"Test lead: {lead.get('company_name')} ({lead.get('website_url')})")
+
+try:
+    from workers.audit_generator import generate_audit_for_lead
+    print("Testing generate_audit_for_lead...")
+    audit = generate_audit_for_lead(lead)
+    print("Audit Success:", audit.get("success"))
+    if not audit.get("success"):
+        print("Audit Error:", audit.get("error"))
+except Exception as e:
+    print("Exception running generator:", e)
+    import traceback
+    traceback.print_exc()

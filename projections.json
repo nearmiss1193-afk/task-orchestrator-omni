@@ -1,0 +1,137 @@
+{
+  "today_emails": 509,
+  "today_sms": 105,
+  "today_calls": 17,
+  "today_total": 631,
+  "fresh_leads": 1428,
+  "fresh_with_email": 647,
+  "fresh_with_website": 1235,
+  "cycles_remaining": 114,
+  "projected_email_max": 647,
+  "projected_sms_max": 570,
+  "projected_calls_max": 342,
+  "solar_count": 18,
+  "solar_leads": [
+    {
+      "id": "990cad7c-14bb-4aa7-9c77-48d32da89ac8",
+      "company_name": "Solar Energy Specialist Corp",
+      "email": null,
+      "phone": "(866) 407-2047",
+      "status": "no_contact_info",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "261395ec-0d91-4090-8c06-8cf63ba8246d",
+      "company_name": "Stamina Solar",
+      "email": null,
+      "phone": "(800) 868-0635",
+      "status": "no_contact_info",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "f72e2b5b-6f3e-45e4-a243-e852ea095c1c",
+      "company_name": "Florida Electric & Solar",
+      "email": null,
+      "phone": "(833) 704-7336",
+      "status": "no_contact_info",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "abb0a262-1002-4413-a46d-c224d35fc0b9",
+      "company_name": "US Solar",
+      "email": "351-3430support@joinussolar.com",
+      "phone": "(800) 351-3430",
+      "status": "delivery_failed",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "82d687c5-5dea-4e44-99df-a035db292739",
+      "company_name": "Lakeland Electric",
+      "email": "customerservice@lakelandelectric.com",
+      "phone": "(863) 834-9535",
+      "status": "delivery_failed",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "cec0ed1c-7c0b-4448-b4dd-e28707655cb5",
+      "company_name": "AAA Solar Source Lakeland",
+      "email": null,
+      "phone": "(352) 352-6771",
+      "status": "no_contact_info",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "2c394a4c-0d54-41fb-84ce-32c10a0fd374",
+      "company_name": "Solar Panel Professionals",
+      "email": null,
+      "phone": "(863) 624-3358",
+      "status": "no_contact_info",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "d4dc1262-01b1-4a06-8dc3-f84701d7d43c",
+      "company_name": "Better Earth Solar",
+      "email": "info@betterearth.solar",
+      "phone": "(888) 373-9379",
+      "status": "bad_email",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "bcd328df-441d-4df1-92d1-839869e0ec46",
+      "company_name": "Solares Controls",
+      "email": null,
+      "phone": "(863) 607-6623",
+      "status": "new",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "23216cc9-00ee-435e-83ca-555737070fa4",
+      "company_name": "SOLEnergy",
+      "email": null,
+      "phone": "(305) 204-6676",
+      "status": "new",
+      "niche": "Solar Panel Installation"
+    },
+    {
+      "id": "a59bad99-08f3-40c0-87ec-ddbc6d7228bc",
+      "company_name": "Ori Energy",
+      "email": "example@mysite.com",
+      "phone": "(863) 509-5409",
+      "status": "new",
+      "niche": "solar panel installation"
+    },
+    {
+      "id": "9d433777-5e02-46bc-b853-abaab4c1bbc1",
+      "company_name": "Green Leaf Solar",
+      "email": "info@greenleafsolar18.com",
+      "phone": "(813) 509-9739",
+      "status": "new",
+      "niche": "solar panel installation"
+    },
+    {
+      "id": "087154cd-128d-4588-af56-8e12ff1fd73b",
+      "company_name": "Solar Optimum Florida",
+      "email": "info@solaroptimum.com",
+      "phone": "(800) 552-9970",
+      "status": "new",
+      "niche": "solar panel installation"
+    },
+    {
+      "id": "66a40906-5517-498c-817c-d45b177f5143",
+      "company_name": "Trinity Solar",
+      "email": "gosolar@trinity-solar.com",
+      "phone": "(863) 430-0146",
+      "status": "new",
+      "niche": "solar panel installation"
+    },
+    {
+      "id": "6f6ac348-6b54-418f-97b1-1695aa52ae09",
+      "company_name": "Go RV Solar",
+      "email": "info@gorvsolar.com",
+      "phone": "(863) 875-2424",
+      "status": "new",
+      "niche": "solar panel installation"
+    }
+  ],
+  "prospector_last_key": "NEVER_RUN"
+}

@@ -1,0 +1,84 @@
+Testing auto_outreach_loop locally...
+🚀 ENGINE v5.0: Starting autonomous outreach cycle (EMAIL + CALLS)...
+📊 Fresh leads found: 15
+📈 ENGINE: Processing 15 fresh + 0 follow-up leads...
+🚦 Routing Error for f240bfee-3455-4427-843c-dd3b191bdae9: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): secret_shopper_fixed@aiserviceco.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID f240bfee-3455-4427-843c-dd3b191bdae9
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for d18aac73-e4cc-4687-bc40-70d49b6417ec: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): nearmiss1193@gmail.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID d18aac73-e4cc-4687-bc40-70d49b6417ec
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 7f440d47-5095-41f5-8454-f18bcd55a30b: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): e.hearsey@abcairandheat.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 7f440d47-5095-41f5-8454-f18bcd55a30b
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 6ad3eb52-9e11-492c-a73d-c578c11da415: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): service@delair.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 6ad3eb52-9e11-492c-a73d-c578c11da415
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for feb853e0-c7f3-4a4c-bd2c-54f6ac2e22a9: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): customercare@brodypennell.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID feb853e0-c7f3-4a4c-bd2c-54f6ac2e22a9
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for dae644e2-92db-490b-82cf-5d251693a608: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): oneteamhvac@gmail.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID dae644e2-92db-490b-82cf-5d251693a608
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 608346ee-2a09-4432-8b9a-afa77707d8cb: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): heartlandheatingcooling@yahoo.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 608346ee-2a09-4432-8b9a-afa77707d8cb
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 4b1b0f5b-01c5-4027-8ea7-f6fc5bceebc4: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): service@alamoaustinair.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 4b1b0f5b-01c5-4027-8ea7-f6fc5bceebc4
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 4d97d4f6-568d-438c-aa5a-fb1beeb784ec: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): norwayacteam@gmail.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 4d97d4f6-568d-438c-aa5a-fb1beeb784ec
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for bfb46609-14ea-485d-aa91-f2787bb248a2: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): robyn@vickreyheatair.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID bfb46609-14ea-485d-aa91-f2787bb248a2
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 216e622c-bb89-480e-be2d-afe9877d4ba8: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): rayburn_r@suncountryheatingandcooling.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 216e622c-bb89-480e-be2d-afe9877d4ba8
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 62f752cc-409e-4b08-a396-3df243b2e863: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): service@championac.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 62f752cc-409e-4b08-a396-3df243b2e863
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for f9452ed8-a4a5-4df9-a06d-a3e086b46bc6: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): Info.AUB@CallFarnell.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID f9452ed8-a4a5-4df9-a06d-a3e086b46bc6
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 35b6ee9e-0154-4062-af71-2c3e3fbd9fed: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): service@orlandohvacpros.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 35b6ee9e-0154-4062-af71-2c3e3fbd9fed
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🚦 Routing Error for 3da8d299-6f28-4be5-8dac-fef4451db4cb: cannot access local variable 'datetime' where it is not associated with a value
+📧 Route -> Generic Email (Step 1): service@phoenixclimate.com (no website)
+📧 EMAIL DISPATCH [Resend]: Lead ID 3da8d299-6f28-4be5-8dac-fef4451db4cb
+⚠️ Warning: Could not verify triage status, defaulting to all variants: {'message': 'column system_state.value does not exist', 'code': '42703', 'hint': None, 'details': None}
+❌ RESEND FAILED: HTTP 401 - {"statusCode":401,"name":"validation_error","message":"API key is invalid"}
+🔄 ENGINE: Step 4 — Retarget Campaign (Social + Reputation Growth)...
+🎯 RETARGET: 1 candidates found
+⚠️ RETARGET: No valid email for a6e60fed-2b57-459e-89bd-343fb7cbd5c4
+📊 RETARGET: 0 emails sent this cycle
+Done

@@ -1,0 +1,3 @@
+Testing lead: Second 2 None Barbershop (http://second2nonebarbershop.net/) | Email: second2nonebarbershoplakeland@gmail.com
+SUCCESS! PDF Size: 5624
+Details: {"pagespeed": {"score": null, "fcp": null, "lcp": null, "cls": null, "speed_index": null, "status": "unknown", "raw_score": null}, "privacy": {"found": false, "url": null, "status": "critical", "details": "No privacy policy found \u2014 potential FDBR violation"}, "ai_readiness": {"has_chat": false, "has_booking": true, "has_schema": true, "status": "warning", "details": "Has booking but missing other AI features"}, "criticals": 1, "video_teaser_url": null}

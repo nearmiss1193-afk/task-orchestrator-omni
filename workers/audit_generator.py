@@ -571,8 +571,8 @@ def generate_audit_for_lead(lead: dict) -> dict:
     ai_readiness = check_ai_readiness(website)
 
     # 4. Generate Veo Teaser (Phase 12 Turbo)
-    print("  [4/4] Skipping Veo 3.1 Video Teaser (taking too long, blocking outreach loop)")
-    video_url = None # generate_veo_teaser(company, pagespeed.get("score") or 0)
+    print("  [4/4] Generating Veo 3.1 Video Teaser...")
+    video_url = generate_veo_teaser(company, pagespeed.get("score") or 0)
 
     # 4. Generate PDF
     print("  Generating PDF report...")
