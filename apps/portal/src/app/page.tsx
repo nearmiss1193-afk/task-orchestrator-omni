@@ -135,6 +135,9 @@ export default function Home() {
                         <Link href="/custom-ai-solutions" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-colors">
                             ⚙️ Custom AI
                         </Link>
+                        <Link href="/dashboard/seo-audit" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors border border-emerald-500/20">
+                            🔍 SEO Audit Deck
+                        </Link>
                     </div>
 
                     <div className="mt-4 pt-4 border-t border-white/10 px-2 flex flex-col gap-2">

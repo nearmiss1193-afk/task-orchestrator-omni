@@ -9,18 +9,18 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
-// Add a fallback if keys exist but we are in server mode
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Revalidate this page every 24 hours to keep SEO fast but updated
 export const revalidate = 86400;
 
 // Dynamic Metadata Generation
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string[] } }): Promise<Metadata> {
+    const slug_path = params.slug.join('/');
     const { data: page } = await supabase
         .from('seo_landing_pages')
         .select('page_title, meta_description')
-        .eq('slug', params.slug)
+        .eq('slug', slug_path)
         .single();
 
     if (!page) {
@@ -36,12 +36,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function DynamicSeoPage({ params }: { params: { slug: string } }) {
-    // 1. Fetch exact page data from Supabase DB
+export default async function DynamicSeoPage({ params }: { params: { slug: string[] } }) {
+    // 1. Fetch exact page data from Supabase DB using the joined slug path
+    const slug_path = params.slug.join('/');
+
     const { data: page } = await supabase
         .from('seo_landing_pages')
         .select('*')
-        .eq('slug', params.slug)
+        .eq('slug', slug_path)
         .single();
 
     // 2. If no data exists in DB, return a 404 naturally
@@ -71,7 +73,7 @@ export default async function DynamicSeoPage({ params }: { params: { slug: strin
     return (
         <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900">
             <Script
-                id={`schema-${params.slug}`}
+                id={`schema-${slug_path.replace(/\//g, '-')}`}
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
             />

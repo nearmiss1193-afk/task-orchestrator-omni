@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { Activity, Target, Landmark, Home, Github, Mic, Box, ArrowRight } from "lucide-react";
 
 type MonitorData = {
@@ -170,8 +171,9 @@ export default function OmniMonitorDashboard() {
                             <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1">Cron Status</div>
                             <div className="text-xl font-bold text-emerald-400">{data.seo_factory_status}</div>
                         </div>
-                        <div className="text-right">
+                        <div className="flex flex-col gap-2 text-right">
                             <a href="https://github.com/nearmiss1193-afk/empire-unified-backup/actions" target="_blank" rel="noopener noreferrer" className="text-xs text-orange-400 hover:underline">View Pipeline</a>
+                            <Link href="/dashboard/seo-audit" className="text-xs text-emerald-400 hover:underline font-bold">View Audit Deck</Link>
                         </div>
                     </div>
                 </div>
