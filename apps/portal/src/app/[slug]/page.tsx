@@ -101,6 +101,17 @@ export default async function DynamicSeoPage({ params }: { params: { slug: strin
 
                     <div className="prose prose-zinc max-w-none md:text-lg leading-relaxed text-zinc-600 font-medium mb-10">
                         <p>{meta_description}</p>
+
+                        {content_data?.market_analysis && (
+                            <div className="mt-8 pt-8 border-t border-zinc-100">
+                                <h2 className="text-2xl font-bold text-zinc-900 mb-4 tracking-tight">
+                                    Why {location.split(',')[0]} Needs AI for {industry}
+                                </h2>
+                                <div className="space-y-6 text-zinc-600 leading-relaxed whitespace-pre-line">
+                                    {content_data.market_analysis}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4 border-t border-zinc-100 pt-8">
